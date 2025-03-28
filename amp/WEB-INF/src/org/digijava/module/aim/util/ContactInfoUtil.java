@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ContactInfoUtil {
     private static Logger logger = Logger.getLogger(ContactInfoUtil.class);
-    
+
     public static void saveOrUpdateContact(AmpContact contact) throws Exception{
         Session session= null;
         try {
@@ -53,30 +53,26 @@ public class ContactInfoUtil {
             throw new AimException("delete failed",ex);
         }
     }
-    
-    public static AmpContact getContact(Long id) throws Exception{
-        Session session=null;
-        String queryString =null;
-        Query query=null;
-        AmpContact returnValue=null;
-        try {
-            session=PersistenceManager.getRequestDBSession();
-            queryString= "select a from " + AmpContact.class.getName()+ " a where a.id=:id";
-            query=session.createQuery(queryString);
+
+    public static AmpContact getContact(Long id) {
+        String queryString = "SELECT a FROM AmpContact a WHERE a.id = :id";
+        AmpContact returnValue = null;
+
+        try (Session session = PersistenceManager.getRequestDBSession()) { // Auto-close session
+            Query<AmpContact> query = session.createQuery(queryString, AmpContact.class);
             query.setParameter("id", id);
-            returnValue=(AmpContact)query.uniqueResult();
-        }catch(Exception ex) {
-            logger.error("couldn't load Message" + ex.getMessage());    
-            ex.printStackTrace();
+            returnValue = query.uniqueResult();
+        } catch (Exception ex) {
+            logger.error("Couldn't load Message: " + ex.getMessage(), ex);
         }
         return returnValue;
     }
-    
+
     public static List<AmpContact> getContacts(List<Long> ids) {
         String queryString = "select a from " + AmpContact.class.getName() + " a where a.id in (:ids)";
         return PersistenceManager.getSession().createQuery(queryString).setParameterList("ids", ids).list();
     }
-    
+
     public static int getContactsCount(String email,Long id) throws Exception{
         int retValue=0;
         Session session=null;
@@ -115,7 +111,7 @@ public class ContactInfoUtil {
                 queryString+=" where concat(cont.name,"+"' ',"+"cont.lastname) like '%"+keyword+"%'";
             }else if (keyword==null && alpha!=null){
                 queryString+=" where cont.name like '"+alpha+"%'";
-            }           
+            }
             query=session.createQuery(queryString);
             Long longValue = (Long) query.uniqueResult();
             retValue= longValue.intValue();
@@ -124,7 +120,7 @@ public class ContactInfoUtil {
         }
         return retValue;
     }
-    
+
     /**
      * @param fromRecord from which record should be loaded contacts
      * @param resultsNum how many contacts should be loaded
@@ -135,7 +131,7 @@ public class ContactInfoUtil {
      * @return contacts
      * @throws Exception
      */
-    public static List<AmpContact> getPagedContacts(int fromRecord,int resultsNum,String sortBy,String sortDir,String keyword,String alpha) throws Exception{       
+    public static List<AmpContact> getPagedContacts(int fromRecord,int resultsNum,String sortBy,String sortDir,String keyword,String alpha) throws Exception{
         List<AmpContact> contacts=null;
         Session session=null;
         String queryString =null;
@@ -172,7 +168,7 @@ public class ContactInfoUtil {
             query.setFirstResult(fromRecord);
             if(resultsNum!=-1){
                 query.setMaxResults(resultsNum);
-            }           
+            }
             contacts=query.list();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -201,7 +197,7 @@ public class ContactInfoUtil {
             }
             if(isLastNameProvided){
                 if(isNameProvided){
-                    queryString.append(" or "); 
+                    queryString.append(" or ");
                 }
                 queryString.append(" lower(cont.lastname) like lower(:lastname)");
             }
@@ -220,9 +216,9 @@ public class ContactInfoUtil {
         }
         return contacts;
     }
-    
+
     /**
-     * get contact name and lastname for autocomplete box 
+     * get contact name and lastname for autocomplete box
      * @return
      * @throws Exception
      */
@@ -241,9 +237,9 @@ public class ContactInfoUtil {
             logger.error("...Failed to get contacts");
             throw new AimException("Can't get Contacts", e);
         }
-        
+
         if(contactNames!=null){
-            retValue=new String[contactNames.size()];           
+            retValue=new String[contactNames.size()];
             int i=0;
             for (Object rawRow : contactNames) {
                 Object[] row = (Object[])rawRow; //:)
@@ -259,15 +255,15 @@ public class ContactInfoUtil {
                     lastnameRow = lastnameRow.replace('\r', ' ');
                     lastnameRow = lastnameRow.replace("\\", "");
                 }
-                
+
                 ////System.out.println(nameRow);
-                retValue[i]=new String(nameRow + " " + lastnameRow);                    
+                retValue[i]=new String(nameRow + " " + lastnameRow);
                 i++;
             }
         }
         return retValue;
     }
-    
+
     public static void saveOrUpdateActivityContact(AmpActivityContact activityContact) throws Exception{
         Session session= null;
         try {
@@ -279,7 +275,7 @@ public class ContactInfoUtil {
             throw new AimException("update failed",ex);
         }
     }
-    
+
     public static List<AmpActivityContact> getActivityContacts(Long activityId) throws Exception{
         if (activityId==null) return null;
         Session session=null;
@@ -293,12 +289,12 @@ public class ContactInfoUtil {
             query.setParameter("id", activityId);
             retValue=(List<AmpActivityContact>)query.list();
         }catch(Exception ex) {
-            logger.error("couldn't load Message" + ex.getMessage());    
+            logger.error("couldn't load Message" + ex.getMessage());
             ex.printStackTrace();
         }
         return retValue;
     }
-    
+
     public static List<Long> getActivityContactIds(Long activityId) throws Exception{
         if (activityId==null) return null;
         Session session=null;
@@ -312,7 +308,7 @@ public class ContactInfoUtil {
             query.setParameter("id", activityId);
             retValue=(List<Long>)query.list();
         }catch(Exception ex) {
-            logger.error("couldn't load Message" + ex.getMessage());    
+            logger.error("couldn't load Message" + ex.getMessage());
             ex.printStackTrace();
         }
         return retValue;
@@ -331,12 +327,12 @@ public class ContactInfoUtil {
             query.setParameter("conttype", contactType);
             retValue=(List<AmpActivityContact>)query.list();
         }catch(Exception ex) {
-            logger.error("couldn't load Message" + ex.getMessage());    
+            logger.error("couldn't load Message" + ex.getMessage());
             ex.printStackTrace();
         }
         return retValue;
     }
-    
+
     public static AmpActivityContact getActivityPrimaryContact(Long activityId, String primaryContactType){
         Session session=null;
         String queryString =null;
@@ -349,12 +345,12 @@ public class ContactInfoUtil {
             query.setParameter("id", activityId);
             retValue=(AmpActivityContact)query.uniqueResult();
         }catch(Exception ex) {
-            logger.error("couldn't load Message" + ex.getMessage());    
+            logger.error("couldn't load Message" + ex.getMessage());
             ex.printStackTrace();
         }
         return retValue;
     }
-    
+
     public static void saveOrUpdateContactProperty(AmpContactProperty property) throws Exception{
         Session session= null;
         try {
@@ -366,8 +362,8 @@ public class ContactInfoUtil {
             throw new AimException("update failed",ex);
         }
     }
-    
-    
+
+
     public static void saveOrUpdateOrganisationContact(AmpOrganisationContact orgContact) throws Exception{
         Session session= null;
         try {
@@ -379,7 +375,7 @@ public class ContactInfoUtil {
             throw new AimException("update failed",ex);
         }
     }
-    
+
     public static void deleteOrgContact(AmpOrganisationContact orgContact) throws Exception{
         Session session= null;
         try {
@@ -392,7 +388,7 @@ public class ContactInfoUtil {
             throw new AimException("delete failed",ex);
         }
     }
-    
+
     public static List<AmpOrganisationContact> getOrganizationContacts(Long organizatioId){
         List<AmpOrganisationContact> retVal=null;
         Session session=null;
@@ -404,12 +400,12 @@ public class ContactInfoUtil {
             query=session.createQuery(queryString);
             retVal=(List<AmpOrganisationContact>) query.list();
         } catch (Exception e) {
-            logger.error("couldn't load contact organizations" + e.getMessage());   
+            logger.error("couldn't load contact organizations" + e.getMessage());
             e.printStackTrace();
         }
         return retVal;
     }
-    
+
     public static List<AmpOrganisationContact> getContactOrganizations(Long contactId){
         List<AmpOrganisationContact> retVal=null;
         Session session=null;
@@ -421,25 +417,25 @@ public class ContactInfoUtil {
             query=session.createQuery(queryString);
             retVal=(List<AmpOrganisationContact>) query.list();
         } catch (Exception e) {
-            logger.error("couldn't load contact organizations" + e.getMessage());   
+            logger.error("couldn't load contact organizations" + e.getMessage());
             e.printStackTrace();
         }
         return retVal;
     }
-    
+
     public static AmpOrganisationContact getAmpOrganisationContact(Long id){
         AmpOrganisationContact retVal=null;
         Session session=null;
         String queryString =null;
         Query query=null;
         try {
-            session=PersistenceManager.getRequestDBSession(); 
+            session=PersistenceManager.getRequestDBSession();
             queryString="select orgCont from " +AmpOrganisationContact.class.getName()+" orgCont where orgCont.id=:orgContactId" ;
             query=session.createQuery(queryString);
             query.setLong("orgContactId", id);
             retVal=(AmpOrganisationContact) query.uniqueResult();
         } catch (Exception e) {
-            logger.error("couldn't load amp organization contact" + e.getMessage());    
+            logger.error("couldn't load amp organization contact" + e.getMessage());
             e.printStackTrace();
         }
         return retVal;

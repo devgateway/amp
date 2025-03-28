@@ -71,7 +71,7 @@ public class ImportedFileUtil {
         }
     }
 
-    public static void updateFileStatus(Long fileId, ImportStatus status) {
+    public static void updateFileStatus(ImportedFilesRecord importedFilesRecord, ImportStatus status) {
         logger.info("Updating file status to {}", status);
 
         Session session = PersistenceManager.getRequestDBSession();
@@ -81,7 +81,7 @@ public class ImportedFileUtil {
 
         Query query = session.createSQLQuery(sql);
         query.setParameter("status", status.ordinal());
-        query.setParameter("fileId", fileId);
+        query.setParameter("fileId", importedFilesRecord.getId());
 
         int updatedRows = query.executeUpdate();
         logger.info("Updated {} rows", updatedRows);

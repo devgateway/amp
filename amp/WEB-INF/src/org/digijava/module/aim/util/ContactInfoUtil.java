@@ -14,6 +14,8 @@ import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ContactInfoUtil {
@@ -276,78 +278,69 @@ public class ContactInfoUtil {
         }
     }
 
-    public static List<AmpActivityContact> getActivityContacts(Long activityId) throws Exception{
-        if (activityId==null) return null;
-        Session session=null;
-        String queryString =null;
-        Query query=null;
-        List<AmpActivityContact> retValue=null;
-        try {
-            session=PersistenceManager.getRequestDBSession();
-            queryString= "select a from " + AmpActivityContact.class.getName()+ " a where a.activity.ampActivityId=:id";
-            query=session.createQuery(queryString);
-            query.setParameter("id", activityId);
-            retValue=(List<AmpActivityContact>)query.list();
-        }catch(Exception ex) {
-            logger.error("couldn't load Message" + ex.getMessage());
-            ex.printStackTrace();
-        }
-        return retValue;
-    }
+    public static List<AmpActivityContact> getActivityContacts(Long activityId) {
+        if (activityId == null) return Collections.emptyList(); // Avoid returning null
 
-    public static List<Long> getActivityContactIds(Long activityId) throws Exception{
-        if (activityId==null) return null;
-        Session session=null;
-        String queryString =null;
-        Query query=null;
-        List<Long> retValue=null;
-        try {
-            session=PersistenceManager.getRequestDBSession();
-            queryString= "select a.id from " + AmpActivityContact.class.getName()+ " a where a.activity.ampActivityId=:id";
-            query=session.createQuery(queryString);
+        String queryString = "SELECT a FROM AmpActivityContact a WHERE a.activity.ampActivityId = :id";
+        List<AmpActivityContact> retValue = new ArrayList<>();
+
+        try (Session session = PersistenceManager.getRequestDBSession()) { // Auto-closing session
+            Query<AmpActivityContact> query = session.createQuery(queryString, AmpActivityContact.class);
             query.setParameter("id", activityId);
-            retValue=(List<Long>)query.list();
-        }catch(Exception ex) {
-            logger.error("couldn't load Message" + ex.getMessage());
-            ex.printStackTrace();
+            retValue = query.list();
+        } catch (Exception ex) {
+            logger.error("Couldn't load Activity Contacts: " + ex.getMessage(), ex);
         }
         return retValue;
     }
-    public static List<AmpActivityContact> getActivityContactsForType(Long activityId,String contactType) throws Exception{
-        if (activityId==null) return null;
-        Session session=null;
-        String queryString =null;
-        Query query=null;
-        List<AmpActivityContact> retValue=null;
-        try {
-            session=PersistenceManager.getRequestDBSession();
-            queryString= "select a from " + AmpActivityContact.class.getName()+ " a where a.activity.ampActivityId=:id and a.contactType=:conttype";
-            query=session.createQuery(queryString);
+    public static List<Long> getActivityContactIds(Long activityId) {
+        if (activityId == null) return Collections.emptyList(); // Avoid returning null
+
+        String queryString = "SELECT a.id FROM AmpActivityContact a WHERE a.activity.ampActivityId = :id";
+        List<Long> retValue = new ArrayList<>();
+
+        try (Session session = PersistenceManager.getRequestDBSession()) { // Auto-closing session
+            Query<Long> query = session.createQuery(queryString, Long.class);
+            query.setParameter("id", activityId);
+            retValue = query.list();
+        } catch (Exception ex) {
+            logger.error("Couldn't load Activity Contact IDs: " + ex.getMessage(), ex);
+        }
+        return retValue;
+    }
+    public static List<AmpActivityContact> getActivityContactsForType(Long activityId, String contactType) {
+        if (activityId == null || contactType == null) return Collections.emptyList(); // Avoid null return
+
+        String queryString = "SELECT a FROM AmpActivityContact a WHERE a.activity.ampActivityId = :id AND a.contactType = :conttype";
+        List<AmpActivityContact> retValue = new ArrayList<>();
+
+        try (Session session = PersistenceManager.getRequestDBSession()) { // Auto-closing session
+            Query<AmpActivityContact> query = session.createQuery(queryString, AmpActivityContact.class);
             query.setParameter("id", activityId);
             query.setParameter("conttype", contactType);
-            retValue=(List<AmpActivityContact>)query.list();
-        }catch(Exception ex) {
-            logger.error("couldn't load Message" + ex.getMessage());
-            ex.printStackTrace();
+            retValue = query.list();
+        } catch (Exception ex) {
+            logger.error("Couldn't load Activity Contacts for Type: " + ex.getMessage(), ex);
         }
         return retValue;
     }
 
-    public static AmpActivityContact getActivityPrimaryContact(Long activityId, String primaryContactType){
-        Session session=null;
-        String queryString =null;
-        Query query=null;
-        AmpActivityContact retValue=null;
-        try {
-            session=PersistenceManager.getRequestDBSession();
-            queryString= "select a from " + AmpActivityContact.class.getName()+ " a where a.activity.ampActivityId=:id and a.contactType='"+primaryContactType+"' and a.primaryContact="+true;
-            query=session.createQuery(queryString);
+    public static AmpActivityContact getActivityPrimaryContact(Long activityId, String primaryContactType) {
+        if (activityId == null || primaryContactType == null) return null; // Prevent null errors
+
+        String queryString = "SELECT a FROM AmpActivityContact a WHERE a.activity.ampActivityId = :id AND a.contactType = :contactType AND a.primaryContact = :isPrimary";
+        AmpActivityContact retValue = null;
+
+        try (Session session = PersistenceManager.getRequestDBSession()) { // Auto-closing session
+            Query<AmpActivityContact> query = session.createQuery(queryString, AmpActivityContact.class);
             query.setParameter("id", activityId);
-            retValue=(AmpActivityContact)query.uniqueResult();
-        }catch(Exception ex) {
-            logger.error("couldn't load Message" + ex.getMessage());
-            ex.printStackTrace();
+            query.setParameter("contactType", primaryContactType);
+            query.setParameter("isPrimary", true); // Properly set boolean value
+            retValue = query.uniqueResult();
+        } catch (Exception ex) {
+            logger.error("Couldn't load primary contact: " + ex.getMessage(), ex);
         }
+
         return retValue;
     }
 

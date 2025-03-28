@@ -311,7 +311,7 @@ public class ActivityUtil {
             }
             session.merge(a);
         }
-        session.flush();
+//        session.flush();
 
         updatePerformanceRules(oldA, a);
 

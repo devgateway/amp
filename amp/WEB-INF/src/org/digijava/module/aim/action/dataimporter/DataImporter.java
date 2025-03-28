@@ -360,7 +360,7 @@ public class DataImporter extends Action {
             }
 
             // Insert into DataImporterConfigValues
-            String insertValuesSql = "INSERT INTO DATA_IMPORTER_CONFIG_VALUES (id,config_id, config_key, config_value) VALUES (nextval('DATA_IMPORTER_CONFIG_VALUES_SEQ'),?, ?, ?)";
+            String insertValuesSql = "INSERT INTO DATA_IMPORTER_CONFIG_VALUES (id,data_importer_config_id, config_key, config_value) VALUES (nextval('DATA_IMPORTER_CONFIG_VALUES_SEQ'),?, ?, ?)";
             try (PreparedStatement insertValuesStmt = connection.prepareStatement(insertValuesSql)) {
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     insertValuesStmt.setLong(1, configId);

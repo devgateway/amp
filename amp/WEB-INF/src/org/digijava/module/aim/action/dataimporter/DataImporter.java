@@ -32,6 +32,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -318,48 +322,62 @@ public class DataImporter extends Action {
 
         return configValues;
     }
-    private static void saveImportConfig(HttpServletRequest request,String fileName, Map<String,String> config)
-    {
+
+    public static void saveImportConfig(HttpServletRequest request, String fileName, Map<String, String> config) {
         logger.info("Saving import config");
-        Session session = PersistenceManager.getRequestDBSession();
 
-        if (!session.isOpen()) {
-            session=PersistenceManager.getRequestDBSession();
-        }
-        String configName= fileName+"_"+ LocalDateTime.now().toString().replace(":", "_");
+        try (Connection connection = PersistenceManager.getJdbcConnection()) {
+            connection.setAutoCommit(false); // Start transaction
 
-        if (request.getParameter("configName") != null)
-        {
-            configName=request.getParameter("configName");
-            Query query = session.createQuery("FROM DataImporterConfig WHERE configName = :configName");
-            query.setParameter("configName", configName);
-            List<DataImporterConfig> existingConfigs = query.list();
+            String configName = fileName + "_" + LocalDateTime.now().toString().replace(":", "_");
 
-            if (!existingConfigs.isEmpty()) {
-                configName += "_" + LocalDateTime.now().toString().replace(":", "_");
+            if (request.getParameter("configName") != null) {
+                configName = request.getParameter("configName");
+
+                // Check if configName already exists
+                String checkSql = "SELECT COUNT(*) FROM DATA_IMPORTER_CONFIG WHERE config_name = ?";
+                try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
+                    checkStmt.setString(1, configName);
+                    ResultSet rs = checkStmt.executeQuery();
+                    if (rs.next() && rs.getInt(1) > 0) {
+                        configName += "_" + LocalDateTime.now().toString().replace(":", "_");
+                    }
+                }
             }
+
+            // Insert into DataImporterConfig
+            String insertConfigSql = "INSERT INTO DATA_IMPORTER_CONFIG (id,config_name) VALUES (nextval('DATA_IMPORTER_CONFIG_SEQ'),?) RETURNING id";
+            long configId;
+
+            try (PreparedStatement insertConfigStmt = connection.prepareStatement(insertConfigSql)) {
+                insertConfigStmt.setString(1, configName);
+                ResultSet rs = insertConfigStmt.executeQuery();
+                if (rs.next()) {
+                    configId = rs.getLong(1);
+                } else {
+                    throw new SQLException("Failed to insert into DATA_IMPORTER_CONFIG");
+                }
+            }
+
+            // Insert into DataImporterConfigValues
+            String insertValuesSql = "INSERT INTO DATA_IMPORTER_CONFIG_VALUES (id,config_id, config_key, config_value) VALUES (nextval('DATA_IMPORTER_CONFIG_VALUES_SEQ'),?, ?, ?)";
+            try (PreparedStatement insertValuesStmt = connection.prepareStatement(insertValuesSql)) {
+                for (Map.Entry<String, String> entry : config.entrySet()) {
+                    insertValuesStmt.setLong(1, configId);
+                    insertValuesStmt.setString(2, entry.getKey());
+                    insertValuesStmt.setString(3, entry.getValue());
+                    insertValuesStmt.addBatch();
+                }
+                insertValuesStmt.executeBatch();
+            }
+
+            connection.commit(); // Commit transaction
+            logger.info("Saved configuration: {}", configName);
+
+        } catch (SQLException e) {
+            logger.error("Error saving import config: {}", e.getMessage(), e);
+            throw new RuntimeException("Database error while saving import config.", e);
         }
-
-        DataImporterConfig dataImporterConfig= new DataImporterConfig();
-        Set<DataImporterConfigValues> configValues = new HashSet<>();
-        dataImporterConfig.setConfigName(configName);
-        session.save(dataImporterConfig);
-        for (Map.Entry<String, String> entry : config.entrySet()) {
-            DataImporterConfigValues configValue = new DataImporterConfigValues();
-            configValue.setConfigKey(entry.getKey());
-            configValue.setConfigValue(entry.getValue());
-            configValue.setDataImporterConfig(dataImporterConfig);
-            configValues.add(configValue);
-            session.save(configValue);
-        }
-
-
-        dataImporterConfig.setConfigValues(configValues);
-        session.flush();
-
-
-        logger.info("Saved configuration: {}", dataImporterConfig);
-
     }
 
 

@@ -19,6 +19,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,24 +32,28 @@ public class AMPActivityService implements ActivityService {
      */
     @Override
     public boolean isActivityStale(Long ampActivityId, Long activityGroupVersion) {
-        PersistenceManager.getSession().clear();
-        Number activityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityVersion.class)
-                .add(Restrictions.eq("ampActivityId", ampActivityId))
-                .setProjection(Projections.count("ampActivityId"))
-                .uniqueResult();
-        if (activityCount.longValue() == 0) {
+        Session session = PersistenceManager.getSession();
+        session.clear();
+
+        // Check if activity exists
+        String activityCountHql = "SELECT COUNT(a) FROM AmpActivityVersion a WHERE a.ampActivityId = :ampActivityId";
+        TypedQuery<Long> activityCountQuery = session.createQuery(activityCountHql, Long.class);
+        activityCountQuery.setParameter("ampActivityId", ampActivityId);
+        Long activityCount = activityCountQuery.getSingleResult();
+
+        if (activityCount == 0) {
             return false;
         }
 
-        Number latestActivityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityGroup.class)
-                .createAlias("ampActivityLastVersion", "a")
-                .add(Restrictions.and(
-                        Restrictions.eq("a.ampActivityId", ampActivityId),
-                        Restrictions.eq("version", activityGroupVersion)))
-                .setProjection(Projections.count("a.ampActivityId"))
-                .uniqueResult();
+        // Check if latest activity version exists
+        String latestActivityCountHql = "SELECT COUNT(a) FROM AmpActivityGroup ag JOIN ag.ampActivityLastVersion a WHERE a.ampActivityId = :ampActivityId AND ag.version = :activityGroupVersion";
 
-        return latestActivityCount.longValue() == 0;
+        TypedQuery<Long> latestActivityCountQuery = session.createQuery(latestActivityCountHql, Long.class);
+        latestActivityCountQuery.setParameter("ampActivityId", ampActivityId);
+        latestActivityCountQuery.setParameter("activityGroupVersion", activityGroupVersion);
+        Long latestActivityCount = latestActivityCountQuery.getSingleResult();
+
+        return latestActivityCount == 0;
     }
 
     /**

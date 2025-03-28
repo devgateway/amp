@@ -69,7 +69,6 @@ public class PersistenceManager {
     public static String PRECACHE_REGION =
             "org.digijava.kernel.persistence.PersistenceManager.precache_region";
 
-    private static final ThreadLocal<Session> currentSession = ThreadLocal.withInitial(() -> null);
 
     /**
      * The maximum allowed life for an opened hibernate session, in miliseconds
@@ -573,36 +572,20 @@ public class PersistenceManager {
      * Returns the current Session. If there is none, creates one and returns it
      * upon creating a new session, a transaction is created.
      */
-//    public static Session getSession() {
-//        boolean currentSessionIsManaged = CURRENT_SESSION_IS_MANAGED.get();
-//        if (!currentSessionIsManaged) {
-//            throw new IllegalStateException("Called outside of managed session context.");
-//        }
-//        Session sess = sf().getCurrentSession();
-//        sess.setFlushMode(FlushModeType.AUTO);
-//
-//        Transaction transaction = sess.getTransaction();
-//        if (transaction == null || !transaction.isActive()) {
-//            sess.beginTransaction();
-//        }
-//        addSessionToStackTraceMap(sess);
-//        return sess;
-//    }
-
     public static Session getSession() {
-        Session session = currentSession.get();
-        if (session == null) {
-            session = sf.openSession();
-            currentSession.set(session);
+        boolean currentSessionIsManaged = CURRENT_SESSION_IS_MANAGED.get();
+        if (!currentSessionIsManaged) {
+            throw new IllegalStateException("Called outside of managed session context.");
         }
-        session.setFlushMode(FlushModeType.AUTO);
+        Session sess = sf().getCurrentSession();
+        sess.setFlushMode(FlushModeType.AUTO);
 
-        Transaction transaction = session.getTransaction();
+        Transaction transaction = sess.getTransaction();
         if (transaction == null || !transaction.isActive()) {
-            session.beginTransaction();
+            sess.beginTransaction();
         }
-        addSessionToStackTraceMap(session);
-        return session;
+        addSessionToStackTraceMap(sess);
+        return sess;
     }
 
     /**

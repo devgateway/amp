@@ -577,7 +577,7 @@ public class PersistenceManager {
         if (!currentSessionIsManaged) {
             throw new IllegalStateException("Called outside of managed session context.");
         }
-        Session sess = sf().openSession();
+        Session sess = sf().getCurrentSession();
         sess.setFlushMode(FlushModeType.AUTO);
 
         Transaction transaction = sess.getTransaction();

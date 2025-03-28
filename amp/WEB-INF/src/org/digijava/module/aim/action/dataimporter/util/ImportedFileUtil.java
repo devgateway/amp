@@ -73,10 +73,8 @@ public class ImportedFileUtil {
 
     public static void updateFileStatus(ImportedFilesRecord importedFilesRecord, ImportStatus status) {
         logger.info("Updating file status to {}", status);
-
         Session session = PersistenceManager.getRequestDBSession();
         Transaction tx = session.beginTransaction();
-
         String sql = "UPDATE IMPORTED_FILES_RECORD SET import_status = :status WHERE id = :fileId";
 
         Query query = session.createSQLQuery(sql);

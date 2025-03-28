@@ -58,11 +58,8 @@ public class ImportedFileUtil {
 
             long generatedId = resultSet.getLong(1);
 
-            ImportedFilesRecord importedFilesRecord = new ImportedFilesRecord();
-            importedFilesRecord.setId(generatedId);
-            importedFilesRecord.setFileHash(generatedHash);
-            importedFilesRecord.setImportStatus(ImportStatus.UPLOADED);
-            importedFilesRecord.setFileName(filename);
+            ImportedFilesRecord importedFilesRecord = PersistenceManager.getSession().get(ImportedFilesRecord.class,generatedId);
+
 
             logger.info("File saved {}", importedFilesRecord);
             return importedFilesRecord;

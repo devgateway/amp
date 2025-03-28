@@ -52,9 +52,9 @@
     <logger name="org.quartz" level="ERROR" />
     <logger name="org.springframework.security" level="ERROR" />
 
-    <logger name="org.digijava" level="ERROR" /> <!-- DEBUG default -->
+    <logger name="org.digijava" level="INFO" /> <!-- DEBUG default -->
 
-    <logger name="org.dgfoundation" level="ERROR" /> <!-- DEBUG default -->
+    <logger name="org.dgfoundation" level="INFO" /> <!-- DEBUG default -->
 
     <!-- SET to DEBUG to see wicket page render times -->
     <logger name="org.apache.wicket.devutils.inspector.RenderPerformanceListener" level="DEBUG" />

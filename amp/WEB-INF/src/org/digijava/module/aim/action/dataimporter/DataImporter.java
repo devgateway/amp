@@ -235,7 +235,6 @@ public class DataImporter extends Action {
 
                     int res = 0;
                     ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile, fileName);
-                    importedFilesRecord = PersistenceManager.getSession().get(ImportedFilesRecord.class,importedFilesRecord.getId());
                     logger.info("Saved file record: {}",importedFilesRecord);
                     boolean isInternal= dataImporterForm.isInternal();
                     logger.info("Internal: "+ isInternal);

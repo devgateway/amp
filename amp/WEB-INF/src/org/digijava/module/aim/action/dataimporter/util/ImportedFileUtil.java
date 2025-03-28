@@ -49,7 +49,7 @@ public class ImportedFileUtil {
 
             preparedStatement.setString(1, filename);
             preparedStatement.setString(2, generatedHash);
-            preparedStatement.setObject(3, ImportStatus.UPLOADED.ordinal()); // Store Enum as String
+            preparedStatement.setObject(3, ImportStatus.UPLOADED.ordinal());
 
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.next()) {

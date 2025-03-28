@@ -12,7 +12,7 @@
         </id>
         <many-to-one name="importedFilesRecord" cascade="save-update" column="imported_file_record_id" class="org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord" not-null="true"/>
 
-        <property name="importResponse" column="import_response" type="java.lang.String" length="10000" />
+        <property name="importResponse" column="import_response" type="java.lang.String" length="2000000" />
         <property name="newProject" column="new_project" type="java.lang.Boolean" />
 
         <property name="importStatus" column="import_status" type="org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus" />

@@ -42,12 +42,12 @@ public class ImportedFileUtil {
     public static ImportedFilesRecord saveFile(File file, String filename) throws IOException, NoSuchAlgorithmException {
         String generatedHash = generateSHA256Hash(file);
         logger.info("Saving File hash is " + generatedHash);
-
+        long generatedId=0l;
         String sql = "INSERT INTO IMPORTED_FILES_RECORD (id, file_name, file_hash, import_status) VALUES (nextval('IMPORTED_FILES_RECORD_SEQ'), ?, ?, ?) RETURNING id";
 
         try (Connection connection = PersistenceManager.getJdbcConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
+            connection.setAutoCommit(false);
             preparedStatement.setString(1, filename);
             preparedStatement.setString(2, generatedHash);
             preparedStatement.setObject(3, ImportStatus.UPLOADED.ordinal());
@@ -57,24 +57,23 @@ public class ImportedFileUtil {
                 throw new SQLException("Saving file failed, no ID obtained.");
             }
 
-            long generatedId = resultSet.getLong(1);
+             generatedId = resultSet.getLong(1);
 
-            ImportedFilesRecord importedFilesRecord = PersistenceManager.getSession().get(ImportedFilesRecord.class,generatedId);
-
-
-            logger.info("File saved {}", importedFilesRecord);
-            return importedFilesRecord;
+           connection.commit();
 
         } catch (SQLException e) {
             logger.error("Error saving file: {}", e.getMessage(), e);
             throw new RuntimeException("Database error while saving file.", e);
         }
+        ImportedFilesRecord importedFilesRecord = PersistenceManager.getSession().get(ImportedFilesRecord.class,generatedId);
+
+        logger.info("File saved {}", importedFilesRecord);
+        return importedFilesRecord;
     }
 
     public static void updateFileStatus(ImportedFilesRecord importedFilesRecord, ImportStatus status) {
         logger.info("Updating file status to {}", status);
         Session session = PersistenceManager.getRequestDBSession();
-        Transaction tx = session.beginTransaction();
         String sql = "UPDATE IMPORTED_FILES_RECORD SET import_status = :status WHERE id = :fileId";
 
         Query query = session.createSQLQuery(sql);
@@ -84,7 +83,6 @@ public class ImportedFileUtil {
         int updatedRows = query.executeUpdate();
         logger.info("Updated {} rows", updatedRows);
 
-        tx.commit();
     }
     public static List<ImportedFilesRecord> getSimilarFiles(File file) throws IOException, NoSuchAlgorithmException {
         String hash = generateSHA256Hash(file);

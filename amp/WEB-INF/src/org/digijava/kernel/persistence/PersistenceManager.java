@@ -579,7 +579,6 @@ public class PersistenceManager {
         }
         Session sess = sf().getCurrentSession();
         sess.setFlushMode(FlushModeType.AUTO);
-
         Transaction transaction = sess.getTransaction();
         if (transaction == null || !transaction.isActive()) {
             sess.beginTransaction();

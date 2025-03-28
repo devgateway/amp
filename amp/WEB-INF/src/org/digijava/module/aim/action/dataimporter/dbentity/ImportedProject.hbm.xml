@@ -6,8 +6,8 @@
            table="IMPORTED_PROJECT">
         <cache usage="read-write" />
         <id name="id" column="id" type="java.lang.Long">
-            <generator class="native">
-                <param name="sequence">IMPORTED_PROJECT_SEQ</param>
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">IMPORTED_PROJECT_SEQ</param>
             </generator>
         </id>
         <many-to-one name="importedFilesRecord" cascade="save-update" column="imported_file_record_id" class="org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord" not-null="true"/>

@@ -222,7 +222,7 @@ public class ActivityUtil {
                     tmpGroup.setAmpActivityLastVersion(a);
 
                     //TODO this is a temporary status for the case when we have a new activity and we want to create a new version
-                    a.setApprovalStatus(ApprovalStatus.created);
+                    a.setApprovalStatus(ApprovalStatus.started);
                     Long id = (Long) session.save(tmpGroup);
                     tmpGroup.setAmpActivityGroupId(id);
                     a.setAmpActivityGroup(tmpGroup);

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>GGW-84</jira>
+    <keyword>fix report generator urls</keyword>
+    <author>timothygachengo</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                Alter table imported_files_record alter column import_status TYPE VARCHAR(1000);
+
+                UPDATE imported_files_record
+                SET import_status = 'UPLOADED'
+                WHERE import_status LIKE '0xACED%';
+
+                Alter table imported_files_record alter column import_status TYPE VARCHAR(50);
+
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

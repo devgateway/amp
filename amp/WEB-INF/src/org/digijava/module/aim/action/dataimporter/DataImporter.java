@@ -342,19 +342,19 @@ public class DataImporter extends Action {
         DataImporterConfig dataImporterConfig= new DataImporterConfig();
         Set<DataImporterConfigValues> configValues = new HashSet<>();
         dataImporterConfig.setConfigName(configName);
-        session.saveOrUpdate(dataImporterConfig);
+        session.save(dataImporterConfig);
         for (Map.Entry<String, String> entry : config.entrySet()) {
             DataImporterConfigValues configValue = new DataImporterConfigValues();
             configValue.setConfigKey(entry.getKey());
             configValue.setConfigValue(entry.getValue());
             configValue.setDataImporterConfig(dataImporterConfig);
             configValues.add(configValue);
-            session.saveOrUpdate(configValue);
+            session.save(configValue);
         }
 
 
         dataImporterConfig.setConfigValues(configValues);
-
+        session.flush();
 
 
         logger.info("Saved configuration: {}", dataImporterConfig);

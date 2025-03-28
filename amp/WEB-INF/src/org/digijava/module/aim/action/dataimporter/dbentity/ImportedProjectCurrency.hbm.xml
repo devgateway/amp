@@ -6,8 +6,8 @@
            table="IMPORTED_PROJECT_CURRENCY">
         <cache usage="read-write" />
         <id name="id" column="id" type="java.lang.Long">
-            <generator class="native">
-                <param name="sequence">IMPORTED_PROJECT_CURRENCY_ID</param>
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">IMPORTED_PROJECT_CURRENCY_ID</param>
             </generator>
         </id>
         <property name="importedProjectName" column="imported_project_name" type="java.lang.String" />

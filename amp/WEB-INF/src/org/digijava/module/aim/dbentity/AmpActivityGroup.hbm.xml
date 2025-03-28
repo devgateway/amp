@@ -12,7 +12,7 @@
 			</generator>
 		</id>
 
-		<version name="version" column="version" type="long" />
+		<version name="version" column="version" type="long" unsaved-value="negative"/>
 
 		<property column="autoClosedOnExpiration" name="autoClosedOnExpiration" type="java.lang.Boolean" />
 

@@ -52,6 +52,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -447,6 +448,11 @@ public class ActivityUtil {
      * increment explicitly.
      */
     private static void forceVersionIncrement(Session session, AmpActivityGroup group) {
+        Serializable id = session.getIdentifier(group);
+        boolean isSaved = (id != null);
+        if (!isSaved) {
+            session.saveOrUpdate(group);
+        }
         session.buildLockRequest(new LockOptions(LockMode.OPTIMISTIC_FORCE_INCREMENT)).lock(group);
     }
 

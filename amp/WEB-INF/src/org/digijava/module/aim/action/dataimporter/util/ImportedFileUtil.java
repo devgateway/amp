@@ -5,6 +5,7 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,12 +71,22 @@ public class ImportedFileUtil {
         }
     }
 
-    public static void updateFileStatus(ImportedFilesRecord importedFilesRecord, ImportStatus status) {
+    public static void updateFileStatus(Long fileId, ImportStatus status) {
         logger.info("Updating file status to {}", status);
+
         Session session = PersistenceManager.getRequestDBSession();
-        importedFilesRecord.setImportStatus(status);
-        session.saveOrUpdate(importedFilesRecord);
-        session.flush();
+        Transaction tx = session.beginTransaction();
+
+        String sql = "UPDATE IMPORTED_FILES_RECORD SET import_status = :status WHERE id = :fileId";
+
+        Query query = session.createSQLQuery(sql);
+        query.setParameter("status", status.ordinal());
+        query.setParameter("fileId", fileId);
+
+        int updatedRows = query.executeUpdate();
+        logger.info("Updated {} rows", updatedRows);
+
+        tx.commit();
     }
     public static List<ImportedFilesRecord> getSimilarFiles(File file) throws IOException, NoSuchAlgorithmException {
         String hash = generateSHA256Hash(file);

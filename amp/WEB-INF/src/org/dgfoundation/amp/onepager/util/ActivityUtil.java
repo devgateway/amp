@@ -266,13 +266,13 @@ public class ActivityUtil {
         }
 
         if (!newActivity) {
-            session.clear();
+//            session.clear();
             //existing activity
             //previousVersion for current activity
             if (group.getAmpActivityLastVersion().getAmpActivityId().equals(a.getAmpActivityId())) {
                 forceVersionIncrement(session, group);
             }
-            group = session.get(AmpActivityGroup.class, group.getAmpActivityGroupId()); // Reload
+//            group = session.get(AmpActivityGroup.class, group.getAmpActivityGroupId()); // Reload
             group.setAmpActivityLastVersion(a);
             session.merge(group);
 
@@ -449,12 +449,12 @@ public class ActivityUtil {
      * increment explicitly.
      */
     private static void forceVersionIncrement(Session session, AmpActivityGroup group) {
-        Serializable id = session.getIdentifier(group);
-        boolean isSaved = (id != null);
-        if (!isSaved) {
-            session.saveOrUpdate(group);
-            session.flush();
-        }
+//        Serializable id = session.getIdentifier(group);
+//        boolean isSaved = (id != null);
+//        if (!isSaved) {
+//            session.saveOrUpdate(group);
+//            session.flush();
+//        }
         session.buildLockRequest(new LockOptions(LockMode.OPTIMISTIC_FORCE_INCREMENT)).lock(group);
     }
 

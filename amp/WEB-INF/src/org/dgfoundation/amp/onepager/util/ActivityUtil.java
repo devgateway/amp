@@ -306,6 +306,9 @@ public class ActivityUtil {
             }
         } else {
 //            session.saveOrUpdate(a);
+            if(!session.isOpen()){
+                session = PersistenceManager.getRequestDBSession();
+            }
             session.merge(a);
         }
         session.flush();

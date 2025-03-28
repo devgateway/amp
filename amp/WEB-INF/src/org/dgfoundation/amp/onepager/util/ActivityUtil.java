@@ -272,6 +272,7 @@ public class ActivityUtil {
             if (group.getAmpActivityLastVersion().getAmpActivityId().equals(a.getAmpActivityId())) {
                 forceVersionIncrement(session, group);
             }
+            group = session.get(AmpActivityGroup.class, group.getAmpActivityGroupId()); // Reload
             group.setAmpActivityLastVersion(a);
             session.merge(group);
 
@@ -452,6 +453,7 @@ public class ActivityUtil {
         boolean isSaved = (id != null);
         if (!isSaved) {
             session.saveOrUpdate(group);
+            session.flush();
         }
         session.buildLockRequest(new LockOptions(LockMode.OPTIMISTIC_FORCE_INCREMENT)).lock(group);
     }

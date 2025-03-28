@@ -153,6 +153,12 @@ public class TopsChartService {
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_PROGRAMS);
                 name = DashboardConstants.TOP_PROGRAMS;
                 break;
+            case CT:
+                setColumn(ColumnConstants.DONOR_COUNTRY);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.DONOR_COUNTRY));
+                title = TranslatorWorker.translateText(DashboardConstants.TOP_COUNTRIES);
+                name = DashboardConstants.TOP_COUNTRIES;
+                break;
             case NDD:
                 setColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
                 applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1));

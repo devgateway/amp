@@ -293,13 +293,13 @@ public class ContactInfoUtil {
         }
         return retValue;
     }
-    public static List<Long> getActivityContactIds(Long activityId) {
+    public static List<Long> getActivityContactIds(Long activityId, Session session) {
         if (activityId == null) return Collections.emptyList(); // Avoid returning null
 
         String queryString = "SELECT a.id FROM AmpActivityContact a WHERE a.activity.ampActivityId = :id";
         List<Long> retValue = new ArrayList<>();
 
-        try (Session session = PersistenceManager.getRequestDBSession()) { // Auto-closing session
+        try { // Auto-closing session
             Query<Long> query = session.createQuery(queryString, Long.class);
             query.setParameter("id", activityId);
             retValue = query.list();

@@ -206,8 +206,8 @@ public class ActivityUtil {
         //is versioning activated?
         boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
         boolean isActivityForm = context.getSource() == ActivitySource.ACTIVITY_FORM;
-        if (oldA.getAmpActivityId() != null)
-            session.evict(oldA);
+//        if (oldA.getAmpActivityId() != null)
+//            session.evict(oldA);
         if (createNewVersion) {
             try {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();

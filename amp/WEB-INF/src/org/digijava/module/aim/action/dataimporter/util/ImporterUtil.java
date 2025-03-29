@@ -228,7 +228,6 @@ public class ImporterUtil {
 
     private static String getCurrencyCodeFromExistingImported(String importedProjectName) {
         Session session = getSession();
-        session.clear();
         String hql = "FROM " + ImportedProjectCurrency.class.getName() + " c where c.importedProjectName= :importedProjectName";
         Query query = session.createQuery(hql);
         query.setParameter("importedProjectName", importedProjectName);

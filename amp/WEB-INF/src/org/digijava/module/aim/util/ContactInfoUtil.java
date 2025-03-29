@@ -295,6 +295,7 @@ public class ContactInfoUtil {
     }
     public static List<Long> getActivityContactIds(Long activityId, Session session) {
         if (activityId == null) return Collections.emptyList(); // Avoid returning null
+        session = PersistenceManager.openNewSession();
 
         String queryString = "SELECT a.id FROM AmpActivityContact a WHERE a.activity.ampActivityId = :id";
         List<Long> retValue = new ArrayList<>();

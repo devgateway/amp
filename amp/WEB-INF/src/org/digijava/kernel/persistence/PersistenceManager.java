@@ -309,7 +309,7 @@ public class PersistenceManager {
         if (session.getTransaction()==null || !session.getTransaction().isActive()) {
         session.beginTransaction();
         }
-        return session;
+        return threadLocalSession.get();
     }
 
     public static void commitAndClose(Session session)

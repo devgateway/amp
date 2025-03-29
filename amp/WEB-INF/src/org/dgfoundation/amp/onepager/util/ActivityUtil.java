@@ -256,7 +256,6 @@ public class ActivityUtil {
             a.setAmpActivityGroup(tmpGroup);
 
         }
-//        session.flush();
 
         setCreationTimeOnStructureImages(a);
 
@@ -291,7 +290,6 @@ public class ActivityUtil {
         saveEditors(session, createNewVersion, editorStore, site);
 
         saveAgreements(a, session, isActivityForm);
-        session.flush();
         saveContacts(a, session, (draft != draftChange), ampCurrentMember);
 
         updateComponentFunding(a, session);

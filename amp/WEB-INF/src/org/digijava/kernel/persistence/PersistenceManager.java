@@ -65,6 +65,7 @@ public class PersistenceManager {
     private static SessionFactory sf;
     private static Configuration cfg;
     private static Logger logger = I18NHelper.getKernelLogger(PersistenceManager.class);
+    private static final ThreadLocal<Session> threadLocalSession = new ThreadLocal<>();
 
     public static String PRECACHE_REGION =
             "org.digijava.kernel.persistence.PersistenceManager.precache_region";
@@ -292,6 +293,45 @@ public class PersistenceManager {
         }
 
     }
+
+    /**
+     * Get the thread-safe session instance.
+     *
+     * @return Hibernate Session
+     */
+    public static Session getSessionNewly() {
+        Session session = threadLocalSession.get();
+        if (session == null || !session.isOpen()) {
+            session = sf().openSession();
+            threadLocalSession.set(session);
+        }
+        session.beginTransaction();
+        return session;
+    }
+
+    public static void commitAndClose(Session session)
+    {
+        try {
+            if (session != null && session.isOpen()) {
+                session.getTransaction().commit();
+                session.close();
+            }
+        }catch (Exception e)
+        {
+            logger.error("Exception commiting",e );
+        }
+    }
+
+    /**
+     * Refresh the current session if needed.
+     */
+    public static void refreshSession() {
+        Session session = threadLocalSession.get();
+        if (session != null && session.isOpen()) {
+            session.clear();
+        }
+    }
+
 
     /**
      * precache hibernate classes

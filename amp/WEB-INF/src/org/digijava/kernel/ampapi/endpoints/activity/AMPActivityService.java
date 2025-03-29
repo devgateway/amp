@@ -90,11 +90,14 @@ public class AMPActivityService implements ActivityService {
             AmpTeamMember modifiedBy, boolean draftChange, SaveContext saveContext,
             EditorStore editorStore, Site site) throws Exception {
 
-        Session session = PersistenceManager.getRequestDBSession();
+        Session session = PersistenceManager.getSessionNewly();
 
-        return saveActivityNewVersion(newActivity, translations, cumulativeTranslations, modifiedBy,
+        AmpActivityVersion activityVersion = saveActivityNewVersion(newActivity, translations, cumulativeTranslations, modifiedBy,
                 Boolean.TRUE.equals(newActivity.getDraft()), draftChange,
                 session, saveContext, editorStore, site);
+        PersistenceManager.commitAndClose(session);
+        return activityVersion;
+
     }
 
     @Override

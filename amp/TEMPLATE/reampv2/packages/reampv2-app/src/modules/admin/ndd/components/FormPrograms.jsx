@@ -126,12 +126,21 @@ class FormPrograms extends Component {
   sortPrograms(data) {
     if (data && data.length > 0) {
       return data.sort((a, b) => {
-        const compare = (a[SRC_PROGRAM].lvl1.value + a[SRC_PROGRAM].lvl2.value + a[SRC_PROGRAM].lvl3.value)
-          .localeCompare(b[SRC_PROGRAM].lvl1.value + b[SRC_PROGRAM].lvl2.value + b[SRC_PROGRAM].lvl3.value);
+        const getValue = (obj, key) =>
+            (obj?.[key]?.lvl1?.value ?? '') +
+            (obj?.[key]?.lvl2?.value ?? '') +
+            (obj?.[key]?.lvl3?.value ?? '');
+
+        const srcA = getValue(a, SRC_PROGRAM);
+        const srcB = getValue(b, SRC_PROGRAM);
+        const compare = String(srcA).localeCompare(String(srcB));
+
         if (compare === 0) {
-          return (a[DST_PROGRAM].lvl1.value + a[DST_PROGRAM].lvl2.value + a[DST_PROGRAM].lvl3.value)
-            .localeCompare(b[DST_PROGRAM].lvl1.value + b[DST_PROGRAM].lvl2.value + b[DST_PROGRAM].lvl3.value);
+          const dstA = getValue(a, DST_PROGRAM);
+          const dstB = getValue(b, DST_PROGRAM);
+          return String(dstA).localeCompare(String(dstB));
         }
+
         return compare;
       });
     }

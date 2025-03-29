@@ -12,7 +12,9 @@ import {
     TRANSITIONS, PROGRAMLVL2, TRN_PREFIX, CURRENCY_CODE
 } from '../../utils/constants';
 import {
-    addAlpha, formatNumberWithSettings, getCustomColor
+    addAlpha,
+    formatNumberAndAppendCurrency,
+    getCustomColor
 } from '../../utils/Utils';
 import ToolTip from '../tooltips/ToolTip';
 // eslint-disable-next-line no-unused-vars
@@ -209,10 +211,12 @@ class NestedDonutsProgramChart extends Component {
 
     createTooltip = () => {
         const {tooltipData} = this.state;
-        const {settings, globalSettings, translations} = this.props;
         if (tooltipData) {
             const program = tooltipData.points[0].data.extraData[tooltipData.points[0].i];
-            const val = formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings, program.amount, true);
+            // const val = formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings, program.amount, true);
+
+            const {settings, globalSettings, translations} = this.props;
+            const val = formatNumberAndAppendCurrency(program.amount,settings[CURRENCY_CODE],translations, globalSettings)
             const totalAmount = tooltipData.points[0].data.extraData.reduce((i, j) => (i + j.amount), 0);
             return (
                 <ToolTip

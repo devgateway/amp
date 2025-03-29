@@ -1338,12 +1338,11 @@ public class ActivityUtil {
                         session.saveOrUpdate(activityContact.getContact());
                         savedContacts.put(activityContact.getContact().getId(), true);
                     }
-                    if (activityContact.getId() == null) {
                         session.saveOrUpdate(activityContact);
                         if (!newActivity) {
                             session.merge(activityContact.getContact());
                         }
-                    }
+
                 }
             }
         logger.info("Saving contacts {}"+savedContacts);

@@ -76,7 +76,7 @@ public class ImportedFileUtil {
         Session session = PersistenceManager.getRequestDBSession();
         String sql = "UPDATE IMPORTED_FILES_RECORD SET import_status = :status WHERE id = :fileId";
 
-        Query query = session.createSQLQuery(sql);
+        Query query = session.createQuery(sql);
         query.setParameter("status", status.ordinal());
         query.setParameter("fileId", importedFilesRecord.getId());
 

@@ -65,7 +65,7 @@ public class PersistenceManager {
     private static SessionFactory sf;
     private static Configuration cfg;
     private static Logger logger = I18NHelper.getKernelLogger(PersistenceManager.class);
-    private static final ThreadLocal<Session> threadLocalSession = new ThreadLocal<>();
+    private static final ThreadLocal<Session> threadLocalSession = ThreadLocal.withInitial(() -> null);
 
     public static String PRECACHE_REGION =
             "org.digijava.kernel.persistence.PersistenceManager.precache_region";
@@ -306,7 +306,9 @@ public class PersistenceManager {
             session = sf().openSession();
             threadLocalSession.set(session);
         }
-//        session.beginTransaction();
+        if (session.getTransaction()==null || !session.getTransaction().isActive()) {
+        session.beginTransaction();
+        }
         return session;
     }
 

@@ -306,7 +306,7 @@ public class PersistenceManager {
             session = sf().openSession();
             threadLocalSession.set(session);
         }
-        session.beginTransaction();
+//        session.beginTransaction();
         return session;
     }
 

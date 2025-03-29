@@ -47,6 +47,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.gates.FundingOrganisationGate;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
 import java.util.*;
@@ -327,7 +328,7 @@ public class AmpDonorFundingFormSectionFeature extends
 
         orgRolelist = new ListEditor<AmpOrgRole>("listFunding", fundingOrgRoleModel) {
             @Override
-            protected void onPopulateItem(ListItem<AmpOrgRole> item) {
+            protected void onPopulateItem(ListItem<AmpOrgRole> item)  {
                 AmpOrgRole orgRole = item.getModelObject();
                 AmpFundingGroupFeaturePanel fg = new AmpFundingGroupFeaturePanel(
                         "fundingItem", "Funding Group", new Model<AmpRole>(orgRole.getRole()), fundingModel,
@@ -351,25 +352,29 @@ public class AmpDonorFundingFormSectionFeature extends
                         GatePermConst.ScopeKeys.CURRENT_ORG, fo);
                 PermissionUtil.putInScope(((AmpAuthWebSession) getSession()).getHttpSession(),
                         GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
-                User currentUser = TeamUtil.getCurrentUser();
-                boolean enabled=false;
-                Set<AmpOrganisation>  orgs = currentUser.getAssignedOrgs();
-                logger.info("Assigned Orgs" + orgs);
-                for (AmpOrganisation ampOrg : orgs) {
-                    logger.info("Org" + ampOrg.getName());
-                    logger.info("Org Role" + orgRole);
-                    if (ampOrg.getAmpOrgId().equals(orgRole.getOrganisation().getAmpOrgId()))
-                    {
-                        logger.info("Access granted for user " + currentUser.getName() + " to organization " + ampOrg.getName());
-                        enabled = true;
+                item.setOutputMarkupId(true);
+
+                item.add(fg);
+                boolean isEnabled=false;
+                if (Boolean.TRUE.equals(FundingOrganisationGate.enabled)) {
+                    Set<AmpOrganisation> orgs = TeamUtil.getCurrentUser().getAssignedOrgs();
+                    for (AmpOrganisation ampOrg : orgs) {
+                        if (ampOrg.getAmpOrgId().equals(fo.getAmpOrgId()))
+                        {
+                            isEnabled=true;
+                            break;
+                        }
+
+                    }
+                    if(!TeamUtil.getCurrentUser().getEmail().equalsIgnoreCase("atl@amp.org")) {
+                        item.setEnabled(isEnabled);
                     }
                 }
-                logger.info("Enabled for user " + currentUser.getName() + ":" + enabled);
-                item.add(fg);
-                AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-                PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
-                PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
-                item.setEnabled(enabled);
+
+
+//                AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+//                PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
+//                PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
 
             }
 

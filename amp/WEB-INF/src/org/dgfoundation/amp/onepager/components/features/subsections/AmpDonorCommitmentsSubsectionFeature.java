@@ -25,7 +25,7 @@ import java.util.Date;
 public class AmpDonorCommitmentsSubsectionFeature extends AmpSubsectionFeatureFundingPanel<AmpFunding> {
 
     protected AmpDonorCommitmentsFormTableFeature commitsTableFeature;
-    
+
     /**
      * @param id
      * @param fmName
@@ -38,7 +38,7 @@ public class AmpDonorCommitmentsSubsectionFeature extends AmpSubsectionFeatureFu
         super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType), model, transactionType);
         commitsTableFeature = new AmpDonorCommitmentsFormTableFeature("commitsTableFeature", model, "Commitments Table", transactionType);
         add(commitsTableFeature);
-        
+
         AmpAjaxLinkField addCommit=new AmpAjaxLinkField("addCommit","Add Commitment","Add Commitment") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -50,14 +50,14 @@ public class AmpDonorCommitmentsSubsectionFeature extends AmpSubsectionFeatureFu
 //              fd.setTransactionDate(new Date(System.currentTimeMillis()));
                 fd.setAmpFundingId(model.getObject());
                 fd.setTransactionType(Constants.COMMITMENT);
-                
+
                 fd.setAmpCurrencyId(CurrencyUtil.getWicketWorkspaceCurrency());
-                
+
                 //model.getObject().getFundingDetails().add(fd);
                 //commitsTableFeature.getList().removeAll();
                 commitsTableFeature.getEditorList().addItem(fd);
                 target.add(commitsTableFeature);
-                
+
                 AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
                 parent.getFundingInfo().configureRequiredFields();
                 target.add(parent.getFundingInfo());

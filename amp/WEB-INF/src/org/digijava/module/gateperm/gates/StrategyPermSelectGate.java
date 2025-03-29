@@ -18,7 +18,7 @@ import java.util.Queue;
  * This gate returns true if the {@link GatePermConst.ScopeKeys#CURRENT_MEMBER}
  * belongs to the workspace with the Id given in the
  * {@link Gate#getParameters()}
- * 
+ *
  * @author dan@developmentgateway.org
  * @since Jul 24, 2012
  */
@@ -40,7 +40,7 @@ public class StrategyPermSelectGate extends Gate {
     }
 
     /**
-     * 
+     *
      */
     public StrategyPermSelectGate() {
         // TODO Auto-generated constructor stub
@@ -48,30 +48,27 @@ public class StrategyPermSelectGate extends Gate {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.digijava.module.gateperm.core.Gate#logic()
      */
     @Override
     public boolean logic() throws Exception {
         TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
-        
+
         if (tm == null)
             return false;
-        
+
         if (tm.getTeamId() == null)
             return false;
-        
+
         String permStrategy = parameters.poll().trim();
         AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
-        if (ampTeam.getPermissionStrategy()!=null && ampTeam.getPermissionStrategy().compareTo(permStrategy) == 0)
-            return true;
-        
-        return false;
+        return ampTeam.getPermissionStrategy() != null && ampTeam.getPermissionStrategy().compareTo(permStrategy) == 0;
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.digijava.module.gateperm.core.Gate#parameterInfo()
      */
     @Override
@@ -81,7 +78,7 @@ public class StrategyPermSelectGate extends Gate {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.digijava.module.gateperm.core.Gate#mandatoryScopeKeys()
      */
     @Override
@@ -91,7 +88,7 @@ public class StrategyPermSelectGate extends Gate {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.digijava.module.gateperm.core.Gate#description()
      */
     @Override

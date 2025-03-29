@@ -31,4 +31,7 @@ public class DashboardConstants {
     public static final String X_COLUMN = "xColumn";
     public static final String Y_COLUMN = "yColumn";
 
-    public static final String TOP_PROGRAMS = "Top Programs";}
+    public static final String TOP_PROGRAMS = "Top Programs";
+    public static final String TOP_COUNTRIES = "Top Countries";
+}
+

@@ -136,7 +136,7 @@ public class SiteUtils {
     {
         return getDefaultSite();
     }
-    
+
     public static Site getDefaultSite() {
         return getSiteByName("amp");
     }
@@ -147,10 +147,7 @@ public class SiteUtils {
      * @return Site if found. null - if not
      */
     private static Site getSiteByName(String siteName) {
-        Session session = PersistenceManager.getSession();
-
-        session.clear();
-
+        Session session = PersistenceManager.getRequestDBSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Site> criteriaQuery = criteriaBuilder.createQuery(Site.class);
         Root<Site> siteRoot = criteriaQuery.from(Site.class);
@@ -212,16 +209,16 @@ public class SiteUtils {
         Collection<Locale> langs = SiteCache.getInstance().getUserLanguages(site);
         return langs == null ? null : new HashSet<Locale>(langs);
     }
-    
+
     public static Collection<String> getUserLanguagesCodes(Site site) {
         Collection<String> codes = null;
-        if (site != null) 
+        if (site != null)
             codes = SiteCache.getInstance().getUserLanguagesCodes(site);
         if (codes == null)
             codes = new ArrayList<String>();
         return codes;
     }
-        
+
 
     /**
      * Returns default language for specified site
@@ -544,11 +541,11 @@ public class SiteUtils {
                 .filter(SiteDomain::isDefaultDomain)
                 .findFirst()
                 .orElse(null);
-        
+
         if (principalSiteDomain != null) {
             url = principalSiteDomain.getSiteDomain();
         }
-        
+
         return url;
-    }    
+    }
 }

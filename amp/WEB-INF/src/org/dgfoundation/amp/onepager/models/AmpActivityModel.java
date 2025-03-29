@@ -100,7 +100,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
         }
         if(hibernateSession==null || !hibernateSession.isOpen())  {
             try {
-                hibernateSession = PersistenceManager.getSessionNewly();
+                hibernateSession = PersistenceManager.openNewSession();
                 hibernateSession.setFlushMode(FlushModeType.COMMIT);
                 hibernateSession.beginTransaction();
                 s.getHttpSession().setAttribute(OnePagerConst.ONE_PAGER_HIBERNATE_SESSION_KEY, hibernateSession);

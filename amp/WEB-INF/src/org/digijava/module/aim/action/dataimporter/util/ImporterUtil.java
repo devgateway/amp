@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.dgfoundation.amp.onepager.util.PercentagesUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
@@ -32,6 +33,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -228,6 +230,7 @@ public class ImporterUtil {
 
     private static String getCurrencyCodeFromExistingImported(String importedProjectName) {
         Session session = getSession();
+        session.clear();
         String hql = "FROM " + ImportedProjectCurrency.class.getName() + " c where c.importedProjectName= :importedProjectName";
         Query query = session.createQuery(hql);
         query.setParameter("importedProjectName", importedProjectName);
@@ -1037,14 +1040,20 @@ public class ImporterUtil {
 
     private static void createSector(ImportDataModel importDataModel, boolean primary, Long ampSectorId) {
         Sector sector1 = new Sector();
-        sector1.setSector_percentage(100.00);
+
         sector1.setSector(ampSectorId);
         if (primary) {
             importDataModel.getPrimary_sectors().add(sector1);
+            Double perc = PercentagesUtil.split(new BigDecimal(100), importDataModel.getPrimary_sectors().size(),
+                    AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(importDataModel.getPrimary_sectors().size()).doubleValue();
+            sector1.setSector_percentage(perc);
         }
         else
         {
             importDataModel.getSecondary_sectors().add(sector1);
+            Double  perc = PercentagesUtil.split(new BigDecimal(100), importDataModel.getSecondary_sectors().size(),
+                    AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(importDataModel.getSecondary_sectors().size()).doubleValue();
+            sector1.setSector_percentage(perc);
 
         }
     }

@@ -33,7 +33,7 @@ public class AMPActivityService implements ActivityService {
     @Override
     public boolean isActivityStale(Long ampActivityId, Long activityGroupVersion) {
         Session session = PersistenceManager.getSession();
-//        session.clear();
+        session.clear();
 
         // Check if activity exists
         String activityCountHql = "SELECT COUNT(a) FROM AmpActivityVersion a WHERE a.ampActivityId = :ampActivityId";

@@ -790,7 +790,7 @@ public class PersistenceManager {
      * @see #cleanupSession(Session)
      */
     public static void endSessionLifecycle() {
-        cleanupSession(sf().getCurrentSession());
+        cleanupSession(getSession());
     }
 
     /**

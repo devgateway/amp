@@ -307,7 +307,6 @@ public class ActivityUtil {
 //            session.saveOrUpdate(a);
             session.merge(a);
         }
-        session.flush();
 
         updatePerformanceRules(oldA, a);
 
@@ -1347,10 +1346,13 @@ public class ActivityUtil {
                     }
                 }
             }
+        logger.info("Saving contacts {}"+savedContacts);
+            session.flush();
         }catch (Exception e)
         {
             logger.error("Error saving activity contact:",e);
         }
+
     }
     private static void saveAnnualProjectBudgets(AmpActivityVersion a,
                                                  Session session) {

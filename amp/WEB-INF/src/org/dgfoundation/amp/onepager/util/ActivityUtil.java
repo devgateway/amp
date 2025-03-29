@@ -305,8 +305,6 @@ public class ActivityUtil {
             }
         } else {
 //            session.saveOrUpdate(a);
-                PersistenceManager.refreshSession();
-
             session.merge(a);
         }
 //        session.flush();

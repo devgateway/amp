@@ -161,6 +161,7 @@ public class PersistenceManager {
      */
     public static Session openNewSession() {
         org.hibernate.Session openSession = sf.openSession();
+        threadLocalSession.set(openSession);
         return openSession;
     }
 
@@ -299,7 +300,7 @@ public class PersistenceManager {
      *
      * @return Hibernate Session
      */
-    public static Session getSessionNewly() {
+    public static Session getRequestDBSession() {
         Session session = threadLocalSession.get();
         if (session == null || !session.isOpen()) {
             session = sf().openSession();
@@ -630,9 +631,9 @@ public class PersistenceManager {
     /**
      * an alias for {@link #getSession()}
      */
-    public static Session getRequestDBSession() {
-        return getSession();
-    }
+//    public static Session getRequestDBSession() {
+//        return getSession();
+//    }
 
     /**
      * Adds this session to the stack trace map, so its closing can be tracked later

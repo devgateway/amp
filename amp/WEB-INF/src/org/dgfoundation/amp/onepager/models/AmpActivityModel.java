@@ -29,8 +29,8 @@ import java.util.HashMap;
  */
 public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion> implements IModel<AmpActivityVersion>  {
     private static Logger logger = Logger.getLogger(AmpActivityModel.class);
-    
-    
+
+
     protected transient AmpActivityVersion a;
     protected transient HashMap<String, AmpContentTranslation> translationHashMap = new HashMap<String, AmpContentTranslation>();
     protected Long id;
@@ -38,21 +38,21 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 
     private static final long serialVersionUID = 3915904820384659360L;
 
-    
-    
+
+
     public AmpActivityModel() {
         beginConversation(true);
         a = new AmpActivityVersion();
-    }   
-    
+    }
+
     public AmpActivityModel(Long id, String editingKey) {
         beginConversation(true);
-        
+
         this.id = id;
         this.a = null;
         this.editingKey = editingKey;
     }
-    
+
     /**
      * Start a multi-request dialogue known as a conversation.
      * This creates a hibernate session that is kept in the HttpSession (thus one per each user session)
@@ -71,14 +71,14 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
             s.setMetaData(OnePagerConst.AGREEMENT_ITEMS, null);
             s.setMetaData(OnePagerConst.COMMENTS_ITEMS, null);
             s.setMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS, null);
-    
+
             translationHashMap = new HashMap<String, AmpContentTranslation>();
         }
         Session ses = getHibernateSession(reset);
         ses.clear();
     }
-    
-    
+
+
     /**
      * We keep hibernate session in the http session. This will ensure there is one session per wicket conversation (pager).
      * When its null, a new session is created and a transaction started
@@ -100,7 +100,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
         }
         if(hibernateSession==null || !hibernateSession.isOpen())  {
             try {
-                hibernateSession = PersistenceManager.openNewSession();
+                hibernateSession = PersistenceManager.getSessionNewly();
                 hibernateSession.setFlushMode(FlushModeType.COMMIT);
                 hibernateSession.beginTransaction();
                 s.getHttpSession().setAttribute(OnePagerConst.ONE_PAGER_HIBERNATE_SESSION_KEY, hibernateSession);
@@ -145,8 +145,8 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
         org.apache.wicket.Session.get().setMetaData(OnePagerConst.ACTIVITY_FREEZING_CONFIGURATION, isActivityEditable);
         org.apache.wicket.Session.get().setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, ampActivityFrozen);
     }
-    
-    @Override   
+
+    @Override
     public void setObject(AmpActivityVersion arg0) {
         a = arg0;
         super.setObject(a);
@@ -162,7 +162,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
      * Then in a finally block we close the session.
      */
     public static void endConversation()
-    {       
+    {
             AmpAuthWebSession session =  (AmpAuthWebSession) org.apache.wicket.Session.get();
             Session hibernateSession = (Session) session.getHttpSession().getAttribute(OnePagerConst.ONE_PAGER_HIBERNATE_SESSION_KEY);
             session.getHttpSession().setAttribute(OnePagerConst.ONE_PAGER_HIBERNATE_SESSION_KEY,null);
@@ -170,7 +170,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
             if(!hibernateSession.isOpen()) throw new RuntimeException("Attempted to close an already closed session!");
             Throwable exceptionToThrow = null;
             try {
-                hibernateSession.flush();        
+                hibernateSession.flush();
                 hibernateSession.getTransaction().commit();
                 hibernateSession.setFlushMode(FlushModeType.COMMIT);
             }
@@ -194,7 +194,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
             }
             finally {
                 hibernateSession.clear();
-                hibernateSession.close(); 
+                hibernateSession.close();
             }
             if (exceptionToThrow != null)
                 throw new RuntimeException("error while ending database conversation", exceptionToThrow);

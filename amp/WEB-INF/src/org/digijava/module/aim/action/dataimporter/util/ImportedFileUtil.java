@@ -77,7 +77,7 @@ public class ImportedFileUtil {
         String sql = "UPDATE ImportedFilesRecord SET importStatus = :status WHERE id = :fileId";
 
         Query query = session.createQuery(sql);
-        query.setParameter("status", status.ordinal());
+        query.setParameter("status", status);
         query.setParameter("fileId", importedFilesRecord.getId());
 
         int updatedRows = query.executeUpdate();

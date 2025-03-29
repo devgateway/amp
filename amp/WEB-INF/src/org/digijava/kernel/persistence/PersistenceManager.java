@@ -65,7 +65,6 @@ public class PersistenceManager {
     private static SessionFactory sf;
     private static Configuration cfg;
     private static Logger logger = I18NHelper.getKernelLogger(PersistenceManager.class);
-    private static final ThreadLocal<Session> threadLocalSession = ThreadLocal.withInitial(() -> null);
 
     public static String PRECACHE_REGION =
             "org.digijava.kernel.persistence.PersistenceManager.precache_region";
@@ -161,7 +160,6 @@ public class PersistenceManager {
      */
     public static Session openNewSession() {
         org.hibernate.Session openSession = sf.openSession();
-        threadLocalSession.set(openSession);
         return openSession;
     }
 
@@ -294,47 +292,6 @@ public class PersistenceManager {
         }
 
     }
-
-    /**
-     * Get the thread-safe session instance.
-     *
-     * @return Hibernate Session
-     */
-    public static Session getRequestDBSession() {
-        Session session = threadLocalSession.get();
-        if (session == null || !session.isOpen()) {
-            session = sf().openSession();
-            threadLocalSession.set(session);
-        }
-        if (session.getTransaction()==null || !session.getTransaction().isActive()) {
-        session.beginTransaction();
-        }
-        return threadLocalSession.get();
-    }
-
-    public static void commitAndClose(Session session)
-    {
-        try {
-            if (session != null && session.isOpen()) {
-                session.getTransaction().commit();
-                session.close();
-            }
-        }catch (Exception e)
-        {
-            logger.error("Exception commiting",e );
-        }
-    }
-
-    /**
-     * Refresh the current session if needed.
-     */
-    public static void refreshSession() {
-        Session session = threadLocalSession.get();
-        if (session != null && session.isOpen()) {
-            session.clear();
-        }
-    }
-
 
     /**
      * precache hibernate classes
@@ -622,6 +579,7 @@ public class PersistenceManager {
         }
         Session sess = sf().getCurrentSession();
         sess.setFlushMode(FlushModeType.AUTO);
+
         Transaction transaction = sess.getTransaction();
         if (transaction == null || !transaction.isActive()) {
             sess.beginTransaction();
@@ -633,9 +591,9 @@ public class PersistenceManager {
     /**
      * an alias for {@link #getSession()}
      */
-//    public static Session getRequestDBSession() {
-//        return getSession();
-//    }
+    public static Session getRequestDBSession() {
+        return getSession();
+    }
 
     /**
      * Adds this session to the stack trace map, so its closing can be tracked later
@@ -819,7 +777,7 @@ public class PersistenceManager {
 //                } finally {
 //                    // do we really want to attempt commit if flushing fails?
                 //session will be flushed automatically on transaction commit since we set the FlusmodeType as AUTO
-                    transaction.commit();
+                transaction.commit();
 //                }
             }
         }

@@ -95,7 +95,6 @@ public class AMPActivityService implements ActivityService {
         AmpActivityVersion activityVersion = saveActivityNewVersion(newActivity, translations, cumulativeTranslations, modifiedBy,
                 Boolean.TRUE.equals(newActivity.getDraft()), draftChange,
                 session, saveContext, editorStore, site);
-        PersistenceManager.commitAndClose(session);
         return activityVersion;
 
     }

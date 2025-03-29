@@ -791,7 +791,7 @@ public class FeaturesUtil {
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
-        }    
+        }
         return col;
     }
 
@@ -841,8 +841,8 @@ public class FeaturesUtil {
         return col;
     }
 
-    
-    
+
+
     /**
      *
      * @author dan
@@ -865,7 +865,7 @@ public class FeaturesUtil {
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
-        }    
+        }
         return col;
     }
 
@@ -891,7 +891,7 @@ public class FeaturesUtil {
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
-        }    
+        }
         return col;
     }
 
@@ -917,22 +917,22 @@ public class FeaturesUtil {
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
-        }    
+        }
         return col;
     }
-    
+
     /**
-     * Returns the list of {@link AmpFieldsVisibility} with names in the specified list of fieldNames 
-     * that are attached to the template with the given templateId 
+     * Returns the list of {@link AmpFieldsVisibility} with names in the specified list of fieldNames
+     * that are attached to the template with the given templateId
      * @param fieldNames
      * @return a list of AmpFieldsVisibility
      */
     public static List<AmpFieldsVisibility> getAmpFieldsVisibility(Collection<String> fieldNames, Long templateId) {
         return getAmpObjectVisibility(AmpFieldsVisibility.class, fieldNames, templateId);
     }
-    
+
     /**
-     * Returns the list of {@link AmpFeaturesVisibility} with names in the specified list of featuresNames 
+     * Returns the list of {@link AmpFeaturesVisibility} with names in the specified list of featuresNames
      * that are attached to the template with the given templateId
      * @param featuresNames
      * @param templateId
@@ -941,9 +941,9 @@ public class FeaturesUtil {
     public static List<AmpFeaturesVisibility> getAmpFeaturesVisibility(Collection<String> featuresNames, Long templateId) {
         return getAmpObjectVisibility(AmpFeaturesVisibility.class, featuresNames, templateId);
     }
-    
+
     /**
-     * Returns the list of {@link AmpModulesVisibility} with names in the specified list of modulesNames 
+     * Returns the list of {@link AmpModulesVisibility} with names in the specified list of modulesNames
      * that are attached to the template with the given templateId
      * @param modulesNames
      * @param templateId
@@ -952,20 +952,20 @@ public class FeaturesUtil {
     public static List<AmpModulesVisibility> getAmpModulesVisibility(Collection<String> modulesNames, Long templateId) {
         return getAmpObjectVisibility(AmpModulesVisibility.class, modulesNames, templateId);
     }
-    
+
     private static <T extends AmpObjectVisibility> List<T> getAmpObjectVisibility(Class<T> clazz, Collection<String> names, Long templateId) {
         String joinBy = "items";
-        
+
         if (clazz.isAssignableFrom(AmpFieldsVisibility.class))
             joinBy = "fields";
         else if (clazz.isAssignableFrom(AmpFeaturesVisibility.class))
             joinBy = "features";
-        
+
         if (names == null || names.isEmpty()) {
             return new ArrayList<>();
         }
 
-        String qryStr = "select aov from " 
+        String qryStr = "select aov from "
                 + AmpTemplatesVisibility.class.getName() + " as templ"
                 + " join templ." + joinBy + " aov"
                 + " where templ.id=:templateId"
@@ -976,7 +976,7 @@ public class FeaturesUtil {
         qry.setParameterList("names", names);
         return qry.list();
     }
-    
+
     /**
      * Verifies if specified AmpObjectVisibility object is visible or not
      * @param object - AmpObjectVisibility to check
@@ -1004,7 +1004,7 @@ public class FeaturesUtil {
         //if outside the workspace, then provide the default one
         return FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE);
     }
-    
+
     /**
      * Detects current visibility template: used by the current workspace or default one if outside the workspace
      * @return AmpTemplatesVisibility
@@ -1022,7 +1022,7 @@ public class FeaturesUtil {
         // get the default amp template
         return getTemplateVisibility(getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE));
     }
-    
+
     public static boolean existTemplateVisibility(String templateName,Long templateId) {
         Session session = null;
         Collection col = new ArrayList();
@@ -1074,12 +1074,12 @@ public class FeaturesUtil {
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
-        }    
+        }
         return col;
     }
-    
+
     /**
-     * @return names of the root FM groups 
+     * @return names of the root FM groups
      */
     public static Set<String> getMainModulesNames() {
         return new HashSet<String>(PersistenceManager.getSession().createQuery(
@@ -1106,11 +1106,11 @@ public class FeaturesUtil {
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
-        }    
+        }
         return;
     }
-    
-    
+
+
 
     /**
      * @author dan
@@ -1125,7 +1125,7 @@ public class FeaturesUtil {
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
-        }    
+        }
         return ft.getItems();
     }
 
@@ -1206,7 +1206,7 @@ public class FeaturesUtil {
         }
         catch (Exception ex) {
             logger.error("Exception ;;;; " + ex.getMessage());
-        }   
+        }
         return;
     }
 
@@ -1273,7 +1273,7 @@ public class FeaturesUtil {
     public static boolean deleteFeatureVisibility(Long id, Session session) {
         try {
             AmpFeaturesVisibility feature = (AmpFeaturesVisibility) session.load(AmpFeaturesVisibility.class, id);
-            
+
             AmpObjectVisibility parent = feature.getParent();
             parent.getItems().remove(feature);
 
@@ -1304,7 +1304,7 @@ public class FeaturesUtil {
     public static boolean deleteModuleVisibility(Long id, Session session) {
         try {
             AmpModulesVisibility module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, id);
-            
+
             Iterator k = module.getItems().iterator();
             while (k.hasNext()) {
                 AmpFeaturesVisibility feature = (AmpFeaturesVisibility) k.next();
@@ -1336,7 +1336,7 @@ public class FeaturesUtil {
                 AmpTemplatesVisibility element = (AmpTemplatesVisibility) k.next();
                 element.getItems().remove(module);
             }
-            
+
             AmpModulesVisibility parentModule = ((AmpModulesVisibility)module.getParent());
             if (parentModule != null) {
                 parentModule.getSubmodules().remove(module);
@@ -1561,7 +1561,7 @@ public class FeaturesUtil {
         AmpTemplatesVisibility ampTemplate = new AmpTemplatesVisibility();
         ampTemplate = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
                 templateId);
-        
+
         ampTemplate.getOrCreateItems().retainAll(modules);
         ampTemplate.getOrCreateItems().addAll(modules);
         return;
@@ -1630,7 +1630,7 @@ public class FeaturesUtil {
 
     /**
      * @author dan
-     * @param templateId - id of the template with which this field will be linked in case defaultVisible=on 
+     * @param templateId - id of the template with which this field will be linked in case defaultVisible=on
      * or (if defaultVisible==null and the GS "new fields visibility" is "on")
      * @param featureId
      * @param fieldName
@@ -1665,7 +1665,7 @@ public class FeaturesUtil {
             }
             else
                 makeVisible     = defaultVisible;
-            
+
             if  ( makeVisible ){
                 template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class, templateId);
                 template.addField(field);
@@ -1694,12 +1694,12 @@ public class FeaturesUtil {
             if(hasLevel!=null && "no".compareTo(hasLevel)==0)
                 feature.setHasLevel(false);
             else feature.setHasLevel(true);
-                        
+
             module.getOrCreateItems().add(feature);
-            
+
             session.update(module);
             session.save(feature);
-            
+
             String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
             if (gsValue != null && gsValue.equalsIgnoreCase("on")){
                 template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,templateId);
@@ -1746,17 +1746,17 @@ public class FeaturesUtil {
         try {
             session = PersistenceManager.getSession();
             AmpModulesVisibility parent = session.load(AmpModulesVisibility.class, parentId);
-            
+
             module.setName(moduleName);
             module.setParent(parent);
             module.setHasLevel(hasLevel == null || "no".compareTo(hasLevel) != 0);
-            
+
             if(parent.getSubmodules()==null) parent.setSubmodules(new HashSet<>());
             parent.getSubmodules().add(module);
-            
+
             session.update(parent);
             session.save(module);
-            
+
             String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
             if (gsValue != null && gsValue.equalsIgnoreCase("on")){
                 template = session.load(AmpTemplatesVisibility.class,
@@ -1798,7 +1798,7 @@ public class FeaturesUtil {
     public static void updateFieldWithFeatureVisibility(Long featureId,
             String fieldName) {
         Session session = null;
-        Query qry;      
+        Query qry;
         String qryStr;
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -1808,7 +1808,7 @@ public class FeaturesUtil {
             qry.setParameter("fieldName", fieldName,StringType.INSTANCE);
             AmpFieldsVisibility field = (AmpFieldsVisibility) qry.uniqueResult();
             System.out.println(field);
-            if (field != null){             
+            if (field != null){
                 feature.getOrCreateItems().add(field);
                 field.setParent(feature);
                 session.saveOrUpdate(field);
@@ -1856,6 +1856,7 @@ public class FeaturesUtil {
         AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
         try {
             session = PersistenceManager.getRequestDBSession();
+            session.clear();
             ft = session.get(AmpTemplatesVisibility.class,
                     id);
             List list = session.createQuery("from " +
@@ -1868,7 +1869,7 @@ public class FeaturesUtil {
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }
-        
+
         return ft;
     }
 
@@ -1942,7 +1943,7 @@ public class FeaturesUtil {
 
     /**
      * @author dan
-     * 
+     *
      */
 
     public static void cleanUpFM(ArrayList allFieldsId) {
@@ -2019,7 +2020,7 @@ public class FeaturesUtil {
 
     /**
      * @author dan
-     * 
+     *
      */
     public static void deleteOneFeature(Long id) {
         Session session = null;
@@ -2135,26 +2136,26 @@ public class FeaturesUtil {
         java.io.StringReader in = new java.io.StringReader(theString.toLowerCase());
         boolean precededBySpace = true;
         StringBuilder properCase = new StringBuilder();
-        while(true) {      
+        while(true) {
             int i = in.read();
-            if (i == -1)  break;      
+            if (i == -1)  break;
             char c = (char)i;
             if (c == ' ' || c == '"' || c == '(' || c == '.' || c == '/' || c == '\\' || c == ',') {
                 properCase.append(c);
                 precededBySpace = true;
             } else {
-                if (precededBySpace) { 
+                if (precededBySpace) {
                     properCase.append(Character.toUpperCase(c));
-                } else { 
-                    properCase.append(c); 
+                } else {
+                    properCase.append(c);
                 }
                 precededBySpace = false;
             }
         }
-        return properCase.toString();    
+        return properCase.toString();
 
     }
-    
+
     public static final Comparator ALPHA_ORDER = new AmpTreeVisibilityAlphaOrderComparator();
     public static final Comparator ALPHA_AMP_TREE_ORDER = new AmpTreeVisibilityAlphaTreeOrderComparator();
 
@@ -2186,10 +2187,10 @@ public class FeaturesUtil {
     /**
      * return feature if it is visible or NULL
      * @param featureName
-     * @param moduleName 
+     * @param moduleName
      * @param defTemplId
      * @return feature
-     * 
+     *
      */
     public static AmpFeaturesVisibility getFeatureByName(String featureName, String moduleName,Long defTemplId){
         AmpFeaturesVisibility feature=null;
@@ -2217,14 +2218,14 @@ public class FeaturesUtil {
 
         return feature;
 
-    }   
+    }
     /**
      * return module if it is visible or NULL
      * @param moduleName
      * @param parentModuleName
      * @param defTemplId
-     * @return module  
-     * 
+     * @return module
+     *
      */
 
 
@@ -2260,7 +2261,7 @@ public class FeaturesUtil {
         return module;
 
     }
-    
+
     /**
      * updates descriptions for AmpObjectVisibility descendants
      * @param clazz
@@ -2295,8 +2296,8 @@ public class FeaturesUtil {
             return fieldToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
         return false;
     }
-    
-    
+
+
 
     /**
      * for testcases, since the implementation is lame and does not allow one to supply a dummy FM instance
@@ -2306,14 +2307,14 @@ public class FeaturesUtil {
     public static boolean isVisibleField(String fieldName){
         if (overriddenFields.containsKey(fieldName))
             return overriddenFields.get(fieldName);
-        
+
         ServletContext  ampContext= TLSUtils.getRequest().getSession().getServletContext();
         HttpSession session = TLSUtils.getRequest().getSession();
         AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
         AmpFieldsVisibility fieldToTest=ampTreeVisibility.getFieldByNameFromRoot(fieldName);
         if(fieldToTest!=null)
             return fieldToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
-        
+
         return false;
     }
 
@@ -2339,21 +2340,21 @@ public class FeaturesUtil {
     public static boolean isVisibleModule(String moduleName){
         AmpTreeVisibility ampTreeVisibility = FeaturesUtil.getAmpTreeVisibility(TLSUtils.getRequest().getServletContext(), TLSUtils.getRequest().getSession());
         AmpModulesVisibility moduleToTest = ampTreeVisibility.getModuleByNameFromRoot(moduleName);
-        
+
         if (moduleToTest != null)
             return moduleToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
-        
+
         return false;
     }
-    
+
     /**
      * @return AmpTreeVisibility used by the current context
      */
     public static AmpTreeVisibility getCurrentAmpTreeVisibility() {
-        return getAmpTreeVisibility(TLSUtils.getRequest().getServletContext(), TLSUtils.getRequest().getSession()); 
-        
+        return getAmpTreeVisibility(TLSUtils.getRequest().getServletContext(), TLSUtils.getRequest().getSession());
+
     }
-    
+
     /**
      * gets the visibility tree relevant for this session. Does that by trying to get the tree of the session; if none exists, then falls back to the global one
      * @param ampContext
@@ -2387,7 +2388,7 @@ public class FeaturesUtil {
     public static void setAmpTreeVisibility(ServletContext ampContext, HttpSession session, AmpTreeVisibility ampTreeVisibility) {
         Date modificationDate = new Date();
         ConcurrentHashMap<Long, Date> ampVisibilityModification = null;
-        //we should save the time of last actualization 
+        //we should save the time of last actualization
         ampVisibilityModification = (ConcurrentHashMap<Long,Date>) ampContext.getAttribute("templateVisibilityChangeDate");
         if (ampVisibilityModification == null) {
             ampVisibilityModification = new ConcurrentHashMap<Long, Date>();
@@ -2396,12 +2397,12 @@ public class FeaturesUtil {
         //we set the modification date for the corresponding template
         ampVisibilityModification.put(ampTreeVisibility.getRoot().getId(), modificationDate);
         ampContext.setAttribute("templateVisibilityChangeDate", ampVisibilityModification);
-        
+
         //we only save on context the default template so we don't mess the administrative section
         if (FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE).equals(ampTreeVisibility.getRoot().getId())) {
-            ampContext.setAttribute(AMP_TREE_VISIBILITY_ATTR, ampTreeVisibility);           
+            ampContext.setAttribute(AMP_TREE_VISIBILITY_ATTR, ampTreeVisibility);
         }
-        
+
         if (session != null) {
             session.setAttribute(AMP_TREE_VISIBILITY_ATTR, ampTreeVisibility);
             //after setting the session visibility tree we set the date for that session

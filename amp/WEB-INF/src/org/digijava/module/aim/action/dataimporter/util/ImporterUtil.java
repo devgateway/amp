@@ -577,7 +577,6 @@ public class ImporterUtil {
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                 });
         JsonApiResponse<ActivitySummary> response;
-        logger.info("Existing ?" + existing);
         logger.info("Data model object: " + importDataModel);
         if (importDataModel.getProject_title().trim().isEmpty() && importDataModel.getProject_code().trim().isEmpty()) {
             logger.info("Project title and code are empty. Skipping import");
@@ -666,8 +665,6 @@ public class ImporterUtil {
             }
         }
         if (ampActivityVersion.getOrgrole() != null && !ampActivityVersion.getOrgrole().isEmpty()) {
-//            int index=0;
-//            Map<Integer, Float> percentages = divide100(ampActivityVersion.getOrgrole().size());
             for (AmpOrgRole ampOrgRole : ampActivityVersion.getOrgrole()) {
                 if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("DN")) {
                     createDonorOrg(importDataModel,ampOrgRole.getOrganisation().getAmpOrgId());
@@ -701,7 +698,6 @@ public class ImporterUtil {
         String hql = "FROM " + AmpActivityVersion.class.getName() + " a WHERE a.ampActivityId= :activityId";
         Query query = session.createQuery(hql);
         query.setParameter("activityId", activityId);
-//        query.setMaxResults(1);
         List<AmpActivityVersion> activityVersions = query.list();
         if (activityVersions != null && !activityVersions.isEmpty()) {
             Set<AmpFunding> ampFundings = activityVersions.get(activityVersions.size() - 1).getFunding();

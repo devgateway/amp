@@ -1863,7 +1863,7 @@ public class FeaturesUtil {
         AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
         try {
             session = PersistenceManager.getRequestDBSession();
-            session.clear();
+//            session.clear();
             ft = session.get(AmpTemplatesVisibility.class,
                     id);
             List list = session.createQuery("from " +

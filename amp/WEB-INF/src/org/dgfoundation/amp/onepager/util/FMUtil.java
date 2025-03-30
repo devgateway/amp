@@ -453,7 +453,7 @@ public final class FMUtil {
             }
 
             session.saveOrUpdate(ft);
-
+            session.flush();
             AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
             ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 

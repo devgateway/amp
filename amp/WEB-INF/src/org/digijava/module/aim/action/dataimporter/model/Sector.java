@@ -1,6 +1,8 @@
 package org.digijava.module.aim.action.dataimporter.model;
 
 
+import java.util.Objects;
+
 public class Sector {
     private Long id;
     private Long sector;
@@ -37,5 +39,17 @@ public class Sector {
                 ", sector=" + sector +
                 ", sector_percentage=" + sector_percentage +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Sector)) return false;
+        Sector sector = (Sector) o;
+        return Objects.equals(getId(), sector.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
     }
 }

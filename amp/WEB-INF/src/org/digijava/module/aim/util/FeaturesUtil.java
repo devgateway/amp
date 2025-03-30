@@ -1747,7 +1747,7 @@ public class FeaturesUtil {
         AmpModulesVisibility module = new AmpModulesVisibility();
         AmpTemplatesVisibility template = null;
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             AmpModulesVisibility parent = session.load(AmpModulesVisibility.class, parentId);
 
             module.setName(moduleName);

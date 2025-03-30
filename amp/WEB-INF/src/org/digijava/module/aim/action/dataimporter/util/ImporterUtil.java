@@ -1103,9 +1103,9 @@ public class ImporterUtil {
             if (!organisations.isEmpty()) {
                 orgId = organisations.get(0);
             } else {
-                hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o";
+                hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o where o.name= :name";
 
-                query = session.createQuery(hql).setMaxResults(1);
+                query = session.createQuery(hql).setParameter("name", "Undefined Agency", StringType.INSTANCE).setMaxResults(1);
                 orgId = (Long) query.uniqueResult();
             }
             ConstantsMap.put("org_"+name+"_"+code, orgId);

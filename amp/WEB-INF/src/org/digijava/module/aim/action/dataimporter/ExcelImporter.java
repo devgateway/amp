@@ -183,7 +183,7 @@ public class ExcelImporter {
                 {
                     logger.info("Instructed to skip existing activities");
                     importedProject.setImportStatus(ImportStatus.SKIPPED);
-                    return;
+                    continue;
                 }
 
                 logger.info("Row Number: {}, Sheet Name: {}", row.getRowNum(), sheet.getSheetName());

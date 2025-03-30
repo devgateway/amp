@@ -109,7 +109,7 @@ public class TxtDataImporter {
             {
                 logger.info("Instructed to skip existing activities");
                 importedProject.setImportStatus(ImportStatus.SKIPPED);
-                return;
+                continue;
             }
 
             importDataModel.setProject_title(projectTitle);

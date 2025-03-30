@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.dgfoundation.amp.onepager.util.PercentagesUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
@@ -599,7 +598,7 @@ public class ImporterUtil {
             importDataModel.setActivity_group(activityGroup);
             importDataModel.setProject_title(existing.getName());
             importDataModel.setProject_code(!Objects.equals(importDataModel.getProject_code(), "") ? importDataModel.getProject_code() : existing.getProjectCode());
-            updateFundingAndOrgsWithAlreadyExisting(existing, importDataModel);
+            updateFundingOrgsAndSectorsWithAlreadyExisting(existing, importDataModel);
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                     });
@@ -633,7 +632,7 @@ public class ImporterUtil {
         logger.info("Imported project: " + importedProject);
     }
 
-    private static void updateFundingAndOrgsWithAlreadyExisting(AmpActivityVersion ampActivityVersion, ImportDataModel importDataModel) {
+    private static void updateFundingOrgsAndSectorsWithAlreadyExisting(AmpActivityVersion ampActivityVersion, ImportDataModel importDataModel) {
 
         if (ampActivityVersion.getFunding() != null) {
             Long adjType = getCategoryValue("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY, "");
@@ -683,6 +682,13 @@ public class ImporterUtil {
                     importDataModel.getBeneficiary_agency().add(beneficiaryAgency);
 
                 }
+            }
+        }
+
+
+        if (ampActivityVersion.getSectors() != null && !ampActivityVersion.getSectors().isEmpty()) {
+            for (AmpActivitySector ampActivitySector : ampActivityVersion.getSectors()) {
+                createSector(importDataModel,ampActivitySector.getClassificationConfig().getName().equalsIgnoreCase("primary"),ampActivitySector.getSectorId().getAmpSectorId());
             }
         }
     }

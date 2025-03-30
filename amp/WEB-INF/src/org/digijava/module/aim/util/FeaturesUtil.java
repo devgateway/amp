@@ -1847,6 +1847,7 @@ public class FeaturesUtil {
                 feature.setParent(module);
                 session.saveOrUpdate(feature);
             }
+            session.flush();
         }
         catch (Exception ex) {
             logger.error(ex, ex);

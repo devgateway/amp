@@ -666,13 +666,20 @@ public class ImporterUtil {
             }
         }
         if (ampActivityVersion.getOrgrole() != null && !ampActivityVersion.getOrgrole().isEmpty()) {
-            double  perc = PercentagesUtil.split(new BigDecimal(100), ampActivityVersion.getOrgrole().size(),
-                    AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(ampActivityVersion.getOrgrole().size()).doubleValue();
+            BigDecimal  perc = PercentagesUtil.split(new BigDecimal(100), ampActivityVersion.getOrgrole().size(),
+                    AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(ampActivityVersion.getOrgrole().size());
+            double trueperc;
+            if (perc!=null)
+            {
+                trueperc = perc.doubleValue();
+            } else {
+                trueperc = 100.0;
+            }
             for (AmpOrgRole ampOrgRole : ampActivityVersion.getOrgrole()) {
                 if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("DN")) {
                     DonorOrganization donorOrganization = new DonorOrganization();
                     donorOrganization.setOrganization(ampOrgRole.getOrganisation().getAmpOrgId());
-                    donorOrganization.setPercentage(ampOrgRole.getPercentage() != null ? (double) ampOrgRole.getPercentage() : perc);
+                    donorOrganization.setPercentage(ampOrgRole.getPercentage() != null ? (double) ampOrgRole.getPercentage() : trueperc);
                     importDataModel.getDonor_organization().add(donorOrganization);
                 } else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("EA")) {
                     Organization responsibleOrg = new Organization();

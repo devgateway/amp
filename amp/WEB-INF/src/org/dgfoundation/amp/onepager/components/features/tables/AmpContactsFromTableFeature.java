@@ -46,7 +46,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
     private static final long serialVersionUID = -2114204838953838609L;
     //protected ListView<AmpActivityContact> idsList;
     private AjaxCheckBox primaryContact=null;
-    
+
     /*public ListView<AmpActivityContact> getIdsList() {
         return idsList;
     }*/
@@ -75,9 +75,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                 Set<AmpActivityContact> allContacts = setModel.getObject();
                 Set<AmpActivityContact> specificContacts = new TreeSet<AmpActivityContact>();
                 if (allContacts != null){
-                    Iterator<AmpActivityContact> it = allContacts.iterator();
-                    while (it.hasNext()) {
-                        AmpActivityContact ampActContact = (AmpActivityContact) it.next();
+                    for (AmpActivityContact ampActContact : allContacts) {
                         if (specificType.compareTo(ampActContact.getContactType()) == 0) {
                             specificContacts.add(ampActContact);
                         }
@@ -96,7 +94,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                 try {
                     final MarkupContainer listParent=this.getParent();
                     final AmpActivityContact actContact=item.getModelObject();
-                   
+
 
                     AmpContact contactModel = actContact.getContact();
                     item.add(new Label("contactName", contactModel.getNameAndLastName()));
@@ -138,7 +136,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                         }
                     };
                     item.add(delContact);
-                    
+
 
                     final AmpCategorySelectFieldPanel contactTitle = new AmpCategorySelectFieldPanel(
                                     "title",
@@ -150,12 +148,12 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                         protected void onUpdate(AjaxRequestTarget target) {
                             send(getPage(), Broadcast.BREADTH,
                                     new ContactChangedEvent(target));
-                            
+
                         }
                     });
                     item.add(contactTitle);
-                    
-                    
+
+
                     final AmpTextFieldPanel<String> name=new AmpTextFieldPanel<String>("name",new PropertyModel<String>(actContact.getContact(),"name"),"contact first name",false,true);
                     name.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
                         @Override
@@ -164,7 +162,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                                     new ContactChangedEvent(target));
                         }
                     });
-                
+
                     name.getTextContainer().setRequired(true);
                     name.getTextContainer().add(new AttributeModifier("size", "50"));
                     name.setTextContainerDefaultMaxSize();
@@ -181,11 +179,11 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                         }
                     });
                     item.add(lastname);
-                    
+
                     IModel<AmpContact> contactReadOnlyModel = new AmpReadOnlyModel(actContact.getContact());
                     AmpContactDetailFeaturePanel detailEmail=new AmpContactDetailFeaturePanel("addContactEmail", contactReadOnlyModel, "Add Contact Email",false,Constants.CONTACT_PROPERTY_NAME_EMAIL);
                     item.add(detailEmail);
-                    
+
                     final AmpTextFieldPanel<String> function=new  AmpTextFieldPanel<String>("function",new PropertyModel<String>(contactModel,"function"),"contact function",false);
                     function.setTextContainerDefaultMaxSize();
                     function.getTextContainer().add(new AttributeModifier("size", "50"));
@@ -197,7 +195,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                         }
                     });
                     item.add(function);
-                    
+
                     final AmpTextFieldPanel<String> organisationName=new  AmpTextFieldPanel<String>("organisationName",new PropertyModel<String>(contactModel,"organisationName"),"organisationName",false);
                     organisationName.setTextContainerDefaultMaxSize();
                     organisationName.getTextContainer().add(new AttributeModifier("size", "50"));
@@ -208,19 +206,19 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                                     new ContactChangedEvent(target));
                         }
                     });
-                    
+
                     item.add(organisationName);
-                    
+
                     AmpContactOrganizationFeaturePanel contactOrganizations = new AmpContactOrganizationFeaturePanel("contactOrganizations",contactReadOnlyModel, "Contact Organizations", false);
                     contactOrganizations.setOutputMarkupId(true);
                     item.add(contactOrganizations);
-                    
-                    AmpContactDetailFeaturePanel detailPhone=new AmpContactDetailFeaturePanel("addContactPhone", contactReadOnlyModel,"Add Contact Phone",false,Constants.CONTACT_PROPERTY_NAME_PHONE); 
+
+                    AmpContactDetailFeaturePanel detailPhone=new AmpContactDetailFeaturePanel("addContactPhone", contactReadOnlyModel,"Add Contact Phone",false,Constants.CONTACT_PROPERTY_NAME_PHONE);
                     item.add(detailPhone);
 
-                    AmpContactDetailFeaturePanel detailFax=new AmpContactDetailFeaturePanel("addContactFax", contactReadOnlyModel,"Add Contact Fax",false,Constants.CONTACT_PROPERTY_NAME_FAX);  
+                    AmpContactDetailFeaturePanel detailFax=new AmpContactDetailFeaturePanel("addContactFax", contactReadOnlyModel,"Add Contact Fax",false,Constants.CONTACT_PROPERTY_NAME_FAX);
                     item.add(detailFax);
-                  
+
                     final AmpTextAreaFieldPanel office = new AmpTextAreaFieldPanel("officeaddress",new PropertyModel<String>(contactModel,"officeaddress"),"contact office address",false, false, true);
                     office.getTextAreaContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
                         @Override
@@ -250,21 +248,21 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                 if (setModel.getObject() == null){
                     setModel.setObject(new HashSet<AmpActivityContact>());
                 }
-                
+
                 Set<AmpActivityContact> actContacts = setModel.getObject();
                 if(choice.getId()!=null){
                     for (AmpActivityContact actCont : actContacts) {
-                        if(actCont.getContact().getId()!=null && actCont.getContact().getId().equals(choice.getId()) 
+                        if(actCont.getContact().getId()!=null && actCont.getContact().getId().equals(choice.getId())
                                 && contactType.equals(actCont.getContactType())){
                             contactExists = true;
                             break;
                         }
                     }
                 }
-                
+
                 if(!contactExists){
                     AmpActivityContact activityContact = new AmpActivityContact();
-                    activityContact.setContact(choice);         
+                    activityContact.setContact(choice);
                     activityContact.setActivity(am.getObject());
                     activityContact.setContactType(contactType);
                     activityContact.setPrimaryContact(false);
@@ -273,10 +271,10 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                         choice.setActivityContacts(new TreeSet<AmpActivityContact>());
                     }
                     choice.getActivityContacts().add(activityContact);
-                    
+
                     setModel.getObject().add(activityContact);
                 }
-                
+
                 list.removeAll();
                 target.add(list.getParent());
             }
@@ -286,5 +284,5 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
         add(searchContacts);
 
     }
-    
+
 }

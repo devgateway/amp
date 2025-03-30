@@ -1164,11 +1164,11 @@ public class ImporterUtil {
         int remainder = 100 % n;  // Find remainder
 
         // Assign baseValue to all indexes
-        for (int i = 1; i <= n; i++) {
+        for (int i = 0; i < n; i++) {
             result.put(i, (float) baseValue);
         }
 
-        for (int i = 1; i <= remainder; i++) {
+        for (int i = 0; i < remainder; i++) {
             result.put(i, result.get(i) + 1);
         }
 

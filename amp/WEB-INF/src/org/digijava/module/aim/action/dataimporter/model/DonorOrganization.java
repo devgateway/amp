@@ -4,13 +4,13 @@ package org.digijava.module.aim.action.dataimporter.model;
 import java.util.Objects;
 
 public class DonorOrganization extends Organization {
-    private Double percentage;
+    private Float percentage;
 
-    public Double getPercentage() {
+    public Float getPercentage() {
         return percentage;
     }
 
-    public void setPercentage(Double percentage) {
+    public void setPercentage(Float percentage) {
         this.percentage = percentage;
     }
 

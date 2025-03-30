@@ -666,11 +666,13 @@ public class ImporterUtil {
             }
         }
         if (ampActivityVersion.getOrgrole() != null && !ampActivityVersion.getOrgrole().isEmpty()) {
+            int index=0;
+            Map<Integer, Float> percentages = divide100(ampActivityVersion.getOrgrole().size());
             for (AmpOrgRole ampOrgRole : ampActivityVersion.getOrgrole()) {
                 if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("DN")) {
                     DonorOrganization donorOrganization = new DonorOrganization();
                     donorOrganization.setOrganization(ampOrgRole.getOrganisation().getAmpOrgId());
-                    donorOrganization.setPercentage(ampOrgRole.getPercentage() != null ? (double) ampOrgRole.getPercentage() : divide100(ampActivityVersion.getOrgrole().size()).doubleValue());
+                    donorOrganization.setPercentage(ampOrgRole.getPercentage() != null ? ampOrgRole.getPercentage() : percentages.get(index));
                     importDataModel.getDonor_organization().add(donorOrganization);
                 } else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("EA")) {
                     Organization responsibleOrg = new Organization();
@@ -682,6 +684,7 @@ public class ImporterUtil {
                     importDataModel.getBeneficiary_agency().add(beneficiaryAgency);
 
                 }
+                index++;
             }
         }
 
@@ -1046,14 +1049,22 @@ public class ImporterUtil {
         sector1.setSector(ampSectorId);
         if (primary) {
             importDataModel.getPrimary_sectors().add(sector1);
-
-            importDataModel.getPrimary_sectors().forEach(sec->sec.setSector_percentage(divide100(importDataModel.getPrimary_sectors().size()).doubleValue()));
+            Map<Integer, Float> percentages = divide100(importDataModel.getPrimary_sectors().size());
+            int index=0;
+            for (Sector sec : importDataModel.getPrimary_sectors()) {
+                sec.setSector_percentage(percentages.get(index));
+                index++;
+            }
         }
         else
         {
             importDataModel.getSecondary_sectors().add(sector1);
-            importDataModel.getSecondary_sectors().forEach(sec -> sec.setSector_percentage(divide100(importDataModel.getSecondary_sectors().size()).doubleValue()));
-
+            Map<Integer, Float> percentages = divide100(importDataModel.getSecondary_sectors().size());
+            int index=0;
+            for (Sector sec : importDataModel.getSecondary_sectors()) {
+                sec.setSector_percentage(percentages.get(index));
+                index++;
+            }
         }
     }
 
@@ -1141,21 +1152,39 @@ public class ImporterUtil {
 
     }
 
-    protected static BigDecimal divide100(int parts) {
-        if (parts == 0) {
-            return BigDecimal.valueOf(100.00).setScale(AmpActivityIndirectProgram.PERCENTAGE_PRECISION, RoundingMode.HALF_UP);
+    public static Map<Integer, Float> divide100(int n) {
+        Map<Integer, Float> result = new HashMap<>();
+
+        if (n == 0) {
+            result.put(0, 100f);
+            return result;
         }
 
-        return BigDecimal.valueOf(100.00)
-                .divide(BigDecimal.valueOf(parts), AmpActivityIndirectProgram.PERCENTAGE_PRECISION, RoundingMode.HALF_UP);
+        int baseValue = 100 / n;  // Get base distribution
+        int remainder = 100 % n;  // Find remainder
+
+        // Assign baseValue to all indexes
+        for (int i = 1; i <= n; i++) {
+            result.put(i, (float) baseValue);
+        }
+
+        for (int i = 1; i <= remainder; i++) {
+            result.put(i, result.get(i) + 1);
+        }
+
+        return result;
     }
 
     private static void createDonorOrg(ImportDataModel importDataModel, Long orgId) {
         DonorOrganization donorOrganization = new DonorOrganization();
         donorOrganization.setOrganization(orgId);
         importDataModel.getDonor_organization().add(donorOrganization);
-
-        importDataModel.getDonor_organization().forEach(donorOrganization1 -> donorOrganization1.setPercentage(divide100(importDataModel.getDonor_organization().size()).doubleValue()));
+        Map<Integer, Float> percentages = divide100(importDataModel.getDonor_organization().size());
+        int index=0;
+        for (DonorOrganization donorOrganization1 : importDataModel.getDonor_organization()) {
+            donorOrganization1.setPercentage(percentages.get(index));
+            index++;
+        }
     }
 
     public static int getColumnIndexByName(Sheet sheet, String columnName) {

@@ -4,7 +4,7 @@ package org.digijava.module.aim.action.dataimporter.model;
 public class Sector {
     private Long id;
     private Long sector;
-    private Double sector_percentage;
+    private Float sector_percentage;
 
     public Long getId() {
         return id;
@@ -22,11 +22,11 @@ public class Sector {
         this.sector = sector;
     }
 
-    public Double getSector_percentage() {
+    public Float getSector_percentage() {
         return sector_percentage;
     }
 
-    public void setSector_percentage(Double sector_percentage) {
+    public void setSector_percentage(Float sector_percentage) {
         this.sector_percentage = sector_percentage;
     }
 

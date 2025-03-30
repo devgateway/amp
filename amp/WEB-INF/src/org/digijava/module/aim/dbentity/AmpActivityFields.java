@@ -2320,6 +2320,10 @@ LoggerIdentifiable, Cloneable {
                 this.regionalObservations = regionalObservations;
             } else {
                 if(this.regionalObservations==null) {
+                    if (regionalObservations==null)
+                    {
+                        regionalObservations=new HashSet<>();
+                    }
                     this.regionalObservations = new HashSet<>(regionalObservations);
                 }
                 this.regionalObservations.clear();

@@ -667,7 +667,7 @@ public class ImporterUtil {
         }
         if (ampActivityVersion.getOrgrole() != null && !ampActivityVersion.getOrgrole().isEmpty()) {
             BigDecimal  perc = PercentagesUtil.split(new BigDecimal(100), ampActivityVersion.getOrgrole().size(),
-                    AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(ampActivityVersion.getOrgrole().size());
+                    AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(!ampActivityVersion.getOrgrole().isEmpty() ?ampActivityVersion.getOrgrole().size()-1:0);
             double trueperc;
             if (perc!=null)
             {
@@ -1049,7 +1049,7 @@ public class ImporterUtil {
         if (primary) {
             importDataModel.getPrimary_sectors().add(sector1);
             BigDecimal perc = PercentagesUtil.split(new BigDecimal(100), importDataModel.getPrimary_sectors().size(),
-                    AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(importDataModel.getPrimary_sectors().size());
+                    AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(importDataModel.getPrimary_sectors().isEmpty()?0:importDataModel.getPrimary_sectors().size()-1);
             double trueperc;
             if (perc!=null)
             {
@@ -1063,7 +1063,7 @@ public class ImporterUtil {
         {
             importDataModel.getSecondary_sectors().add(sector1);
             BigDecimal  perc = PercentagesUtil.split(new BigDecimal(100), importDataModel.getSecondary_sectors().size(),
-                    AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(importDataModel.getSecondary_sectors().size());
+                    AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(importDataModel.getSecondary_sectors().isEmpty()?0:importDataModel.getSecondary_sectors().size()-1);
             double trueperc;
             if (perc!=null)
             {
@@ -1164,7 +1164,7 @@ public class ImporterUtil {
         donorOrganization.setOrganization(orgId);
         importDataModel.getDonor_organization().add(donorOrganization);
         BigDecimal  perc = PercentagesUtil.split(new BigDecimal(100), importDataModel.getDonor_organization().size(),
-                AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(importDataModel.getDonor_organization().size());
+                AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(importDataModel.getDonor_organization().isEmpty()?0:importDataModel.getDonor_organization().size()-1);
         double trueperc;
         if (perc!=null)
         {

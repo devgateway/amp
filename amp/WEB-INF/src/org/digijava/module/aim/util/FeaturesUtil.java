@@ -1767,6 +1767,9 @@ public class FeaturesUtil {
                 template.getItems().add(module);
                 session.update(template);
             }
+            logger.info("Saved path"+moduleName);
+
+            session.flush();
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);

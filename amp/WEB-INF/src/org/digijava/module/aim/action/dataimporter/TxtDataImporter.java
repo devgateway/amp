@@ -101,6 +101,8 @@ public class TxtDataImporter {
             String projectCode= row.get(getKey(config, "Project Code"));
             String projectTitle= row.get(getKey(config, "Project Title"));
             String projectDesc= row.get(getKey(config, "Project Description"));
+            String primarySubSector= row.get(getKey(config, "Primary Subsector"));
+            String secondarySubSector= row.get(getKey(config, "Secondary Subsector"));
             AmpActivityVersion existing = existingActivity(projectTitle,projectCode,session);
 
             importDataModel.setProject_title(projectTitle);
@@ -119,10 +121,10 @@ public class TxtDataImporter {
                         updateLocations(importDataModel, row.get(entry.getKey().trim()),session);
                         break;
                     case "Primary Sector":
-                        updateSectors(importDataModel, row.get(entry.getKey().trim()), session, true);
+                        updateSectors(importDataModel, row.get(entry.getKey().trim()), session, true, primarySubSector);
                         break;
                     case "Secondary Sector":
-                        updateSectors(importDataModel, row.get(entry.getKey().trim()), session, false);
+                        updateSectors(importDataModel, row.get(entry.getKey().trim()), session, false, secondarySubSector);
                         break;
                     case "Donor Agency":
                         updateOrgs(importDataModel,row.get(entry.getKey().trim()),donorAgencyCode, session, "donor");

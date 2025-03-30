@@ -158,6 +158,11 @@ public class ExcelImporter {
                 int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, "Responsible Organization Code"));
                 String responsibleOrgCode = responsibleOrgCodeColumn >= 0 ? getStringValueFromCell(row.getCell(responsibleOrgCodeColumn),true) : null;
 
+                int primarySubSectorColumn = getColumnIndexByName(sheet, getKey(config, "Primary Subsector"));
+                String primarySubSector = primarySubSectorColumn >= 0 ? getStringValueFromCell(row.getCell(primarySubSectorColumn),true) : null;
+
+                int secondarySubSectorColumn = getColumnIndexByName(sheet, getKey(config, "Secondary Subsector"));
+                String secondarySubSector = secondarySubSectorColumn >= 0 ? getStringValueFromCell(row.getCell(secondarySubSectorColumn),true) : null;
 
                 int projectCodeColumn = getColumnIndexByName(sheet, getKey(config, "Project Code"));
                 String projectCode = projectCodeColumn >= 0 ? getStringValueFromCell(row.getCell(projectCodeColumn),false) : "";
@@ -187,10 +192,10 @@ public class ExcelImporter {
                                  updateLocations(importDataModel,Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(),session);
                                 break;
                             case "Primary Sector":
-                                updateSectors(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), session, true);
+                                updateSectors(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), session, true, primarySubSector);
                                 break;
                             case "Secondary Sector":
-                                updateSectors(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), session, false);
+                                updateSectors(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), session, false, secondarySubSector);
                                 break;
                             case "Donor Agency":
                                 logger.info("Getting donor");

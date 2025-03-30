@@ -935,8 +935,11 @@ public class ImporterUtil {
     }
 
 
-    public static void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary) {
-
+    public static void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary, String subSector) {
+        if (subSector!=null && !subSector.isEmpty())
+        {
+            name = subSector;
+        }
         if (ConstantsMap.containsKey("sector_" + name)) {
             Long sectorId = ConstantsMap.get("sector_" + name);
             logger.info("In cache... sector " + "sector_" + name + ":" + sectorId);
@@ -946,18 +949,19 @@ public class ImporterUtil {
                 session = PersistenceManager.getRequestDBSession();
             }
 
+            String finalName = name;
             session.doWork(connection -> {
                 String query = primary ? "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Primary'" : "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Secondary'";
                 try (PreparedStatement statement = connection.prepareStatement(query)) {
                     // Set the name as a parameter to the prepared statement
-                    statement.setString(1, name);
+                    statement.setString(1, finalName);
 
                     // Execute the query and process the results
                     try (ResultSet resultSet = statement.executeQuery()) {
                         while (resultSet.next()) {
                             Long ampSectorId = resultSet.getLong("amp_sector_id");
                             createSector(importDataModel, primary, ampSectorId);
-                            ConstantsMap.put("sector_" + name, ampSectorId);
+                            ConstantsMap.put("sector_" + finalName, ampSectorId);
                         }
                     }
 

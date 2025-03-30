@@ -412,6 +412,7 @@ public class DataImporter extends Action {
         fieldsInfos.add("Financing Instrument");
         fieldsInfos.add("Type Of Assistance");
         fieldsInfos.add("Secondary Subsector");
+        fieldsInfos.add("Primary Subsector");
         fieldsInfos.add("Currency");
         fieldsInfos.add("Component Name");
         fieldsInfos.add("Component Code");

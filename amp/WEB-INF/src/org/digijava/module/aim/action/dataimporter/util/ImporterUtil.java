@@ -54,7 +54,7 @@ public class ImporterUtil {
 
     private static final int BATCH_SIZE = 1000;
     private static final Logger logger = LoggerFactory.getLogger(ImporterUtil.class);
-    private static final boolean SKIP_EXISTING=true;
+    public static final boolean SKIP_EXISTING=true;
 
     private static Double parseDouble(String number) {
         try {
@@ -590,11 +590,6 @@ public class ImporterUtil {
             response = ActivityInterchangeUtils.importActivity(map, false, rules, "activity/new");
         } else {
             logger.info("Existing activity");
-            if (SKIP_EXISTING)
-            {
-                logger.info("Instructed to skip existing activities");
-                return;
-            }
             importedProject.setNewProject(false);
             importDataModel.setInternal_id(existing.getAmpActivityId());
             importDataModel.setAmp_id(existing.getAmpId());
@@ -707,7 +702,6 @@ public class ImporterUtil {
         List<AmpActivityVersion> activityVersions = query.list();
         if (activityVersions != null && !activityVersions.isEmpty()) {
             Set<AmpFunding> ampFundings = activityVersions.get(activityVersions.size() - 1).getFunding();
-            logger.info("Activity Fundings found: " + ampFundings);
             for (AmpFunding ampFunding : ampFundings) {
                 for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
                     if (ampFundingDetail.getTransactionAmount() < 0) {

@@ -179,6 +179,13 @@ public class ExcelImporter {
                 AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
                 Long responsibleOrgId = null;
 
+                if (SKIP_EXISTING)
+                {
+                    logger.info("Instructed to skip existing activities");
+                    importedProject.setImportStatus(ImportStatus.SKIPPED);
+                    return;
+                }
+
                 logger.info("Row Number: {}, Sheet Name: {}", row.getRowNum(), sheet.getSheetName());
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     Funding fundingItem = new Funding();
@@ -241,7 +248,6 @@ public class ExcelImporter {
 
 
                 }
-                logger.info("Fundings at this point: {}",fundings);
 
 
                 importTheData(importDataModel, session, importedProject, componentName, componentCode, responsibleOrgId, fundings, existing);

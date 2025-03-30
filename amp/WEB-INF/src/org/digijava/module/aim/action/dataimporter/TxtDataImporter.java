@@ -8,6 +8,7 @@ import com.opencsv.CSVReaderHeaderAwareBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
 import org.digijava.module.aim.action.dataimporter.model.Funding;
@@ -104,6 +105,12 @@ public class TxtDataImporter {
             String primarySubSector= row.get(getKey(config, "Primary Subsector"));
             String secondarySubSector= row.get(getKey(config, "Secondary Subsector"));
             AmpActivityVersion existing = existingActivity(projectTitle,projectCode,session);
+            if (SKIP_EXISTING)
+            {
+                logger.info("Instructed to skip existing activities");
+                importedProject.setImportStatus(ImportStatus.SKIPPED);
+                return;
+            }
 
             importDataModel.setProject_title(projectTitle);
             importDataModel.setProject_code(projectCode);

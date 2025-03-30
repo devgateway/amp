@@ -13,14 +13,14 @@ import java.util.Set;
  * @author Nadejda Mandrescu
  */
 public class ApiErrorMessage {
-    
+
     public static final int MAX_ERROR_CODE = 99;
-    
+
     private final Integer typeId;
-    
+
     /** Message custom Error Code [0..99] within its component/method */
     public final Integer id;
-    
+
         /**
      * General error description (laconic), automatically translated.<br>
      * For custom details per error, you must use: <br>
@@ -29,7 +29,7 @@ public class ApiErrorMessage {
      * <dt>prefix </dt> <dd> for custom translatable detail prefix </dd>
      * </dl>
      */
-    public final String description;
+    public String description;
 
     /** (Optional) Error message prefix, custom value, e.g. "Missing fields: " */
     public final String prefix;
@@ -41,19 +41,19 @@ public class ApiErrorMessage {
     /** (Optional) Flags if this error should be treated as a generic error under the default 00 package code */
     @IgnoreCanonicalNames
     public final boolean isGeneric;
-    
+
     public Integer getId() {
         return id;
     }
-    
+
     public String getDescription() {
         return description;
     }
-    
+
     public Set<String> getValues() {
         return values;
     }
-    
+
     /**
      *
      * @param typeId - the type of error
@@ -63,18 +63,18 @@ public class ApiErrorMessage {
     public ApiErrorMessage(int typeId, int id, String description) {
         this(typeId, id, description, null);
     }
-    
+
     public ApiErrorMessage(int typeId, int id, String description, String prefix) {
         this(typeId, id, description, prefix, null, false);
     }
-    
+
     private ApiErrorMessage(int typeId, int id, String description, String prefix, Set<String> values,
                             boolean isGeneric) {
         if (typeId < 0 || typeId > MAX_ERROR_CODE) {
             throw new RuntimeException(String.format("Invalid typeId = %d, must be within [0..%d] range.",
                     typeId, MAX_ERROR_CODE));
         }
-        
+
         if (id < 0 || id > MAX_ERROR_CODE) {
             throw new RuntimeException(String.format("Invalid id = %d, must be within [0..%d] range.",
                     id, MAX_ERROR_CODE));
@@ -104,7 +104,7 @@ public class ApiErrorMessage {
         }
         return new ApiErrorMessage(typeId, id, description, prefix, newValues, isGeneric);
     }
-    
+
     /**
      * Configures an {@link #ApiErrorMessage(int, int, String)} with prefix
      * @param prefix
@@ -126,11 +126,11 @@ public class ApiErrorMessage {
         newValues.addAll(details);
         return new ApiErrorMessage(typeId, id, description, prefix, newValues, isGeneric);
     }
-    
+
     public String getErrorId() {
         return String.format(ApiError.ERROR_PATTERN, typeId, id);
     }
-    
+
     @Override
     public String toString() {
         return "[" + (isGeneric ? "generic" : "package") + "]" + "[" + id + "] "

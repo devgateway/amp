@@ -24,6 +24,7 @@ public class TotalPercentageValidator implements ConstraintValidator {
 
     private static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100.0);
     private static final BigDecimal ERROR = BigDecimal.valueOf(0.0001);
+    private static BigDecimal finalTotal=BigDecimal.ZERO;
     @Override
     public void initialize(Map<String, String> arguments) {
     }
@@ -45,12 +46,14 @@ public class TotalPercentageValidator implements ConstraintValidator {
                 total = total.add(BigDecimal.valueOf(percentage.doubleValue())); // Convert Float to BigDecimal
             }
         }
+        finalTotal=total;
 
         return total.subtract(ONE_HUNDRED).abs().compareTo(ERROR) < 0;
     }
 
     @Override
     public ApiErrorMessage getErrorMessage() {
+        ValidationErrors.FIELD_PERCENTAGE_SUM_BAD.description+=" but is "+finalTotal;
         return ValidationErrors.FIELD_PERCENTAGE_SUM_BAD;
     }
 }

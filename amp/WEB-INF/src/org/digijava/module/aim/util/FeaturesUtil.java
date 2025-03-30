@@ -1847,7 +1847,6 @@ public class FeaturesUtil {
                 feature.setParent(module);
                 session.saveOrUpdate(feature);
             }
-            session.flush();
         }
         catch (Exception ex) {
             logger.error(ex, ex);
@@ -1863,7 +1862,6 @@ public class FeaturesUtil {
         AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
         try {
             session = PersistenceManager.getRequestDBSession();
-//            session.clear();
             ft = session.get(AmpTemplatesVisibility.class,
                     id);
             List list = session.createQuery("from " +

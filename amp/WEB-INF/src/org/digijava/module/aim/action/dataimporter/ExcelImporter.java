@@ -179,12 +179,12 @@ public class ExcelImporter {
                 AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
                 Long responsibleOrgId = null;
 
-                if (existing!=null && SKIP_EXISTING)
-                {
-                    logger.info("Instructed to skip existing activities");
-                    importedProject.setImportStatus(ImportStatus.SKIPPED);
-                    continue;
-                }
+//                if (existing!=null && SKIP_EXISTING)
+//                {
+//                    logger.info("Instructed to skip existing activities");
+//                    importedProject.setImportStatus(ImportStatus.SKIPPED);
+//                    continue;
+//                }
 
                 logger.info("Row Number: {}, Sheet Name: {}", row.getRowNum(), sheet.getSheetName());
                 for (Map.Entry<String, String> entry : config.entrySet()) {

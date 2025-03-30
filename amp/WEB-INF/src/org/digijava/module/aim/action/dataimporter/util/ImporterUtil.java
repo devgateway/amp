@@ -54,6 +54,7 @@ public class ImporterUtil {
 
     private static final int BATCH_SIZE = 1000;
     private static final Logger logger = LoggerFactory.getLogger(ImporterUtil.class);
+    private static final boolean SKIP_EXISTING=true;
 
     private static Double parseDouble(String number) {
         try {
@@ -589,6 +590,11 @@ public class ImporterUtil {
             response = ActivityInterchangeUtils.importActivity(map, false, rules, "activity/new");
         } else {
             logger.info("Existing activity");
+            if (SKIP_EXISTING)
+            {
+                logger.info("Instructed to skip existing activities");
+                return;
+            }
             importedProject.setNewProject(false);
             importDataModel.setInternal_id(existing.getAmpActivityId());
             importDataModel.setAmp_id(existing.getAmpId());

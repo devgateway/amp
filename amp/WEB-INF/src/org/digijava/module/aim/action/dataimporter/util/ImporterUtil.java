@@ -1076,6 +1076,7 @@ public class ImporterUtil {
         }
     }
 
+    //get random undefined agency if name is missing in DB
     private static Long getRandomOrg(Session session)
     {
         Long randomOrg;
@@ -1086,9 +1087,9 @@ public class ImporterUtil {
             if (!session.isOpen()) {
                 session = PersistenceManager.getRequestDBSession();
             }
-            String hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o";
+            String hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o where o.name = :name";
 
-            randomOrg = (Long) session.createQuery(hql).setMaxResults(1).uniqueResult();
+            randomOrg = (Long) session.createQuery(hql).setParameter("name", "Undefined Agency", StringType.INSTANCE).setMaxResults(1).uniqueResult();
             ConstantsMap.put("randomOrg",randomOrg);
         }
         return randomOrg;

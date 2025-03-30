@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -666,20 +667,11 @@ public class ImporterUtil {
             }
         }
         if (ampActivityVersion.getOrgrole() != null && !ampActivityVersion.getOrgrole().isEmpty()) {
-            BigDecimal  perc = PercentagesUtil.split(new BigDecimal(100), ampActivityVersion.getOrgrole().size(),
-                    AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(!ampActivityVersion.getOrgrole().isEmpty() ?ampActivityVersion.getOrgrole().size()-1:0);
-            double trueperc;
-            if (perc!=null)
-            {
-                trueperc = perc.doubleValue();
-            } else {
-                trueperc = 100.0;
-            }
             for (AmpOrgRole ampOrgRole : ampActivityVersion.getOrgrole()) {
                 if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("DN")) {
                     DonorOrganization donorOrganization = new DonorOrganization();
                     donorOrganization.setOrganization(ampOrgRole.getOrganisation().getAmpOrgId());
-                    donorOrganization.setPercentage(ampOrgRole.getPercentage() != null ? (double) ampOrgRole.getPercentage() : trueperc);
+                    donorOrganization.setPercentage(ampOrgRole.getPercentage() != null ? (double) ampOrgRole.getPercentage() : divide100(ampActivityVersion.getOrgrole().size()).doubleValue());
                     importDataModel.getDonor_organization().add(donorOrganization);
                 } else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("EA")) {
                     Organization responsibleOrg = new Organization();
@@ -1048,30 +1040,13 @@ public class ImporterUtil {
         sector1.setSector(ampSectorId);
         if (primary) {
             importDataModel.getPrimary_sectors().add(sector1);
-            BigDecimal perc = PercentagesUtil.split(new BigDecimal(100), importDataModel.getPrimary_sectors().size(),
-                    AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(importDataModel.getPrimary_sectors().isEmpty()?0:importDataModel.getPrimary_sectors().size()-1);
-            double trueperc;
-            if (perc!=null)
-            {
-                trueperc = perc.doubleValue();
-            } else {
-                trueperc = 100.0;
-            }
-            importDataModel.getPrimary_sectors().forEach(sec->sec.setSector_percentage(trueperc));
+
+            importDataModel.getPrimary_sectors().forEach(sec->sec.setSector_percentage(divide100(importDataModel.getPrimary_sectors().size()).doubleValue()));
         }
         else
         {
             importDataModel.getSecondary_sectors().add(sector1);
-            BigDecimal  perc = PercentagesUtil.split(new BigDecimal(100), importDataModel.getSecondary_sectors().size(),
-                    AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(importDataModel.getSecondary_sectors().isEmpty()?0:importDataModel.getSecondary_sectors().size()-1);
-            double trueperc;
-            if (perc!=null)
-            {
-                trueperc = perc.doubleValue();
-            } else {
-                trueperc = 100.0;
-            }
-            importDataModel.getSecondary_sectors().forEach(sec -> sec.setSector_percentage(trueperc));
+            importDataModel.getSecondary_sectors().forEach(sec -> sec.setSector_percentage(divide100(importDataModel.getSecondary_sectors().size()).doubleValue()));
 
         }
     }
@@ -1160,20 +1135,21 @@ public class ImporterUtil {
 
     }
 
+    protected static BigDecimal divide100(int parts) {
+        if (parts == 0) {
+            return BigDecimal.valueOf(100.00).setScale(AmpActivityIndirectProgram.PERCENTAGE_PRECISION, RoundingMode.HALF_UP);
+        }
+
+        return BigDecimal.valueOf(100.00)
+                .divide(BigDecimal.valueOf(parts), AmpActivityIndirectProgram.PERCENTAGE_PRECISION, RoundingMode.HALF_UP);
+    }
+
     private static void createDonorOrg(ImportDataModel importDataModel, Long orgId) {
         DonorOrganization donorOrganization = new DonorOrganization();
         donorOrganization.setOrganization(orgId);
         importDataModel.getDonor_organization().add(donorOrganization);
-        BigDecimal  perc = PercentagesUtil.split(new BigDecimal(100), importDataModel.getDonor_organization().size(),
-                AmpActivityIndirectProgram.PERCENTAGE_PRECISION).getValueFor(importDataModel.getDonor_organization().isEmpty()?0:importDataModel.getDonor_organization().size()-1);
-        double trueperc;
-        if (perc!=null)
-        {
-            trueperc = perc.doubleValue();
-        } else {
-            trueperc = 100.0;
-        }
-        importDataModel.getDonor_organization().forEach(donorOrganization1 -> donorOrganization1.setPercentage(trueperc));
+
+        importDataModel.getDonor_organization().forEach(donorOrganization1 -> donorOrganization1.setPercentage(divide100(importDataModel.getDonor_organization().size()).doubleValue()));
     }
 
     public static int getColumnIndexByName(Sheet sheet, String columnName) {

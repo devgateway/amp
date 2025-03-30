@@ -1722,20 +1722,23 @@ public class FeaturesUtil {
         AmpModulesVisibility module = new AmpModulesVisibility();
         AmpTemplatesVisibility template = null;
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             module.setName(moduleName);
             module.setHasLevel(hasLevel == null || "no".compareTo(hasLevel) != 0);
-            session.save(module);
+            session.saveOrUpdate(module);
             String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
             if (gsValue != null && gsValue.equalsIgnoreCase("on")){
                 template = session.load(AmpTemplatesVisibility.class,templateId);
                 template.getItems().add(module);
                 session.update(template);
             }
+            logger.info("Saved path"+moduleName);
+            session.flush();
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }
+
         return;
     }
 

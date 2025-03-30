@@ -420,7 +420,7 @@ public final class FMUtil {
         AmpTemplatesVisibility ft;
         Session session = null;
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             ft = session.load(AmpTemplatesVisibility.class, ampTreeVisibility.getRoot().getId());
 
             Set set;
@@ -452,7 +452,7 @@ public final class FMUtil {
                 set.add(newObj);
             }
 
-            session.update(ft);
+            session.saveOrUpdate(ft);
 
             AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
             ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
@@ -462,7 +462,6 @@ public final class FMUtil {
 
             // notify about visibility change
             DataVisibility.notifyVisibilityChanged();
-            session.flush();
         }
         catch (Exception ex) {
             logger.error("Exception : " + ex.getMessage()+" while changing FM visible status for "+fmc.getFMName());

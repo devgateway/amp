@@ -78,19 +78,15 @@ public class ImportedFileUtil {
         Transaction transaction = null;
 
         try {
-            transaction = session.beginTransaction(); // Start transaction
             String sql = "UPDATE IMPORTED_FILES_RECORD SET import_status = :status WHERE id = :fileId";
             Query query = session.createNativeQuery(sql);
             query.setParameter("status", status.ordinal());
             query.setParameter("fileId", importedFilesRecord.getId());
             int updatedRows = query.executeUpdate();
-            transaction.commit(); // Commit the transaction
+            session.getTransaction().commit(); // Commit the transaction
 
             logger.info("Updated {} rows", updatedRows);
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             logger.error("Error updating file status", e);
         }
     }

@@ -105,7 +105,7 @@ public class TxtDataImporter {
             String primarySubSector= row.get(getKey(config, "Primary Subsector"));
             String secondarySubSector= row.get(getKey(config, "Secondary Subsector"));
             AmpActivityVersion existing = existingActivity(projectTitle,projectCode,session);
-            if (SKIP_EXISTING)
+            if (existing!=null && SKIP_EXISTING)
             {
                 logger.info("Instructed to skip existing activities");
                 importedProject.setImportStatus(ImportStatus.SKIPPED);

@@ -179,7 +179,7 @@ public class ExcelImporter {
                 AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
                 Long responsibleOrgId = null;
 
-                if (SKIP_EXISTING)
+                if (existing!=null && SKIP_EXISTING)
                 {
                     logger.info("Instructed to skip existing activities");
                     importedProject.setImportStatus(ImportStatus.SKIPPED);

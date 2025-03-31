@@ -69,8 +69,9 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         ReportOutputColumn implementationLevel = report.leafHeaders.get(2);
         ReportOutputColumn country = report.leafHeaders.get(3);
         ReportOutputColumn status = report.leafHeaders.get(4);
-        ReportOutputColumn reportingSystem = report.leafHeaders.get(5); // Also called Forum
-        ReportOutputColumn typeOfAssistance = report.leafHeaders.get(6);
+        ReportOutputColumn typeOfAssistance = report.leafHeaders.get(5);
+        ReportOutputColumn reportingSystem = report.leafHeaders.get(6); // Also called Forum
+
 
         List<ReportsDashboard> ampDashboardFunding = new ArrayList<>();
         for (ReportArea child : report.reportContents.getChildren()) {
@@ -84,11 +85,17 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                             TextCell countryCell = (TextCell) location.getContents().get(country);
                             for (ReportArea statusData : location.getChildren()) {
                                 TextCell statusCell = (TextCell) statusData.getContents().get(status);
-                                for (ReportArea reportSystemData : statusData.getChildren()) {
-                                    TextCell reportSystemCell = (TextCell) reportSystemData.getContents().get(reportingSystem);
-                                    for (ReportArea typeOfAssistanceData : reportSystemData.getChildren()) {
-                                        TextCell typeOfAssistanceCell = (TextCell) typeOfAssistanceData.getContents().get(typeOfAssistance);
-                                        for (Map.Entry<ReportOutputColumn, ReportCell> content : typeOfAssistanceData.getContents().entrySet()) {
+                                for (ReportArea typeOfAssistanceData : statusData.getChildren()) {
+                                //for (ReportArea reportSystemData : statusData.getChildren()) {
+                                    TextCell typeOfAssistanceCell= (TextCell) typeOfAssistanceData.getContents().get(typeOfAssistance);
+                                    //TextCell reportSystemCell = (TextCell) reportSystemData.getContents().get(reportingSystem);
+                                    for (ReportArea reportSystemData : typeOfAssistanceData.getChildren()) {
+                                    //for (ReportArea typeOfAssistanceData : reportSystemData.getChildren()) {
+                                        TextCell reportSystemCell = (TextCell)  reportSystemData.getContents().get(reportingSystem);
+                                        //TextCell typeOfAssistanceCell = (TextCell) typeOfAssistanceData.getContents().get(typeOfAssistance);
+                                        for (Map.Entry<ReportOutputColumn, ReportCell> content : reportSystemData.getContents().entrySet()) {
+
+
                                             ReportOutputColumn col = content.getKey();
                                             if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS) || col.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
                                                 if (!col.parentColumn.originalColumnName.equals("Totals")) {

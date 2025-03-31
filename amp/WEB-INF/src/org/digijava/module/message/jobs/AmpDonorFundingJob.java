@@ -123,16 +123,33 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         return ampDashboardFunding;
     }
 
+    private void addFilters(ReportSpecificationImpl spec) {
+        if (spec.getFilters() == null) {
+            spec.setFilters(new ReportFiltersImpl());
+        }
+        addCommonFilters(spec, ColumnConstants.TYPE_OF_ASSISTANCE);
+        addCommonFilters(spec, ColumnConstants.REPORTING_SYSTEM);
+
+    }
+
+    private static void addCommonFilters(ReportSpecificationImpl spec, String columnName) {
+        ReportElement elem = new ReportElement(new ReportColumn(columnName));
+        FilterRule filterRule = new FilterRule("-999999999", false);
+        ((ReportFiltersImpl) spec.getFilters()).addFilterRule(elem, filterRule);
+
+    }
+
     private GeneratedReport generateReport(String currencyCode) {
         ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", ArConstants.DONOR_TYPE);
         addColumnsToSpecification(spec);
+
         spec.setSummaryReport(true);
         spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
         spec.setShowOriginalCurrency(false);
         spec.setDisplayEmptyFundingRows(true);
         ReportSettingsImpl reportSettings = new ReportSettingsImpl();
         spec.setSettings(reportSettings);
-
+        addFilters(spec);
         reportSettings.setCurrencyCode(currencyCode);
         return EndpointUtils.runReport(spec);
     }
@@ -143,8 +160,9 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTATION_LEVEL));
         spec.addColumn(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0));
         spec.addColumn(new ReportColumn(ColumnConstants.STATUS));
-        spec.addColumn(new ReportColumn(ColumnConstants.REPORTING_SYSTEM));
         spec.addColumn(new ReportColumn(ColumnConstants.TYPE_OF_ASSISTANCE));
+        spec.addColumn(new ReportColumn(ColumnConstants.REPORTING_SYSTEM));
+
         spec.setHierarchies(spec.getColumns());
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));

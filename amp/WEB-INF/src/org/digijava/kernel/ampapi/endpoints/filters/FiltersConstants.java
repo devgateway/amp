@@ -200,6 +200,7 @@ public class FiltersConstants {
     public static final String QUINARY_SECTOR_SUB_SECTOR = "quinary-sector-sub-sector";
     public static final String QUINARY_SECTOR_SUB_SUB_SECTOR = "quinary-sector-sub-sub-sector";
     public static final String TYPE_OF_ASSISTANCE = "type-of-assistance";
+    public static final String REPORTING_SYSTEM = "reporting-system";
     public static final String WORKSPACES = "workspaces";
 
     public static final String INDICATOR_NAME = "indicator-name";

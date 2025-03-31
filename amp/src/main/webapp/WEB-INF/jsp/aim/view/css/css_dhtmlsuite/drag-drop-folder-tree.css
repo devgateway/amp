@@ -3,8 +3,8 @@
 *
 *	Created:			August, 23rd, 2006
 *	Purpose of class:	Transforms an UL,LI list into a folder tree with drag and drop capabilities.
-*						
-*			
+*
+*
 * 	Update log:
 *
 ************************************************************************************************************/
@@ -14,7 +14,7 @@
 .DHTMLSuite_tree a{
 	color:#000;
 	size:10
-	text-decoration:none	
+	text-decoration:none
 }
 
 .DHTMLSuite_tree,#floatingContainer{
@@ -30,19 +30,19 @@
 
 #floatingContainer ul{
 	margin-left:20px;	/* Left spacing */
-	padding-left:0px;	
+	padding-left:0px;
 }
 .DHTMLSuite_tree li,#floatingContainer li{	/* Nodes */
 	list-style-type:none;
 	vertical-align:middle;
-	
+
 }
 .DHTMLSuite_tree li a,#floatingContainer li a{	/* Node links */
 	color:#000;
 	padding-left:3px;
 	line-height:13px;
-	
-}	
+
+}
 /* CSS for the imageSelection class. in case nodes in this tree are possible destination nodes for images etc. */
 .DHTMLSuite_tree li a.imageSelection{
 	background-color:#316AC5;

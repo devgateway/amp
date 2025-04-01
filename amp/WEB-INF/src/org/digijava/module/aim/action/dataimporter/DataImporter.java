@@ -183,6 +183,7 @@ public class DataImporter extends Action {
 
             if (Objects.equals(request.getParameter("action"), "uploadDataFile")) {
                 logger.info("This is the action " + request.getParameter("action"));
+                Instant start = Instant.now();
                 String fileName = dataImporterForm.getDataFile().getFileName();
                 String tempDirPath = System.getProperty("java.io.tmpdir");
                 File tempDir = new File(tempDirPath);
@@ -265,7 +266,6 @@ public class DataImporter extends Action {
                     logger.info("Cache map size: " + ConstantsMap.size());
                     ConstantsMap.clear();
                     logger.info("File path is " + tempFilePath + " and size is " + tempFile.length() / (1024 * 1024) + " mb");
-                    Instant start = Instant.now();
                     logger.info("Start time: " + start);
                     Instant finish = Instant.now();
                     long timeElapsed = Duration.between(start, finish).toMillis();

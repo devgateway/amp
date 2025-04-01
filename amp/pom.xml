@@ -1128,6 +1128,13 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
                 <version>2.5.0</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <arguments>
+                        <argument>-disableXmlSecurity</argument>
+                        <argument>-verbose</argument>
+                    </arguments>
+                </configuration>
                 <executions>
                     <!-- JAXB generation for translation.xsd -->
                     <execution>
@@ -1136,10 +1143,10 @@
                             <goal>xjc</goal>
                         </goals>
                         <configuration>
+                        <encoding>UTF-8</encoding>
                             <sources>
-
                                 <source>
-                                    ./src/main/webapp/WEB-INF/schemas/translation.xsd
+                                    src/main/resources/schemas/translation.xsd
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.translation.jaxb</packageName>
@@ -1157,7 +1164,7 @@
                         <configuration>
                             <sources>
                                 <source>
-                                    ./src/main/webapp/WEB-INF/schemas/help.xsd
+                                    src/main/resources/schemas/help.xsd
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.help.jaxbi</packageName>
@@ -1176,7 +1183,7 @@
                         <configuration>
                             <sources>
                                 <source>
-                                    ./src/main/webapp/WEB-INF/schemas/report.xsd
+                                    src/main/resources/schemas/report.xsd
                                 </source>
                             </sources>
                             <packageName>org.dgfoundation.amp.reports.xml</packageName>
@@ -1194,7 +1201,7 @@
                         <configuration>
                             <sources>
                                 <source>
-                                    ./src/main/webapp/WEB-INF/schemas/xmlpatcher.xsd
+                                    src/main/resources/schemas/xmlpatcher.xsd
                                 </source>
                             </sources>
                             <packageName>org.digijava.module.xmlpatcher.jaxb</packageName>

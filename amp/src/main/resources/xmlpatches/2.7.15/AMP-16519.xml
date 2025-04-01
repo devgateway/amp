@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-16519</jira>
+    <keyword>Views</keyword>
+    <author>Vladimir Limansky</author>
+    <description>Add a field to 'Global Settings' called 'Public Portal URL'</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section) VALUES
+                ((select max(id) + 1 FROM amp_global_settings), 'Public Portal URL', '', '',
+                'Public Portal URL', 'general');
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

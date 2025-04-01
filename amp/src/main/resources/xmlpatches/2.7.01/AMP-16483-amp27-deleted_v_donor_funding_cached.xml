@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-16001</jira>
+	<keyword>pledges</keyword>
+	<author>Alex Gartner</author>
+	<description>Adding pledges column to donor reports</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_componente;
+				DROP VIEW IF EXISTS v_donor_funding_cached;
+				
+				UPDATE amp_xml_patch set state=0 WHERE patch_id like 'v_%' AND location ='xmlpatches/general/views/' AND state=4;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

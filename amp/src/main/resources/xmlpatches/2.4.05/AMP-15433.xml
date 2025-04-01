@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-15433</jira>
+	<keyword>category manager</keyword>
+	<author>mihai</author>
+	<description>Category value allows now multiple values per category, something which should never be allowed. 
+	We have found in Ethiopia multiple duplicates and believe this is a systemic issue, so we need to constraint the database into not allowing this.
+	</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				ALTER TABLE amp_category_value ADD CONSTRAINT amp_category_value_class_unique UNIQUE (category_value, amp_category_class_id);	
+				ALTER TABLE amp_category_value ADD CONSTRAINT amp_category_index_class_unique UNIQUE (index_column, amp_category_class_id);
+				ALTER TABLE amp_activities_categoryvalues ADD CONSTRAINT amp_activities_categoryvalues_unique UNIQUE (amp_activity_id, amp_categoryvalue_id);							
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-15951</jira>
+    <keyword>GPI</keyword>
+    <author>ginchauspe</author>
+    <description>Add GPI info.</description>
+    <trigger type="all">
+        <condition  type="tableEmpty">amp_gpi_survey_question</condition>
+        <condition  type="tableEmpty">amp_gpi_survey_question_type</condition>
+        <condition  type="tableEmpty">amp_gpi_survey_indicator</condition>
+    </trigger>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+            
+            	INSERT INTO amp_gpi_survey_indicator(amp_indicator_id, name, total_question, indicator_code, status)
+            	VALUES(1,'Indicator 1',1,'1',null);
+            	INSERT INTO amp_gpi_survey_indicator(amp_indicator_id, name, total_question, indicator_code, status)
+            	VALUES(2,'Indicator 5a',0,'5a',null);
+            	INSERT INTO amp_gpi_survey_indicator(amp_indicator_id, name, total_question, indicator_code, status)
+            	VALUES(3,'Indicator 6',1,'6',null);            	
+            	INSERT INTO amp_gpi_survey_indicator(amp_indicator_id, name, total_question, indicator_code, status)
+            	VALUES(4,'Indicator 9b',4,'9b',null);
+            	
+            	INSERT INTO amp_gpi_survey_question_type(amp_type_id, name, description)
+            	VALUES(1, 'yes-no', 'for yes/no type question');
+            	INSERT INTO amp_gpi_survey_question_type(amp_type_id, name, description)
+            	VALUES(2, 'calculated', 'for calculated type question');
+            	INSERT INTO amp_gpi_survey_question_type(amp_type_id, name, description)
+            	VALUES(3, 'input', 'input from user');
+            	
+            	INSERT INTO amp_gpi_survey_question(amp_question_id, question_text, amp_indicator_id, parent_question_id, question_number, amp_type_id, status)
+            	VALUES(1, 'Does this project use the country results framework?', 1, null, 1, 1, null);              
+            	
+            	INSERT INTO amp_gpi_survey_question(amp_question_id, question_text, amp_indicator_id, parent_question_id, question_number, amp_type_id, status)
+            	VALUES(2, 'Is this project on budget and subject to parliamentary scrutiny?', 3, null, 2, 1, null);
+            	
+            	INSERT INTO amp_gpi_survey_question(amp_question_id, question_text, amp_indicator_id, parent_question_id, question_number, amp_type_id, status)
+            	VALUES(3, 'Does the project use national budget execution procedures?', 3, null, 3, 1, null);
+            	INSERT INTO amp_gpi_survey_question(amp_question_id, question_text, amp_indicator_id, parent_question_id, question_number, amp_type_id, status)
+            	VALUES(4, 'Does the project use national financial reporting procedures?', 3, null, 4, 1, null);
+            	INSERT INTO amp_gpi_survey_question(amp_question_id, question_text, amp_indicator_id, parent_question_id, question_number, amp_type_id, status)
+            	VALUES(5, 'Does the project use national auditing procedures?', 3, null, 5, 1, null);
+            	INSERT INTO amp_gpi_survey_question(amp_question_id, question_text, amp_indicator_id, parent_question_id, question_number, amp_type_id, status)
+            	VALUES(6, 'Does the project use national procurement systems?', 3, null, 6, 1, null);
+                
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

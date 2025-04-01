@@ -38,6 +38,7 @@
 
 
         <!-- JDBC Settings -->
+        <dbName>postgresql</dbName>
         <jdbc.url>jdbc:postgresql://localhost</jdbc.url>
         <jdbc.params>useUnicode=true&amp;characterEncoding=UTF-8</jdbc.params>
         <jdbc.paramsClean>useUnicode=true&amp;characterEncoding=UTF-8</jdbc.paramsClean>
@@ -75,7 +76,98 @@
             <url>https://artifactory.dgdev.org/artifactory/amp/</url>
         </pluginRepository>
     </pluginRepositories>
+    <profiles>
+        <!-- Set external-lib if jboss-lib is defined -->
+        <profile>
+            <id>externalLibProfile</id>
+            <activation>
+                <property>
+                    <name>jboss-lib</name>
+                </property>
+            </activation>
+            <properties>
+                <external-lib>${jboss-lib}</external-lib>
+            </properties>
+        </profile>
 
+        <!-- Set jdbc.password to "1234" if not defined -->
+        <profile>
+            <id>jdbcPasswordProfile</id>
+            <activation>
+                <property>
+                    <name>!jdbc.password</name>
+                </property>
+            </activation>
+            <properties>
+                <jdbc.password>1234</jdbc.password>
+            </properties>
+        </profile>
+
+        <!-- Set serverName to "generic" if not defined -->
+        <profile>
+            <id>serverNameProfile</id>
+            <activation>
+                <property>
+                    <name>!serverName</name>
+                </property>
+            </activation>
+            <properties>
+                <serverName>generic</serverName>
+            </properties>
+        </profile>
+
+        <!-- Set jdbc.user to "postgres" if not defined -->
+        <profile>
+            <id>jdbcUserProfile</id>
+            <activation>
+                <property>
+                    <name>!jdbc.user</name>
+                </property>
+            </activation>
+            <properties>
+                <jdbc.user>postgres</jdbc.user>
+            </properties>
+        </profile>
+
+        <!-- Set jdbc.port to "5432" if not defined -->
+        <profile>
+            <id>jdbcPortProfile</id>
+            <activation>
+                <property>
+                    <name>!jdbc.port</name>
+                </property>
+            </activation>
+            <properties>
+                <jdbc.port>5432</jdbc.port>
+            </properties>
+        </profile>
+
+        <!-- Set jdbc.host to "localhost" if not defined -->
+        <profile>
+            <id>jdbcHostProfile</id>
+            <activation>
+                <property>
+                    <name>!jdbc.host</name>
+                </property>
+            </activation>
+            <properties>
+                <jdbc.host>localhost</jdbc.host>
+            </properties>
+        </profile>
+
+        <!-- Set antilock to "false" if not defined -->
+        <profile>
+            <id>antilockProfile</id>
+            <activation>
+                <property>
+                    <name>!antilock</name>
+                </property>
+            </activation>
+            <properties>
+                <antilock>false</antilock>
+            </properties>
+        </profile>
+    </profiles>
     <dependencies>
     <dependency>
     <groupId>org.mockito</groupId>

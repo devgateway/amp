@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE form-validation PUBLIC
+         "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.3.0//EN"
+         "http://jakarta.apache.org/commons/dtds/validator_1_3_0.dtd">
+<form-validation>
+	<global></global>
+	<formset>
+        <!-- AIM module -->
+	    <!-- aim User Registration Form -->
+		<form name="aimUserRegisterForm">
+			<field property="firstNames" depends="required,maxlength">
+				<arg key="display.aim.firstNames"/>
+				<arg name="maxlength" key="${var:maxlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>40</var-value>
+				</var>
+			</field>
+			
+			<field property="lastName" depends="required,maxlength">
+				<arg key="display.aim.lastName"/>
+				<arg name="maxlength" key="${var:maxlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>40</var-value>
+				</var>
+			</field>
+			<field property="email" depends="required,email,identical">
+				<msg name="identical" key="errors.aim.emailIdentical"/>				
+				<arg key="display.aim.email"/>
+				<arg name="email" key="${var:email}" resource="false"/>
+				<var>
+					<var-name>secondProperty</var-name>
+					<var-value>emailConfirmation</var-value>
+				</var>								
+			</field>
+			<field property="emailConfirmation" depends="required,email">
+				<arg key="display.aim.reemail"/>
+				<arg name="email" key="${var:email}" resource="false"/>
+			</field>
+			<field property="password" depends="required,maxlength,identical">
+				<msg name="identical" key="errors.aim.passwordIdentical"/>
+				<arg key="display.aim.password"/>
+				<arg name="maxlength" key="${var:maxlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>30</var-value>
+				</var>
+				<var>
+					<var-name>secondProperty</var-name>
+					<var-value>passwordConfirmation</var-value>
+				</var>				
+			</field>
+			<field property="passwordConfirmation" depends="required,maxlength">
+				<arg key="display.aim.repassword"/>
+				<arg name="maxlength" key="${var:maxlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>30</var-value>
+				</var>
+			</field>
+
+			<field property="selectedCountryResidence" depends="required">
+				<arg key="display.aim.selectedCountryResidence"/>
+			</field>
+
+			<field property="selectedOrgType" depends="required">
+				<arg key="display.aim.selectedOrgType"/>
+			</field>
+			
+			<field property="selectedOrgGroup" depends="required">
+				<arg key="display.aim.selectedOrgGroup"/>
+			</field>
+			
+			<field property="organizationName" depends="required">
+				<arg key="display.aim.organizationName"/>
+			</field>
+
+			<!--
+			<field property="mailingAddress" depends="maxlength">
+				<arg key="display.aim.mailingAddress"/>
+				<arg name="maxlength" key="${var:maxlength}," resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>50</var-value>
+				</var>
+			</field>
+			<field property="organizationName" depends="maxlength">
+				<arg key="display.aim.organizationName"/>
+				<arg name="maxlength" key="${var:maxlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>40</var-value>
+				</var>
+			</field>
+			<field property="webSite" depends="maxlength">
+				<arg key="display.aim.webSite"/>
+				<arg name="maxlength" key="${var:maxlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>60</var-value>
+				</var>
+			</field>
+			-->
+		</form>
+
+		<form name="aimLoginForm">
+			<field property="userId" depends="required,email">
+				<arg key="display.aim.uid"/>
+				<arg name="email" key="${var:email}" resource="false"/>
+			</field>
+			<field property="password" depends="required">
+			        <arg key="display.aim.password"/>
+             </field>
+	    </form>
+
+
+		<form name="aimChangePasswordForm">
+            <field property="userId" depends="required,email">
+                    <arg key="display.aim.uid"/>
+				<arg name="email" key="${var:email}" resource="false"/>
+             </field>
+		<field property="oldPassword" depends="required">
+			        <arg key="display.aim.oldpassword"/>
+             </field>
+		<field property="newPassword" depends="required">
+			        <arg key="display.aim.newpassword"/>
+             </field>
+		<field property="confirmNewPassword" depends="required">
+			        <arg key="display.aim.confirmpassword"/>
+			</field>
+
+			<field property="newPassword" depends="identical">
+				<arg name="identical" key="${var:secondProperty}" resource="false"/>
+				<var>
+					<var-name>secondProperty</var-name>
+					<var-value>confirmNewPassword</var-value>
+				</var>
+			</field>
+
+	    </form>
+<!-- Aim Add Team -->
+
+	<form name="aimUpdateWorkspaceForm">
+            <field property="teamName" depends="required">
+                    <arg key="display.aim.teamName"/>
+            </field>
+            <!--
+			<field property="description" depends="required">
+                    <arg key="display.aim.description"/>
+            </field> -->
+            <field property="workspaceType" depends="validOption"> 
+            	<arg key="display.aim.workspaceType"/>
+           </field>
+           <field property="workspaceGroup" depends="validOption"> 
+            	<arg key="display.aim.workspaceGroup"/>
+           </field>           
+	</form>
+
+    <form name="aidEffectivenessIndicatorsForm">
+        <field property="role" depends="required">
+            <arg key="display.aim.role"/>
+        </field>
+        <field property="description" depends="required">
+            <arg key="display.aim.description"/>
+        </field>
+    </form>
+
+
+
+<!-- Aim Add Role -->
+
+	<form name="aimUpdateRoleForm">
+            <field property="role" depends="required">
+                    <arg key="display.aim.role"/>
+            </field>
+			<field property="description" depends="required">
+                    <arg key="display.aim.description"/>
+            </field>
+	</form>
+
+<!-- Year Range filter validation	-->
+	<form name="aimFinancingBreakdownForm">
+		<field property="fromYear" depends="validYearRange">
+            <arg name="validYearRange" key="${var:secondProperty}" resource="false"/>
+			<var>
+				<var-name>secondProperty</var-name>
+				<var-value>toYear</var-value>
+			</var>
+        </field>
+	</form>
+	<form name="aimYearlyInfoForm">
+		<field property="fromYear" depends="validYearRange">
+            <arg name="validYearRange" key="${var:secondProperty}" resource="false"/>
+			<var>
+				<var-name>secondProperty</var-name>
+				<var-value>toYear</var-value>
+			</var>
+        </field>
+	</form>
+	<form name="aimQuarterlyInfoForm">
+		<field property="fromYear" depends="validYearRange">
+            <arg name="validYearRange" key="${var:secondProperty}" resource="false"/>
+			<var>
+				<var-name>secondProperty</var-name>
+				<var-value>toYear</var-value>
+			</var>
+        </field>
+	</form>
+	<form name="aimYearlyComparisonsForm">
+		<field property="fromYear" depends="validYearRange">
+            <arg name="validYearRange" key="${var:secondProperty}" resource="false"/>
+			<var>
+				<var-name>secondProperty</var-name>
+				<var-value>toYear</var-value>
+			</var>
+        </field>
+	</form>
+	<form name="aimQuarterlyComparisonsForm">
+		<field property="fromYear" depends="validYearRange">
+            <arg name="validYearRange" key="${var:secondProperty}" resource="false"/>
+			<var>
+				<var-name>secondProperty</var-name>
+				<var-value>toYear</var-value>
+			</var>
+        </field>
+	</form>
+	</formset>
+	<!-- An example formset for another locale     <formset language="fr">          <constant>             <constant-name>postalCode</constant-name>             <constant-value>^[0-9a-zA-Z]*$</constant-value>         </constant>     </formset>    -->
+</form-validation>

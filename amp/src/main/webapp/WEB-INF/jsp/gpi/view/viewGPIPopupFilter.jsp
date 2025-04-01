@@ -99,7 +99,7 @@ div.membersSelector div.memsearch {
 .groupingSelector ul {
 	margin-bottom: 15px;
 	width: 285px;
-	
+
 }
 
 .groupingSelector ul li {
@@ -175,7 +175,7 @@ label {
 	text-indent: 10px;
 }
 li table{
-	visibility:visible; 
+	visibility:visible;
 }
 
 #status_sector_search, #donorTab_search, #financingsInsTab_search
@@ -261,7 +261,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 											onclick="toggleCheckChildren(this)" class="root_checkbox" />
 											<span style="font-family: Arial,sans-serif; font-size: 12px;"> <digi:trn>${element.rootHierarchyListable.label}</digi:trn>
 										</span> <jsp:include
-												page="/repository/aim/view/filters/hierarchyLister.jsp" />
+												page="WEB-INF/jsp/aim/view/filters/hierarchyLister.jsp" />
 										</li>
 									</ul>
 								</div>
@@ -339,7 +339,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 						</div>
 						<div class="clear"></div>
 						<div class="tabSubmit">
-							<input type="button" class="buttonx_sm" style="font-size: 10px;" 
+							<input type="button" class="buttonx_sm" style="font-size: 10px;"
 								value="<digi:trn>Apply Filters to the Report</digi:trn>" onclick="submitFilters();"/>
 							<input type="button" style="font-size: 10px;"
 								class="buttonx_sm" value="<digi:trn>Reset and Start Over</digi:trn>" onclick="resetGPIFilters();"/>
@@ -391,7 +391,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 											onclick="toggleCheckChildren(this)" class="root_checkbox" />
 											<span style="font-family: Arial,sans-serif; font-size: 12px;"> <digi:trn>${element.rootHierarchyListable.label}</digi:trn>
 										</span> <jsp:include
-												page="/repository/aim/view/filters/hierarchyLister.jsp" />
+												page="WEB-INF/jsp/aim/view/filters/hierarchyLister.jsp" />
 										</li>
 									</ul>
 								</div>
@@ -454,7 +454,7 @@ var tabView = new YAHOO.widget.TabView('demo');
 											onclick="toggleCheckChildren(this)" class="root_checkbox" />
 											<span style="font-family: Arial,sans-serif; font-size: 12px;"> <digi:trn>${element.rootHierarchyListable.label}</digi:trn>
 										</span> <jsp:include
-												page="/repository/aim/view/filters/hierarchyLister.jsp" />
+												page="WEB-INF/jsp/aim/view/filters/hierarchyLister.jsp" />
 										</li>
 									</ul>
 								</div>

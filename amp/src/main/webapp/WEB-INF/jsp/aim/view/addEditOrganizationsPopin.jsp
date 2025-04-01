@@ -21,7 +21,7 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
 
-<script type="text/javascript" src="/repository/aim/view/multilingual/multilingual_scripts.js"></script>
+<script type="text/javascript" src="WEB-INF/jsp/aim/view/multilingual/multilingual_scripts.js"></script>
 
 <style type="text/css">
     .mask {
@@ -323,7 +323,7 @@ function selectPageSectors(pagedata){
     YAHOO.util.Connect.asyncRequest("POST", url, callback, postString);
 
 }
-    
+
 function checkSectorEmpty() {
     var sectorFlag = true;
     if(document.aimSelectSectorForm.sector.value == -1)
@@ -410,7 +410,7 @@ function myAddLocation(params) {
 }
 
 function locationChanged( selectId ) {
-	var selectEl		= document.getElementById(selectId).value;   
+	var selectEl		= document.getElementById(selectId).value;
     if ( selectEl != "-1" ) {
         //document.selectLocationForm.parentLocId.value=selectEl.value;
 		<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
@@ -426,7 +426,7 @@ function showPanelLoading(msg){
         '<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
         '<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>';
         showContent();
-   
+
 }
 function myclose(){
     myPanel.hide();

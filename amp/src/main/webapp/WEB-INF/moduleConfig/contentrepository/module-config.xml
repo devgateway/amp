@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>contentrepository</name>
+	<security>
+		<action login-required="true" pattern="/tempDocManager">ADMIN</action>
+		<action login-required="true" pattern="/labelManager" />
+	</security>
+	<!--	
+		<security>
+		<action login-required="false" pattern="/documentManager" />
+		<action login-required="true" pattern="/getVersionsForDocumentManager" />
+		<action login-required="true" pattern="/deleteForDocumentManager" />
+		<action login-required="true" pattern="/downloadFile" />
+		<action login-required="true" pattern="/getDocumentList" />
+	</security> -->
+
+	<hibernate-classes required="true">
+		<hibernate-class>
+			org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.contentrepository.dbentity.CrSharedDoc
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.contentrepository.dbentity.TeamNodeState
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.contentrepository.dbentity.CrDocumentsToOrganisations
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.contentrepository.dbentity.template.TemplateDoc
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.contentrepository.dbentity.template.TemplateField
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.contentrepository.dbentity.template.PossibleValue
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.contentrepository.dbentity.filter.DocumentFilter
+		</hibernate-class>
+	</hibernate-classes>
+</module-config>

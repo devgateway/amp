@@ -21,7 +21,7 @@
 	<digi:trn>Data Freeze Manager</digi:trn>
 </h1>
 <script language="JavaScript" type="text/javascript">
-	
+
 </script>
 <style>
 .scorecard-container {
@@ -117,17 +117,17 @@
 
 
 <script language="JavaScript" type="text/javascript"
-	src="/repository/aim/view/scripts/common.js"></script>
+	src="WEB-INF/jsp/aim/view/scripts/common.js"></script>
 
 <script language="JavaScript" type="text/javascript">
 $( document ).ready(function() {
 	$('input[name="gracePeriod"]').attr('disabled',!$('input[name="enabled"]').is(':checked'));
-	
+
 	$('input[name="enabled"]').on("click",function(){
 		$('input[name="gracePeriod"]').attr('disabled',!$('input[name="enabled"]').is(':checked'));
 		$('input[name="gracePeriod"]').val('');
 	});
-	
+
 	//only allow numbers
 	$('input[name="gracePeriod"]').on("keydown",function () {
 		// Allow only backspace and delete
@@ -136,11 +136,11 @@ $( document ).ready(function() {
 		else {
 			// Ensure that it is a number and stop the keypress
 				if(!( (event.keyCode >=48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) )){
-					event.preventDefault();	
-					}	
+					event.preventDefault();
+					}
 				}
 	});
-});	
+});
 
 	function saveDataFreezeManager() {
 		var alertGracePeriod = '<digi:trn jsFriendly="true">Grace period should be between 0 and 30</digi:trn>';

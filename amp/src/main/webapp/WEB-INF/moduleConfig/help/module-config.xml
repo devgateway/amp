@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module-config>
+	<name>help</name>
+	<security login-required="true" default="READ">
+		<action login-required="true" pattern="/helpActions" /> 
+		<action login-required="true" pattern="/glossary" /> 
+		<action login-required="true" pattern="/showAddGlossary" /> 
+		<action login-required="true" pattern="/addGlossary" /> 
+		<action login-required="true" pattern="/topicBody" /> 
+		<action login-required="true" pattern="/deleteTopic" /> 
+		<action login-required="true" pattern="/searchGlossary" /> 
+	</security>
+		<hibernate-classes required="false">
+			<hibernate-class>org.digijava.module.help.dbentity.HelpTopic</hibernate-class>		
+		</hibernate-classes>
+</module-config>

@@ -112,34 +112,34 @@ function projectFiche(id)
 		* o.responseXML
 		* o.argument
 		*/
-		var response = o.responseText; 
+		var response = o.responseText;
 		var content = document.getElementById("myContentContent");
 		//response = response.split("<!")[0];
 		content.innerHTML = response;
 		//content.style.visibility = "visible";
-		
+
 		showContent();
 	}
 
 	function showPanelLoading(msg){
 		   var content = document.getElementById("myContentContent");
 		   content.innerHTML = "<div style='text-align: center'>" + "Loading..." +
-		   "<br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";   
+		   "<br /> <img src='WEB-INF/jsp/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
 		   showContent();
 		 }
-		 
-	var responseFailure = function(o){ 
-		// Access the response object's properties in the 
-		// same manner as listed in responseSuccess( ). 
-		// Please see the Failure Case section and 
-		// Communication Error sub-section for more details on the 
+
+	var responseFailure = function(o){
+		// Access the response object's properties in the
+		// same manner as listed in responseSuccess( ).
+		// Please see the Failure Case section and
+		// Communication Error sub-section for more details on the
 		// response object's properties.
-		//alert("Connection Failure!"); 
-	}  
-	var callback = 
-	{ 
-		success:responseSuccess, 
-		failure:responseFailure 
+		//alert("Connection Failure!");
+	}
+	var callback =
+	{
+		success:responseSuccess,
+		failure:responseFailure
 	};
 
 	function showContent(){
@@ -163,7 +163,7 @@ function projectFiche(id)
 		<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreviewPopin.do" />
 		var url = "<%=addUrl %>?"+postString;
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
-		
+
 	}
 
 	function initPopin() {
@@ -172,8 +172,8 @@ function projectFiche(id)
 		myPanel.setBody("");
 		myPanel.beforeHideEvent.subscribe(function() {
 			panelStart=1;
-		}); 
-		
+		});
+
 		myPanel.render(document.body);
 	}
 
@@ -186,9 +186,9 @@ function projectFiche(id)
 	}
 
 	function expandAll() {
-	   
+
 		$("img[id$='_minus']").show();
-		$("img[id$='_plus']").hide();	
+		$("img[id$='_plus']").hide();
 		$("div[id$='_dots']").hide();
 		$("div[id^='act_']").show('fast');
 	}
@@ -196,7 +196,7 @@ function projectFiche(id)
 	function collapseAll() {
 
 		$("img[id$='_minus']").hide();
-		$("img[id$='_plus']").show();	
+		$("img[id$='_plus']").show();
 		$("div[id$='_dots']").show();
 		$("div[id^='act_']").hide();
 	}
@@ -309,14 +309,14 @@ method="post">
 
 						<TR>
 							<field:display name="Activity Performance"  feature="Activity Dashboard">
-							
+
 							<TD width="50%">
 
 								<% if (actPerfChartUrl != null) { %>
-                                                                
+
 
 								<img src="<%= actPerfChartUrl %>" width=370 height=450 border="0" usemap="#<%= actPerfChartFileName %>"><br><br>
-                                                                
+
 
 								<div align="center">
                                                                      <field:display name="Activity Printer Friendly Button Performance" feature="Activity Dashboard">
@@ -345,7 +345,7 @@ method="post">
 							</TD>
 							</field:display>
 							<field:display name="Project Risk"  feature="Activity Dashboard">
-							
+
 							<TD width="50%" valign="top">
 
 								<% if (actRiskChartUrl != null) { %>
@@ -370,7 +370,7 @@ method="post">
                     <field:display name="Activity Printer Friendly Button Risk" feature="Activity Dashboard">
 
 								<div align="center">
-                                                                    
+
 							<html:button  styleClass="dr-menu" property="submitButton" onclick="javascript:showPrinterFriendly(${actId},'R')">
 								<digi:trn key="btn:printerFriendly">Printer Friendly</digi:trn>
 							</html:button>
@@ -390,7 +390,7 @@ method="post">
 
 							</TD>
 							</field:display>
-						
+
 
 						</TR>
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="parisIndicatorForm"
+			type="org.digijava.module.parisindicator.form.PIForm">
+			<form-property name="selectedStartYear" type="int" />
+			<form-property name="selectedEndYear" type="int" />
+		</form-bean>
+	</form-beans>
+	<action-mappings>
+		<action name="parisIndicatorForm" path="/parisindicator/parisindicator"
+			scope="session" type="org.digijava.module.parisindicator.action.PIAction">
+			<forward name="forward" path="/showLayout.do?layout=parisindicator_base" />
+			<forward name="print" path="/showLayout.do?layout=newParisIndicatorLayout" />
+		</action>
+	</action-mappings>
+</struts-config>

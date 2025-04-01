@@ -11,11 +11,11 @@
 <script language="javascript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.js"/>"></script>
 <script language="javascript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery.fancytree.js"/>"></script>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/ui.fancytree.css"/>"> 
+<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/ui.fancytree.css"/>">
 
 <style>
 .scorecard-container {
-	width:550px; 
+	width:550px;
 	margin: 0 auto;
 }
 
@@ -27,7 +27,7 @@
 
 .settings-left {
     width:225px;
-    display: inline-block;  
+    display: inline-block;
     padding-bottom: 10px;
     text-align: right;
 }
@@ -42,14 +42,14 @@
 .settings-right {
     width:210px;
     text-align: left;
-    display: inline-block; 
+    display: inline-block;
     vertical-align: middle;
     padding-left:20px
 }
 
 .settings-blocks {
-	display: inline-block;  
-	width: 100%; 
+	display: inline-block;
+	width: 100%;
 	padding: 0;
 	vertical-align: top;
 }
@@ -134,7 +134,7 @@
   				</div>
 			</fieldset>
 		</div>
-			
+
 		<div id="Step2" class="step-container">
 			<fieldset>
 				<legend><digi:trn>Donors to exclude</digi:trn></legend>
@@ -146,7 +146,7 @@
 				</div>
 			</fieldset>
 		</div>
-			
+
 		<div id="Step3" class="step-container">
 		<fieldset>
   				<legend><digi:trn>Donors with no updates</digi:trn></legend>
@@ -155,9 +155,9 @@
 						<select id="allDonors" multiple="true" size="15" style="width:210px"></select>
 					</div>
 					<div class="nodonors-center">
-						<input class="dr-menu" type="button" onclick="addDonors();" value="<digi:trn>Add</digi:trn> >>"> 
+						<input class="dr-menu" type="button" onclick="addDonors();" value="<digi:trn>Add</digi:trn> >>">
 						<div style="padding-top:10px"></div>
-						<input class="dr-menu" type="button" onclick="removeDonors();" value=">> <digi:trn>Remove</digi:trn>"> 
+						<input class="dr-menu" type="button" onclick="removeDonors();" value=">> <digi:trn>Remove</digi:trn>">
 					</div>
 					<div class="nodonors-right">
 						<select id="noUpdateDonors" multiple="true" size="15" style="width:210px"></select>
@@ -165,14 +165,14 @@
 				</div>
 			</fieldset>
 		</div>
-			
+
 		<div id="Step4" class="step-container">
 		<fieldset>
   				<legend><digi:trn>Summary</digi:trn></legend>
 				<div>
 					<div class="settings-blocks">
 						<div class="settings-left summary-text-left">
-							<digi:trn>Validation Period</digi:trn>: 
+							<digi:trn>Validation Period</digi:trn>:
 							<b><span id="validationYes" style="display:none;"><digi:trn>Yes</digi:trn></span>
 							<span id="validationNo" style="display:none;"><digi:trn>No</digi:trn></span></b>
 						</div>
@@ -220,7 +220,7 @@
 </digi:form>
 
 
-<script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"></script>
+<script language="JavaScript" type="text/javascript" src="WEB-INF/jsp/aim/view/scripts/common.js"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scorecard.js"/>"></script>
 
 <script type="text/javascript">

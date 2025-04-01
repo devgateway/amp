@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" %> 
+<%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -20,6 +20,6 @@
 <bean:define toScope="request" id="crRights" value="true" />
 <bean:define toScope="request" id="showLineBreaks" value="true" />
 
-<jsp:include page="/repository/contentrepository/view/showSelectedDocumentsDM.jsp"/>
+<jsp:include page="WEB-INF/jsp/contentrepository/view/showSelectedDocumentsDM.jsp"/>
 </body>
 </html>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config>
+<secondary-pages>
+    <page page="advancedTrans" name="advTranslationLayout" title=" - Advanced Translation" />
+    <page page="adminTranslation" name="translationAdminLayout" title=" - Translation Administration" />
+    <page page="adminPerms" name="translationPermLayout" title=" - Permission Administration" />
+    <page page="adminUser" name="translationUserLayout" title=" - User Administration" />
+    <page page="translator" name="translatorLayout" title=" - Translator Interface" />
+    <page page="importExportBody" name="importExportLayout" title=" - Import/Export Translations" />
+    <page page="newAdvancedTrans" name="newAdvTranslationLayout" title=" - Advanced Translation" />
+    <page page="trnCleanupManager" name="translationCleanupLayout" title=" - Translation cleanup" />
+    <page page="contentTrnImportExport" name="contentTrnImportExportLayout" title=" - Content Translation Manager" />
+    <page page="contentTrnExport" name="contentTrnExportLayout" title=" - Export Content Translations" />
+    <page page="contentTrnImport" name="contentTrnImportLayout" title=" - Import Content Translations" />
+</secondary-pages>
+<module>
+	<teaser-file>dropdownLangSwitch.jsp</teaser-file>
+	<teaser name="flatLangSwitch" action="renderTeaser.do">flatLangSwitch.jsp</teaser>
+	<teaser name="dropdownLangSwitch" action="renderTeaser.do">dropdownLangSwitch.jsp</teaser>
+</module>
+</config>

@@ -94,9 +94,9 @@ div.charcounter-progress-bar {
 }
 </style>
 
-<jsp:include page="/repository/aim/view/addEditOrganizationsPopin.jsp" />
-<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp" />
-<jsp:include page="/repository/aim/view/components/contactScripts.jsp" />
+<jsp:include page="WEB-INF/jsp/aim/view/addEditOrganizationsPopin.jsp" />
+<jsp:include page="WEB-INF/jsp/aim/view/addOrganizationPopin.jsp" />
+<jsp:include page="WEB-INF/jsp/aim/view/components/contactScripts.jsp" />
 
 <script language="JavaScript" type="text/javascript">
 	function addLoadEvent(func) {
@@ -112,7 +112,7 @@ div.charcounter-progress-bar {
 		  }
 		}
 	}
-	
+
 
 
 function initScripts() {
@@ -137,8 +137,8 @@ initContactScript();
             var url="${addCont}"+"&"+params;
             YAHOO.util.Connect.asyncRequest("POST", url, callback1);
     }
-  
-   
+
+
         function addStaff(){
             var year=document.aimAddOrgForm.selectedYear;
             var type=document.aimAddOrgForm.typeOfStaff;
@@ -191,11 +191,11 @@ initContactScript();
             document.aimAddOrgForm.target = "_self";
             document.aimAddOrgForm.submit();
         }
-       
+
         function setStyle(table,hasTitle){
-        	
+
 //        	alert (table)
-        	
+
             if(table!=null){
                 table.className += " tableElement";
                 setStripsTable(table.id, "tableEven", "tableOdd");
@@ -235,7 +235,7 @@ initContactScript();
                 document.aimAddOrgForm.submit();
         	}
         }
-        
+
         function addSector() {
     		<digi:context name="addSectors" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.actionFlag.value="addSector";
@@ -243,7 +243,7 @@ initContactScript();
             document.aimAddOrgForm.target = "_self";
             document.aimAddOrgForm.submit();
         }
-       
+
             function editStaffInfo(index){
                 <digi:context name="editStaffInfo" property="context/module/moduleinstance/editOrganisation.do" />
                     document.aimAddOrgForm.action = "${editStaffInfo}?staffInfoIndex="+index;
@@ -253,10 +253,10 @@ initContactScript();
                 }
 
 
-        
-        
-    
-        
+
+
+
+
 
         function cancel() {
     		<digi:context name="selectLoc" property="context/module/moduleinstance/organisationManager.do" />
@@ -266,7 +266,7 @@ initContactScript();
         function check() {
 
             var type=document.aimAddOrgForm.type;
-           
+
             // We have different mandatory fields for NGOs and others....
             if(type.value=='NGO'){
                 var orgPrimaryPurpose= document.aimAddOrgForm.orgPrimaryPurpose.value;
@@ -289,15 +289,15 @@ initContactScript();
                     alert('<digi:trn  jsFriendly="true">Please Select Sectors for this Organization.</digi:trn>');
                     return false;
                 }
-                                    
+
             }
-           
-              
+
+
             return true;
 
-        }     
+        }
 
-          	   
+
         function addDocumentsDM(documentsType, showTheFollowingDocuments) {
         	//submit organization parameters first
            	<digi:context name="getInf" property="context/module/moduleinstance/editOrganisation.do?skipReset=true" />
@@ -317,9 +317,9 @@ initContactScript();
 								document.forms[0].submit();
 						}
        		};
-       	
-       		YAHOO.util.Connect.asyncRequest("POST",url, callback, params );         
-            
+
+       		YAHOO.util.Connect.asyncRequest("POST",url, callback, params );
+
         }
 
 
@@ -360,15 +360,15 @@ initContactScript();
         	}
         	if(document.getElementById('description')!=null){
         		params+="&description="+document.getElementById('description').value;
-        	}                            
+        	}
         	if(document.getElementById('fundingorgid')!=null){
         		params+="&fundingorgid="+document.getElementById('fundingorgid').value;
         	}
             return params;
-            
+
         }
 
-        
+
         function validateSaveOrg() {
             if(check()){
     			<digi:context name="save" property="context/module/moduleinstance/editOrganisation.do" />
@@ -420,7 +420,7 @@ initContactScript();
                 rows = null;
             }
         }
-        
+
     function expand(suffix){
 		var imgId='#img_'+suffix;
 		var imghId='#imgh_'+suffix;
@@ -438,8 +438,8 @@ initContactScript();
 		$(imgId).show();
 		$(divId).hide('fast');
 	}
-  
-       
+
+
 
         function removeContact(selContactId){
     		<digi:context name="remLocs" property="context/module/moduleinstance/editOrganisation.do" />
@@ -454,13 +454,13 @@ initContactScript();
         function removeSelectedContacts(){
         	var atLeastOneIsChecked = false;
         	var selected= $("input[class='selectedContactInfoIds']:checked").length;
-        		if (selected>0) { 
+        		if (selected>0) {
                 	atLeastOneIsChecked = true;
-                } else { 
+                } else {
                 	atLeastOneIsChecked = false;
-                	
+
                 }
-            
+
         	if (atLeastOneIsChecked) {
             	<digi:context name="remConts" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${remConts}";
@@ -494,8 +494,8 @@ initContactScript();
         	}
         	return retValue;
         }
-       
-       
+
+
 </script>
 <style>
 .yui-skin-sam a.yui-pg-page {
@@ -773,7 +773,7 @@ initContactScript();
 												</fieldset>
 											</td>
 										</tr>
-										
+
 										<c:if test="${aimAddOrgForm.type=='NGO'}">
 										<tr>
 											<td colspan="2">
@@ -1071,7 +1071,7 @@ initContactScript();
 																		<bean:define toScope="request"
 																		id="showLineBreaks" value="false" />
 																	<jsp:include
-																		page="/repository/contentrepository/view/showSelectedDocumentsDM.jsp" />
+																		page="WEB-INF/jsp/contentrepository/view/showSelectedDocumentsDM.jsp" />
 																		<c:set var="showTheFollowingDocuments" value="PUBLIC" />
 																	<c:set var="documentsType"><%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>
 																	<html:button styleClass="buttonx_sm"
@@ -1085,7 +1085,7 @@ initContactScript();
 													<td></td>
 												</tr>
 											</module:display>
-											
+
 										</c:if>
 
 

@@ -61,7 +61,7 @@ function validate(){
 
 }
 function applyFilter() {
-	
+
 	if(document.getElementsByName('numRecords')[0].value>0)
 	{   <digi:context name="manager" property="context/module/moduleinstance/currencyManager.do" />
     document.aimCurrencyForm.action = "${manager}";
@@ -72,7 +72,7 @@ function applyFilter() {
 }
 
 function sortSubmit(val){
-	
+
 	var sval = document.aimCurrencyForm.sort.value;
 	var soval = document.aimCurrencyForm.sortOrder.value;
 
@@ -84,9 +84,9 @@ function sortSubmit(val){
 	}
 	else
 		document.aimCurrencyForm.sortOrder.value = "asc";
-	
+
 	document.aimCurrencyForm.sort.value=val;
-	
+
 	<digi:context name="sorting" property="context/module/moduleinstance/currencyManager.do" />
 	document.aimCurrencyForm.action = "<%= sorting %>";
 	document.aimCurrencyForm.target = "_self";
@@ -102,7 +102,7 @@ function submitPages(){
 	else{
 		alert("<digi:trn>Number of records per page should be greater than 0</digi:trn>");
 	}
-		
+
 }
 
 var enterBinder	= new EnterHitBinder('currencyFilterBtn');
@@ -153,11 +153,11 @@ function exportXSL(){
 										</td>
 									<!-- End navigation -->
 								</tr>
-								
+
 								<tr>
 									<td align="left">
 										<jsp:include
-									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
+									page="WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" />
 									</td>
 									<td rowspan="4" valign=top>
 										<table align="center" cellpadding="0" cellspacing="0"
@@ -315,10 +315,10 @@ function exportXSL(){
 																			key="aim:currCode">Code</digi:trn>
 																</b>
 																<c:if test="${aimCurrencyForm.sort=='code' && aimCurrencyForm.sortOrder=='asc'}">
-																		<img src="/repository/aim/images/up.gif" alt="up" />
+																		<img src="WEB-INF/jsp/aim/images/up.gif" alt="up" />
 																	</c:if>
 																<c:if test="${aimCurrencyForm.sort=='code' && aimCurrencyForm.sortOrder=='desc'}">
-																		<img src="/repository/aim/images/down.gif" alt="down" />
+																		<img src="WEB-INF/jsp/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</td>
 																<td align="left" class="inside" width="35%"
@@ -328,10 +328,10 @@ function exportXSL(){
 																			key="aim:currencyName">Currency Name</digi:trn>
 																</b>
 																<c:if test="${aimCurrencyForm.sort=='cname' && aimCurrencyForm.sortOrder=='asc'}">
-																		<img src="/repository/aim/images/up.gif" alt="up" />
+																		<img src="WEB-INF/jsp/aim/images/up.gif" alt="up" />
 																	</c:if>
 																<c:if test="${aimCurrencyForm.sort=='cname' && aimCurrencyForm.sortOrder=='desc'}">
-																		<img src="/repository/aim/images/down.gif" alt="down" />
+																		<img src="WEB-INF/jsp/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</td>
 																<td colspan="2" align="left" class="inside"
@@ -342,10 +342,10 @@ function exportXSL(){
 																			key="aim:countryName">Administrative Level 0</digi:trn>
 																</b>
 																<c:if test="${aimCurrencyForm.sort=='country' && aimCurrencyForm.sortOrder=='asc'}">
-																		<img src="/repository/aim/images/up.gif" alt="up" />
+																		<img src="WEB-INF/jsp/aim/images/up.gif" alt="up" />
 																	</c:if>
 																<c:if test="${aimCurrencyForm.sort=='country' && aimCurrencyForm.sortOrder=='desc'}">
-																		<img src="/repository/aim/images/down.gif" alt="down" />
+																		<img src="WEB-INF/jsp/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</td>
 															</tr>
@@ -366,7 +366,7 @@ function exportXSL(){
 																	<%if (index%2 == 0) { %>
 																	<tr class="rowNormal">
 																		<%  } else { %>
-																	
+
 																	<tr class="rowAlternate">
 																		<%}index++;%>
 																		<td align="left" width="3" class="inside">
@@ -544,7 +544,7 @@ function exportXSL(){
 																		</c:set>
 																		<digi:link href="/currencyManager.do"
 																			style="text-decoration=none" name="urlParamsLast"
-																			title="${translation}">&gt;&gt;												
+																			title="${translation}">&gt;&gt;
 														</digi:link>&nbsp;&nbsp;
 											</c:if> <c:out value="${aimCurrencyForm.currentPage}"></c:out> <digi:trn
 																		key="aim:of">of</digi:trn> <c:out

@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8"%> 
+<%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
@@ -9,7 +9,7 @@
 
 <digi:instance property="crDocumentManagerForm" />
 
-<jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
+<jsp:include page="WEB-INF/jsp/aim/view/teamPagesHeader.jsp"  />
 
 <%@include file="addDocumentPanel.jsp" %>
 
@@ -38,7 +38,7 @@
 		windowController	= newWindow('${translation}', false, 'otherDocumentsDiv');
 		windowController.populateWithPublicDocs();
 	}
-	YAHOO.util.Event.on(window, "load", afterPageLoad); 
-</script>	
+	YAHOO.util.Event.on(window, "load", afterPageLoad);
+</script>
 
 <%@include file="documentManagerDivHelper.jsp" %>

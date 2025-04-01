@@ -14,7 +14,7 @@
 <digi:context name="digiContext" property="context"/>
 
 <logic:equal name="aimFinancialOverviewForm" property="sessionExpired" value="true">
-	<jsp:include page="../../../repository/aim/view/sessionExpired.jsp"  />
+	<jsp:include page="../../..WEB-INF/jsp/aim/view/sessionExpired.jsp"  />
 </logic:equal>
 
 <logic:equal name="aimFinancialOverviewForm" property="sessionExpired" value="false">
@@ -81,7 +81,7 @@
 					<feature:display module="Funding" name="Expenditures">
 						<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
 						<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
-						</digi:link> 
+						</digi:link>
 					</feature:display>
 		</td>
 
@@ -100,13 +100,13 @@
 					</c:set>
 					<digi:link href="/viewYearlyComparisons.do" name="urlAll" styleClass="sub-nav2" title="${translation}" >
 					<digi:trn key="aim:all">ALL</digi:trn>
-					</digi:link>	
-				
+					</digi:link>
+
 </td>
 </tr>
 </table>
 </logic:equal>
-					 
+
 
 
 

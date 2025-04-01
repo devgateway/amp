@@ -23,18 +23,18 @@ function banUser(txt) {
   var ban=confirm('${translationBan}');
   return ban;
   }
-  
+
  function unbanUser(txt) {
   var ban=confirm('${translationUnban}');
   return ban;
   }
-  
-  
+
+
   function searchAlpha(val) {
 		     document.umViewAllUsersForm.action = "/um/viewAllUsers.do?currentAlpha="+val;
 		     document.umViewAllUsersForm.target="_self";
 		     document.umViewAllUsersForm.submit();
-			 return true;		
+			 return true;
 	}
   function exportXSL(){
       <digi:context name="exportUrl" property="context/module/moduleinstance/exportUserManager.do"/>;
@@ -100,13 +100,13 @@ function banUser(txt) {
 							style="background-color: #F2F2F2; border: 1px solid #D0D0D0; padding: 5px;">
 							<digi:errors /> <span style="font-size: 12px; font-weight: bold;">
 								<digi:trn key="um:viewAllUsers:ListOfUsers">
-                List of users 
+                List of users
                 </digi:trn> </span></td>
 					</tr>
 					<tr>
 						<td align="left" colspan=8>
 								<jsp:include
-									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
+									page="WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" />
 						</td>
 					</tr>
 					<tr style="background-color: #F2F2F2; padding: 5px;">
@@ -181,15 +181,15 @@ function banUser(txt) {
 								<digi:trn key="um:viewAllUsers:showButton">Show</digi:trn>
 							</c:set> <input type="button" value="${translation}" class="dr-menu"
 							style="font-family: verdana; font-size: 11px;" onclick="showUsers()" />
-							
+
 							<c:set var="translation">
 								<digi:trn key="um:viewAllUsers:resetButton">Reset</digi:trn>
 							</c:set> <input type="button" value="${translation}" class="dr-menu"
 							style="font-family: verdana; font-size: 11px;"  onclick="resetUsers()"  />
-							
+
 							</td>
-							
-							
+
+
 					</tr>
 					</table>
 										<table bgColor=#ffffff cellpadding="0" cellspacing="0"
@@ -243,10 +243,10 @@ function banUser(txt) {
 																									</digi:link>
 																								</c:if> <c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='nameAscending'}">
-																									<img src="/repository/aim/images/up.gif" />
+																									<img src="WEB-INF/jsp/aim/images/up.gif" />
 																								</c:if> <c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='nameDescending'}">
-																									<img src="/repository/aim/images/down.gif" />
+																									<img src="WEB-INF/jsp/aim/images/down.gif" />
 																								</c:if></td>
 																							<td height="30" width="220"><c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy!='emailAscending'}">
@@ -264,10 +264,10 @@ function banUser(txt) {
 																									</digi:link>
 																								</c:if> <c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='emailAscending'}">
-																									<img src="/repository/aim/images/up.gif" />
+																									<img src="WEB-INF/jsp/aim/images/up.gif" />
 																								</c:if> <c:if
 																									test="${not empty umViewAllUsersForm.sortBy && umViewAllUsersForm.sortBy=='emailDescending'}">
-																									<img src="/repository/aim/images/down.gif" />
+																									<img src="WEB-INF/jsp/aim/images/down.gif" />
 																								</c:if></td>
 																							<td height="30" width="220"><b> <digi:trn
 																										key="um:viewAllUsers:UserWorkspace">Workspace</digi:trn>
@@ -442,7 +442,7 @@ function banUser(txt) {
 																					<digi:link href="/userSearch.do"
 																						style="text-decoration=none" name="urlParamsLast"
 																						title="${translation}">
-															&gt;&gt; 
+															&gt;&gt;
 														</digi:link>
 																				</c:if> &nbsp; <c:out
 																					value="${umViewAllUsersForm.currentPage}"></c:out>&nbsp;<digi:trn

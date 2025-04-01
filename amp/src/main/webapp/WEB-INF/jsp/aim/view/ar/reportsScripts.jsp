@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 
-<%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
+<%@ include file="WEB-INF/jsp/aim/view/scripts/newCalendar.jsp"  %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTable.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTableReports.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
@@ -42,7 +42,7 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 
-<link rel="stylesheet" href="/repository/aim/view/css/css_dhtmlsuite/modal-message.css"/>
+<link rel="stylesheet" href="WEB-INF/jsp/aim/view/css/css_dhtmlsuite/modal-message.css"/>
 
 <script type="text/javascript">
 messageObj = new DHTMLSuite.modalMessage();	// We only create one object of this class
@@ -147,7 +147,7 @@ background-color: yellow;css
 }
 
 </style>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
 
@@ -160,7 +160,7 @@ background-color: yellow;css
 
 
 <script type="text/javascript">
-SaveReportEngine.connectionErrorMessage = 
+SaveReportEngine.connectionErrorMessage =
 	"<digi:trn key='aim:reportwizard:connectionProblems' jsFriendly='true'>Apparently there are some connection problems. Please try again in a few moments.</digi:trn>";
 SaveReportEngine.savingMessage =
 	"<digi:trn key='aim:reportwizard:savingData' jsFriendly='true'>Saving data. Please wait.</digi:trn>";
@@ -174,12 +174,12 @@ SaveReportEngine.tabSavedMessage =
 	"<digi:trn key='aim:reports:tabSaved' jsFriendly='true'>Tab and filters have been saved. </digi:trn>";
 SaveReportEngine.reportSavedMessage =
 	"<digi:trn key='aim:reports:reportSaved' jsFriendly='true'>Report and filters have been saved.</digi:trn>";
-saveReportEngine	= null;	
+saveReportEngine	= null;
 </script>
 <script type="text/javascript">
 		dateFilterErrorMsg = "<digi:trn jsFriendly='true'>'From' date must be on or before 'To' date</digi:trn>";
 		var currentReportId	= -1;
-		<% 
+		<%
 		//We override currentReportId only if the user is logged in
 		if (session.getAttribute("currentMember") != null) {%>
 			currentReportId = <%=ReportContextData.contextIdExists() ? ReportContextData.getCurrentReportContextId(request, true) : "-1" %>
@@ -195,7 +195,7 @@ saveReportEngine	= null;
 				//history.go(-1);
 			}
 		}
-		
+
 		YAHOO.amptab.handleClose = function() {
 			var filter			= document.getElementById('myFilter');
 			filter.innerHTML 	= '';
@@ -212,7 +212,7 @@ saveReportEngine	= null;
 					filter.parent.removeChild(filter);
 			wrapper.appendChild(filter);
 		};
-	
+
 		var myPanel1 = new YAHOO.widget.Panel("new", {
 			width:"750px",
 		    fixedcenter: true,
@@ -223,7 +223,7 @@ saveReportEngine	= null;
 		    modal:true,
 		    effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 		    draggable:true} );
-		
+
 		var myPanel2 = new YAHOO.widget.Panel("new2", {
 			width:"400px",
 		    fixedcenter: true,
@@ -245,7 +245,7 @@ saveReportEngine	= null;
 		    modal:true,
 		    effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 		    draggable:true} );
-		    
+
 		    var myPanel4 = new YAHOO.widget.Panel("new4", {
 			width:"480px",
 		    fixedcenter: true,
@@ -267,30 +267,30 @@ saveReportEngine	= null;
 			    modal:true,
 			    effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 			    draggable:true} );
-	
+
 	myPanel1.hideEvent.subscribe(YAHOO.amptab.handleClose);
 	myPanel5.beforeHideEvent.subscribe(YAHOO.amptab.handleCloseAbout);
 	myPanel4.beforeHideEvent.subscribe(YAHOO.amptab.handleCloseShowFormat);
-		    
+
 	function initScripts() {
-	
+
 	    var msg='\n<digi:trn key="rep:filter:filters" jsFriendly="true">Filters</digi:trn>';
 		myPanel1.setHeader(msg);
 		myPanel1.setBody("");
 		myPanel1.render(document.body);
-		
+
 		var msgP2='\n<digi:trn key="rep:filter:selectsorter" jsFriendly="true">Please select hierarchy sorter criteria</digi:trn>';
 
 		myPanel2.setHeader(msgP2);
 		myPanel2.setBody("");
 		myPanel2.render(document.body);
 		myPanel2EmptyBody	= true;
-		
+
 		var msgP3='\n<digi:trn key="rep:filter:selectRange" jsFriendly="true">Please select range</digi:trn>';
 		myPanel3.setHeader(msgP3);
 		myPanel3.setBody("");
 		myPanel3.render(document.body);
-		
+
 		//alert('param.queryEngine: ' + '${param.queryEngine}');
 		<c:choose>
 		<c:when test="${param.is_a_tab =='true' }">
@@ -308,22 +308,22 @@ saveReportEngine	= null;
 		var msgP5='\n<digi:trn key="aim:aboutamp" jsFriendly="true">About AMP</digi:trn>';
 		myPanel5.setHeader(msgP5);
 		myPanel5.setBody("");
-		myPanel5.render(document.body);				
+		myPanel5.render(document.body);
 	}
-	
+
 	function submitFilters(reportContextId) {
 		//alert("SUBMITTING FILTERS");
 		//debugger;
 		if(document.getElementById("workspace_only")!=null)
 			document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
 		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];
-		
+
 		if (validateDynamicDateFilters() && validateDateFilters()){
 			filterForm.action	= "/aim/reportsFilterPicker.do?apply=true&reportContextId=" + reportContextId;
 			filterForm.submit();
 		};
 	}
-	
+
 	function submitSettings(reportContextId) {
 		//This is needed for unfreezing the report. applyFormat parameter needs to be set so that the function
 		// ReportsFilterPickerForm.reset doesn't reset the currently applied filters
@@ -331,23 +331,23 @@ saveReportEngine	= null;
 		filterForm.action	= "/aim/reportsFilterPicker.do?applyFormat=true&reportContextId=" + reportContextId;
 		filterForm.submit();
 	}
-	
+
 	function showFilter(reportContextId) {
 		document.getElementById("myFilter").innerHTML = '<div align="center" style="font-size: 11px;margin-top:190px;"><img src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif"/></div>';
-		
+
 		var element = document.getElementById("myFilter");
 		element.style.display   = "block";
  	 	element.style.height    = "500px";
 
  	 	myPanel1.setBody(element);
-		
+
  	 	myPanel1.cfg.setProperty("height", "520px" );
  	 	myPanel1.cfg.setProperty("width", "870px" );
 		myPanel1.center();
 		myPanel1.show();
-		
+
 		var timestamp = new Date().getTime();
-		
+
 		YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?timestamp=" + timestamp + "&reportContextId=" + reportContextId + "&overwriteBackUrl=" + window.location.pathname , {
 			success: function(o) {
 				document.getElementById("myFilter").innerHTML	= o.responseText;
@@ -359,7 +359,7 @@ saveReportEngine	= null;
 		});
 		YAHOO.amptab.init();
 
-		
+
 
 		<field:display name="Project Category" feature="Identification">
 			try {
@@ -370,7 +370,7 @@ saveReportEngine	= null;
 //				alert(e);
 			}
 		</field:display>
-		
+
 	}
 
 	function addTitleSelect(selectName){
@@ -392,7 +392,7 @@ saveReportEngine	= null;
 		myPanel5.center();
 		myPanel5.show();
 	}
-	
+
 	function checkRangeValues(){
 	    var actualFrom = document.aimReportsFilterPickerForm2.renderStartYear.value;
         var actualTo = document.aimReportsFilterPickerForm2.renderEndYear.value;
@@ -403,7 +403,7 @@ saveReportEngine	= null;
 		}
 		return true;
 	}
-	
+
 	function showFormat(){
 		//YAHOO.amptab.init();
 		//var maxFractionDigits=${maxFractionDigits};
@@ -415,7 +415,7 @@ saveReportEngine	= null;
 		myPanel4.center();
 		myPanel4.show();
 	}
-	
+
 	function changeRange(){
 		var cant = document.aimReportsFilterPickerForm2.countYear.value;
 		var actualFrom = document.aimReportsFilterPickerForm2.fromYear.value;
@@ -474,20 +474,20 @@ saveReportEngine	= null;
 		}
 		return false;
 	}
-	
+
 	function showRange(){
 		YAHOO.amptab.init();
 		var element = document.getElementById("myRange");
 		element.style.display = "inline";
-		
+
 		myPanel3.setBody(element);
 		myPanel3.center();
-		myPanel3.show();	
+		myPanel3.show();
 	}
 	function hideRange() {
 		myPanel3.hide();
 	}
-	
+
 	function hideFilter() {
 		myPanel1.hide();
 	}
@@ -507,7 +507,7 @@ saveReportEngine	= null;
     	}
     	return true;
 	}
-	
+
 
 function resetFormat(){
 	document.aimReportsFilterPickerForm3.action=document.aimReportsFilterPickerForm3.action+'&resetFormat=true';
@@ -582,29 +582,29 @@ function initFormatPopup(){
 function changeFormat(){
 	var decimalSymbol=document.aimReportsFilterPickerForm3.customDecimalSymbol.value;
 		decimalSymbol=("custom"==decimalSymbol.toLowerCase())?document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.value:decimalSymbol;
-	
+
 	var customDecimalPlaces=document.aimReportsFilterPickerForm3.customDecimalPlaces.value;
 		customDecimalPlaces=("-2"==customDecimalPlaces.toLowerCase())?document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value:customDecimalPlaces;
-	
+
 	var customUseGrouping=document.aimReportsFilterPickerForm3.customUseGrouping.checked;
 
-	
+
 	var customGroupCharacter=document.aimReportsFilterPickerForm3.customGroupCharacter.value;
 		customGroupCharacter=("custom"==customGroupCharacter.toLowerCase())?document.aimReportsFilterPickerForm3.customGroupCharacterTxt.value:customGroupCharacter;
-	
-	
+
+
 	var customGroupSize=document.aimReportsFilterPickerForm3.customGroupSize.value;
-	
+
 	var amountDivisor = 1.0;
-	
+
 	var selectedValue = document.aimReportsFilterPickerForm3.amountinthousands.value;
 	if (selectedValue == '1')
 		amountDivisor = 1000.0;
-	
+
 	if (selectedValue == '2')
 		amountDivisor = 1000.0 * 1000.0;
-	
-	
+
+
 	var num=Number(123456789.928 / amountDivisor);
 
 	//debugger;
@@ -618,45 +618,45 @@ function validateFormat(){
 
 	var decimalSymbol=document.aimReportsFilterPickerForm3.customDecimalSymbol.value;
 		decimalSymbol=("custom"==decimalSymbol.toLowerCase())?document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.value:decimalSymbol;
-	
+
 	var customDecimalPlaces=document.aimReportsFilterPickerForm3.customDecimalPlaces.value;
 		customDecimalPlaces=("-2"==customDecimalPlaces.toLowerCase())?document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value:customDecimalPlaces;
-	
+
 	var customUseGrouping=document.aimReportsFilterPickerForm3.customUseGrouping.checked;
-	
+
 	var customGroupCharacter=document.aimReportsFilterPickerForm3.customGroupCharacter.value;
 		customGroupCharacter=("custom"==customGroupCharacter.toLowerCase())?document.aimReportsFilterPickerForm3.customGroupCharacterTxt.value:customGroupCharacter;
-	
+
 	var customGroupSize=document.aimReportsFilterPickerForm3.customGroupSize.value;
-	
+
 	if ((decimalSymbol==customGroupCharacter)&&(customUseGrouping)){
 	        var msg='<digi:trn jsFriendly="true" key="rep:format:equalsSymbol">Decimal Symbol and group symbol must be diferents</digi:trn>';
 			alert(msg);
 			return false;
 	}
 	var validNumbers="0123456789";
-	
+
 	if (decimalSymbol=="" || customGroupCharacter==""){
 		 var msg='<digi:trn jsFriendly="true" key="rep:format:badSymbolEmpty">Symbols can not be a empty, you can use the space character</digi:trn>';
 		alert(msg);
 		return false;
 	}
-	
-	
+
+
 	if ((validNumbers.indexOf(decimalSymbol)!=-1)||(validNumbers.indexOf(customGroupCharacter)!=-1)){
 		     var msg='<digi:trn jsFriendly="true" key="rep:format:badSymbolNumber">Symbols can not be a number</digi:trn>';
 			alert(msg);
 			return false;
 	}
-	
+
 	if ((customGroupSize < 1) && (document.aimReportsFilterPickerForm3.customUseGrouping.checked == true)) {
 		  var msg='<digi:trn jsFriendly="true" key="rep:format:badGorupSize">The value should be greater than zero</digi:trn>';
 			alert(msg);
 			return false;
 	}
-	
-	
-	
+
+
+
 	return true;
 }
 
@@ -665,13 +665,13 @@ function validateFormat(){
 
 
 	var msg0="<digi:trn key="rep:pop:pleasewait..." jsFriendly='true'>Loading...</digi:trn>";
-	
+
 	var msg1="<digi:trn key="rep:pop:freezeReportHeading" jsFriendly='true'>Freeze Report Heading</digi:trn>";
-	
+
 	var msg2="<digi:trn key="rep:pop:unFreezeReportHeading" jsFriendly='true'>Unfreeze Report Heading</digi:trn>";
-	
+
 	var msg3="<digi:trn key="rep:pop:freezingReportHeading" jsFriendly='true'> Freezing Report Heading </digi:trn>";
-	
+
 	var msg4="<digi:trn key="rep:pop:freezingReportHeading" jsFriendly='true'> Unfreezing Report Heading </digi:trn>";
 
 
@@ -695,32 +695,32 @@ function validateFormat(){
 	  }
 	}
 
-	
+
 	var scrollingStr=readCookie('report_scrolling');
 	var scrolling=(scrollingStr==null)?false:(scrollingStr==new Number(currentReportId).toString() )?true:false;
-		
+
 	// For some reason freezeLink.removeListener doesn't work correctly so we need an ugly hack
 	var canMakeScroll	= false;
 	function scrollCallback (reportContextId) {
-		if ( canMakeScroll ) 
+		if ( canMakeScroll )
 				makeScroll();
 		else
 				hiddeScroll(reportContextId);
 	}
-	//END	
-	
-	
+	//END
+
+
 	function reloadpage(){
 		location.reload();
 	}
-	
+
 	function sendCookieAndReload (reportContextId){
 		showWaitPanel(msg3);
 		createCookie('report_scrolling',currentReportId,1);
 		submitScroll(reportContextId);
 	}
-	
-	
+
+
 	function makeScroll (){
 		var freezeLink	= new YAHOO.util.Element( "frezzlink" );
 		createCookie('report_scrolling',currentReportId,1);
@@ -733,7 +733,7 @@ function validateFormat(){
 		canMakeScroll	= false;
 		//document.getElementById("frezzlink").innerHTML=msg2;
 	}
-	
+
 	function hiddeScroll(reportContextId){
 		showWaitPanel(msg4);
 		eraseCookie('report_scrolling');
@@ -745,26 +745,26 @@ function validateFormat(){
 		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true&reportContextId=" + reportContextId;
 		filterForm.submit();
 	}
-	
+
 	function showWaitPanel(msgF){
- 	 	var wait = new YAHOOAmp.widget.Panel("wait",   
-	 	 	{ width:"240px",  
-	 	 	fixedcenter:true,  
-	 	 	close:false,  
-	 	 	draggable:false,  
-	 	 	zindex:99, 
-	 	 	modal:true, 
+ 	 	var wait = new YAHOOAmp.widget.Panel("wait",
+	 	 	{ width:"240px",
+	 	 	fixedcenter:true,
+	 	 	close:false,
+	 	 	draggable:false,
+	 	 	zindex:99,
+	 	 	modal:true,
 	 	 	visible:false,
 	 	 	underlay:"shadow"
-	 	 	}  
- 	 	); 
- 	 	
-		wait.setHeader(msg0); 
- 	 	wait.setBody("<div align='center'>"+msgF+"</div>"); 
+	 	 	}
+ 	 	);
+
+		wait.setHeader(msg0);
+ 	 	wait.setBody("<div align='center'>"+msgF+"</div>");
  	 	wait.render(document.body);
  	 	wait.show();
 	}
-	
+
 	var enableLink=function(){
 	if (document.getElementById("frezzlink")){
 		var freezeLink	= new YAHOO.util.Element( "frezzlink" );
@@ -785,7 +785,7 @@ function validateFormat(){
 			//document.getElementById("frezzlink").setAttribute("onClick","makeScroll()");
 			//document.getElementById("frezzlink").setAttribute("class","settingsLink");
 			if ( freezeLink.hasClass("settingsLinkDisable") )
-				freezeLink.removeClass("settingsLinkDisable");			
+				freezeLink.removeClass("settingsLinkDisable");
 			freezeLink.addClass( "settingsLink" );
 			freezeLink.on("click", function() {sendCookieAndReload(reportContextId);});
 			freezeLink.setStyle("cursor", "pointer");
@@ -798,24 +798,24 @@ function validateFormat(){
 		addOnloadEvent(enableLink);
 		//-----------------------
 		function showScroll(){
-			var wait = new YAHOO.widget.Panel("wait",   
-		        { width:"240px",  
-		          fixedcenter:true,  
-		          close:false,  
-		          draggable:false,  
-		          zindex:99, 
-		          modal:true, 
+			var wait = new YAHOO.widget.Panel("wait",
+		        { width:"240px",
+		          fixedcenter:true,
+		          close:false,
+		          draggable:false,
+		          zindex:99,
+		          modal:true,
 		          visible:false,
 		          underlay:"shadow"
-		        }  
-		    ); 
+		        }
+		    );
 
-			wait.setHeader(msg0); 
-			wait.setBody("<div align='center'>"+msg3+"</div>"); 
+			wait.setHeader(msg0);
+			wait.setBody("<div align='center'>"+msg3+"</div>");
 			wait.render(document.body);
 			wait.show();
 			var winH;
-			
+
 			if (navigator.appName.indexOf("Microsoft")!=-1) {
 				winH = document.body.offsetHeight;
 			}else{
@@ -826,15 +826,15 @@ function validateFormat(){
 				reporTable.debug=false;
 				reporTable.maxRowDepth=2;
 				reporTable.scroll();
-				wait.hide();		
+				wait.hide();
 			}
-			
+
 				window.setTimeout(call,200);
 			}
-		
+
 	//----------------------------------------------------------------
 	var isscrolling=false;
-	  	function frezzreport(reportContextId){ 
+	  	function frezzreport(reportContextId){
 	  		//debugger;
   	  		if (isscrolling==false){
   				if ( $('#frezzlinkreport').hasClass("settingsLinkDisable") )
@@ -857,31 +857,31 @@ function validateFormat(){
   					isscrolling=false;
   					loadingreport.show();
   					submitSettings(reportContextId);
-  					
+
   				}
   	  	}
 
 	//-----------------------
 	function showScrollReport(){
 
-		var wait = new YAHOO.widget.Panel("wait",   
-	        { width:"240px",  
-	          fixedcenter:true,  
-	          close:false,  
-	          draggable:false,  
-	          zindex:99, 
-	          modal:true, 
+		var wait = new YAHOO.widget.Panel("wait",
+	        { width:"240px",
+	          fixedcenter:true,
+	          close:false,
+	          draggable:false,
+	          zindex:99,
+	          modal:true,
 	          visible:false,
 	          underlay:"shadow"
-	        }  
-	    ); 
+	        }
+	    );
 
-		wait.setHeader(msg0); 
-		wait.setBody("<div align='center'>"+msg3+"<br>"+'<img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />'+"</div>"); 
+		wait.setHeader(msg0);
+		wait.setBody("<div align='center'>"+msg3+"<br>"+'<img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />'+"</div>");
 		wait.render(document.body);
 		wait.show();
 		var winH;
-		
+
 		if (navigator.appName.indexOf("Microsoft")!=-1) {
 			winH = document.body.offsetHeight;
 		}else{
@@ -892,13 +892,13 @@ function validateFormat(){
 			reporTable.debug=false;
 			reporTable.maxRowDepth=2;
 			reporTable.scroll();
-			wait.hide();		
+			wait.hide();
 		}
-		
+
 			window.setTimeout(call,200);
 		}
-	
-	
+
+
 
 
 	function cleanformat() {
@@ -915,7 +915,7 @@ function validateFormat(){
 		initFormatPopup();
 	}
 
-	
+
 	var currentRMenu=null;
 	function reportOptions(element,id){
 		//cargar opciones
@@ -924,7 +924,7 @@ function validateFormat(){
 			}
 		var itemsUrl='/aim/reportMenuAction.do?action=getOptions&id='+id;
 
-		var oMenu = new YAHOO.widget.Menu("reportMenu", { shadow:false, fixedcenter: false,srcElement:element,context:[element, "tl", "bl"] }); 
+		var oMenu = new YAHOO.widget.Menu("reportMenu", { shadow:false, fixedcenter: false,srcElement:element,context:[element, "tl", "bl"] });
 		$.get(itemsUrl,'',function(data){
 		for (var i=0; i < data.childNodes[0].childNodes.length;i++){
 			var node=data.childNodes[0].childNodes[i]
@@ -938,9 +938,9 @@ function validateFormat(){
 		oMenu.render(document.body);
 		oMenu.show();
 		currentRMenu=oMenu;
-		}); 
+		});
 	}
-	
+
 </script>
 <style type="text/css">
 .mask {

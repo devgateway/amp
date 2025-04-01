@@ -13,7 +13,7 @@
 <link rel="stylesheet" type="text/css" href="<digi:file src='js_2/yui/tabview/assets/tabview.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='js_2/yui/tabview/assets/border_tabs.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
-	<link rel="stylesheet" type="text/css" href="<digi:file src='/repository/aim/view/css/filters/filters2.css'/>">
+	<link rel="stylesheet" type="text/css" href="<digi:file src='WEB-INF/jsp/aim/view/css/filters/filters2.css'/>">
 
 	<link rel="stylesheet" type="text/css" href="<digi:file src='css_2/amp.css '/>">
 
@@ -29,7 +29,7 @@
 	YAHOOAmp.amptab.init = function() {
 	    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
 	};
-		
+
     var myPanelHistory = new YAHOOAmp.widget.Panel("newmyHistory", {
 		width:"800px",
         height:"510px",
@@ -40,10 +40,10 @@
 	    visible:false,
 	    modal:true,
 	    draggable:true,
-	    context: ["showbtn", "tl", "bl"] 
+	    context: ["showbtn", "tl", "bl"]
 	    }
 	     );
-	
+
 	function initScriptsHistory() {
 		var msgP6='\n<digi:trn jsFriendly="true">Version History</digi:trn>';
 		myPanelHistory.setHeader(msgP6);
@@ -51,7 +51,7 @@
 		myPanelHistory.render(document.body);
 		panelFirstShow = 1;
 	}
-	
+
 	function showHistory() {
 		var content = document.getElementById("myHistoryContent");
 		var element6 = document.getElementById("myHistory");
@@ -69,7 +69,7 @@
 	}
 
 
-    var responseSuccessHistory = function(o){ 
+    var responseSuccessHistory = function(o){
 	/* Please see the Success Case section for more
 	 * details on the response object's properties.
 	 * o.tId
@@ -81,7 +81,7 @@
 	 * o.responseXML
 	 * o.argument
 	 */
-		var response = o.responseText; 
+		var response = o.responseText;
 		var content = document.getElementById("myHistoryContent");
 		content.innerHTML = response;
 		postsuccessScripts();
@@ -92,7 +92,7 @@
 		setHoveredRow("rowHighlight");
 		monitorCheckbox();
         checkVersions();
-	}	 
+	}
 	function setVersion(activityId)
 	{
 		document.getElementById("action").value = "setVersion";
@@ -164,27 +164,27 @@
 		}
     }
 
-	var responseFailureHistory = function(o){ 
-	// Access the response object's properties in the 
-	// same manner as listed in responseSuccess( ). 
-	// Please see the Failure Case section and 
-	// Communication Error sub-section for more details on the 
+	var responseFailureHistory = function(o){
+	// Access the response object's properties in the
+	// same manner as listed in responseSuccess( ).
+	// Please see the Failure Case section and
+	// Communication Error sub-section for more details on the
 	// response object's properties.
-		alert("Connection Failure!"); 
-	}  
-	var historyCallback = 
-	{ 
-		success:responseSuccessHistory, 
-		failure:responseFailureHistory 
+		alert("Connection Failure!");
+	}
+	var historyCallback =
+	{
+		success:responseSuccessHistory,
+		failure:responseFailureHistory
 	};
-    
+
 	function previewHistory(id)
 	{
         var postString = "activityId=" + id;
         showHistory();
         YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/viewActivityHistory.do", historyCallback, postString);
 	}
-	
+
 	function previewHistoryClicked() {
 		var flag = validateForm();
 		if (flag == true) {
@@ -222,7 +222,7 @@ function setHoveredTable(tableId, hasHeaders) {
     	var className = 'Hovered',
         pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
         rows      = tableElement.getElementsByTagName('tr');
-		
+
 		for(var i = 0, n = rows.length; i < n; ++i) {
 			rows[i].onmouseover = function() {
 				this.className += ' ' + className;
@@ -260,12 +260,12 @@ function setHoveredRow(rowId) {
 
 </script>
 <style type="text/css">
-	#myHistory .content { 
-	    overflow:auto; 
-	    height:455px; 
-	    background-color:fff; 
-	    padding:10px; 
-	} 
+	#myHistory .content {
+	    overflow:auto;
+	    height:455px;
+	    background-color:fff;
+	    padding:10px;
+	}
 .tableEven {
 	background-color: #dbe5f1;
 	font-size: 8pt;
@@ -285,5 +285,5 @@ function setHoveredRow(rowId) {
 .notHovered {
 	background-color: #FFFFFF;
 }
-	
+
 </style>

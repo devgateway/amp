@@ -1,6 +1,6 @@
 <%@page import="org.digijava.module.contentrepository.helper.FilterValues"%>
 <%@page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
-<%@ page pageEncoding="UTF-8"%> 
+<%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
@@ -12,7 +12,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<jsp:include page="/repository/aim/view/scripts/newCalendar.jsp"  />
+<jsp:include page="WEB-INF/jsp/aim/view/scripts/newCalendar.jsp"  />
 <%-- This file renders the Resource-Filtering popup table. Add one <tr></tr> per filter criterium --%>
 <style>
 #docTypes {
@@ -66,7 +66,7 @@
 					</select>
 				</td>
 			</tr>
-			<field:display name="Resource Organisations" feature="Resource Columns">			
+			<field:display name="Resource Organisations" feature="Resource Columns">
 				<tr>
 					<td><div class="t_sm"><b><digi:trn>Organisations</digi:trn>:</b></div></td>
 					<td>
@@ -78,13 +78,13 @@
 						</select>
 					</td>
 				</tr>
-			</field:display>			
+			</field:display>
 			<tr>
 				<td><div class="t_sm"><b><digi:trn>From date</digi:trn>:</b></div></td>
 				<td>
 					<input id="filterFromDate" type="text" readonly="readonly" name="filterFromDate" class="dropdwn_sm"/>
 					<a id="date1" href='javascript:pickDateById2("filterTeamIds","filterFromDate",true,"tl")'>
-			        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"/>	
+			        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"/>
 			        </a>
 			        <a id="clear1" href="javascript:clearDate('filterFromDate')">
                     <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this date"/>
@@ -96,7 +96,7 @@
 				<td>
 					<input id="filterToDate" type="text" readonly="readonly" name="filterToDate" class="dropdwn_sm"/>
 					<a id="date2" href='javascript:pickDateById2("filterTeamIds","filterToDate",true,"tl")'>
-			        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"/>	
+			        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"/>
 			        </a>
 			        <a id="clear2" href='javascript:clearDate("filterToDate")'>
                     <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this date"/>
@@ -111,7 +111,7 @@
 					 &nbsp;&nbsp;&nbsp;
 					<button class="buttonx" type="button">
 						<digi:trn>Reset</digi:trn>
-					</button> 
+					</button>
 					&nbsp;&nbsp;&nbsp;
 					<button class="buttonx" type="button">
 						<digi:trn>Close</digi:trn>

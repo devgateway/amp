@@ -36,7 +36,7 @@
 	<logic:iterate name="columnReport" property="items" id="column" scope="page">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
-		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
+		<jsp:include page="<%=viewable.getViewerPath()%>"/>
 	</logic:iterate>
 </tr>
 </logic:iterate>
@@ -50,7 +50,7 @@
 </ul>
 </li>
 
-<div style='position:relative;display:none;' id='<bean:write name="columnReport" property="absoluteReportNameMD5"/>'> 
+<div style='position:relative;display:none;' id='<bean:write name="columnReport" property="absoluteReportNameMD5"/>'>
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.ColumnReportData" scope="page" toScope="request"/>
-<jsp:include page="/repository/aim/view/ar/print/TrailCells.jsp"/>
+<jsp:include page="WEB-INF/jsp/aim/view/ar/print/TrailCells.jsp"/>
 </div>

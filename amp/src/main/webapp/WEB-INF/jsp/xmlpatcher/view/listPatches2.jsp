@@ -1,4 +1,4 @@
-<!-- Individual YUI CSS files --> 
+<!-- Individual YUI CSS files -->
 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/fonts/fonts-min.css" />
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css" />
@@ -6,25 +6,25 @@
 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/container.css" />
 
-<!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
+<!-- Individual YUI JS files -->
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script>
 
 <!-- XML/Java Beautifier -->
-<script type="text/javascript" src="/repository/xmlpatcher/js/sh_main.min.js"></script>
-<script type="text/javascript" src="/repository/xmlpatcher/js/sh_xml.min.js"></script>
-<script type="text/javascript" src="/repository/xmlpatcher/js/sh_java.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/repository/xmlpatcher/css/sh_style.css" />
+<script type="text/javascript" src="WEB-INF/jsp/xmlpatcher/js/sh_main.min.js"></script>
+<script type="text/javascript" src="WEB-INF/jsp/xmlpatcher/js/sh_xml.min.js"></script>
+<script type="text/javascript" src="WEB-INF/jsp/xmlpatcher/js/sh_java.min.js"></script>
+<link rel="stylesheet" type="text/css" href="WEB-INF/jsp/xmlpatcher/css/sh_style.css" />
 
-<style type="text/css"> 
+<style type="text/css">
 /* Class for marked rows */
 .yui-skin-sam .yui-dt tr.mark,
 .yui-skin-sam .yui-dt tr.mark td.yui-dt-asc,
@@ -98,12 +98,12 @@
 <tr><td bgcolor="#C0D6E2" align="center" style="color: #000000; font-size: 12px; font-weight:bold;" width="700px">Discovered Patches</td><td align="center" bgcolor="#C0D6E2" style="color: #000000; font-size: 12px; font-weight:bold;" width="400px">Patch Details</td></tr>
 <tr><td rowspan="3" valign="top" width="700px"><div id="dynamicdata"></div> </td><td valign="top"><div id="patchBodyParent" style="height:400px;overflow:auto;"><div id="patchBody"></div></div></td></tr>
 <tr><td bgcolor="#C0D6E2" align="center" style="color: #000000; font-size: 12px; font-weight:bold;" width="700px">Patch Logs</td></tr>
-<tr><td><div id="patchLogs" style="height:400px;overflow:auto;"></div></td></tr>	
-</table>	
+<tr><td><div id="patchLogs" style="height:400px;overflow:auto;"></div></td></tr>
+</table>
 		</td>
 		</tr>
 		</table>
-		
+
 
 
 
@@ -129,29 +129,29 @@ var handleLogBodySuccess = function(o){
 		popup.setBody('<div style="height:275px;width:545px;overflow:auto">'+o.responseText+'</div>');
 	}
 	sh_highlightDocument();
-	popup.show(); 
+	popup.show();
 }
-   
+
 function loadLogBody(patchLogId){
 	var callback =
     {
       success:handleLogBodySuccess,
       failure: handleFailure
-    }; 
+    };
 	YAHOO.util.Connect.asyncRequest('GET','/xmlpatcher/xmlpatches.do?mode=logContents&patchLogId='+(patchLogId),callback);
 	return true;
 }
 
 
 YAHOO.example.DynamicData = function() {
-    var myColumnDefs = [           
+    var myColumnDefs = [
                         {key:"patchId", label:"Name", sortable:true},
                         {key:"location",label:"Location",sortable:true},
                         {key:"discovered",label:"Discovered",sortable:true},
                         {key:"state", label:"State", sortable:true},
                         {key:"attempts",label:"Attempts",sortable:true}
                     ];
-    
+
 
 
     var stringToDate = function(timestamp) {
@@ -179,8 +179,8 @@ YAHOO.example.DynamicData = function() {
            YAHOO.util.Dom.addClass(elTr, 'deprecatedmark');
        }
         return true;
-    }; 
-    
+    };
+
     // DataSource instance
     var myDataSource = new YAHOO.util.DataSource("/xmlpatcher/xmlpatchesjson.do?");
     myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
@@ -191,16 +191,16 @@ YAHOO.example.DynamicData = function() {
             totalRecords: "totalRecords" // Access to value in the server response
         }
     };
-    
+
     // DataTable configuration
     var myConfigs = {
         initialRequest: "sort=discovered&dir=desc&startIndex=0&results=15", // Initial request for first page of data
         dynamicData: true, // Enables dynamic server-driven data
         sortedBy : {key:"discovered", dir:YAHOO.widget.DataTable.CLASS_DESC}, // Sets UI initial sort arrow
-        paginator: new YAHOO.widget.Paginator({ rowsPerPage:15 }), // Enables pagination 
+        paginator: new YAHOO.widget.Paginator({ rowsPerPage:15 }), // Enables pagination
        	formatRow: myRowFormatter
     };
-    
+
     // DataTable instance
     var myDataTable = new YAHOO.widget.DataTable("dynamicdata", myColumnDefs, myDataSource, myConfigs);
     // Update totalRecords on the fly with value from server
@@ -210,13 +210,13 @@ YAHOO.example.DynamicData = function() {
     }
 
 
-    
+
     function loadPatchBody(patchId){
     	var callback =
         {
           success:handlePatchBodySuccess,
           failure: handleFailure
-        }; 
+        };
     	YAHOO.util.Connect.asyncRequest('GET','/xmlpatcher/xmlpatches.do?mode=patchContents&patchId='+(patchId),callback);
     	return true;
     }
@@ -227,13 +227,13 @@ YAHOO.example.DynamicData = function() {
         {
           success:handlePatchLogsSuccess,
           failure: handleFailure
-        }; 
+        };
  		YAHOO.util.Connect.asyncRequest('GET','/xmlpatcher/xmlpatches.do?mode=listPatchLogs&patchId='+(patchId),callback);
  	return true;
  	}
 
-    
-    
+
+
     var handlePatchBodySuccess = function(o){
     	if(o.responseText != undefined){
     		var element2 = document.getElementById("patchBody");
@@ -249,7 +249,7 @@ YAHOO.example.DynamicData = function() {
     	}
     }
 
- 
+
 
 	var rowClickEvent = function(oArgs) {
 		 myDataTable.onEventSelectRow(oArgs);
@@ -257,17 +257,17 @@ YAHOO.example.DynamicData = function() {
 		 loadPatchBody(rec.getData("patchId"));
 		 loadPatchLogs(rec.getData("patchId"))
 	}
-    
+
     // Subscribe to events for row selection
     myDataTable.subscribe("rowMouseoverEvent", myDataTable.onEventHighlightRow);
     myDataTable.subscribe("rowMouseoutEvent", myDataTable.onEventUnhighlightRow);
     myDataTable.subscribe("rowClickEvent", rowClickEvent);
 
-    
+
     return {
         ds: myDataSource,
         dt: myDataTable
     };
-        
+
 }();
 </script>

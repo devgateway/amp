@@ -29,9 +29,9 @@
 		document.umViewEditUserForm.submit();
 		return false;
 	}
-	
+
 	var removedApproverRole;
-	
+
 	function hideUnhideApproverRole(teamSelect){
 		var index=teamSelect.selectedIndex;
 		var type=teamSelect.options[index].className;
@@ -54,20 +54,20 @@
 			<c:set var="translation">
 				<digi:trn>Please choose workspace</digi:trn>
     		</c:set>
-			
+
 			alert("${translation}");
 			document.umViewEditUserForm.teamId.focus();
 			return false;
-		}	
+		}
 		if(document.umViewEditUserForm.role.value=="-1"){
 			<c:set var="translation">
 				<digi:trn>Please choose role</digi:trn>
     		</c:set>
-			
+
 			alert("${translation}");
 			document.umViewEditUserForm.role.focus();
 			return false;
-		}	
+		}
 		return true;
 	}
 
@@ -91,7 +91,7 @@
 				<tr>
 				<td noWrap width=1000 vAlign="top">
 					<table class="contentbox_border" width="1000" border="0" bgcolor="#f4f4f2">
-					   <tr>			
+					   <tr>
 					      <td align="center">
 						     <table width="100%">
 							    <tr>
@@ -102,15 +102,15 @@
 					   </tr>
 					   <tr>
 						  <td valign="top" bgcolor="#F2F2F2" align="center">
-					
+
 							<table border="0" cellpadding="0" cellspacing="0" width=772>
 								<tr>
 									<td align=left valign="top" width=520>
-									
+
 										<table border="0" cellPadding=5 cellspacing="0" width="100%">
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=left noWrap colspan="2">											
+												<td align=left noWrap colspan="2">
 													<digi:errors/>
 												</td>
 											</tr>
@@ -141,15 +141,15 @@
 													<bean:write name="umViewEditUserForm" property="email"/>
 												</td>
 											</tr>
-							
-											
+
+
 											<tr>
 												<td>
 													<html:hidden name="umViewEditUserForm" property="firstNames"/>
 													<html:hidden name="umViewEditUserForm" property="lastName"/>
-													<html:hidden name="umViewEditUserForm" property="email"/>							                        
+													<html:hidden name="umViewEditUserForm" property="email"/>
 							                        <html:hidden name="umViewEditUserForm" property="addWorkspace"/>
-							                        
+
 												</td>
 											</tr>
 											<tr>
@@ -176,7 +176,7 @@
 												<td align="left" width="70%">
 													<html:select property="role" styleId="team_member_roles_drop_down">
 													<html:option value="-1">-- <digi:trn key="um:selectRole">Select a role</digi:trn> --</html:option>
-													
+
 													<logic:iterate name="umViewEditUserForm" property="ampRoles" id="ampRole" type="org.digijava.module.aim.dbentity.AmpTeamMemberRoles">
 														<html:option value="${ampRole.ampTeamMemRoleId}" styleId="role_approver_${ampRole.approver}">
 															<digi:trn key="<%=ampRole.getAmpTeamMemberKey() %>">
@@ -187,7 +187,7 @@
 													</html:select>
 												</td>
 											</tr>
-								
+
 											<tr>
 												<td>&nbsp;</td>
 												<td align="right">
@@ -202,7 +202,7 @@
 							                        </c:set>
 													<html:submit value="${btnDone}" styleClass="dr-menu" onclick="return cancel()"/>
 												</td>
-												
+
 											</tr>
 											<tr>
 												<td colspan=3>&nbsp;</td>
@@ -226,8 +226,8 @@
 										</td>
 										</tr>
 		    							<logic:iterate name="umViewEditUserForm"  property="assignedWorkspaces" id="assignedWS" indexId="idx">
-			                              	<tr bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
-			                              	onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="" >                           
+			                              	<tr bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');"
+			                              	onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="" >
 				                              	<td bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" class="reportsBorderTD">
 												<c:out value="${assignedWS.ampTeam.name}"/>
 												</td>
@@ -236,7 +236,7 @@
 												</td>
 												<td align="center">
 													<a href="javascript:deleteWS(<c:out value="${assignedWS.ampTeamMemId}"/>)" title="<digi:trn>Click on this icon to remove user from the workspace</digi:trn>">
-														<img  src="/repository/message/view/images/trash_12.gif" border="0" hspace="2"/>
+														<img  src="WEB-INF/jsp/message/view/images/trash_12.gif" border="0" hspace="2"/>
 													</a>
 												</td>
 											</tr>

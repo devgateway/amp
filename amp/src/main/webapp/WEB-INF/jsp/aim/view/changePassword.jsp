@@ -8,15 +8,15 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<jsp:include page="/repository/aim/view/strongPassword.jsp"  />
+<jsp:include page="WEB-INF/jsp/aim/view/strongPassword.jsp"  />
 
 <digi:instance property="aimChangePasswordForm" />
 <script language="JavaScript">
 function isVoid(name){
 	if ( name == null ||name.length==0){
     	return true;
-    }		
-	return false;		
+    }
+	return false;
 }
 
 function validate(){
@@ -39,7 +39,7 @@ function validate(){
         }
         if(isVoid(password)){
         	errors.push('<digi:trn jsFriendly="true">New password is a required field</digi:trn>');
-        }  
+        }
         if(password != passwordConfirmation){
         	errors.push('<digi:trn jsFriendly="true">Passwords in both fields must be the same</digi:trn>');
         }
@@ -86,7 +86,7 @@ function validate(){
 		</td>
 		<td align=left valign="top" width="60%">
 			<digi:errors/>
-			<jsp:include page="/repository/aim/view/strongPasswordRulesLegend.jsp"  />
+			<jsp:include page="WEB-INF/jsp/aim/view/strongPasswordRulesLegend.jsp"  />
 		</td>
 	</tr>
 	<tr>
@@ -94,7 +94,7 @@ function validate(){
 		</td>
 		<td align=left valign="top" width="100%"><br>
 			<table border="0" cellPadding=5 cellspacing="0" width="100%">
-				
+
 				<tr class="input_row_container">
 					<td width="3">&nbsp;</td>
 					<td class=f-names style="padding-bottom:10px;" noWrap width="18%">

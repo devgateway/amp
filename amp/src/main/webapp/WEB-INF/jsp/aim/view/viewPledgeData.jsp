@@ -1,3 +1,3 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<jsp:include page="/repository/aim/view/pledgeform/pledgeViewMain.jsp"></jsp:include>
+<jsp:include page="WEB-INF/jsp/aim/view/pledgeform/pledgeViewMain.jsp"></jsp:include>
 

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+	<secondary-pages>
+		<page name="parisindicator_base" title=" - Paris Indicators" />
+		<page name="parisindicator_3" title=" - Paris Indicator Report 3" />
+		<page name="parisindicator_4" title=" - Paris Indicator Report 4" />
+		<page name="parisindicator_5a" title=" - Paris Indicator Report 5a" />
+	</secondary-pages>
+</config>

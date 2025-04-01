@@ -193,7 +193,7 @@ AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 		this.createFilterString(true);
 	this.createReqString();
 	var callbackObj		= getCallbackForOtherDocuments(this.containerEl, null, this.thisObjName +"DivId");
-	this.containerEl.innerHTML="<div align='center'>"+ trnWait +"<br /><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' /> </div>";
+	this.containerEl.innerHTML="<div align='center'>"+ trnWait +"<br /><img src='WEB-INF/jsp/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' /> </div>";
 
 	YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do?ajaxDocumentList=true&dynamicList='+this.thisObjName+
 			this.reqString, callbackObj );

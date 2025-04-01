@@ -34,9 +34,9 @@
 									</c:if>
 									<c:if test="${aimTeamReportsForm.showReportList == false}">
 										<c:set var="selectedTab" value="8" scope="request"/>
-									</c:if>									
+									</c:if>
 									<c:set var="selectedSubTab" value="0" scope="request"/>
-										
+
 										<table width="1000px" border="0" cellspacing="0" cellpadding="0" align="center">
 											<tr>
 											<td>
@@ -44,7 +44,7 @@
 													<span class="sec_name">
 														<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
 													</span>
-													
+
 													<span class="breadcrump_sep">|</span>
 													<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
 														<digi:trn key="aim:portfolio">Portfolio</digi:trn>
@@ -62,7 +62,7 @@
 														</c:if>
 														<c:if test="${aimTeamReportsForm.showReportList == false}">
 															<digi:trn key="aim:tabsList">Tab List</digi:trn>
-														</c:if>	
+														</c:if>
 													</span>
 												</div>
 											</td>
@@ -70,10 +70,10 @@
 										<tr>
 											<td valign="top">
 												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-										
-										
+
+
 									<jsp:include page="teamSetupMenu.jsp"  />
-									
+
 									<div>
 										<table>
 													<tr>
@@ -99,7 +99,7 @@
 															</c:set>
 															<input type="button" value="${trnResetBtn}" class="dr-menu" onclick="return resetSearch()">
 														</td>
-														<td>					
+														<td>
 															<c:set var="trnGoBtn">
 																<digi:trn> GO </digi:trn>
 															</c:set>
@@ -108,10 +108,10 @@
 													</tr>
 												</table>
 									</div>
-									
+
 									<br>
 									<div id="private">
-										<img src= "/repository/contentrepository/view/images/make_public.gif">
+										<img src= "WEB-INF/jsp/contentrepository/view/images/make_public.gif">
 										<c:if test="${aimTeamReportsForm.showReportList == true}">
 											<digi:trn key="aim:teamReportListViewableByAllWorkspaceMembers">
 												Indicates the report is viewable by all team members.
@@ -123,10 +123,10 @@
 											</digi:trn>
 										</c:if>
 										<br/>
-										<digi:trn key="aim:clicktomakethisprivate">Click here to make this team-invisible</digi:trn>	
+										<digi:trn key="aim:clicktomakethisprivate">Click here to make this team-invisible</digi:trn>
 									</div>
 									<div id="private">
-										<img src= "/repository/contentrepository/view/images/make_private.gif">
+										<img src= "WEB-INF/jsp/contentrepository/view/images/make_private.gif">
 										<c:if test="${aimTeamReportsForm.showReportList == true}">
 											<digi:trn>Indicates the report is only viewable by the owner</digi:trn>
 										</c:if>
@@ -136,10 +136,10 @@
 										<br>
 										<digi:trn key="aim:clicktomakethispublic">Click here to make this team-visible</digi:trn>
 									</div>
-						
-									<table class="inside normal" cellpadding="0" cellspacing="0" width=970>									
-									
-									
+
+									<table class="inside normal" cellpadding="0" cellspacing="0" width=970>
+
+
 										<tr style="border-top:1px solid #cccccc;border-bottom:1px solid #cccccc;">
 									  	<td width="5" align="center" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									  		<input type="checkbox" id="checkAll">
@@ -170,7 +170,7 @@
 									    	</b>
 									    </td>
 									    <td width=18% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">&nbsp;
-									    	
+
 									    </td>
 									     <td width=7% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 									    	<b class="ins_title">
@@ -186,7 +186,7 @@
 													</c:if>
 													<c:if test="${aimTeamReportsForm.showReportList == false}">
 														<digi:trn key="aim:noTabsPresent">No tabs present</digi:trn>
-													</c:if>															
+													</c:if>
 												</td>
 											</tr>
 										</logic:empty>
@@ -206,10 +206,10 @@
 																		<c:out value="${fn:substring(ampReports.name, 0, 25)}" />...
 																	</c:when>
 																	<c:otherwise>
-																		<c:out value="${ampReports.name}" /> 
+																		<c:out value="${ampReports.name}" />
 																	</c:otherwise>
 																</c:choose>
-															</span>														
+															</span>
 														</td>
 														<td class="inside">
 															<logic:present name="ampReports" property="ownerId">
@@ -253,7 +253,7 @@
                                 <li class="bullet">
                                   <digi:trn key="aim:typeSummaryReport">Summary Report</digi:trn>
                                 </li>
-                              </logic:equal>                                  
+                              </logic:equal>
                               <logic:equal name="ampReports" property="options" value="A">
                                 <li class="bullet">
                                 	<digi:trn key="aim:annualreport">Annual</digi:trn>
@@ -266,7 +266,7 @@
                               </logic:equal>
                               <logic:equal name="ampReports" property="options" value="M">
                                 <li class="bullet">
-                                	<digi:trn key="aim:monthlyreport">Monthly</digi:trn>	
+                                	<digi:trn key="aim:monthlyreport">Monthly</digi:trn>
                                 </li>
                               </logic:equal>
 														</td>
@@ -280,10 +280,10 @@
                               </logic:iterate>
 														</td>
 														<td class="inside">
-															<div style='position:relative;display:none;' id='report-<bean:write name="ampReports" property="ampReportId"/>'> 
+															<div style='position:relative;display:none;' id='report-<bean:write name="ampReports" property="ampReportId"/>'>
                                 <logic:iterate name="ampReports" property="columns" id="column" indexId="index"  >
                                   <%if (index.intValue()%2==0){ %>
-                                    <li class="bullet">                                      
+                                    <li class="bullet">
                                     	<digi:colNameTrn>
                                       	<bean:write name="column" property="column.columnName" />
                                     	</digi:colNameTrn>
@@ -299,21 +299,21 @@
                               <span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn jsFriendly="true" key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="ampReports" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn key="aim:teamreports:columns">Columns</digi:trn></u> ]&nbsp;
                               </span>
 
-                              <div style='position:relative;display:none;' id='measure-<bean:write name="ampReports" property="measures"/>'> 
+                              <div style='position:relative;display:none;' id='measure-<bean:write name="ampReports" property="measures"/>'>
                                 <logic:iterate name="ampReports" property="measures" id="measure" indexId="index"  >
                                   <li class="bullet">
-                                  	<digi:trn key="aim:reportBuilder:${measure.measure.aliasName}">                                      
+                                  	<digi:trn key="aim:reportBuilder:${measure.measure.aliasName}">
                                     		${measure.measure.aliasName}
                                     	</digi:trn>
                                   </li>
                                 </logic:iterate>
-                              </div>										                                
+                              </div>
                               <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn jsFriendly="true" key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="ampReports" property="measures"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
                               </span>
 														</td>
 														<td class="inside">
-															
-															
+
+
 															<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams}" property="id">
 																<bean:write name="ampReports" property="ampReportId" />
@@ -324,21 +324,21 @@
 																	<c:set var="translation">
 																		<digi:trn key="aim:clickToMakeThisPublic">Click here to make this team-visible</digi:trn>
 																	</c:set>
-																	
+
 																	<c:if test="${aimTeamReportsForm.showReportList == true}">
 																		<c:set target="${urlParams}" property="returnPage">teamReportList</c:set>
-																	</c:if>	
+																	</c:if>
 																	<c:if test="${aimTeamReportsForm.showReportList == false}">
 																		<c:set target="${urlParams}" property="returnPage">teamDesktopTabList</c:set>
-																	</c:if>	
-																	
+																	</c:if>
+
 																	<c:set target="${urlParams}" property="tempNumResults">${aimTeamReportsForm.tempNumResults}</c:set>
-																	
+
 																	<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
-																		<img hspace="2" title="<digi:trn key="aim:teamReportListMakePublic">Make this team-visible</digi:trn>" src= "/repository/contentrepository/view/images/make_private.gif" border="0">
+																		<img hspace="2" title="<digi:trn key="aim:teamReportListMakePublic">Make this team-visible</digi:trn>" src= "WEB-INF/jsp/contentrepository/view/images/make_private.gif" border="0">
 																	</digi:link>
 															</logic:equal>
-															
+
 															<logic:equal name="reports" property="teamView" value="true">
 																<c:set target="${urlParams}" property="status" value="member" />
 																<c:set target="${urlParams}" property="currentPage" value="${aimTeamReportsForm.currentPage}" />
@@ -348,26 +348,26 @@
 
 																	<c:if test="${aimTeamReportsForm.showReportList == true}">
 																		<c:set target="${urlParams}" property="returnPage">teamReportList</c:set>
-																	</c:if>	
+																	</c:if>
 																	<c:if test="${aimTeamReportsForm.showReportList == false}">
 																		<c:set target="${urlParams}" property="returnPage">teamDesktopTabList</c:set>
-																	</c:if>	
+																	</c:if>
 
 																	<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
-																		<img hspace="2" title="<digi:trn key="aim:teamReportListMakePrivate">Make this team-invisible</digi:trn>" src= "/repository/contentrepository/view/images/make_public.gif" border="0">
+																		<img hspace="2" title="<digi:trn key="aim:teamReportListMakePrivate">Make this team-invisible</digi:trn>" src= "WEB-INF/jsp/contentrepository/view/images/make_public.gif" border="0">
 																	</digi:link>
 															</logic:equal>
-															
+
 														</td>
-														
-														
+
+
 													</tr>
 											</logic:iterate>
 										</logic:notEmpty>
-										
+
 										<tr><td colspan="7"><digi:errors /></td></tr>
 									</table>
-									
+
 									<!-- Pagination -->
 									<logic:notEmpty name="aimTeamReportsForm" property="totalPages">
 										<div class="paging" style="font-size:11px;">
@@ -376,7 +376,7 @@
 												  	<c:if test="${aimTeamReportsForm.currentPage==page}">
 				                                	    <b class="paging_sel"><c:out value="${page}"/></b>
 				                                    </c:if>
-				                                    <c:if test="${aimTeamReportsForm.currentPage!=page}">				                                    
+				                                    <c:if test="${aimTeamReportsForm.currentPage!=page}">
 				                                    	<c:if test="${aimTeamReportsForm.showReportList == true}">
 															<digi:link href="/teamReportList.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}&keyword=${aimTeamReportsForm.keyword}" >
 							                                   	<c:out value="${page}"/>
@@ -387,13 +387,13 @@
 							                                   	<c:out value="${page}"/>
 							                                </digi:link>
 														</c:if>
-				                                    </c:if>				                                    
+				                                    </c:if>
 													|&nbsp;
 												</c:forEach>
 											</div>
 										</logic:notEmpty>
 										<!-- end of Pagination -->
-									
+
 									<br>
 									<div class="buttons" align="center">
 									<c:if test="${aimTeamReportsForm.showReportList == true}">
@@ -409,19 +409,19 @@
 											</c:set>
 											<html:hidden property="removeReports" value="${removeReportsText}"/>
 											<input type="text"  class="buttonx_sm btn" value="${removeReportsText} " onclick="return confirmDelete() "/>
-										
-										</c:if>																			
-									
+
+										</c:if>
+
 									</div>
-							
-										
+
+
 										</div>
-										</div>											
-												
+										</div>
+
 											</td>
 										</tr>
-									</table>	
-									
+									</table>
+
 </td></tr>
 </table>
 
@@ -447,14 +447,14 @@ function validate() {
       </c:set>
   </c:if>
   <c:if test="${aimTeamReportsForm.showReportList == false}">
-      <c:set var="message" scope="request">	      
+      <c:set var="message" scope="request">
        <digi:trn>Please choose a tab to remove</digi:trn>
    </c:set>
-  </c:if>	
-	
+  </c:if>
+
   if(document.aimTeamReportsForm.selReports){
 	if(document.aimTeamReportsForm.selReports.checked != null) {
-		if (document.aimTeamReportsForm.selReports.checked == false) {				
+		if (document.aimTeamReportsForm.selReports.checked == false) {
 			alert("${message}");
 			return false;
 		};
@@ -491,7 +491,7 @@ function validate() {
 	      <c:set var="message">
               <digi:trn>Are you sure you want to remove selected tabs?</digi:trn>
           </c:set>
-	  </c:if>																			
+	  </c:if>
 
 		var flag = confirm("${message}");
 		if(flag == false)
@@ -506,9 +506,9 @@ function validate() {
 		return false;
 	}
 }
-    
+
     function resetSearch() {
-    	var showReports = document.getElementById("showReportList").value;    		
+    	var showReports = document.getElementById("showReportList").value;
 		if(showReports == "true"){
 			return submitReports('yes');
 		}else if(showReports == "false"){
@@ -521,35 +521,35 @@ function validate() {
     	  if (key==13) {
     		  searchActivity ('${aimTeamReportsForm.teamId }');
     	  }
-    	
+
     }
-	function searchActivity(teamId) {    		
-		var showReports = document.getElementById("showReportList").value;    		
+	function searchActivity(teamId) {
+		var showReports = document.getElementById("showReportList").value;
 		if(showReports == "true"){
 			return submitReports('no');
 		}else if(showReports == "false"){
 			return  submitTabs('no');
-		}	 
+		}
 	}
-	
+
 	function submitTabs(reset){
 		<digi:context name="lala" property="context/module/moduleinstance/teamDesktopTabList.do"/>
 		url = "<%= lala %>";
 		if(reset=='yes'){
 			url +="?reset=true";
 		}
-		document.aimTeamReportsForm.action = url;   		    
+		document.aimTeamReportsForm.action = url;
 		    document.aimTeamReportsForm.submit();
 		 	return true;
 	}
-	
+
 	function submitReports(reset){
 		 <digi:context name="lala" property="context/module/moduleinstance/teamReportList.do"/>
 		 url = "<%= lala %>";
 		 if(reset=='yes'){
  			url +="?reset=true";
  		 }
-		 document.aimTeamReportsForm.action = url;   		    
+		 document.aimTeamReportsForm.action = url;
 		     document.aimTeamReportsForm.submit();
 		 return true;
 	}

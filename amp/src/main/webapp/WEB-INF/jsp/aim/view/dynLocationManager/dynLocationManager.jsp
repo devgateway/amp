@@ -27,11 +27,11 @@
 		font-size: 12px;
 	}
 	a.functional {
-		cursor:pointer; 
-		color: blue; 
+		cursor:pointer;
+		color: blue;
 		font-size: 11px;
 	}
-	
+
 	.topAlign {
 	vertical-align: top;
 	}
@@ -48,9 +48,9 @@
 	unorgLocsUlId			= "";
 	</logic:empty>
 
-	treeObj					= null; 
+	treeObj					= null;
 
-	
+
 	function initTree(){
 		treeObj = new DHTMLSuite.JSDragDropTree();
 		treeObj.setTreeId('dhtmlgoodies_tree');
@@ -87,17 +87,17 @@
 			alert("<digi:trn>Tree structure checked</digi:trn>");
 			return true;
 		}
-		
+
 		//var myForm						= document.getElementById("dynLocationManagerForm");
 		//myForm.treeStructure.value		= getTreeStruct(locationsUlId);
 		//myForm.unorgLocations.value		= getTreeStruct(unorgLocsUlId);
 		//myForm.target="_self";
 		//myForm.submit();
-		
+
 	}
 	function getTreeStruct (ulId) {
 		if ( ulId == null || ulId.length == 0 )
-			return ""; 
+			return "";
 		var returnString	= "";
 		rootUlEl			= document.getElementById(ulId);
 		returnString		= findNextLevelStructure( rootUlEl, 0, 0, returnString );
@@ -106,15 +106,15 @@
 	}
 	function simpleSubmit() {
 		var myForm		= document.getElementById("dynLocationManagerForm");
-		myForm.action	= "/aim/dynLocationManager.do?hideEmptyCountriesAction="+document.getElementById("hide_empty_countries").checked ; 
+		myForm.action	= "/aim/dynLocationManager.do?hideEmptyCountriesAction="+document.getElementById("hide_empty_countries").checked ;
 		myForm.target="_self";
 		myForm.submit();
 	}
 
-	
-	/** 
-	 * We presume that each "li" element has a child "a". 
-	 * If there is also a "ul" element it must be inside the "li" and after the "a" 
+
+	/**
+	 * We presume that each "li" element has a child "a".
+	 * If there is also a "ul" element it must be inside the "li" and after the "a"
      */
 	function findNextLevelStructure(parentEl, parentDbId, layer, returnString) {
 		var i, j;
@@ -127,14 +127,14 @@
 						var childAEl	= childLiEl.childNodes[j];
 						locationDbId	= childAEl.id.substr(4);
 						if ( locationDbId != "-1" ) // This is to avoid hitting an Unspecified Node
-							returnString	+= locationDbId + "p" + parentDbId + "h" + layer + "|"; 
+							returnString	+= locationDbId + "p" + parentDbId + "h" + layer + "|";
 					}
 					if ( childLiEl.childNodes[j].nodeName.toLowerCase() == "ul" ) {
 						if ( locationDbId != "-1" ) // This is to avoid hitting an Unspecified Node
 							returnString	= findNextLevelStructure( childLiEl.childNodes[j], locationDbId, layer+1, returnString );
 						else
 							returnString	= findNextLevelStructure( childLiEl.childNodes[j], parentDbId, layer+1, returnString );
-					} 
+					}
 				}
 			}
 		}
@@ -160,7 +160,7 @@
 				for (j=0; j<childLiEl.childNodes.length; j++) {
 					if ( childLiEl.childNodes[j].nodeName.toLowerCase() == "ul" ) {
 						returnValue		= returnValue&checkStructure( childLiEl.childNodes[j], requiredLevel+1 );
-					} 
+					}
 				}
 			}
 		}
@@ -178,7 +178,7 @@
 			if ( liEl.childNodes[i].nodeName.toLowerCase() == "span" )
 				return parseInt( liEl.childNodes[i].innerHTML );
 		}
-		return -1;		
+		return -1;
 	}
 
 	function addLocation(parentDbId, locCategDbId ) {
@@ -189,7 +189,7 @@
 		myForm.target="_self";
 		myForm.submit();
 	}
-	
+
 	function editLocation(locationDbId) {
 		var myForm						= document.getElementById("addNewLocationForm");
 		myForm.editedId.value			= locationDbId;
@@ -206,8 +206,8 @@
 	        myForm.target="_blank";
 	        myForm.submit();
 	    }
-	 
-	 
+
+
 	 var myPanelExport = new YAHOO.widget.Panel("export", {
 			width :"250px",
 			fixedcenter :true,
@@ -218,11 +218,11 @@
 			modal :true,
 			draggable :true
 		});
-	
+
 	 function closeExportPanel () {
-		 myPanelExport.hide(); 
+		 myPanelExport.hide();
 	 }
-	 
+
 </script>
  <div style="margin:0 auto;width:1000px;" class="admin-content">
 <bean:define id="myForm" toScope="request" name="aimDynLocationManagerForm" />
@@ -242,8 +242,8 @@
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						
-						
+
+
 						<digi:trn key="aim:regionManager">
 							Region Manager
 						</digi:trn>
@@ -262,7 +262,7 @@
 					<tr>
 						<td align="left">
 						<jsp:include
-									page="/repository/aim/view/adminXSLExportToolbar.jsp" /></td>
+									page="WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" /></td>
 					</tr>
 				<tr>
 					<td height="16" vAlign="center" width="571">
@@ -291,8 +291,8 @@
 										<ul>
 											<li noDrag="true">
 												<a class="atree" id="a-locations"><digi:trn>Locations</digi:trn></a>
-												<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;" 
-														onclick="addLocation(-1, ${aimDynLocationManagerForm.firstLayerId})" 
+												<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;"
+														onclick="addLocation(-1, ${aimDynLocationManagerForm.firstLayerId})"
 														title="Add ${locationLevels[lvlIndex]}" />
 												<jsp:include page="listLocations.jsp" />
 											</li>
@@ -306,7 +306,7 @@
 										</ul>
 									</li>
 								</ul>
-							</font>		
+							</font>
 						</p>
 						<button type="button" class="buton" onclick="submitTreeStructure()" ><digi:trn>Check Structure</digi:trn></button> &nbsp; &nbsp;
 <!--						<button type="button" class="buton" onclick=""><digi:trn>Save</digi:trn></button> -->
@@ -333,9 +333,9 @@
 	<form id="addNewLocationForm"  method="post" action="/aim/addNewLocation.do">
 		<input type="hidden" name="parentCatValId" />
 		<input type="hidden" name="parentLocationId" />
-		<input type="hidden" name="editedId" />		
+		<input type="hidden" name="editedId" />
 		<input type="hidden" name="event" />
-	</form> 
+	</form>
 </div>
 <div style="display: none;">
 	<form id="dynLocationManagerForm" action="/aim/dynLocationManager.do" method="post">
@@ -347,6 +347,6 @@
 <div style="display: none;">
 	<form id="indicatorLayerForm"  method="post" action="/aim/indicatorLayerManager.do">
 		<input type="hidden" name="event" />
-	</form> 
+	</form>
 </div>
 </div>

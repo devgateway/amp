@@ -14,7 +14,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
+<jsp:include page="WEB-INF/jsp/aim/view/teamPagesHeader.jsp" flush="true" />
 
 <style>
 .contentbox_border {
@@ -143,7 +143,7 @@ div.fakefile2 input {
                           <tr>
                             <td width="3%">&nbsp;</td>
                             <td align=left class=title noWrap colspan="2">
-								<digi:errors/>                            
+								<digi:errors/>
 							</td>
                           </tr>
                           <tr>
@@ -238,7 +238,7 @@ function cancel()
 function doAction(index, action, confirmation) {
 	if(confirmation){
 		var ret = confirm("<digi:trn jsFriendly='true'>Are you sure?</digi:trn>");
-		if (!ret) return false; 
+		if (!ret) return false;
 	}
 	document.contentForm.action = "/content/structureTypeManager.do?action=" + action +"&index=" + index;
 	document.contentForm.target = "_self";
@@ -299,7 +299,7 @@ function validateForm(){
 			}
 		}
 	}
-	
+
 	if (strError != ""){
 		alert("<digi:trn jsFriendly='true'>Please complete the following fields:</digi:trn>\n" + strError);
 		return false;
@@ -312,7 +312,7 @@ $("#iconFile").change(function(){
 });
 
 function IsNumeric(strString)
-//  check for valid numeric strings	
+//  check for valid numeric strings
 {
 var strValidChars = "0123456789.-";
 var strChar;

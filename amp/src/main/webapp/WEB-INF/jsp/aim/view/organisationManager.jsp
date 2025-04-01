@@ -18,7 +18,7 @@
 			  document.aimOrgManagerForm.tempNumResults.focus();
 			  return false;
 		} else {
-			
+
 			 <digi:context name="searchOrg" property="context/module/moduleinstance/organisationManager.do"/>
 		     url = "<%= searchOrg %>?orgSelReset=false";
 		     document.aimOrgManagerForm.action = url;
@@ -42,7 +42,7 @@
 			 return true;
 		}
 	}
-	
+
 	function resetSearch(){
 		<digi:context name="searchOrg" property="context/module/moduleinstance/organisationManager.do"/>
 		url = "<%= searchOrg %>?orgSelReset=true";
@@ -57,12 +57,12 @@
         document.aimOrgManagerForm.target="_blank";
         document.aimOrgManagerForm.submit();
     }
-   
+
 
 
 
 	var enterBinder	= new EnterHitBinder('searchBtn');
-	
+
 	-->
 
 </script>
@@ -91,7 +91,7 @@
 						<td align="left" colspan=7>
 							<div class="toolbar" align="center" style="background: #f2f2f2;">
 									<jsp:include
-									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
+									page="WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" />
 							</div></td>
 					</tr>
 					</digi:secure>
@@ -100,7 +100,7 @@
 					<td valign="top">
 						<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 							<jsp:include page="teamSetupMenu.jsp" flush="true"/>
-					
+
 					<table style="width:97%;">
 					</c:if>
 					<tr>
@@ -219,10 +219,10 @@
 																									</digi:link>
 																								</c:if> <c:if
 																									test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy=='nameAscending'}">
-																									<img src="/repository/aim/images/up.gif" />
+																									<img src="WEB-INF/jsp/aim/images/up.gif" />
 																								</c:if> <c:if
 																									test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='nameDescending'}">
-																									<img src="/repository/aim/images/down.gif" />
+																									<img src="WEB-INF/jsp/aim/images/down.gif" />
 																								</c:if>
 																							</td>
 																							<td class="inside" bgcolor=#F2F2F2><c:if
@@ -241,10 +241,10 @@
 																									</digi:link>
 																								</c:if> <c:if
 																									test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='acronymAscending'}">
-																									<img src="/repository/aim/images/up.gif" />
+																									<img src="WEB-INF/jsp/aim/images/up.gif" />
 																								</c:if> <c:if
 																									test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='acronymDescending'}">
-																									<img src="/repository/aim/images/down.gif" />
+																									<img src="WEB-INF/jsp/aim/images/down.gif" />
 																								</c:if>
 																							</td>
 																							<%--<td height="60" width="171"><b>
@@ -266,10 +266,10 @@
 																									</digi:link>
 																								</c:if> <c:if
 																									test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='typeAscending'}">
-																									<img src="/repository/aim/images/up.gif" />
+																									<img src="WEB-INF/jsp/aim/images/up.gif" />
 																								</c:if> <c:if
 																									test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='typeDescending'}">
-																									<img src="/repository/aim/images/down.gif" />
+																									<img src="WEB-INF/jsp/aim/images/down.gif" />
 																								</c:if>
 																							</td>
 																							<td class="inside" bgcolor=#F2F2F2><c:if
@@ -288,14 +288,14 @@
 																									</digi:link>
 																								</c:if> <c:if
 																									test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='groupAscending'}">
-																									<img src="/repository/aim/images/up.gif" />
+																									<img src="WEB-INF/jsp/aim/images/up.gif" />
 																								</c:if> <c:if
 																									test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='groupDescending'}">
-																									<img src="/repository/aim/images/down.gif" />
+																									<img src="WEB-INF/jsp/aim/images/down.gif" />
 																								</c:if>
 																							</td>
 																							<c:if test="${!aimOrgManagerForm.adminSide}">
-																							<td class="inside" bgcolor=#F2F2F2>&nbsp; 
+																							<td class="inside" bgcolor=#F2F2F2>&nbsp;
 																							</td>
 																							</c:if>
 																						</tr>
@@ -328,7 +328,7 @@
 																								</c:when>
 																								<c:otherwise><c:out value="${organisation.name}"/></c:otherwise>
 																								</c:choose>
-																								
+
 																								</td>
 																								<td class="inside"><bean:write
 																										name="organisation" property="acronym" />
@@ -458,7 +458,7 @@
 																		<digi:link href="/organisationSearch.do"
 																			style="text-decoration=none" name="urlParamsLast"
 																			title="${translation}">
-																&gt;&gt;  
+																&gt;&gt;
 															</digi:link>
 															&nbsp;&nbsp;
 														</c:if> <c:out value="${aimOrgManagerForm.currentPage}"></c:out>&nbsp;<digi:trn
@@ -539,7 +539,7 @@
 														<!-- end page logic for pagination -->
 													</table></td>
 											</tr>
-														
+
 											<logic:notEmpty name="aimOrgManagerForm"
 												property="alphaPages">
 												<tr>

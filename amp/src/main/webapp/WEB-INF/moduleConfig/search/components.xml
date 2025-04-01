@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config>
+	<secondary-pages>
+		<page name="search" title=" - Search Page" />
+	</secondary-pages>
+</config>

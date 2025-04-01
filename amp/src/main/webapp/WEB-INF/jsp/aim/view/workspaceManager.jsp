@@ -103,17 +103,17 @@
         background-color:#2f2f2f;
     }
 
-    #popin .content { 
-        overflow:auto; 
-        height:455px; 
-        background-color:fff; 
-        padding:10px; 
-    } 
+    #popin .content {
+        overflow:auto;
+        height:455px;
+        background-color:fff;
+        padding:10px;
+    }
     .bd a:hover {
         background-color:#ecf3fd;
-        font-size: 10px; 
-        color: #0e69b3; 
-        text-decoration: none	  
+        font-size: 10px;
+        color: #0e69b3;
+        text-decoration: none
     }
     .bd a {
         color:black;
@@ -186,20 +186,20 @@
     var panelStart;
     var checkAndClose=false;
     var lastFunction="";
-   
-	    
+
+
     function initWorkspaceManagerPopinScript() {
         var msg='\n<digi:trn jsFriendly="true">Select Indicator</digi:trn>';
         myPanel.setHeader(msg);
         myPanel.setBody("");
         myPanel.beforeHideEvent.subscribe(function() {
             myclose();
-        }); 
+        });
         myPanel.render(document.body);
-        panelStart = 0; 
-		
+        panelStart = 0;
+
     }
-	
+
 </script>
 <script language="JavaScript">
     var tooltipPanel;
@@ -210,7 +210,7 @@
     var actRecordNumbers=0;
     var pagesToShow = 18;
 
-    
+
 
     function initWorkspaceManagerScript(){
         initWorkspaceManagerPopinScript();
@@ -223,26 +223,26 @@
 			return '<digi:trn jsFriendly="true">yes</digi:trn>'+boolStr.substring(3);
 		return '<digi:trn jsFriendly="true">no</digi:trn>';
     }
-    
+
     function returnAccesType (accType) {
 	    if (accType == 'Team')
 			return '<digi:trn jsFriendly="true">Team</digi:trn>';
 		return '<digi:trn jsFriendly="true">Management</digi:trn>';
     }
-    
+
     function initDynamicTable() {
-		
+
         YAHOO.example.XHR_JSON = new function() {
- 	
+
        	    this.formatActions = function(elCell, oRecord, oColumn, sData) {
-                elCell.innerHTML = 
+                elCell.innerHTML =
                     "<a onclick='setViewTemDetails()' href=/aim/getWorkspace.do?dest=admin&event=edit&tId=" +oRecord.getData( 'ID' )+' title="<digi:trn>Click here to Edit Workspace</digi:trn>">' + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
                     "<a href='javascript:deleteWorkspace(" + oRecord.getData( 'ID' )+ ")'" + ' title="<digi:trn>Click here to Delete Workspace</digi:trn>">' + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
                     "<input type='hidden' class='teamsOnpage' value='"+oRecord.getData( 'ID' )+"'/>"
             };
-        
+
             this.formatActionsName = function(elCell, oRecord, oColumn, sData) {
-                elCell.innerHTML = 
+                elCell.innerHTML =
                     '<a href="JavaScript:showTeamDetails(' +oRecord.getData( 'ID' )+',  \''+oRecord.getData( 'name' )+'\');" title="<digi:trn>Click here to view Details</digi:trn>">' + oRecord.getData( 'name' ) + '</a>'
             };
 
@@ -268,16 +268,16 @@
                     }
                     compOrgs+='</ul>';
                 }
-          
+
                 var name=oRecord.getData( 'name' ).replace("\'", "'").replace("<", "&lt;").replace(">", "&gt;");
                 var accType = oRecord.getData( 'accessType' );
                 var comp = oRecord.getData( 'computation' )+compOrgs;
-              
+
                 elCell.innerHTML =
                     name
                     +'<div id="tooltip'+oRecord.getData( 'ID' )+'" style="z-index:1;display:none">'+
                     '<ul>'+
-                    '<li>'+returnAccesType(accType)+'</li>'+ 
+                    '<li>'+returnAccesType(accType)+'</li>'+
                     '<li><digi:trn>Children (Workspaces)</digi:trn>:'+children+'</li>'+
                     '<li><digi:trn>Computation</digi:trn>:'+returnYesOrNo(comp)+'</li>'+
                     '</ul>'+
@@ -293,15 +293,15 @@
                 fields: ["ID","name","accessType","computation","childrenOrganizations","childrenWorkspaces"],
                 metaFields: {
                     totalRecords: "totalRecords" // Access to value in the server response
-                }    
+                }
             };
-        
-        
+
+
             var myColumnDefs = [
                 {key:"name", label:'<digi:trn jsFriendly="true">NAME</digi:trn>', sortable:true, width: 250,formatter:this.formatTeamName},
                 {key:"actions", label:'<digi:trn jsFriendly="true">ACTIONS</digi:trn>', width: 160, formatter:this.formatActions,className:"ignore"}
             ];
-  
+
             var div = document.getElementById('errors');
 
             var handleSuccess = function(o){
@@ -317,12 +317,12 @@
                     div.innerHTML += "<li>Status code message: " + o.statusText + "</li>";
                 }
             }
-            // Create the Paginator 
-            
-            myPaginator = new YAHOO.widget.Paginator({ 
+            // Create the Paginator
+
+            myPaginator = new YAHOO.widget.Paginator({
             	rowsPerPage:10,
 	        	//totalRecords:document.getElementById("totalResults").value,
-	        	containers : ["dt-pag-nav","dt-pag-nav2"], 
+	        	containers : ["dt-pag-nav","dt-pag-nav2"],
 	        	template : '{CurrentPageReport}&nbsp;<span class="l_sm"><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}<br/>{FirstPageLink}{PageLinks}{LastPageLink}',
 	        	pageReportTemplate		: '<span class="l_sm"><digi:trn>Showing items</digi:trn></span> <span class="txt_sm_b">{startRecord} - {endRecord} <digi:trn>of</digi:trn> {totalRecords}</span>',
 	        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
@@ -344,9 +344,9 @@
 	                else{
 	                	return page;
 	                }
-	                
+
 	            }
-            });   
+            });
             var myConfigs = {
                 initialRequest: "sort=name&dir=asc&startIndex=0&results=10", // Initial request for first page of data
                 dynamicData: true, // Enables dynamic server-driven data
@@ -354,9 +354,9 @@
                 //paginator: new YAHOO.widget.Paginator({ rowsPerPage:10 }) // Enables pagination
                 paginator:myPaginator
             };
-    	 
+
             this.myDataTable = new YAHOO.widget.DataTable("dynamicdata", myColumnDefs, this.myDataSource, myConfigs);
-            this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow); 
+            this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow);
             this.myDataTable.subscribe("rowMouseoutEvent", this.myDataTable.onEventUnhighlightRow);
             this.myDataTable.subscribe("rowClickEvent", this.myDataTable.onEventSelectRow);
             this.myDataTable.subscribe("rowClickEvent", function (ev) {
@@ -365,19 +365,19 @@
                 showTeamDetails(record.getData('ID'), record.getData('name'));
                 hideToolTip();
             });
-        
-            //this.myDataTable.selectRow(this.myDataTable.getTrEl(0)); 
-            // Programmatically bring focus to the instance so arrow selection works immediately 
-            this.myDataTable.focus(); 
+
+            //this.myDataTable.selectRow(this.myDataTable.getTrEl(0));
+            // Programmatically bring focus to the instance so arrow selection works immediately
+            this.myDataTable.focus();
             var second=false;
             <c:if test="${not empty aimWorkspaceForm.currentPage}">
             this.myDataTable.subscribe('postRenderEvent',function(oArgs){
-			if(second){ 
+			if(second){
 			    this.selectRow(this.getTrEl(${aimWorkspaceForm.currentRow}));
 			    showTeamDetails(${aimWorkspaceForm.selectedWs},null);
 			    second=false;
 			}
-            
+
             if(added=="true"){
             	if(${aimWorkspaceForm.currentPage}!=1){
 					myPaginator.setPage(${aimWorkspaceForm.currentPage});
@@ -387,12 +387,12 @@
 					this.selectRow(this.getTrEl(${aimWorkspaceForm.currentRow}));
 					showTeamDetails(${aimWorkspaceForm.selectedWs},null);
 				    second=false;
-				} 
+				}
                added="false";
             }
             });
             </c:if>
-          
+
 
             // Update totalRecords on the fly with value from server
             this.myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
@@ -400,9 +400,9 @@
                 return oPayload;
             }
             //further lines are for generating tooltips
-            var showTimer,hideTimer;				
+            var showTimer,hideTimer;
             var tt = new YAHOO.widget.Tooltip("myTooltip");
-    	
+
             this.myDataTable.on('cellMouseoverEvent', function (oArgs) {
                 if (showTimer) {
                     window.clearTimeout(showTimer);
@@ -413,12 +413,12 @@
                 var column = this.getColumn(target);
                 if (column.key == 'name') {
                     var record = this.getRecord(target);
-    			
-    	
+
+
                     var tooltipid="tooltip"+record.getData('ID');
                     var tooltipDiv=document.getElementById(tooltipid);
                     var tooltipText=tooltipDiv.innerHTML;
-    		      
+
 
                     if(tooltipText!=null && tooltipText.length > 0){
                         var event=oArgs.event;
@@ -444,12 +444,12 @@
                                 tt.hide();
                             },5000);
                         },500);
-    					
+
                     }
-    			
+
                 }
             });
-    	
+
             this.myDataTable.on('cellMouseoutEvent', function (oArgs) {
                 if (showTimer) {
                     window.clearTimeout(showTimer);
@@ -461,13 +461,13 @@
                 }
                 tt.hide();
             });
-       
+
         };
-  
-	       
-   
+
+
+
     };
-    
+
 
 
     function setViewTemDetails() {
@@ -481,35 +481,35 @@
 	        <digi:context name="deleteUrl" property="context/module/moduleinstance/deleteWorkspace.do"/>;
 	        document.aimWorkspaceForm.action="${deleteUrl}?event=delete&tId="+id;
 	        document.aimWorkspaceForm.target="_self";
-	        document.aimWorkspaceForm.submit();	
+	        document.aimWorkspaceForm.submit();
     	}
     }
-    
+
 </script>
 
 
 
 <script language="JavaScript">
     <!--
-   
+
     //DO NOT REMOVE THIS FUNCTION --- AGAIN!!!!
     function mapCallBack(status, statusText, responseText, responseXML){
         window.location.reload();
     }
-    
-    
+
+
     var responseSuccess = function(o){
         var response = o.responseText;
         myPanel.setBody(response);
         showContent();
     }
- 
-    var responseFailure = function(o){ 
-        alert("Connection Failure!"); 
-    }  
-    
-    var callback = { 
-        success:responseSuccess, 
+
+    var responseFailure = function(o){
+        alert("Connection Failure!");
+    }
+
+    var callback = {
+        success:responseSuccess,
         failure:responseFailure,
         cache: false
     };
@@ -521,13 +521,13 @@
         }
         checkErrorAndClose();
     }
-    
+
     function checkErrorAndClose() {
         var error = document.getElementById("someError");
         if (checkAndClose == "true" || checkAndClose) {
             if(error != null && YAHOO.lang.trim(error.innerHTML) != '') {
-            	checkAndClose=false; 
-            	return; 
+            	checkAndClose=false;
+            	return;
             } else {
             	var someErrorVar = document.getElementsByName("someError")[0];
                 if (someErrorVar == null || typeof someErrorVar.value == 'undefined' || someErrorVar.value == "false") {
@@ -535,11 +535,11 @@
                     refreshPage();
                 }
             }
-            			
+
         }
         checkAndClose=false;
     }
-    
+
     function refreshPage(){
         if(lastFunction==="showDetails"){
             showDetails();
@@ -550,9 +550,9 @@
     function myclose(){
         myPanel.setBody("");
         panelStart=1;
-    	
+
     }
-    
+
 
     function closeWindow() {
         myclose();
@@ -561,20 +561,20 @@
     function hideWindow() {
     	myPanel.hide();
     }
-    
+
     function showPanelLoading(msg){
-        myPanel.setHeader(msg);	
-        var bodymsg='<div style="text-align: center">' + 
-        '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+        myPanel.setHeader(msg);
+        var bodymsg='<div style="text-align: center">' +
+        '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
         '<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>'
         myPanel.setBody(bodymsg);
         showContent();
     }
-    
+
     function addNewUser()	{
         var msg='\n<digi:trn jsFriendly="true">AMP View Settings</digi:trn>';
         showPanelLoading(msg);
-            <digi:context name="commentUrl" property="context/module/moduleinstance/addUser.do"/>  
+            <digi:context name="commentUrl" property="context/module/moduleinstance/addUser.do"/>
             var url = "<%=commentUrl %>";
         YAHOO.util.Connect.asyncRequest("POST", url, callback, '');
     }
@@ -597,20 +597,20 @@
         var partialURL=fullURL.substring(0,lastSlash);
         return partialURL+"/"+actionName;
     }
-    
+
     function getParams(){
         ret = "";
         ret += "keyword="+document.getElementsByName('keyword')[0].value+"&workspaceType="+document.getElementsByName('workspaceType')[0].value+"&workspaceGroup="+document.getElementsByName('workspaceGroup')[0].value;
         return ret;
     }
-	
+
     function resetPage(){
         if(oldKeyword != document.getElementsByName('keyword')[0].value  || oldWorkspaceType != document.getElementsByName('workspaceType')[0].value
         		|| oldWorkspaceGroup!=document.getElementsByName('workspaceGroup')[0].value){
             oldKeyword=document.getElementsByName('keyword')[0].value;
             oldWorkspaceType=document.getElementsByName('workspaceType')[0].value;
             oldWorkspaceGroup=document.getElementsByName('workspaceGroup')[0].value;
-                <digi:context name="commentUrl" property="context/module/moduleinstance/workspaceManager.do"/>  
+                <digi:context name="commentUrl" property="context/module/moduleinstance/workspaceManager.do"/>
                 var url = "<%=commentUrl %>";
             url += "?"+getParams();
             var async=new Asynchronous();
@@ -620,7 +620,7 @@
     }
 </script>
 <script langauage="JavaScript" type="text/javascript">
-	
+
 
     function validateValues(){
         var errmsg='';
@@ -630,13 +630,13 @@
         var angle=document.getElementById('angle').value;
         var pageSize=document.getElementById('pageSize').value;
         //*** Validate width
-        if(parseInt(width)==(width-0)){		   	
+        if(parseInt(width)==(width-0)){
             if(parseInt(width)<10 || parseInt(width)>1000){
                 errmsg+='\n<digi:trn jsFriendly="true">Width must be in range from 10 to 1000</digi:trn>';
             }
         }else{
             errmsg+='\n<digi:trn jsFriendly="true">Please enter correct width</digi:trn>';
-        }		 
+        }
         //***Validate height
         if(parseInt(height)==(height-0)) {
             if(parseInt(height)<10 || parseInt(height)>1000){
@@ -644,8 +644,8 @@
             }
         }else{
             errmsg+='\n<digi:trn jsFriendly="true">Please enter correct height</digi:trn>';
-        }		 
-        //***Validate angle	
+        }
+        //***Validate angle
 
         if(angle!=''){
             if(parseInt(angle)==(angle-0)) {
@@ -664,7 +664,7 @@
                 errmsg+='\n<digi:trn jsFriendly="true">Please enter correct number of pages</digi:trn>';
             }
         }
-		 
+
         //***Validate error messages
         if (errmsg==''){
 
@@ -706,26 +706,26 @@
 
         demo.replaceChild(tmp.getElementsByTagName('table')[0], tbl);
     }
-    
+
     function memberAction(action, id){
         var msg='<digi:trn jsFriendly="true">Delete Member</digi:trn>';
         if(action==='edit'){
             msg='<digi:trn jsFriendly="true">Edit Member</digi:trn>'
         }
         myPanel.cfg.setProperty("width","400px");
-        myPanel.cfg.setProperty("height","350px"); 
-        showPanelLoading(msg);	
-            <digi:context name="commentUrl" property="context/module/moduleinstance/getTeamMemberDetailsJSON.do"/>;  
+        myPanel.cfg.setProperty("height","350px");
+        showPanelLoading(msg);
+            <digi:context name="commentUrl" property="context/module/moduleinstance/getTeamMemberDetailsJSON.do"/>;
         var url = "<%=commentUrl %>";
         url += "?action="+action+"&id="+id;
         YAHOO.util.Connect.asyncRequest("POST", url, callback, '');
     }
-    
+
     function confirmActionMember(){
         if(validateAction()){
             checkAndClose=true;
             lastFunction="showDetails";
-                <digi:context name="commentUrl" property="context/module/moduleinstance/updateTeamMemberJSON.do"/>  
+                <digi:context name="commentUrl" property="context/module/moduleinstance/updateTeamMemberJSON.do"/>
                 var url = "<%=commentUrl %>";
             url += "?teamId="+document.getElementsByName('teamId')[0].value+
                 "&teamMemberId="+document.getElementsByName('teamMemberId')[0].value+
@@ -734,7 +734,7 @@
                 "&name="+document.getElementsByName('name')[0].value+
                 "&role="+document.getElementsByName('role')[0].value;
             YAHOO.util.Connect.asyncRequest("POST", url, callback, '');
-        }	
+        }
     }
 
     function validateAction(){
@@ -742,9 +742,9 @@
             alert("<digi:trn jsFriendly='true'>Please select the role</digi:trn>");
             return false;
         }
-        return true;			
+        return true;
     }
-    
+
     function updateTableActivities(members){
         var demo       = YAHOO.util.Dom.get('demo'),
         tbl        = demo.getElementsByTagName('table')[0],
@@ -763,7 +763,7 @@
             		else{
             			html[j++]='<tbody class="act_pages_'+pages+'">';
             		}
-            		
+
             	}
                 item = members[i];
                 html[j++] = '<tr><td width="75%" class="inside">';
@@ -775,7 +775,7 @@
             		html[j++]='</tbody>';
             	}
             }
-        
+
         } else {
             html[j++] = '<tr><td colspan="2"><em><digi:trn jsFriendly="true">No Activities</digi:trn></em></td></tr>';
         }
@@ -791,13 +791,13 @@
         		paginator[j++]='<span id="act_page_link_navi_'+k+'" style="display:none" ><a href="#" class="yui-pg-page" onclick="return showPageContent('+k+')" >'+k+'</a> |</span>';
         		paginator[j++]='<span id="act_page_link_curr_'+k+'" class="yui-pg-current-page yui-pg-page"><span class="current-page">&nbsp;&nbsp;'+k+'&nbsp;&nbsp;</span>|</span>';
         	}
-        	
+
         }
         actRecordNumbers=pages;
         if(pages>1){
         	paginator[j++]='<span id="act_page_link_last"><a href="#"  class="yui-pg-page" onclick="return showPageContent('+pages+')"><digi:trn>Last Page</digi:trn></a></span>';
         }
-        
+
         paginator[j++] ="</span></td></tr></tbody></table>";
         document.getElementById('paginatorPlace').innerHTML=paginator.join('');
         html[j] = "</table>";
@@ -856,12 +856,12 @@
         }
         return false;
     }
-    
+
     function removeActivity(id){
     	YAHOO.util.Dom.replaceClass('loadedDetails', 'visibleTable','invisibleTable');
         YAHOO.util.Dom.replaceClass('loadingDetailsIcon', 'invisibleTable','visibleTable');
         YAHOO.util.Dom.replaceClass('addNew','visibleTable','invisibleTable');
-            <digi:context name="commentUrl" property="context/module/moduleinstance/removeTeamActivityJSON.do"/>  
+            <digi:context name="commentUrl" property="context/module/moduleinstance/removeTeamActivityJSON.do"/>
             var url = "<%=commentUrl %>";
         url += "?selActivities="+id+"&teamId="+ document.getElementsByName('teamId')[0].value;
         YAHOO.util.Dom.replaceClass('loadedDetails', 'visibleTable','invisibleTable');
@@ -890,7 +890,7 @@
             failure : function () {
                 alert("<digi:trn jsFriendly='true'>Error getting activity data</digi:trn>");
             }
-        
+
         });
     }
 
@@ -919,7 +919,7 @@
                    document.getElementById('ws_go').disabled=false;
                    YAHOO.util.Dom.replaceClass('loadingDetailsIcon','visibleTable', 'invisibleTable');
                    YAHOO.util.Dom.replaceClass('loadedDetails', 'invisibleTable','visibleTable');
-                   YAHOO.util.Dom.replaceClass('addNew','invisibleTable', 'visibleTable'); 
+                   YAHOO.util.Dom.replaceClass('addNew','invisibleTable', 'visibleTable');
                 }
             },
             failure : function () {
@@ -928,7 +928,7 @@
         	cache: false
         });
     }
-    
+
     function showActivities(id, description){
         YAHOO.util.Dom.replaceClass('loadedDetails', 'visibleTable','invisibleTable');
         YAHOO.util.Dom.replaceClass('loadingDetailsIcon', 'invisibleTable','visibleTable');
@@ -961,25 +961,25 @@
                 updateTableActivities("{}");
                 alert("Error getting members data");
             }
-        
+
         });
     }
 
     var responseSuccessJson = function(o){
         //initDynamicTable1();
-        var response = o.responseText; 
+        var response = o.responseText;
         var content = document.getElementById("popinContent");
         content.innerHTML = response;
         showContent();
     }
 
-    var responseFailureJson = function(o){ 
-        alert("Connection Failure!"); 
-    }  
-    var jsonCallback = 
-        { 
-        success:responseSuccessJson, 
-        failure:responseFailureJson 
+    var responseFailureJson = function(o){
+        alert("Connection Failure!");
+    }
+    var jsonCallback =
+        {
+        success:responseSuccessJson,
+        failure:responseFailureJson
     };
 
     function assignNewMember(){
@@ -989,9 +989,9 @@
         var selectedRow= YAHOO.example.XHR_JSON.myDataTable.getTrIndex(recordID);
         document.aimWorkspaceForm.action="${exportUrl}?fromPage="+fromPage+"&teamId="+document.getElementsByName('teamId')[0].value+"&selectedRow="+selectedRow+"&reset=true";
         document.aimWorkspaceForm.target="_self";
-        document.aimWorkspaceForm.submit();	
+        document.aimWorkspaceForm.submit();
     }
-    
+
     function saveAddedMember(){
         if(validateAddedMember()){
             checkAndClose=true;
@@ -1001,9 +1001,9 @@
             var url = "<%=commentUrl %>";
             url += "?fromPage=1&teamId="+document.getElementsByName('teamId')[0].value+"&email="+document.getElementsByName('email')[0].value+"&role="+document.getElementsByName('role')[0].value;
             YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
-        }	
+        }
     }
-    
+
     function validateAddedMember(){
         if(document.getElementsByName('role')[0].selectedIndex==0){
             alert("<digi:trn jsFriendly='true'>Role not entered</digi:trn>");
@@ -1011,17 +1011,17 @@
         }
         return true;
     }
-    
+
     function addActivities(id){
         var msg='<digi:trn jsFriendly="true">Assign Activities</digi:trn>';
         myPanel.cfg.setProperty("width","500px");
-        myPanel.cfg.setProperty("height","400px"); 
+        myPanel.cfg.setProperty("height","400px");
         showPanelLoading(msg);
 
-            <digi:context name="commentUrl" property="context/module/moduleinstance/assignActivityJSON.do"/>  
+            <digi:context name="commentUrl" property="context/module/moduleinstance/assignActivityJSON.do"/>
             var url = "<%=commentUrl %>";
         url += "~id="+id;
-	
+
 
         YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
     }
@@ -1039,13 +1039,13 @@
         value = document.getElementById('showdataWs').options[document.getElementById('showdataWs').selectedIndex].value;;
         console.log(value)
         if(value==0){
-            showTeamMembers(document.getElementsByName('teamId')[0].value, document.getElementById('teamTitle').value);			
+            showTeamMembers(document.getElementsByName('teamId')[0].value, document.getElementById('teamTitle').value);
         }
         else{
-            showActivities(document.getElementsByName('teamId')[0].value, document.getElementById('teamTitle').value);		
+            showActivities(document.getElementsByName('teamId')[0].value, document.getElementById('teamTitle').value);
         }
     }
-    
+
     function showTeamDetails(id, description){
     	value = document.getElementById('showdataWs').options[document.getElementById('showdataWs').selectedIndex].value;
     	if(value==0){
@@ -1059,18 +1059,18 @@
         }
     	document.getElementsByName('teamId')[0].value=id;
         document.getElementsByName('teamName')[0].value=description;
-    	
+
         if(viewTeamDetails!='false'){
             if(value==0){
-                showTeamMembers(id, description);			
+                showTeamMembers(id, description);
             }
             else{
-                showActivities(id, description);		
+                showActivities(id, description);
             }
         }else{
             viewTeamDetails='true';
         }
-	
+
     }
 
 </script>
@@ -1078,13 +1078,13 @@
     function showTeamMemberProfile(email){
         var param = "~edit=true~email="+email;
         previewWorkspaceframe('/aim/default/userProfile.do',param);
-	
+
     }
     function confirmDelete() {
         var flag = confirm("<digi:trn jsFriendly='true'>Are you sure you want to remove the selected activity</digi:trn>");
         if(flag == false)
             return false;
-        else 
+        else
             return true;
     }
 </script>
@@ -1099,7 +1099,7 @@
                     break;
                 }
             }
-        } 
+        }
         if(!result){
             alert('<digi:trn jsFriendly="true">Please, Select an Activity First</digi:trn>');
         }
@@ -1126,15 +1126,15 @@
                     ret+=document.getElementsByName("selectedActivities")[i].name+"="+document.getElementsByName("selectedActivities")[i].value+"&";
                 }
             }
-        } 
+        }
         if(validate()){
             checkAndClose=true;
             lastFunction="showDetails";
-                <digi:context name="commentUrl" property="context/module/moduleinstance/assignActivityJSON.do"/>;  
+                <digi:context name="commentUrl" property="context/module/moduleinstance/assignActivityJSON.do"/>;
             var url = "<%=commentUrl %>";
             url+="?"+ret+"&teamId="+document.getElementsByName('teamId')[0].value;
-            var bodymsg='<div style="text-align: center">' + 
-            '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+            var bodymsg='<div style="text-align: center">' +
+            '<img src="/TEMPLATE/ampTemplate/js_2/yui/assets/skins/sam/loading.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
             '<digi:trn jsFriendly="true">Saving, please wait ...</digi:trn><br/><br/></div>'
             myPanel.setBody(bodymsg);
             YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
@@ -1149,7 +1149,7 @@
         document.aimWorkspaceForm.submit();
     }
 
-</script> 
+</script>
 
 <DIV id="TipLayer"	style="absolute;z-index:1000;"></DIV>
 <h1 class="admintitle"><digi:trn>Workspace manager</digi:trn></h1>
@@ -1162,10 +1162,10 @@
     <tr>
         <td align=left vAlign=top width=850>
             <table cellPadding=5 cellSpacing=0 width="100%" border=0>
-                 
-				<!--	
+
+				<!--
 				<tr>
-			
+
                     <td height=33><span class=crumb>
                             <c:set var="translation">
                                 <digi:trn>Click here to goto Admin Home</digi:trn>
@@ -1176,7 +1176,7 @@
                             <digi:trn>Workspace Manager</digi:trn>
                             <div class="adminicon"><img src="/TEMPLATE/ampTemplate/img_2/adminicons/workspacemanager.jpg"/></div>
                     </td>
-                </tr> 
+                </tr>
 				-->
                 <!--<tr>
 					<td height="16" vAlign="center" width="571">
@@ -1188,9 +1188,9 @@
                 <digi:errors />
         </td>
     </tr>
-    <tr><td align="left">              
+    <tr><td align="left">
 	<jsp:include
-									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
+									page="WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" />
 
 </td></tr>
 <tr>
@@ -1216,12 +1216,12 @@
                                         <tr>
 
                                             <td style="text-align:left;">
-                                        <digi:trn>keyword</digi:trn><br/>	
+                                        <digi:trn>keyword</digi:trn><br/>
                                         <html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
                                 </td>
 
                                 <td  style="text-align:left;">
-                            <digi:trn>Type</digi:trn><br/>	
+                            <digi:trn>Type</digi:trn><br/>
                             <html:select property="workspaceType" styleClass="inp-text">
                                 <html:option value="all"><digi:trn>All</digi:trn></html:option>
                                 <html:option value="team"><digi:trn>Team</digi:trn></html:option>
@@ -1230,8 +1230,8 @@
                             </html:select>
                             </td>
 													<td  style="text-align:left;">
-														<digi:trn>Workspace Group</digi:trn><br/>	
-														<c:set var="translationAll"><digi:trn>All</digi:trn></c:set>												
+														<digi:trn>Workspace Group</digi:trn><br/>
+														<c:set var="translationAll"><digi:trn>All</digi:trn></c:set>
 														<category:showoptions firstLine="${translationAll}" name="aimWorkspaceForm" property="workspaceGroup" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>" styleClass="inp-text" />
 													</td>
                             <td align="left">

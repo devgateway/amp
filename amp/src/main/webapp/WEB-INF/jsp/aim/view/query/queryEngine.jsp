@@ -14,7 +14,7 @@
 <!-- Individual YUI CSS files -->
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
-<link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css">
+<link rel="stylesheet" type="text/css" href="WEB-INF/jsp/aim/view/css/filters/filters2.css">
 
 <link rel="stylesheet" href="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.css">
 <link href='tabs/fonts/open-sans.css' rel='stylesheet' type='text/css'>
@@ -48,13 +48,13 @@
 	}
 </style>
 
-<!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script> 
-<script type="text/javascript" src="/repository/aim/view/multilingual/multilingual_scripts.js"></script>
+<!-- Individual YUI JS files -->
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"></script>
+<script type="text/javascript" src="WEB-INF/jsp/aim/view/multilingual/multilingual_scripts.js"></script>
 
 <!-- Individual YUI JS files -->
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
@@ -79,14 +79,14 @@
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/filterWidgetLoader.js'/>"></script>
 
-<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
-<jsp:include page="/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp" />
+<jsp:include page="WEB-INF/jsp/aim/view/ar/reportsScripts.jsp"/>
+<jsp:include page="WEB-INF/jsp/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp" />
 
 <c:set var="showCurrSettings">
-	<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn> 
+	<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn>
 </c:set>
 <c:set var="hideCurrSettings">
-	<digi:trn key="rep:hideCurrSettings">Hide current settings</digi:trn> 
+	<digi:trn key="rep:hideCurrSettings">Hide current settings</digi:trn>
 </c:set>
 
 <script type="text/javascript">
@@ -101,13 +101,13 @@ queryValidCbObj	= {
 			else{
 				alert('<digi:trn jsFriendly="true">From date should be greater than to Date</digi:trn>');
 			}
-			 
+
 		},
 		failure: function (o) {
 			alert('<digi:trn jsFriendly="true">Error!</digi:trn>');
-			
+
 		}
-	
+
 	};
 			queryCbObj		= {
 			success: function (o) {
@@ -118,24 +118,24 @@ queryValidCbObj	= {
 			failure: function (o) {
 				var divObj		= document.getElementById("queryLabelsDiv");
 				divObj.innerHTML	= "There was a problem with getting the results. Please try again";
-				
+
 			}
-		
+
 		};
-	
+
 	function animToResult () {
-		var attributes = { 
-			scroll: { to: [YAHOO.util.Dom.getDocumentScrollTop(), YAHOO.util.Dom.getY("results")] } 
-		}; 
-		 var anim = new YAHOO.util.Scroll(document.body, attributes, 1); 
-		 anim.animate(); 
+		var attributes = {
+			scroll: { to: [YAHOO.util.Dom.getDocumentScrollTop(), YAHOO.util.Dom.getY("results")] }
+		};
+		 var anim = new YAHOO.util.Scroll(document.body, attributes, 1);
+		 anim.animate();
 	}
-	
+
 	function showlegend() {
 		var contentId = document.getElementById("show_legend_pop_box");
-  		contentId.style.display == "block" ? contentId.style.display = "none" : contentId.style.display = "block"; 
+  		contentId.style.display == "block" ? contentId.style.display = "none" : contentId.style.display = "block";
 	}
-	
+
 	function toggleSettings(){
 		var currentDisplaySettings = document.getElementById('currentDisplaySettings');
 		var displaySettingsButton = document.getElementById('displaySettingsButton');
@@ -162,28 +162,28 @@ function validateSubmitQuery () {
 			submitQuery ();
 		}
 	}
-	
+
 	function submitQuery () {
 		//debugger;
 		var formName	= "aimReportsFilterPickerForm";
 		var filterForm		= document.getElementsByName(formName)[0];
 		var divObj		= document.getElementById("results");
-		divObj.innerHTML	= 
-		"<div style='text-align: center'>" + "Please wait..." + 
-		"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
+		divObj.innerHTML	=
+		"<div style='text-align: center'>" + "Please wait..." +
+		"... <br /> <img src='WEB-INF/jsp/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
 		YAHOO.util.Connect.setForm(filterForm);
 		var additionalParams	= "&doreset=true&queryEngine=true&reportContextId=" + '<%=ReportContextData.getCurrentReportContextId(request, true)%>';
 		YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true" + additionalParams, queryCbObj);
 		animToResult();
 	}
-	
+
 	function changeStep(url) {
 		var divObj		= document.getElementById("queryLabelsDiv");
 		divObj.innerHTML	=
-		"<div style='text-align: center'>" + "Please wait..." + 
-		"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
-		
-		
+		"<div style='text-align: center'>" + "Please wait..." +
+		"... <br /> <img src='WEB-INF/jsp/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
+
+
 		YAHOO.util.Connect.asyncRequest("GET", url, queryCbObj);
 	}
 
@@ -193,7 +193,7 @@ function validateSubmitQuery () {
 	}
 
 	YAHOO.util.Event.addListener(window, "load", initializeFilters) ;
-</script>		
+</script>
 <br />
 <div id="filter-popup" style="font-size: 14px !important; position: unset !important; margin: 0%;"></div>
 

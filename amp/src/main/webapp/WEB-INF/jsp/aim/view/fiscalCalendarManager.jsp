@@ -46,7 +46,7 @@
 							</c:set>
 							<div class="toolbar" align="center" style="background: #f2f2f2;">
 									<jsp:include
-									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
+									page="WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" />
 							</div></td>
 			</tr>
 				<tr>
@@ -187,7 +187,7 @@
 													<digi:trn key="aim:otherLinks">Other links</digi:trn></b>
 												</td>
 												<td background="module/aim/images/corner-r.gif" 	height="17" width=17>&nbsp;
-												
+
 												</td>
 											</tr>
 										</table>
@@ -219,7 +219,7 @@
 											</tr>
 											<!-- end of other links -->
 										</table>
-										
+
 										</td>
   </tr>
 </table>

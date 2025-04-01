@@ -20,7 +20,7 @@
 				<th class="col-xs-1 text-center"><%--<digi:trn>Delete</digi:trn> --%></th>
 			</tr>
 		</thead>
-		<tbody>	
+		<tbody>
 		<c:forEach var="selectedDocs" items="${pledgeForm.selectedDocs}" varStatus="index">
 			<c:set var="indexLoc" value="${indexLoc+1}"/>
 			<tr id="pledge_form_row_for_document_${selectedDocs.uniqueId}">
@@ -30,14 +30,14 @@
 				<td>
 					<a target="_blank" href="${selectedDocs.generalLink}">
 						<c:out value="${selectedDocs.fileName}" /><%--
-						<img src="/repository/contentrepository/view/images/check_out.gif" border="0"> --%>
+						<img src="WEB-INF/jsp/contentrepository/view/images/check_out.gif" border="0"> --%>
 					</a>
 					 (<c:out value="${selectedDocs.formattedSize}" /> MB)
 				</td>
 				<td class="text-center"><button type="button" onclick="documentsController.onDelete(${selectedDocs.uniqueId});" class="btn btn-danger btn-xs"><digi:trn>Delete</digi:trn></button></td>
 			</tr>
 		</c:forEach>
-		</tbody> 
+		</tbody>
 	</table>
 	</c:if>
 </div>

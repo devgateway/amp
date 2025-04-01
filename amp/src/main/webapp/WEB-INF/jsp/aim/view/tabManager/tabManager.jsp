@@ -20,44 +20,44 @@
 <script type="text/javascript">
 
 	function initializeTabManager () {
-		
+
 		tabManager	= new TabManager();
 		tabManager.showPanel();
 	}
-	
+
 	function TabManager() {
 		this.bodyEl			= document.getElementById("panelBody");
 		this.footerEl		= document.getElementById("panelFooter");
 		this.btnDivEl		= document.getElementById("buttonDiv");
 		this.btnEl			= document.getElementById("tabManagerButton");
-		
+
 		this.doubleTabErrEl		= document.getElementById("doubleTabErr");
-		
+
 		this.saveDataManager	= new SaveDataManager("panelBody");
 	}
-	
+
 	TabManager.prototype.showPanel	= function () {
 		if ( this.panel == null ) {
 			document.getElementById("tabManagerPanel").style.display	= "";
-			this.panel	= new YAHOOAmp.widget.Panel("tabManagerPanel", 
+			this.panel	= new YAHOOAmp.widget.Panel("tabManagerPanel",
 						{ 	visible:true,
-							width: "400px", 
-							constraintoviewport:true, 
-							fixedcenter: true, 
-							underlay:"shadow", 
+							width: "400px",
+							constraintoviewport:true,
+							fixedcenter: true,
+							underlay:"shadow",
 							modal: true,
-							close:true, 
-							visible:false, 
+							close:true,
+							visible:false,
 							draggable:true } );
 			this.panel.render();
-			
+
 		}
 		this.hideButton();
 		this.disableButton();
 		this.setFooter("");
-		this.setBody( "${pleaseWaitMsg}... <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='14px'/>" );
+		this.setBody( "${pleaseWaitMsg}... <img src='WEB-INF/jsp/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='14px'/>" );
 		this.panel.show();
-		
+
 		new GetDataManager().getData();
 	}
 	TabManager.prototype.hidePanel	= function () {
@@ -101,7 +101,7 @@
 	TabManager.prototype.save		= function ( content ) {
 		this.saveDataManager.saveData();
 	}
-	
+
 	TabManager.prototype.check 		= function () {
 		var items		= document.getElementById("panelBody").getElementsByTagName( "select" );
 		for ( var i=0; i<items.length; i++ )  {
@@ -143,16 +143,16 @@
 		tabManager.hideButton();
 		tabmanager.setFooter('${connectionErrMsg}');
 	}
-	
+
 	GetDataManager.prototype.getData	= function () {
-		var timestamp		= new Date().getTime();	
+		var timestamp		= new Date().getTime();
 		YAHOOAmp.util.Connect.asyncRequest("GET", "/aim/tabManager.do?get=true&iestamp="+timestamp, this);
 	}
-	
+
 	function SaveDataManager(destContainerId) {
 		this.destContainerId	= destContainerId;
 	}
-	
+
 	SaveDataManager.prototype.success		= function (o) {
 		if ( o.responseText.indexOf("saveSuccessful") >= 0 ) {
 			tabManager.hidePanel();
@@ -162,7 +162,7 @@
 			tabManager.enableButton();
 		}
 	}
-	
+
 	SaveDataManager.prototype.failure		= function (o) {
 		tabManager.enableButton();
 		tabmanager.setFooter('${connectionErrMsg}');
@@ -170,7 +170,7 @@
 	SaveDataManager.prototype.createPostString		= function () {
 			var items		= document.getElementById(this.destContainerId).getElementsByTagName( "select" );
 			var ret			= "";
-			
+
 			for (var i=0; i<items.length; i++) {
 					var idx		= items[i].selectedIndex;
 					var option	= items[i].options[idx];
@@ -180,12 +180,12 @@
 			}
 			// alert(ret);
 			return ret;
-			
+
 	}
 	SaveDataManager.prototype.saveData				= function () {
 		tabManager.disableButton();
-		tabManager.setFooter( "${pleaseWaitMsg}... <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='14px'/>" );
-	
+		tabManager.setFooter( "${pleaseWaitMsg}... <img src='WEB-INF/jsp/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='14px'/>" );
+
 		var postString		= this.createPostString();
 		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/tabManager.do", this, postString);
 	}
@@ -209,6 +209,6 @@
 			</div>
 		</div>
 		<div class="ft" align="center" id="panelFooter" style="font-size: 8pt;">
-			
+
 		</div>
 	</div>

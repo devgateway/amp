@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+  <form-beans>
+    <form-bean name="TranslatorForm" type="org.digijava.kernel.translator.form.TranslatorForm" />
+    <form-bean name="AjaxTranslatorForm" type="org.digijava.kernel.translator.form.AjaxTranslatorForm" />
+    <form-bean name="TranslatorNavForm" type="org.digijava.kernel.translator.form.TranslatorNavForm" />
+    <form-bean name="translationForm" type="org.digijava.module.translation.form.TranslationForm" />
+    <form-bean name="modeSwitchForm" type="org.digijava.module.translation.form.ModeSwitchForm" />
+    <form-bean name="advancedTranslationForm" type="org.digijava.module.translation.form.AdvancedTranslationForm" />
+    <form-bean name="translationAdminForm" type="org.digijava.module.translation.form.TranslationAdminForm" />
+    <form-bean name="translationPermissionsForm" type="org.digijava.module.translation.form.TranslationPermissionsForm" />
+    <form-bean name="translatorForm" type="org.digijava.module.translation.form.TranslatorForm" />
+    <form-bean name="importExportForm" type="org.digijava.module.translation.form.ImportExportForm" />
+    <form-bean name="newAdvancedTrnForm" type="org.digijava.module.translation.form.NewAdvancedTrnForm" />
+    <form-bean name="translationCleanupForm" type="org.digijava.module.translation.form.TranslationCleanupForm" />
+    <form-bean name="contentTrnImportExportForm" type="org.digijava.module.translation.form.ContentTrnImportExportForm" />
+  </form-beans>
+
+
+  <action-mappings>
+    <!-- Action mappings added by Shamanth -->
+    <!-- Translator Mappings -->
+    <!-- Translator -->
+    <action type="org.digijava.kernel.translator.action.CompleteTranslationAction" parameter="method" scope="request" path="/translate/CompleteTranslation" />
+    <action forward="/showLayout.do?layout=translation" scope="request" path="/translate/index" />
+    <action forward="/showLayout.do?layout=translation" path="/translate/trans" />
+    <action forward="/showLayout.do?layout=AllTopicsLayout" path="/alltopics/index" />
+    <action forward="/showLayout.do?layout=globaltranslation" parameter="method" scope="request" path="/translate/global" />
+    <action type="org.digijava.kernel.translator.action.CompleteTranslationAction" parameter="method" scope="request" path="/translate/GlobalTranslation" />
+    <action type="org.digijava.kernel.translator.action.CompleteTranslationAction" parameter="method" scope="request" path="/translate/AddKey">
+      <forward name="success" path="/showLayout.do?layout=addkey" />
+      <forward name="failure" path="/showLayout.do?layout=failure" />
+    </action>
+    <action type="org.digijava.kernel.translator.action.CompleteTranslationAction" parameter="method" scope="request" path="/translate/GlobalAddKey">
+      <forward name="success" path="/showLayout.do?layout=globaladdkey" />
+    </action>
+    <action name="TranslatorForm" type="org.digijava.kernel.translator.action.TranslatorAction" validate="true" input="/showLayout.do?layout=TranslatorPortlet" path="/translate/Translator" />
+    <action name="AjaxTranslatorForm" type="org.digijava.kernel.translator.action.AjaxTranslator" path="/translation/ajaxTranslator" />
+    <action type="org.digijava.kernel.translator.action.ChangeLangGatewayAction" path="/translate/ChangeLangGateway" />
+    <action name="TranslatorNavForm" type="org.digijava.kernel.translator.action.TranslatorLocaleUpdate" path="/translate/ChangeNavLang" />
+    <action name="TranslatorForm" type="org.digijava.kernel.translator.action.RtAction" path="/translate/Translate" />
+    <action name="TranslatorNavForm" type="org.digijava.kernel.translator.action.TranslatorNavigation" path="/translate/TranslatorNavigation">
+      <forward name="success" path="/showLayout.do?layout=ChangeNavLang" />
+    </action>
+    <!-- Translation module actions -->
+    <action type="org.digijava.module.eproc.action.SwitchLanguageAction" path="/eproc/switchLanguage" />
+    <action name="translationForm" type="org.digijava.module.translation.action.RenderTeaser" scope="request" path="/translation/renderTeaser" />
+    <action name="translationForm" type="org.digijava.module.translation.action.SwitchLanguage" scope="request" path="/translation/switchLanguage" />
+    <action name="modeSwitchForm" type="org.digijava.module.translation.action.SwitchMode" scope="request" path="/translation/switchMode" />
+    <!-- advanced Translation -->
+    <!-- Default view definition -->
+    <action forward="/translation/showAdvancedTranslation.do" path="/translation/index" />
+    <!-- End default view definition -->
+    <!-- NEW ADVANCED TRANSLATIONS START-->
+    <action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.ShowNewAdvancedTranslations" scope="request" path="/translation/showNewAdvancedTranslation">
+      <forward name="forward" path="/showLayout.do?layout=newAdvTranslationLayout" />
+    </action>
+    <action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnAddTranslation" scope="session" path="/translation/newAdvTranAdd"/>
+    <action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnDeleteTranslation" scope="session" path="/translation/newAdvTranDelete"/>
+    <action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnGetChanges" scope="session" path="/translation/AdvTranGetChanges"/>
+	<action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnUndoChange" scope="session" path="/translation/AdvTranUndoChanges"/>
+	<action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnSaveChanges" scope="session" path="/translation/AdvTranSaveChanges"/>
+	<action name="newAdvancedTrnForm" type="org.digijava.module.translation.action.AdvTrnUpdateTranslation" scope="session" path="/translation/AdvTranUpdate"/>
+    <!-- NEW ADVANCED TRANSLATIONS END-->
+    <action name="advancedTranslationForm" type="org.digijava.module.translation.action.ShowAdvancedTranslation" scope="session" path="/translation/showAdvancedTranslation">
+      <forward name="forward" path="/showLayout.do?layout=advTranslationLayout" />
+    </action>
+    <action name="advancedTranslationForm" type="org.digijava.module.translation.action.DeleteKey" scope="session" path="/translation/deleteKey">
+      <forward name="forward" path="/translation/showAdvancedTranslation.do" redirect="true" />
+    </action>
+    <action name="advancedTranslationForm" type="org.digijava.module.translation.action.UpdateMessage" scope="session" path="/translation/updateMessage">
+      <forward name="forward" path="/translation/showAdvancedTranslation.do" redirect="true" />
+    </action>
+    <action name="advancedTranslationForm" type="org.digijava.module.translation.action.SaveAllMessages" scope="session" path="/translation/saveAllMessages">
+      <forward name="forward" path="/translation/showAdvancedTranslation.do" redirect="true" />
+    </action>
+    <action name="advancedTranslationForm" type="org.digijava.module.translation.action.ShowAddKey" scope="session" path="/translation/showAddKey">
+      <forward name="forward" path="/translation/showAdvancedTranslation.do" redirect="true" />
+    </action>
+    <action name="advancedTranslationForm" type="org.digijava.module.translation.action.AddKey" scope="session" path="/translation/addKey">
+      <forward name="forward" path="/translation/showAdvancedTranslation.do" redirect="true" />
+    </action>
+    <!-- administration -->
+    <action name="translationAdminForm" type="org.digijava.module.translation.action.ShowEditPermissions" scope="session" path="/translation/showEditPermissions">
+      <forward name="forward" path="/showLayout.do?layout=translationAdminLayout" />
+    </action>
+    <action name="translationAdminForm" type="org.digijava.module.translation.action.SearchUser" scope="session" path="/translation/searchUser">
+      <forward name="forward" path="/translation/showEditPermissions.do" redirect="true" />
+    </action>
+    <action name="translationPermissionsForm" type="org.digijava.module.translation.action.ShowGroupAdministration" scope="session" path="/translation/showGroupAdministration">
+      <forward name="forward" path="/showLayout.do?layout=translationPermLayout" />
+    </action>
+    <action name="translationPermissionsForm" type="org.digijava.module.translation.action.SaveGroupPermissions" scope="session" path="/translation/saveGroupPermissions">
+      <forward name="forward" path="/showLayout.do?layout=translationPermLayout" />
+    </action>
+    <action name="translationPermissionsForm" type="org.digijava.module.translation.action.ShowUserAdministration" scope="session" path="/translation/showUserAdministration">
+      <forward name="forward" path="/showLayout.do?layout=translationUserLayout" />
+    </action>
+    <action name="translationPermissionsForm" type="org.digijava.module.translation.action.SaveUserPermissions" scope="session" path="/translation/saveUserPermissions">
+      <forward name="forward" path="/showLayout.do?layout=translationUserLayout" />
+    </action>
+    <action name="translationPermissionsForm" type="org.digijava.module.translation.action.AddPermission" scope="session" path="/translation/addPermission">
+      <forward name="forwardGroup" path="/showLayout.do?layout=translationPermLayout" />
+      <forward name="forwardUser" path="/showLayout.do?layout=translationUserLayout" />
+    </action>
+    <action name="translationPermissionsForm" type="org.digijava.module.translation.action.DeletePermission" scope="session" path="/translation/deletePermission">
+      <forward name="forwardGroup" path="/showLayout.do?layout=translationPermLayout" />
+      <forward name="forwardUser" path="/showLayout.do?layout=translationUserLayout" />
+    </action>
+    <!--translator interface-->
+    <action name="translatorForm" type="org.digijava.module.translation.action.ShowTranslate" scope="request" path="/translation/showTranslate">
+      <forward name="forward" path="/showLayout.do?layout=translatorLayout" />
+    </action>
+    <action name="translatorForm" type="org.digijava.module.translation.action.SaveTranslation" scope="request" input="/showLayout.do?layout=translatorLayout" path="/translation/saveTranslation">
+      <forward name="forward" path="/translation/showTranslate" />
+    </action>
+    <action name="importExportForm" type="org.digijava.module.translation.action.ImportExportTranslations" scope="request" path="/translation/importexport">
+      <forward name="forward" path="/showLayout.do?layout=importExportLayout" />
+    </action>
+    <action name="translationCleanupForm" type="org.digijava.module.translation.action.TranslationCleanupManager" scope="session" path="/translation/msgCleanupManager">
+      <forward name="forward" path="/showLayout.do?layout=translationCleanupLayout" />
+    </action>
+
+    <!-- Content translation export/import  -->
+    <action name="contentTrnImportExportForm" type="org.digijava.module.translation.action.ContentTrnImportExport" scope="request" path="/translation/contentTrnImportExport" parameter="action">
+      <forward name="forward" path="/showLayout.do?layout=contentTrnImportExportLayout" />
+      <forward name="forwardExport" path="/showLayout.do?layout=contentTrnExportLayout" />
+      <forward name="forwardImport" path="/showLayout.do?layout=contentTrnImportLayout" />
+    </action>
+
+  </action-mappings>
+</struts-config>

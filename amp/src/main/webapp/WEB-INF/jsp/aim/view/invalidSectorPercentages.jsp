@@ -21,10 +21,10 @@ a.itr:hover {
 .itr {
 	position: relative;
 	text-decoration: none;
-	
+
 }
 
-.itr:hover .bpop 
+.itr:hover .bpop
 {
 	display: block;
 	position: absolute;
@@ -32,7 +32,7 @@ a.itr:hover {
 	background-color: white;
 	padding: 3px 5px 4px 5px;
 	border: 1px Silver solid;
-	
+
 	left: 8em;
 	top: 0.6em;
 }
@@ -47,7 +47,7 @@ a.itr:hover {
 </style>
 
 <script type="text/javascript">
-	function saveAsDraft(actId){		
+	function saveAsDraft(actId){
 		<digi:context name="save" property="context/module/moduleinstance/invalidSectorPercentages.do" />
 	    document.invalidDataList.action = "<%= save %>?saveDraft=true&actId="+actId;
 	    document.invalidDataList.submit();
@@ -79,7 +79,7 @@ a.itr:hover {
                 <digi:trn>Invalid Sector Percentages</digi:trn>
               </span>
             </td>
-          </tr>         
+          </tr>
           <tr>
             <td noWrap width="100%" vAlign="top">
               <table width="100%" cellspacing="0" cellSpacing="0" border="0">
@@ -91,13 +91,13 @@ a.itr:hover {
                           <table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" border="0">
                             <tr>
                               <td>
-                                <table style="font-family:verdana;font-size:11px;" border="0" width="100%">                                 
+                                <table style="font-family:verdana;font-size:11px;" border="0" width="100%">
                                   <tr>
                                     <td colspan="6" width="100%" align="center">
                                       <table width="100%" align="center"  border="0" style="font-family:verdana;font-size:11px;">
                                         <tr bgColor="#d7eafd">
                                           <td width="60%" nowrap="nowrap">
-                                              <b><digi:trn>Activity Name</digi:trn></b>                                                                                        
+                                              <b><digi:trn>Activity Name</digi:trn></b>
                                           </td>
                                           <td width="10%" align="left" nowrap="nowrap">
                                               <b><digi:trn>AMP ID</digi:trn></b>
@@ -134,7 +134,7 @@ a.itr:hover {
 											  </td>
 											  <c:set var="draftTrn"><digi:trn>Save as Draft</digi:trn></c:set>
 											  <td width="5%">
-											  	<a href="javascript:saveAsDraft(${act.activityId})"><digi:img border="0" src="/repository/aim/images/draft.png" title="${draftTrn}"/> </a>
+											  	<a href="javascript:saveAsDraft(${act.activityId})"><digi:img border="0" src="WEB-INF/jsp/aim/images/draft.png" title="${draftTrn}"/> </a>
 											  </td>
 				                           </tr>
                                           </c:forEach>

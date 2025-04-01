@@ -35,10 +35,10 @@ function showUser(email){
 	</tr>
 	<tr>
 	<td>
-	
+
 									<c:set var="selectedTab" value="7" scope="request"/>
 									<c:set var="selectedSubTab" value="0" scope="request"/>
-										
+
 									<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 										<tr>
 											<td>
@@ -46,7 +46,7 @@ function showUser(email){
 													<span class="sec_name">
 														<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
 													</span>
-													
+
 													<span class="breadcrump_sep">|</span>
 													<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
 														<digi:trn key="aim:portfolio">Portfolio</digi:trn>
@@ -59,15 +59,15 @@ function showUser(email){
 													<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></digi:link>
 													<span class="breadcrump_sep"><b>»</b></span>
 													<span class="bread_sel"><digi:trn key="aim:AuditTrialList">Audit Trial List</digi:trn></span>
-												</div>						
+												</div>
 											</td>
 										</tr>
 										<tr>
 											<td valign="top">
-												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">	
-										
+												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+
 									<jsp:include page="teamSetupMenu.jsp"  />
-										
+
 
 							<table class="inside" width="970" cellpadding="0" cellspacing="0">
 								<tr>
@@ -77,14 +77,14 @@ function showUser(email){
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=nameasc" styleClass="l_sm">
 													<digi:trn key="aim:name">Name</digi:trn>
                                                     <c:if test="${aimTeamAuditListForm.sortBy=='namedesc'}">
-                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                        <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/up.gif" />
                                                     </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='nameasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=namedesc" styleClass="l_sm">
 													<digi:trn key="aim:name">Name</digi:trn>
-                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+                                                    <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/down.gif" />
 												</digi:link>
 							  			</c:if>
 							  		</b>
@@ -95,14 +95,14 @@ function showUser(email){
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=typeasc" styleClass="l_sm">
 													<digi:trn key="aim:objectType">Object Type</digi:trn>
                                                     <c:if test="${aimTeamAuditListForm.sortBy=='typedesc'}">
-                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                        <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/up.gif" />
                                                     </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='typeasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=typedesc" styleClass="l_sm">
 													<digi:trn key="aim:objectType">Object Type</digi:trn>
-                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+                                                    <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/down.gif" />
 												</digi:link>
 											</c:if>
 										</b>
@@ -113,14 +113,14 @@ function showUser(email){
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=teamasc" styleClass="l_sm">
 													<digi:trn key="aim:teamName">Team Name</digi:trn>
                                                     <c:if test="${aimTeamAuditListForm.sortBy=='teamdesc'}">
-                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                        <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/up.gif" />
                                                     </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='teamasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=teamdesc" styleClass="l_sm">
 													<digi:trn key="aim:teamName">Team Name</digi:trn>
-                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+                                                    <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/down.gif" />
 												</digi:link>
 											</c:if>
 										</b>
@@ -131,14 +131,14 @@ function showUser(email){
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=authorasc" styleClass="l_sm">
 													<digi:trn key="aim:authorName">Author Name</digi:trn>
                                                     <c:if test="${aimTeamAuditListForm.sortBy=='authordesc'}">
-                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                        <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/up.gif" />
                                                     </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='authorasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=authordesc" styleClass="l_sm">
 													<digi:trn key="aim:authorName">Author Name</digi:trn>
-                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+                                                    <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/down.gif" />
 												</digi:link>
 											</c:if>
 										</b>
@@ -149,14 +149,14 @@ function showUser(email){
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=creationdateasc" styleClass="l_sm">
 													<digi:trn key="aim:creationDateLogger">Creation Date</digi:trn>
                                                     <c:if test="${aimTeamAuditListForm.sortBy=='creationdatedesc'}">
-                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                        <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/up.gif" />
                                                     </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='creationdateasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=creationdatedesc" styleClass="l_sm">
 													<digi:trn key="aim:creationDateLogger">Creation Date</digi:trn>
-                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+                                                    <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/down.gif" />
                                                 </digi:link>
 								  		</c:if>
 							  		</b>
@@ -167,14 +167,14 @@ function showUser(email){
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=editorasc" styleClass="l_sm">
 													<digi:trn key="aim:editorName">Editor Name</digi:trn>
                                                     <c:if test="${aimTeamAuditListForm.sortBy=='editordesc'}">
-                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                        <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/up.gif" />
                                                     </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='editorasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=editordesc" styleClass="l_sm">
 													<digi:trn key="aim:editorName">Editor Name</digi:trn>
-                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+                                                    <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/down.gif" />
 												</digi:link>
 											</c:if>
 										</b>
@@ -185,14 +185,14 @@ function showUser(email){
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=changedateasc" styleClass="l_sm">
 													<digi:trn key="aim:changeDate">Change Date</digi:trn>
                                                     <c:if test="${aimTeamAuditListForm.sortBy=='changedatedesc'}">
-                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                        <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/up.gif" />
                                                     </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='changedateasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=changedatedesc" styleClass="l_sm">
 													<digi:trn key="aim:changeDate">Change Date</digi:trn>
-                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+                                                    <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/down.gif" />
 												</digi:link>
 											</c:if>
 										</b>
@@ -203,21 +203,21 @@ function showUser(email){
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=actionasc" styleClass="l_sm">
 													<digi:trn key="aim:action">Action</digi:trn>
                                                     <c:if test="${aimTeamAuditListForm.sortBy=='actiondesc'}">
-                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                        <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/up.gif" />
                                                     </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='actionasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=actiondesc" styleClass="l_sm">
 													<digi:trn key="aim:action">Action</digi:trn>
-                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+                                                    <img id="activityColumnImg" src="WEB-INF/jsp/aim/images/down.gif" />
 												</digi:link>
 											</c:if>
 										</b>
 									</td>
 								</tr>
-								
-								
+
+
 								<logic:iterate name="aimTeamAuditListForm" property="logs" id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
 									<tr>
 										<td width="280" class="inside" title="${log.objectName}">
@@ -231,7 +231,7 @@ function showUser(email){
 											</c:choose>
 										</td>
 										<td class="inside" width="150" title="${log.objectTypeTrimmed}">
-											<bean:write name="log" property="objectTypeTrimmed"/>									
+											<bean:write name="log" property="objectTypeTrimmed"/>
 										</td>
 										<td class="inside" width="100" title="${log.teamName}">
 											<c:choose>
@@ -241,7 +241,7 @@ function showUser(email){
 												<c:otherwise>
 													<bean:write name="log" property="teamName"/>
 												</c:otherwise>
-											</c:choose>									
+											</c:choose>
 										</td>
 										<td class="inside" width="150">
 											<a href="javascript:showUser('<bean:write name="log" property="authorEmail"/>')" style="text-decoration: none" title="${log.authorName}" class="l_sm">
@@ -253,17 +253,17 @@ function showUser(email){
 														<bean:write name="log" property="authorName"/>
 													</c:otherwise>
 												</c:choose>
-											</a>								  
+											</a>
 										</td>
 										<td width="100" class="inside" title="${log.loggedDate}">
 											<bean:write name="log" property="sloggeddate"/>
 										</td>
-										
+
 										<td width="100" class="inside" title="${log.editorName}">
-											<bean:write name="log" property="editorName" />								  
+											<bean:write name="log" property="editorName" />
 										</td>
 										<td width="150" class="inside" title="${log.modifyDate}">
-											<bean:write name="log" property="smodifydate"/>								  
+											<bean:write name="log" property="smodifydate"/>
 										</td>
 										<td width="100" class="inside">
 											<logic:equal value="delete" property="action" name="log">
@@ -274,12 +274,12 @@ function showUser(email){
 											</logic:equal>
 											<logic:equal value="update" property="action" name="log">
 												<digi:trn key="admin:update">Update</digi:trn>
-											</logic:equal>								  
+											</logic:equal>
 										</td>
 									</tr>
 								</logic:iterate>
 							</table>
-							
+
 							<!-- Pagination -->
 							<div class="paging" style="font-size:11px;">
 							<c:if test="${aimTeamAuditListForm.currentPage > 1}">
@@ -302,24 +302,24 @@ function showUser(email){
 									<digi:trn key="aim:previous">Previous</digi:trn>
 								</digi:link>|
 							</c:if>
-							
-							
+
+
 							<c:set var="length" value="${aimTeamAuditListForm.pagesToShow}"></c:set>
 							<c:set var="start" value="${aimTeamAuditListForm.offset}"/>
-							<logic:iterate name="aimTeamAuditListForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="${length}">	
+							<logic:iterate name="aimTeamAuditListForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="${length}">
 								<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 								<c:set target="${urlParams1}" property="sortBy" value="${aimTeamAuditListForm.sortBy}" />
 								<c:set target="${urlParams1}" property="page"><%=pages%></c:set>
 								<c:if test="${aimTeamAuditListForm.currentPage == pages && aimTeamAuditListForm.pagesSize > 1}">
 									<b class="paging_sel"><%=pages%></b>
-									|						
+									|
 								</c:if>
 								<c:if test="${aimTeamAuditListForm.currentPage != pages && aimTeamAuditListForm.pagesSize > 1}">
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
 									</c:set>
 									<digi:link href="/teamAuditList.do" name="urlParams1" title="${translation}" styleClass="l_sm">
-									<%=pages%>							
+									<%=pages%>
 									</digi:link>
 									|
 								</c:if>
@@ -328,14 +328,14 @@ function showUser(email){
 								<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap" />
 								<c:set target="${urlParamsNext}" property="page" value="${aimTeamAuditListForm.currentPage+1}"/>
 								<c:set target="${urlParamsNext}" property="sortBy" value="${aimTeamAuditListForm.sortBy}" />
-								<c:set var="translation"> 
+								<c:set var="translation">
 								<digi:trn key="aim:nextpage">Next Page</digi:trn>
 								</c:set>
 								<digi:link  href="/teamAuditList.do" style="text-decoration=none" name="urlParamsNext" title="${translation}" styleClass="l_sm">
 									<digi:trn key="aim:next">Next</digi:trn>
 								</digi:link>
 								<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap" />|
-								
+
 								<c:if test="${aimTeamAuditListForm.pagesSize > aimTeamAuditListForm.pagesToShow}">
 									<c:set target="${urlParamsLast}" property="page" value="${aimTeamAuditListForm.pagesSize}" />
 									<c:set target="${urlParamsLast}" property="sortBy" value="${aimTeamAuditListForm.sortBy}" />
@@ -349,26 +349,26 @@ function showUser(email){
 									<digi:link href="/teamAuditList.do" style="text-decoration=none" name="urlParamsLast" title="${translation}" styleClass="l_sm">
 										&gt;&gt;
 									</digi:link>
-								</c:if> 
+								</c:if>
 							</c:if>
-							<c:out value="${aimTeamAuditListForm.currentPage}"/>&nbsp; 
+							<c:out value="${aimTeamAuditListForm.currentPage}"/>&nbsp;
 							<digi:trn key="aim:of">
 								of
 							</digi:trn>&nbsp;
-							
+
 							<c:out value="${aimTeamAuditListForm.pagesSize}"/>
-							
+
 							</div>
 							<!-- end of Pagination -->
-			
-										
-										
+
+
+
 						</div>
-						</div>											
+						</div>
 					</td>
 				</tr>
-			</table>	
-								
+			</table>
+
 		</td>
 	</tr>
 </table>

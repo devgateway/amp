@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<config>
+<secondary-pages>
+<!-- document manager  -->
+	<page name="viewDocumentManager" page="viewDocumentManager" title =" - Content Repository " />
+	<page name="amp_getDocumentList" page="getDocumentList"/>
+	<page name="amp_getDocumentVersionList" page="getDocumentVersionList"/>
+	<page name="amp_selectDocumentDM" page="selectDocumentDM"/>
+	<page name="documentManagerJsHelper" page="documentManagerJsHelper"/>
+	<page name="documentManagerDivHelper" page="documentManagerDivHelper"/>
+	<page name="addDocumentDM" page="addDocumentDM"/>
+	<page name="viewPublicDocuments" page="viewPublicDocuments"/>
+	<page name="nondhtmlAddDocument" page="nondhtmlAddDocument"/>
+	<page name="amp_deleteDocumentResponse" page="deleteDocumentResponse"/>
+	<page name="cr_docToOrg" page="docToOrg" title= "" />
+	<page name="templateDocsManager" page="templateDocsManager" title =" - Template Documents Manager" />
+	<page name="addEditTempDoc" page="addEditTempDoc" title=" - Create/Edit template document"/>
+	<page name="tempFieldPreDefinedValues" page="tempFieldPreDefinedValues"/>
+	<page name="docFromTemplate" page="docFromTemplate"/>
+	<page name="cr_labelManager" page="labelmanager/labelManager" title=" - Label Manager" />
+	<page name="cr_docTabManager" page="doctabmanager/docTabManager" title=" - Public Document Manager" />
+	<page name="cr_publicResources" page="doctabmanager/publicResources" title=" - Public Resources" />
+</secondary-pages>
+
+
+</config>

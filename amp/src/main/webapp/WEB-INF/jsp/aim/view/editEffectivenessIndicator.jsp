@@ -12,9 +12,9 @@
 
 <%@ page import="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator" %>
 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
 <script type="text/javascript" src='<digi:file src="module/aim/scripts/table_utils.js"/>'>.</script>
-<script type="text/javascript" src="/repository/aim/view/multilingual/multilingual_scripts.js"></script>
+<script type="text/javascript" src="WEB-INF/jsp/aim/view/multilingual/multilingual_scripts.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 <script type="text/javascript">
     var optionsTableCounter = 0;
@@ -61,9 +61,9 @@
                 <digi:trn>Indicator Name</digi:trn><font color="red">*</font>:
             </td>
             <td>
-                <jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
+                <jsp:include page="WEB-INF/jsp/aim/view/multilingual/multilingualFieldEntry.jsp">
 					<jsp:param name="attr_name" value="multilingual_aid_name" />
-				</jsp:include>         
+				</jsp:include>
             </td>
 
 
@@ -81,9 +81,9 @@
                 <digi:trn>Indicator Tooltip</digi:trn>:
             </td>
             <td>
-            	<jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
+            	<jsp:include page="WEB-INF/jsp/aim/view/multilingual/multilingualFieldEntry.jsp">
 							<jsp:param name="attr_name" value="multilingual_aid_tooltip" />
-				</jsp:include>         
+				</jsp:include>
             </td>
 
             <td>
@@ -219,14 +219,14 @@
 	        alert('<digi:trn jsFriendly="true">Please enter name for Indicator.</digi:trn>');
 	        return false;
 	    }
-	    
+
 	    var indicatorType = document.aimAddOrgForm.indicatorType.value;
         if (ampOrgTypeId == '-1' || ampOrgTypeId == null) {
             alert('<digi:trn  jsFriendly="true">Please Select Indicator Type.</digi:trn>');
             document.aimAddOrgForm.ampOrgTypeId.focus();
             return false;
         }
-	    
+
 	    return true;
     }
 

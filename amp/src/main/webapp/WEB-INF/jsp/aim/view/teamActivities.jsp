@@ -63,22 +63,22 @@
 	}
 
 	function sortMe(val) {
-		
+
 		<c:set var="unarchivedTab"><%=GetTeamActivities.UNARCHIVED_SUB_TAB %></c:set>
 		<c:set var="archivedTab"><%=GetTeamActivities.ARCHIVED_SUB_TAB %></c:set>
 		<c:if test="${selectedSubTab==unarchivedTab}">
-		     var archiveselected =false ;	
+		     var archiveselected =false ;
 	     </c:if>
 	     <c:if test="${selectedSubTab==archivedTab}">
-	     var archiveselected =true ;	
+	     var archiveselected =true ;
      </c:if>
-			
+
 		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do" />
 			 url = "<%= sel %>" ;
            // url = '/aim/teamActivityList.do~showArchivedActivities=false~dest=teamLead~tId=-1~subtab=0';
-           if (typeof archiveselected != 'undefined') 
+           if (typeof archiveselected != 'undefined')
                url = url +'~showArchivedActivities='+archiveselected;
-             
+
 			var sval = document.aimTeamActivitiesForm.sort.value;
 			var soval = document.aimTeamActivitiesForm.sortOrder.value;
 
@@ -114,7 +114,7 @@
 				document.aimTeamActivitiesForm.submit();
 			}
 		}
-		
+
 	}
 
 	function page(val) {
@@ -122,19 +122,19 @@
 		<c:set var="unarchivedTab"><%=GetTeamActivities.UNARCHIVED_SUB_TAB %></c:set>
 		<c:set var="archivedTab"><%=GetTeamActivities.ARCHIVED_SUB_TAB %></c:set>
 		<c:if test="${selectedSubTab==unarchivedTab}">
-		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do~showArchivedActivities=false~dest=teamLead~tId=-1~subtab=0" />	
+		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do~showArchivedActivities=false~dest=teamLead~tId=-1~subtab=0" />
     	</c:if>
     	<c:if test="${selectedSubTab==archivedTab}">
-		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do~showArchivedActivities=true~dest=teamLead~tId=-1~subtab=0" />	
+		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do~showArchivedActivities=true~dest=teamLead~tId=-1~subtab=0" />
     	</c:if>
 			url = "<%= sel %>?page=" + val ;
 			document.aimTeamActivitiesForm.action = url;
 			document.aimTeamActivitiesForm.submit();
 	}
-	
-	
+
+
 	function resetSearch() {
-		<digi:context name="searchOrg" property="context/module/moduleinstance/teamActivityList.do~dest=teamLead~tId=-1~subtab=0"/>     
+		<digi:context name="searchOrg" property="context/module/moduleinstance/teamActivityList.do~dest=teamLead~tId=-1~subtab=0"/>
 		url = "<%= searchOrg %>?reset=true";
 	     document.aimTeamActivitiesForm.action = url;
 	     document.aimTeamActivitiesForm.submit();
@@ -143,7 +143,7 @@
 	}
 
 	function searchActivity(teamId) {
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/teamActivityList.do~dest=teamLead~tId=-1~subtab=0"/>			 
+			 <digi:context name="searchOrg" property="context/module/moduleinstance/teamActivityList.do~dest=teamLead~tId=-1~subtab=0"/>
 		     url = "<%= searchOrg %>";
 		     document.aimTeamActivitiesForm.action = url;
 		     document.aimTeamActivitiesForm.submit();
@@ -170,7 +170,7 @@
 <tr><td>
 
 									<c:set var="selectedTab" value="2" scope="request"/>
-										
+
 									<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 										<tr>
 											<td>
@@ -178,7 +178,7 @@
 													<span class="sec_name">
 														<digi:trn key="aim:activityListinWorkspace">List of Activities in the Workspace</digi:trn>
 													</span>
-													
+
 													<span class="breadcrump_sep">|</span>
 													<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
 														<digi:trn key="aim:portfolio">Portfolio</digi:trn>
@@ -196,12 +196,12 @@
 										</tr>
 										<tr>
 											<td valign="top">
-												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">	
+												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 									<c:if test="${selectedSubTab==null}">
 										<c:set var="selectedSubTab" value="0" scope="request"/>
-									</c:if>	
+									</c:if>
 									<jsp:include page="teamSetupMenu.jsp"  />
-									
+
 									<table class="inside normal" width="970" cellpadding="0" cellspacing="0" style="border:none;">
 										<tr>
 											<td>
@@ -229,7 +229,7 @@
 															</c:set>
 															<input type="button" value="${trnResetBtn}" class="dr-menu" onclick="return resetSearch()">
 														</td>
-														<td>					
+														<td>
 															<c:set var="trnGoBtn">
 																<digi:trn> GO </digi:trn>
 															</c:set>
@@ -254,12 +254,12 @@
 									    		<a  style="color:black" href="javascript:sortMe('activity')" title="Click here to sort by Activity Details">
 														<b><digi:trn key="aim:activityListinWorkspace">List of Activities in the Workspace</digi:trn></b>
 													<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='activity' && aimTeamActivitiesForm.sortOrder=='asc'}">
-														<img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+														<img id="activityColumnImg" src="WEB-INF/jsp/aim/images/up.gif" />
 													</c:if>
 													<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='activity' && aimTeamActivitiesForm.sortOrder=='desc'}">
-														<img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+														<img id="activityColumnImg" src="WEB-INF/jsp/aim/images/down.gif" />
 													</c:if>
-												</a>												
+												</a>
 									    	</b>
 									    </td>
 									    <td width="20%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="border:none;" >
@@ -267,16 +267,16 @@
 									    		<a  style="color:black" href="javascript:sortMe('donor')" title="Click here to sort by Donors">
 														<b><digi:trn key="aim:donors">Donors</digi:trn></b>
 														<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='donor' && aimTeamActivitiesForm.sortOrder=='asc'}">
-															<img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+															<img id="activityColumnImg" src="WEB-INF/jsp/aim/images/up.gif" />
 														</c:if>
 														<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='donor' && aimTeamActivitiesForm.sortOrder=='desc'}">
-															<img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+															<img id="activityColumnImg" src="WEB-INF/jsp/aim/images/down.gif" />
 														</c:if>
 													</a>
 									    	</b>
 									    </td>
 										</tr>
-										
+
 										<logic:empty name="aimTeamActivitiesForm" property="activities">
 											<tr>
 												<td class="inside1" align="center" colspan="4">
@@ -284,7 +284,7 @@
 												</td>
 											</tr>
 										</logic:empty>
-										
+
 										<logic:notEmpty name="aimTeamActivitiesForm" property="activities">
 											<logic:iterate name="aimTeamActivitiesForm" property="activities" id="activities">
 												<tr>
@@ -315,15 +315,15 @@
 														<bean:write name="activities" property="donors" />
 													</td>
 												</tr>
-											</logic:iterate>	
-											
+											</logic:iterate>
+
 										</logic:notEmpty>
                                                 </tr>
                                             </table>
                                         </td>
-									  	
+
 									</table>
-									
+
 									<!-- Pagination -->
 									<logic:notEmpty name="aimTeamActivitiesForm" property="pages">
 										<div class="paging" style="font-size:11px;">
@@ -346,8 +346,8 @@
 											</div>
 										</logic:notEmpty>
 										<!-- end of Pagination -->
-									
-									
+
+
 									<br>
 								<logic:notEmpty name="aimTeamActivitiesForm"
 									property="activities">
@@ -385,12 +385,12 @@
 
 
 							</div>
-										</div>											
-												
+										</div>
+
 											</td>
 										</tr>
-									</table>										
-										
+									</table>
+
 		</td>
 	</tr>
 </table>

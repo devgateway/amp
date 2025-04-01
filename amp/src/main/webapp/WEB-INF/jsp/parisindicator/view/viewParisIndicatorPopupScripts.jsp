@@ -5,27 +5,27 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<%@ include file="/repository/aim/view/scripts/newCalendar.jsp"%>
+<%@ include file="WEB-INF/jsp/aim/view/scripts/newCalendar.jsp"%>
 <link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>" />
-	
+
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
-	
 
-	
+
+
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" >.</script>
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportManager.js'/>" >.</script>
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/fundingGroups.js'/>" >.</script>
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/saving.js'/>" >.</script>
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" >.</script>
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
-	<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>	
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > .</script>
-	
+
 
 
 
@@ -48,17 +48,17 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 
-<link rel="stylesheet" href="/repository/aim/view/css/css_dhtmlsuite/modal-message.css" />
+<link rel="stylesheet" href="WEB-INF/jsp/aim/view/css/css_dhtmlsuite/modal-message.css" />
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
 
 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/treeview.css" />
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/fonts-min.css" />
- 
+
  <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
     <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/treeview/treeview-min.js"></script>
-    
+
 
 <script type="text/javascript">
 	messageObj = new DHTMLSuite.modalMessage(); // We only create one object of this class
@@ -164,7 +164,7 @@
 
 <!-- END - For DHTML Tab View of Filters -->
 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
 <script type="text/javascript">
@@ -263,17 +263,17 @@
 		 });
 		 if(selectedArray.length>0)
 		 txtSelectedValuesObj.value = selectedArray;
-		
+
 	}
-	
-	
+
+
 	function resetPIFilters() {
 		 $("input[name='selectedDonors']:checked").attr('checked', false);
 		 $("input[name='selectedDonorGroups']:checked").attr('checked', false);
 		 $("input[name='selectedStatuses']:checked").attr('checked', false);
 		 $("input[name='selectedFinancingIstruments']:checked").attr('checked', false);
 		 $("input[name='selectedSectors']:checked").attr('checked', false);
-		  var filterForm = document.getElementsByName("parisIndicatorForm")[0]; 
+		  var filterForm = document.getElementsByName("parisIndicatorForm")[0];
 		  var selectedArray = new Array();
  			filterForm.selectedDonors.value= selectedArray;
  			filterForm.selectedDonorGroups.value= selectedArray;
@@ -291,11 +291,11 @@
 	}
 	function showFilterDiv(divId,searchId){
 		var divEl=document.getElementById(divId);
-		getSearchManagerInstanceById(searchId).setDiv(divEl); 
+		getSearchManagerInstanceById(searchId).setDiv(divEl);
 		$("div[id^='filter_']").hide();
 		$('#'+divId).show();
 	}
-	
+
 
 	function submitFilters() {
 		//alert('submitfilters');
@@ -304,34 +304,34 @@
         filterForm.selectedEndYear.value = document.getElementById("selectedEndYear").options[document.getElementById("selectedEndYear").selectedIndex].value;
         filterForm.selectedCalendar.value = document.getElementById("selectedCalendar").options[document.getElementById("selectedCalendar").selectedIndex].value;
         filterForm.selectedCurrency.value = document.getElementById("selectedCurrency").options[document.getElementById("selectedCurrency").selectedIndex].value;
-        
+
         //Donors
         var txtSelectedValuesObj = filterForm.selectedDonors;
         setSelectedValues(txtSelectedValuesObj,'selectedDonors');
-      
-       
+
+
 
         //groups
         var txtSelectedValuesObj = filterForm.selectedDonorGroups;
         setSelectedValues(txtSelectedValuesObj,'selectedDonorGroups');
-      
+
 
         //status
         var txtSelectedValuesObj = filterForm.selectedStatuses;
         setSelectedValues(txtSelectedValuesObj,'selectedStatuses');
-  
+
 
         //instruments
         var txtSelectedValuesObj = filterForm.selectedFinancingIstruments;
         setSelectedValues(txtSelectedValuesObj,'selectedFinancingIstruments');
- 
+
 
 
         //sectors
         var txtSelectedValuesObj = filterForm.selectedSectors;
         setSelectedValues(txtSelectedValuesObj,'selectedSectors');
 
-      
+
 
         //filterForm.selectedFinancingIstruments.value = document.getElementsByName("selectedFinancingIstruments")[0].value;
         filterForm.submit();

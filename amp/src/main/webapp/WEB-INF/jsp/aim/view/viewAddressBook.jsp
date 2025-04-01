@@ -134,9 +134,9 @@
 .autocompleteClass .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
 
 
-#myContainer .yui-ac-content { 
-    max-height:16em;overflow:auto;overflow-x:hidden; /* set scrolling */ 
-    _height:16em; /* ie6 */ 
+#myContainer .yui-ac-content {
+    max-height:16em;overflow:auto;overflow-x:hidden; /* set scrolling */
+    _height:16em; /* ie6 */
 }
 
 
@@ -148,7 +148,7 @@
 
 #myAutoComplete div {
 	padding: 0px;
-	margin: 0px; 
+	margin: 0px;
 }
 
 #myAutoComplete,
@@ -175,35 +175,35 @@
 
 </style>
 
-<!-- Individual YUI JS files --> 
+<!-- Individual YUI JS files -->
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
 
-	
+
 <script language="JavaScript">
 	var msgDataError = '<digi:trn jsFriendly="true">Data error</digi:trn>';
 	var msgLoading	 = '<digi:trn jsFriendly="true">Loading...</digi:trn>';
 	var noData 		 = '<digi:trn jsFriendly="true">No Records found</digi:trn>';
-	
+
 	YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
-		function initDynamicTable1() {	
-				
+		function initDynamicTable1() {
+
 		    YAHOO.example.XHR_JSON = new function() {
 
 		    	this.formatActions = function(elCell, oRecord, oColumn, sData) {
 		        	elCell.innerHTML =
 		        		"<a href=/aim/addressBook.do?actionType=editContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn jsFriendly="true">Click here to Edit Contact</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
-		            	"<a onclick='return confirmDelete()' href=/aim/addressBook.do?actionType=deleteContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn jsFriendly="true">Click here to Delete Contact</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>" 		        	
-			        	
-		        };		        
-		        
+		            	"<a onclick='return confirmDelete()' href=/aim/addressBook.do?actionType=deleteContact&contactId=" +oRecord.getData( 'ID' )+" title='<digi:trn jsFriendly="true">Click here to Delete Contact</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>"
+
+		        };
+
 		        var lastTimeStamp = new Date().getTime();
 
 		        this.myDataSource = new YAHOO.util.DataSource("/aim/addressBook.do?actionType=getContactsJSON&lastTimeStamp"+lastTimeStamp+"&");
@@ -214,9 +214,9 @@
 		            fields: ["ID","title","name","email","organizations","function","phones","faxes"],
 		            metaFields: {
 		            	totalRecords: "totalRecords" // Access to value in the server response
-		        	}    
-		        };        
-		        
+		        	}
+		        };
+
 		        var myColumnDefs = [
 		            {key:"title", label:"<digi:trn>Title</digi:trn>", sortable:true,className:"inside"},
 		            {key:"name", label:"<digi:trn>Name</digi:trn>", sortable:true,className:"inside"},
@@ -227,15 +227,15 @@
 		            {key:"faxes", label:"<digi:trn>Fax</digi:trn>", sortable:false,className:"inside"},
 		            {key:"actions", label:"<digi:trn>Actions</digi:trn>", width: 65, formatter:this.formatActions,className:"ignore"}
 		        ];
-		  
+
 		        var div = document.getElementById('errors');
-		
+
 		        var handleSuccess = function(o){
 		        	if(o.responseText != undefined){
 		        		o.argument.oArgs.liner_element.innerHTML=o.responseText;
 		        	}
 		        }
-		
+
 		        var handleFailure = function(o){
 		        	if(o.responseText != undefined){
 		        		div.innerHTML = "<li>Transaction id: " + o.tId + "</li>";
@@ -243,16 +243,16 @@
 		        		div.innerHTML += "<li>Status code message: " + o.statusText + "</li>";
 		        	}
 		        }
-		        // Create the Paginator 
-		        var myPaginator = new YAHOO.widget.Paginator({ 
+		        // Create the Paginator
+		        var myPaginator = new YAHOO.widget.Paginator({
 		        	rowsPerPage:10,
 		        	//totalRecords:document.getElementById("totalResults").value,
-		        	containers : ["dt-pag-nav","dt-pag-nav2"], 
-		        	template : "{CurrentPageReport}&nbsp;<span class='l_sm'><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}&nbsp;{FirstPageLink}{PageLinks}{LastPageLink}", 
-		        	pageReportTemplate		: "<span class='l_sm'><digi:trn>Showing items</digi:trn></span> <span class='txt_sm_b'>{startRecord} - {endRecord} <digi:trn>of</digi:trn> {totalRecords}</span>", 
+		        	containers : ["dt-pag-nav","dt-pag-nav2"],
+		        	template : "{CurrentPageReport}&nbsp;<span class='l_sm'><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}&nbsp;{FirstPageLink}{PageLinks}{LastPageLink}",
+		        	pageReportTemplate		: "<span class='l_sm'><digi:trn>Showing items</digi:trn></span> <span class='txt_sm_b'>{startRecord} - {endRecord} <digi:trn>of</digi:trn> {totalRecords}</span>",
 		        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
-		        	firstPageLinkLabel : 	"<digi:trn>first page</digi:trn>", 
-		        	previousPageLinkLabel : "<digi:trn>prev</digi:trn>", 
+		        	firstPageLinkLabel : 	"<digi:trn>first page</digi:trn>",
+		        	previousPageLinkLabel : "<digi:trn>prev</digi:trn>",
 		        	firstPageLinkClass : "yui-pg-first l_sm",
 		        	lastPageLinkClass: "yui-pg-last l_sm",
 		        	nextPageLinkClass: "yui-pg-next l_sm",
@@ -269,11 +269,11 @@
 		                else{
 		                	return page;
 		                }
-		                
+
 		            }
 
 		        });
-		         
+
 		        var myConfigs = {
 		            initialRequest: "sort=name&dir=asc&startIndex=0&results=10", // Initial request for first page of data
 		            dynamicData: true, // Enables dynamic server-driven data
@@ -284,27 +284,27 @@
 		            MSG_LOADING:msgLoading,
 		            MSG_EMPTY:noData
 		        };
-		    	 
+
 		        this.myDataTable = new YAHOO.widget.DataTable("dynamicdata", myColumnDefs, this.myDataSource, myConfigs);
-		        this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow); 
+		        this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow);
 		        this.myDataTable.subscribe("rowMouseoutEvent", this.myDataTable.onEventUnhighlightRow);
-		       
-		        
-		        this.myDataTable.selectRow(this.myDataTable.getTrEl(0)); 
-		        // Programmatically bring focus to the instance so arrow selection works immediately 
-		        this.myDataTable.focus(); 
-		
+
+
+		        this.myDataTable.selectRow(this.myDataTable.getTrEl(0));
+		        // Programmatically bring focus to the instance so arrow selection works immediately
+		        this.myDataTable.focus();
+
 		        // Update totalRecords on the fly with value from server
 		        this.myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
 		           oPayload.totalRecords = oResponse.meta.totalRecords;
 		           return oPayload;
 		       }
-		     
+
 
 				//further lines are for generating tooltips
-		        var showTimer,hideTimer;				
+		        var showTimer,hideTimer;
 		        var tt = new YAHOO.widget.Tooltip("myTooltip");
-				
+
 		        this.myDataTable.on('cellMouseoverEvent', function (oArgs) {
 					if (showTimer) {
 						window.clearTimeout(showTimer);
@@ -316,7 +316,7 @@
 					if (column.key == 'name' || column.key == 'email' || column.key == 'organizations' || column.key == 'phones' || column.key == 'faxes') {
 						var record = this.getRecord(target);
 						var tooltipText = record.getData(column.key);
-	
+
 
                         if(tooltipText!=null && tooltipText.length > 0){
                             var event=oArgs.event;
@@ -342,12 +342,12 @@
 									tt.hide();
 								},5000);
 							},500);
-								
+
 						}
-						
+
 					}
 				});
-				
+
 		        this.myDataTable.on('cellMouseoutEvent', function (oArgs) {
 					if (showTimer) {
 						window.clearTimeout(showTimer);
@@ -359,12 +359,12 @@
 					}
 					tt.hide();
 				});
-				       
-		       
+
+
 		    };
-	    
+
 		}
-		
+
 </script>
 
 
@@ -411,7 +411,7 @@
 
 
 
-	
+
 
 	// don't remove or change this line!!!
 	document.getElementsByTagName('body')[0].className='autocompleteClass';
@@ -420,15 +420,15 @@
 <div class="breadcrump">
 <div class="centering">
 <div class="breadcrump_cont">
-<span class="sec_name"><digi:trn>Address Book</digi:trn></span><span class="breadcrump_sep">|</span><a class="l_sm"><digi:trn>Tools</digi:trn></a><span class="breadcrump_sep"><b>»</b></span><span class="bread_sel"><digi:trn>Address Book</digi:trn></span></div>
+<span class="sec_name"><digi:trn>Address Book</digi:trn></span><span class="breadcrump_sep">|</span><a class="l_sm"><digi:trn>Tools</digi:trn></a><span class="breadcrump_sep"><b>ï¿½</b></span><span class="bread_sel"><digi:trn>Address Book</digi:trn></span></div>
 </div>
 </div>
-<!-- BREADCRUMP END --> 
-<table width="1000" align="center" border="0" cellpadding="0" cellspacing="0">	
+<!-- BREADCRUMP END -->
+<table width="1000" align="center" border="0" cellpadding="0" cellspacing="0">
 <tbody>
 <tr>
 <td valign="top" align="left">
-<div id="content" class="yui-skin-sam"> 
+<div id="content" class="yui-skin-sam">
 <div id="demo" class="yui-navset">
 <ul class="yui-nav">
 
@@ -444,11 +444,11 @@
 	<div title='<digi:trn jsFriendly="true">Add New Contact</digi:trn>'>
 		<digi:trn>Add New Contact</digi:trn>
 	</div>
-	</a>		
+	</a>
 	</li>
 </ul>
 <div class="yui-content" style="border: 1px solid rgb(208, 208, 208);">
-<jsp:include page="/repository/aim/view/exportTable.jsp" />
+<jsp:include page="WEB-INF/jsp/aim/view/exportTable.jsp" />
 <table>
 <tbody>
 <tr>
@@ -458,7 +458,7 @@
 								<table bgColor="#ffffff" align="center" cellPadding="1" cellSpacing="1" width="100%" valign="top">
 											<tr bgColor="#ffffff">
 												<td vAlign="top" width="100%">
-													
+
 															<!-- Table title -->
 															<div style="width:100%;">
 																<table width="100%">
@@ -468,16 +468,16 @@
 																		</td>
 																		<td align="left" width=300 style="padding-right:10px;">
 																			<div id="myAutoComplete">
-																				<html:text property="keyword" styleId="myInput" style="width:320px;font-size:100%; font-size:12px; border:1px solid #D0D0D0; background-color:#FFFFFF;"></html:text>																																								
-																		    	<div id="myContainer" style="width:315px;"></div>																		    	
-																		    	<html:hidden property="keyword" styleId="myHidden"/>																			   																			    	
+																				<html:text property="keyword" styleId="myInput" style="width:320px;font-size:100%; font-size:12px; border:1px solid #D0D0D0; background-color:#FFFFFF;"></html:text>
+																		    	<div id="myContainer" style="width:315px;"></div>
+																		    	<html:hidden property="keyword" styleId="myHidden"/>
 																		   	</div>
 																		</td>
 																		<td align="left" valign="top" width="30px">
 																			<c:set var="trn">
 																				<digi:trn>Find</digi:trn>
 																			</c:set>
-																			<input type="submit" value="${trn}"  class="buttonx_sm" onclick="clearCurrentAlpha()"/>																			
+																			<input type="submit" value="${trn}"  class="buttonx_sm" onclick="clearCurrentAlpha()"/>
 																		</td>
 																		<td valign="top" align="left">
 																			<c:set var="trnReset">
@@ -485,7 +485,7 @@
 																			</c:set>
 																			<input type="button" value="${trnReset}"  class="buttonx_sm" onclick="resetSearch()"/>
 																		</td>
-																		<td class="t_mid" valign="top">						
+																		<td class="t_mid" valign="top">
 																			<digi:trn>Go To : </digi:trn>
 																			<html:select property="currentAlpha" style="font-family:verdana;font-size:11px;" onchange="clearKeyword()" styleId="alphaDropdown">
 																				<c:if test="${not empty addressbookForm.currentAlpha && addressbookForm.currentAlpha!='viewAll'}">
@@ -510,11 +510,11 @@
 															<td>
                                                                 <div class='yui-skin-sam'>
                                                                 <div id="dt-pag-nav2"></div>
-									                            	<div id="dynamicdata" class="report"></div>                            	
+									                            	<div id="dynamicdata" class="report"></div>
 																	<div id="dt-pag-nav"></div>
 																	<div id="errors"></div>
                                                                     <div id="tooltipsCtx"></div>
-																</div>													
+																</div>
 															</td>
 														</tr>
 													</table>
@@ -530,7 +530,7 @@
 			</tr>
 		</tbody>
 </table>
-	
+
 
 
 
@@ -540,7 +540,7 @@
 	var myArray = [
 		<c:forEach var="contName" items="${addressbookForm.contactNames}">
 		 {name: "<c:out value='${contName}'/>"},
-		</c:forEach>     
+		</c:forEach>
 	];
 
 	YAHOO.example.ItemSelectHandler = function() {
@@ -548,11 +548,11 @@
 	    var oDS = new YAHOO.util.LocalDataSource(myArray);
 	    oDS.responseSchema = {fields : ["name"]};
 
-	    // Instantiate the AutoComplete	    
+	    // Instantiate the AutoComplete
 	    var oAC = new YAHOO.widget.AutoComplete("myInput", "myContainer", oDS);
 	    oAC.resultTypeList = false;
-	    
-	    
+
+
 	    // Define an event handler to populate a hidden form field
 	    // when an item gets selected
 	    var myHiddenField = YAHOO.util.Dom.get("myHidden");
@@ -560,17 +560,17 @@
 	        var myAC = aArgs[0]; // reference back to the AC instance
 	        var elLI = aArgs[1]; // reference to the selected LI element
 	        var oData = aArgs[2]; // object literal of selected item's result data
-	        
-	        // update hidden form field with the selected item's fullname	        
+
+	        // update hidden form field with the selected item's fullname
 	        myHiddenField.value = oData.name;
-	    };	   
-	    //oAC.itemSelectEvent.subscribe(myHandler);	    
+	    };
+	    //oAC.itemSelectEvent.subscribe(myHandler);
 
 	    return {
 	        oDS: oDS
-	      
+
 	    };
-	}();    
+	}();
 
 </script>
 

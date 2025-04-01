@@ -12,13 +12,13 @@
 <script language="JavaScript">
 <!--
 	<digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>
-	
+
 	function deleteIndicator()
 	{
-		var translation = "<digi:trn key="aim:activitydelete">Do you want to delete the Activity</digi:trn>"; 
+		var translation = "<digi:trn key="aim:activitydelete">Do you want to delete the Activity</digi:trn>";
 		return confirm(translation);
 	}
-	
+
 	function deleteActivities(){
 		var chk=document.getElementsByTagName('input');
       	var tIds='';
@@ -28,38 +28,38 @@
           	}
       	}
      	if(tIds.length>0){
-     		if(deleteActs()){ 
+     		if(deleteActs()){
       			tIds=tIds.substring(0,tIds.length-1);
       			<digi:context name="deleteActs" property="context/module/moduleinstance/activityManager.do?action=delete"/>
   				document.aimActivityForm.action = "<%=deleteActs %>&tIds="+tIds+"";
 				document.aimActivityForm.target = "_self";
-				document.aimActivityForm.submit();	
+				document.aimActivityForm.submit();
  			}
  		}else{
- 			var translation = "<digi:trn key="aim:activityselectone">Please select at least one activity to be deleted</digi:trn>"; 
+ 			var translation = "<digi:trn key="aim:activityselectone">Please select at least one activity to be deleted</digi:trn>";
      		alert(translation);
      		return false;
  		}
-	}	
-	
+	}
+
 	function unFreezeActivities() {
 		var activityIds  = getSelectedIds();
 		if(activityIds.length > 0){
-     		if(confirm("<digi:trn jsFriendly='true'>Are you sure you want to unfreeze the selected activities?</digi:trn>")){ 
+     		if(confirm("<digi:trn jsFriendly='true'>Are you sure you want to unfreeze the selected activities?</digi:trn>")){
       			activityIds=activityIds.substring(0,activityIds.length-1);
       			<digi:context name="unfreezeAction" property="context/module/moduleinstance/activityManager.do?action=unfreeze"/>
   				document.aimActivityForm.action = "<%=unfreezeAction %>&activityIds="+activityIds+"";
 				document.aimActivityForm.target = "_self";
-				document.aimActivityForm.submit();				
+				document.aimActivityForm.submit();
  			}
  		}else{
  			var translation = "<digi:trn key="aim:activityselectonetounfreeze">Please select at least one activity to unfreeze</digi:trn>";
  			alert(translation);
      		return false;
  		}
-		
+
 	}
-	
+
 	function getSelectedIds() {
 		var chk=document.getElementsByTagName('input');
       	var tIds='';
@@ -68,26 +68,26 @@
          	 	tIds+=chk[i].value+',';
           	}
       	}
-      	
+
       	return tIds
 	}
-	
+
 	function deleteActs(){
-		var translation = "<digi:trn jsFriendly='true'>Are You Sure You Want To Remove Selected Activities?</digi:trn>"; 
+		var translation = "<digi:trn jsFriendly='true'>Are You Sure You Want To Remove Selected Activities?</digi:trn>";
 		return confirm(translation);
-	}	
-	
+	}
+
 	function load() {}
 
 	function unload() {}
-	
+
 	function searchActivity() {
 		if (document.aimActivityForm.tempNumResults.value == 0) {
 			  alert ("Invalid value at 'Number of results per page'");
 			  document.aimActivityForm.tempNumResults.focus();
 			  return false;
 		} else {
-			
+
 			 <digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>
 		     url = "<%= searchOrg %>?action=search";
 		     document.aimActivityForm.action = url;
@@ -130,7 +130,7 @@
 
 
 	function sortSubmit(val){
-		
+
 		var sval = document.aimActivityForm.sort.value;
 		var soval = document.aimActivityForm.sortOrder.value;
 
@@ -144,7 +144,7 @@
 		}
 		else
 			document.aimActivityForm.sortOrder.value = "asc";
-		
+
 		document.aimActivityForm.sort.value=val;
 
 		<digi:context name="sorting" property="context/module/moduleinstance/activityManager.do" />
@@ -153,9 +153,9 @@
 	    document.aimActivityForm.target="_self";
 	    document.aimActivityForm.submit();
 	}
-	
+
 	function resetSearch() {
-		<digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>     
+		<digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>
 		url = "<%= searchOrg %>?action=reset";
 	     document.aimActivityForm.action = url;
 	     document.aimActivityForm.submit();
@@ -168,10 +168,10 @@
 	        document.aimActivityForm.target="_blank";
 	        document.aimActivityForm.submit();
 	    }
-	
+
 	var enterBinder	= new EnterHitBinder('');
-	enterBinder.map(["keywordText"], "searchActBtn");	
-	
+	enterBinder.map(["keywordText"], "searchActBtn");
+
 -->
 </script>
 
@@ -194,7 +194,7 @@
 					<!-- <td height=33><span class=crumb>
 					<c:set var="clickToViewAdmin">
 					<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-					</c:set>	
+					</c:set>
 						<digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}" >
 						<digi:trn key="aim:AmpAdminHome">
 							Admin Home
@@ -218,19 +218,19 @@
 				</tr>-->
 			<tr>
 				<td align="left">
-				
+
             <table border="0" align="center" bgcolor="#f2f2f2" width=100%>
                 <tr>
 
 
                     <td noWrap align=center valign="middle">
                       	<jsp:include
-									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
+									page="WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" />
         </td>
     </tr>
 </table></td>
 			</tr>
-			
+
 				<tr>
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellpadding="1" cellspacing="1" border="0">
@@ -261,11 +261,11 @@
 															<digi:trn key="aim:resultsAll">All</digi:trn>
 														</html:option>
 													</html:select></td>
-													<td width="200"><digi:trn key="aim:dataFreezeFilter">Data Freeze Filter</digi:trn>&nbsp;													
+													<td width="200"><digi:trn key="aim:dataFreezeFilter">Data Freeze Filter</digi:trn>&nbsp;
 													<html:select property="dataFreezeFilter" styleClass="inp-text" onchange="return searchActivity()">
 	                                                    <html:option value="ALL"><digi:trn key="aim:all">All</digi:trn></html:option>
 	                                                    <html:option value="FROZEN"><digi:trn key="aim:frozen">Frozen</digi:trn></html:option>
-	                                                    <html:option value="UNFROZEN"><digi:trn key="aim:unfrozen">Unfrozen</digi:trn></html:option>	
+	                                                    <html:option value="UNFROZEN"><digi:trn key="aim:unfrozen">Unfrozen</digi:trn></html:option>
                                                     </html:select>
                                                     &nbsp;
 													</td>
@@ -289,11 +289,11 @@
 												<digi:trn key="aim:activityList">Activity List</digi:trn></b> <!-- end table title --></td>
 										</tr>
 										<tr>
-										
+
 											<td>
 											<table width="100%" cellspacing="0" cellpadding=0 valign="top"
 												align=left bgcolor="#ffffff">
-												
+
 												<logic:notEmpty name="aimActivityForm"
 													property="activityList">
 													<tr>
@@ -328,16 +328,16 @@
 	                                                                            </digi:trn>
 																</digi:link>  --%></b>
 																<c:if test="${aimActivityForm.sort=='activityName' && aimActivityForm.sortOrder=='asc'}">
-																		<img src="/repository/aim/images/up.gif" alt="up" />
+																		<img src="WEB-INF/jsp/aim/images/up.gif" alt="up" />
 																	</c:if>
 																<c:if test="${aimActivityForm.sort=='activityName' && aimActivityForm.sortOrder=='desc'}">
-																		<img src="/repository/aim/images/down.gif" alt="down" />
+																		<img src="WEB-INF/jsp/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</a>
 																</td>
 																<td width="200" class="inside" >
 																<a href="javascript:sortSubmit('activityTeamName')">
-																<b> 
+																<b>
 																<digi:trn key="aim:ActivityTeamName">
 	                                                                            	Team Name
 	                                                                            </digi:trn>
@@ -350,10 +350,10 @@
 	                                                                            </digi:trn>
 																</digi:link>  --%></b>
 																<c:if test="${aimActivityForm.sort=='activityTeamName' && aimActivityForm.sortOrder=='asc'}">
-																		<img src="/repository/aim/images/up.gif" alt="up" />
+																		<img src="WEB-INF/jsp/aim/images/up.gif" alt="up" />
 																	</c:if>
 																<c:if test="${aimActivityForm.sort=='activityTeamName' && aimActivityForm.sortOrder=='desc'}">
-																		<img src="/repository/aim/images/down.gif" alt="down" />
+																		<img src="WEB-INF/jsp/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</a>
 																</td>
@@ -363,7 +363,7 @@
 																<b>
 																<digi:trn key="aim:ActivityIdCol">
 	                                                                            	Activity Id
-	                                                                            </digi:trn> 
+	                                                                            </digi:trn>
 																<%-- <c:set
 																	target="${urlParamsSort}" property="sortByColumn"
 																	value="activityId" /> <digi:link
@@ -373,14 +373,14 @@
 	                                                                            </digi:trn>
 																</digi:link> --%> </b>
 																<c:if test="${aimActivityForm.sort=='activityId' && aimActivityForm.sortOrder=='asc'}">
-																		<img src="/repository/aim/images/up.gif" alt="up" />
+																		<img src="WEB-INF/jsp/aim/images/up.gif" alt="up" />
 																	</c:if>
 																<c:if test="${aimActivityForm.sort=='activityId' && aimActivityForm.sortOrder=='desc'}">
-																		<img src="/repository/aim/images/down.gif" alt="down" />
+																		<img src="WEB-INF/jsp/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</a>
 																</td>
-																
+
 																<td width="5%" align="left" class="inside ignore"><c:set
 																	var="trnSelectAll">
 																	<digi:trn>Select All</digi:trn>
@@ -400,7 +400,7 @@
 																			src="../ampTemplate/images/arrow_right.gif" border="0">
 																		</td>
 																	</logic:notEmpty>
-																	
+
 																	<logic:empty name="activities" property="team">
 																		<td width="9" height="15" class="inside ignore"><img
 																			src="../ampTemplate/images/start_button.gif" border="0">
@@ -417,7 +417,7 @@
 																	</logic:notEmpty></td>
 																	<td width="100" class="inside"><bean:write name="activities"
 																		property="ampId" /></td>
-																	
+
 
 																	<td align="left" width="12" class="inside ignore">
 																		<c:set var="actId">
@@ -446,31 +446,31 @@
 											<td bgColor=#ffffff height="20" align="left" style="padding-top:15px;"><img
 												src="../ampTemplate/images/start_button.gif" border="0">
 											- <b><digi:trn key="aim:unassignedactivities">Unassigned Activities</digi:trn></b>
-											
+
 											</td>
-											
+
 										</tr>
 										<tr>
-										<td>						
-										
+										<td>
+
 										<div class="legend-item">
 										  <div class="frozen"> </div>
 										  <div style= "float:left;"><digi:trn key="aim:frozen">Frozen</digi:trn></div>
 										</div>
-										
+
 										<div class="legend-item">
 										  <div class="unfrozen"> </div>
 										  <div style= "float:left;"><digi:trn key="aim:unfrozen">Unfrozen</digi:trn></div>
 										</div>
-										
+
 										</td>
 										</tr>
 										<tr>
-										<td> 
-									    
+										<td>
+
 										</td>
 										</tr>
-										
+
 										<tr bgcolor="#ffffff">
 											<td>&nbsp;</td>
 										</tr>
@@ -575,9 +575,9 @@
 															<digi:link href="/activityManager.do"
 																style="text-decoration=none" name="urlParamsLast"
 																title="${translation}">
-														&gt;&gt; 
+														&gt;&gt;
 													</digi:link>
-													</c:if> &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;  
+													</c:if> &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;
 													<digi:trn>Page</digi:trn>&nbsp;
 													<c:out value="${aimActivityForm.currentPage+1}"></c:out>&nbsp;
 													<digi:trn>of</digi:trn>&nbsp;

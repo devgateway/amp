@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<jsp:include page="/repository/aim/view/strongPassword.jsp"  />
+<jsp:include page="WEB-INF/jsp/aim/view/strongPassword.jsp"  />
 
 <digi:instance property="umViewEditUserForm" />
 <digi:context name="digiContext" property="context" />
@@ -30,7 +30,7 @@ function initialize() {
 	$('#notificationEmailEnabled').bind("click", function() {
         $('#notificationEmailRow') [this.checked ? "show" : "hide"]();
       });
-    
+
     $('#notificationEmailRow')[$('#notificationEmailEnabled').is(":checked") ? "show" : "hide"]();
 }
 
@@ -43,13 +43,13 @@ function cancel()
 }
 
 function goAction(value){
-	var submitForm=true;	
-	
+	var submitForm=true;
+
   	if(value!=null){
 	  	if(value=='save'){
-	  		submitForm=validateUserInfo();		  
+	  		submitForm=validateUserInfo();
 	  	}
-	  	
+
 	  	if (value == 'delOrgs'){
 	  		var msg='<digi:trn jsFriendly="true">Please select at least one organization ! </digi:trn>';
 	  		var assignedOrgs = $("input[id^='verOrg_']");
@@ -76,7 +76,7 @@ function goAction(value){
 	  	if(submitForm==true){
 	  		document.getElementById("event").value=value;
 	    	document.umViewEditUserForm.submit();
-	  	}    	
+	  	}
   	}
 }
 
@@ -113,11 +113,11 @@ function validateUserInfo(){
 	var country=document.getElementById("country").value;
 	var language = $('select[name="selectedLanguageCode"]').val();
 	var errorMsg='';
-	
+
 	if(!validateEmail(userMail)) {
 		return false;
 	}
-	
+
 	if(isInvalid(firstName)==1){
 		<c:set var="translation">
 		<digi:trn key="erroruregistration.FirstNameBlank">First Name is Blank or starts with an space</digi:trn>
@@ -146,13 +146,13 @@ function validateUserInfo(){
 		alert("${translation}");
     	return false;
     }
-	
+
 	if ($('#notificationEmailEnabled').is(":checked")) {
         if (!validateNotificationEmail(notificationEmail) || !validateMailWithNotificationMail(userMail, notificationEmail)) {
             return false;
         }
     }
-	
+
 	if(country=='-1'){
 		errorMsg='<digi:trn jsFriendly="true">Please Select Country</digi:trn>';
 		alert(errorMsg);
@@ -172,12 +172,12 @@ function validateUserInfo(){
 <digi:form action="/viewEditUser.do" method="post">
   <html:hidden name="umViewEditUserForm" property="event" styleId="event"/>
   <html:hidden name="umViewEditUserForm" property="id" styleId="id"/>
-  
+
   <table bgColor="#ffffff" cellPadding="5" cellSpacing="1" width="705" >
 	<tr>
 		<td class="r-dotted-lg" width="14">&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=752>
-        
+
 			<table cellPadding="5" cellSpacing="0" width="100%">
 				<tr>
 					<!-- Start Navigation -->
@@ -191,7 +191,7 @@ function validateUserInfo(){
 				            Admin Home
 				            </digi:trn>
 				          </digi:link>&nbsp;&gt;&nbsp;
-				
+
 				          <c:set var="translation">
 				            <digi:trn key="aim:clickToViewAllUsers">Click here to goto users manager</digi:trn>
 				          </c:set>
@@ -202,19 +202,19 @@ function validateUserInfo(){
 				          </digi:link>&nbsp;&gt;&nbsp;
 							 <span style="font-size: 11px;font-weight: bold; color:#000;">
 				          <digi:trn key="aim:viewEditUser:EditUser" >
-                         
+
 				          Edit user
 				          </digi:trn>
                       </span>
 					</td>
 					<!-- End navigation -->
 				</tr>
-			   
-    			
+
+
    				<tr>
 					<td noWrap width="100%" vAlign="top">
 					<table width="740" cellspacing="1" cellSpacing="1">
-                    
+
 					<tr>
 						<td noWrap width="616" vAlign="top">
 							<table bgColor="#ffffff" cellPadding="0" cellSpacing="0"  width="100%" style="border: 1px solid #DDDDDD;">
@@ -226,7 +226,7 @@ function validateUserInfo(){
 			          </digi:trn>
 			        </span>
                     <digi:errors/>
-					<jsp:include page="/repository/aim/view/strongPasswordRulesLegend.jsp"  />
+					<jsp:include page="WEB-INF/jsp/aim/view/strongPasswordRulesLegend.jsp"  />
 					        &nbsp;
 					        <br/>
 					        <logic:equal name="umViewEditUserForm" property="displaySuccessMessage" value="true" >
@@ -252,11 +252,11 @@ function validateUserInfo(){
 								<tr>
 									<td valign="top" colspan="3">
 										<table align="center"  cellPadding="0" cellSpacing="0" width="562" border="0" >
-                                        
+
 											<tr>
 												<td bgColor="#ffffff" class="box-border" width="560">
 													<table border="0" cellPadding="1" cellSpacing="1" class="box-border" width="100%">
-														
+
 														<!-- Page Logic -->
 														<tr>
 															<td width="100%" id="viewUserEditContainer">
@@ -268,7 +268,7 @@ function validateUserInfo(){
 																			<font color="red">*</font>
 																		</td>
 																	    <td width="380" height="30" colspan="2" >
-																	          <html:text name="umViewEditUserForm" property="firstNames" style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;" styleId="firstName"/>																	          
+																	          <html:text name="umViewEditUserForm" property="firstNames" style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;" styleId="firstName"/>
 																	    </td>
 																	</tr>
 																	<tr>
@@ -342,8 +342,8 @@ function validateUserInfo(){
                                                           			</tr>
                                                           			<tr>
 																		<td width="169" align="right" height="2">&nbsp;
-                                                                            
-																		</td>																		
+
+																		</td>
 																	</tr>
 																	<tr>
 																		<td width="169" align="right" height="30"style="font-size: 11px;
@@ -406,7 +406,7 @@ function validateUserInfo(){
 																	<tr>
 																		<td width="169" align="right" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
-                                                                 			<digi:trn key="aim:viewEditUser:selectOrgVeified">Select Organization To Add as Verified</digi:trn> 
+                                                                 			<digi:trn key="aim:viewEditUser:selectOrgVeified">Select Organization To Add as Verified</digi:trn>
 																		</td>
 																	    <td width="380" height="30" colspan="2">
                                                                     		<html:select name="umViewEditUserForm" property="assignedOrgId"  style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;">
@@ -422,15 +422,15 @@ function validateUserInfo(){
 																            </html:select>
 																		</td>
 																	</tr>
-																	
+
 																	<tr>
 																		<td width="169" align="right" height="30">&nbsp;</td>
 																		<td class="addUserButContainer">
 																		  <bean:define id="addOrganization"><digi:trn>Add Organization</digi:trn></bean:define>
-		 	 	 	 		                                                <input type="button" value="${addOrganization}" onclick="goAction('addOrg');" style="font-family:verdana; font-size:11px; min-width:60px; "/>                                                                                                                                             
+		 	 	 	 		                                                <input type="button" value="${addOrganization}" onclick="goAction('addOrg');" style="font-family:verdana; font-size:11px; min-width:60px; "/>
 	 	                                                                </td>
 																	</tr>
-																	
+
 																	<tr>
 																		<td width="169" align="right" height="30"style="font-size: 14px;
     font-weight: bold; color:#000;"><digi:trn key="aim:viewEditUser:verifiedAssignedOrgs">Verified Assigned Organisations</digi:trn></td>
@@ -445,20 +445,20 @@ function validateUserInfo(){
                     	                                                                 </td>
                         	                                                             <td align="left" width="49%">
                                                                                              <bean:write name="organisation" property="name" scope="page"/>
-                            	                                                         </td>                                                                                                   
+                            	                                                         </td>
                                 		                                             </tr>
                                         	                                     </logic:iterate>
                                             		                         </table>
                                                                         </td>
                                                                     </tr>
-                                                                    
+
                                                                     <tr>
 																		<td width="169" align="right" height="30">&nbsp;</td>
  	 	 	 															<td class="addUserButContainer">
 																			<logic:notEmpty name="umViewEditUserForm" property="assignedOrgs">
 																			    <bean:define id="removeOrganization"><digi:trn>Remove Organizations</digi:trn></bean:define>
 																				<input type="button" value="${removeOrganization}" onclick="goAction('delOrgs');" style="font-family:verdana; font-size:11px; min-width:60px; "/>
-																			</logic:notEmpty>                                                                                                                                                       
+																			</logic:notEmpty>
  	 	 	 															</td>
 																	</tr>
                                                           			<tr>
@@ -481,7 +481,7 @@ function validateUserInfo(){
 																             </html:select>
 																		</td>
 																	</tr>
-                                                                    
+
 																	<tr>
 																		<td width="169" align="right" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
@@ -540,7 +540,7 @@ function validateUserInfo(){
 																				</c:if>
 																			</td>
 																		</tr>
-																	</module:display>																	
+																	</module:display>
 																		<tr>
 																		<td width="169" align="right" height="30"style="font-size: 11px;font-weight: bold; color:#000;">
                                                                      		 <digi:trn key="um:nationalCoordinator">National Coordinator</digi:trn>
@@ -548,7 +548,7 @@ function validateUserInfo(){
 																	    <td width="380" height="30" colspan="2">
           																	<html:checkbox property="nationalCoordinator" style="margin: 5px" styleClass="inp-text"/>
 																		</td>
-																	</tr>																	
+																	</tr>
 																		<tr>
 																			<td align="right"  class="formCheckContainer">
 																				<digi:trn>Assign to Workspace</digi:trn>
@@ -579,7 +579,7 @@ function validateUserInfo(){
 																                <digi:trn jsFriendly="true">Save</digi:trn>
 																              </c:set>
 																              <input type="button" value="${translation}" onclick="goAction('save');" style="font-family:verdana; font-size:11px; min-width:60px; "/>
-																
+
 																              <c:set var="translation">
 																                <digi:trn jsFriendly="true">
 																                Cancel
@@ -587,7 +587,7 @@ function validateUserInfo(){
 																              </c:set>
 																              <input type="button" value="${translation}" onclick="cancel();" style="font-family:verdana; font-size:11px; min-width:60px; "/>
 																		</td>
-																	</tr>																	
+																	</tr>
 																	<tr>
 															            <td>&nbsp;</td>
 															          </tr>
@@ -642,7 +642,7 @@ function validateUserInfo(){
                                                               				<input type="button" value="${translation}" onclick="resetPasswordFields()" style="font-family:verdana;font-size:11px;"/></td>
 																		</td>
 																	</tr>
-																			
+
 																</table>
                                                                 <br/>
 															</td>

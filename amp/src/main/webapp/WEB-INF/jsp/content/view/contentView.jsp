@@ -15,10 +15,10 @@
     }
 
 	var labelText = [];
-	
+
     function attachFuncToThumbnail(index, pageCode) {
 		var idThumbnail = "displayThumbnail_" + index;
-		
+
         var lastTimeStamp = new Date().getTime();
         var url = '/content/displayThumbnail.do?index='+index+'&pageCode='+pageCode+'&labelText=true&timestamp='+lastTimeStamp;
         $.get(url, function(data) {
@@ -35,12 +35,12 @@
             }
             else
 			{
-				
+
                 $("#"+idThumbnail).click(function() {
                     downloadFile(index, pageCode);
                 });
             }
-            
+
             if(labelText[index] != null && labelText[index] != "null")
 			{
 				if (labelText[index].length > 0){
@@ -53,7 +53,7 @@
 				}
             }
         });
-        $("#"+idThumbnail).attr("style", "  ");	
+        $("#"+idThumbnail).attr("style", "  ");
     }
 
 </script>
@@ -65,7 +65,7 @@
 <c:set var="thumbnailCount" value="${fn:length(contentForm.contentThumbnails)}"/>
 
 
-<c:import url="/repository/content/view/layout_${contentLayout}.jsp">
+<c:import url="WEB-INF/jsp/content/view/layout_${contentLayout}.jsp">
 	<c:param name="htmlblock_1" value="${htmlblock_1}"/>
 	<c:param name="htmlblock_2" value="${htmlblock_2}"/>
 	<c:param name="pageCode" value="${pageCode}"/>

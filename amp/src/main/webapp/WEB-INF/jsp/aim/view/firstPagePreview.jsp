@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8"%> 
+<%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
@@ -14,7 +14,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
+<jsp:include page="WEB-INF/jsp/aim/view/teamPagesHeader.jsp"  />
 <%@include file="addThumbnailPanel.jsp" %>
 <digi:context name="displayThumbnail" property="context/aim/default/displayThumbnail.do" />
 <style type="text/css">
@@ -90,7 +90,7 @@ function validateAddThumbnail() {
 	document.getElementById('uploadThumbnailErrorHolderDiv').innerHTML	= msg;
 	if (msg.length == 0)
 			return true;
-	return false;	
+	return false;
 }
 
 
@@ -109,7 +109,7 @@ function deleteThumbnail(){
     	document.aimWelcomePageForm.action = document.aimWelcomePageForm.action+"?action=deleteThumbnail";
 		document.aimWelcomePageForm.target = "_self";
     	document.aimWelcomePageForm.submit();
-	} 
+	}
 }
 
    function downloadFile(placeholder) {
@@ -165,12 +165,12 @@ function deleteThumbnail(){
 <!--			        	<button type="button" class="dr-menu buton" onClick="showMyPanel(0, 'uploadThumbnailDiv'); ">-->
 					  		<a href="javascript:"  onClick=" configPanel(0); showMyPanel(0, 'uploadThumbnailDiv');">
 					  		<digi:trn key="uploadThumbnails">
-					 	    	       Upload Thumbnails   				
-					  		</digi:trn>            
+					 	    	       Upload Thumbnails
+					  		</digi:trn>
 <!--				    	</button>-->
 				    </td>
 				</tr>
-			</table>		
+			</table>
 
 			<div id="uploadThumbnailDiv" class="invisible-item">
 				<div align="center">
@@ -180,7 +180,7 @@ function deleteThumbnail(){
 						<tr id="tr_path_thumbnail">
 						<td><strong><digi:trn key="selectThumbnail">Select Thumbnail to upload:</digi:trn><font color="red"></font></strong></td>
 						<td>
-							<div class="fileinputs"> 
+							<div class="fileinputs">
 								<input id="thumbnail" name="thumbnail" type="file" class="file">
 							</div>
 						</td>
@@ -188,32 +188,32 @@ function deleteThumbnail(){
 						<tr id="tr_path_optional">
 						<td><strong><digi:trn>Select Optional File to upload:</digi:trn><font color="red"></font></strong></td>
 						<td>
-						<div class="fileinputs"> 
+						<div class="fileinputs">
 								<input id="optionalFile" name="optionalFile" type="file" class="file">
-								
+
 							</div>
 						</td>
 						</tr>
 						<tr>
-							<td> 
+							<td>
 								<strong><digi:trn key="firstPlaceholder">First Placeholder</digi:trn></strong>
 								<input name="placeholder" type="radio" value="1" checked="checked" />
 							</td>
-							<td> 
+							<td>
 								<strong><digi:trn key="secondPlaceholder">Second Placeholder</digi:trn></strong>
 								<input name="placeholder" type="radio" value="2" />
 							</td>
 						</tr>
-						
+
 						<tr>
-							<td> 
+							<td>
 								<strong><digi:trn key="selectOptionalFile">Thumbnail Label:</digi:trn><font color="red"></font></strong>
 							</td>
-							<td colspan="2"> 
+							<td colspan="2">
 								<input name="thumbnailLabel" type="text" style="width: 300"/>
 							</td>
 						</tr>
-						
+
 						<tr align="center">
 							<td colspan="3">
 								<table>
@@ -224,7 +224,7 @@ function deleteThumbnail(){
 										</td>
 										<td align="center">
 											&nbsp;
-											<button class="dr-menu buton" type="button" style="padding-bottom: 2px; padding-top: 2px;"  
+											<button class="dr-menu buton" type="button" style="padding-bottom: 2px; padding-top: 2px;"
 											onClick="hidePanel(0)">
 												<digi:trn key="cancel">Cancel</digi:trn>
 											</button>&nbsp;
@@ -239,9 +239,9 @@ function deleteThumbnail(){
 						</tr>
 					</table>
 				</digi:form>
-				</div>			        
+				</div>
 		    </div>
-		    
+
 		</td>
 	<tr>
 <table>

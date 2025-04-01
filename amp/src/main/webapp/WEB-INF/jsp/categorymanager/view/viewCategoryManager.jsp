@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" %> 
+<%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ page import="java.util.List"%>
- 
+
 <%@page import="org.digijava.module.categorymanager.util.CategoryManagerUtil"%>
 <%@ page import="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" %>
 <%@ page import="java.util.Collection" %>
@@ -37,17 +37,17 @@ function exportXSL(){
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<td valign="center" style="padding-top:10px;">
-					
+
 					<h1 style="text-align:left;" class="admintitle">
 						<digi:trn key="aim:categoryManager">Category Manager</digi:trn>
 					</h1>
-					
+
 					</td>
 				</tr>
 				<tr>
 						<td align="left">
 						<jsp:include
-									page="/repository/aim/view/adminXSLExportToolbar.jsp" /></td>
+									page="WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" /></td>
 					</tr>
 				<tr>
 					<td height=16 valign="center" width=571>
@@ -56,7 +56,7 @@ function exportXSL(){
 				</tr>
 				<tr>
 				<td class="report">
-				
+
 				<logic:notEmpty name="myForm" property="categories">
 					<table class="inside" style="font-size:12px;">
 					<thead>
@@ -88,7 +88,7 @@ function exportXSL(){
 								<br />
 								(
 								<digi:trn key="aim:categoryKeyIs">
-									category key is 
+									category key is
 								</digi:trn>
 								<i><bean:write name="category" property="keyName" /></i>
 								)
@@ -115,8 +115,8 @@ function exportXSL(){
 										deletedStyle = "color:darkgray; background-color:white; text-decoration: line-through;";
 									%>
 									<li style="<%=deletedStyle%>">
-									
-									
+
+
 										<digi:trn key='<%=keyForValue%>'>
 											<bean:write name="categoryValue" property="value" />
 										</digi:trn>
@@ -181,7 +181,7 @@ function exportXSL(){
 						</logic:iterate>
 						</tbody>
 					</table>
-				
+
 				</logic:notEmpty>
 <c:set var="translation">
 	<digi:trn key="aim:categoryManagerAddNewCategoryTitle">Click here to add a new category with specified values</digi:trn>

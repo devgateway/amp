@@ -8,9 +8,9 @@
 	};
 
 	YAHOO.amptab.handleClose = function() {
-		
+
 	}
-		
+
     var myPanelWorkspaceframe = new YAHOO.widget.Panel("newmyPWorkspaceframe", {
 		width:"600px",
 		height:"600px",
@@ -26,7 +26,7 @@
 	     );
 
     myPanelWorkspaceframe.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
-	
+
 	function initScriptsWorkspaceframe() {
 		//alert('initScriptsWorkspaceframe');
 		var msgP8='\n<digi:trn key="aim:memberDetails">Member Details</digi:trn>';
@@ -35,14 +35,14 @@
 		myPanelWorkspaceframe.render(document.body);
 		panelFirstShow = 1;
 	}
-	
+
 	function showPWorkspaceframe() {
 		initScriptsWorkspaceframe();
 		//alert('showPWorkspaceframe');
 		contentLocal = document.createElement('div');
 		contentLocal.setAttribute('id', 'myPWorkspaceframeContent');
 		contentLocal.setAttribute('class', 'content');
-		contentLocal.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /><font size="3"><b>Loading...</b></font></p>';
+		contentLocal.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="WEB-INF/jsp/aim/view/scripts/ajaxtabs/loading.gif" /><font size="3"><b>Loading...</b></font></p>';
             contentLocal.style.height = "700px";
             contentLocal.style.width = "594px";
             contentLocal.style.overflow="scroll";
@@ -55,7 +55,7 @@
 	}
 
 
-    var responseSuccessWorkspaceframe = function(o){ 
+    var responseSuccessWorkspaceframe = function(o){
 	/* Please see the Success Case section for more
 	 * details on the response object's properties.
 	 * o.tId
@@ -72,19 +72,19 @@
 		//var content = document.getElementById("myPWorkspaceframeContent");
 		contentLocal.innerHTML = response;
 	}
-		 
-	var responseFailureWorkspaceframe = function(o){ 
-	// Access the response object's properties in the 
-	// same manner as listed in responseSuccess( ). 
-	// Please see the Failure Case section and 
-	// Communication Error sub-section for more details on the 
+
+	var responseFailureWorkspaceframe = function(o){
+	// Access the response object's properties in the
+	// same manner as listed in responseSuccess( ).
+	// Please see the Failure Case section and
+	// Communication Error sub-section for more details on the
 	// response object's properties.
-		alert("Connection Failure!"); 
-	}  
-	var WorkspaceframeCallback = 
-	{ 
-		success:responseSuccessWorkspaceframe, 
-		failure:responseFailureWorkspaceframe 
+		alert("Connection Failure!");
+	}
+	var WorkspaceframeCallback =
+	{
+		success:responseSuccessWorkspaceframe,
+		failure:responseFailureWorkspaceframe
 	};
 
 	function previewWorkspaceframe(action,params)
@@ -105,7 +105,7 @@
   	      func();
   	  }
   	}
-  }  	
+  }
 	/*var currentWorkspaceframe = window.onload;
 	window.onload = function() {
         currentWorkspaceframe.apply(currentWorkspaceframe);

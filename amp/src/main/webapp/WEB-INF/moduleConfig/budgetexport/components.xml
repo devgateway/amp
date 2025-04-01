@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<config>
+<secondary-pages>
+<!-- Budget export  -->
+	<page name="viewBudgetExportManager"  title ="- Budget Export" />
+	<page name="reportWrapper"  title ="- Budget Export" />
+	<page name="addEditBudgetExpProject"  title ="- Add/Edit Budget Export Project" />
+	<page name="viewMappingRuleList"  title ="- Mapping rule list" />
+	<page name="addEditMapRule"  title ="- Add/Edit mapping rule" />
+	<page name="budgetExportMapActions"  title ="- Budget export map actions" />
+
+
+</secondary-pages>
+
+
+</config>

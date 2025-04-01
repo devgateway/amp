@@ -12,10 +12,10 @@
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css_2/organization-manager.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css_2/organization-manager.css">
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
 <%@page import="org.digijava.module.aim.dbentity.AmpOrganisationDocument"%>
@@ -26,9 +26,9 @@
     <jsp:include page="scripts/calendar.js.jsp"  />
 </script>
 <jsp:include page="scripts/newCalendar.jsp"  />
-<jsp:include page="/repository/aim/view/addEditOrganizationsPopin.jsp"  />
-<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"  />
-<jsp:include page="/repository/aim/view/components/contactScripts.jsp"  />
+<jsp:include page="WEB-INF/jsp/aim/view/addEditOrganizationsPopin.jsp"  />
+<jsp:include page="WEB-INF/jsp/aim/view/addOrganizationPopin.jsp"  />
+<jsp:include page="WEB-INF/jsp/aim/view/components/contactScripts.jsp"  />
 
 <script language="JavaScript" type="text/javascript">
 	function addLoadEvent(func) {
@@ -44,7 +44,7 @@
 		  }
 		}
 	}
-	
+
 
 
     function initScripts() {
@@ -76,7 +76,7 @@
 		var url="${addCont}"+"&"+params;
 		YAHOO.util.Connect.asyncRequest("POST", url, callback1);
     }
-  
+
     function orgTypeChanged()
 	{
     	<digi:context name="typeChanged" property="context/module/moduleinstance/editOrganisation.do" />
@@ -86,7 +86,7 @@
         document.aimAddOrgForm.submit();
 		//YAHOO.util.Connect.asyncRequest("POST", "/aim/editOrganisation.do", this, postString);
 	}
-    
+
         function addStaff(){
             var year=document.aimAddOrgForm.selectedYear;
             var type=document.aimAddOrgForm.typeOfStaff;
@@ -108,7 +108,7 @@
                 alert(errorMsg);
                 number.value = "";
                 return false;
-            }            
+            }
 
             if(year.value=='-1'){
                 errorMsg='<digi:trn jsFriendly="true">Please select year!</digi:trn>';
@@ -157,7 +157,7 @@
             var amount=document.aimAddOrgForm.orgInfoAmount;
             var currId=document.aimAddOrgForm.orgInfoCurrId;
             var errorMsg;
-          
+
 
             if(year.value=='-1'){
                 errorMsg='<digi:trn jsFriendly="true">Please select year!</digi:trn>';
@@ -175,7 +175,7 @@
                 return false;
             }
 
-                    
+
             if (!(/^\d+\.?\d*$/.test(amount.value))) {
                 errorMsg='<digi:trn jsFriendly="true">Please enter correct amount value!</digi:trn>';
                 alert(errorMsg);
@@ -214,9 +214,9 @@
             document.aimAddOrgForm.submit();
         }
         function setStyle(table,hasTitle){
-        	
+
 //        	alert (table)
-        	
+
             if(table!=null){
                 table.className += " tableElement";
                 setStripsTable(table.id, "tableEven", "tableOdd");
@@ -252,7 +252,7 @@
                 document.aimAddOrgForm.submit();
         	}
         }
-        
+
         function addSector() {
     		<digi:context name="addSectors" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.actionFlag.value="addSector";
@@ -272,7 +272,7 @@
         		alert('<digi:trn jsFriendly="true">Please select Organization to remove</digi:trn>');
         		return false;
     		}
-    		
+
         }
         function deleteBudgetOrg(){
         	var checkboxes=$("#budgOrgs").find("input.selBudgOrg:checked");
@@ -285,7 +285,7 @@
     		}else{
     			alert('Please select Organization to remove');
         		return false;
-    		}            
+    		}
         }
         function editOrgInfo(index){
                 <digi:context name="updateBudgetInfo" property="context/module/moduleinstance/editOrganisation.do" />
@@ -340,7 +340,7 @@
                 return false;
             }
         }
-        
+
         function fnChk(frmContrl,exceedhundred){
             //alert(frmContrl.value);
     <c:set var="errMsgAddSectorNumericValue">
@@ -368,9 +368,9 @@
             }
             return true;
         }
-        
 
-    
+
+
         function msg() {
             if (confirm('<digi:trn  jsFriendly="true">Are you sure about deleting this organization?</digi:trn>')) {
     <digi:context name="delete" property="context/module/moduleinstance/editOrganisation.do" />
@@ -393,7 +393,7 @@
             var nameEntered = check_multilingual_value_entered('AmpOrganisation_name');
             if (!nameEntered) {
 // 			var name = document.aimAddOrgForm.name.value;
-//            if ( name == null||name.length == 0) {            	
+//            if ( name == null||name.length == 0) {
                 alert('<digi:trn  jsFriendly="true">Please enter name for this Organization.</digi:trn>');
                 //document.aimAddOrgForm.name.focus();
                 return false;
@@ -404,8 +404,8 @@
                 document.aimAddOrgForm.acronym.focus();
                 return false;
             }
-            
-            
+
+
             var ampOrgTypeId= document.aimAddOrgForm.ampOrgTypeId.value;
             if (ampOrgTypeId == '-1' || ampOrgTypeId == null) {
                 alert('<digi:trn  jsFriendly="true">Please Select Organization Type.</digi:trn>');
@@ -427,7 +427,7 @@
                     document.aimAddOrgForm.orgPrimaryPurpose.focus();
                     return false;
                 }
-                                    
+
                 var selSectors= document.getElementsByName("selSectors");
                 var mandatorySectPref = document.getElementById('mandatorySectPref');
                 if (mandatorySectPref!=null && (selSectors == null||selSectors.length == 0 )) {
@@ -448,7 +448,7 @@
                     document.aimAddOrgForm.countryId.focus();
                     return false;
                 }
-     
+
                 var address= document.aimAddOrgForm.address.value;
                 var mandatoryHeadquartersAddr = document.getElementById('mandatoryHeadquartersAddr');
                 if (mandatoryHeadquartersAddr!=null && (address == null||address.length == 0 )) {
@@ -456,7 +456,7 @@
                     document.aimAddOrgForm.address.focus();
                     return false;
                 }
-                
+
                 var mandatoryInterventionLoc = document.getElementById('mandatoryInterventionLoc');
                 var selLocs= document.getElementsByName("selLocs");
                 if (mandatoryInterventionLoc!=null && (selLocs == null||selLocs.length == 0 )) {
@@ -502,7 +502,7 @@
 
             }
             //phone, fax
-            
+
             if (document.getElementById('phone') != null) {
 	            var phoneNum=document.getElementById('phone').value;
 	            if(checkNumber(phoneNum)==false){
@@ -517,12 +517,12 @@
 	                return false;
 	            }
 	          }
-	          
+
             return true;
 
-        }     
+        }
 
-          	   
+
         function addDocumentsDM(documentsType, showTheFollowingDocuments) {
         	//submit organization parameters first
            	<digi:context name="getInf" property="context/module/moduleinstance/editOrganisation.do?skipReset=true" />
@@ -542,9 +542,9 @@
 								document.forms[0].submit();
 						}
        		};
-       	
-       		YAHOO.util.Connect.asyncRequest("POST",url, callback, params );         
-            
+
+       		YAHOO.util.Connect.asyncRequest("POST",url, callback, params );
+
         }
 
 
@@ -585,15 +585,15 @@
         	}
         	if(document.getElementById('description')!=null){
         		params+="&description="+document.getElementById('description').value;
-        	}                            
+        	}
         	if(document.getElementById('fundingorgid')!=null){
         		params+="&fundingorgid="+document.getElementById('fundingorgid').value;
         	}
             return params;
-            
+
         }
 
-        
+
         function validateSaveOrg() {
             if(check()){
                 //departments reset or not
@@ -610,7 +610,7 @@
                 }else{
                 	document.getElementById('budgSects').value=true;
                 }
-               
+
     			<digi:context name="save" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${save}";
                 document.aimAddOrgForm.actionFlag.value = "save";
@@ -669,7 +669,7 @@
                 rows = null;
             }
         }
-        
+
     function expand(suffix){
 		var imgId='#img_'+suffix;
 		var imghId='#imgh_'+suffix;
@@ -729,7 +729,7 @@
           }
 
          function exportNGOToPDF() {
-        	 <digi:context name="wholeInfo" property="/exportNGOToPdf.do?actionMethod=exportNGOForm" />;        	 
+        	 <digi:context name="wholeInfo" property="/exportNGOToPdf.do?actionMethod=exportNGOForm" />;
              //user may click on the export icon before submitting,saving data, this is why we are collecting data manually.
              var url="${wholeInfo}"+"&"+ getWholeInfoParamsForNGO();
              document.aimAddOrgForm.action = url;
@@ -766,7 +766,7 @@
                           params+="&fiscalCalId="+document.getElementById('fiscalCalId').value;
                       }
 						if(document.getElementById('orgUrl')!=null){
-						     params+="&orgUrl="+document.getElementById('orgUrl').value;                     
+						     params+="&orgUrl="+document.getElementById('orgUrl').value;
 						}
 						if(document.getElementById('address')!=null){
 						    params+="&address="+document.getElementById('address').value;
@@ -778,16 +778,16 @@
 						    params+="&legalPersonNum="+document.getElementById('legalPersonNum').value;
 						}
 						if(document.getElementById('legalPersonRegDate')!=null){
-							params+="&legalPersonRegDate="+document.getElementById('legalPersonRegDate').value;    
+							params+="&legalPersonRegDate="+document.getElementById('legalPersonRegDate').value;
 						}
 						if(document.getElementById('countryId')!=null){
-							params+="&countryId="+document.getElementById('countryId').value;    
+							params+="&countryId="+document.getElementById('countryId').value;
 						}
 						if(document.getElementById('taxNumber')!=null){
-							params+="&taxNumber="+document.getElementById('taxNumber').value;    
+							params+="&taxNumber="+document.getElementById('taxNumber').value;
 						}
 						if(document.getElementById('implemLocationLevel')!=null){
-							params+="&implemLocationLevel="+ document.getElementsByName("implemLocationLevel")[0].value;    
+							params+="&implemLocationLevel="+ document.getElementsByName("implemLocationLevel")[0].value;
 						}
                       return params;
               }
@@ -809,11 +809,11 @@
         	else if(document.aimAddOrgForm.selectedContactInfoIds instanceof NodeList)
         	{
         	for (var i = 0; ((i < document.aimAddOrgForm.selectedContactInfoIds.length) && (atLeastOneIsChecked == false)) ; i++){
-        		if (document.aimAddOrgForm.selectedContactInfoIds[i].checked) { 
+        		if (document.aimAddOrgForm.selectedContactInfoIds[i].checked) {
                 	atLeastOneIsChecked = true;
-                } else { 
+                } else {
                 	atLeastOneIsChecked = false;
-                	
+
                 }
              }
         	}
@@ -850,8 +850,8 @@
         	}
         	return retValue;
         }
-       
-       
+
+
 </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
@@ -908,14 +908,14 @@ border-right: 1px solid rgb(208, 208, 208);
     <html:hidden name="aimAddOrgForm" styleId="parentLocId" property="parentLocId" />
     <html:hidden name="aimAddOrgForm"  property="type" />
     <html:hidden name="aimAddOrgForm"  property="ampOrgId" />
-    <html:hidden name="aimAddOrgForm" property="selectedOrgInfoId"/> 
+    <html:hidden name="aimAddOrgForm" property="selectedOrgInfoId"/>
 	<html:hidden name="aimAddOrgForm"  property="selContactId" />
 	<html:hidden styleId="primaryOrgCont" value="${aimAddOrgForm.resetPrimaryOrgContIds}" name="aimAddOrgForm" property="resetPrimaryOrgContIds"/>
 	<html:hidden styleId="departments" value="${aimAddOrgForm.resetDepartments}" name="aimAddOrgForm" property="resetDepartments"/>
 	<html:hidden styleId="budgSects" value="${aimAddOrgForm.resetBudgetSectors}" name="aimAddOrgForm" property="resetBudgetSectors"/>
 
 	<feature:display name="NGO Form" module="Organization Manager"></feature:display>
-	
+
     <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width=1000 align=center>
         <tr>
             <td align=left valign="top" width="100%">
@@ -926,7 +926,7 @@ border-right: 1px solid rgb(208, 208, 208);
                             <span class=crumb>
                                 <digi:link href="/admin.do" styleClass="comment">
                                     <digi:trn>Admin Home</digi:trn>
-                                </digi:link>&nbsp;&gt;&nbsp; 
+                                </digi:link>&nbsp;&gt;&nbsp;
                                 <digi:link href="/organisationManager.do?orgSelReset=true"
                                     styleClass="comment">
                                     <digi:trn>
@@ -965,7 +965,7 @@ border-right: 1px solid rgb(208, 208, 208);
 	                            <digi:link href="#" onclick="javascript:exportNGOToPDF(); return false;" title="Export to PDF">
 	                            	<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
 	                            </digi:link>
-                            </c:if>                           
+                            </c:if>
 
 
                         </td>
@@ -974,8 +974,8 @@ border-right: 1px solid rgb(208, 208, 208);
                     <tr>
                         <td>
                             <table border="0" bgColor=#f4f4f2>
-                                 
-                               
+
+
                                 <tr>
                                     <td bgColor=#c7d4db height="25" align="center"
                                         colspan="2" class="tdBoldClass" style="font-size:12px; font-weight:bold;"> <c:if test="${empty aimAddOrgForm.ampOrgId||aimAddOrgForm.ampOrgId==0}">
@@ -1005,9 +1005,9 @@ border-right: 1px solid rgb(208, 208, 208);
                                                     <font size="2" color="#FF0000">*</font>
                                                 </td>
                                                 <td align="left">
-                                                	<jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
+                                                	<jsp:include page="WEB-INF/jsp/aim/view/multilingual/multilingualFieldEntry.jsp">
 														<jsp:param name="attr_name" value="multilingual_organisation_name" />
-													</jsp:include>                                              
+													</jsp:include>
                                                     <%--<html:text name="aimAddOrgForm" property="name" size="54" styleId="orgName"/>
                                                      --%>
                                                 </td>
@@ -1015,7 +1015,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                                     <digi:trn>Organization Acronym</digi:trn>
                                                     <font size="2" color="#FF0000">*</font>
                                                 </td>
-                                                <td>    
+                                                <td>
                                                     <html:text name="aimAddOrgForm" property="acronym" size="20" styleId="acronym"/>
                                                 </td>
                                             </tr>
@@ -1118,12 +1118,12 @@ border-right: 1px solid rgb(208, 208, 208);
                                         </tr>
                                         <tr>
                                             <td width="100%" colspan="2">
-                                               
+
                                                         <fieldset style="margin-left:10px; margin-right:10px;"><legend class="legendClass"><digi:trn>General Information</digi:trn></legend>
 														 <div class="exportContactIcon">
                                                     <a href="javascript:exportGeneralInfo();" >
                                                         <digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
-                                                    </a>                        
+                                                    </a>
                                                 </div>
                                                       	<img id="img_general" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('general')"/>
                                 						<img id="imgh_general" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"  onclick="collapse('general')"/>
@@ -1254,7 +1254,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                                                     </td>
                                                                 </tr>
                                                                 <!-- contact info -->
-                                                                
+
                                                                 <tr>
 																																	<td></td>
 																																	<td></td>
@@ -1276,7 +1276,7 @@ border-right: 1px solid rgb(208, 208, 208);
 																																	<td></td>
 																																</tr>
 
-																																
+
 
                                                                 <tr>
                                                                     <td  style=" text-align:right" class="tdBoldClass"><digi:trn>Organization website</digi:trn></td>
@@ -1377,7 +1377,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                                                             <td colspan="3">
 																			<input type="button" style="margin-right:10px;" class="buttonx_sm" onclick="javascript:removeOrgs();" value="<digi:trn>Remove Organization(s)</digi:trn>" />
                                                                          <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.module.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="buttonx_sm" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
-                                                                        
+
                                                                         </td>
                                                                         </tr>
 
@@ -1471,13 +1471,13 @@ border-right: 1px solid rgb(208, 208, 208);
                 </tr>
                 <tr>
                     <td colspan="2">
-                    
+
                         <fieldset style="margin-left:10px; margin-right:10px;">
                             <legend align="left" class="tdBoldClass" style="font-size:13px;color:#FFFFFF; "><digi:trn>Staff Information</digi:trn></legend>    <div style="float:right">
                         <a href="javascript:exportInfo('exportStaffInfo')" >
 				<digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
                         </a>
-                       
+
                          </div>
                             <img id="img_staff" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;"  onclick="expand('staff')"/>
                             <img id="imgh_staff" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"   onclick="collapse('staff')"/>
@@ -1485,7 +1485,7 @@ border-right: 1px solid rgb(208, 208, 208);
                             <table cellpadding="2" cellspacing="0" border="0" width=100% style="margin-top:25px;">
                                       <tr>
                                     <td style="width:40px;text-align:center;font-weight:bold">&nbsp;
-                                        
+
                                     </td>
                                     <td style="width:130px;text-align:center; "  class="tdBoldClass">
                                             <digi:trn>Year</digi:trn>
@@ -1497,7 +1497,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                         <digi:trn>Number of Staff</digi:trn>
                                     </td>
                                     <td style="width:90px;text-align:center;font-weight:bold">&nbsp;
-                                        
+
                                     </td>
                                 </tr>
                                 <tr>
@@ -1578,7 +1578,7 @@ border-right: 1px solid rgb(208, 208, 208);
 
                 <tr>
                     <td colspan="2">
-                      
+
                         <fieldset style="margin-left:10px; margin-right:10px;">
                             <legend class="legendClass"><digi:trn>Budget Information</digi:trn></legend>
 							  <div class="exportContactIcon">
@@ -1589,10 +1589,10 @@ border-right: 1px solid rgb(208, 208, 208);
                                 <img id="img_budget" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('budget')"/>
                                 <img id="imgh_budget" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"  onclick="collapse('budget')"/>
                                 <div id="div_container_budget">
-                                <table cellpadding="2" cellspacing="0" border="0" width=100%>   
+                                <table cellpadding="2" cellspacing="0" border="0" width=100%>
                                      <tr>
                                     <td style="width:40px;text-align:center; "  class="tdBoldClass">&nbsp;
-                                        
+
                                     </td>
                                     <td style="width:130px;text-align:center; "  class="tdBoldClass">
                                         <digi:trn>Year</digi:trn>
@@ -1726,10 +1726,10 @@ border-right: 1px solid rgb(208, 208, 208);
                         </fieldset>
                     </td>
                 </tr>
-                
-                
-                               
-                
+
+
+
+
             </c:when>
             <c:otherwise>
                 <tr>
@@ -1756,7 +1756,7 @@ border-right: 1px solid rgb(208, 208, 208);
 
                 <tr>
                     <td class="tdBoldClass"><digi:trn>Budget Organization Code</digi:trn>
-                   
+
                      <field:display name="Mandatory Budget Organization Code" feature="Organization Form">
                     	<span id="mandatoryBudgetOrganizationCode"><font size="2" color="#FF0000">*</font></span>
                      </field:display></td>
@@ -1869,8 +1869,8 @@ border-right: 1px solid rgb(208, 208, 208);
                			</tr>
                		</table>
                	</td>
-               	</field:display> 
-               	<!-- End Sectors -->	
+               	</field:display>
+               	<!-- End Sectors -->
                <!-- Departments -->
                <field:display name="Budget Department" feature="Budget">
                <tr>
@@ -1889,10 +1889,10 @@ border-right: 1px solid rgb(208, 208, 208);
                			</tr>
                		</table>
                	</td>
-               	</field:display> 
-               		
+               	</field:display>
+
               <!-- End Departments -->
-               
+
 </c:otherwise>
 </c:choose>
 
@@ -1900,7 +1900,7 @@ border-right: 1px solid rgb(208, 208, 208);
  <!-- Contact -->
 	<tr>
 	    <td colspan="2">
-	        
+
 	        <fieldset style="margin-left:10px; margin-right:10px; margin-bottom:15px;">
 	            <legend class="legendClass"><digi:trn>Contact Information</digi:trn></legend>
 				<div class="exportContactIcon">
@@ -1921,7 +1921,7 @@ border-right: 1px solid rgb(208, 208, 208);
 	                                    <table width="100%" cellSpacing="1" cellPadding="1" align="left" id="table_contact_content" style="margin-top:20px;">
 	                                    <tr>
 	                                        <td>&nbsp;
-	                                            
+
 	                                        </td>
 	                                        <td class="tdBoldClass" style="color:#000000">
 	                                            <digi:trn>LAST NAME</digi:trn>
@@ -1945,7 +1945,7 @@ border-right: 1px solid rgb(208, 208, 208);
 	                                        	<digi:trn>PRIMARY </digi:trn>
 	                                        </td>
 	                                        <td colspan="2">&nbsp;
-	                                            
+
 	                                        </td>
 	                                    </tr>
 	                                    <c:forEach var="orgCont" items="${aimAddOrgForm.orgContacts}" varStatus="stat">
@@ -2027,7 +2027,7 @@ border-right: 1px solid rgb(208, 208, 208);
 	                <tr>
 	                    <td colspan="2"><aim:addContactButton styleClass="buttonx_sm" collection="orgContacts" form="${aimAddOrgForm}" addOrgBtn="hidden"><digi:trn>Add contact</digi:trn></aim:addContactButton></td>
 	                </tr>
-	
+
 	            </table>
 	                </div>
 	        </fieldset>
@@ -2073,12 +2073,12 @@ border-right: 1px solid rgb(208, 208, 208);
             <html:textarea property="description" styleId="description" style="width:400px;	height:100px;margin-bottom:10px;"/>
         </td>
     </tr>
-    
+
 	<module:display name="Document" parentModule="PROJECT MANAGEMENT">
 		<tr>
             <td colspan="2" align=center class="yui-skin-sam">
 				<table width="95%" cellspacing="0" cellpadding="0" border="0">
-					<tr>									
+					<tr>
 						<td bgcolor=#f4f4f2 align=center>
 							<bean:define toScope="request" id="showRemoveButton" value="true" />
 							<bean:define toScope="request" id="documentsType" value="<%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME %>" />
@@ -2090,18 +2090,18 @@ border-right: 1px solid rgb(208, 208, 208);
 							<bean:define toScope="request" id="crRights" value="true" />
 							<bean:define toScope="request" id="checkBoxToHide" value="false" />
 							<bean:define toScope="request" id="showLineBreaks" value="true" />
-							<jsp:include page="/repository/contentrepository/view/showSelectedDocumentsDM.jsp"/>
+							<jsp:include page="WEB-INF/jsp/contentrepository/view/showSelectedDocumentsDM.jsp"/>
 						</td>
 					</tr>
-				</table>				
+				</table>
 			</td>
 			<td></td>
 		</tr>
 	</module:display>
     <tr>
         <td colspan="2" align="center">
-        	<c:set var="showTheFollowingDocuments" value="PUBLIC" /> 
-        	<c:set var="documentsType"><%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>        	
+        	<c:set var="showTheFollowingDocuments" value="PUBLIC" />
+        	<c:set var="documentsType"><%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>
             <html:button styleClass="buttonx_sm" property="submitButton" onclick="addDocumentsDM('${documentsType}','${showTheFollowingDocuments}')">
                 <digi:trn>Add Documents From Repository</digi:trn>
             </html:button> <br />
@@ -2166,7 +2166,7 @@ border-right: 1px solid rgb(208, 208, 208);
         initOtherInformationCounter();
 
         function initOtherInformationCounter() {
-        	var otherInformationTxt = $("#otherInformation").val() == undefined? "" : $("#otherInformation").val(); 
+        	var otherInformationTxt = $("#otherInformation").val() == undefined? "" : $("#otherInformation").val();
     		var otherInformationCounterTxt = ["(", 256 - otherInformationTxt.length, " <digi:trn>characters remaining</digi:trn>", ")"];
     		otherInformationCounter.html(otherInformationCounterTxt.join(""));
     		otherInformationProgressBar.css("width", otherInformationTxt.length/256*100 + "%");
@@ -2193,7 +2193,7 @@ border-right: 1px solid rgb(208, 208, 208);
             });
     </c:if>
 
-    
+
     var enterBinder	= new EnterHitBinder('addOrgBtn');
 </script>
 </div>

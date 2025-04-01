@@ -15,9 +15,9 @@
 <%String contextPath = request.getContextPath();
 String _editor_url = new String();
 if (contextPath.length() == 0 || contextPath.startsWith("/")) {
-	_editor_url = contextPath + "/repository/editor/view/";
+	_editor_url = contextPath + "WEB-INF/jsp/editor/view/";
 } else {
-	_editor_url = "/" + contextPath + "/repository/editor/view/";
+	_editor_url = "/" + contextPath + "WEB-INF/jsp/editor/view/";
 }%>
 _editor_url = "<%=_editor_url%>";
 </script>
@@ -86,16 +86,16 @@ function cancelText(){
 		<span style="color: #cc4000"> <bean:write name="editorForm" property="key" /></span>
 	</b>
 	&nbsp;
-	
+
 	<c:set var="trn">
 		<digi:trn>Save now</digi:trn>
 	</c:set>
 	<html:submit value="${trn}" />&nbsp;
-	
+
 	<html:button property="" onclick="cancelText()">
 		<digi:trn>Cancel</digi:trn>
 	</html:button>
-	<!-- 
+	<!--
 	<html:select property="lang" onchange="ChangeLanguage(this)">
 
 	<bean:define id="lid" name="editorForm" property="languages" type="java.util.Collection"/>
@@ -190,7 +190,7 @@ function cancelText(){
 			type="org.digijava.module.editor.form.EditorForm.TextInfo">
 			<tr align="left">
 				<td><small> <bean:write name="editorList"
-							property="langName" /></small> 
+							property="langName" /></small>
 					<digi:link href="/showEditText.do" paramName="editorList" paramId="langCode" paramProperty="langCode">[<small>Edit</small>]</digi:link>
 				</td>
 				<td align="left"><small> <bean:write name="editorList"

@@ -12,19 +12,19 @@
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
 <script language="JavaScript">
-	function searchAlpha(val) {		 
-		     aimOrgGroupManagerForm.action ="${contextPath}/aim/orgGroupManager.do?alpha="+val ;		     
+	function searchAlpha(val) {
+		     aimOrgGroupManagerForm.action ="${contextPath}/aim/orgGroupManager.do?alpha="+val ;
 		     aimOrgGroupManagerForm.submit();
-			 return true;		
+			 return true;
 	}
-	
+
 	function searchOrganization() {
 		if (document.aimOrgGroupManagerForm.tempNumResults.value == 0) {
 			  alert ("Invalid value at 'Number of results per page'");
 			  document.aimOrgGroupManagerForm.tempNumResults.focus();
 			  return false;
 		} else {
-			
+
 			 <digi:context name="searchOrg" property="context/module/moduleinstance/orgGroupManager.do"/>
 		     url = "<%= searchOrg %>?orgSelReset=false";
 		     document.aimOrgGroupManagerForm.action = url;
@@ -33,7 +33,7 @@
 		}
 	}
 
-	
+
 	function resetSearch(){
 		<digi:context name="searchOrg" property="context/module/moduleinstance/orgGroupManager.do"/>
 		url = "<%= searchOrg %>?orgSelReset=true";
@@ -41,7 +41,7 @@
 	    document.aimOrgGroupManagerForm.submit();
 		return true;
 	}
-	
+
 	var enterBinder	= new EnterHitBinder('searchOrgGrpBtn');
 </script>
 
@@ -85,7 +85,7 @@
                     </c:set>
                     <input type="button" value="${trnResetBtn}" class="buttonx" onclick="return resetSearch()">
 					</td>
-					<td width="300">					
+					<td width="300">
                     <c:set var="trnGoBtn">
                       <digi:trn key="aim:btnGo"> GO </digi:trn>
                     </c:set>
@@ -99,7 +99,7 @@
 						</digi:trn>
                      </td>
 				</tr>
-				
+
 				<tr>
 					<td noWrap width=867  colspan="7" vAlign="top">
 					<table width="100%" cellpadding="1" cellspacing="1">
@@ -108,7 +108,7 @@
 							<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
 								<tr>
 									<td valign="top">
-										<table align="center" cellpadding="0" cellspacing="0" width="100%" border="0">	
+										<table align="center" cellpadding="0" cellspacing="0" width="100%" border="0">
 											<tr>
 												<td bgColor=#ffffff >
 													<table border="0" cellpadding="1" cellspacing="1" class=box-border width="100%">
@@ -116,8 +116,8 @@
 															<!-- header -->
 															<td bgColor=#c7d4db height="25" align="center" colspan="5"><B style="font-size:12px;">
 																<digi:trn key="aim:orgGroupList">List
-                                                                of Organization Groups</digi:trn>						
-                                                              </b>						
+                                                                of Organization Groups</digi:trn>
+                                                              </b>
 															</td>
 															<!-- end header -->
 														</tr>
@@ -128,13 +128,13 @@
 															<td colspan="5">
                                                    		<b><digi:trn key="aim:noOrganizationGroup">No
                                                         organization group present</digi:trn>
-                                                       </b>	
+                                                       </b>
 															</td>
 														</tr>
 														</logic:empty>
 														<logic:notEmpty name="aimOrgGroupManagerForm" 	property="organisation">
 														<tr>
-															<td width="100%">	
+															<td width="100%">
 																<table width="100%" border="0" class="inside">
 																	<tr>
 																		<td height="30" width="377" class="inside" bgcolor=#F2F2f2>
@@ -143,31 +143,31 @@
 																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy!='nameAscending'}">
 																				<digi:link href="/orgGroupManager.do?sortBy=nameAscending&reset=false&orgSelReset=false" name="urlParams4">
 																					<b><digi:trn key="aim:orgGroupName">Group Name</digi:trn></b>
-																				</digi:link>																															
+																				</digi:link>
 																			</c:if>
 																			<c:if test="${empty aimOrgGroupManagerForm.sortBy || aimOrgGroupManagerForm.sortBy=='nameAscending'}">
 																				<digi:link href="/orgGroupManager.do?sortBy=nameDescending&reset=false&orgSelReset=false" name="urlParams4">
 																					<b><digi:trn key="aim:orgGroupName">Group Name</digi:trn></b>
-																				</digi:link>																															
+																				</digi:link>
 																			</c:if>
-																			<c:if test="${empty aimOrgGroupManagerForm.sortBy || aimOrgGroupManagerForm.sortBy=='nameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='nameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
-																		</td>	
+																			<c:if test="${empty aimOrgGroupManagerForm.sortBy || aimOrgGroupManagerForm.sortBy=='nameAscending'}"><img  src="WEB-INF/jsp/aim/images/up.gif"/></c:if>
+																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='nameDescending'}"><img src="WEB-INF/jsp/aim/images/down.gif"/></c:if>
+																		</td>
 																		<td height="30" width="171" class="inside" bgcolor=#F2F2f2>
 																			<jsp:useBean id="urlParams5" type="java.util.Map" class="java.util.HashMap"/>
 																			<c:set target="${urlParams5}" property="alpha"><bean:write name="aimOrgGroupManagerForm" property="currentAlpha"/></c:set>
 																			<c:if test="${empty aimOrgGroupManagerForm.sortBy || aimOrgGroupManagerForm.sortBy!='codeAscending'}">
 																				<digi:link href="/orgGroupManager.do?sortBy=codeAscending&reset=false&orgSelReset=false" name="urlParams5">
 																					<b><digi:trn key="aim:orgGroupCode">Code</digi:trn></b>
-																				</digi:link>																															
+																				</digi:link>
 																			</c:if>
 																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeAscending'}">
 																				<digi:link href="/orgGroupManager.do?sortBy=codeDescending&reset=false&orgSelReset=false"  name="urlParams5">
 																					<b><digi:trn key="aim:orgGroupCode">Code</digi:trn></b>
-																				</digi:link>																															
+																				</digi:link>
 																			</c:if>
-																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
+																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeAscending'}"><img  src="WEB-INF/jsp/aim/images/up.gif"/></c:if>
+																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='codeDescending'}"><img src="WEB-INF/jsp/aim/images/down.gif"/></c:if>
 																		</td>
 																		<td height="30" width="147" class="inside" bgcolor=#F2F2f2>
 																			<jsp:useBean id="urlParams6" type="java.util.Map" class="java.util.HashMap"/>
@@ -175,16 +175,16 @@
 																			<c:if test="${empty aimOrgGroupManagerForm.sortBy || aimOrgGroupManagerForm.sortBy!='typeAscending'}">
 																				<digi:link href="/orgGroupManager.do?sortBy=typeAscending&reset=false&orgSelReset=false" name="urlParams6">
 																					<b><digi:trn key="aim:orgGroupType">Type</digi:trn></b>
-																				</digi:link>																														
+																				</digi:link>
 																			</c:if>
 																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='typeAscending'}">
 																				<digi:link href="/orgGroupManager.do?sortBy=typeDescending&reset=false&orgSelReset=false" name="urlParams6">
 																					<b><digi:trn key="aim:orgGroupType">Type</digi:trn></b>
-																				</digi:link>																														
+																				</digi:link>
 																			</c:if>
-																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='typeAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
-																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='typeDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
-																																		
+																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='typeAscending'}"><img  src="WEB-INF/jsp/aim/images/up.gif"/></c:if>
+																			<c:if test="${not empty aimOrgGroupManagerForm.sortBy && aimOrgGroupManagerForm.sortBy=='typeDescending'}"><img src="WEB-INF/jsp/aim/images/down.gif"/></c:if>
+
 																		</td>
 																	</tr>
 																<logic:iterate name="aimOrgGroupManagerForm" property="organisation" id="organisation">
@@ -217,7 +217,7 @@
 																		</td>
                                                             		</tr>
 																</logic:iterate>
-																</table>	
+																</table>
 															</td>
 														</tr>
 														</logic:notEmpty>
@@ -242,7 +242,7 @@
 													<c:if test="${aimOrgGroupManagerForm.currentPage != pages}">
 													<digi:link href="/orgGroupManager.do" name="urlParams1">
 														<%=pages%>
-														</digi:link> |&nbsp; 
+														</digi:link> |&nbsp;
 													</c:if>
 													</logic:iterate>
 												</td>
@@ -257,7 +257,7 @@
 														    <td>
 														    <c:if test="${not empty aimOrgGroupManagerForm.currentAlpha}">
 														    	<c:if test="${aimOrgGroupManagerForm.currentAlpha!='viewAll'}">
-															    	<c:if test="${aimOrgGroupManagerForm.currentAlpha!=''}">														    	
+															    	<c:if test="${aimOrgGroupManagerForm.currentAlpha!=''}">
 																    	<c:set var="trnViewAllLink">
 																			<digi:trn key="aim:clickToViewAllSearchPages">Click here to view all search pages</digi:trn>
 																		</c:set>
@@ -296,7 +296,7 @@
 							</table>
 						</td>
 						<td noWrap width="100%" vAlign="top">
-							<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">	
+							<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
 								<tr>
 									<td>
 										<!-- Other Links -->

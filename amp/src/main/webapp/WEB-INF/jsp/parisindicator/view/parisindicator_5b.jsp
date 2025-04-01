@@ -11,7 +11,7 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <digi:form action="/parisindicator" type="org.digijava.module.parisindicator.form.PIForm" name="parisIndicatorForm">
-    <table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%" 
+    <table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%"
 	style="font-size:11px; font-family: Arial,sans-serif; background-color: white; font-family: Arial, Helvetica, sans-serif;">
         <tr align="center">
             <td width="15%" height="33"  class="inside_header" >
@@ -53,7 +53,7 @@
         <logic:notEmpty name="parisIndicatorForm" property="mainTableRows">
            <%int counter = 0; %>
            <bean:define id="color" value="" type="String"/>
-           <logic:iterate id="element" name="parisIndicatorForm" property="mainTableRows" indexId="index" 
+           <logic:iterate id="element" name="parisIndicatorForm" property="mainTableRows" indexId="index"
             type="org.digijava.module.parisindicator.helper.row.PIReport5bRow">
                <logic:equal name="element" property="year" value="${parisIndicatorForm.selectedStartYear}">
                    <%/*counter++;*/counter=1;%>
@@ -85,12 +85,12 @@
 	<table>
 		<tr><td>
 			<font color="orange">&nbsp;*&nbsp;</font>
-  			<jsp:include page="/repository/aim/view/utils/amountUnitsUnformatted.jsp">
+  			<jsp:include page="WEB-INF/jsp/aim/view/utils/amountUnitsUnformatted.jsp">
     			<jsp:param value="" name="amount_prefix"/>
   			</jsp:include>
 			<digi:trn><bean:write name="parisIndicatorForm" property="selectedCurrency"/></digi:trn>
 		</td></tr>
-	</table>		
+	</table>
 	<br>
     <table width="100%">
         <tr align="center">
@@ -101,7 +101,7 @@
 			                <strong><digi:trn>Percent of ODA using national procurement systems</digi:trn></strong>
 			            </td>
 			            <td align="center" colspan="${parisIndicatorForm.selectedEndYear + 1 - parisIndicatorForm.selectedStartYear}"  class="inside_header" >
-			                <strong><digi:trn>Percent of donors that use national procurement systems</digi:trn></strong>    
+			                <strong><digi:trn>Percent of donors that use national procurement systems</digi:trn></strong>
 			            </td>
 			        </tr>
 			        <bean:define id="years" value="${parisIndicatorForm.selectedEndYear + 1 - parisIndicatorForm.selectedStartYear}"/>

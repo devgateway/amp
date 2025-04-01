@@ -12,7 +12,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:form action="/gpi" type="org.digijava.module.gpi.form.GPIForm" name="gpiForm">
-	<table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%" 
+	<table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%"
 	style="font-size:11px; font-family: Arial,sans-serif; background-color: white; font-family: Arial, Helvetica, sans-serif;">
 	    <tr align="center">
 	        <td width="15%" height="33" class="inside_header" >
@@ -48,7 +48,7 @@
 	                    <strong><font color="red"><digi:trn>Report cant be generated because the Indicator Fields have not been set in Global Partnership Indicators Manager.</digi:trn></font></strong>
 	                </div>
 	            </td>
-	        </tr>	
+	        </tr>
 		</logic:empty>
 		<logic:empty name="gpiForm" property="mainTableRows">
 	        <tr>
@@ -92,7 +92,7 @@
 	</table>
 	<br>
 	<font color="orange">&nbsp;*&nbsp;</font>
-  	<jsp:include page="/repository/aim/view/utils/amountUnitsUnformatted.jsp">
+  	<jsp:include page="WEB-INF/jsp/aim/view/utils/amountUnitsUnformatted.jsp">
     	<jsp:param value="" name="amount_prefix"/>
   	</jsp:include>
 	<digi:trn><bean:write name="gpiForm" property="selectedCurrency"/></digi:trn>

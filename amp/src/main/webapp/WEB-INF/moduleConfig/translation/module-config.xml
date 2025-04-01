@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>translation</name>
+	<security login-required="false">
+		<action login-required="true" pattern="/showAdvancedTranslation" /> 
+		<action login-required="true" pattern="/showEditPermissions" /> 
+		<action login-required="true" pattern="/searchUser" /> 
+		<action login-required="true" pattern="/saveAllMessages" /> 
+		<action login-required="true" pattern="/updateMessage" /> 
+		<action login-required="true" pattern="/deleteKey" /> 
+		<action login-required="true" pattern="/addKey" /> 
+		<action login-required="true" pattern="/showEditPermissions" /> 
+		<action login-required="true" pattern="/showGroupAdministration" /> 
+		<action login-required="true" pattern="/saveGroupPermissions" /> 
+		<action login-required="true" pattern="/showUserAdministration" /> 
+		<action login-required="true" pattern="/saveUserPermissions" /> 
+		<action login-required="true" pattern="/addPermission" /> 
+		<action login-required="true" pattern="/deletePermission" /> 
+		<action login-required="true" pattern="/importexport">ADMIN</action>
+		<action login-required="true" pattern="/contentTrnImportExport" /> 
+		<action login-required="true" pattern="/contentTrnExport" /> 
+		<action login-required="true" pattern="/contentTrnImport" />
+		<action login-required="false" pattern="/ajaxTranslator" /> 
+
+	</security>
+	
+</module-config>

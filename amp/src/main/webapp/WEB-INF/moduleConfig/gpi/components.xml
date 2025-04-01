@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config>
+	<secondary-pages>
+		<page name="gpi_base" title=" - Global Partnership Indicators" />
+		<page name="gpi_1" title="GPI 3" />
+	</secondary-pages>
+</config>

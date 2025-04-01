@@ -70,7 +70,7 @@
   <div id="log"></div>
   <!--<div id="xmlString"></div>-->
   <input type="hidden" id="xmlString"/>
- 
+
 <script type="text/javascript">
 
 var selectedTopicId;
@@ -105,10 +105,10 @@ if (typeof DOMParser == "undefined") {
 					show(id);
 			 }
 	}
-	
+
             var id = document.getElementById("treeboxbox_tree");
 	 		tree = new dhtmlXTreeObject(id,"100%","100%",0);
-	 		tree.setImagePath("../../repository/help/view/images/csh_vista/");
+	 		tree.setImagePath("../..WEB-INF/jsp/help/view/images/csh_vista/");
 	        tree.enableTreeImages(false);
 	        <digi:secure group="Help Administrators">
 	            tree.enableDragAndDrop(true);
@@ -119,21 +119,21 @@ if (typeof DOMParser == "undefined") {
 			    xml+='<tree id="0" radio="1">';
 			    xml+='<%=HelpUtil.renderTopicTree(topic,request,false) %>';
 			    xml+='</tree>';
-		  
-		    tree.loadXMLString(xml);
-		    
 
-		 
-		  
+		    tree.loadXMLString(xml);
+
+
+
+
 		    tree.attachEvent("onXLE",function(){
-		    contextTreeXml = tree.serializeTree();  
+		    contextTreeXml = tree.serializeTree();
 		 	var xmlobject = (new DOMParser()).parseFromString(contextTreeXml, "text/xml");
 		    node = xmlobject.getElementsByTagName("tree");
 		    id=getFirstChild(node);
 		    show(id);
 		    });
-		    
-		    		     
+
+
           tree.attachEvent("onDrop",function(sid,tid,sobj,tobj){
 	            if(sid){
     	            var contextTreeXml = tree.serializeTree();
@@ -142,7 +142,7 @@ if (typeof DOMParser == "undefined") {
             	}
            });
 
-           
+
 
 
     function show(str){
@@ -164,7 +164,7 @@ if (typeof DOMParser == "undefined") {
 	 	var timestamp = Number(new Date());
 		var urlact="/help/helpActions.do?actionType=getbody"
 		urlact=urlact+"&body="+str+"&nocahe="+timestamp ;
-		xmlHttp.open("GET",urlact,true)	
+		xmlHttp.open("GET",urlact,true)
 		xmlHttp.onreadystatechange=stateChange
 		xmlHttp.send(null)
 }
@@ -172,7 +172,7 @@ if (typeof DOMParser == "undefined") {
 function stateChange(){
 	 if (xmlHttp.readyState==4)
   {
-		
+
 		 document.getElementById("bodyhelp").innerHTML = xmlHttp.responseText.slice(0,xmlHttp.responseText.indexOf("_editor_key_="));
 	     document.getElementById("key").innerHTML = xmlHttp.responseText.slice(xmlHttp.responseText.indexOf("_editor_key_=")+12,xmlHttp.responseText.indexOf("_topic_db_id_="));
 	     selectedTopicId = xmlHttp.responseText.slice(xmlHttp.responseText.indexOf("_topic_db_id_=")+14);
@@ -213,7 +213,7 @@ function GetXmlHttpObject()	{
 	return xmlHttp;
 }
 
-function  getFirstChild(nl){  
+function  getFirstChild(nl){
    for (i = 0; i< nl.length; i++){
    	nd = nl.item(i);
 
@@ -225,7 +225,7 @@ function  getFirstChild(nl){
    		x=x.nextSibling;
    	}
    	return x.attributes.getNamedItem("id").nodeValue;
-   		
+
   }
 }
 

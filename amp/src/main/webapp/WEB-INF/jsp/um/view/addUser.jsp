@@ -15,14 +15,14 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<jsp:include page="/repository/aim/view/strongPassword.jsp"  />
+<jsp:include page="WEB-INF/jsp/aim/view/strongPassword.jsp"  />
 
 <style  type="text/css">
 <!--
 
 .contentbox_border{
         border: 1px solid black;
-	border-width: 1px 1px 1px 1px; 
+	border-width: 1px 1px 1px 1px;
 	background-color: #ffffff;
 }
 
@@ -34,7 +34,7 @@
 
 #statesautocomplete div {
 	padding: 0px;
-	margin: 0px; 
+	margin: 0px;
 }
 
 
@@ -110,18 +110,18 @@
 	function isVoid(name){
 		if (name == "" || name == null || name.charAt(0) == ' '){
         	return 1;
-        }		
+        }
 		if (!isNaN(name)){
         	return 2;
-        }		
-		return 0;		
+        }
+		return 0;
 	}
 
 	function isPassVoid(name){
         return (name==null || name.length<1);
 	}
-	
-	
+
+
 	function validate(){
         name = document.umAddUserForm.firstNames.value;
         lastname = document.umAddUserForm.lastName.value;
@@ -130,7 +130,7 @@
         selectedOrgType = document.umAddUserForm.selectedOrgType.value;
         selectedOrgGroup = document.umAddUserForm.selectedOrgGroup.value;
         selectedOrganizationId = document.umAddUserForm.selectedOrganizationId.value;
-        
+
         if (isVoid(name)==1)
         {
 			<c:set var="translation">
@@ -167,14 +167,14 @@
 		var address2 = document.umAddUserForm.emailConfirmation.value;
         if(! validateEmails(address, address2))
             return false;
-        
+
         var notificationEmail = $('#notificationEmail').val();
         if ($('#notificationEmailEnabled').is(":checked")) {
         	if (!validateNotificationEmail(notificationEmail) || !validateMailWithNotificationMail(address, notificationEmail)) {
         	    return false;
         	}
         }
-        
+
         if (isPassVoid(password)||isPassVoid(passwordConfirmation))
         {
 			<c:set var="translation">
@@ -220,10 +220,10 @@
 		$('#notificationEmailEnabled').bind("click", function() {
 	        $('#notificationEmailRow') [this.checked ? "show" : "hide"]();
 	      });
-		
+
 		$('#notificationEmailRow')[$('#notificationEmailEnabled').is(":checked") ? "show" : "hide"]();
 	}
-	
+
 	YAHOOAmp.util.Event.addListener(window, "load", init) ;
 </script>
 <digi:instance property="umAddUserForm" />
@@ -243,50 +243,50 @@
 			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33><span class=crumb> 
+					<td height=33><span class=crumb>
 						<c:set	var="translation">
 						<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</c:set> 
+						</c:set>
 						<digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}">
 							<digi:trn key="aim:AmpAdminHome">
 				            	Admin Home
 				        	</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp; 
+						</digi:link>&nbsp;&gt;&nbsp;
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAllUsers">Click here to goto users manager</digi:trn>
-						</c:set> 
+						</c:set>
 						<digi:link href="/viewAllUsers.do" styleClass="comment"	title="${translation}">
 							<digi:trn key="aim:viewAllUsers">
 				            	List of users
 				        	</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp; 
+						</digi:link>&nbsp;&gt;&nbsp;
 							<digi:trn key="aim:viewEditUser:EditUser">
 				          		Edit user
-				          	</digi:trn> 
+				          	</digi:trn>
 				        </span>
 				    </td>
 					<!-- End navigation -->
 				</tr>
-			
+
 				<tr>
 					<td vAlign="top" colspan="2">
 						<table style="border:1px solid #dddddd;" border="0" cellpadding=0 cellspacing=0>
                         	<tr>
-								<td colspan="2"  height="25" bgcolor="#C7D4DB" align="center" style="font-size:12px; font-weight:bold;border-bottom:1px solid 	 		 								#dddddd;"><span class=subtitle-blue> 
+								<td colspan="2"  height="25" bgcolor="#C7D4DB" align="center" style="font-size:12px; font-weight:bold;border-bottom:1px solid 	 		 								#dddddd;"><span class=subtitle-blue>
 								<digi:trn key="aim:viewEditUser:AddEditUserHeader">Add user</digi:trn> </span>
 			        </td>
 				</tr>
-                        
+
 					   		<tr>
 							  <td valign="top"  align="center">
 								  <table border="0" cellpadding="0" cellspacing="0" width=1000 id="addUserContainer">
-	
+
 									<tr>
-										
+
 										<td align=left valign="top" width=520><br>
 										<table border="0" cellPadding=5 cellspacing="0" width="100%">
 											<tr>
-												
+
 												<td align=left class=title noWrap colspan="4">
 												<!-- digi:errors /-->
 												<logic:notEmpty name="umAddUserForm" property="errors">
@@ -303,13 +303,13 @@
 													</ul>
 													</font>
 												</logic:notEmpty>
-													<jsp:include page="/repository/aim/view/strongPasswordRulesLegend.jsp"  />
+													<jsp:include page="WEB-INF/jsp/aim/view/strongPasswordRulesLegend.jsp"  />
 												</td>
 											</tr>
                                             <tr>
                                             	<td colspan="3"bgcolor="#C7D4DB" align="center" style="background-color: #F0F0F0;">
                                                 <digi:trn key="um:userAccountInformation">User Account information</digi:trn>
-                                                <digi:trn>All fields marked with an</digi:trn><span style='color: red; font-weight: bold; font-size: larger;'> * </span> <digi:trn>are required.</digi:trn> 
+                                                <digi:trn>All fields marked with an</digi:trn><span style='color: red; font-weight: bold; font-size: larger;'> * </span> <digi:trn>are required.</digi:trn>
 	 												<digi:trn key="um:userValidEmail"> Please use a valid e-mail address.</digi:trn><br/><br/>
                                                 </td>
                                             </tr>
@@ -319,8 +319,8 @@
 											<tr>
 												<td width="3%">&nbsp;</td>
 												<td align=right class=f-names noWrap width="40%">
-                                                
-													<FONT color=red>*</FONT> 
+
+													<FONT color=red>*</FONT>
 													<digi:trn key="um:firstName">First Name</digi:trn>
 												</td>
 												<td align="left">
@@ -329,7 +329,7 @@
 											<tr>
 												<td width="3%">&nbsp;</td>
 												<td align=right class=f-names noWrap width="40%">
-													<FONT color=red>*</FONT> 
+													<FONT color=red>*</FONT>
 													<digi:trn key="um:lastName">Last Name</digi:trn>
 												</td>
 												<td align="left">
@@ -375,7 +375,7 @@
 													</div>
 												</td>
 											</tr>
-										
+
 											<tr>
 												<td width="3%">&nbsp;</td>
 												<td align=right class=f-names noWrap>
@@ -455,14 +455,14 @@
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:organizationName">Organization Name</digi:trn></td>
 												<td align="left">
-													<html:hidden property="organizationName" value="-1" /> 
+													<html:hidden property="organizationName" value="-1" />
 													<html:select property="selectedOrganizationId" styleClass="inp-text">
 														<html:option value="-1">-- <digi:trn key="um:selectOrganization">Select an organization</digi:trn> --</html:option>
 														<logic:notEmpty name="umAddUserForm" property="orgColl">
 															<html:optionsCollection name="umAddUserForm" property="orgColl" value="ampOrgId" label="name" />
 														</logic:notEmpty>
 													</html:select></td>
-	
+
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
@@ -476,7 +476,7 @@
 														<html:options collection="languages" property="code"
 															labelProperty="name" />
 													</html:select></td>
-	
+
 											</tr>
  											<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
 											<tr>
@@ -484,7 +484,7 @@
 												<td align="right" class="formCheckContainer"><digi:trn key="um:pledgesUser">Pledges User</digi:trn></td>
 												<td class=f-names align="left">
 													<html:checkbox property="pledger" styleClass="inp-text">
-														
+
 													</html:checkbox></td>
 											</tr>
 											</module:display>
@@ -500,7 +500,7 @@
 												<c:if test="${!umAddUserForm.registrationByEmail}">
 													<html:checkbox property="sendEmail"	styleClass="inp-text" disabled="true" >
 													</html:checkbox></td>
-												</c:if>													
+												</c:if>
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
@@ -528,12 +528,12 @@
 												<td align="right" class="addUserButContainer">
 													<c:set var="btnSubmit">
 														<digi:trn key="btn:submit">Submit</digi:trn>
-													</c:set> 
+													</c:set>
 													<html:submit value="${btnSubmit}" styleClass="dr-menu" onclick="return validate()" /></td>
 												<td align="left" class="addUserButContainer">
 													<c:set var="btnCancel">
 														<digi:trn key="btn:cancel">Cancel</digi:trn>
-													</c:set> 
+													</c:set>
 													<html:submit value="${btnCancel}" styleClass="dr-menu" onclick="return cancel()" /></td>
 											</tr>
 											<tr>
@@ -547,7 +547,7 @@
 						          <br />
 						      </td>
 					        </tr>
-						</table>						
+						</table>
 					</td>
 				</tr>
 			</table>

@@ -2,7 +2,7 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-  version="3.0"> 
+  version="3.0">
 
 	<display-name>AMP 2.0</display-name>
 	<description>Aid Management Platform</description>
@@ -51,7 +51,7 @@
          <param-value>utf-8</param-value>
       </init-param>
    </filter>
-   
+
    <filter>
         <filter-name>populateTLSRequestFilter</filter-name>
         <filter-class>org.digijava.kernel.request.PopulateTLSRequestFilter</filter-class>
@@ -62,7 +62,7 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
-   
+
 	<filter>
 		<filter-name>HibernateFilter</filter-name>
 		<filter-class>org.digijava.kernel.startup.HibernateSessionRequestFilter</filter-class>
@@ -96,10 +96,10 @@
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>ERROR</dispatcher>
 	</filter-mapping>
-	
+
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-    </listener>	
+    </listener>
 	<listener>
     	<listener-class>org.digijava.kernel.startup.AmpSessionListener</listener-class>
 	</listener>
@@ -108,12 +108,12 @@
  	<listener>
           <listener-class>net.sf.ehcache.constructs.web.ShutdownListener</listener-class>
      </listener>
-     
+
     <context-param>
 		<param-name>log4jExposeWebAppRoot</param-name>
 		<param-value>false</param-value>
 	</context-param>
-     
+
 	<context-param>
 		<param-name>patchAMP</param-name>
 		<param-value>
@@ -150,7 +150,7 @@
 		<filter-name>showMasterLayout</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+
 	<listener>
 		<listener-class>
 			org.digijava.module.aim.startup.AMPStartupListener
@@ -259,27 +259,27 @@
 		<init-param>
 			<param-name>config</param-name>
 			<param-value>
-				/repository/struts-config.xml,
-				/repository/admin/struts-config.xml,
-				/repository/calendar/struts-config.xml,
-				/repository/aim/struts-config.xml,
-				/repository/editor/struts-config.xml,
-				/repository/translation/struts-config.xml,
-				/repository/um/struts-config.xml,
-				/repository/exception/struts-config.xml,
-				/repository/digifeed/struts-config.xml,
-				/repository/gateperm/struts-config.xml,
-				/repository/help/struts-config.xml,
-				/repository/contentrepository/struts-config.xml, /repository/categorymanager/struts-config.xml,
-				/repository/sdm/struts-config.xml,
-				/repository/message/struts-config.xml,				
-				/repository/parisindicator/struts-config.xml,
-				/repository/search/struts-config.xml,
-				/repository/content/struts-config.xml,
-				/repository/xmlpatcher/struts-config.xml,
-				/repository/esrigis/struts-config.xml,
-				/repository/budgetexport/struts-config.xml,
-				/repository/gpi/struts-config.xml				
+				/WEB-INF/moduleConfig/struts-config.xml,
+				/WEB-INF/moduleConfig/admin/struts-config.xml,
+				/WEB-INF/moduleConfig/calendar/struts-config.xml,
+				/WEB-INF/moduleConfig/aim/struts-config.xml,
+				/WEB-INF/moduleConfig/editor/struts-config.xml,
+				/WEB-INF/moduleConfig/translation/struts-config.xml,
+				/WEB-INF/moduleConfig/um/struts-config.xml,
+				/WEB-INF/moduleConfig/exception/struts-config.xml,
+				/WEB-INF/moduleConfig/digifeed/struts-config.xml,
+				/WEB-INF/moduleConfig/gateperm/struts-config.xml,
+				/WEB-INF/moduleConfig/help/struts-config.xml,
+				/WEB-INF/moduleConfig/contentrepository/struts-config.xml, /WEB-INF/moduleConfig/categorymanager/struts-config.xml,
+				/WEB-INF/moduleConfig/sdm/struts-config.xml,
+				/WEB-INF/moduleConfig/message/struts-config.xml,
+				/WEB-INF/moduleConfig/parisindicator/struts-config.xml,
+				/WEB-INF/moduleConfig/search/struts-config.xml,
+				/WEB-INF/moduleConfig/content/struts-config.xml,
+				/WEB-INF/moduleConfig/xmlpatcher/struts-config.xml,
+				/WEB-INF/moduleConfig/esrigis/struts-config.xml,
+				/WEB-INF/moduleConfig/budgetexport/struts-config.xml,
+				/WEB-INF/moduleConfig/gpi/struts-config.xml
 			</param-value>
 		</init-param>
 		<init-param>
@@ -328,7 +328,7 @@
 	<error-code>403</error-code>
 		<location>/showLayout.do?layout=login</location>
 	</error-page>
-	
+
 	<error-page>
 		<error-code>404</error-code>
 		<location>/exceptionHandle.do</location>
@@ -336,69 +336,69 @@
 	<jsp-config>
 	<taglib>
 		<taglib-uri>/taglib/struts-bean</taglib-uri>
-		<taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
+		<taglib-location>/WEB-INF/tld/struts-bean.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/struts-html</taglib-uri>
-		<taglib-location>/WEB-INF/struts-html.tld</taglib-location>
+		<taglib-location>/WEB-INF/tld/struts-html.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/struts-logic</taglib-uri>
-		<taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
+		<taglib-location>/WEB-INF/tld/struts-logic.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/struts-nested</taglib-uri>
-		<taglib-location>/WEB-INF/struts-nested.tld</taglib-location>
+		<taglib-location>/WEB-INF/tld/struts-nested.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/struts-tiles</taglib-uri>
-		<taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
+		<taglib-location>/WEB-INF/tld/struts-tiles.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/digijava</taglib-uri>
-		<taglib-location>/WEB-INF/digijava.tld</taglib-location>
+		<taglib-location>/WEB-INF/tld/digijava.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/gateperm</taglib-uri>
-		<taglib-location>/repository/gateperm/gateperm.tld</taglib-location>
+		<taglib-location>WEB-INF/jsp/gateperm/gateperm.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/category</taglib-uri>
-		<taglib-location>/WEB-INF/category.tld</taglib-location>
+		<taglib-location>/WEB-INF/tld/category.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/globalsettings</taglib-uri>
-		<taglib-location>/WEB-INF/globalsettings.tld</taglib-location>
+		<taglib-location>/WEB-INF/tld/globalsettings.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/resourcesettings</taglib-uri>
-		<taglib-location>/WEB-INF/resourcesettings.tld</taglib-location>
+		<taglib-location>/WEB-INF/tld/resourcesettings.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/aim</taglib-uri>
-		<taglib-location>/WEB-INF/aim.tld</taglib-location>
+		<taglib-location>/WEB-INF/tld/aim.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/moduleVisibility</taglib-uri>
-		<taglib-location>/WEB-INF/moduleVisibility.tld</taglib-location>
+		<taglib-location>/WEB-INF/tld/moduleVisibility.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/featureVisibility</taglib-uri>
 		<taglib-location>
-			/WEB-INF/featureVisibility.tld
+			/WEB-INF/tld/featureVisibility.tld
 		</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/fieldVisibility</taglib-uri>
-		<taglib-location>/WEB-INF/fieldVisibility.tld</taglib-location>
+		<taglib-location>/WEB-INF/tld/fieldVisibility.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/editlivejava</taglib-uri>
-		<taglib-location>/WEB-INF/taglib.tld</taglib-location>
+		<taglib-location>/WEB-INF/tld/taglib.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/jstl-core</taglib-uri>
-		<taglib-location>/WEB-INF/c.tld</taglib-location>
+		<taglib-location>/WEB-INF/tld/c.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/fmt</taglib-uri>
@@ -412,7 +412,7 @@
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/jstl-functions</taglib-uri>
-		<taglib-location>/WEB-INF/fn.tld</taglib-location>
+		<taglib-location>/WEB-INF/tld/fn.tld</taglib-location>
 	</taglib>
 	</jsp-config>
 

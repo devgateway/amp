@@ -18,9 +18,9 @@
 
 <!-- Individual YUI CSS files -->
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css">
-<!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
+<!-- Individual YUI JS files -->
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
@@ -41,16 +41,16 @@
 <style type="text/css">
 <!--
 div.charcounter-progress-container {
-	width:100%; 
+	width:100%;
 	height:3px;
 	max-height:3px;
-	border: 1px solid gray; 
-	filter:alpha(opacity=20); 
+	border: 1px solid gray;
+	filter:alpha(opacity=20);
 	opacity:0.2;
 }
 
 div.charcounter-progress-bar {
-	height:3px; 
+	height:3px;
 	max-height:3px;
 	font-size:3px;
 	background-color:#5E8AD1;
@@ -115,9 +115,9 @@ div.fakefile2 input{
 -->
 </style>
 
-<script langauage="JavaScript">	
+<script langauage="JavaScript">
    function showMessagesHelpTooltip() {
-			
+
            var div=document.getElementById("createMessagesHelpTooltip");
            div.style.display = "block";
     }
@@ -127,8 +127,8 @@ div.fakefile2 input{
 
 </script>
 <DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
-<script langauage="JavaScript">	
-	
+<script langauage="JavaScript">
+
 var MyArray=new Array();
 
 function initMyArray(){
@@ -143,7 +143,7 @@ function initMyArray(){
   }
 }
 function addUserOrTeam(){
-    
+
   var reslist = document.getElementById('whoIsReceiver');
   var selreceivers=document.getElementById('selreceivers');
 
@@ -151,9 +151,9 @@ function addUserOrTeam(){
     return false;
   }
   var Mindex=reslist.selectedIndex;
-    
+
   initMyArray();//creates the empty array
-  
+
   if(selreceivers.length!=0){
     getCurrentSelectedReceivers(); //fills the array with existing selected options
   }
@@ -178,13 +178,13 @@ function addUserOrTeam(){
               Mycol++
             }
           }
-        }  
+        }
         else{//the option is a member
           if(!isOptionSelected(reslist.options[i])){//it is not at the list yet
             var Myrow=getTeamRow(reslist.options[i].id);
             var Mycol=MyArray[Myrow].length;
             MyArray[Myrow][Mycol]=reslist.options[i];
-          } 
+          }
         }
       }
     }
@@ -197,7 +197,7 @@ function getTeamRow(idTeam){
     if(MyArray[row][0].value==idTeam){
       return row;
     }
-  }  
+  }
 }
 function isOptionSelected(option){
   var selreceivers=document.getElementById('selreceivers');
@@ -221,21 +221,21 @@ function selectAllReceivers(){
   initMyArray();
   for(var h; h<selreceivers.length; h++){
     selreceivers.options[h]=null
-  }  
+  }
   selreceivers.options.length=0;
   for(var i=1; i<reslist.length; i++){
     if(reslist.options[i].value.indexOf('m')==0){//it is not at the list yet
       var Myrow=getTeamRow(reslist.options[i].id);
       var Mycol=MyArray[Myrow].length;
       MyArray[Myrow][Mycol]=reslist.options[i];
-    } 
-  }      
+    }
+  }
 }
 function showReceivers(){
   var selreceivers=document.getElementById('selreceivers');
   for(var h; h<selreceivers.length; h++){
     selreceivers.options[h]=null
-  }  
+  }
   selreceivers.options.length=0;
   for(var i=0; i<MyArray.length; i++){
     if(MyArray[i][1]!=null){
@@ -256,12 +256,12 @@ function getCurrentSelectedReceivers(){
       MyArray[row][col]=selreceivers.options[i];
     }
   }
-} 
+}
 function registerOrphanMember(orphans){
    for(var i=0; i<orphans.length; i++){
       var itsTeam = getTeam(orphans[i].value);
       orphans[i].id=itsTeam;
-   }    	
+   }
 }
 function getTeam(memberValue){
   var reslist = document.getElementById('whoIsReceiver');
@@ -284,12 +284,12 @@ function addOnption(list, text, value, id){
     list.options.add(option);
     return false;
 }
-  
+
 function removeUserOrTeam() {
   var tobeRemoved=document.getElementById('selreceivers');
   if(tobeRemoved==null){
     return;
-  }   
+  }
   var teamId=-1;
   if($("#selreceivers > option[value='guest']:selected").length>0){
        $("#selreceivers > option[value^='c:']").remove();
@@ -324,10 +324,10 @@ function removeUserOrTeam() {
               document.getElementById('selreceivers')[h]=null;
               i--;
             }
-          }     
+          }
         }
-      }     
-    }     
+      }
+    }
   }
   if($("#selreceivers > option[value^='c:']").length==0){
         $("#selreceivers > option[value='guest']").remove();
@@ -339,25 +339,25 @@ function addActionToURL(actionName){
   var lastSlash=fullURL.lastIndexOf("/");
   var partialURL=fullURL.substring(0,lastSlash);
   return partialURL+"/"+actionName;
-}	
-	
+}
+
 var guestText='---<digi:trn jsFriendly="true">Guest</digi:trn>---';
 var messageHelp='<digi:trn jsFriendly="true" >Message Help</digi:trn>';
 var relatedActs='<digi:trn jsFriendly="true">Type first letter of activity to view suggestions</digi:trn>';
 var extraReceivers='<digi:trn jsFriendly="true">Type first letter of contact to view suggestions \n or enter email to send message to</digi:trn>';
 var tmHelp='<digi:trn jsFriendly="true">A user may appear in more than one workspace.\n Be sure to choose the correct workspace and user within the workspace.</digi:trn>';
 var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of activity to view suggestions</digi:trn>';
-	
+
 	function getElementOffset (domObject) {
 		var pos = {top: 0, left: 0}
 
 		var retX = 0;
 		var retY = 0;
-		
+
 		while (domObject.offsetParent != null) {
 			retX += domObject.offsetLeft;
 			retY += domObject.offsetTop;
-			
+
 			domObject = domObject.offsetParent;
 		}
 		logged = true;
@@ -367,9 +367,9 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
 	}
 
 
-   
-    
-    
+
+
+
   function MyremoveUserOrTeam(){
   	var orphands=new Array();
     var list = document.getElementById('selreceivers');
@@ -384,8 +384,8 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
        registerOrphanMember(orphands);
     }
     removeUserOrTeam();
-  }  
-  
+  }
+
   function MyaddUserOrTeam(){
     var list = document.getElementById('selreceivers');
     var MyContacts=new Array();
@@ -417,12 +417,12 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
 		}
 	}
   }
-	
+
   function validate(){
       var titleSize=document.messageForm.messageName.value.trim().length;
         var descSize=document.messageForm.description.value.length;
         <c:set var="message">
-    		<digi:trn>Please enter name </digi:trn>						
+    		<digi:trn>Please enter name </digi:trn>
         </c:set>
         <c:set var="msg">
     		${fn:replace(message,'\\n',' ')}
@@ -445,7 +445,7 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
 				return false;
          	}
         }
-        
+
     var selAct = document.messageForm.selectedAct.value;
     if (selAct != null && selAct.trim().length > 0) { //Activity selected
      	if (selAct.indexOf("(") < 0 || selAct.indexOf(")") < 0 || selAct.lastIndexOf("(") > selAct.lastIndexOf(")")){
@@ -463,8 +463,8 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
 		if(selectUsers(event)){
 			messageForm.action="${contextPath}/message/messageActions.do?actionType=addMessage&toDo="+event;
   			messageForm.target = "_self";
-  			messageForm.submit();		
-		}	 		
+  			messageForm.submit();
+		}
 	}
 
 	function removeAttachment(attachmentOrder){
@@ -479,28 +479,28 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
   		messageForm.target = "_self";
   		messageForm.submit();
 	}
-	
+
 	function cancel() {
 		messageForm.action="${contextPath}/message/messageActions.do?actionType=cancelMessage";
   		messageForm.target = "_self";
-  		messageForm.submit();	
+  		messageForm.submit();
 	}
-	
+
 	function selectUsers(event) {
     	//var list = document.getElementsByName('selreceivers');
-    	
+
     	var mainList = $("input[name='selreceivers'][type='checkbox']:checked");
     	var guestList = $("input[name='selreceivers'][type='hidden']");
-			
+
 			var list = mainList.push(guestList);
-    	
-    	
-    	
-    	
+
+
+
+
     	if (event=='send') {
     		if ((mainList == null || mainList.length==0) && (guestList == null || guestList.length==0)) {
     			<c:set var="message">
-            	<digi:trn>Please add receivers </digi:trn>						
+            	<digi:trn>Please add receivers </digi:trn>
                 </c:set>
                 <c:set var="msg">
             	${fn:replace(message,'\\n',' ')}
@@ -513,8 +513,8 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
         		alert('${msgsq}');
         		return false ;
     		}
-    	}    	
-    	
+    	}
+
         //check guest emails
 				for(var i = 0; i < guestList.length; i++) {
 						var receiver=guestList[i].value.substring(2);
@@ -522,50 +522,50 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
 						if(receiver.indexOf("<")!=-1){
 							email=receiver.substr(receiver.indexOf("<")+1, receiver.indexOf(">")-receiver.indexOf("<")-1); //cut email from "some text <email>"
 						}
-						
+
 						var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 						var expression = new RegExp(pattern)
 					    if(expression.test(email)!=true){
 						    var trn='<digi:trn jsFriendly="true">Please provide correct email</digi:trn>';
 								alert(trn);
-						    return false; 
+						    return false;
 					    }
 				}
 
-       /* 	
+       /*
     		for(var i = 0; i < list.length; i++) {
         		list.options[i].selected = true;
     		}*/
-    	
+
     	return true;
 	}
-	
+
 	var addedGuests = new Array();
-	
+
 	function validateGuestEmail (email) {
 		var successVal = true;
 		if(email.indexOf("<")!=-1){
 			email=email.substr(email.indexOf("<")+1, email.indexOf(">")-email.indexOf("<")-1); //cut email from "some text <email>"
 		}
-		
+
 		var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 		var expression = new RegExp(pattern)
     if(expression.test(email)!=true){
 	    var trn='<digi:trn jsFriendly="true">Please provide correct email</digi:trn>';
 			alert(trn);
-	    successVal = false; 
+	    successVal = false;
     }
     return successVal;
 	}
-		
-	
+
+
 	function addContact(contact){
 		var guestVal=contact.value;
 		if (validateGuestEmail(guestVal)) {
 			if(guestVal.length>0 && $.inArray("c:" + guestVal, addedGuests) < 0){
 				addedGuests.push("c:" + guestVal);
 				var filteredGusetId = guestVal.replace("<", "&lt;").replace(">", "&gt;");
-	
+
 				var guestListItemMarkup = new Array();
 				guestListItemMarkup.push('<div class="msg_added_cont">');
 				guestListItemMarkup.push('<div style="float:right;position: relative"><span style="cursor:pointer;" onClick="removeGuest(this)">[x] remove</span></div>');
@@ -576,17 +576,17 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
 				guestListItemMarkup.push('</div>');
 				var html=guestListItemMarkup.join('');
 				$('#guest_user_container').append(html);
-			}	
+			}
 			contact.value = "";
 		}
 	}
-	
+
 	function fillExternalContact() {
 		if (selContacts != null && selContacts.length > 0) {
 			var guestListItemMarkup = new Array();
 			for (var contIdx = 0; contIdx < selContacts.length; contIdx ++) {
 				var curContact = selContacts[contIdx];
-				
+
 				if (curContact.substring(0,2) == "c:") {
 					guestListItemMarkup.push('<div class="msg_added_cont">');
 					guestListItemMarkup.push('<div style="float:right;"><span style="cursor:pointer;" onClick="removeGuest(this)">[x] remove</span></div>');
@@ -600,11 +600,11 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
 			$('#guest_user_container').append(guestListItemMarkup.join(''));
 		}
 	}
-	
+
 	function removeGuest(obj) {
 		var delControl = $(obj);
 		delControl.parent().parent().remove();
-		
+
 		var addedGuestIdx;
 		for (addedGuestIdx = 0; addedGuestIdx < addedGuests.length; addedGuestIdx ++) {
 			if (addedGuests[addedGuestIdx] == delControl.parent().parent().find("input").attr("value")) {
@@ -623,9 +623,9 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
 			return false;
 		}
 		//check submit selected receivers
-		
+
 		//$("input[type=checkbox][name=receiversIds]:checked");
-		
+
 		var list = document.getElementById('selreceivers');
 		if(list!=null){
     		for(var i = 0; i < list.length; i++) {
@@ -633,8 +633,8 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
     		}
     	}
 		return true;
-	}	
-	
+	}
+
 	// don't remove or change this line!!!
 	document.getElementsByTagName('body')[0].className='yui-skin-sam';
 </script>
@@ -644,7 +644,7 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
 
 .contentbox_border{
         border: 1px solid black;
-	border-width: 1px 1px 1px 1px; 
+	border-width: 1px 1px 1px 1px;
 	background-color: #ffffff;
 }
 
@@ -663,12 +663,12 @@ var relatedActivityHelpText='<digi:trn jsFriendly="true">Type first letter of ac
 
 #statesAutoComplete div{
 	padding: 0px;
-	margin: 0px; 
+	margin: 0px;
 }
 
 #contactsAutocomplete div {
 	padding: 0px;
-	margin: 0px; 
+	margin: 0px;
 }
 
 #statesAutoComplete,
@@ -724,7 +724,7 @@ span.extContactDropdownEmail {
 <c:set var="title">
     <c:choose>
         <c:when test="${not empty messageForm.forwardedMsg}">
-            
+
             <c:choose>
                 <c:when test="${messageForm.tabIndex==1}">
             <digi:trn>Forward Message</digi:trn>
@@ -739,8 +739,8 @@ span.extContactDropdownEmail {
                     <digi:trn>Forward Calendar Events</digi:trn>
                 </c:otherwise>
             </c:choose>
-            
-            
+
+
         </c:when>
         <c:when test="${messageForm.messageId==null}">
             <digi:trn>Add Message</digi:trn>
@@ -751,7 +751,7 @@ span.extContactDropdownEmail {
     </c:choose>
 </c:set>
 <br/><br/>
-<digi:form  action="/messageActions.do?actionType=attachFilesToMessage" method="post" enctype="multipart/form-data">																				
+<digi:form  action="/messageActions.do?actionType=attachFilesToMessage" method="post" enctype="multipart/form-data">
 
 <module:display name="Messages" parentModule="Messaging System"></module:display>
 
@@ -771,7 +771,7 @@ span.extContactDropdownEmail {
   						<button class="buttonx_sm" onclick="getSearchManagerInstanceById('${reqSearchManagerId}',messagesSearchManagerCreator).findPrev()" style="padding: 0px;" type="button">&lt;&lt;</button>
 						<button class="buttonx_sm" onclick="getSearchManagerInstanceById('${reqSearchManagerId}',messagesSearchManagerCreator).findNext()" style="padding: 0px;" type="button">&gt;&gt;</button>
   					</div>
-					<div class="msg_receivers" id="msg_Receivers_div">						
+					<div class="msg_receivers" id="msg_Receivers_div">
 						<logic:empty name="messageForm" property="teamMapValues">
 							<div class="msg_lbl"><digi:trn>No receivers</digi:trn></div>
 						</logic:empty>
@@ -786,19 +786,19 @@ span.extContactDropdownEmail {
 											<c:forEach var="tm" items="${team.members}">
 													<div class="msg_grp_mem_name" id="m:${tm.memberId}">
 														<html:multibox property="receiversIds" styleId="t:${team.id}" value="m:${tm.memberId}" /><span><c:out value="${tm.memberName}"/></span> <br/>
-													</div>													
+													</div>
 											</c:forEach>
 										</div>
-									</logic:notEmpty>											                                                		
-								</c:forEach>		
-						</logic:notEmpty>		
-								
+									</logic:notEmpty>
+								</c:forEach>
+						</logic:notEmpty>
+
 				</div>
 			<br/>
 			<input type="checkbox" name="sendToAll" value="checkbox"/><digi:trn>Send to All</digi:trn><br/><br/>
 			<b><digi:trn>Additional Receivers</digi:trn>: </b><digi:trn>Type first letter of contact to view suggestions or enter e-mail to send message to</digi:trn><br />
 			<div class="msg_add">
-				
+
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
 				<div id="extContactAutocom"></div>
 				<input type="button" value="<digi:trn>Add</digi:trn>" class="buttonx_sm" style="height:22px;vertical-align: middle;" onClick="addContact(document.getElementById('contactInput'))">
@@ -814,9 +814,9 @@ span.extContactDropdownEmail {
 	<field:display name="Title Text Box" feature="Create Message Form">
 	  <tr>
 	    <td width="20" valign="top" colspan=2>
-	    	<b style="font-size:12px;"><digi:trn>Title</digi:trn></b> 
-	    	<b class="mand">*</b> 
-	    	<span style="font-size:11px;" id="titleCharCounter"></span>	
+	    	<b style="font-size:12px;"><digi:trn>Title</digi:trn></b>
+	    	<b class="mand">*</b>
+	    	<span style="font-size:11px;" id="titleCharCounter"></span>
 	    	<div class="charcounter-progress-container" >
 	    		<div id="titleProgressBar" class="charcounter-progress-bar" style="width:0%;"></div>
 	    	</div>
@@ -866,9 +866,9 @@ span.extContactDropdownEmail {
     <td colspan="2"><b style="font-size:12px;"><digi:trn>Set as alert</digi:trn></b></td>
   </tr>
   <tr>
-  <td colspan=2><html:select property="setAsAlert" styleClass="dropdwn_sm" style="width:140px">																							
+  <td colspan=2><html:select property="setAsAlert" styleClass="dropdwn_sm" style="width:140px">
 				<html:option value="0"><digi:trn>No</digi:trn> </html:option>
-				<html:option value="1"><digi:trn>Yes</digi:trn> </html:option>																																														
+				<html:option value="1"><digi:trn>Yes</digi:trn> </html:option>
 	  	</html:select>
 </td>
   </tr>
@@ -884,9 +884,9 @@ span.extContactDropdownEmail {
 							<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
 							<c:if test="${not empty messageForm.sdmDocument.id}">
 								<c:set target="${urlParamsSort}" property="documentId" value="${messageForm.sdmDocument.id}"/>
-							</c:if>																					
+							</c:if>
 							<digi:link module="sdm" href="/showFile.do~activeParagraphOrder=${attachedDoc.paragraphOrder}" name="urlParamsSort">
-								<img src="/repository/message/view/images/attachment.png" border="0" />
+								<img src="WEB-INF/jsp/message/view/images/attachment.png" border="0" />
 								${attachedDoc.contentTitle}
 							</digi:link>
 							<a href="javascript:removeAttachment(${attachedDoc.paragraphOrder})" title="Click Here To Remove Attachment" ><img  src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/></a>
@@ -903,38 +903,38 @@ span.extContactDropdownEmail {
 					<div>
 						<input type="submit" value="<digi:trn>Upload</digi:trn>" class="buttonx" align="right" onclick="return validateFile()"/>
 					</div>
-					
+
 				</td>
 				<td>&nbsp;
-					
+
 				</td>
 			</tr>
 		</table></td>
   </tr>
-  
+
   <tr>
     <td colspan="2" align="center">
 			<hr class="hr_3">
 			<field:display name="Save button" feature="Create Message Form">
 				<input type="button" value="<digi:trn>Save</digi:trn>" onclick="save('draft');" class="buttonx">
 			</field:display>
-			
+
 			<field:display name="Send button" feature="Create Message Form">
 				<c:if test="${empty messageForm.forwardedMsg}">
 					<c:set var="trnSendtBtn">
 						<digi:trn>Send</digi:trn>
-					</c:set> 
+					</c:set>
 					<input type="button" value="${trnSendtBtn}" onclick="save('send');" class="buttonx">
 				</c:if>
 			</field:display>
-			
+
 			<c:if test="${not empty messageForm.forwardedMsg}">
 				<c:set var="trnFwdtBtn">
 					<digi:trn>Forward</digi:trn>
-				</c:set> 
+				</c:set>
 				<input type="button" value="${trnFwdtBtn}" onclick="save('send');" class="buttonx">
 			</c:if>
-			
+
 			<field:display name="Cancel button" feature="Create Message Form">
 				<input type="button" value="<digi:trn>Cancel</digi:trn>" onclick="cancel();" class="buttonx">
 			</field:display>
@@ -946,13 +946,13 @@ span.extContactDropdownEmail {
 
 
 <script type="text/javascript">
-	
-	//Char counters	
+
+	//Char counters
 	var titleLength = 50;
 	var titleCounter = $("#titleCharCounter");
 	var titleProgressBar = $("#titleProgressBar");
 	initTitleCharCounter();
-	
+
 	function initTitleCharCounter() {
 		var titleCounterTxt = ["(", titleLength - $("#titleMax").val().length, " <digi:trn>characters remaining</digi:trn>", ")"];
 		titleCounter.html(titleCounterTxt.join(""));
@@ -966,13 +966,13 @@ span.extContactDropdownEmail {
 		titleCounter.html(titleCounterTxt.join(""));
 		titleProgressBar.css("width", this.value.length/titleLength*100 + "%");
 	});
-	
+
 	var descLength = 500;
 	var descCounter = $("#descCharCounter");
 	var descProgressBar = $("#descProgressBar");
-	
+
 	initDescCharCounter();
-	
+
 	function initDescCharCounter() {
 		var descCounterTxt = ["(", descLength - $("#descMax").val().length, " <digi:trn>characters remaining</digi:trn>", ")"];
 		descCounter.html(descCounterTxt.join(""));
@@ -986,13 +986,13 @@ span.extContactDropdownEmail {
 		descCounter.html(descCounterTxt.join(""));
 		descProgressBar.css("width", this.value.length/descLength*100 + "%");
 	});
-	//End of char counters	
-	
+	//End of char counters
 
-	$(".group_checkbox").bind("change", function (event) { 
+
+	$(".group_checkbox").bind("change", function (event) {
 		var selGrpCtrl = $(this);
 		var childUsers = selGrpCtrl.parent().parent().find("input[name='receiversIds']");
-		
+
 		childUsers.each(
 			function (idx){
 				this.checked = selGrpCtrl.attr("checked");
@@ -1001,7 +1001,7 @@ span.extContactDropdownEmail {
 
 
 
-			
+
 			//Related activity autocomplite
 			var relatedActDataSource = new YAHOO.widget.DS_XHR("/message/messageActions.do", ["\n", ";"]);
 			relatedActDataSource.scriptQueryAppend = "actionType=searchRelatedAcrivities";
@@ -1011,8 +1011,8 @@ span.extContactDropdownEmail {
 			var relatedActAutoComp = new YAHOO.widget.AutoComplete("statesinput","statesautocomplete", relatedActDataSource);
 			relatedActAutoComp.queryDelay = 0.5;
 			$("#statesinput").css("position", "static");
-			
-			
+
+
 			//External contact autocomplite
 			var extContactDataSource = new YAHOO.widget.DS_XHR("/message/messageActions.do", ["\n", ";"]);
 			extContactDataSource.scriptQueryAppend = "actionType=searchExternalContacts";
@@ -1021,11 +1021,11 @@ span.extContactDropdownEmail {
 			extContactDataSource.queryMatchContains = true;
 		  extContactDataSource.scriptQueryParam  = "srchStr";
 			var extContactAutoComp = new YAHOO.widget.AutoComplete("contactInput","extContactAutocom", extContactDataSource);
-			
+
 			extContactAutoComp.formatResult = function( oResultData , sQuery , sResultMatch ) {
 				var retVal;
 				//Hilight email separately
-				
+
 				if (oResultData[0].indexOf('<') > -1 && oResultData[0].indexOf('>') > -1) {
 					var contactEmail = oResultData[0].substring (oResultData[0].indexOf('<') + 1, oResultData[0].indexOf('>'));
 					var contactName = oResultData[0].substring (0, oResultData[0].indexOf('<'));
@@ -1034,17 +1034,17 @@ span.extContactDropdownEmail {
 				} else {
 					retVal = oResultData;
 				}
-				
+
 				return retVal;
 			}
-			
+
 			extContactAutoComp.queryDelay = 0.5;
 			$("#contactInput").css("position", "static");
-	
 
-	
 
-	$("input[name='sendToAll']").bind("change", function (event) { 
+
+
+	$("input[name='sendToAll']").bind("change", function (event) {
 		var selAllCtrl = $(this);
 		var allUsers = selAllCtrl.parent().find(".msg_receivers").find("input");
 		allUsers.each(
@@ -1052,8 +1052,8 @@ span.extContactDropdownEmail {
 				this.checked = selAllCtrl.attr("checked");
 			})
 		});
-		
-		
+
+
 		//Preselect recipients
 		function preselectRecipients() {
 			var preselectedIds = Array();
@@ -1061,18 +1061,18 @@ span.extContactDropdownEmail {
 				<c:forEach var="recId" items="${messageForm.receiversIds}">
 					preselectedIds.push('${recId}');
 				</c:forEach>
-			</logic:notEmpty>						
-			
+			</logic:notEmpty>
+
 			var preselIdx;
 			for (preselIdx = 0; preselIdx < preselectedIds.length; preselIdx ++) {
 				$('input[type="checkbox"][value="' + preselectedIds[preselIdx] + '"]').attr("checked",true);
-			} 
-		
+			}
+
 		}
-		
+
 		preselectRecipients();
 
-  $("#descMax").bind("paste", function (event) { 
+  $("#descMax").bind("paste", function (event) {
   	var browser=navigator.appName;
   	if(browser=="Microsoft Internet Explorer"){
   		var textThatNeedsToBePasted = window.clipboardData.getData("Text");
@@ -1082,10 +1082,10 @@ span.extContactDropdownEmail {
   			alert(msg);
   			window.clipboardData.setData("Text",'');
   		}
-      }				
+      }
 	});
 
-    $("#titleMax").bind("paste", function (event) { 
+    $("#titleMax").bind("paste", function (event) {
     	var browser=navigator.appName;
     	if(browser=="Microsoft Internet Explorer"){
     		var textThatNeedsToBePasted = window.clipboardData.getData("Text");
@@ -1096,13 +1096,13 @@ span.extContactDropdownEmail {
     			window.clipboardData.setData("Text",'');
     		}
         }
-	});	
+	});
 </script>
 
 <script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
 <script type="text/javascript">
 	initFileUploads('<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>');
-	
+
 	var selContacts = new Array();
 	<logic:present name="messageForm" property="receiversIds">
 		<logic:iterate indexId="idxId" name="messageForm" property="receiversIds" id="receiversId">
@@ -1110,10 +1110,10 @@ span.extContactDropdownEmail {
 		</logic:iterate>
 		fillExternalContact();
 	</logic:present>
-	
+
 	var divEl=document.getElementById('msg_Receivers_div');
-	getSearchManagerInstanceById('searchStr',messagesSearchManagerCreator).setDiv(divEl);	
-	
+	getSearchManagerInstanceById('searchStr',messagesSearchManagerCreator).setDiv(divEl);
+
 </script>
 
 </digi:form>

@@ -1,1 +1,1 @@
-<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp"  />
+<jsp:include page="../../..WEB-INF/jsp/aim/view/teamPagesHeader.jsp"  />

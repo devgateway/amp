@@ -14,19 +14,19 @@
 <!-- Source File -->
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
-        
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
 
 <!-- Individual YUI CSS files -->
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css">
 
-<!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
+<!-- Individual YUI JS files -->
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
 
-<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"  />
+<jsp:include page="WEB-INF/jsp/aim/view/addOrganizationPopin.jsp"  />
 
 <style>
 <!--
@@ -46,7 +46,7 @@
 
 .contentbox_border{
         border: 1px solid black;
-	border-width: 1px 1px 1px 1px; 
+	border-width: 1px 1px 1px 1px;
 	background-color: #ffffff;
 }
 
@@ -65,12 +65,12 @@
 
 #statesAutoComplete div{
 	padding: 0px;
-	margin: 0px; 
+	margin: 0px;
 }
 
 #contactsAutocomplete div {
 	padding: 0px;
-	margin: 0px; 
+	margin: 0px;
 }
 
 #statesAutoComplete,
@@ -140,16 +140,16 @@ span.extContactDropdownEmail {
 		myPanel.setBody("");
 		myPanel.beforeHideEvent.subscribe(function() {
 			panelStart=1;
-		}); 
-		
+		});
+
 		myPanel.render(document.body);
 	}
 	//this is called from editActivityMenu.jsp
 	addLoadEvent(initOrganizationsScript);
-	
+
 	// don't remove or change this line!!
 	document.getElementsByTagName('body')[0].className='yui-skin-sam';
--->	
+-->
 </script>
 <style type="text/css">
 	.mask {
@@ -158,50 +158,50 @@ span.extContactDropdownEmail {
 	  filter: alpha(opacity=80);
 	  background-color:#2f2f2f;
 	}
-	
-	#popin .content { 
-	    overflow:auto; 
-	    height:455px; 
-	    background-color:fff; 
-	    padding:10px; 
-	} 
+
+	#popin .content {
+	    overflow:auto;
+	    height:455px;
+	    background-color:fff;
+	    padding:10px;
+	}
 	.bd a:hover {
   		background-color:#ecf3fd;
-		font-size: 10px; 
-		color: #0e69b3; 
-		text-decoration: none	  
+		font-size: 10px;
+		color: #0e69b3;
+		text-decoration: none
 	}
 	.bd a {
 	  	color:black;
 	  	font-size:10px;
 	}
-	
+
 	div.charcounter-progress-container {
-	width:inherit; 
+	width:inherit;
 	height:3px;
 	max-height:3px;
-	border: 1px solid gray; 
-	filter:alpha(opacity=20); 
+	border: 1px solid gray;
+	filter:alpha(opacity=20);
 	opacity:0.2;
 	}
-	
+
 	div.charcounter-progress-bar {
-		height:3px; 
+		height:3px;
 		max-height:3px;
 		font-size:3px;
 		background-color:#5E8AD1;
 	}
-		
+
 </style>
 <script language="JavaScript">
     <!--
-   
+
     //DO NOT REMOVE THIS FUNCTION --- AGAIN!!!!
     function mapCallBack(status, statusText, responseText, responseXML){
        window.location.reload();
     }
-    
-    
+
+
     var responseSuccess = function(o){
 	/* Please see the Success Case section for more
 	 * details on the response object's properties.
@@ -214,27 +214,27 @@ span.extContactDropdownEmail {
 	 * o.responseXML
 	 * o.argument
 	 */
-		var response = o.responseText; 
+		var response = o.responseText;
 		var content = document.getElementById("popinContent");
 	    //response = response.split("<!")[0];
 		content.innerHTML = response;
 	    //content.style.visibility = "visible";
-		
+
 		showContent();
 	}
- 
-	var responseFailure = function(o){ 
-	// Access the response object's properties in the 
-	// same manner as listed in responseSuccess( ). 
-	// Please see the Failure Case section and 
-	// Communication Error sub-section for more details on the 
+
+	var responseFailure = function(o){
+	// Access the response object's properties in the
+	// same manner as listed in responseSuccess( ).
+	// Please see the Failure Case section and
+	// Communication Error sub-section for more details on the
 	// response object's properties.
-		//alert("Connection Failure!"); 
-	}  
-	var callback = 
-	{ 
-		success:responseSuccess, 
-		failure:responseFailure 
+		//alert("Connection Failure!");
+	}
+	var callback =
+	{
+		success:responseSuccess,
+		failure:responseFailure
 	};
 
 	function showContent(){
@@ -256,7 +256,7 @@ span.extContactDropdownEmail {
 				myclose();
 				refreshPage();
 			}
-			checkAndClose=false;			
+			checkAndClose=false;
 		}
 	}
 	function refreshPage(){
@@ -264,18 +264,18 @@ span.extContactDropdownEmail {
 	}
 
 	function myclose(){
-		myPanel.hide();	
+		myPanel.hide();
 		panelStart=1;
-	
+
 	}
 	function closeWindow() {
 		myclose();
 	}
 	function showPanelLoading(msg){
-		myPanel.setHeader(msg);		
+		myPanel.setHeader(msg);
 		var content = document.getElementById("popinContent");
-		content.innerHTML = '<div style="text-align: center">' + 
-		'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' + 
+		content.innerHTML = '<div style="text-align: center">' +
+		'<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
 		'<digi:trn jsFriendly="true">Loading...</digi:trn><br/><br/></div>';
 		showContent();
 	}
@@ -293,10 +293,10 @@ span.extContactDropdownEmail {
 
 .contentbox_border {
     border: 1px solid #cccccc;
-	border-width: 1px 1px 1px 1px; 
+	border-width: 1px 1px 1px 1px;
 	background-color: #ffffff;
 }
-.myStyleClass{	
+.myStyleClass{
 	min-width: 110px;
 }
 -->
@@ -304,15 +304,15 @@ span.extContactDropdownEmail {
 
 <script language="JavaScript" type="text/javascript">
   <jsp:include page="../../aim/view/scripts/calendar.js.jsp"  />
-  
-	
-function cancel() { 
+
+
+function cancel() {
 	setMethod("");
 	selectAtts();
 	var eventForm = document.getElementById("showAmpEventFormID");
 	eventForm.action="${contextPath}/calendar/showCalendarView.do?filterInUse=false";
 	eventForm.target = "_self";
-	eventForm.submit();	
+	eventForm.submit();
 }
 function removeSelOrgs() {
 	var orgList = document.getElementsByName("selOrganizations");
@@ -326,7 +326,7 @@ function removeSelOrgs() {
 			selectAtts();
 			var eventForm = document.getElementById("showAmpEventFormID");
 			eventForm.target = "_self";
-			eventForm.submit();	
+			eventForm.submit();
 		}
 	}
 //	document.calendarEventForm.submit();
@@ -336,7 +336,7 @@ function submitForm() {
 	selectAtts();
 	var eventForm = document.getElementById("showAmpEventFormID");
 	eventForm.target = "_self";
-	eventForm.submit();	
+	eventForm.submit();
 //	document.calendarEventForm.submit();
 }
 
@@ -345,7 +345,7 @@ function submitForm() {
 </script>
 
 <jsp:include page="../../aim/view/scripts/newCalendar.jsp"  />
-<jsp:include page="/repository/calendar/view/scripts/calendarEventScript.jsp"/>
+<jsp:include page="WEB-INF/jsp/calendar/view/scripts/calendarEventScript.jsp"/>
 <link rel="stylesheet" href="<digi:file src="module/calendar/css/main.css"/>">
 
 <script language="JavaScript" type="text/javascript">
@@ -355,7 +355,7 @@ function submitForm() {
 	var validEmailmsg="<digi:trn>Invalid e-mail address:</digi:trn>"
 	var alreadyAdded="<digi:trn >E-mail address already added: </digi:trn>"
     var guestText='---<digi:trn jsFriendly="true">Guest</digi:trn>---';
-		
+
 function makePublic(){
 
   var showPrivateEvents = document.getElementsByName('privateEventCheckbox')[0];
@@ -502,7 +502,7 @@ function addOrganisation(orgId, orgName){
 	    }
 
         var guestVal=guest.value;
-		
+
         while(guestVal.indexOf(";")!=-1){
             var optionValue=guestVal.substring(0,guestVal.indexOf(";"));
             if (!checkEmail(optionValue)){
@@ -522,8 +522,8 @@ function addOrganisation(orgId, orgName){
              if(guestAmount==0){
                 addOption(list,guestText,"guest");
             }
-			addOption(list,optionValue,'g:'+optionValue);				
-		    guestVal=guestVal.substring(guestVal.indexOf(";")+1);		
+			addOption(list,optionValue,'g:'+optionValue);
+		    guestVal=guestVal.substring(guestVal.indexOf(";")+1);
 		}
 		if(guestVal.length>0){
             if (!checkEmail(guestVal)){
@@ -539,9 +539,9 @@ function addOrganisation(orgId, orgName){
                 addOption(list,guestText,"guest");
             }
 			addOption(list,guestVal,'g:'+guestVal);
-		}	
+		}
 	    guest.value = "";
-	} 
+	}
 
     function isGuestAllreadyAdded(guest){
 	  var selreceivers = document.getElementById('selreceivers');
@@ -554,17 +554,17 @@ function addOrganisation(orgId, orgName){
 		}
 	  return false
 	}
-  
-    function checkEmail(email){	
+
+    function checkEmail(email){
         var pattern=/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
         var expression = new RegExp(pattern)
-        if(expression.test(email)){         
-    		return true;   
-        }else{   
-        	return false; 
+        if(expression.test(email)){
+    		return true;
+        }else{
+        	return false;
         }
     }
-   
+
 
   function removeAtt() {
     var list = document.getElementById('selreceivers');
@@ -659,35 +659,35 @@ function addOrganisation(orgId, orgName){
   }
 
   function sendEvent(){
-		 var list = document.getElementById('selreceivers');  
+		 var list = document.getElementById('selreceivers');
 		 if(list!=null){
 		  	for(var i = 0; i < list.length; i++) {
 		  		list.options[i].selected = true;
 		  	}
 		}
-			
 
-		if (validateText() && validateDates()){ 
+
+		if (validateText() && validateDates()){
 			document.getElementById('hdnMethod').value = 'save';
 			<digi:context name="sendEvent" property="context/module/moduleinstance/showCalendarEvent.do?method=save"/>
 	//		document.calendarEventForm.action = "<%=sendEvent %>";
 	//		document.calendarEventForm.target = "_self";
 	//		document.calendarEventForm.submit();
-			
+
 			var eventForm = document.getElementById("showAmpEventFormID");
-			eventForm.action = "<%=sendEvent %>"; 
+			eventForm.action = "<%=sendEvent %>";
 			eventForm.target = "_self";
-			eventForm.submit();	
+			eventForm.submit();
 		}
-  }	  
+  }
 
 function validateDates(){
 	var startDate = document.getElementById("selectedStartDate").value;
-   	var endDate = document.getElementById("selectedEndDate").value; 
+   	var endDate = document.getElementById("selectedEndDate").value;
    	var startHour = 1*(document.getElementById("selectedStartHour").value);
-   	var endHour = 1*(document.getElementById("selectedEndHour").value); 
+   	var endHour = 1*(document.getElementById("selectedEndHour").value);
    	var startMin = 1*(document.getElementById("selectedStartMinute").value);
-   	var endMin = 1*(document.getElementById("selectedEndMinute").value); 
+   	var endMin = 1*(document.getElementById("selectedEndMinute").value);
    	//alert ("startDate: " + startDate + " -- "+"startHour: " + startHour + " -- "+"startMin: " + startMin + " -- "+"endDate: " + endDate + " -- "+"endHour: " + endHour + " -- "+"endMin: " + endMin + " -- ");
 	if (compareDates(startDate, endDate, false)==1){
 		alert ('<digi:trn jsFriendly="true">End Date Should Be Greater Than Start Date</digi:trn>');
@@ -710,9 +710,9 @@ function validateDates(){
 
 function validateText(){
 	var title = "" + document.getElementById("titleMax").value;
-   	var decription = "" + document.getElementById("descMax").value; 
+   	var decription = "" + document.getElementById("descMax").value;
    	var regexp = new RegExp("[a-zA-Z0-9 \r\n,._ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ()а-яА-ЯşŞţŢîÎăĂâÂ]+");
-   	
+
    	if (title==""){
 		alert ("<digi:trn jsFriendly='true'>Title can't be empty!</digi:trn>");
         return false;
@@ -742,7 +742,7 @@ function recurEvent(){
 function is_mail(m) {
 	var p = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 	//alert(p.test(m));
-	return p.test(m);		  
+	return p.test(m);
 }
 
 function submitForm(thisform){
@@ -750,10 +750,10 @@ function submitForm(thisform){
 	document.getElementById('CalendatTypeid').value = typeid;
 	setMethod("");
 	selectAtts();
-	
+
 	var eventForm = document.getElementById("showAmpEventFormID");
 	eventForm.target = "_self";
-	eventForm.submit();	
+	eventForm.submit();
 //	document.calendarEventForm.submit();
 }
 
@@ -793,13 +793,13 @@ function validateGuestEmail (email) {
 	if(email.indexOf("<")!=-1){
 		email=email.substr(email.indexOf("<")+1, email.indexOf(">")-email.indexOf("<")-1); //cut email from "some text <email>"
 	}
-	
+
 	var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 	var expression = new RegExp(pattern)
 	if(expression.test(email)!=true){
 	    var trn='<digi:trn jsFriendly="true">Please provide correct email</digi:trn>';
 			alert(trn);
-	    successVal = false; 
+	    successVal = false;
 	}
 	return successVal;
 }
@@ -821,7 +821,7 @@ function addContact(contact){
 			guestListItemMarkup.push('</div>');
 			var html=guestListItemMarkup.join('');
 			$('#guest_user_container').append(html);
-		}	
+		}
 		contact.value = "";
 	}
 }
@@ -831,13 +831,13 @@ function fillExternalContact() {
 		var guestListItemMarkup = new Array();
 		for (var contIdx = 0; contIdx < selContacts.length; contIdx ++) {
 			var curContact = selContacts[contIdx];
-			
+
 			if (curContact.substring(0,2) == "g:") {
 				guestListItemMarkup.push('<div class="msg_added_cont">');
 				guestListItemMarkup.push('<div style="float:right;"><span style="cursor:pointer;" onClick="removeGuest(this)">[x] remove</span></div>');
 				guestListItemMarkup.push(curContact.substring(2));
 
-				guestListItemMarkup.push('<input name="selectedAtts" class="guest_contact_hidden" type="hidden" value="');								
+				guestListItemMarkup.push('<input name="selectedAtts" class="guest_contact_hidden" type="hidden" value="');
 
 				guestListItemMarkup.push(curContact);
 				guestListItemMarkup.push('"/>');
@@ -852,7 +852,7 @@ function fillExternalContact() {
 function removeGuest(obj) {
 	var delControl = $(obj);
 	delControl.parent().parent().remove();
-	
+
 	var addedGuestIdx;
 	for (addedGuestIdx = 0; addedGuestIdx < addedGuests.length; addedGuestIdx ++) {
 		if (addedGuests[addedGuestIdx] == delControl.parent().parent().find("input").attr("value")) {
@@ -897,32 +897,32 @@ function removeGuest(obj) {
 					<digi:trn key="aim:createNewEvent">Create New Event</digi:trn>
 				</span>
 			</td>
-		</tr>	
-		<tr>			
-			<td noWrap vAlign="top"> 
+		</tr>
+		<tr>
+			<td noWrap vAlign="top">
             	<table class="contentbox_border" width="100%" cellpadding="0" cellspacing="0">
-                	<tr>	
+                	<tr>
                 		<td align="center" style="padding: 0px 3px 0px 3px;">
-			           		
-			           </td>	
+
+			           </td>
                     </tr>
              		<tr>
-			            <td style="font-family: Arial;font-size: 12px;">                
+			            <td style="font-family: Arial;font-size: 12px;">
 			                <div style="background-color: #ffffff; padding: 20px; background-color:#F8F8F8;">
-			                	<span style="font-family: Arial;font-size: 11px;"><digi:errors/></span>			                  
+			                	<span style="font-family: Arial;font-size: 11px;"><digi:errors/></span>
 			                  <html:hidden name="calendarEventForm" property="calendarTypeId" styleId="CalendatTypeid"/>
 			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 			                    <table border="0" align="center" cellpadding="3" cellspacing="3" class="t_mid">
 			                    	<tr>
-			                    		<td nowrap="nowrap" style="vertical-align: text-top" width=48%>			                    			
+			                    		<td nowrap="nowrap" style="vertical-align: text-top" width=48%>
 			                    			<div style="margin-bottom:5px;"><font color="red" size="3px">*</font><b><digi:trn>Title</digi:trn></b>
 			                    				<span style="font-size:11px;" id="titleCharCounter"></span>
-			                    			</div>			                    			
+			                    			</div>
 										    <div class="charcounter-progress-container" style="width: 220px;">
 										    	<div id="titleProgressBar" class="charcounter-progress-bar" style="width:0%;"></div>
 										    </div>
 										    <div style="height:5px;width:220px;">&nbsp; </div>
-										    
+
 			                    			<html:text name="calendarEventForm" styleId="titleMax" property="eventTitle" style="width: 220px" styleClass="inp-text"/>
 			                    			<br /><br />
 			                    			<digi:trn key="calendar:cType"><div style="margin-bottom:5px;"><b><digi:trn>Calendar type</digi:trn></b></div></digi:trn>
@@ -969,7 +969,7 @@ function removeGuest(obj) {
 			                                                      <c:if test="${hour < 10}"><c:set var="hour" value="0${hour}"/></c:if>
 			                                                      <option value="${hour}" class="inp-text">${hour}</option>
 			                                                    </c:forEach>
-			                                                  </select>			                                                 
+			                                                  </select>
 			                                                  	<script type="text/javascript">
 			                                                  	if(document.getElementById('selectedStartTime') != null)
 				                                                  selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
@@ -1177,12 +1177,12 @@ function removeGuest(obj) {
 				                                          	<script language="Javascript">
 				                                          		document.getElementsByName("privateEventCheckbox")[0].checked = true
 				                                          	</script>
-				                                          </c:if>                                          
+				                                          </c:if>
 			                                          <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>											</td>
 			                    		<td width="2%">&nbsp;</td>
-			                    		<feature:display name="Donors" module="Calendar">			                    			
+			                    		<feature:display name="Donors" module="Calendar">
 			                    			<td colspan="4" valign="top" width=48%>
-                                                                <digi:trn key="cal:organizations"><b><digi:trn>Organizations</digi:trn></b></digi:trn>	
+                                                                <digi:trn key="cal:organizations"><b><digi:trn>Organizations</digi:trn></b></digi:trn>
 											<br />
 											<div style="margin-top:7px;">
 												<table border="0" cellpadding="0" cellspacing="3">
@@ -1222,7 +1222,7 @@ function removeGuest(obj) {
 													</tr>
 												</table>
 											</div>
-												
+
 											<br/><br/>
 
 
@@ -1232,14 +1232,14 @@ function removeGuest(obj) {
 											    </div>
 											    <div style="height:5px;width:220px;">&nbsp; </div>
 												<div style="margin-top:7px;"><html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/></div>													                    						                    		</td>
-			                    		</feature:display>			                    		
+			                    		</feature:display>
 			                    	</tr>
 
 
-									
+
 			                    	<tr height="25px;">
 			                    		<td colspan="8">
-										
+
 										<table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td valign=top style="font-size:12px;">
@@ -1255,7 +1255,7 @@ function removeGuest(obj) {
 				<logic:notEmpty name="team" property="members">
 					<div class="rec_group_container">
 						<div class="msg_grp_name">
-							
+
 							<html:multibox property="selectedAtts" value="t:${team.id}" style="float:left;" styleClass="group_checkbox"/>
 							<div class="msg_lbl">---<c:out value="${team.name}"/>---</div>
 						</div>
@@ -1265,16 +1265,16 @@ function removeGuest(obj) {
 							</c:forEach>
 						</div>
 					</div>
-				</logic:notEmpty>											                                                		
-			</c:forEach>		
+				</logic:notEmpty>
+			</c:forEach>
 		</logic:notEmpty>
-	
+
 	</div>
 	<br />
 				<input type="checkbox" name="sendToAll" value="checkbox"/><digi:trn>Send to All</digi:trn><br/><br/>
 	<b><digi:trn>Additional Receivers</digi:trn>: </b><digi:trn>Type first letter of contact to view suggestions or enter e-mail to send message to</digi:trn><br />
 			<div class="msg_add">
-				
+
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
 				<div id="extContactAutocom"></div>
 				<input type="button" value="<digi:trn>Add</digi:trn>" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
@@ -1284,14 +1284,14 @@ function removeGuest(obj) {
 				<c:if test="${!empty calendarEventForm.selectedAttsCol}">
                     <c:forEach var="attendee" items="${calendarEventForm.selectedAttsCol}">
                         <c:if test="${fn:startsWith(attendee.value, 'g:')}">
-                       		<div class="msg_added_cont">	
+                       		<div class="msg_added_cont">
 								<div style="float:right;position: relative"><span style="cursor:pointer;" onClick="removeGuest(this)">[x] remove</span></div>
 								${attendee.label}
 								<input name="selectedAtts" class="guest_contact_hidden" type="hidden" value="g:${attendee.value}">
 							</div>
                         </c:if>
                     </c:forEach>
-                    
+
                   </c:if>
 				</div>
 			</td>
@@ -1302,10 +1302,10 @@ function removeGuest(obj) {
 			                    		<td colspan="2">&nbsp;</td>
 			                    		<td>
 			                    			<font color="red" size="3px">*</font>
-			                    			<digi:trn key="calendar:Attendee">Attendee</digi:trn>			                                            
+			                    			<digi:trn key="calendar:Attendee">Attendee</digi:trn>
 			                    		</td>
 			                    		<td colspan="3">&nbsp; </td>
-			                    	</tr>			                    	
+			                    	</tr>
 			                    	<tr>
 			                    		<td colspan="2">&nbsp;</td>
 			                    		 <td style="width: 220px">
@@ -1329,7 +1329,7 @@ function removeGuest(obj) {
 			                                        <td colspan="3" style="text-align: center;">
 					                                	<input type="button" class="buttonx" onclick="MyaddUserOrTeam();" style="width:110px;font-family:Arial;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
 					                                  	<br><br>
-					                       			  	<input type="button" class="buttonx" style="width:110px;font-family:Arial;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >											
+					                       			  	<input type="button" class="buttonx" style="width:110px;font-family:Arial;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >
 			                                        </td>
 			                                        <td>
 			                                        	<table width="100%" height="100%">
@@ -1348,19 +1348,19 @@ function removeGuest(obj) {
 			                                        			</td>
 			                                        		</tr>
 			                                        	</table>
-			                                        </td>			                                        
+			                                        </td>
 			                                        <td style="vertical-align: top;" nowrap="nowrap">
 			                                        	<input type="button" class="buttonx" style="width:110px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:btnAddGuest">Add</digi:trn>">
 			                                            <img src="../ampTemplate/images/help.gif" onmouseover="stm([calendarHelp,separateEmails],Style[15])" onmouseout="htm()"/>
 			                                        </td>
-			                    	</tr>	
-			                    	<tr height="5px"><td colspan="8">&nbsp;</td></tr>-->			                    	
+			                    	</tr>
+			                    	<tr height="5px"><td colspan="8">&nbsp;</td></tr>-->
 			                    	<tr>
 			                          <td colspan="8" style="text-align:center;">
 									  <hr />
 			                          	<feature:display name="Preview Event button" module="Calendar">
 			                          		<input type="submit" class="buttonx" style="width: 110px" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
-&nbsp;			                          	</feature:display>                           
+&nbsp;			                          	</feature:display>
 			                            <feature:display name="Save and Send button" module="Calendar">
 			                            	<input type="button" class="buttonx" style="min-width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
 &nbsp;			                            </feature:display>
@@ -1373,9 +1373,9 @@ function removeGuest(obj) {
 		                      </table>
 			                </div>
 			            </td>
-        			</tr>       
+        			</tr>
 				</table>
-			</td>    	
+			</td>
         	</table>
     	</td>
 	</tr>
@@ -1387,13 +1387,13 @@ function removeGuest(obj) {
 </digi:form>
 
 <script type="text/javascript">
-	
-	//Char counters	
+
+	//Char counters
 	var titleLength = 50;
 	var titleCounter = $("#titleCharCounter");
 	var titleProgressBar = $("#titleProgressBar");
 	initTitleCharCounter();
-	
+
 	function initTitleCharCounter() {
 		var titleCounterTxt = ["(", titleLength - $("#titleMax").val().length, " <digi:trn>characters remaining</digi:trn>", ")"];
 		titleCounter.html(titleCounterTxt.join(""));
@@ -1407,13 +1407,13 @@ function removeGuest(obj) {
 		titleCounter.html(titleCounterTxt.join(""));
 		titleProgressBar.css("width", this.value.length/titleLength*100 + "%");
 	});
-	
+
 	var descLength = 500;
 	var descCounter = $("#descCharCounter");
 	var descProgressBar = $("#descProgressBar");
-	
+
 	initDescCharCounter();
-	
+
 	function initDescCharCounter() {
 		var descCounterTxt = ["(", descLength - $("#descMax").val().length, " <digi:trn>characters remaining</digi:trn>", ")"];
 		descCounter.html(descCounterTxt.join(""));
@@ -1427,15 +1427,15 @@ function removeGuest(obj) {
 		descCounter.html(descCounterTxt.join(""));
 		descProgressBar.css("width", this.value.length/descLength*100 + "%");
 	});
-	//End of char counters	
-	
+	//End of char counters
+
 	//Team select checkbox handlers
 	$(".group_checkbox").bind("change", function (e) {
 		var srcObj = $(this);
 		srcObj.parents("div.rec_group_container").children("div.msg_grp_mem_name").children("input[type='checkbox']").attr("checked", srcObj.attr("checked"));
-				
+
 	});
-	
+
 	//select all handler
 	$("input[type='checkbox'][name='sendToAll']").bind("change", function (e) {
         var checked = $(this).attr('checked');
@@ -1446,7 +1446,7 @@ function removeGuest(obj) {
             childBoxes.attr("checked", false);
         }
 	});
-	
+
 	//External contact autocomplite
 	var extContactDataSource = new YAHOO.widget.DS_XHR("/message/messageActions.do", ["\n", ";"]);
 	extContactDataSource.scriptQueryAppend = "actionType=searchExternalContacts";
@@ -1455,11 +1455,11 @@ function removeGuest(obj) {
 	extContactDataSource.queryMatchContains = true;
   extContactDataSource.scriptQueryParam  = "srchStr";
 	var extContactAutoComp = new YAHOO.widget.AutoComplete("contactInput","extContactAutocom", extContactDataSource);
-	
+
 	extContactAutoComp.formatResult = function( oResultData , sQuery , sResultMatch ) {
 		var retVal;
 		//Hilight email separately
-		
+
 		if (oResultData[0].indexOf('<') > -1 && oResultData[0].indexOf('>') > -1) {
 			var contactEmail = oResultData[0].substring (oResultData[0].indexOf('<') + 1, oResultData[0].indexOf('>'));
 			var contactName = oResultData[0].substring (0, oResultData[0].indexOf('<'));
@@ -1468,13 +1468,13 @@ function removeGuest(obj) {
 		} else {
 			retVal = oResultData;
 		}
-		
+
 		return retVal;
 	}
-	
+
 	extContactAutoComp.queryDelay = 0.5;
 	$("#contactInput").css("position", "static");
-	
+
 </script>
 
 

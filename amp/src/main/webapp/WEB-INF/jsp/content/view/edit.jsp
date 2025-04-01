@@ -14,7 +14,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
+<jsp:include page="WEB-INF/jsp/aim/view/teamPagesHeader.jsp"  />
 
 <digi:context name="displayThumbnail" property="context/aim/default/displayThumbnail.do" />
 <style>
@@ -98,7 +98,7 @@ div.fakefile2 input {
 
 #thumbnails_table tr td {
 	text-align : left;
-	
+
 }
 -->
 </style>
@@ -111,7 +111,7 @@ div.fakefile2 input {
     }
 
 	var labelText = [];
-	
+
     function attachFuncToThumbnail(index, pageCode) {
 		var idThumbnail = "displayThumbnail_" + index;
         var lastTimeStamp = new Date().getTime();
@@ -134,7 +134,7 @@ div.fakefile2 input {
                     downloadFile(index, pageCode);
                 });
             }
-            
+
             if(labelText[index] != null && labelText[index] != "null")
 			{
 				if (labelText[index].length > 0){
@@ -201,7 +201,7 @@ div.fakefile2 input {
                           <tr>
                             <td width="3%">&nbsp;</td>
                             <td align=left class=title noWrap colspan="2">
-								<digi:errors/>                            
+								<digi:errors/>
 							</td>
                           </tr>
                           <tr>
@@ -238,7 +238,7 @@ div.fakefile2 input {
                             </td>
                           </tr>
                         </table>
-                        
+
                         </td>
                     </tr>
                   </table></td>
@@ -258,28 +258,28 @@ div.fakefile2 input {
                           <table cellpadding="5" cellspacing="5">
                             <tr>
                               <td align="center">
-                              <img src="/repository/content/view/layout_1.png"/><br />
+                              <img src="WEB-INF/jsp/content/view/layout_1.png"/><br />
                               <html:radio name="contentForm" property="contentLayout" value="1" disabled="false" />
                               <br />
                               </td>
                               <td align="center">
-                              <img src="/repository/content/view/layout_2.png" /><br />
+                              <img src="WEB-INF/jsp/content/view/layout_2.png" /><br />
                               <html:radio property="contentLayout" value="2" disabled="false" />
                               <br />
                               </td>
                               <td align="center">
-                              <img src="/repository/content/view/layout_3.png" /><br />
+                              <img src="WEB-INF/jsp/content/view/layout_3.png" /><br />
                               <html:radio property="contentLayout" value="3" disabled="false" />
                               <br />
                               </td>
                               <td align="center">
-                              <img src="/repository/content/view/layout_4.png" /><br />
+                              <img src="WEB-INF/jsp/content/view/layout_4.png" /><br />
                               <html:radio property="contentLayout" value="4" disabled="false" />
                               <br />
                               </td>
                             </tr>
                           </table>
-					</td>                      
+					</td>
                     </tr>
                   </table>
                 </td>
@@ -310,7 +310,7 @@ div.fakefile2 input {
                         </c:choose>
                     </c:set>
                     <div style="width:1000px;background-color:#ffffff;${displayLayout}" id="layout_${layoutNumber}" name="layoutGroup">
-                    <c:import url="/repository/content/view/layout_${layoutNumber}.jsp">
+                    <c:import url="WEB-INF/jsp/content/view/layout_${layoutNumber}.jsp">
 					  <c:param name="pageCode" value="${contentForm.pageCode}"/>
                       <c:param name="htmlblock_1" value="${contentForm.htmlblock_1}"/>
                       <c:param name="htmlblock_2" value="${contentForm.htmlblock_2}"/>
@@ -368,7 +368,7 @@ div.fakefile2 input {
                     </table>
                     <br />
                     <br />
-                    
+
 					<table id="thumbnails_table" cellpadding="3" cellspacing="3" style="font-size:12px;">
 						<tr id="tr_path_thumbnail">
 						<td><digi:trn>Select Thumbnail to upload:</digi:trn><font color="red">*</font></td>
@@ -376,7 +376,7 @@ div.fakefile2 input {
 							<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
 								<input id="tempContentThumbnail" name="tempContentThumbnail" type="file" class="file"/>
 							</div>
-                            
+
 						</td>
 						</tr>
 						<tr id="tr_path_optional">
@@ -388,15 +388,15 @@ div.fakefile2 input {
 						</td>
 						</tr>
 						<tr>
-							<td> 
+							<td>
 								<digi:trn>Thumbnail Label:</digi:trn><font color="red"></font>
 							</td>
-							<td> 
+							<td>
                             	<html:text property="tempContentThumbnailLabel"/>
 							</td>
 						</tr>
 						<tr>
-							<td colspan="2" align="center"> 
+							<td colspan="2" align="center">
 	                        <input type="button" class="buttonx" onclick="upload()" value="<digi:trn>Upload File</digi:trn>"/>&nbsp;
 							</td>
 						</tr>
@@ -441,7 +441,7 @@ $(document).ready( function() {
 			$('div[name=layoutGroup]').hide();
 			//Show the selected one
 			$('#layout_'+$(this).val()).show();
-			
+
 		});
 	});
 
@@ -482,7 +482,7 @@ function upload() {
 function doAction(index, action, confirmation) {
 	if(confirmation){
 		var ret = confirm("<digi:trn jsFriendly='true'>Are you sure?</digi:trn>");
-		if (!ret) return false; 
+		if (!ret) return false;
 	}
 	document.contentForm.action = "/content/contentManager.do?action=" + action +"&index=" + index;
 	document.contentForm.target = "_self";

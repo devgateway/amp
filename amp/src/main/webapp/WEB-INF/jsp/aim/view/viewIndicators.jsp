@@ -22,10 +22,10 @@ a.itr:hover {
 .itr {
 	position: relative;
 	text-decoration: none;
-	
+
 }
 
-.itr:hover .bpop 
+.itr:hover .bpop
 {
 	display: block;
 	position: absolute;
@@ -33,7 +33,7 @@ a.itr:hover {
 	background-color: white;
 	padding: 3px 5px 4px 5px;
 	border: 1px Silver solid;
-	
+
 	left: 8em;
 	top: 0.6em;
 }
@@ -56,11 +56,11 @@ a.itr:hover {
    function setOverImg(index){
 	  document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-righthover1.gif"
 	}
-	
+
    function setOutImg(index){
 	  document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
 	}
-	
+
 	function sortByVal(value){
 	  if(value!=null){
 	    <digi:context name="viewIndicators" property="context/module/moduleinstance/viewIndicators.do" />
@@ -69,32 +69,32 @@ a.itr:hover {
 	    document.aimViewIndicatorsForm.submit();
 	  }
 	}
-	
+
 	function addIndicator(){
 	  <digi:context name="addIndicator" property="context/module/moduleinstance/addNewIndicator.do?indicator=new" />
 	  openURLinWindow("<%= addIndicator %>",500, 300);
 	}
-	
+
 	function editIndicator(id){
 	  <digi:context name="viewEditIndicator" property="context/module/moduleinstance/viewEditIndicator.do" />
 	  openURLinWindow("<%= viewEditIndicator %>?id="+id,500, 300);
 	}
-	
-	function deletePrgIndicator(){  
-		<c:set var="translation"> 
+
+	function deletePrgIndicator(){
+		<c:set var="translation">
 			<digi:trn key="aim:doYouWantToDelIndicatorCheckProgramFirst">Do you want to delete the Indicator ? Please check whether the indicator is being used by some Program.</digi:trn>
 		</c:set>
 					return confirm("${translation}");
 			}
-			
-	
+
+
 	//if yu remove or rename this function please look in addNewIndicator.jsp
 	function viewall(){
 	    <digi:context name="viewIndicators" property="context/module/moduleinstance/viewIndicators.do?sector=viewall" />
 	    document.aimViewIndicatorsForm.action = "<%= viewIndicators %>";
 	    document.aimViewIndicatorsForm.target = "_self";
 	    document.aimViewIndicatorsForm.submit();
-	  
+
 	}
 	function filterIndicators(){
 		  <digi:context name="viewIndicators" property="context/module/moduleinstance/viewIndicators.do" />
@@ -137,10 +137,10 @@ a.itr:hover {
             </td>
           </tr>-->
 						<%-- End navigation --%>
-						
+
 						<tr>
 							<td vAlign="center" width="100%"><jsp:include
-									page="/repository/aim/view/adminXSLExportToolbar.jsp" /></td>
+									page="WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" /></td>
 						</tr>
 						<tr>
 							<td height=16 vAlign="center" width="100%"><span
@@ -214,7 +214,7 @@ a.itr:hover {
 																									test="${empty aimViewIndicatorsForm.sortBy || aimViewIndicatorsForm.sortBy=='nameAsc'}">
 																									<a href="javascript:sortByVal('nameDesc')">
 																										<b><digi:trn>Indicator Name</digi:trn>
-																									</b> <img src="/repository/aim/images/up.gif"
+																									</b> <img src="WEB-INF/jsp/aim/images/up.gif"
 																										border="0" /> </a>
 																								</c:if> <c:if
 																									test="${not empty aimViewIndicatorsForm.sortBy && aimViewIndicatorsForm.sortBy!='nameAsc'}">
@@ -224,7 +224,7 @@ a.itr:hover {
 																									</b>
 																									<c:if
 																											test="${aimViewIndicatorsForm.sortBy=='nameDesc'}">
-																											<img src="/repository/aim/images/down.gif"
+																											<img src="WEB-INF/jsp/aim/images/down.gif"
 																												border="0" />
 																										</c:if> </a>
 																								</c:if></td>
@@ -233,7 +233,7 @@ a.itr:hover {
 																									test="${aimViewIndicatorsForm.sortBy=='sectAsc'}">
 																									<a href="javascript:sortByVal('sectDesc')">
 																										<b><digi:trn>Sector</digi:trn>
-																									</b><img src="/repository/aim/images/up.gif"
+																									</b><img src="WEB-INF/jsp/aim/images/up.gif"
 																										border="0" /> </a>
 																								</c:if> <c:if
 																									test="${aimViewIndicatorsForm.sortBy!='sectAsc'}">
@@ -241,7 +241,7 @@ a.itr:hover {
 																										<b><digi:trn>Sector</digi:trn>
 																									</b> <c:if
 																											test="${aimViewIndicatorsForm.sortBy=='sectDesc'}">
-																											<img src="/repository/aim/images/down.gif"
+																											<img src="WEB-INF/jsp/aim/images/down.gif"
 																												border="0" />
 																										</c:if> </a>
 																								</c:if></td>

@@ -20,34 +20,34 @@
 
 <style type="text/css">
 	.td_top1 {
-		border-top-style:solid; 
+		border-top-style:solid;
 		border-top-color:#455786;
 		border-top-width: 1px;
-		border-right-style:solid; 
+		border-right-style:solid;
 		border-right-color:#455786;
-		border-right-width: 1px; 
-		border-left-style:solid; 
+		border-right-width: 1px;
+		border-left-style:solid;
 		border-left-color:#455786;
 		border-left-width: 1px;
 	}
-	
+
 	.td_bottom1 {
-		border-bottom-style:solid; 
+		border-bottom-style:solid;
 		border-bottom-color:#455786;
 		border-bottom-width: 1px;
-		border-right-style:solid; 
+		border-right-style:solid;
 		border-right-color:#455786;
-		border-right-width: 1px; 
-		border-left-style:solid; 
+		border-right-width: 1px;
+		border-left-style:solid;
 		border-left-color:#455786;
 		border-left-width: 1px;
 	}
-	
+
 	.td_right_left1 {
-		border-right-style:solid; 
+		border-right-style:solid;
 		border-right-color:#455786;
-		border-right-width: 1px; 
-		border-left-style:solid; 
+		border-right-width: 1px;
+		border-left-style:solid;
 		border-left-color:#455786;
 		border-left-width: 1px;
 	}
@@ -82,34 +82,34 @@ var responseSuccess = function(o){
 	* o.responseXML
 	* o.argument
 	*/
-	var response = o.responseText; 
+	var response = o.responseText;
 	var content = document.getElementById("myContentContent");
 	//response = response.split("<!")[0];
 	content.innerHTML = response;
 	//content.style.visibility = "visible";
-	
+
 	showContent();
 }
 
 function showPanelLoading(msg){
 	   var content = document.getElementById("myContentContent");
 	   content.innerHTML = "<div style='text-align: center'>" + "Loading..." +
-	   "... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";   
+	   "... <br /> <img src='WEB-INF/jsp/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
 	   showContent();
 	 }
-	 
-var responseFailure = function(o){ 
-	// Access the response object's properties in the 
-	// same manner as listed in responseSuccess( ). 
-	// Please see the Failure Case section and 
-	// Communication Error sub-section for more details on the 
+
+var responseFailure = function(o){
+	// Access the response object's properties in the
+	// same manner as listed in responseSuccess( ).
+	// Please see the Failure Case section and
+	// Communication Error sub-section for more details on the
 	// response object's properties.
-	//alert("Connection Failure!"); 
-}  
-var callback = 
-{ 
-	success:responseSuccess, 
-	failure:responseFailure 
+	//alert("Connection Failure!");
+}
+var callback =
+{
+	success:responseSuccess,
+	failure:responseFailure
 };
 
 function showContent(){
@@ -133,7 +133,7 @@ function preview(id)
 	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreviewPopin.do" />
 	var url = "<%=addUrl %>?"+postString;
 	YAHOOAmp.util.Connect.asyncRequest("POST", url, callback);
-	
+
 }
 
 function initPopin() {
@@ -142,8 +142,8 @@ function initPopin() {
 	myPanel.setBody("");
 	myPanel.beforeHideEvent.subscribe(function() {
 		panelStart=1;
-	}); 
-	
+	});
+
 	myPanel.render(document.body);
 }
 
@@ -151,7 +151,7 @@ window.onload=initPopin;
 
 function viewChanges(id){
 	var windowname = "popup"+new Date().getTime();
-	
+
 	openNewWindowWithName(650,200, windowname);
 	<digi:context name="showLog" property="context/module/moduleinstance/showActivityLog.do" />
 	if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
@@ -165,13 +165,13 @@ function viewChanges(id){
 	{
 		popupPointer.href = "<%= showLog %>?activityId=" + id;
 	}
-	
+
 }
 
 function expandAll() {
-   
+
 	$("img[id$='_minus']").show();
-	$("img[id$='_plus']").hide();	
+	$("img[id$='_plus']").hide();
 	$("div[id$='_dots']").hide();
 	$("div[id^='act_']").show('fast');
 }
@@ -179,7 +179,7 @@ function expandAll() {
 function collapseAll() {
 
 	$("img[id$='_minus']").hide();
-	$("img[id$='_plus']").show();	
+	$("img[id$='_plus']").show();
 	$("div[id$='_dots']").show();
 	$("div[id^='act_']").hide();
 }
@@ -201,12 +201,12 @@ function projectFiche(id)
 
 function fnEditProject(id)
 {
-	
+
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
 	document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~resetMessages=true~action=edit~surveyFlag=true~activityId=" + id + "~actId=" + id;
 	document.aimChannelOverviewForm.target = "_self";
     document.aimChannelOverviewForm.submit();
-    
+
 }
 
 </script>
@@ -223,7 +223,7 @@ function fnEditProject(id)
 		document.aimMainProjectDetailsForm.description.value = key;
 		document.aimMainProjectDetailsForm.objectives.value = key;
 		document.aimMainProjectDetailsForm.target = popupPointer.name;
-		document.aimMainProjectDetailsForm.submit();					  
+		document.aimMainProjectDetailsForm.submit();
 	}
 
 -->
@@ -245,17 +245,17 @@ function fnEditProject(id)
 	padding: 0;
 }
 
-#tabs li { 
+#tabs li {
 	 float: left;
 }
 
 
 
-#tabs a, #tabs span { 
+#tabs a, #tabs span {
 	font-size: 8pt;
 }
 
-#tabs ul li a { 
+#tabs ul li a {
 	background:#222E5D url(/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top;
 	color:#FFFFFF;
 	float:left;
@@ -266,12 +266,12 @@ function fnEditProject(id)
 
 }
 
-#tabs ul li a div { 
+#tabs ul li a div {
 	background: url(/TEMPLATE/ampTemplate/images/tabrightcorner.gif) right top no-repeat;
 	padding: 4px 10px 4px 10px;
 }
 
-#tabs ul li span a { 
+#tabs ul li span a {
 	background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top;
 	color:#FFFFFF;
 	float:left;
@@ -282,20 +282,20 @@ function fnEditProject(id)
 
 }
 
-#tabs ul li span a div { 
+#tabs ul li span a div {
 	background: url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) right top no-repeat;
 	padding: 4px 10px 4px 10px;
 }
 
 #tabs a:hover {
-    background: #455786 url(/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;  
+    background: #455786 url(/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;
 }
 
 #tabs a:hover span {
-    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;
 }
 #tabs a:hover div {
-    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;
 }
 
 #tabs a.active {
@@ -333,8 +333,8 @@ function fnEditProject(id)
 	padding: 0px 4px 0px 4px;
 }
 
-#subtabs a, #subtabs span { 
-	font-size: 8pt; 
+#subtabs a, #subtabs span {
+	font-size: 8pt;
 }
 
 #subtabs a {
@@ -418,8 +418,8 @@ ${aimMainProjectDetailsForm.activityExists}
 				parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Preview Activity" module="Previews">
 					<field:display feature="Preview Activity" name="Preview Button">
-						<a href="javascript:preview(document.getElementById('tempActivity').value);" title="<digi:trn key='btn:preview'>Preview</digi:trn>"> 
-							<img src="/repository/aim/images/tangopack_preview.png" border="0"></a>
+						<a href="javascript:preview(document.getElementById('tempActivity').value);" title="<digi:trn key='btn:preview'>Preview</digi:trn>">
+							<img src="WEB-INF/jsp/aim/images/tangopack_preview.png" border="0"></a>
 					</field:display>
 				</feature:display>
 			</module:display>
@@ -431,12 +431,12 @@ ${aimMainProjectDetailsForm.activityExists}
 
 			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Edit Activity" module="Previews">
-					<field:display feature="Edit Activity" name="Edit Activity Button">  
+					<field:display feature="Edit Activity" name="Edit Activity Button">
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="edit">
 	                		<a href="${activityEditURL}" style="cursor:pointer" target="_self" title="<digi:trn key='btn:edit'>Edit</digi:trn>">
-								<img src="/repository/aim/images/tangopack_edit.png" border="0"></a>&nbsp;
-	                		 <a style="cursor:pointer" target="_blank" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:oldedit'>Edit using Old Form</digi:trn>"> 
-								<img src="/repository/aim/images/tangopack_old_edit.png" border="0"></a>&nbsp;
+								<img src="WEB-INF/jsp/aim/images/tangopack_edit.png" border="0"></a>&nbsp;
+	                		 <a style="cursor:pointer" target="_blank" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:oldedit'>Edit using Old Form</digi:trn>">
+								<img src="WEB-INF/jsp/aim/images/tangopack_old_edit.png" border="0"></a>&nbsp;
 						</logic:equal>
 					</field:display>
 				</feature:display>
@@ -448,14 +448,14 @@ ${aimMainProjectDetailsForm.activityExists}
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="validate">
 							<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
 								<a href="${activityEditURL}" style="cursor:pointer" target="_self" title="<digi:trn key='btn:validate'>Validate</digi:trn>">
-									<img src="/repository/aim/images/tangopack_validate2.png" border="0"></a>&nbsp;
+									<img src="WEB-INF/jsp/aim/images/tangopack_validate2.png" border="0"></a>&nbsp;
 							</c:if>
 						</logic:equal>
 					</field:display>
 				</feature:display>
 			</module:display>
 			<a style="cursor:pointer" target="_blank" onclick="javascript:previewHistory(document.getElementById('tempActivity').value); return false;" title="<digi:trn>View History</digi:trn>">
-				<img src="/repository/aim/images/activity_history.png" border="0"></a>&nbsp;
+				<img src="WEB-INF/jsp/aim/images/activity_history.png" border="0"></a>&nbsp;
 			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Logframe" module="Previews">
 					<field:display name="Logframe Preview Button" feature="Logframe">
@@ -483,7 +483,7 @@ ${aimMainProjectDetailsForm.activityExists}
 		</td>
 	</tr>
 	<tr><td>&nbsp;
-		
+
 	</td></tr>
    <TR>
 		<TD>
@@ -491,19 +491,19 @@ ${aimMainProjectDetailsForm.activityExists}
 			<TABLE width="100%" cellSpacing="0" cellPadding="0" vAlign="top">
 				<TR>
 					<TD>
-						<TABLE cellpadding="0" cellspacing="0" valign="top" align=left width="100%"> 
+						<TABLE cellpadding="0" cellspacing="0" valign="top" align=left width="100%">
 							<TR>
 							<feature:display module="Project ID and Planning" name="Identification">
 							<field:display  feature="Identification" name="Project Title">
 								<TD valign="center"><span class="subtitle-blue-1">
 									&nbsp;<bean:write name="aimMainProjectDetailsForm" property="name"/></span>
 								</TD>
-							</field:display>						
+							</field:display>
 							</feature:display>
 							</TR>
 						</TABLE>
 					</TD>
-				</TR>					
+				</TR>
 			</TABLE>
 		</TD>
 	</TR>
@@ -560,7 +560,7 @@ ${aimMainProjectDetailsForm.activityExists}
 								</LI>
 							</logic:notEqual>
 						</module:display>
-						
+
 						<feature:display name="Financial Progress Tab" module="Funding">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="2">
 							   <c:set target="${urlTabs}" property="tabIndex" value="2"/>
@@ -587,14 +587,14 @@ ${aimMainProjectDetailsForm.activityExists}
 								</LI>
 							</logic:notEqual>
 						</feature:display >
-						
+
 							<feature:display name="Funding Information" module="Funding"></feature:display>
 								<field:display name="Funding Organizations Tab" feature="Funding Information">
 									<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="3">
 									   <LI>
                                         <a name="node">
                                         <div>
-											<digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>  
+											<digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
                                         </div>
                                         </a>
 										</LI>
@@ -612,7 +612,7 @@ ${aimMainProjectDetailsForm.activityExists}
 										</LI>
 									</logic:notEqual>
 								</field:display>
-							
+
 						<module:display name="Document" parentModule="PROJECT MANAGEMENT">
 						<feature:display name="Documents Tab" module="Document">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
@@ -656,7 +656,7 @@ ${aimMainProjectDetailsForm.activityExists}
                                     <span>
 									<digi:link href="/viewRegionalFundingBreakdown.do" name="urlTabs">
 										<div title='<digi:trn jsFriendly="true" key="aim:clickToViewRegionalFundings">Click here to view regional funding</digi:trn>'>
-										<digi:trn key="aim:regionalFunding">Regional Funding</digi:trn> 	
+										<digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
                                         </div>
 									</digi:link>
                                     </span>
@@ -666,7 +666,7 @@ ${aimMainProjectDetailsForm.activityExists}
 						<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display>
 						<field:display name="Paris Survey" feature="Paris Indicators">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
-								   <LI>						
+								   <LI>
                                		<a name="node">
                                     <div>
  									<digi:trn key="aim:parisIndicators">Paris Indicators</digi:trn>
@@ -680,11 +680,11 @@ ${aimMainProjectDetailsForm.activityExists}
 									<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
 								</c:set>
 								<c:set target="${survey}" property="tabIndex" value="6"/>
-								<LI>	
+								<LI>
                                 <span>
 								<digi:link href="/viewSurveyList.do" name="survey">
 								<div title='<digi:trn jsFriendly="true" key="aim:clickToViewAidEffectIndicators">Click here to view Aid Effectiveness Indicators</digi:trn>'>
-									<digi:trn key="aim:parisIndicators">Paris Indicators</digi:trn> 	
+									<digi:trn key="aim:parisIndicators">Paris Indicators</digi:trn>
                                 </div>
 								</digi:link>
                                 </span>
@@ -713,14 +713,14 @@ ${aimMainProjectDetailsForm.activityExists}
                                 </span>
 								</LI>
 							</logic:notEqual>
-						</feature:display>						
-						
+						</feature:display>
+
 						<feature:display name="Contracting" module="Contracting">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="9">
 							   <LI>
                                		<a name="node">
                                     <div>
-									<digi:trn key="aim:projectContracting"> Contracting </digi:trn>								
+									<digi:trn key="aim:projectContracting"> Contracting </digi:trn>
                                     </div>
                                     </a>
 								</LI>
@@ -738,14 +738,14 @@ ${aimMainProjectDetailsForm.activityExists}
 								</LI>
 							</logic:notEqual>
 						</feature:display>
-						
+
 						<module:display name="Regional Observations" parentModule="PROJECT MANAGEMENT">
 							<feature:display name="Regional Observations" module="Regional Observations">
 								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="10">
 									<LI>
 		                               	<a name="node">
 		                                    <div>
-												<digi:trn>Regional Observations</digi:trn>								
+												<digi:trn>Regional Observations</digi:trn>
 		                                    </div>
 		                                </a>
 									</LI>
@@ -764,8 +764,8 @@ ${aimMainProjectDetailsForm.activityExists}
 								</logic:notEqual>
 							</feature:display>
 						</module:display>
-					</UL>		
-				</DIV>	
+					</UL>
+				</DIV>
             	</DIV>
 			</TABLE>
 		</TD>

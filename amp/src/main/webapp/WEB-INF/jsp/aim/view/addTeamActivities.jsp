@@ -13,25 +13,25 @@
 		var selectbox = document.aimTeamActivitiesForm.checkAll;
 		var items = document.aimTeamActivitiesForm.selActivities;
 		if (items != null) {
-			if (document.aimTeamActivitiesForm.selActivities.checked == true || 
+			if (document.aimTeamActivitiesForm.selActivities.checked == true ||
 								 document.aimTeamActivitiesForm.selActivities.checked == false) {
 					  document.aimTeamActivitiesForm.selActivities.checked = selectbox.checked;
 			} else {
 				for(i=0; i<items.length; i++){
 					document.aimTeamActivitiesForm.selActivities[i].checked = selectbox.checked;
 				}
-			}				  
+			}
 		}
 	}
 
 function checkSelActivities() {
-	if (document.aimTeamActivitiesForm.selActivities.checked != null) { 
+	if (document.aimTeamActivitiesForm.selActivities.checked != null) {
 		if (document.aimTeamActivitiesForm.selActivities.checked == false) {
 			alert("Please choose an activity to add");
 			return false;
 		}
-	} else { // 
-		var length = document.aimTeamActivitiesForm.selActivities.length;	  
+	} else { //
+		var length = document.aimTeamActivitiesForm.selActivities.length;
 		var flag = 0;
 		for (i = 0;i < length;i ++) {
 			if (document.aimTeamActivitiesForm.selActivities[i].checked == true) {
@@ -42,25 +42,25 @@ function checkSelActivities() {
 
 		if (flag == 0) {
 			alert("Please choose an activity to add");
-			return false;					  
+			return false;
 		}
 	}
 	return true;
-}	
+}
 
 
 	function sortMe(val) {
 		<digi:context name="sel" property="context/module/moduleinstance/updateTeamActivity.do" />
 			url = "<%= sel %>" ;
-			
+
 			var sval = document.aimTeamActivitiesForm.sort.value;
 			var soval = document.aimTeamActivitiesForm.sortOrder.value;
-			
+
 			if ( val == sval ) {
 				if (soval == "asc")
 					document.aimTeamActivitiesForm.sortOrder.value = "desc";
 				else if (soval == "desc")
-					document.aimTeamActivitiesForm.sortOrder.value = "asc";	
+					document.aimTeamActivitiesForm.sortOrder.value = "asc";
 			}
 			else
 				document.aimTeamActivitiesForm.sortOrder.value = "asc";
@@ -71,7 +71,7 @@ function checkSelActivities() {
 	}
 
 	function resetSearch() {
-		<digi:context name="searchOrg" property="context/module/moduleinstance/updateTeamActivity.do~dest=teamLead~tId=-1~subtab=0"/>     
+		<digi:context name="searchOrg" property="context/module/moduleinstance/updateTeamActivity.do~dest=teamLead~tId=-1~subtab=0"/>
 		url = "<%= searchOrg %>?reset=true";
 	     document.aimTeamActivitiesForm.action = url;
 	     document.aimTeamActivitiesForm.submit();
@@ -80,7 +80,7 @@ function checkSelActivities() {
 	}
 
 	function searchActivity(teamId) {
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/updateTeamActivity.do~dest=teamLead~tId=-1~subtab=0"/>			 
+			 <digi:context name="searchOrg" property="context/module/moduleinstance/updateTeamActivity.do~dest=teamLead~tId=-1~subtab=0"/>
 		     url = "<%= searchOrg %>";
 		     document.aimTeamActivitiesForm.action = url;
 		     document.aimTeamActivitiesForm.submit();
@@ -110,7 +110,7 @@ function checkSelActivities() {
 
 									<c:set var="selectedTab" value="2" scope="request"/>
 									<c:set var="selectedSubTab" value="2" scope="request"/>
-										
+
 									<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 										<tr>
 											<td>
@@ -118,7 +118,7 @@ function checkSelActivities() {
 													<span class="sec_name">
 														<digi:trn>List of Unassigned Activities</digi:trn>
 													</span>
-													
+
 													<span class="breadcrump_sep">|</span>
 													<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
 														<digi:trn key="aim:portfolio">Portfolio</digi:trn>
@@ -144,13 +144,13 @@ function checkSelActivities() {
 										</tr>
 										<tr>
 											<td valign="top">
-												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">	
-										
-										
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />								
-										
-										
-										
+												<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+
+
+									<jsp:include page="teamSetupMenu.jsp" flush="true" />
+
+
+
 									<table class="inside normal" width="100%" cellpadding="0" cellspacing="0" style="border:none;">
 										<!-- filter start -->
 										<tr>
@@ -166,7 +166,7 @@ function checkSelActivities() {
 															<html:select property="tempNumResults" styleClass="inp-text" onchange="return searchActivity('${aimTeamActivitiesForm.teamId }')">
 																<c:if test="${aimTeamActivitiesForm.tempNumResults!=-1}">
 																	<html:option value="${aimTeamActivitiesForm.tempNumResults}"><digi:trn>Current</digi:trn>: ${aimTeamActivitiesForm.tempNumResults}</html:option>
-																</c:if>																
+																</c:if>
 																<html:option value="10">10</html:option>
 																<html:option value="20">20</html:option>
 																<html:option value="50">50</html:option>
@@ -179,7 +179,7 @@ function checkSelActivities() {
 															</c:set>
 															<input type="button" value="${trnResetBtn}" class="dr-menu" onclick="return resetSearch()">
 														</td>
-														<td>					
+														<td>
 															<c:set var="trnGoBtn">
 																<digi:trn> GO </digi:trn>
 															</c:set>
@@ -189,12 +189,12 @@ function checkSelActivities() {
 												</table>
 											</td>
 										</tr>
-										<!-- filter end -->	
+										<!-- filter end -->
 										<tr>
                                         <td style="background:#ccc;">
                                         	<table cellpadding="1" cellspacing="1" border="0" width="100%"style="background:none;border:none;">
 										<tr>
-											
+
 									  	<td width="5px" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"  style="border:none;width:25px;border-left:none;">
 									  		<input type="checkbox" id="checkAll">
 									  	</td>
@@ -206,10 +206,10 @@ function checkSelActivities() {
 									    		<a  style="color:black" href="javascript:sortMe('activity')" title="Click here to sort by Activity Details">
 														<b><digi:trn key="aim:unassignedActivityList">List of unassigned activities</digi:trn></b>
 														<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='activity' && aimTeamActivitiesForm.sortOrder=='asc'}">
-															<img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+															<img id="activityColumnImg" src="WEB-INF/jsp/aim/images/up.gif" />
 														</c:if>
 														<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='activity' && aimTeamActivitiesForm.sortOrder=='desc'}">
-															<img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+															<img id="activityColumnImg" src="WEB-INF/jsp/aim/images/down.gif" />
 														</c:if>
 													</a>
 									    	</b>
@@ -219,10 +219,10 @@ function checkSelActivities() {
 									    		<a  style="color:black" href="javascript:sortMe('donor')" title="Click here to sort by Donors">
 														<b><digi:trn key="aim:donors">Donors</digi:trn></b>
 														<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='donor' && aimTeamActivitiesForm.sortOrder=='asc'}">
-															<img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+															<img id="activityColumnImg" src="WEB-INF/jsp/aim/images/up.gif" />
 														</c:if>
 														<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='donor' && aimTeamActivitiesForm.sortOrder=='desc'}">
-															<img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+															<img id="activityColumnImg" src="WEB-INF/jsp/aim/images/down.gif" />
 														</c:if>
 													</a>
 									    	</b>
@@ -267,14 +267,14 @@ function checkSelActivities() {
 														<bean:write name="activities" property="donors" />
 													</td>
 												</tr>
-											</logic:iterate>	
+											</logic:iterate>
 										</logic:notEmpty>
 									</table>
 									</td>
 									</tr>
 									</table>
-									
-									
+
+
 									<!-- Pagination -->
 									<logic:notEmpty name="aimTeamActivitiesForm" property="pages">
 										<div class="paging" style="font-size:11px;">
@@ -287,7 +287,7 @@ function checkSelActivities() {
 															<c:set target="${urlParams1}" property="page">
 																<%=pages%>
 															</c:set>
-															
+
 														<% if (currPage.equals(pages)) { %>
 																<b class="paging_sel"><%=pages%></b>
 														<%	} else { %>
@@ -297,34 +297,34 @@ function checkSelActivities() {
 															<digi:link href="/updateTeamActivity.do" name="urlParams1" title="${translation}" styleClass="l_sm">
 																<%=pages%>
 															</digi:link>
-															
+
 														<% } %>
 															|&nbsp;
 														</logic:iterate>
 											</div>
 										</logic:notEmpty>
 										<!-- end of Pagination -->
-									
+
 									<logic:notEmpty name="aimTeamActivitiesForm" property="activities">
-										<div align="center" style="font-size:11px;">	
-											<digi:trn key="aim:newOwner">New owner for the assigned activities:</digi:trn> 
+										<div align="center" style="font-size:11px;">
+											<digi:trn key="aim:newOwner">New owner for the assigned activities:</digi:trn>
 											<html:select property="memberId" styleClass="inputx insidex">
-												<html:optionsCollection property="members" value="memberId" label="memberName" /> 
+												<html:optionsCollection property="members" value="memberId" label="memberName" />
 											</html:select>
 											<html:submit  styleClass="buttonx_sm btn" property="submitButton"  onclick="return checkSelActivities()">
-												<digi:trn key="btn:addActivityToWorkspace">Add Activity To Workspace</digi:trn> 
+												<digi:trn key="btn:addActivityToWorkspace">Add Activity To Workspace</digi:trn>
 											</html:submit>
 										<div>
 									</logic:notEmpty>
-										
-										
+
+
 										</div>
-										</div>											
-												
+										</div>
+
 											</td>
 										</tr>
-									</table>	
-									
+									</table>
+
 		</td>
 	</tr>
 </table>

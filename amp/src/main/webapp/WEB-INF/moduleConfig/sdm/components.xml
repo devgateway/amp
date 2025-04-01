@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<config>
+
+<secondary-pages>
+	<page page="sdmDocList" name="sdm_DocList" title="Create Document" />
+	<page page="sdmCreateDoc" name="sdm_createDoc" title="Create Document" />
+	<page page="sdmEditDoc" name="sdm_editDoc" title="Edit Document" />
+	<page page="addFile" name="sdm_file" title="Add File to the Existing Document" />
+	<page page="addHTMLCode" name="sdm_html" title="Add HTML code to the Existing Document" />
+	<page page="addPicture" name="sdm_picture" title="Add Picture to the Existing Document" />
+	<page page="createHyperLink" name="sdm_link" title="Add Hyper Link to the Existing Document" />
+	<page page="createText" name="sdm_text" title="Add Text to the Existing Document" />
+	<page page="preview" name="sdm_preview" title="Preview Document" />
+	<page page="error" name="sdm_error" title="ERROR" />
+</secondary-pages>
+
+<module>
+	<teaser-file>teaser.jsp</teaser-file>
+	<page name="sdmCreateDoc">sdmCreateDoc.jsp</page>
+	<page name="sdmEditDoc">sdmEditDoc.jsp</page>
+	<page name="createText">createText.jsp</page>
+	<page name="createHTMLCode">createHTMLCode.jsp</page>
+	<page name="createHyperLink">createHyperLink.jsp</page>
+	<page name="addFile">addFile.jsp</page>
+	<page name="addPicture">addPicture.jsp</page>
+	<page name="sdmDocList">sdmDocList.jsp</page>
+	<page name="preview">preview.jsp</page>
+	<page name="error">error.jsp</page>
+</module>
+
+</config>	

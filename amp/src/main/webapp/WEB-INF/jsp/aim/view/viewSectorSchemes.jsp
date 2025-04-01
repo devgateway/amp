@@ -40,7 +40,7 @@
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<td align="left">
-						<jsp:include page="/repository/aim/view/adminXSLExportToolbar.jsp" />
+						<jsp:include page="WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" />
 					</td>
 				</tr>
 				<tr>
@@ -97,12 +97,12 @@
 
 
 															[ <digi:link href="/updateSectorSchemes.do" name="urlParams2" title="${trnEditScheme}" >
-															 ${edittext} 
+															 ${edittext}
 															</digi:link>
 															]													  </td>
 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
-                                                                                                               
+
 														<td bgcolor="#ffffff" width="13%" align="center" class="inside ignore">
                                                            <c:if test="${!sectorScheme.used}">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
@@ -118,7 +118,7 @@
 																 <digi:trn key="aim:delete">Delete</digi:trn>
 															</digi:link>
                                                              ]</c:if>&nbsp;</td>
-                                                                                                                        
+
 
 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="false">
@@ -137,14 +137,14 @@
 
 													</logic:notEmpty>
 													<!-- end page logic -->
-									
+
 									</table>
 
 								</td>
 							</tr>
 						</table>
 					</td>
-					
+
 </tr>
 					</table>
 					</td>
@@ -213,8 +213,8 @@
                                                                                          </td>
                                                                                      </tr>
 																				</field:display>
-                                                                         
-										
+
+
 										<!-- end of other links -->
 									</table>
 								</td>

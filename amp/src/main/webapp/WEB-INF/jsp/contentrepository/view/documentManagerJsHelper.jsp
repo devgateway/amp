@@ -9,7 +9,7 @@
 
 <!-- Individual YUI CSS files -->
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css">
 
 <%-- Huge JS block included directly in the DocumentManager page --%>
 
@@ -25,30 +25,30 @@
 .all_markup th {padding:.25em; font-size:11px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .all_markup th a, .all_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .all_markup tr.yui-dt-selected td {background-color:#a5bcf2;}/*green*/
-.all_markup .yui-dt {width: 100%;} 
-.all_markup .yui-dt-even td {background-color:#FFFFFF;} 
+.all_markup .yui-dt {width: 100%;}
+.all_markup .yui-dt-even td {background-color:#FFFFFF;}
 .all_markup .yui-dt-odd td {background-color:#f2f2f2;} /* blue*/
 .all_markup .yui-dt-headtext {background-color: rgb(153, 153, 153); color: black;margin-right:5px;padding-right:15px;font-size: 10px;font: bold 7.5pt "Verdana"; color:black;}
 .all_markup .yui-dt-headcontainer {background-color: #C7D4DB; color: black;}
-.all_markup .yui-dt-sortedbyasc .yui-dt-headcontainer td{color: black;background: url('/repository/contentrepository/view/images/up.gif') no-repeat right;}/*arrow up*/
-.all_markup .yui-dt-sortedbydesc .yui-dt-headcontainer td{color: black;background: url('/repository/contentrepository/view/images/down.gif') no-repeat right;}/*arrow down*/
+.all_markup .yui-dt-sortedbyasc .yui-dt-headcontainer td{color: black;background: url('WEB-INF/jsp/contentrepository/view/images/up.gif') no-repeat right;}/*arrow up*/
+.all_markup .yui-dt-sortedbydesc .yui-dt-headcontainer td{color: black;background: url('WEB-INF/jsp/contentrepository/view/images/down.gif') no-repeat right;}/*arrow down*/
 .all_markup .yui-dt-sortedbyasc, .all_markup .yui-dt-sortedbydesc td{background-color: rgb(153, 153, 153); color: black;}
 
 
-.versions_markup {margin:1em; overflow: auto; } 
-.versions_markup table {width: 95%; border-collapse:collapse; overflow: auto;border: 1px solid #d7eafd;} 
+.versions_markup {margin:1em; overflow: auto; }
+.versions_markup table {width: 95%; border-collapse:collapse; overflow: auto;border: 1px solid #d7eafd;}
 .versions_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:11px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .versions_markup th a, .versions_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .versions_markup td {padding:.25em;font-size:11px;color:#0E69B3;font-family:	Arial,Helvetica,sans-serif;font-size:10px;letter-space:2px;}
-.versions_markup .yui-dt-odd td {background-color:#A7CC25;} /* a light blue color -- this doesn't apply (?)' */ 
+.versions_markup .yui-dt-odd td {background-color:#A7CC25;} /* a light blue color -- this doesn't apply (?)' */
 .versions_markup .yui-dt-headtext {background-color: rgb(153, 153, 153); color: black;margin-right:5px;padding-right:15px;font-size: 10px;font: bold 7.5pt "Verdana"; color:black;}
 .versions_markup .yui-dt-headcontainer {background-color: rgb(153, 153, 153); color: black;}
-.versions_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/up.gif') no-repeat right;}/*arrow up*/
-.versions_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/down.gif') no-repeat right;}/*arrow down*/
+.versions_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {background: url('WEB-INF/jsp/contentrepository/view/images/up.gif') no-repeat right;}/*arrow up*/
+.versions_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {background: url('WEB-INF/jsp/contentrepository/view/images/down.gif') no-repeat right;}/*arrow down*/
 .versions_markup .yui-dt-sortedbyasc, .versions_markup .yui-dt-sortedbydesc {background-color: rgb(153, 153, 153); color: black;}
 
 #menuContainerDiv .yuimenu {z-index: 101;}
-#menuContainerDiv ul.first-of-type { background: transparent; z-index: 300000;} 
+#menuContainerDiv ul.first-of-type { background: transparent; z-index: 300000;}
 #menuContainerDiv ul.first-of-type li  {
 	background: transparent; z-index: 300001
 }
@@ -56,15 +56,15 @@
 	background: #8c8ad0;
 }
 #menuContainerDiv ul.first-of-type a{float: none; background: transparent; color: #000000; font-size: 10px; text-decoration: none; font-style: normal;}
-#menuContainerDiv ul.first-of-type li.selected a.selected{ 
+#menuContainerDiv ul.first-of-type li.selected a.selected{
 	color: #ffffff; text-decoration: underline; font-size: 10px; font-style: normal;
 }
 
-#panelForTemplates .bd {     
-    /* Apply scrollbars for all browsers. */ 
+#panelForTemplates .bd {
+    /* Apply scrollbars for all browsers. */
     height: 400px;
-    width:450px; overflow: auto;      
-     
+    width:450px; overflow: auto;
+
 }
 
 .showActions {
@@ -72,9 +72,9 @@
 }
 .wordWrap {
 word-wrap: break-word;
-white-space: pre-wrap; 
-white-space: -moz-pre-wrap; 
-white-space: -pre-wrap; 
+white-space: pre-wrap;
+white-space: -moz-pre-wrap;
+white-space: -pre-wrap;
 }
 
 div.actionsDivItem a span {
@@ -101,18 +101,18 @@ font-weight : bold;
 </style>
 
 
-<!-- Individual YUI JS files --> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event-mouseenter/event-mouseenter-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/selector/selector-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event-delegate/event-delegate-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/calendar/calendar-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
+<!-- Individual YUI JS files -->
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event-mouseenter/event-mouseenter-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/selector/selector-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event-delegate/event-delegate-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/calendar/calendar-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/FormatDateHelper.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/FilterAsYouTypePanel.js'/>" > </script>
@@ -136,13 +136,13 @@ font-weight : bold;
 	var show_index = false;
 	var show_category = false;
 	var show_organisations = false;
-	
+
 	<feature:display name="Resource Columns" module="Content Repository">
-	
+
 	<field:display name="Resource Index" feature="Resource Columns">
 		show_index = true;
 	</field:display>
-	
+
 	<field:display name="Resource Category" feature="Resource Columns">
 		show_category = true;
 	</field:display>
@@ -215,7 +215,7 @@ font-weight : bold;
 
 	/* Check FormatDateHelper.js for more information */
 	FormatDateHelper.prototype.formatString		= '<%= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)%>';
-	
+
 	/* AJAX Callback object for showing versions*/
 	var callbackForVersions	= {
 		success: function (o) {
@@ -230,12 +230,12 @@ font-weight : bold;
 			YAHOO.amp.panels[1].setBody("<div align='center'><font color='red'>We are sorry but your request cannot be processed at this time</font></div>");
 		}
 	}
-	
+
 	function requestVersions(uuid) {
 		var currTime	= new Date().getTime();
 		var request = YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/getVersionsForDocumentManager.do?uuid='+uuid+'&time='+currTime, callbackForVersions);
 	}
-	
+
 	/* Function for creating YAHOO datatable for versions */
 	YAHOO.amp.table.enhanceVersionsMarkup = function() {
 		    this.columnHeadersForVersions = [
@@ -250,7 +250,7 @@ font-weight : bold;
 		        </field:display>
 		        <field:display name="Resource Index" feature="Resource Columns">
 		        	{key:"resource_category", label:"${headerCategory}", sortable:true},
-		        </field:display>		        	
+		        </field:display>
 		        {key:"v_notes", label:"${headerNotes}", sortable:false},
 		        {key:"v_actions", label:"${headerAction}", sortable:false}
 		    ];
@@ -278,19 +278,19 @@ font-weight : bold;
 
     YAHOO.amp.table.dataTableForVersions = new YAHOO.widget.DataTable(versionsDiv,this.columnSetForVersions,ds , options	);
    };
-	
+
 	function getfiltertext(){
 		return '${filterstrn}';
 	}
-	
+
 	function getlabelsext(){
 		return '${labelstrn}';
 	}
-	
+
 	function getkeywordsext(){
 		return '${labelstrn}';
 	}
-	
+
 	function getkeywordModeext(){
         return '${keywordModetrn}';
     }
@@ -348,10 +348,10 @@ font-weight : bold;
 	  <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Type</digi:trn>  </b></span>
 </c:set>
 <c:set var="trans_headerFileName">
-	  <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Resource Name</digi:trn> </b></span> 
+	  <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Resource Name</digi:trn> </b></span>
 </c:set>
 <c:set var="trans_headerSelect">
-	  <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Select</digi:trn> </b></span> 
+	  <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Select</digi:trn> </b></span>
 </c:set>
 <c:set var="trans_headerResourceIndex">
 	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Index</digi:trn></b></span>
@@ -360,10 +360,10 @@ font-weight : bold;
 	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Category</digi:trn></b></span>
 </c:set>
 <c:set var="trans_headerResourceOrganisations">
-	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Organisations</digi:trn></b></span>  
+	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Organisations</digi:trn></b></span>
 </c:set>
 <c:set var="trans_headerResourceTitle">
-	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Title</digi:trn></b></span>  
+	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Title</digi:trn></b></span>
 </c:set>
 <c:set var="trans_headerDate">
 	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b> <digi:trn>Date</digi:trn></b></span>
@@ -372,10 +372,10 @@ font-weight : bold;
 	  <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Size (MB)</digi:trn></b></span>
 </c:set>
 <c:set var="trans_headerContentType">
-	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Content Type</digi:trn></b></span>  
+	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Content Type</digi:trn></b></span>
 </c:set>
 <c:set var="trans_cmDocType">
-	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Document Type</digi:trn></b></span>  
+	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Document Type</digi:trn></b></span>
 </c:set>
 
 <c:set var="trans_headerLabels">
@@ -428,7 +428,7 @@ font-weight : bold;
          <span style='font-size:12px; font-family: Arial,sans-serif;' class='wordWrap'><b>${yearPublication}</b></span>
     </c:otherwise>
 </c:choose>
-    
+
 </c:set>
 
 <c:set var="trans_wait">
@@ -445,10 +445,10 @@ YAHOO.namespace("YAHOO.amp");
 var myTable = YAHOO.namespace("YAHOO.amp.table");
 
 /* Function for creating YAHOO datatable for all documents*/
-myTable.enhanceMarkup = function(markupName) {	
+myTable.enhanceMarkup = function(markupName) {
 	var checkBoxToHide = document.getElementById("checkBoxToHide");
 	<%
-    	String dt = request.getParameter("documentsType");		
+    	String dt = request.getParameter("documentsType");
 	%>
 	var dt = "<%= dt %>";
 	if(checkBoxToHide != null && checkBoxToHide.value == "true"){
@@ -481,11 +481,11 @@ myTable.enhanceMarkup = function(markupName) {
 	}else {
 		//alert(3);
 		//debugger;
-		
+
 		var totalWidth = 70 + 50 + 40 + 50 + 50;
 		var freeWidth = 0;
 		var freeloaders = 4.5; // the 3 optional columns + 1.5 x cm_doc_type
-		
+
 		if (!show_index){
 			freeWidth += 40;
 			freeloaders --;
@@ -499,7 +499,7 @@ myTable.enhanceMarkup = function(markupName) {
 			freeloaders --;
 		}
 		var extraSpacePerFreeLoader = freeloaders = 0 ? 0 : freeWidth / freeloaders;
-		
+
 	    this.columnHeaders = [];
 	    this.columnHeaders.push({key:"resource_title",label:"${trans_headerResourceTitle}", sortable:true});
 	    this.columnHeaders.push({key:"type",label:"${trans_headerType}", sortable:true, width: 40});
@@ -519,16 +519,16 @@ myTable.enhanceMarkup = function(markupName) {
 	}
 
     var markup	 				= YAHOO.util.Dom.get(markupName);
- 
-	var myPaginator = new YAHOO.widget.Paginator({ 
+
+	var myPaginator = new YAHOO.widget.Paginator({
     	rowsPerPage:10,
     	template : "<span class='t_sm'><b><digi:trn>Pages:</digi:trn></b><span> {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}",
     	//template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;",
-    	firstPageLinkLabel : 	"<digi:trn>&lt;&lt;</digi:trn>", 
+    	firstPageLinkLabel : 	"<digi:trn>&lt;&lt;</digi:trn>",
         previousPageLinkLabel : "<digi:trn>prev</digi:trn>",
         nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn>',
         lastPageLinkLabel		: '<digi:trn jsFriendly="true">&gt;&gt</digi:trn>',
-    	
+
         // use custom page link labels
         pageLabelBuilder: function (page,paginator) {
                 var curr = paginator.getCurrentPage();
@@ -538,20 +538,20 @@ myTable.enhanceMarkup = function(markupName) {
                 else {
                 	return page;
                 }
-                
+
         }
-    });	
-	
-    var oConfigs = { 
-    		 // Create the Paginator	       
-	         paginator:myPaginator,        
+    });
+
+    var oConfigs = {
+    		 // Create the Paginator
+	         paginator:myPaginator,
 	         MSG_EMPTY: "<digi:trn>No records found</digi:trn>",
 	         MSG_LOADING: "<digi:trn>Loading...</digi:trn>"
-	        }; 
+	        };
 
     var tableEl						= markup.getElementsByTagName("table")[0];
-	var myDataSource 				= new YAHOO.util.DataSource( tableEl ); 
-	myDataSource.responseType 		= YAHOO.util.DataSource.TYPE_HTMLTABLE; 
+	var myDataSource 				= new YAHOO.util.DataSource( tableEl );
+	myDataSource.responseType 		= YAHOO.util.DataSource.TYPE_HTMLTABLE;
 	myDataSource.responseSchema		= {fields: [{key: "resource_title"},
 	                           		         {key: "type"},
 			                           		 {key: "file_name"},
@@ -564,20 +564,20 @@ myTable.enhanceMarkup = function(markupName) {
 			                           		{key: "resource_organisations"},
 			                           		 {key: "labels"},
 			                           		{key: "actions"}
-		                           		     	] 
+		                           		     	]
 	                           		     	};
-    
-	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnHeaders, myDataSource, oConfigs);	
-	
+
+	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnHeaders, myDataSource, oConfigs);
+
 	// this is for document in activity form, to be able to select them, since the checbox is removed
 	dataTable.subscribe("cellClickEvent", dataTable.onEventSelectRow);
 	dataTable.subscribe("paginateEvent",hideCategories);
-	dataTable.subscribe("rowMouseoverEvent", dataTable.onEventHighlightRow); 
+	dataTable.subscribe("rowMouseoverEvent", dataTable.onEventHighlightRow);
 	dataTable.subscribe("rowMouseoutEvent", dataTable.onEventUnhighlightRow);
 	dataTable.subscribe('initEvent', sortColumn);
 	//dataTable.setAttribute('width', "785px");
-	
-	 
+
+
 	return dataTable;
 };
 
@@ -585,18 +585,18 @@ function sortColumn() {
 	//debugger;
 	var columnSettingString = '<rs:value name="<%=SettingsConstants.SORT_COLUMN %>" />';
 	// the setting has the value [ColumnName]_[ASC/DESC];
-	
+
 	var separatorPos = columnSettingString.lastIndexOf('_');
 	var columnName = columnSettingString.substring(0, separatorPos);
 	var sortOrderStr = columnSettingString.substring(separatorPos + 1);
-	
+
 	var sortOrder = -1;
-	
+
 	switch(sortOrderStr)
 	{
 		case 'ASC': sortOrder = YAHOO.widget.DataTable.CLASS_ASC; break;
 		case 'DESC': sortOrder = YAHOO.widget.DataTable.CLASS_DESC; break;
-		default: alert('invalid sort column setting: ' + columnSettingString); 
+		default: alert('invalid sort column setting: ' + columnSettingString);
 				sortOrder = YAHOO.widget.DataTable.CLASS_DESC;
 				columnName = 'date';
 				break;
@@ -615,36 +615,36 @@ var categories	= YAHOO.amp.actionPanels;
 	}
 }
 
-/* Ajax function that creates a callback object after a delete command 
+/* Ajax function that creates a callback object after a delete command
 was issued in order to delete the respective row/document*/
 function getCallbackForDelete (rows,tabType) {
 	callbackForDelete = {
 		success: function(o) {
 			YAHOO.amp.panels[2].setBody(o.responseText);
 			if (document.getElementById("successfullDiv") != null) {
-				
+
 				if (this.myRows != null) {
-					//alert(YAHOO.amp.datatables.length + "|" + YAHOO.amp.num_of_tables);		
+					//alert(YAHOO.amp.datatables.length + "|" + YAHOO.amp.num_of_tables);
 					for (var ii=0; ii<YAHOO.amp.datatables.length; ii++) {
 						for (var i=0; i<this.myRows.length; i++) {
 							YAHOO.amp.datatables[ii].deleteRow(this.myRows[i]);
 						}
 					}
-					
+
 					repositoryTabView.activatedLists[2]	= false;
 					repositoryTabView.activatedLists[3]	= false;
 					if(document.getElementById("shared_markup")!=null){
-						sharedListObj.clearBody();	
+						sharedListObj.clearBody();
 					}
-					
+
 					if(document.getElementById("public_markup")!=null){
-						publicListObj.clearBody();	
+						publicListObj.clearBody();
 					}
-					
+
 				}
 				updateFilterPanel('',tabType);
 			}
-			else 
+			else
 				YAHOO.amp.panels[2].show();
 
 		},
@@ -676,29 +676,29 @@ function deleteRow(uuid,o) {
 	}
 	if ( confirmDelete() ) {
 		//var translation2				= "${translation2}";
-		//YAHOO.amp.panels[2].setBody("<div align='center'>" + translation2 + "<br /> <img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0'/> </div>" );
+		//YAHOO.amp.panels[2].setBody("<div align='center'>" + translation2 + "<br /> <img src='WEB-INF/jsp/contentrepository/view/images/ajax-loader-darkblue.gif' border='0'/> </div>" );
 		//YAHOO.amp.panels[2].setFooter("<div align='right'><button type='button' onClick='hidePanel(2)'>Close</button></div>");
 		//showPanel(2);
 		//YAHOO.amp.table.dataTable.deleteRow(possibleRow);
 		YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/deleteForDocumentManager.do?uuid='+uuid, getCallbackForDelete(possibleRows,o));
-		
+
 	}
 }
 function confirmDelete() {
 	var ret		= confirm('${translation1}');
 	return ret;
 }
-</script> 
+</script>
 
 
 <style type="text/css">
-.autofolding_table_header 
+.autofolding_table_header
 {
 	white-space:normal !important;
 	text-align: center;
 
 }
-.centered_th_label 
+.centered_th_label
 {
 	padding:0px !important;
 	margin: auto !important;
@@ -710,10 +710,10 @@ function confirmDelete() {
 <script type="text/javascript">
 
 /*
-  jQuery piece of code to add word wrapping to yui-generated table headers 
+  jQuery piece of code to add word wrapping to yui-generated table headers
  */
- 
- 
+
+
 $(window).load(function ()
 		{
 		    var i = setInterval(function ()
@@ -746,14 +746,14 @@ YAHOO.amp.windowControllers	= new Array();
 function WindowControllerObject(bodyContainerEl) {
 	this.bodyContainerElement	= bodyContainerEl;
 	this.titleSpanEl;
-	
+
 	this.datatable				= null;
-	
+
 	this.lastPopulateObject		= null;
-	
+
 	this.showOnlyLinks			= false;
 	this.showOnlyDocs			= false;
-	
+
 	this.clickedShowOnlyLinks	= function (sType, aArgs, obj) {
 									//alert(obj);
 									if ( this.showOnlyLinks ) {
@@ -786,13 +786,13 @@ function WindowControllerObject(bodyContainerEl) {
 										this.populateCallback(null, null, lastPopulateObject);
 									return;
 								}
-	
-	
+
+
 	this.setTitle				= function (title) {
 									this.titleSpanEl.innerHTML	= title;
 								};
-	
-	this.reload					= function() 
+
+	this.reload					= function()
 								{
 									populateCallback(null, null, this.lastPopulateObject);
 								};
@@ -804,27 +804,27 @@ function WindowControllerObject(bodyContainerEl) {
 						parameters	+= "&"+publicDocs+"="+obj.publicDocs;
 				}
 				if (obj.rights != null) {
-					if (obj.rights.versioningRights != null) 
+					if (obj.rights.versioningRights != null)
 						parameters	+= "&versioningRights=" + obj.rights.versioningRights;
-					if (obj.rights.deleteRights != null) 
+					if (obj.rights.deleteRights != null)
 						parameters	+= "&deleteRights=" + obj.rights.deleteRights;
-					if (obj.rights.showVersionsRights != null) 
+					if (obj.rights.showVersionsRights != null)
 						parameters	+= "&showVersionsRights=" + obj.rights.showVersionsRights;
-					if (obj.rights.makePublicRights != null) 
+					if (obj.rights.makePublicRights != null)
 						parameters	+= "&makePublicRights=" + obj.rights.makePublicRights;
-					if (obj.rights.viewAllRights != null) 
+					if (obj.rights.viewAllRights != null)
 						parameters	+= "&viewAllRights=" + obj.rights.viewAllRights;
 				}
 				if (obj.userName != null)
 					parameters	+= "&otherUsername=" + obj.userName;
 				if (obj.teamId != null)
 					parameters	+= "&otherTeamId=" + obj.teamId;
-					
+
 				//for shared docs
 				if(obj.sharedDocs!=null){
 					parameters+= "&showSharedDocs=" + obj.sharedDocs;
 				}
-					
+
 				if (obj.docListInSession != null) {
 					parameters	+= "&docListInSession=" + obj.docListInSession;
 				}
@@ -832,20 +832,20 @@ function WindowControllerObject(bodyContainerEl) {
 				if(obj.showActions !=null){
 					parameters	+= "&showActions=" + obj.showActions;
 				}
-				
-				if ( this.showOnlyLinks ) 
+
+				if ( this.showOnlyLinks )
 						parameters	+= "&showOnlyLinks=" + this.showOnlyLinks;
-				if ( this.showOnlyDocs ) 
+				if ( this.showOnlyDocs )
 						parameters	+= "&showOnlyDocs=" + this.showOnlyDocs;
 
 				//parameters += "&type=team2"
 				//alert(parameters);
-				this.bodyContainerElement.innerHTML="<div align='center'>${trans_wait}<br /><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' /> </div>";
-				
+				this.bodyContainerElement.innerHTML="<div align='center'>${trans_wait}<br /><img src='WEB-INF/jsp/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' /> </div>";
+
 				YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do', getCallbackForOtherDocuments(this.bodyContainerElement, this),
 								'ajaxDocumentList=true'+parameters );
 				};
-				
+
 	this.populateWithSelDocs	= function (documentsType, rights) {
 									var o				= new Object();
 									o.docListInSession	= documentsType;
@@ -854,7 +854,7 @@ function WindowControllerObject(bodyContainerEl) {
 									}
 									this.populateCallback (null, null, o);
 								}
-	
+
 	this.populateWithPublicDocs	= function () {
 									var o				= new Object();
 									o.publicDocs		= true;
@@ -870,47 +870,47 @@ function newWindow(title, showSelectButton, otherDocumentsDiv) {
 
 	var newDiv 						= document.createElement("div");
 	newDiv.id						= "newDivId" + YAHOO.amp.num_of_tables;
-	
+
 	var tableTemplateElement		= document.getElementById("tableTemplate");
-	
+
 	newDiv.innerHTML				= tableTemplateElement.innerHTML ;
-	
+
 	var otherDocumentsDivElement	= document.getElementById(otherDocumentsDiv);
 
-	
+
 	otherDocumentsDivElement.appendChild(newDiv);
-	
+
 	newDiv							= document.getElementById("newDivId" + YAHOO.amp.num_of_tables);
-	
+
 	for(i=0; i<newDiv.childNodes.length; i++) {
 		if ( newDiv.childNodes[i].nodeName.toLowerCase() == 'table' ) {
 				newDiv.childNodes[i].style.background	= 'white';
 				break;
 		}
-		
+
 	}
-	
+
 	var otherDocumentsImgElement	= getElementByNameFromList("otherDocumentsImg", newDiv.getElementsByTagName("img") );
 	var otherDocumentsDivElement	= getElementByNameFromList("otherDocumentsDiv", newDiv.getElementsByTagName("a") );
 	var otherDocumentsTdElement		= otherDocumentsDivElement.parentNode;
 	var otherDocumentsTrElement		= otherDocumentsTdElement.parentNode;
 	var otherDocumentsButtonElement	= getElementByNameFromList("otherDocumentsButton", newDiv.getElementsByTagName("button") );
-	
+
 	if (!showSelectButton) {
 		otherDocumentsButtonElement.style.display	= 'none';
 	}
-	
+
 	otherDocumentsImgElement.id		= "otherDocumentsImg" + YAHOO.amp.num_of_tables;
 	otherDocumentsTrElement.id		= "otherDocumentsTr" + YAHOO.amp.num_of_tables;
 	otherDocumentsTdElement.id		= "otherDocumentsTd" + YAHOO.amp.num_of_tables;
 	otherDocumentsButtonElement.id	= "otherDocumentsMenu" + YAHOO.amp.num_of_tables;
-	
+
 	var windowController			= new WindowControllerObject(otherDocumentsTdElement);
-	
+
 	/* Finding the title wrapper element */
 	var temp = otherDocumentsButtonElement;
 	while (temp != null) {
-		temp	= temp.nextSibling;	
+		temp	= temp.nextSibling;
 		if (temp.nodeName.toLowerCase() == 'span') {
 			windowController.titleSpanEl	= temp;
 			break;
@@ -918,9 +918,9 @@ function newWindow(title, showSelectButton, otherDocumentsDiv) {
 	}
 	windowController.setTitle(title);
 	/*END - Finding the title wrapper element */
-	
+
 	var obj							= new ContextObject(otherDocumentsImgElement, otherDocumentsTrElement, YAHOO.amp.num_of_tables);
-	
+
 	var menuObj						= null;
 	if (showSelectButton) {
 				var divForRenderingMenu		= document.getElementById("menuContainerDiv");
@@ -929,13 +929,13 @@ function newWindow(title, showSelectButton, otherDocumentsDiv) {
 				menuObj	= addMenuToDocumentList(YAHOO.amp.num_of_tables, divForRenderingMenu, windowController);
 				YAHOO.util.Event.addListener(otherDocumentsButtonElement, "click", showMenu, menuObj, true);
 	}
-	
+
 	YAHOO.util.Event.addListener(otherDocumentsImgElement.parentNode, "click", callbackToggle, obj, true);
-	
+
 	YAHOO.amp.windowControllers[YAHOO.amp.num_of_tables]	= windowController;
-	
+
 	YAHOO.amp.num_of_tables++;
-	
+
 	return windowController;
 }
 
@@ -971,10 +971,10 @@ function removeSelectedDocuments(removeFrom) {
 }
 
 function doSelectedDocuments(action,removeFrom) {
-	
+
 	var trEls=$("#team_table").find("input.selDocs:checked");
 	var result= new Array();
-	for (i=0; i<trEls.length; i++) {		
+	for (i=0; i<trEls.length; i++) {
 		result[i]	= trEls[i].value;
 	}
 	selectedDocs= result;
@@ -982,13 +982,13 @@ function doSelectedDocuments(action,removeFrom) {
 	if(selectedDocs.length==0){
 	selectedDocs			= getAllSelectedDocuments();
 	}
-	
+
 	var updatedDocsAction	= '<%=org.digijava.module.contentrepository.helper.CrConstants.REQUEST_UPDATED_DOCUMENTS_IN_SESSION%>';
 	if (selectedDocs.length == 0) {
 		alert("${translation_no_doc_selected}");
 		return;
 	}
-	
+
 	var postString 	= createPostString(selectedDocs, action);
 	var callback;
 	if (action == 'set') {
@@ -998,20 +998,20 @@ function doSelectedDocuments(action,removeFrom) {
 											urlstr = urlstr.replace('~addSector=true',"");
 											urlstr = urlstr.replace('~delPledge=true',"");
 											urlstr = urlstr.replace('~addPledge=true',"");
-											urlstr = urlstr.replace('~remSectors=true',"");											
+											urlstr = urlstr.replace('~remSectors=true',"");
 											if(urlstr.indexOf('?')!=-1 || urlstr.indexOf('~')!=-1){
 												window.opener.location.replace(urlstr+"&"+updatedDocsAction+"=true");
 											}else{
 												window.opener.location.replace(urlstr+"?actionFlag=create&skipReset=false&"+updatedDocsAction+"=true");
 											}
-											//window.opener.location.replace(urlstr+"&"+updatedDocsAction+"=true"); 
+											//window.opener.location.replace(urlstr+"&"+updatedDocsAction+"=true");
 											window.close();
 											}
 							};
 	}
 	if (action == 'remove') {
 		callback	= {
-						success:function(o) {									
+						success:function(o) {
 									window.location.replace(window.location.href);
 								},
 						failure:function(o){
@@ -1048,9 +1048,9 @@ function getAllSelectedDocuments () {
 	return result;
 }
 
-/* Returns the UUIDs of the selected documents in the datatable 'datatable'. 
- If vec not null the results are added to vec array and vec is returned. 
- Otherwise they are returned as a new array 
+/* Returns the UUIDs of the selected documents in the datatable 'datatable'.
+ If vec not null the results are added to vec array and vec is returned.
+ Otherwise they are returned as a new array
 */
 function getSelectedDocumentsFromDatatable(datatable, vec) {
 	var i;
@@ -1060,10 +1060,10 @@ function getSelectedDocumentsFromDatatable(datatable, vec) {
 	}else{
 		result	= new Array();
 	}
-	
+
 	trEls	= datatable.getSelectedRows();
-	
-	
+
+
 	var vector_length		= result.length;
 	for (i=0; i<trEls.length; i++) {
 		//alert(i);
@@ -1077,11 +1077,11 @@ function getSelectedDocumentsFromDatatable(datatable, vec) {
 
 /* Show & sets position of document selector menu on a new window */
 function showMenu(e, obj) {
-	
+
 	this.moveTo(  YAHOO.util.Event.getPageX(e), YAHOO.util.Event.getPageY(e) );
 	this.show();
 }
-/* Function that creates AJAX callback object that is used when receiving 
+/* Function that creates AJAX callback object that is used when receiving
 document list from server. windowController.datatable field will be set to the created datatable. */
 function getCallbackForOtherDocuments(containerElement, windowController, datatableDivId) {
 	var num						= YAHOO.amp.num_of_tables - 1;
@@ -1097,21 +1097,21 @@ function getCallbackForOtherDocuments(containerElement, windowController, datata
 					YAHOO.amp.datatables.push( datatable );
 					if ( windowController != null)
 						windowController.datatable	= datatable;
-					
+
 					updateFilterPanel(divId,null);
-					
-					if (prevPage && prevPage > 0){ 
+
+					if (prevPage && prevPage > 0){
 						//Re-establish the page that was being viewed before the ajax request
 						datatable.configs.paginator.setPage(parseInt(prevPage), false);
 					}
-					 
+
 					//createToolTips(containerElement);
 				},
 		failure: function(o) {
 					containerElement.innerHTML	= "${translation_unableToRetriveDocuments}";
 				}
 	};
-	
+
 	return callbackForOtherDocuments;
 
 }
@@ -1127,7 +1127,7 @@ function updateFilterPanel(divId,tabType){
 		}
 	}
 	var filterAndLabelShow = $('div#'+divId).find('.yui-dt-empty');
-	
+
 	if(divId=='privateListObjDivId'){
 		if(tabType==null){
 			type = 'private';
@@ -1137,7 +1137,7 @@ function updateFilterPanel(divId,tabType){
 			type = 'team';
 		}
 	}
-	
+
 	var requestURL = "../../contentrepository/getResourcesInfo.do?type=" + type+ "&unique=" + new Date().getTime();
 	$.get(requestURL, getResourcesInfoComplited, "xml");
 }
@@ -1149,20 +1149,20 @@ function getResourcesInfoComplited(data, textStatus) {
 		if(tabType=='private'){
 			$('#filterButtonId').show();
 			$('#labelButtonId').show();
-			
+
 		}else if(tabType=='team'){
 			$('#teamFilterButtonId').show();
-			$('#teamLabelButtonId').show();		
+			$('#teamLabelButtonId').show();
 		}
-		
+
 	}else{
 		if(tabType=='private'){
 			$('#filterButtonId').hide();
 			$('#labelButtonId').hide();
-			
+
 		}else if(tabType=='team'){
 			$('#teamFilterButtonId').hide();
-			$('#teamLabelButtonId').hide();		
+			$('#teamLabelButtonId').hide();
 		}
 	}
 }
@@ -1170,11 +1170,11 @@ function getResourcesInfoComplited(data, textStatus) {
 /* Creating document selector menu for new window */
 function addMenuToDocumentList (menuNum, containerElement, windowController) {
 	var menu		= new YAHOO.widget.Menu("mymenu" + menuNum);
-	
+
 	var membersMenu	= new YAHOO.widget.Menu("membersMenu" + menuNum);
-	
+
 	var optionsMenu	= new YAHOO.widget.Menu("optionsMenu" + menuNum);
-	
+
 	<logic:notEmpty name="tMembers">
 	<logic:iterate name="tMembers" id="member" indexId="counterId">
 		var scopeObj	= {
@@ -1186,17 +1186,17 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 			fn					: windowController.populateCallback,
 			obj					: scopeObj,
 			scope				: windowController
-			
+
 		};
 		var menuId		= "myMember-${counterId}";
 		var menuItem	= new YAHOO.widget.MenuItem('<bean:write name="member" property="email" />', { onclick:onclickObj, id:menuId } );
-		membersMenu.addItem(menuItem); 
+		membersMenu.addItem(menuItem);
 
 	</logic:iterate>
 	var mItem1="${trans_teamMemberDocuments}";
 	 menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamMemberDocuments}", {submenu: membersMenu, id:mItem1})   );
 	</logic:notEmpty>
-	
+
 	<logic:notEmpty name="meTeamMember">
 		var scopeObj	= {
 			teamId				: '<bean:write name="meTeamMember" property="teamId" />',
@@ -1206,7 +1206,7 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 			fn					: windowController.populateCallback,
 			obj					: scopeObj,
 			scope				: windowController
-			
+
 		};
 		var mItem2="${trans_teamDocuments}";
 	menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamDocuments}", {onclick: onclickObj, id:mItem2} )   );
@@ -1219,9 +1219,9 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 	var onclickObjForShared 	= {
 			fn					: windowController.populateCallback,
 			obj					: scopeObjForShared,
-			scope				: windowController			
+			scope				: windowController
 	};
-	
+
 	var mItem3="${trans_sharedDocuments}";
 	menu.addItem(  new YAHOO.widget.MenuItem("${trans_sharedDocuments}", {onclick: onclickObjForShared, id:mItem3} )   );
 	</logic:notEmpty>
@@ -1229,11 +1229,11 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 		var onclickObj 	= {
 			fn					: windowController.populateWithPublicDocs,
 			scope				: windowController
-			
+
 		};
-		
+
 	menu.addItem(  new YAHOO.widget.MenuItem("${trans_publicDocuments}", {onclick: onclickObj} )   );
-	
+
 	var scopeObj	= {
 			mItemDoc			: null,
 			mItemLink			: null
@@ -1242,11 +1242,11 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 			fn					: windowController.clickedShowOnlyDocs,
 			obj					: scopeObj,
 			scope				: windowController
-			
+
 	};
 	var showDocItem			= new YAHOO.widget.MenuItem("${trans_optionsShowOnlyDocuments}", {onclick: onclickObj} );
 	scopeObj.mItemDoc		= showDocItem;
-	
+
 	var onclickObj 	= {
 			fn					: windowController.clickedShowOnlyLinks,
 			obj					: scopeObj,
@@ -1254,10 +1254,10 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 	};
 	var showLinkItem		= new YAHOO.widget.MenuItem("${trans_optionsShowOnlyWebLinks}", {onclick: onclickObj});
 	scopeObj.mItemLink		= showLinkItem;
-	
+
 	optionsMenu.addItem( showDocItem );
 	optionsMenu.addItem( showLinkItem );
-	
+
 	menu.addItem(  new YAHOO.widget.MenuItem("${trans_options}", {submenu: optionsMenu})   );
 	*/
 	menu.render(containerElement);
@@ -1267,19 +1267,19 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 }
 /* 	 the view for body of window
 elementId	- html id of the html element that should be hidden/unhidden
-iconId		- html id of the html plus/minus image 
+iconId		- html id of the html plus/minus image
 isMinus 	- true if body is hidden right now
 */
 function toggleView(elementId, iconId, isMinus) {
 	var icon	= document.getElementById(iconId);
 	var element	= document.getElementById(elementId);
 	if (isMinus) {
-			icon.src				= '/repository/contentrepository/view/images/dhtmlgoodies_plus.gif';
+			icon.src				= 'WEB-INF/jsp/contentrepository/view/images/dhtmlgoodies_plus.gif';
 			element.style.display	= 'none';
 			isMinus		= false;
 	}
 	else{
-			icon.src	= '/repository/contentrepository/view/images/dhtmlgoodies_minus.gif';
+			icon.src	= 'WEB-INF/jsp/contentrepository/view/images/dhtmlgoodies_minus.gif';
 			element.style.display	= '';
 			isMinus		= true;
 	}
@@ -1308,21 +1308,21 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 	myForm.yearOfPublication.disabled		= false;
 	if (myForm.docIndex)
     	myForm.docIndex.value = index ? index : ''; // field might be missing if feature is disabled
-    	
+
 	if (myForm.docCategory)
     	myForm.docCategory.value = category ? category : ''; // field might be missing if feature is disabled
 	if (isAUrl == null) {
 		isAUrl	= false;
     }
-		
+
 	selectResourceType(isAUrl);
-	
+
 	if (uuid != null && uuid.length > 0) {
-		
+
 		myForm.docTitle.readOnly					= true;
-		myForm.docTitle.style.background			= "#eeeeee"; 
+		myForm.docTitle.style.background			= "#eeeeee";
 		myForm.docTitle.style.color					= "darkgray";
-		
+
 		myForm.docDescription.readOnly				= true;
 		myForm.docDescription.style.backgroundColor	= "#eeeeee";
 		myForm.docDescription.style.color			= "darkgray";
@@ -1346,9 +1346,9 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
         	myForm.docCategory.style.color                  = "darkgray";
 		}
 
-	
+
 		setPanelHeader(0, "${translation_add_new_version}");
-		
+
 		var opts									= myForm.docType.options;
 		for ( j=0; j<opts.length; j++ ) {
 			if ( opts[j].value	== optionId ) {
@@ -1371,17 +1371,17 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 	else {
 		//myForm.webResource[1].disabled				= false;
 		//myForm.webResource[0].disabled				= false;
-		
+
 		myForm.docTitle.readOnly					= false;
 		myForm.docTitle.style.backgroundColor		= "";
 		myForm.docTitle.style.color					= "";
-		
+
 		myForm.docDescription.readOnly				= false;
 		myForm.docDescription.style.backgroundColor	= "";
 		myForm.docDescription.style.color			= "";
-		
+
 		myForm.docType.selectedIndex				= 0;
-		
+
 		myForm.docType.style.backgroundColor	= "";
 		myForm.docType.style.color			= "";
 
@@ -1394,16 +1394,16 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
         	myForm.docIndex.style.color             = "";
 		}
 		if (typeof(myForm.docCategory) !== 'undefined')
-		{	
+		{
         	myForm.docCategory.readOnly              = false;
         	myForm.docCategory.style.backgroundColor = "";
         	myForm.docCategory.style.color           = "";
 		}
 		setPanelHeader(0, "${translation_add_new_content}");
 	}
-	
+
 	setPanelFooter(0, "* ${translation_mandatory_fields}");
-	
+
 }
 
 function selectResourceType(isUrl) {
@@ -1420,7 +1420,7 @@ function selectResourceType(isUrl) {
 	}
 }
 
-/* Sets whether we are currently adding a new 
+/* Sets whether we are currently adding a new
  personal/team document or a new version */
 function setType(typeValue) {
 	//alert('setting type:' + typeValue);
@@ -1438,24 +1438,24 @@ function validateAddDocument() {
 	// var regexp	= new RegExp("[a-zA-Z0-9_��������������������������������������%&' ()]+");
 	var regexp	= new RegExp("[a-zA-Z0-9_��������������������������������������!@#$%^&' ()]+");
 
-	var msg	= '';	
+	var msg	= '';
 	if (document.forms['crDocumentManagerForm'].docTitle.value == '') {
 		msg = msg + "${translation_validation_title}"+'<br>';
-	}	
+	}
 	else {
 		var title	= document.forms['crDocumentManagerForm'].docTitle.value;
 		var found	= regexp.exec(title);
 		if ( found != title ) {
 			msg = msg + "${translation_validation_title_chars}"+'<br>' ;
 		}
-		
+
 	}
 
 	var webUrlVisible=document.getElementById('tr_url');
-	
+
 	var fileData = document.forms['crDocumentManagerForm'].fileData;
-	
-	if(webUrlVisible.style.display=='none') { 
+
+	if(webUrlVisible.style.display=='none') {
 		if(fileData.value == '') { //adding document
 			msg = msg + "${translation_validation_filedata}"+'<br>';
 		} else if(!FileTypeValidator.isValid(fileData.value)) {
@@ -1473,7 +1473,7 @@ function validateAddDocument() {
 	if (msg.length == 0) {
 			return true;
 	}
-	
+
 	return false;
 }
 
@@ -1495,7 +1495,7 @@ function shareDoc(uuid,shareWith,tabType){
 	var callback	= new Object();
 	callback.success	= function(o) {
 		 					if ("${shareWithoutApprovalNeeded}" != "true") {
-							var successAlert='<digi:trn jsFriendly="true">Your document will be shared with team members and will be available under Team resources tab after workspace manager approval</digi:trn>';                                                 
+							var successAlert='<digi:trn jsFriendly="true">Your document will be shared with team members and will be available under Team resources tab after workspace manager approval</digi:trn>';
 	 						alert(successAlert);
 		 					}
 	 	 					window.location.replace( window.location.href );
@@ -1534,14 +1534,14 @@ function rejectVersion(versionId, baseNodeUUID){
 							window.location.replace( window.location.href );
 						};
 	callback.failure	= function(o) {
-							var failureAlert='<digi:trn jsFriendly="true">There seems to be a problem with the connection. Please try again later</digi:trn>';							
+							var failureAlert='<digi:trn jsFriendly="true">There seems to be a problem with the connection. Please try again later</digi:trn>';
 							alert(failureAlert);
 							var myDiv=document.getElementById('loadingDiv');
 							myDiv.style.display="none";
 						};
 	var myDiv=document.getElementById('loadingDiv');
 	myDiv.style.display="block";
-	//myDiv.innerHTML='<img src=\"/repository/contentrepository/view/images/ajax-loader-darkblue.gif\" height=\"20px\" />';
+	//myDiv.innerHTML='<img src=\"WEB-INF/jsp/contentrepository/view/images/ajax-loader-darkblue.gif\" height=\"20px\" />';
 	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/rejectVersion.do?versionId="+versionId+"&baseNodeUUID="+baseNodeUUID, callback);
 }
 
@@ -1553,26 +1553,26 @@ function rejectDoc (uuid,actType,tabType){
 	callback.failure	= function(o) {
 							alert('share failed');
 						};
-	//var panel		= YAHOO.amp.orgPanels[uuid]; 
-	//panel.setBody("<div style='text-align: center;'><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
+	//var panel		= YAHOO.amp.orgPanels[uuid];
+	//panel.setBody("<div style='text-align: center;'><img src='WEB-INF/jsp/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
 	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/rejectDoc.do?actType="+actType+"&uuid="+uuid+"&type="+tabType, callback);
 }
 
 function setAttributeOnNode(action, uuid, doReload,tabType) {
-	
+
 	var callback	= new Object();
 	callback.success	= function(o) {
 							window.location.replace( window.location.href );
 						};
 	callback.failure	= function(o) {
 							alert("${translation_make_public_failed}");
-						};	
+						};
 	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/setAttributes.do?uuid="+uuid+"&action="+action+"&type="+tabType, callback);
 }
 
 function createToolTips(containerElement) {
 	var elements	= containerElement.getElementsByTagName("a");
-	
+
 	for (i=0; i<elements.length; i++) {
 		if ( elements[i].id != null ) {
 			createToolTip(elements[i], containerElement);
@@ -1582,11 +1582,11 @@ function createToolTips(containerElement) {
 
 function createToolTip (id, containerElement) {
 		new YAHOO.widget.Tooltip("tt"+id, { context: id, container: containerElement });
-} 
+}
 
 
 function downloadFile(uuid) {
-	
+
 	if (checkDocumentUuid(uuid)) {
 		if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
 			var referLink = document.createElement('a');
@@ -1615,7 +1615,7 @@ function getCallbackForOrgs (panel) {
 	var callbackObj	= {
 			success: function (o) {
 				panel.setBody( o.responseText );
-				
+
 			},
 			failure: function () {
 				panel.setBody("<div align='center'><font color='red'>We are sorry but your request cannot be processed at this time</font></div>");
@@ -1633,9 +1633,9 @@ function showOrgsPanel(uuid) {
 	if (uuid == null) {
 		uuid	= YAHOO.amp.orgPanels.lastUuid;
 	}
-	organisationPanel	= YAHOO.amp.orgPanels[uuid]; 
+	organisationPanel	= YAHOO.amp.orgPanels[uuid];
 	if (organisationPanel == null) {
-		organisationPanel 		= new YAHOO.widget.Panel("panelForOrganisations"+uuid, { width:"400px", visible:true, 
+		organisationPanel 		= new YAHOO.widget.Panel("panelForOrganisations"+uuid, { width:"400px", visible:true,
 			draggable:true, close:true,
 			effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 			modal:true } );
@@ -1646,7 +1646,7 @@ function showOrgsPanel(uuid) {
 		YAHOO.amp.orgPanels[uuid]	= organisationPanel;
 		organisationPanel.center();
 	}
-	organisationPanel.setBody("<div style='text-align: center;'><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
+	organisationPanel.setBody("<div style='text-align: center;'><img src='WEB-INF/jsp/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
 	organisationPanel.show();
 
 	YAHOO.amp.orgPanels.lastUuid	= uuid;
@@ -1654,8 +1654,8 @@ function showOrgsPanel(uuid) {
 }
 
 function deleteDocToOrgObj(uuid, ampOrgId) {
-	var panel		= YAHOO.amp.orgPanels[uuid]; 
-	panel.setBody("<div style='text-align: center;'><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
+	var panel		= YAHOO.amp.orgPanels[uuid];
+	panel.setBody("<div style='text-align: center;'><img src='WEB-INF/jsp/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
 	var postString	= "removingUuid=" + uuid + "&removingOrgId=" + ampOrgId;
 	YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/docToOrg.do?orgsforuuid='+uuid, getCallbackForOrgs(panel), postString );
 }
@@ -1666,14 +1666,14 @@ function getCallbackForTemplates (panel) {
 	var callbackObj	= {
 			success: function (o) {
 				panel.setBody( o.responseText );
-				
+
 			},
 			failure: function () {
 				panel.setBody("<div align='center'><font color='red'>We are sorry but your request cannot be processed at this time</font></div>");
 				var myDiv=document.getElementById('tempLoadingDiv');
 				myDiv.style.display="none";
 			}
-	}	
+	}
 	return callbackObj;
 
 }
@@ -1682,10 +1682,10 @@ function addFromTemplate(ownType) {
 	if ( YAHOO.amp.tempPanels == null ) {
 		YAHOO.amp.tempPanels	= new Object;
 	}
-	templatesPanel	= YAHOO.amp.tempPanels[0]; 
+	templatesPanel	= YAHOO.amp.tempPanels[0];
 	if (templatesPanel == null) {
-		templatesPanel 		= new YAHOO.widget.Panel("panelForTemplates",{visible:true, 
-			draggable:true, close:true, 
+		templatesPanel 		= new YAHOO.widget.Panel("panelForTemplates",{visible:true,
+			draggable:true, close:true,
 			modal:true,
 			effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 			constraintoviewport: false } );
@@ -1695,7 +1695,7 @@ function addFromTemplate(ownType) {
 		YAHOO.amp.tempPanels[0]	= templatesPanel;
 		templatesPanel.center();
 	}
-	templatesPanel.setBody("<div style='text-align: center;'><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
+	templatesPanel.setBody("<div style='text-align: center;'><img src='WEB-INF/jsp/contentrepository/view/images/ajax-loader-darkblue.gif' /></div>");
 	templatesPanel.show();
 
 	//YAHOO.amp.orgPanels.lastUuid	= uuid;
@@ -1738,10 +1738,10 @@ function showActions(linkId, divId, category,timestamp){
 		YAHOO.util.Event.addListener(document,"click", hideActions, this, true );
 		YAHOO.amp.actionPanels.listenerAdded	= true;
 	}
-	
+
 	var panels	= YAHOO.amp.actionPanels[category];
 	if ( !panels.timestamp || panels.timestamp != timestamp) {
-		panels.timestamp	= timestamp;    
+		panels.timestamp	= timestamp;
 		for (var p in panels) {
 			if ( panels[p] && panels[p].destroy ) {
 					panels[p].destroy();
@@ -1770,10 +1770,10 @@ function showActions(linkId, divId, category,timestamp){
 }
 function hideActions(e) {
 	var clickedEl	= e.target||e.srcElement;
-	if ( clickedEl.id.indexOf("Actions") >= 0 ) 
+	if ( clickedEl.id.indexOf("Actions") >= 0 )
 		return;
 	 hideCategories();
-	
+
 }
 function hidePanels(panels){
      for (var p in panels) {
@@ -1794,7 +1794,7 @@ function getTemplateLabelsCb(formName, infoDivId) {
 			apply: "<digi:trn>Apply</digi:trn>",
 			close: "<digi:trn>Close</digi:trn>"
 	};
-	
+
 	if ( !YAHOO.amp.templateFilterWrapper ) {
 		YAHOO.amp.templateFilterWrapper	= new FilterWrapper(filterWrapperTrnObj);
 	}
@@ -1824,6 +1824,6 @@ YAHOO.util.Event.addListener(window, "load", initPanel) ;
 
 function showlegend(divIdSuffix) {
 	var contentId = document.getElementById("show_legend_pop_box_"+divIdSuffix);
-	contentId.style.display == "block" ? contentId.style.display = "none" : contentId.style.display = "block"; 
+	contentId.style.display == "block" ? contentId.style.display = "none" : contentId.style.display = "block";
 }
 </script>

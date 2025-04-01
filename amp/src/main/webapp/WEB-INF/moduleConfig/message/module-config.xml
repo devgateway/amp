@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module-config>
+	<name>message</name>
+	<security login-required="true" default="READ">
+		<action login-required="true" pattern="/messageActions" />
+		<action login-required="true" pattern="/msgSettings">ADMIN</action>
+		<action login-required="true" pattern="/templatesManager">ADMIN</action>
+		<action login-required="true" pattern="/exportImportTemplates">ADMIN</action>
+	</security>
+		<hibernate-classes required="false">
+			<hibernate-class>
+                      org.digijava.module.message.dbentity.AmpMessage
+            </hibernate-class>
+			<hibernate-class>
+					  org.digijava.module.message.dbentity.AmpMessageState
+			</hibernate-class>
+			<hibernate-class>
+					  org.digijava.module.message.dbentity.AmpMessageSettings
+			</hibernate-class>
+			<hibernate-class>
+                      org.digijava.module.message.dbentity.AmpMessageReceiver
+            </hibernate-class>
+			<hibernate-class>
+					  org.digijava.module.message.dbentity.AmpEmail
+			</hibernate-class>
+			<hibernate-class>
+					  org.digijava.module.message.dbentity.AmpEmailReceiver
+			</hibernate-class>
+			
+		</hibernate-classes>
+</module-config>

@@ -1987,19 +1987,18 @@
                 </executions>
                 </plugin>
 
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M2</version>
-                    <configuration>
-                        <includes>
-                            <include>**/Test*.java</include>
-                            <include>**/*Test.java</include>
-                            <include>**/*Testcases.java</include>
-                            <include>**/*Tests*.java</include>
-                        </includes>
-                        <excludes>
-                            <!--suites are running tests twice-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+
+                <configuration>
+                    <testSourceDirectory>${project.build.testSourceDirectory}</testSourceDirectory>
+                    <includes>
+                        <include>**/*</include>
+                    </includes>
+                    <excludes>
+                        <!--suites are running tests twice-->
                         <exclude>**/*TestSuite.java</exclude>
                     </excludes>
                     <excludedGroups>

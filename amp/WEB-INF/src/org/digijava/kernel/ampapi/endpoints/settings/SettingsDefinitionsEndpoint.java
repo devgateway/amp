@@ -16,6 +16,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -25,6 +26,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.reports.converters.AmpReportsToReportSpecification;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.PublicServices;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportErrors;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
@@ -37,6 +39,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -67,6 +70,15 @@ public class SettingsDefinitionsEndpoint {
     public final List<SettingField> getSettingDefinitionsForDashboards() {
         return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField(),
                 getFundingTypeField(new LinkedHashSet<>(GisConstants.FUNDING_TYPES)), getEnabledProgramField());
+    }
+
+    @OPTIONS
+    @Path("/dashboards")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeSettingDefinitionsForDashboards() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     @GET

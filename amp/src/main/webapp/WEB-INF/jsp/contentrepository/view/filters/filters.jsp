@@ -12,7 +12,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<jsp:include page="WEB-INF/jsp/aim/view/scripts/newCalendar.jsp"  />
+<jsp:include page="/WEB-INF/jsp/aim/view/scripts/newCalendar.jsp"  />
 <%-- This file renders the Resource-Filtering popup table. Add one <tr></tr> per filter criterium --%>
 <style>
 #docTypes {

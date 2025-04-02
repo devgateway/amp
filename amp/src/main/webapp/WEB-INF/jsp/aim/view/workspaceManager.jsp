@@ -1190,7 +1190,7 @@
     </tr>
     <tr><td align="left">
 	<jsp:include
-									page="WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" />
+									page="/WEB-INF/jsp/aim/view/adminXSLExportToolbar.jsp" />
 
 </td></tr>
 <tr>

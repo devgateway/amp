@@ -8,7 +8,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<jsp:include page="WEB-INF/jsp/aim/view/strongPassword.jsp"  />
+<jsp:include page="/WEB-INF/jsp/aim/view/strongPassword.jsp"  />
 
 <digi:instance property="aimChangePasswordForm" />
 <script language="JavaScript">
@@ -86,7 +86,7 @@ function validate(){
 		</td>
 		<td align=left valign="top" width="60%">
 			<digi:errors/>
-			<jsp:include page="WEB-INF/jsp/aim/view/strongPasswordRulesLegend.jsp"  />
+			<jsp:include page="/WEB-INF/jsp/aim/view/strongPasswordRulesLegend.jsp"  />
 		</td>
 	</tr>
 	<tr>

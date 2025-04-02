@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.digijava.module.admin.dbentity.ImportedFilesRecord"
+		table="IMPORTED_FILES_RECORD">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">IMPORTED_FILES_RECORD_SEQ</param>
+			</generator>
+		</id>
+
+		<property name="fileName" column="file_name" type="java.lang.String" />
+
+		<property name="fileHash" column="file_hash" type="java.lang.String" />
+		<property name="importStatus" column="import_status" type="org.digijava.module.admin.dbentity.ImportStatus" />
+
+
+	</class>
+
+</hibernate-mapping>

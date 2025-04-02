@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Source and destination directories
-SOURCE_DIR="repository"
-DEST_DIR="src/main/webapp/WEB-INF/moduleConfig"
+SOURCE_DIR="/Users/brianbrix/IdeaProjects/amp/amp/src/main/java/org"
+DEST_DIR="/Users/brianbrix/IdeaProjects/amp/amp/src/main/resources/org"
 
 # Check if both arguments are provided
 if [ -z "$SOURCE_DIR" ] || [ -z "$DEST_DIR" ]; then
@@ -20,7 +20,7 @@ fi
 mkdir -p "$DEST_DIR"
 
 # Find and move .html files while preserving directory structure
-find "$SOURCE_DIR" -type f -name "*.xml" | while read -r file; do
+find "$SOURCE_DIR" -type f -name "*.hbm.xml" | while read -r file; do
     # Get the directory structure relative to source directory
     RELATIVE_PATH="${file#$SOURCE_DIR/}"
     RELATIVE_DIR="$(dirname "$RELATIVE_PATH")"

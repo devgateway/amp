@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.kernel.user.UserContactInfo" table="DG_USER_CONTACT_INFO">
+		<composite-id name="id" class="org.digijava.kernel.user.UserContactInfoPK">
+			<key-many-to-one column="USER_ID" name="user" class="org.digijava.kernel.user.User" />
+			<key-property name="contactIndex" type="int" column="CONTACT_INDEX" />
+		</composite-id>
+		<property name="contactType" column="CONTACT_TYPE" type="java.lang.String" />
+		<property name="contactData" column="CONTACT_DATA" type="java.lang.String" />
+	</class>
+</hibernate-mapping>

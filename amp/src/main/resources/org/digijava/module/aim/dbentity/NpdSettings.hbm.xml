@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.NpdSettings" table="amp_npd_settings" lazy="false">
+		<cache usage="read-write" />
+		<id name="id" column="npd_settings_id">
+			<generator class="foreign">
+				<param name="property">team</param>
+			</generator>
+		</id>
+
+		<property name="width" column="width" type="java.lang.Integer" />
+		<property name="height" column="height" type="java.lang.Integer" />
+		<property name="angle" column="angle" type="java.lang.Integer" />
+		<property name="actListPageSize" column="activities_per_page" type="java.lang.Integer" />
+		<property name="selectedYearsForTeam" column="selected_years_for_team" type="java.lang.String" />
+
+		<one-to-one name="team" constrained="true" class="org.digijava.module.aim.dbentity.AmpTeam" />
+		
+	</class>
+</hibernate-mapping>

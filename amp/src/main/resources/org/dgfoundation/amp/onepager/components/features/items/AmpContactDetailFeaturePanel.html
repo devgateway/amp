@@ -1,0 +1,41 @@
+<wicket:extend>
+    <span wicket:id="featureLabel"/>
+    <table border="0" cellspacing ="0" cellpadding="0">
+        <tr>
+            <td align="right">        
+            <table wicket:id="resultcontainer" border="0" cellspacing ="0" cellpadding="0">
+                <tr wicket:id="detailsList">
+                    <td>
+                    <div wicket:id="detailPanel"/>
+                    <wicket:fragment wicket:id="frag1">
+                        <table border="0" cellspacing ="0" cellpadding="0"><tr><td>
+                            <div wicket:id="detail"/></td><td><div wicket:id="removeContact"/>
+                        </td></tr></table>
+                    </wicket:fragment>
+
+                    <wicket:fragment wicket:id="frag2">
+                        <table border="0" cellspacing ="1" cellpadding="0">
+                            <tr>
+                                <td><div wicket:id="type"/></td>
+                                <td><div wicket:id="phone"/></td>
+                                <td style="vertical-align: bottom"><wicket:trn>Extension:</wicket:trn></td>
+                                <td><div wicket:id="phoneExt"/></td>
+                                <td><div wicket:id="removeContact"/></td>
+                            </tr>
+                        </table>
+                    </wicket:fragment>
+                    </td>
+                  </tr>
+            </table> 
+        </td>
+		<td align="right">
+			<span wicket:id="addDetailButton"/>
+		</td>
+		<td>
+			<span wicket:id="detailFeedbackContainer" style="color: red;">
+				<span wicket:id="detailFeedbackLabel" class="feedbacklabel.error"></span>
+			</span>
+		</td>
+        </tr>
+    </table>
+</wicket:extend>

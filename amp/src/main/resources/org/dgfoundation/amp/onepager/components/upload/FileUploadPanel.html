@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	
+	<!-- AMP-19977: The problem with IE9 is that the data was never submitted to the backend because the user clicked a div, not the input element,
+		thus resulting in a security problem, the solution was to create a fake div button on top of the input but allowing the user to click the input. -->	
+	<div id="uploadBtn" class="custom-file-input">
+		<input type="file" id="upfile" onchange="setLabel(this)" title=""/>
+		<p id="chooseFileLabel" wicket:id="chooseFileLabel" />		
+	</div>
+	<div id="uploadLabel" class="custom-file-label">
+		<span wicket:id="noFileLabel" />
+	</div>  	
+	 	 	 		                                                                                
+    <div role="fileUploadedMsg"></div>
+    
+    <!-- The global progress information -->
+    <div class="span5 fileupload-progress fade">
+    	<!-- The global progress bar -->
+        <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+            <div class="bar" style="width:0%;"></div>
+        </div>
+        <!-- The extended global progress information -->
+        <div class="progress-extended"></div>
+    </div>
+    
+    <!-- The loading indicator is shown during file processing -->
+    <div class="fileupload-loading"></div>
+    
+    <script type="text/javascript">
+    	// Need this in order to get rid of Chrome default message.
+    	if (window.webkitURL) $('#upfile').attr('title', ' ');
+    </script>
+</wicket:panel>
+</html>

@@ -14,7 +14,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<jsp:include page="WEB-INF/jsp/aim/view/teamPagesHeader.jsp" flush="true" />
+<jsp:include page="/WEB-INF/jsp/aim/view/teamPagesHeader.jsp" flush="true" />
 
 <style>
 .contentbox_border {

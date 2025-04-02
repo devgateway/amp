@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="org.digijava.module.sdm.dbentity.SdmItem" table="DG_SDM_ITEM" lazy="false">
+		<composite-id>
+			<key-many-to-one name="document" class="org.digijava.module.sdm.dbentity.Sdm" column="SDM_ID" />
+			<key-property name="paragraphOrder" column="PARAGRAPH_ORDER" type="java.lang.Long" />
+		</composite-id>
+
+		<property name="contentType" column="CONTENT_TYPE" type="java.lang.String" />
+		<property name="alignment" column="ALIGNMENT" type="java.lang.String" />
+		<property name="font" column="FONT" type="java.lang.String" />
+		<property name="fontSize" column="FONTSIZE" type="java.lang.Long" />
+		<property name="fontColor" column="FONTCOLOR" type="java.lang.String" />
+		<property name="bold" column="BOLD" type="java.lang.String" />
+		<property name="italic" column="ITALIC" type="java.lang.String" />
+		<property name="underline" column="UNDERLINE" type="java.lang.String" />
+		<property name="contentTitle" column="CONTENT_TITLE" type="java.lang.String" />
+		<property name="content" column="CONTENT" type="binary" />
+		<property name="contentText" column="CONTENT_TXT" type="text" />
+		<property name="realType" column="REAL_TYPE" type="java.lang.String" />
+	</class>
+
+</hibernate-mapping>

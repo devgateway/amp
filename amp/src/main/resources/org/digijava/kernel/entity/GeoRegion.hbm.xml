@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.kernel.entity.GeoRegion" table="DG_GEOREGIONS">
+		<cache usage="read-write" />
+		<id column="ISO2" name="id" type="java.lang.String">
+			<generator class="assigned" />
+		</id>
+		<property column="NAME" length="400" name="name" type="java.lang.String" />
+		<property column="TYPE" length="200" name="type" type="java.lang.String" />
+		<property column="ACTIVE" length="1" name="active" type="java.lang.String" />
+	</class>
+</hibernate-mapping>

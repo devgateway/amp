@@ -15,7 +15,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib prefix="httml" uri="http://struts.apache.org/tags-html" %>
-<jsp:include page="WEB-INF/jsp/aim/view/teamPagesHeader.jsp" flush="true" />
+<jsp:include page="/WEB-INF/jsp/aim/view/teamPagesHeader.jsp" flush="true" />
 
 <style>
 .contentbox_border {

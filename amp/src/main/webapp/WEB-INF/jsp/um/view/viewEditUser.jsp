@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<jsp:include page="WEB-INF/jsp/aim/view/strongPassword.jsp"  />
+<jsp:include page="/WEB-INF/jsp/aim/view/strongPassword.jsp"  />
 
 <digi:instance property="umViewEditUserForm" />
 <digi:context name="digiContext" property="context" />
@@ -226,7 +226,7 @@ function validateUserInfo(){
 			          </digi:trn>
 			        </span>
                     <digi:errors/>
-					<jsp:include page="WEB-INF/jsp/aim/view/strongPasswordRulesLegend.jsp"  />
+					<jsp:include page="/WEB-INF/jsp/aim/view/strongPasswordRulesLegend.jsp"  />
 					        &nbsp;
 					        <br/>
 					        <logic:equal name="umViewEditUserForm" property="displaySuccessMessage" value="true" >

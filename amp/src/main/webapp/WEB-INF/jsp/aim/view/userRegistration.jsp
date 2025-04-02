@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<jsp:include page="WEB-INF/jsp/aim/view/strongPassword.jsp"  />
+<jsp:include page="/WEB-INF/jsp/aim/view/strongPassword.jsp"  />
 
 <script language="JavaScript">
 
@@ -269,7 +269,7 @@
                             </logic:iterate>
                           </ul>
                         </font>
-                        <jsp:include page="WEB-INF/jsp/aim/view/strongPasswordRulesLegend.jsp"  />
+                        <jsp:include page="/WEB-INF/jsp/aim/view/strongPasswordRulesLegend.jsp"  />
                       </td>
                     </tr>
                   </logic:notEmpty>

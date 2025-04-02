@@ -67,9 +67,9 @@ public class SettingsDefinitionsEndpoint {
             value = "Setting definitions for dashboards",
             notes = "Returns definitions for the following settings: currency, calendar, calendar currencies, "
                     + "funding type.")
-    public final List<SettingField> getSettingDefinitionsForDashboards() {
-        return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField(),
-                getFundingTypeField(new LinkedHashSet<>(GisConstants.FUNDING_TYPES)), getEnabledProgramField());
+    public final Response getSettingDefinitionsForDashboards() {
+        return PublicServices.buildOkResponseWithOriginHeaders(Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField(),
+                getFundingTypeField(new LinkedHashSet<>(GisConstants.FUNDING_TYPES)), getEnabledProgramField()));
     }
 
     @OPTIONS

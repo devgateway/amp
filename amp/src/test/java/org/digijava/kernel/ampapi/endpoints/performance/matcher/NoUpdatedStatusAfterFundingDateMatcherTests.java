@@ -14,37 +14,36 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.Assert.*;
 
 /**
  * 3 months went by after the contract signature date and the project status was not modified from planned to ongoing
- * 
+ *
  * @author Viorel Chihai
  */
 public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRuleMatcherTests {
-    
+
     @Before
     public void setUp() {
         super.setUp();
         definition = new NoUpdatedStatusAfterFundingDateMatcherDefinition();
     }
-    
+
     @Test
     public void testValidation() {
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "3", 
-                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, Constants.ACTIVITY_STATUS_ONGOING, 
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "3",
+                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, Constants.ACTIVITY_STATUS_ONGOING,
                 getCriticalLevel());
-        
+
         assertNotNull(definition.createMatcher(rule));
     }
 
     @Test
     public void testPlannedStatusAfterClasificationDate() {
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "3", 
-                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, Constants.ACTIVITY_STATUS_ONGOING, 
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "3",
+                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, Constants.ACTIVITY_STATUS_ONGOING,
                 getCriticalLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -69,16 +68,16 @@ public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRule
                                         .getCategoryClass())
                                 .getCategoryValue())
                 .getActivity();
-        
+
         assertEquals(findPerformanceIssue(rule, a).getDonors().size(), 1);
     }
-    
+
     @Test
     public void testUpdatedActivityStatus() {
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "3", 
-                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, Constants.ACTIVITY_STATUS_ONGOING, 
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "3",
+                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, Constants.ACTIVITY_STATUS_ONGOING,
                 getCriticalLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -96,16 +95,16 @@ public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRule
                                         .getCategoryClass())
                                 .getCategoryValue())
                 .getActivity();
-        
+
         assertNull(findPerformanceIssue(rule, a));
     }
-    
+
     @Test
     public void testNotUpdatedActivitySatus() {
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "3", 
-                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, Constants.ACTIVITY_STATUS_ONGOING, 
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "3",
+                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, Constants.ACTIVITY_STATUS_ONGOING,
                 getCriticalLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -123,16 +122,16 @@ public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRule
                                         .getCategoryClass())
                                 .getCategoryValue())
                 .getActivity();
-        
+
         assertEquals(findPerformanceIssue(rule, a).getDonors().size(), 1);
     }
-    
+
     @Test
     public void testActivityStatusUpdatedWihtoutTimePeriod() {
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "3", 
-                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, Constants.ACTIVITY_STATUS_ONGOING, 
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "3",
+                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, Constants.ACTIVITY_STATUS_ONGOING,
                 getCriticalLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -150,16 +149,16 @@ public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRule
                                         .getCategoryClass())
                                 .getCategoryValue())
                 .getActivity();
-        
+
         assertNull(findPerformanceIssue(rule, a));
     }
 
     /**
      * @return
      */
-    public AmpPerformanceRule createRule(String timeUnit, String timeAmount, String fundingDate, String activityStatus, 
+    public AmpPerformanceRule createRule(String timeUnit, String timeAmount, String fundingDate, String activityStatus,
             AmpCategoryValue level) {
-        
+
         AmpPerformanceRule rule = new AmpPerformanceRule();
 
         AmpPerformanceRuleAttribute attr1 = new AmpPerformanceRuleAttribute();
@@ -184,5 +183,5 @@ public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRule
 
         return rule;
     }
-    
+
 }

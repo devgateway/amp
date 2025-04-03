@@ -47,7 +47,7 @@ DHTMLSuite.infoPanel = function()
 	this.cookieNames = new Array();	
 	this.currentlyExpandedPane = false;
 //	this.layoutCSS = 'info-pane.css';	// Default css file for this widget.
-	this.layoutCSS = '/jsp/aim/view/css/css_dhtmlsuite/info-pane.css';	// Default css file for this widget.
+	this.layoutCSS = '/static/aim/view/css/css_dhtmlsuite/info-pane.css';	// Default css file for this widget.
 	this.arrayOfPanes = new Array();
 	this.paneHeights = new Array();
 	try{

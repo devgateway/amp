@@ -4,10 +4,9 @@ import com.google.common.collect.ImmutableList;
 import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.request.TLSUtils;
 import org.hamcrest.Matcher;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import javax.validation.ConstraintViolationException;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -19,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * @author Octavian Ciubotaru
  */
+
 public class DiscriminatedFieldAccessorTest {
 
 
@@ -51,7 +51,7 @@ public class DiscriminatedFieldAccessorTest {
     private static Field attributes;
     private static Field categories;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() throws Exception {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX, "");
@@ -72,6 +72,7 @@ public class DiscriminatedFieldAccessorTest {
         });
     }
 
+    @org.junit.Test
     @Test
     public void testCollectionWriteWriteToNull() {
         assertThrows(RuntimeException.class,()-> {
@@ -84,6 +85,7 @@ public class DiscriminatedFieldAccessorTest {
         });
     }
 
+    @org.junit.Test
     @Test
     public void testDiscriminatedRead() {
         Obj obj = new Obj();

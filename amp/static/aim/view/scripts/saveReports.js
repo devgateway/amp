@@ -1,4 +1,4 @@
-/* Check also reportsScripts.jsp for some initialization of this class. 
+/* Check also reportsScripts.jsp for some initialization of this class.
    The translated messages and the saveReprotEngine variables are declared there.
 */
 function SaveReportEngine (isTab) {
@@ -12,7 +12,7 @@ SaveReportEngine.prototype.getReportName	= function () {
 	if(reportName){
 		reportName = trim(reportName);
 	}
-	return reportName;	
+	return reportName;
 };
 
 SaveReportEngine.prototype.getReportId		= function () {
@@ -39,22 +39,22 @@ SaveReportEngine.prototype.checkEnter		= function (e) {
 			saveReportEngine.saveReport();
 			return false;
 	}
-	return true;	
+	return true;
 };
 
 SaveReportEngine.prototype.showPanel		= function () {
 	if (this.panel == null) {
  	 	document.getElementById("saveTitlePanel").style.display = "";
- 	 	this.panel = new YAHOO.widget.Panel("saveTitlePanel", 
+ 	 	this.panel = new YAHOO.widget.Panel("saveTitlePanel",
 				{ 	visible:true,
-					width: "400px", 
-					constraintoviewport:true, 
-					fixedcenter: true, 
+					width: "400px",
+					constraintoviewport:true,
+					fixedcenter: true,
 					underlay: 'shadow',
 					modal: true,
-					close:true, 
+					close:true,
 					effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
-					visible:false, 
+					visible:false,
 					draggable:true } );
 		this.panel.render(document.body);
 		this.innerBody = this.panel.body.innerHTML;
@@ -65,7 +65,7 @@ SaveReportEngine.prototype.showPanel		= function () {
 	initMultilingualInput('AmpReports_name');
 	this.panel.subscribe("show", function () {$('#titlePanelBody input').first().focus(); });
 };
-	
+
 SaveReportEngine.prototype.closePanel		= function () {
 	debugger;
 	this.panel.close();
@@ -95,11 +95,11 @@ SaveReportEngine.prototype.success		= function (o) {
 		message += "<br />" +
 				"<div align='center'>" +
 				"<digi:trn><input class='buttonx' type='reset' value='OK' onClick='return refresh("+this.isTab+");'></digi:trn>" +
-				"</div>";	
-		
+				"</div>";
+
 		this.panel.setBody( message );
 		this.doneCopyMessage;
-	
+
 	}
 };
 
@@ -142,32 +142,32 @@ SaveReportEngine.prototype.saveReport		= function () {
 		this.saveButton.enable();
 		return;
 	}
-	
+
 	var reportChangedName =  true; //this.getReportName() == this.getOriginalReportName();
 	if (reportChangedName) {
 		this.overwritingReport	= true;
 	}
-	else { 
+	else {
 		this.overwritingReport	= false;
 	}
 
 	this.saveButton.disable();
 	var reportTitles = getReportTitles();
-	
+
 	if (reportTitles == null) {
-		this.panel.setFooter( SaveReportEngine.savingMessage + "...<br />  Error: please enter a value in at least one language " );		
+		this.panel.setFooter( SaveReportEngine.savingMessage + "...<br />  Error: please enter a value in at least one language " );
 	}
 	else {
-		this.panel.setFooter( SaveReportEngine.savingMessage + "...<br />  <img src='/jsp/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>" );
+		this.panel.setFooter( SaveReportEngine.savingMessage + "...<br />  <img src='/static/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>" );
 		var postString		= "dynamicSaveReport=true" +
-							reportTitles + 
-							"&reportTitle=dummy" + 
+							reportTitles +
+							"&reportTitle=dummy" +
 							"&desktopTab=" + this.isTab +
 							"&reportId="+this.getReportId() +
 							"&forceNameOverwrite=" + this.overwritingReport +
 							"&useFilters=true";
 		//alert (postString);
-		YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
+		YAHOO.util.Connect.asyncRequest("POST", "/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T", this, postString);
 	}
 };
 
@@ -178,7 +178,7 @@ SaveReportEngine.enterPressed		= function (e) {
 			keyCode	= e.which;
 		if (e.keyCode != null)
 			keyCode	= e.keyCode;
-			
+
 		if ( keyCode == 13 ) {
 			return true;
 		}
@@ -192,7 +192,7 @@ function ExtendedButton( buttonId ) {
 ExtendedButton.prototype.enable				= function () {
 	var btn 	= document.getElementById( this.buttonId );
 	var btnY	= new YAHOO.util.Element(btn);
-	
+
 	btn.disabled		= false;
 	btnY.setStyle("color", "black");
 };

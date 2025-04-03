@@ -486,7 +486,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     }
 
   public static AmpActivityVersion loadAmpActivity(Long id){
-     return (AmpActivityVersion) PersistenceManager.getSession().load(AmpActivityVersion.class, id);
+     return PersistenceManager.getSession().load(AmpActivityVersion.class, id);
   }
 
   public static List<AmpActivitySector> getAmpActivitySectors(Long actId) {
@@ -546,7 +546,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         AmpOrganisation organisation = null;
         try {
           session = PersistenceManager.getSession();
-          String rewrittenColumns = SQLUtils.rewriteQuery("amp_organisation", "ao", 
+          String rewrittenColumns = SQLUtils.rewriteQuery("amp_organisation", "ao",
                   new HashMap<String, String>(){{
                       put("name", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall("ao.amp_org_id"));
                       put("description", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "description").getSQLFunctionCall("ao.amp_org_id"));
@@ -605,7 +605,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             AmpComponentFunding cf = (AmpComponentFunding) compFundIterator.next();
             FundingDetail fd = new FundingDetail();
             fd.setAdjustmentTypeName(cf.getAdjustmentType());
- 
+
             fd.setCurrencyCode(cf.getCurrency().getCurrencyCode());
             fd.setCurrencyName(cf.getCurrency().getCurrencyName());
             fd.setTransactionAmount(FormatHelper.formatNumber(cf.getTransactionAmount().doubleValue()));
@@ -664,7 +664,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
       Query qry = PersistenceManager.getSession().createQuery(qryStr);
       return qry.list();
   }
-  
+
   public static Collection<AmpActivityVersion> getOldActivities(Session session,int size,Date date){
       List<AmpActivityVersion> colAv;
         Collection<AmpActivityVersion> colAll = new ArrayList<AmpActivityVersion>();
@@ -699,10 +699,10 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
   // function for getting fundings for components and ids ends here
 
-  
-  
+
+
   /**
-   * checks whether the 'name' activity title exists as a translation in any language 
+   * checks whether the 'name' activity title exists as a translation in any language
    * in any latest version of an activity
    * excluding the activity group of the current activity
    * @param name title of the activity
@@ -747,18 +747,18 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
       if (result.getId() == -1l)
           return null;
       return result;
-  
+
   }
-      
+
     public static List<AmpActivityVersion> getSortedActivitiesByDonors (List<AmpActivityVersion> acts, boolean acs) {
         List<AmpActivityVersion> retVal = new ArrayList<AmpActivityVersion>();
 
         Map<String, AmpActivityVersion> donorNameActivityMap = new HashMap<String, AmpActivityVersion> ();
         List<AmpActivityVersion> noFundingActivities = null;
         for (AmpActivityVersion actItem : acts) {
-            if (actItem.getFunding() != null && !actItem.getFunding().isEmpty()) {                
+            if (actItem.getFunding() != null && !actItem.getFunding().isEmpty()) {
                 StringBuilder donorNames = new StringBuilder();
-                
+
                 List<AmpFunding> organizations = new ArrayList<>(actItem.getFunding());
                 if (organizations != null && organizations.size() > 1) {
                     organizations.sort(Comparator.comparing(o -> o.getAmpDonorOrgId().getName()));
@@ -777,14 +777,14 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 noFundingActivities.add(actItem);
             }
         }
-        
+
         Set <String> keys = donorNameActivityMap.keySet();
         List <String> sortedKeys = new ArrayList <String> (keys);
         Collections.sort(sortedKeys);
         if (!acs) {
             Collections.reverse(sortedKeys);
         }
-        
+
         for (String key : sortedKeys) {
             retVal.add(donorNameActivityMap.get(key));
         }
@@ -792,16 +792,16 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         if (noFundingActivities != null) {
             retVal.addAll(noFundingActivities);
         }
-        
+
         return retVal;
     }
 
     /*
    * get the  the Contracts for Activity
-   * 
+   *
    */
   public static List<IPAContract> getIPAContracts(Long activityId) {
-    
+
       String queryString = "select con from " + IPAContract.class.getName()
           + " con " + "where (con.activity=:activityId)";
       Query qry = PersistenceManager.getSession().createQuery(queryString).setParameter("activityId",activityId, LongType.INSTANCE );
@@ -820,21 +820,21 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
           c.setTotalDisbursements(td);
           c.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(c, c.getTotalAmountCurrency().getCurrencyCode()));
           c.setFundingTotalDisbursements(ActivityUtil.computeFundingDisbursementIPA(c, cc));
-          c.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, cc));  
+          c.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, cc));
       }
       return  contrcats ;
-  } 
+  }
 
     public static double computeFundingDisbursementIPA(IPAContract contract, String cc){
-        
-        ArrayList<AmpFundingDetail> disbs1 = (ArrayList<AmpFundingDetail>) DbUtil.getDisbursementsFundingOfIPAContract(contract);                
+
+        ArrayList<AmpFundingDetail> disbs1 = (ArrayList<AmpFundingDetail>) DbUtil.getDisbursementsFundingOfIPAContract(contract);
         //if there is no disbursement global currency saved in db we'll use the default from edit activity form
-        
+
        if(contract.getTotalAmountCurrency()!=null)
            cc=contract.getTotalAmountCurrency().getCurrencyCode();
         double td=0;
-        double usdAmount=0;  
-        double finalAmount=0; 
+        double usdAmount=0;
+        double finalAmount=0;
 
         for(Iterator<AmpFundingDetail> j=disbs1.iterator();j.hasNext();)
         {
@@ -861,12 +861,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 //          contract.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(contract, cc));
         return td;
     }
-  
+
     public static double computeExecutionRateFromContractTotalValue(IPAContract c, String currCode){
-        double usdAmount1=0;  
-           double finalAmount1=0; 
+        double usdAmount1=0;
+           double finalAmount1=0;
         try {
-            if(c.getContractTotalValue()!=null && c.getTotalAmountCurrency().getCurrencyCode()!=null)   
+            if(c.getContractTotalValue()!=null && c.getTotalAmountCurrency().getCurrencyCode()!=null)
                 usdAmount1 = CurrencyWorker.convertToUSD(c.getContractTotalValue().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
             else usdAmount1 = 0.0;
             } catch (AimException e) {
@@ -878,8 +878,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             } catch (AimException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-            }   
-          
+            }
+
           double execRate=0;
           if(finalAmount1!=0)
               execRate=c.getFundingTotalDisbursements()/finalAmount1;
@@ -888,10 +888,10 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     }
 
     public static double computeExecutionRateFromTotalAmount(IPAContract c, String currCode){
-        double usdAmount1=0;  
-           double finalAmount1=0; 
+        double usdAmount1=0;
+           double finalAmount1=0;
         try {
-            if(c.getTotalAmount()!=null && c.getTotalAmountCurrency()!=null )   
+            if(c.getTotalAmount()!=null && c.getTotalAmountCurrency()!=null )
                 usdAmount1 = CurrencyWorker.convertToUSD(c.getTotalAmount().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
             else usdAmount1=0.0;
             } catch (AimException e) {
@@ -901,8 +901,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,currCode);
             } catch (AimException e) {
                 e.printStackTrace();
-            }   
-          
+            }
+
           double execRate=0;
           if(finalAmount1!=0)
               execRate=c.getTotalDisbursements()/finalAmount1;
@@ -918,7 +918,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     {
         Set<Long> ampActivityIds = new TreeSet<Long>();
         List<Object> res;
-        
+
         if (usedQuery.contains(":")) {
             // slower but always works
             res = PersistenceManager.getSession().doReturningWork(new ReturningWork<List<Object>>() {
@@ -936,7 +936,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         }
         return ampActivityIds;
     }
-    
+
     /**
      * returns a set of all ampActivityIds passed by the workspace filter
      * @param session
@@ -944,10 +944,10 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     public static Set<Long> getAllLegalAmpActivityIds() {
         return fetchLongs(WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession()));
     }
-    
+
     public static List<AmpActivityFake> getLastUpdatedActivities() {
         String workspaceQuery = Util.toCSStringForIN(getAllLegalAmpActivityIds());
-        
+
         List<AmpActivityFake> res = new ArrayList<AmpActivityFake>();
         Session session = null;
         Query qry = null;
@@ -970,7 +970,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         }
         return res;
     }
-  
+
   /*
    * this function is so incredibly slow that you should NEVER use it. Left it here because it is used by one very old (most probably unused) page
    */
@@ -978,12 +978,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
       String queryString = "select ampAct from " + AmpActivityVersion.class.getName() + " ampAct";
       return PersistenceManager.getSession().createQuery(queryString).list();
   }
-  
+
   public static List<AmpActivityVersion> getActivitiesWhichMatchDate(String dateField, Date value) {
       Date minDate = new Date(value.getTime() - 24 * 3600l * 1000l);
       Date maxDate = new Date(value.getTime() + 24 * 3600l * 1000l);
       String queryString = String.format(
-              "select ampAct from %s ampAct WHERE (ampAct.team IS NOT NULL) AND " + 
+              "select ampAct from %s ampAct WHERE (ampAct.team IS NOT NULL) AND " +
             "(ampAct.%s >= :minDate) AND (ampAct.%s <= :maxDate)",
               AmpActivityVersion.class.getName(), dateField, dateField);
       List<AmpActivityVersion> aavs = PersistenceManager.getSession()
@@ -1035,7 +1035,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
               .setParameter("name", "%" + name + "%", StringType.INSTANCE)
               .list();
   }
-  
+
   private static AmpActivityGroup getActivityGroups(Session session, Long actId) {
       String queryString = "select group from " + AmpActivityGroup.class.getName() + " group "
                       + "where group.ampActivityLastVersion.ampActivityId=:actId";
@@ -1052,25 +1052,36 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         String deleteActivitySurveyResponse = "DELETE FROM amp_ahsurvey_response WHERE amp_ahsurvey_id in ( SELECT amp_ahsurvey_id FROM amp_ahsurvey WHERE amp_activity_id = " + ampAct.getAmpActivityId() + " ) ";
         SQLUtils.executeQuery(con, deleteActivitySurveyResponse );
 
-        String deleteActivitySurvey = "DELETE FROM amp_ahsurvey WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        SQLUtils.executeQuery(con, deleteActivitySurvey );
+//        String deleteActivitySurvey = "DELETE FROM amp_ahsurvey WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        String deleteActivitySurvey = "DELETE FROM amp_ahsurvey WHERE amp_activity_id = ?";
+        SQLUtils.executePreparedQuery(con, deleteActivitySurvey,ampAct.getAmpActivityId() ,"amp_ahsurvey");
+
+        String deleteFunding = "DELETE FROM amp_funding WHERE amp_activity_id = ?";
+        SQLUtils.executePreparedQuery(con, deleteFunding,ampAct.getAmpActivityId() ,"amp_funding");
+
+
+//        SQLUtils.executeQuery(con, deleteActivitySurvey );
 
         //   delete surveys
         String deleteActivityGPISurveyReponse = "DELETE FROM amp_gpi_survey_response WHERE amp_gpisurvey_id in ( SELECT amp_gpisurvey_id FROM amp_gpi_survey WHERE amp_activity_id = " + ampAct.getAmpActivityId() + " ) " ;
         SQLUtils.executeQuery(con, deleteActivityGPISurveyReponse );
 
-        String deleteActivityGPISurvey = "DELETE FROM amp_gpi_survey WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        SQLUtils.executeQuery(con, deleteActivityGPISurvey );
+        String deleteActivityGPISurvey = "DELETE FROM amp_gpi_survey WHERE amp_activity_id = ?";
+        SQLUtils.executePreparedQuery(con, deleteActivityGPISurvey,ampAct.getAmpActivityId() ,"amp_gpi_survey");
 
         //   delete all previous comments
-        String deleteActivityComments = "DELETE FROM amp_comments WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        SQLUtils.executeQuery(con, deleteActivityComments );
+//        String deleteActivityComments = "DELETE FROM amp_comments WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+//        SQLUtils.executeQuery(con, deleteActivityComments );
+        String deleteActivityComments = "DELETE FROM amp_comments WHERE amp_activity_id = ?";
+        SQLUtils.executePreparedQuery(con, deleteActivityComments,ampAct.getAmpActivityId() ,"amp_comments");
 
         //Delete the connection with Team.
-        String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        SQLUtils.executeQuery(con, deleteActivityTeam );
+//        String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = ?";
+
+        SQLUtils.executePreparedQuery(con, deleteActivityTeam,ampAct.getAmpActivityId(),"amp_team_activities" );
     }
-    
+
     public static void removeMergeSources(Long ampActivityId,Session session){
         String queryString1 = "select act from " + AmpActivityVersion.class.getName() + " act where (act.mergeSource1=:activityId)";
         String queryString2 = "select act from " + AmpActivityVersion.class.getName() + " act where (act.mergeSource2=:activityId)";
@@ -1078,24 +1089,24 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         Query qry2 = session.createQuery(queryString2);
         qry1.setParameter("activityId", ampActivityId, LongType.INSTANCE);
         qry2.setParameter("activityId", ampActivityId, LongType.INSTANCE);
-        
+
         Collection col =qry1.list();
-        if (col != null && col.size() > 0) {
+        if (col != null && !col.isEmpty()) {
             for (AmpActivityVersion actVersion : (Iterable<AmpActivityVersion>) col) {
                 actVersion.setMergeSource1(null);
                 session.update(actVersion);
             }
         }
         col =qry2.list();
-        if (col != null && col.size() > 0) {
+        if (col != null && !col.isEmpty()) {
             for (AmpActivityVersion actVersion : (Iterable<AmpActivityVersion>) col) {
                 actVersion.setMergeSource2(null);
                 session.update(actVersion);
             }
         }
-        
+
     }
-  
+
   /**
    * @deprecated
    *
@@ -1121,7 +1132,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                   .setCacheable(false).list();
       }
   }
-  
+
   public static void deleteActivityIndicatorsSession(Long ampActivityId,Session session) throws Exception{
         Collection col = null;
         Query qry = null;
@@ -1136,18 +1147,19 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
           IndicatorActivity indAct = (IndicatorActivity) o;
           session.delete(indAct);
       }
-      
+
   }
 
   public static void deleteActivityIndicators(Collection activityInd, AmpActivityVersion activity, Session session) throws Exception {
-    
-            if (activityInd != null && activityInd.size() > 0) {
+
+            if (activityInd != null && !activityInd.isEmpty()) {
                 for (Object indAct : activityInd) {
 
-                    AmpIndicator ind = (AmpIndicator) session.get(AmpIndicator.class, ((IndicatorActivity) indAct).getIndicator().getIndicatorId());
+                    AmpIndicator ind = session.get(AmpIndicator.class, ((IndicatorActivity) indAct).getIndicator().getIndicatorId());
                     IndicatorActivity indConn = IndicatorUtil.findActivityIndicatorConnection(activity, ind);
                     IndicatorUtil.removeConnection(indConn);
                 }
+                session.flush();
             }
   }
 
@@ -1162,7 +1174,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             boolean hasTeamLeadOrValidator = false;
             if (currentTeam != null) {
                 List<AmpTeamMember> valids = TeamMemberUtil.getTeamHeadAndApprovers(currentTeam.getAmpTeamId());
-                if (valids != null && valids.size() > 0) {
+                if (valids != null && !valids.isEmpty()) {
                     hasTeamLeadOrValidator = true;
                 }
             }
@@ -1305,13 +1317,13 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
               " ap join ap.programSetting s where (ap.activity=:actId) and (s.name=:settingName)";
       return PersistenceManager.getSession().createQuery(queryString).setParameter("actId",actId, LongType.INSTANCE).setParameter("settingName",settingName,StringType.INSTANCE).list();
   }
- 
+
   public static class HelperAmpActivityNameComparator
         implements Comparator {
         public int compare(Object obj1, Object obj2) {
             AmpActivityVersion act1 = (AmpActivityVersion) obj1;
             AmpActivityVersion act2 = (AmpActivityVersion) obj2;
-            return (act1.getName()!=null && act2.getName()!=null)?act1.getName().compareTo(act2.getName()):0; 
+            return (act1.getName()!=null && act2.getName()!=null)?act1.getName().compareTo(act2.getName()):0;
         }
     }
 
@@ -1321,7 +1333,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
    * @param user,actId
    * @return ampId
    * @author dare
- * @param session 
+ * @param session
    */
   public static String generateAmpId(User user, Long actId, Session session) {
       String globSetting = "numeric";// TODO This should come from global settings
@@ -1331,26 +1343,26 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
       else
           return combinedAmpId(actId);
     }
-  
+
 /**
  * combines countryId, current member id and last activityId+1 and makes ampId
  * @param user,actId
- * @return 
+ * @return
  * @author dare
- * @param session 
+ * @param session
  */
     private static String numericAmpId(User user, Long actId, Session session){
         String countryCode = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
         String userId = user.getId().toString();
-        Country country = (Country) session.load(Country.class, countryCode);   
+        Country country = (Country) session.load(Country.class, countryCode);
         String countryId = "0";
         if (country != null){
             countryId = country.getCountryId().toString();
         }
-        
+
         String lastId = null;
         if (actId != null){
-            lastId = actId.toString();  
+            lastId = actId.toString();
         }
         return countryId + userId + lastId;
     }
@@ -1358,7 +1370,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     /**
      * combines countryIso and last activityId+1 and makes ampId
      * @param actId
-     * @return 
+     * @return
      * @author dare
      */
     private static String combinedAmpId(Long actId){
@@ -1366,18 +1378,18 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         String countryCode = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
         String lastId = null;
         if (actId != null){
-             lastId = actId.toString(); 
-        }   
-        retVal = countryCode.toUpperCase() + "/" + lastId;      
+             lastId = actId.toString();
+        }
+        retVal = countryCode.toUpperCase() + "/" + lastId;
         return retVal;
     }
-    
+
     public static List<AmpActivityVersion> getActivitiesRelatedToAmpTeamMember(Session session, Long ampTeamMemberId) {
         String queryStr = "SELECT a FROM " + AmpActivityVersion.class.getName()  + " a left join a.member m WHERE " +
                 "(a.activityCreator=:atmId) OR (a.modifiedBy=:atmId) OR (a.approvedBy = :atmId) OR (m.ampTeamMemId = :atmId)  OR (a.modifiedBy = :atmId)";
         return session.createQuery(queryStr).setLong("atmId", ampTeamMemberId).list();
     }
-    
+
     public static String collectionToCSV(Collection<AmpActivityVersion> activities) {
         if (activities == null)
             return null;
@@ -1389,13 +1401,13 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             else
                 ret +=  "' '" + ", ";
         }
-        return ret.substring(0, ret.length() - 2);      
+        return ret.substring(0, ret.length() - 2);
     }
-        
+
         /**
          * @author Dare
          * @param partOfName
-         * @return Array of Strings,which have a look like: activity_name(activity_id) 
+         * @return Array of Strings,which have a look like: activity_name(activity_id)
          */
         public static String[] loadActivitiesNamesAndIds(TeamMember member) throws DgException{
             Session session=null;
@@ -1405,7 +1417,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             String [] retValue=null;
             try {
                     session=PersistenceManager.getRequestDBSession();
-                    
+
                 Set relatedTeams=TeamUtil.getRelatedTeamsForMember(member);
                 Set teamAO = TeamUtil.getComputedOrgs(relatedTeams);
                 String activityNameString = AmpActivityVersion.hqlStringForName("a");
@@ -1414,7 +1426,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     queryString = "select " + activityNameString + ", a.ampActivityId from " + AmpActivity.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
                             " where  a.team in  (" + Util.toCSStringForIN(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSStringForIN(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSStringForIN(teamAO) + ")) order by " + activityNameString;
 
-                } else 
+                } else
                 {
                     // not computed (e.g. team) workspace
                     queryString = "select " + activityNameString + ", a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ")    ";
@@ -1422,20 +1434,20 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 //                      queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
 //                    }
                     queryString += " order by " + activityNameString;
-                }   
-                            
-                query=session.createQuery(queryString);             
-                activities=query.list();        
-            }catch(Exception ex) { 
-                logger.error("couldn't load Activities" + ex.getMessage()); 
-                ex.printStackTrace(); 
-            } 
+                }
+
+                query=session.createQuery(queryString);
+                activities=query.list();
+            }catch(Exception ex) {
+                logger.error("couldn't load Activities" + ex.getMessage());
+                ex.printStackTrace();
+            }
             if (activities != null){
-                retValue=new String[activities.size()];         
+                retValue=new String[activities.size()];
                 int i=0;
                 for (Object rawRow : activities) {
                     Object[] row = (Object[])rawRow; //:)
-                    String nameRow=(String)row[0];          
+                    String nameRow=(String)row[0];
                     if(nameRow != null){
                     nameRow = nameRow.replace('\n', ' ');
                     nameRow = nameRow.replace('\r', ' ');
@@ -1443,7 +1455,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     }
                     ////System.out.println(nameRow);
                     retValue[i]=nameRow+"("+row[1]+")";
-                    i++;                    
+                    i++;
                 }
             }
             return retValue;
@@ -1462,12 +1474,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     Set teamAO = TeamUtil.getComputedOrgs(relatedTeams);
 
                     String activityName = AmpActivityVersion.hqlStringForName("gr.ampActivityLastVersion");
-                    queryString ="select " + activityName + ", gr.ampActivityLastVersion.ampActivityId from "+ AmpActivityGroup.class.getName()+" gr ";                    
+                    queryString ="select " + activityName + ", gr.ampActivityLastVersion.ampActivityId from "+ AmpActivityGroup.class.getName()+" gr ";
                     if (teamAO != null && !teamAO.isEmpty()) {
                         queryString +=" left outer join gr.ampActivityLastVersion.orgrole r  left outer join gr.ampActivityLastVersion.funding f "+
                         " where gr.ampActivityLastVersion.team in (" + Util.toCSStringForIN(relatedTeams) + ")  " +
                                 " or (r.organisation in  (" + Util.toCSStringForIN(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSStringForIN(teamAO) + ")) ";
-                        
+
                     } else {
                         // none computed workspace
                         queryString += " where gr.ampActivityLastVersion.team in  ("
@@ -1499,22 +1511,22 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             }
             return retValue;
         }
-        
-        /** 
+
+        /**
          * @param actId
          * @return activity name
          * @author dare
          */
         public static String getActivityName(Long actId){
             String activityName = AmpActivityVersion.hqlStringForName("gr.ampActivityLastVersion");
-            String queryString = "select " + activityName + " from "+ AmpActivityGroup.class.getName()+" gr where gr.ampActivityLastVersion.ampActivityId = " + actId;                    
-            return PersistenceManager.getSession().createQuery(queryString).uniqueResult().toString();              
+            String queryString = "select " + activityName + " from "+ AmpActivityGroup.class.getName()+" gr where gr.ampActivityLastVersion.ampActivityId = " + actId;
+            return PersistenceManager.getSession().createQuery(queryString).uniqueResult().toString();
         }
-        
+
         /**
          * @author Marcelo
-         * @param 
-         * @return Array of Strings, which have budget_code_project_id's 
+         * @param
+         * @return Array of Strings, which have budget_code_project_id's
          */
         public static String[] getBudgetCodes() throws DgException{
             Session session=null;
@@ -1524,18 +1536,18 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             String [] retValue=null;
             try {
                 session=PersistenceManager.getRequestDBSession();
-                queryString = "select distinct a.budgetCodeProjectID from " + AmpActivityVersion.class.getName() + " a";                            
-                query=session.createQuery(queryString);             
-                activities=query.list();        
-            }catch(Exception ex) { 
-                logger.error("couldn't load Activities" + ex.getMessage()); 
-                ex.printStackTrace(); 
-            } 
+                queryString = "select distinct a.budgetCodeProjectID from " + AmpActivityVersion.class.getName() + " a";
+                query=session.createQuery(queryString);
+                activities=query.list();
+            }catch(Exception ex) {
+                logger.error("couldn't load Activities" + ex.getMessage());
+                ex.printStackTrace();
+            }
             if (activities != null){
-                //filtering null and blank values 
+                //filtering null and blank values
                 ArrayList<String> codes = new ArrayList<String>();
                 for (Object rawRow : activities) {
-                    String val = (String)rawRow; 
+                    String val = (String)rawRow;
                     if(val!=null && val.trim().compareTo("")!=0){
                         codes.add(val);
                     }
@@ -1552,7 +1564,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             }
             return retValue;
         }
-      
+
     public static ArrayList<AmpActivityFake> getAllActivitiesAdmin(String searchTerm, Set<Long> frozenActivityIds, ActivityForm.DataFreezeFilter dataFreezeFilter) {
        try {
             Session session = PersistenceManager.getSession();
@@ -1561,7 +1573,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                    && (frozenActivityIds == null || frozenActivityIds.isEmpty())) {
                 return new ArrayList<>();
            }
-            
+
             boolean isSearchByName = searchTerm != null && (!searchTerm.trim().isEmpty());
             String activityName = AmpActivityVersion.hqlStringForName("f");
 
@@ -1592,7 +1604,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     + "FROM " + AmpActivity.class.getName()
                     +  " as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup WHERE "
                     + nameSearchQuery + " ((f.deleted = false) or (f.deleted is null))" + dataFreezeQuery;
-            
+
             Query qry = session.createQuery(queryString);
            if (isSearchByName) {
                qry.setParameter("searchTerm", "%" + searchTerm + "%",StringType.INSTANCE);
@@ -1627,34 +1639,55 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         Session session = PersistenceManager.getSession();
         AmpActivityGroup ampActivityGroup = getActivityGroups(session, ampActId);
         Set<AmpActivityVersion> activityversions = ampActivityGroup.getActivities();
-        if (activityversions != null && activityversions.size() > 0) {
-            for (AmpActivityVersion ampActivityVersion : activityversions) {
-                deleteFullActivityContent(ampActivityVersion, session);
-
-                session.delete(ampActivityVersion);
-            }
+        if (activityversions != null && !activityversions.isEmpty()) {
+            session.delete(ampActivityGroup);
+//            for (AmpActivityVersion ampActivityVersion : activityversions) {
+//                deleteFullActivityContent(ampActivityVersion, session);
+//                session.flush();
+//                deleteActivity(session,ampActivityVersion);
+////                deleteActivity(session,ampActivityVersion);
+//            }
         } else {
             AmpActivityVersion ampAct = session.load(AmpActivityVersion.class, ampActId);
             deleteFullActivityContent(ampAct, session);
+            session.flush();
             session.delete(ampAct);
+            deleteActivity(session,ampAct);
+
+//            deleteActivity(session,ampAct);
         }
         session.delete(ampActivityGroup);
     }
-    
-    public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
-        ActivityUtil.deleteActivityContent(ampAct,session);
-        Long ampActId = ampAct.getAmpActivityId();
-        //This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
-        ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
+
+    private static void deleteActivity(Session session, AmpActivityVersion ampAct)
+    {
+        logger.info("Deleting Real ... Activity # " + ampAct.getAmpActivityId());
+        Connection con = ((SessionImplementor)session).connection();
+        //   delete surveys
+//        String deleteActivityGPISurvey = "DELETE FROM amp_gpi_survey WHERE amp_activity_id = ?";
+//        SQLUtils.executePreparedQuery(con, deleteActivityGPISurvey,ampAct.getAmpActivityId() );
+        String deletActivity = "DELETE FROM amp_activity_version WHERE amp_activity_id = ?";
+        SQLUtils.executePreparedQuery(con, deletActivity,ampAct.getAmpActivityId(),"amp_activity_version" );
     }
-    
+
+    public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
+
+        ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampAct.getAmpActivityId()), ampAct, session);
+        ActivityUtil.deleteActivityContent(ampAct,session);
+
+//        session.flush();
+
+//        Long ampActId = ;
+        //This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
+    }
+
     public static void  deleteAllActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
         ActivityUtil.deleteActivityContent(ampAct,session);
         Long ampActId = ampAct.getAmpActivityId();
         ActivityUtil.removeMergeSources(ampActId, session);
         ActivityUtil.deleteActivityIndicatorsSession(ampActId, session);
     }
-    
+
     public static Integer activityExists (Long versionId,Session session) throws Exception{
         Integer retVal = null;
         try {
@@ -1663,11 +1696,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             retVal= longValue.intValue();
         } catch (Exception e) {
             e.printStackTrace();
-        }       
-        return retVal;      
+        }
+        return retVal;
     }
-    
-    
+
+
     /**
      * returns a subset of activities which can/should be validated by a team member
      * @param tm
@@ -1684,7 +1717,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 "AND (a.approval_status = 'started' OR a.approval_status='edited' OR a.approval_status='rejected') AND (a.draft IS NULL OR a.draft IS FALSE)"; // AND (a.amp_team_id = " + tm.getTeamId() + ")";
             if (!crossTeamValidationEnabled)
                 query += "  AND (a.amp_team_id = " + tm.getTeamId() + ")";
-            
+
             List<BigInteger> validated_activity_ids = PersistenceManager.getSession().createNativeQuery(query).list();
             for(BigInteger bi:validated_activity_ids)
                 result.add(bi.longValue());
@@ -1696,10 +1729,10 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         }
     }
 
-    
+
     public static ArrayList<org.digijava.module.aim.helper.Issues>  getIssues(Long actId) {
         ArrayList<org.digijava.module.aim.helper.Issues> col = new ArrayList<>();
-        
+
         AmpActivityVersion activity = null;
         try {
             Session session = PersistenceManager.getRequestDBSession();
@@ -1715,11 +1748,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
     }
 
-    
+
      public static void changeActivityArchiveStatus(Collection<Long> activityIds, boolean status) {
             try {
                 Session session             = PersistenceManager.getRequestDBSession();
-                String qryString            = "update " + AmpActivityVersion.class.getName()  + 
+                String qryString            = "update " + AmpActivityVersion.class.getName()  +
                         " av  set av.archived=:archived where av.ampActivityId in (" + Util.toCSStringForIN(activityIds) + ")";
                 Query query                 = session.createQuery(qryString);
                 query.setParameter("archived", status, BooleanType.INSTANCE);
@@ -1729,8 +1762,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             catch (Exception e) {
                 e.printStackTrace();
             }
-        }  
-     
+        }
+
      public static AmpStructureImg getStructureImage(Long structureId, Long imgId) {
          return DbUtil.getStructureImage(structureId, imgId);
      }
@@ -1779,7 +1812,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         Date toDate;
         if (fromDate == null)
             return null;
-        
+
         if (activity.getActualCompletionDate() != null)
             toDate = activity.getActualCompletionDate();
         else if (activity.getProposedCompletionDate() != null)
@@ -1789,7 +1822,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             return DateConversion.getPeriod(fromDate, toDate);
         return null;
     }
-    
+
     /** Get the user first name and last name  who modified (created) the activity.
      * @param actitivity
      * @param auditHistory
@@ -1799,7 +1832,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         AmpTeamMember modifiedBy = actitivity.getModifiedBy();
         AmpTeamMember createdBy = actitivity.getActivityCreator();
         AmpTeamMember approvedBy = actitivity.getApprovedBy();
-        
+
         if (modifiedBy != null) {
             return String.format("%s %s", modifiedBy.getUser().getFirstNames(), modifiedBy.getUser().getLastName());
         } else if(auditHistory != null) {
@@ -1809,10 +1842,10 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         } else if (createdBy != null) {
             return String.format("%s %s", createdBy.getUser().getFirstNames(), createdBy.getUser().getLastName());
         }
-        
+
         return "";
     }
-    
+
     /** Get modified date
      * @param activity
      * @param auditHistory
@@ -1829,10 +1862,10 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         } else if (activity.getCreatedDate() != null) {
             return activity.getCreatedDate();
         }
-        
+
         return null;
     }
-    
+
     /**
      * Get audit info about the activity from amp_audit_logger table
      * @param activityId
@@ -1841,7 +1874,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     public static ActivityHistory getModifiedByInfoFromAuditLogger(Long activityId) {
         ActivityHistory logActivityHistory = new ActivityHistory();
         List<AmpAuditLogger> activityLogObjects = AuditLoggerUtil.getActivityLogObjects(activityId.toString());
-        
+
         for(AmpAuditLogger aal : activityLogObjects) {
             if (StringUtils.isNotEmpty(aal.getEditorName())) {
                 logActivityHistory.setModifiedBy(aal.getEditorName());
@@ -1856,7 +1889,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 }
             }
         }
-        
+
         return null;
     }
 
@@ -1994,13 +2027,13 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
     public static boolean canValidateActivity(AmpActivityVersion activity, TeamMember teamMember) {
         boolean canValidate = false;
-        
+
         if (!activity.getDraft()) {
             AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
             String validationOption = appSettings != null ? appSettings.getValidation() : null;
-            
+
             boolean isTeamMemberValidator = isTeamMemberValidator(teamMember, activity);
-            
+
             if (isTeamMemberValidator) {
                 if (Constants.PROJECT_VALIDATION_FOR_ALL_EDITS.equalsIgnoreCase(validationOption)) {
                     if (activity.getTeam() != null
@@ -2017,24 +2050,24 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     }
             }
         }
-        
+
         return canValidate;
     }
-    
+
     public static boolean isTeamMemberValidator(TeamMember teamMember, AmpActivityVersion activity) {
-        
+
         if (teamMember.getTeamHead()) {
             return true;
         }
-    
+
         AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
-    
+
         boolean crossTeamValidation = (appSettings != null && appSettings.getTeam() != null)
                 ? appSettings.getTeam().getCrossteamvalidation() : false;
-    
+
         //Check if cross team validation is enable
         boolean crossTeamCheck = false;
-    
+
         if (activity.getTeam() != null) {
             if (crossTeamValidation) {
                 crossTeamCheck = true;
@@ -2044,10 +2077,10 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     crossTeamCheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
                 }
             }
-        
+
             return teamMember.isApprover() && crossTeamCheck;
         }
-        
+
         return false;
     }
 

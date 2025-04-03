@@ -33,9 +33,9 @@
 		<many-to-one name="ownerId" column="ownerId"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" />
 		<many-to-one name="activityLevel" column="cv_activity_level"
-			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<many-to-one name="reportCategory" column="report_category"
-			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<property name="updatedDate" column="updated_date" type="java.util.Date" />
 		<property name="publishedDate" column="published_date" type="java.util.Date" />
 
@@ -63,7 +63,7 @@
 				<many-to-one name="column" class="org.digijava.module.aim.dbentity.AmpColumns"
 					column="columnId" />
 				<many-to-one name="level" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"
-					column="cv_level_id" />
+					column="cv_level_id" cascade="none" />
 				<property name="orderId" column="order_id" type="java.lang.Long" />
 			</composite-element>
 		</set>
@@ -75,7 +75,7 @@
 				<many-to-one name="column" class="org.digijava.module.aim.dbentity.AmpColumns"
 					column="columnId" />
 				<many-to-one name="level" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"
-					column="cv_level_id" />
+					column="cv_level_id" cascade="none" />
 				 <property name="levelId" column="levelId" type="java.lang.Long" />
 			</composite-element>
 		</set>
@@ -87,9 +87,9 @@
 				<many-to-one name="measure" class="org.digijava.module.aim.dbentity.AmpMeasures"
 					column="measureId" />
 				<property name="orderId" column="order_id" type="java.lang.Long" />
-				
-				
-		
+
+
+
 			</composite-element>
 		</set>
 
@@ -100,7 +100,7 @@
 				<many-to-one name="measure" class="org.digijava.module.aim.dbentity.AmpMeasures"
 					column="measureId" />
 				<many-to-one name="level" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"
-					column="cv_level_id" />
+					column="cv_level_id" cascade="none" />
 				 <property name="orderId" column="order_id" type="java.lang.Long" />
 			</composite-element>
 		</set>

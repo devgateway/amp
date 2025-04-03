@@ -170,7 +170,7 @@ function validateSubmitQuery () {
 		var divObj		= document.getElementById("results");
 		divObj.innerHTML	=
 		"<div style='text-align: center'>" + "Please wait..." +
-		"... <br /> <img src='/jsp/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
+		"... <br /> <img src='/static/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
 		YAHOO.util.Connect.setForm(filterForm);
 		var additionalParams	= "&doreset=true&queryEngine=true&reportContextId=" + '<%=ReportContextData.getCurrentReportContextId(request, true)%>';
 		YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true" + additionalParams, queryCbObj);
@@ -181,7 +181,7 @@ function validateSubmitQuery () {
 		var divObj		= document.getElementById("queryLabelsDiv");
 		divObj.innerHTML	=
 		"<div style='text-align: center'>" + "Please wait..." +
-		"... <br /> <img src='/jsp/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
+		"... <br /> <img src='/static/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
 
 
 		YAHOO.util.Connect.asyncRequest("GET", url, queryCbObj);

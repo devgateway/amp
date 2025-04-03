@@ -334,7 +334,7 @@ SaveFilters.prototype.saveFilters = function (e, obj) {
         //document.body.appendChild(element);
     }
     this.panel.setBody("<div style='text-align: center'>" + obj.filterObj.savingDataMessage +
-        "... <br /> <img src='/jsp/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>");
+        "... <br /> <img src='/static/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>");
 
     return false;
 };

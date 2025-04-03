@@ -1,4 +1,4 @@
-/*  
+/*
  *   Copyright 2012 OSBI Ltd
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,12 +13,12 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
- 
+
 /**
  * Repository query
  */
 var RepositoryUrl = "api/jsp";
-var repoPathUrl = function() {   
+var repoPathUrl = function() {
     return  RepositoryUrl;
 }
 
@@ -52,21 +52,21 @@ var RepositoryZipExport = Backbone.Model.extend( {
     }
 } );
 
-var SavedQuery = Backbone.Model.extend({
+ var SavedQuery = Backbone.Model.extend({
 
     parse: function(response) {
     	Saiku.logger.log("SavedQuery.parse");
         //console.log("response: " + response);
         //this.xml = response;
     },
-    
+
     url: function() {
     	Saiku.logger.log("SavedQuery.url");
         var u = repoPathUrl() + "/resource";
         return u;
 
     },
-    
+
     move_query_to_workspace: function(model, response) {
     	Saiku.logger.log("SavedQuery.move_query_to_workspace");
         var file = response;
@@ -78,24 +78,24 @@ var SavedQuery = Backbone.Model.extend({
                 var Re2 = new RegExp("\\$\\{" + variable.toLowerCase() + "\\}","g");
                 file = file.replace(Re,Settings[key]);
                 file = file.replace(Re2,Settings[key]);
-                
+
             }
         }
-        var query = new Query({ 
+        var query = new Query({
             xml: file,
             formatter: Settings.CELLSET_FORMATTER
         },{
             name: filename
         });
-        
+
         var tab = Saiku.tabs.add(new Workspace({ query: query }));
     },
     move_query_to_workspace_json: function(model, response) {
     	Saiku.logger.log("SavedQuery.move_query_to_workspace_json");
         var json = JSON.stringify(response);
         var filename = model.get('file');
-        
-        var query = new Query({ 
+
+        var query = new Query({
             json: json,
             formatter: Settings.CELLSET_FORMATTER,
             report_id: model.get('report_id'),
@@ -113,7 +113,7 @@ var SavedQuery = Backbone.Model.extend({
         },{
             name: filename
         });
-                
+
         query.set('name', filename);
         var tab = Saiku.tabs.add(new Workspace({ query: query }));
     }
@@ -124,21 +124,21 @@ var SavedQuery = Backbone.Model.extend({
  */
 var Repository = Backbone.Collection.extend({
     model: SavedQuery,
-    
+
     initialize: function(args, options) {
     	Saiku.logger.log("Repository.initialize");
         if (options && options.dialog) {
             this.dialog = options.dialog;
         }
     },
-    
+
     parse: function(response) {
     	Saiku.logger.log("Repository.parse");
         if (this.dialog) {
             this.dialog.populate(response);
         }
     },
-    
+
     url: function() {
     	Saiku.logger.log("Repository.url");
         var segment = repoPathUrl() + "?type=saiku";

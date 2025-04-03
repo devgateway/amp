@@ -31,9 +31,7 @@ Owner of DHTMLgoodies.com
 	February, 3rd 2006 - Dynamic load nodes by use of Ajax(Alf Magne Kalleland)
 */
 
-
-
-	var imageFolder = '/jsp/aim/view/images/images_dhtmlsuite/';	// Path to images
+	var imageFolder = '/static/aim/view/images/images_dhtmlsuite/';	// Path to images
 	var folderImage = 'dhtmlgoodies_folder.gif';
 	var plusImage = 'dhtmlgoodies_plus.gif';
 	var minusImage = 'dhtmlgoodies_minus.gif';
@@ -54,9 +52,9 @@ Owner of DHTMLgoodies.com
 	   var start = document.cookie.indexOf(name+"=");
 	   var len = start+name.length+1;
 	   if ((!start) && (name != document.cookie.substring(0,name.length))) return null;
-	   if (start == -1) return null;
+	   if (start === -1) return null;
 	   var end = document.cookie.indexOf(";",len);
-	   if (end == -1) end = document.cookie.length;
+	   if (end === -1) end = document.cookie.length;
 	   return unescape(document.cookie.substring(len,end));
 	}
 	// This function has been slightly modified

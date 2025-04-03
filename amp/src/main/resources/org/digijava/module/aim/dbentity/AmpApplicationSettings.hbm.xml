@@ -17,7 +17,7 @@
 		<property name="language" column="language" type="java.lang.String" />
 		<property name="validation" column="validation" type="java.lang.String" />
         <property name="showAllCountries" column="show_all_countries" type="java.lang.Boolean"/>
-		
+
 		<many-to-one name="defaultTeamReport" column="default_team_ampreport_id"
 			class="org.digijava.module.aim.dbentity.AmpReports" cascade="none" />
 		<many-to-one name="team" column="team_id" class="org.digijava.module.aim.dbentity.AmpTeam"

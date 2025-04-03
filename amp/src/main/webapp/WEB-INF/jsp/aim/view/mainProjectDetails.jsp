@@ -94,7 +94,7 @@ var responseSuccess = function(o){
 function showPanelLoading(msg){
 	   var content = document.getElementById("myContentContent");
 	   content.innerHTML = "<div style='text-align: center'>" + "Loading..." +
-	   "... <br /> <img src='/jsp/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
+	   "... <br /> <img src='/static/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
 	   showContent();
 	 }
 

@@ -17,6 +17,7 @@ import static org.junit.Assert.assertThat;
  */
 public class EditorTest {
 
+    @org.junit.Test
     @Test
     public void testParallel() {
 

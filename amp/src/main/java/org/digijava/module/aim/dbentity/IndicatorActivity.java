@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * Project Indicator.
  * This is connection between indicator and activity. Most fields are in parent class.
- * Check hibernate mapping in IndicatorConnection.hbm.xml 
+ * Check hibernate mapping in IndicatorConnection.hbm.xml
  * @see IndicatorConnection
  * @author Irakli Kobiashvili
  *
@@ -23,13 +23,13 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
 
     //IATI-check: to be ignored
     private static final long serialVersionUID = 2L;
-    
+
     /**
      * Activity
      */
     @InterchangeableBackReference
     private AmpActivityVersion activity;
-    
+
     /**
      * Indicator risk.
      * Actually risk is in each connection of indicator and activity.
@@ -76,70 +76,58 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
 
     @Override
     public Object getValue() {
-        String value = "";
+        StringBuilder value = new StringBuilder();
         if (getIndicator() != null)
-            value += getIndicator().getName();
+            value.append(getIndicator().getName());
         if (risk != null)
-            value += risk.getRatingName();
+            value.append(risk.getRatingName());
         if (values != null){
             ArrayList<AmpIndicatorValue> list = new ArrayList<AmpIndicatorValue>(values);
-            Collections.sort(list, new Comparator<AmpIndicatorValue>() {
-                @Override
-                public int compare(AmpIndicatorValue arg0,
-                        AmpIndicatorValue arg1) {
-                    return arg0.getValueType() - arg1.getValueType();
-                }
-            });
-            
-            Iterator<AmpIndicatorValue> it = list.iterator();
-            while (it.hasNext()) {
-                AmpIndicatorValue ind = (AmpIndicatorValue) it
-                        .next();
-                value += ind.getValueType() + "" + ind.getValue() + "" + ind.getValueDate();
+            list.sort(Comparator.comparingInt(AmpIndicatorValue::getValueType));
+
+            for (AmpIndicatorValue ind : list) {
+                value.append(ind.getValueType()).append(ind.getValue()).append(ind.getValueDate());
             }
         }
         if (logFrame != null) {
-            value += logFrame.getValue();
+            value.append(logFrame.getValue());
         }
 
-        return value;
+        return value.toString();
     }
 
     @Override
     public Output getOutput() {
         Output out = new Output();
-        out.setOutputs(new ArrayList<Output>());
+        out.setOutputs(new ArrayList<>());
         out.getOutputs().add(
                 new Output(null, new String[] { "Name" }, new Object[] { this.getIndicator() != null ? this.getIndicator().getName()
                         : "Empty Name" }));
         if (risk != null)
             out.getOutputs().add(new Output(null, new String[] {" Risk rating"}, new Object[] {risk.getRatingName()}));
         if (values != null){
-            Iterator<AmpIndicatorValue> it = values.iterator();
-            while (it.hasNext()) {
-                AmpIndicatorValue ind = (AmpIndicatorValue) it
-                        .next();
+            for (AmpIndicatorValue ind : values) {
                 String typeString = "";
                 switch (ind.getValueType()) {
-                case AmpIndicatorValue.BASE:
-                    typeString += "Base Value";
-                    break;
-                case AmpIndicatorValue.ACTUAL:
-                    typeString += "Actual Value";
-                    break;
-                case AmpIndicatorValue.REVISED:
-                    typeString += "Revised Value";
-                    break;
-                case AmpIndicatorValue.TARGET:
-                    typeString += "Target Value";
-                    break;
-                default:
-                    typeString += "Unknown Value";
-                    break;
+                    case AmpIndicatorValue.BASE:
+                        typeString += "Base Value";
+                        break;
+                    case AmpIndicatorValue.ACTUAL:
+                        typeString += "Actual Value";
+                        break;
+                    case AmpIndicatorValue.REVISED:
+                        typeString += "Revised Value";
+                        break;
+                    case AmpIndicatorValue.TARGET:
+                        typeString += "Target Value";
+                        break;
+                    default:
+                        typeString += "Unknown Value";
+                        break;
                 }
                 //typeString += ":&nbsp;";
                 out.getOutputs().add(
-                        new Output(null, new String[] {typeString}, new Object[]{ind.getValue()}));
+                        new Output(null, new String[]{typeString}, new Object[]{ind.getValue()}));
             }
         }
         if (logFrame != null) {
@@ -153,12 +141,11 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
         IndicatorActivity aux = (IndicatorActivity) clone();
         aux.activity = newActivity;
         aux.setId(null);
-        
+
         if (aux.values != null && aux.values.size() > 0){
             HashSet<AmpIndicatorValue> set = new HashSet<AmpIndicatorValue>();
-            Iterator<AmpIndicatorValue> i = aux.values.iterator();
-            while (i.hasNext()) {
-                AmpIndicatorValue ampIndicatorValue = (AmpIndicatorValue) i.next().clone();
+            for (AmpIndicatorValue value : aux.values) {
+                AmpIndicatorValue ampIndicatorValue = (AmpIndicatorValue) value.clone();
                 ampIndicatorValue.setIndValId(null);
                 ampIndicatorValue.setIndicatorConnection(aux);
                 set.add(ampIndicatorValue);
@@ -188,5 +175,5 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
 
         return new ArrayList<AmpIndicatorValue>(tree.values());
     }
-    
+
 }

@@ -12,7 +12,7 @@
         <springSecurityVersion>5.6.11</springSecurityVersion>
         <springVersion>5.3.28</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jackrabbit.version>2.16.2</jackrabbit.version>
+        <jackrabbit.version>2.19.6</jackrabbit.version>
         <lucene.version>3.6.2</lucene.version>
         <jersey.version>1.19</jersey.version>
         <jackson.version>2.14.2</jackson.version>
@@ -31,12 +31,12 @@
         <metainf>${project.basedir}/META-INF</metainf>
         <classes>${project.basedir}/src/main/webapp/WEB-INF/classes</classes>
         <src>${project.basedir}/src</src>
-        <test>${project.basedir}/test</test>
+        <test>${project.basedir}/src/test</test>
         <etc>${project.basedir}/etc</etc>
         <deployConfigs>deployConfigs</deployConfigs>
-        <repository>${project.basedir}/jsp</repository>
-        <jackrabbit>${project.basedir}/jackrabbit</jackrabbit>
-        <ampTest>${project.basedir}/src/main/webapp/WEB-INF/amp-test</ampTest>
+        <repository>${project.basedir}/src/main/webapp/WEB-INF/jsp</repository>
+        <jackrabbit>${project.basedir}/src/main/webapp/WEB-INF/jackrabbit</jackrabbit>
+        <ampTest>${project.basedir}/src/test</ampTest>
         <ampSelenium>${project.basedir}/src/main/webapp/WEB-INF/amp-selenium-test</ampSelenium>
 
         <!-- Uncomment and update the following line if needed -->
@@ -472,8 +472,8 @@
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
-            <artifactId>jackrabbit-api</artifactId>
-            <version>${jackrabbit.version}</version>
+            <artifactId>oak-jackrabbit-api</artifactId>
+            <version>1.20.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
@@ -2123,14 +2123,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M2</version>
+                <version>3.0.0-M5</version>
+
                 <configuration>
                     <testSourceDirectory>${project.build.testSourceDirectory}</testSourceDirectory>
                     <includes>
-                        <include>**/Test*.java</include>
-                        <include>**/*Test.java</include>
-                        <include>**/*Testcases.java</include>
-                        <include>**/*Test*.java</include>
+<!--                        <include>**/Test*.java</include>-->
+<!--                        <include>**/*Test.java</include>-->
+<!--                        <include>**/*Testcases.java</include>-->
+<!--                        <include>**/*Test*.java</include>-->
+                        <include>**/*</include>
+
                     </includes>
                     <excludes>
                         <!--suites are running tests twice-->

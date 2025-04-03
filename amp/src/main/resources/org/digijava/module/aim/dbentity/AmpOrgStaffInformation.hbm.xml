@@ -10,9 +10,9 @@
         </id>
 
         <property name="year" column="year" type="java.lang.Long" />
-        <many-to-one name="type" column="staff_type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
+        <many-to-one name="type" cascade="none" column="staff_type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
         <property name="staffNumber" column="number_of_staff" type="java.lang.Long" />
         <many-to-one name="organization" column="amp_org_id" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
-        
+
     </class>
 </hibernate-mapping>

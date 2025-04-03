@@ -185,16 +185,16 @@ public class DbUtil {
         Group group = null;
         Session session = null;
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             Iterator iter = null;
             String queryString = "select g from " + Group.class.getName() + " g where g.key=:key";
-            Query query = session.createQuery(queryString);
+            Query<Group> query = session.createQuery(queryString, Group.class);
             query.setParameter("key", key,StringType.INSTANCE);
-            iter = query.iterate();
-            while (iter.hasNext()) {
-                group = (Group) iter.next();
-                break;
-            }
+            group = (Group) query.stream().findAny().orElse(null);
+//            while (iter.hasNext()) {
+//                group = (Group) iter.next();
+//                break;
+//            }
         } catch (Exception ex) {
             logger.debug("Unable to get group from database ", ex);
             throw new AdminException("Unable to get group from database ", ex);
@@ -254,15 +254,14 @@ public class DbUtil {
     }
 
     public static List getGroupUsers(Long id) throws AdminException {
-        ArrayList users = new ArrayList();
+        List<User> users = new ArrayList();
         ;
         Session session = null;
         try {
             session = PersistenceManager.getSession();
-            Group group = (Group) session.load(Group.class, id);
-            Iterator iter = group.getUsers().iterator();
-            while (iter.hasNext()) {
-                User user = (User) iter.next();
+            Group group = session.load(Group.class, id);
+            for (Object o : group.getUsers()) {
+                User user = (User) o;
                 users.add(user);
             }
 
@@ -274,13 +273,15 @@ public class DbUtil {
     }
 
     public static void removeUserFromGroup(Long groupId, Long userId) throws AdminException {
-        Session session = null;
+        Session session;
         try {
             session = PersistenceManager.getSession();
             // beginTransaction();
-            Group group = (Group) session.load(Group.class, groupId);
-            User user = (User) session.load(User.class, userId);
+            Group group = session.load(Group.class, groupId);
+            User user = session.load(User.class, userId);
             user.getGroups().remove(group);
+            session.save(user);
+            session.flush();
             // tx.commit();
         } catch (Exception ex) {
             logger.debug("Unable to remove User from group ", ex);
@@ -294,11 +295,13 @@ public class DbUtil {
         try {
             session = PersistenceManager.getSession();
             // beginTransaction();
-            Group group = (Group) session.load(Group.class, groupId);
-            for (int i = 0; i < userIds.length; i++) {
-                User user = (User) session.load(User.class, userIds[i]);
+            Group group = session.load(Group.class, groupId);
+            for (Long userId : userIds) {
+                User user = session.load(User.class, userId);
                 user.getGroups().add(group);
+                session.saveOrUpdate(user);
             }
+            session.flush();
             // tx.commit();
         } catch (Exception ex) {
             logger.debug("Unable to add Users to group ", ex);
@@ -309,7 +312,7 @@ public class DbUtil {
     public static List searchSite(String siteKey) throws AdminException {
 
         Session session = null;
-        List siteList = new ArrayList();
+        List siteList = new ArrayList<>();
 
         try {
             session = PersistenceManager.getSession();

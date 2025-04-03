@@ -116,13 +116,11 @@ public class IndirectProgramUpdater {
 
     private List<AmpTheme> getIndirectPrograms(Map<AmpTheme, Set<AmpTheme>> themeMapping, AmpTheme program) {
         if (program!=null){
-        while (program.getIndlevel() > getMappingLevel(MAPPING_PROGRAM_LEVEL)) {
-            program = program.getParentThemeId();
-        }
+            while (program.getIndlevel() > getMappingLevel(MAPPING_PROGRAM_LEVEL)) {
+                program = program.getParentThemeId();
+            }
             return new ArrayList<>(themeMapping.getOrDefault(program, emptySet()));
         }
         return emptyList();
-
-
     }
 }

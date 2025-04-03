@@ -1,5 +1,8 @@
 package org.digijava.module.categorymanager.dbentity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -9,13 +12,25 @@ import java.util.Set;
  *
  */
 public class AmpCategoryClass implements Serializable, Comparable<AmpCategoryClass> {
+    @JsonProperty("id")
     private Long id;
+
+    @JsonProperty("name")
     private String name;
+
+    @JsonProperty("description")
     private String description;
+
+    @JsonProperty("keyName")
     private String keyName;
+
+    @JsonProperty("isMultiselect")
     private boolean isMultiselect   = false;
+
+    @JsonProperty("isOrdered")
     private boolean isOrdered       = false;
     
+    @JsonIgnore
     private List<AmpCategoryValue> possibleValues;
     
     private List<AmpCategoryClass> usedCategories;

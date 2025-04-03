@@ -20,10 +20,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.TeamMember;
@@ -305,11 +302,11 @@ public final class ActivityInterchangeUtils {
                 if (user.getAssignedOrgs() != null && !user.getAssignedOrgs().isEmpty()) {
                     if (!userBelongToExemptOrgForDocumentVisualization(user)) {
                         List organizationIds = user.getAssignedOrgs().stream()
-                                .map(ampOrganisation -> ampOrganisation.getAmpOrgId()).collect(Collectors.toList());
+                                .map(AmpOrganisation::getAmpOrgId).collect(Collectors.toList());
                         List<AmpOrgRole> ampOrgRoles =
                                 ActivityUtil.getAmpRolesForActivityAndOrganizationsAndRole(projectId,
                                         organizationIds, donorRole);
-                        if (ampOrgRoles == null || ampOrgRoles.size() == 0) {
+                        if (ampOrgRoles == null || ampOrgRoles.isEmpty()) {
                             activity.replace(ACTIVITY_DOCUMENTS, null);
                         }
                     }
@@ -321,11 +318,9 @@ public final class ActivityInterchangeUtils {
     }
 
     private static boolean userBelongToExemptOrgForDocumentVisualization(User user) {
-        return user.getAssignedOrgs().stream()
-                .filter(ampOrganisation
-                        -> ampOrganisation.getIdentifier().equals(
-                                FeaturesUtil.getGlobalSettingValueLong(EXEMPT_ORGANIZATION_DOCUMENTS)))
-                .count() > 0;
+        return user.getAssignedOrgs().stream().anyMatch(ampOrganisation
+                -> ampOrganisation.getIdentifier().equals(
+                FeaturesUtil.getGlobalSettingValueLong(EXEMPT_ORGANIZATION_DOCUMENTS)));
     }
 
     public static AmpActivityVersion loadActivity(Long actId) {

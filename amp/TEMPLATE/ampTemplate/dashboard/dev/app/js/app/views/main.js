@@ -35,6 +35,7 @@ var NDD = '/Dashboards[true]/Peace-building and State-building Goals[true]';
 var SEC = '/Dashboards[true]/Sector Fragmentation[true]';
 var LOC = '/Dashboards[true]/Location Fragmentation[true]';
 var PRG = '/Dashboards[true]/Program Fragmentation[true]';
+var PR = '/Dashboards[true]/Top Programs[true]';
 
 module.exports = BackboneDash.View.extend({
 
@@ -89,6 +90,15 @@ module.exports = BackboneDash.View.extend({
                 {name: 'Top Sectors', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/ps'}));
         }
+
+        if (_.find(enabledCharts, function (item) {
+            return item === PR;
+        })) {
+            col.push(new TopsChart(
+                {name: 'Top Programs', big: false, view: 'bar'},
+                {app: this.app, url: '/rest/dashboard/tops/pr'}));
+        }
+
         if (_.find(enabledCharts, function (item) {
             return item === AP;
         })) {

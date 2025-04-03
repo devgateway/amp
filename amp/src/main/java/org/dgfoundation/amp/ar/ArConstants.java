@@ -21,13 +21,13 @@ public final class ArConstants {
     public final static MetaInfo []prefixes=new MetaInfo[] {
         //PLEASE KEEP THE SAME ORDER IN prefixes AND suffixes !!
 
-        new MetaInfo(GenericViews.HTML2,"/WEB-INF/jsp/aim/view/ar/html2/"),
-        new MetaInfo(GenericViews.HTML,"/WEB-INF/jsp/aim/view/ar/html/"),
+        new MetaInfo(GenericViews.HTML2,"/repository/aim/view/ar/html2/"),
+        new MetaInfo(GenericViews.HTML,"/repository/aim/view/ar/html/"),
         new MetaInfo(GenericViews.XLS,"org.dgfoundation.amp.ar.view.xls."),
         new MetaInfo(GenericViews.PDF,"org.dgfoundation.amp.ar.view.pdf."),
-        new MetaInfo(GenericViews.PRINT,"/WEB-INF/jsp/aim/view/ar/print/"),
-        new MetaInfo(GenericViews.TREE,"/WEB-INF/jsp/aim/view/ar/tree/"),
-        new MetaInfo(GenericViews.FOLDABLE,"/WEB-INF/jsp/aim/view/ar/foldable/"),
+        new MetaInfo(GenericViews.PRINT,"/repository/aim/view/ar/print/"),
+        new MetaInfo(GenericViews.TREE,"/repository/aim/view/ar/tree/"),
+        new MetaInfo(GenericViews.FOLDABLE,"/repository/aim/view/ar/foldable/"),
         };
 
     public final static MetaInfo []suffixes=new MetaInfo[] {
@@ -95,8 +95,9 @@ public final class ArConstants {
     public final static int REGIONAL_TYPE = 3;
     public final static int PLEDGES_TYPE = 5;
     public final static int GPI_TYPE = 6;
-    public final static Set<Integer> LEGAL_REPORT_TYPES = Collections.unmodifiableSet(new HashSet<Integer>(Arrays.asList(
-            DONOR_TYPE, COMPONENT_TYPE, REGIONAL_TYPE, PLEDGES_TYPE, GPI_TYPE
+    public static final int INDICATOR_TYPE = 7;
+    public static final Set<Integer> LEGAL_REPORT_TYPES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+            DONOR_TYPE, COMPONENT_TYPE, REGIONAL_TYPE, PLEDGES_TYPE, GPI_TYPE, INDICATOR_TYPE
             )));
 
     //metainfo values:
@@ -192,8 +193,10 @@ public final class ArConstants {
 
     public final static String ACTUAL_COMMITMENT_FILTERED="ACTUAL_COMMITMENT_FILTERED";
     public final static String ACTUAL_DISBURSEMENT_FILTERED="ACTUAL_DISBURSEMENT_FILTERED";
+    public final static String ACTUAL_EXPENDITURE_FILTERED="ACTUAL_EXPENDITURE_FILTERED";
     public final static String PLANNED_COMMITMENT_FILTERED="PLANNED_COMMITMENT_FILTERED";
     public final static String PLANNED_DISBURSEMENT_FILTERED="PLANNED_DISBURSEMENT_FILTERED";
+    public final static String PLANNED_EXPENDITURE_FILTERED="PLANNED_EXPENDITURE_FILTERED";
 
 
     public final static String ACTUAL_COMMITMENT_COUNT="ACTUAL_COMMITMENT_COUNT";
@@ -344,6 +347,7 @@ public final class ArConstants {
     //additional measures
     public static final String GRAND_TOTAL_ACTUAL_COMMITMENTS = "GRAND_TOTAL_ACTUAL_COMMITMENTS";
     public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
+    public final static String UNEXPENDITURED_BALANCE="Unexpenditured Balance";
     public final static String ACTUAL_COMMITMENTS="Actual Commitments";
     public final static String ACTUAL_DISBURSEMENTS = "Actual Disbursements";
     public final static String ACTUAL_MTEF_PROJECTION = "Actual MTEF Projections";

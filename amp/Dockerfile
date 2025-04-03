@@ -2,19 +2,20 @@ FROM node:16.4.0 as node
 
 FROM node as compile-amp-state
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-state
-COPY /TEMPLATE/ampTemplate/node_modules/amp-state .
+COPY TEMPLATE/ampTemplate/node_modules/amp-state .
 RUN --mount=type=cache,target=/root/.npm \
     npm ci
 
 FROM node as compile-amp-translate
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate
-COPY /TEMPLATE/ampTemplate/node_modules/amp-translate .
+COPY TEMPLATE/ampTemplate/node_modules/amp-translate .
 RUN --mount=type=cache,target=/root/.npm \
     npm ci
 
 FROM node as compile-amp-boilerplate
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate
-COPY /TEMPLATE/ampTemplate/node_modules/amp-boilerplate .
+COPY TEMPLATE/ampTemplate/node_modules/amp-boilerplate/.git .
+COPY TEMPLATE/ampTemplate/node_modules/amp-boilerplate .
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \
@@ -22,10 +23,11 @@ RUN --mount=type=cache,target=/root/.npm \
 
 FROM node as compile-amp-filter
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter
+COPY TEMPLATE/ampTemplate/node_modules/amp-filter/.git .
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
-COPY /TEMPLATE/ampTemplate/node_modules/amp-filter .
+COPY TEMPLATE/ampTemplate/node_modules/amp-filter .
 # HACK otherwise amp-filter won't compile!
-COPY /TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
+COPY TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \
     && npm run build
@@ -33,7 +35,7 @@ RUN --mount=type=cache,target=/root/.npm \
 FROM node as compile-amp-settings
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
-COPY /TEMPLATE/ampTemplate/node_modules/amp-settings .
+COPY TEMPLATE/ampTemplate/node_modules/amp-settings .
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \
     && npm run build
@@ -41,7 +43,7 @@ RUN --mount=type=cache,target=/root/.npm \
 FROM node as compile-gis-layers-manager
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
-COPY /TEMPLATE/ampTemplate/node_modules/gis-layers-manager .
+COPY TEMPLATE/ampTemplate/node_modules/gis-layers-manager .
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \
     && npm run build
@@ -53,10 +55,10 @@ COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp
 COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../node_modules/amp-boilerplate
 COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter ../node_modules/amp-filter
 # HACK otherwise amp-filter won't compile!
-COPY /TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
+COPY TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
 COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings ../node_modules/amp-settings
 COPY --from=compile-gis-layers-manager /tmp/amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager ../node_modules/gis-layers-manager
-COPY /TEMPLATE/ampTemplate/gisModule .
+COPY TEMPLATE/ampTemplate/gisModule .
 RUN --mount=type=cache,target=/root/.npm \
     cd dev \
     && npm ci \
@@ -71,10 +73,10 @@ COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp
 COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../node_modules/amp-boilerplate
 COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter ../node_modules/amp-filter
 # HACK otherwise amp-filter won't compile!
-COPY /TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
+COPY TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
 COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings ../node_modules/amp-settings
-COPY /TEMPLATE/ampTemplate/node_modules/amp-url ../node_modules/amp-url
-COPY /TEMPLATE/ampTemplate/dashboard .
+COPY TEMPLATE/ampTemplate/node_modules/amp-url ../node_modules/amp-url
+COPY TEMPLATE/ampTemplate/dashboard .
 RUN --mount=type=cache,target=/root/.npm \
     cd dev \
     && npm ci \
@@ -84,7 +86,7 @@ RUN --mount=type=cache,target=/root/.npm \
 FROM node as compile-reamp
 WORKDIR /tmp/amp/TEMPLATE/reamp
 COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../ampTemplate/node_modules/amp-boilerplate
-COPY /TEMPLATE/reamp .
+COPY TEMPLATE/reamp .
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
     npm ci \
@@ -96,7 +98,7 @@ WORKDIR /tmp/amp/TEMPLATE/reampv2
 COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../ampTemplate/node_modules/amp-boilerplate
 COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter ../ampTemplate/node_modules/amp-filter
 COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings ../ampTemplate/node_modules/amp-settings
-COPY /TEMPLATE/reampv2 .
+COPY TEMPLATE/reampv2 .
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
     npm ci \
@@ -113,23 +115,16 @@ COPY --from=compile-gis-layers-manager /tmp/amp/TEMPLATE/ampTemplate/node_module
 COPY --from=compile-gis-module /tmp/amp/TEMPLATE/ampTemplate/gisModule/dist TEMPLATE/ampTemplate/gisModule/dist
 COPY --from=compile-dashboard /tmp/amp/TEMPLATE/ampTemplate/dashboard/build TEMPLATE/ampTemplate/dashboard/build
 COPY --from=compile-reamp /tmp/amp/TEMPLATE/reamp TEMPLATE/reamp
-COPY --from=compile-reampv2 /tmp/amp/TEMPLATE/reampv2/build TEMPLATE/reampv2/build
+COPY --from=compile-reampv2 /tmp/amp/TEMPLATE/reampv2 TEMPLATE/reampv2
 ARG BUILD_SOURCE
 RUN --mount=type=cache,target=/root/.m2 \
-    mvn -B test war:exploded -DfailIfNoTests=false \
-      -DbuildSource="$BUILD_SOURCE" \
-      -Djdbc.user=amp \
-      -Djdbc.password=amp122006 \
-      -Djdbc.db=amp \
-      -Djdbc.host=db \
-      -Djdbc.port=5432 \
-      -DdbName=postgresql \
-      -Djdbc.driverClassName=org.postgresql.Driver \
-      -Dskip.npm \
-      -Dskip.installnodenpm \
+    mvn -B test war:exploded \
+      -DbuildSource=$BUILD_SOURCE \
+      -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
+      -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
+      -Dskip.npm -Dskip.installnodenpm \
     && mv target/amp exploded \
     && rm -rf target
-
 
 FROM tomcat:8.5.79-jdk8
 

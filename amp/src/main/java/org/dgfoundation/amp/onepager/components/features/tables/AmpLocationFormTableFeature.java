@@ -1,6 +1,5 @@
 /**
  * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
- *
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
@@ -30,9 +29,12 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.text.DecimalFormat;
 import java.util.*;
+
+import static org.digijava.module.aim.util.LocationConstants.MULTI_COUNTRY_ISO_CODE;
 
 
 /**
@@ -48,20 +50,22 @@ public class AmpLocationFormTableFeature extends
         return setModel;
     }
 
+    final AmpAutocompleteFieldPanel<AmpCategoryValueLocations> searchLocations;
+
     private AmpPercentageCollectionValidatorField<AmpActivityLocation> percentageValidationField;
 
     /**
      * @param id
      * @param fmName
      * @param regionalFundingFeature
-     * @param implementationLevel 
+     * @param implementationLevel
      * @throws Exception
      */
     public AmpLocationFormTableFeature(String id, String fmName,
-            final IModel<AmpActivityVersion> am,
-            final AmpRegionalFundingFormSectionFeature regionalFundingFeature,
-            final AmpCategorySelectFieldPanel implementationLocation, final AmpCategorySelectFieldPanel implementationLevel,
-            final IModel<Boolean> disablePercentagesForInternational)
+                                       final IModel<AmpActivityVersion> am,
+                                       final AmpRegionalFundingFormSectionFeature regionalFundingFeature,
+                                       final AmpCategorySelectFieldPanel implementationLocation, final AmpCategorySelectFieldPanel implementationLevel,
+                                       final IModel<Boolean> disablePercentagesForInternational)
             throws Exception {
         super(id, am, fmName, false, true);
         setTitleHeaderColSpan(4);
@@ -78,18 +82,18 @@ public class AmpLocationFormTableFeature extends
                 // remove sectors with other classification
                 ArrayList<AmpActivityLocation> ret = new ArrayList<AmpActivityLocation>();
 
-                if(setModel.getObject()!=null){
+                if (setModel.getObject() != null) {
                     for (AmpActivityLocation ampActivityLocation : setModel.getObject()) {
                         ret.add(ampActivityLocation);
                     }
                 }
 
-                Comparator<AmpActivityLocation> comparator = new Comparator<AmpActivityLocation>(){
+                Comparator<AmpActivityLocation> comparator = new Comparator<AmpActivityLocation>() {
                     @Override
                     public int compare(AmpActivityLocation o1, AmpActivityLocation o2) {
                         return o1.getLocation().getAutoCompleteLabel().compareTo(
                                 o2.getLocation().getAutoCompleteLabel());
-                    }       
+                    }
                 };
 
                 Collections.sort(ret, comparator);
@@ -100,7 +104,8 @@ public class AmpLocationFormTableFeature extends
         add(wmc);
         AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
         wmc.add(iValidator);
-        final AmpComponentPanel locationPercentageRequired = new AmpComponentPanel("locationPercentageRequired", "Location percentage required"){};
+        final AmpComponentPanel locationPercentageRequired = new AmpComponentPanel("locationPercentageRequired", "Location percentage required") {
+        };
         add(locationPercentageRequired);
         final Label totalLabel = new Label("totalPercLocation", new Model() {
             @Override
@@ -111,7 +116,7 @@ public class AmpLocationFormTableFeature extends
                         total += item.getLocationPercentage();
                     }
                 }
-                
+
                 DecimalFormat decimalFormat = FormatHelper.getPercentageDefaultFormat(true);
                 return decimalFormat.format(total);
             }
@@ -119,17 +124,17 @@ public class AmpLocationFormTableFeature extends
         totalLabel.setOutputMarkupId(true);
         add(totalLabel);
         percentageValidationField =
-            new AmpPercentageCollectionValidatorField<AmpActivityLocation>("locationPercentageTotal",listModel,"locationPercentageTotal") {
-                private static final long serialVersionUID = 1L;
+                new AmpPercentageCollectionValidatorField<AmpActivityLocation>("locationPercentageTotal", listModel, "locationPercentageTotal") {
+                    private static final long serialVersionUID = 1L;
 
-                @Override
-                public Number getPercentage(AmpActivityLocation item) {
-                    return item.getLocationPercentage();
-                }
-        };
+                    @Override
+                    public Number getPercentage(AmpActivityLocation item) {
+                        return item.getLocationPercentage();
+                    }
+                };
         percentageValidationField.setIndicatorAppender(iValidator);
         add(percentageValidationField);
-        
+
         final AmpUniqueCollectionValidatorField<AmpActivityLocation> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpActivityLocation>(
                 "uniqueLocationsValidator", listModel, "uniqueLocationsValidator") {
             private static final long serialVersionUID = 1L;
@@ -137,21 +142,21 @@ public class AmpLocationFormTableFeature extends
             @Override
             public Object getIdentifier(AmpActivityLocation t) {
                 return t.getLocation().getAutoCompleteLabel();
-            }   
+            }
         };
         uniqueCollectionValidationField.setIndicatorAppender(iValidator);
         add(uniqueCollectionValidationField);
-        
+
         final AmpMinSizeCollectionValidationField<AmpActivityLocation> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpActivityLocation>(
-                "minSizeValidator", listModel, "Location required validator"){
+                "minSizeValidator", listModel, "Location required validator") {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                
+
                 //the required star should be visible, depending on whether the validator is active or not
                 reqStar.setVisible(isVisible());
-                        
-            }       
+
+            }
         };
         minSizeCollectionValidationField.setIndicatorAppender(iValidator);
         add(minSizeCollectionValidationField);
@@ -171,30 +176,46 @@ public class AmpLocationFormTableFeature extends
 
             @Override
             protected void populateItem(final ListItem<AmpActivityLocation> item) {
-                AmpLocationItemPanel li = new AmpLocationItemPanel("locationItem", item.getModel(), "Location Item", 
+                boolean isCountryNationalAndMultiCountry = false;
+
+                if (CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.
+                        equalsCategoryValue(implementationLevel.getChoiceModel().getObject().iterator().next()) &&
+                        CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.
+                                equalsCategoryValue(implementationLocation.getChoiceModel().getObject().iterator().next())
+                        && DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE)) {
+                    isCountryNationalAndMultiCountry = true;
+                    disablePercentagesForInternational.setObject(true);
+                    searchLocations.setVisibilityAllowed(false);
+                }else{
+                    disablePercentagesForInternational.setObject(false);
+                    searchLocations.setVisibilityAllowed(true);
+                }
+
+                AmpLocationItemPanel li = new AmpLocationItemPanel("locationItem", item.getModel(), "Location Item",
                         disablePercentagesForInternational, am, regionalFundingFeature,
-                        AmpLocationFormTableFeature.this, locationPercentageRequired, setModel, list, totalLabel);
+                        AmpLocationFormTableFeature.this, locationPercentageRequired, setModel, list, totalLabel, isCountryNationalAndMultiCountry);
                 item.add(li);
             }
         };
         list.setReuseItems(true);
         add(list);
 
-        add(new AmpDividePercentageField<AmpActivityLocation>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, new Model<ListView<AmpActivityLocation>>(list)){
+        add(new AmpDividePercentageField<AmpActivityLocation>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, new Model<ListView<AmpActivityLocation>>(list)) {
             private static final long serialVersionUID = 1L;
+
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.DECIMAL_LOCATION_PERCENTAGES_DIVIDE);
                 int factor = 1;
-                if(pattern != null && Integer.parseInt(pattern) > 0){
+                if (pattern != null && Integer.parseInt(pattern) > 0) {
                     Integer numDecimals = Integer.parseInt(pattern);
-                    factor = (int)(Math.pow(10, numDecimals));
+                    factor = (int) (Math.pow(10, numDecimals));
                 }
 
                 Set<AmpActivityLocation> set = setModel.getObject();
                 if (set.size() == 0)
                     return;
-                
+
                 int size = 0;
                 Iterator<AmpActivityLocation> it = set.iterator();
                 while (it.hasNext()) {
@@ -202,138 +223,157 @@ public class AmpLocationFormTableFeature extends
                     if (itemInCollection(t))
                         size++;
                 }
-                
+
                 if (size == 0)
                     return;
-                
-                int alloc = (100*factor)/size;
+
+                int alloc = (100 * factor) / size;
                 it = set.iterator();
                 while (it.hasNext()) {
                     AmpActivityLocation loc = it.next();
                     if (!itemInCollection(loc))
                         continue;
-                    setPercentageLocation(loc, alloc/(double)factor);
+                    setPercentageLocation(loc, alloc / (double) factor);
                 }
-                
-                int dif = (100*factor) - alloc*size;
+
+                int dif = (100 * factor) - alloc * size;
                 int delta = 1;
                 if (dif < 0)
                     delta = -1;
                 it = set.iterator();
-                while (dif != 0 && it.hasNext()){
+                while (dif != 0 && it.hasNext()) {
                     AmpActivityLocation loc = it.next();
                     if (!itemInCollection(loc))
                         continue;
-                    setPercentageLocation(loc, (getPercentageLocation(loc) + (delta)/(double)factor));
+                    setPercentageLocation(loc, (getPercentageLocation(loc) + (delta) / (double) factor));
                     dif = dif - delta;
                 }
                 list.removeAll();
                 target.add(list.getParent());
             }
 
-            
-            
+
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                if (this.isEnabled()){
+                if (this.isEnabled()) {
                     this.setEnabled(!disablePercentagesForInternational.getObject());
                 }
             }
+
             public void setPercentageLocation(AmpActivityLocation loc, double val) {
                 loc.setLocationPercentage((float) val);
             }
+
             public double getPercentageLocation(AmpActivityLocation loc) {
-                return (double)(loc.getLocationPercentage());
+                return (double) (loc.getLocationPercentage());
             }
+
             @Override
             public void setPercentage(AmpActivityLocation loc, int val) {
                 loc.setLocationPercentage((float) val);
             }
+
             @Override
             public int getPercentage(AmpActivityLocation loc) {
-                return (int)((float)(loc.getLocationPercentage()));
+                return (int) ((float) (loc.getLocationPercentage()));
             }
+
             @Override
             public boolean itemInCollection(AmpActivityLocation item) {
                 return true; //all items displayed in the same list
             }
-            
+
         });
-        
-        final AmpAutocompleteFieldPanel<AmpCategoryValueLocations> searchLocations=
-                new AmpAutocompleteFieldPanel<AmpCategoryValueLocations>("searchLocations","Search Locations",
-                        AmpLocationSearchModel.class,false) {
-            private static final long serialVersionUID = 1L;
 
-            @Override
-            public void onSelect(AjaxRequestTarget target,
-                    AmpCategoryValueLocations choice) {
-                locationSelected(choice, am, disablePercentagesForInternational);
+        searchLocations =
+                new AmpAutocompleteFieldPanel<AmpCategoryValueLocations>("searchLocations", "Search Locations",
+                        AmpLocationSearchModel.class, false) {
+                    private static final long serialVersionUID = 1L;
 
-                // toggleHeading(target, setModel.getObject());
-                target.add(list.getParent());
-                regionalFundingFeature.getList().removeAll();
+                    @Override
+                    public void onSelect(AjaxRequestTarget target,
+                                         AmpCategoryValueLocations choice) {
+                        //if national, country and multicountry then disable percentage
+                        if (CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.
+                                equalsCategoryValue(implementationLevel.getChoiceModel().getObject().iterator().next()) &&
+                                CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.
+                                        equalsCategoryValue(implementationLocation.getChoiceModel().getObject().iterator().next())
+                                && DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE)) {
+                            disablePercentagesForInternational.setObject(true);
+                            //AmpLocationFormTableFeature.this.getSearchLocations().changeEnabled(false, target);
+                            AmpLocationFormTableFeature.this.getSearchLocations().setVisibilityAllowed(false);
+                            target.add(AmpLocationFormTableFeature.this.getSearchLocations());
+                        }else{
+                            disablePercentagesForInternational.setObject(false);
+                        }
+                        locationSelected(choice, am, disablePercentagesForInternational);
 
-                if (regionalFundingFeature.isVisibleInHierarchy()) {
-                    target.add(regionalFundingFeature);
-                    target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
-                }
-                reloadValidationFields(target);
-                list.removeAll();
-            }
+                        // toggleHeading(target, setModel.getObject());
+                        target.add(list.getParent());
+                        regionalFundingFeature.getList().removeAll();
 
-            @Override
-            public Integer getChoiceLevel(AmpCategoryValueLocations choice) {
-                return null;
-            }
+                        if (regionalFundingFeature.isVisibleInHierarchy()) {
+                            target.add(regionalFundingFeature);
+                            target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
+                        }
+                        reloadValidationFields(target);
+                        list.removeAll();
+                    }
 
-            @Override
-            protected String getChoiceValue(AmpCategoryValueLocations choice) {
-                return choice.getAutoCompleteLabel();
-            }
-        };
+                    @Override
+                    public Integer getChoiceLevel(AmpCategoryValueLocations choice) {
+                        return null;
+                    }
 
-        AmpTeamMember ampCurrentMember = ((AmpAuthWebSession)this.getSession()).getAmpCurrentMember();
+                    @Override
+                    protected String getChoiceValue(AmpCategoryValueLocations choice) {
+                        return choice.getAutoCompleteLabel();
+                    }
+                };
+
+        AmpTeamMember ampCurrentMember = ((AmpAuthWebSession) this.getSession()).getAmpCurrentMember();
         AmpApplicationSettings ampAppSettings = null;
         if (ampCurrentMember != null) {
             ampAppSettings = org.digijava.module.aim.util.DbUtil.getTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
         }
 
-        Boolean allSetupCountries = (ampAppSettings == null || !ampAppSettings.getShowAllCountries())? new Boolean(false) : new Boolean(true);
+        Boolean allSetupCountries = (ampAppSettings == null || !ampAppSettings.getShowAllCountries()) ? new Boolean(false) : new Boolean(true);
 
         searchLocations.getModelParams().put(AmpLocationSearchModel.PARAM.LAYER,
                 implementationLocation.getChoiceModel());
-    
+
         searchLocations.getModelParams().put(AmpLocationSearchModel.PARAM.LEVEL,
                 implementationLevel.getChoiceModel());
 
         searchLocations.getModelParams().put(AmpLocationSearchModel.PARAM.ALL_SETUP_COUNTRIES, allSetupCountries);
-        
-        
+
+
         add(searchLocations);
     }
-    
-    public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational){
-         locationSelected(choice, am, disablePercentagesForInternational,false);
+
+    public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational) {
+        locationSelected(choice, am, disablePercentagesForInternational, false);
     }
 
-    public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational, boolean isCountryNational){
+    public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational, boolean isCountryNational) {
         AmpActivityLocation activityLocation = new AmpActivityLocation();
 
         activityLocation.setLocation(choice);
-        if (disablePercentagesForInternational.getObject()){
+        if (disablePercentagesForInternational.getObject()) {
             AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getDefaultCountry();
-            if (choice.getId().longValue() == defCountry.getId().longValue())
+            if (choice.getId().longValue() == defCountry.getId().longValue()
+                    || defCountry.getIso().equals(MULTI_COUNTRY_ISO_CODE)) {
                 activityLocation.setLocationPercentage(100f);
-            else
+            } else {
                 activityLocation.setLocationPercentage(null);
-        }
-        else{
-            if(list.size()>0)
+            }
+        } else {
+            if (list.size() > 0) {
                 activityLocation.setLocationPercentage(null);
-            else
+            } else {
                 activityLocation.setLocationPercentage(100f);
+            }
         }
 
         activityLocation.setActivity(am.getObject());
@@ -342,9 +382,9 @@ public class AmpLocationFormTableFeature extends
             setModel.setObject(new HashSet<AmpActivityLocation>());
 
         Set<AmpActivityLocation> set = setModel.getObject();
-        if(isCountryNational){
+        if (isCountryNational) {
             Iterator<AmpActivityLocation> it = set.iterator();
-            while(it.hasNext()){
+            while (it.hasNext()) {
                 AmpActivityLocation loc = it.next();
                 if (loc.getLocation() != null && activityLocation.getLocation() != null
                         && loc.getLocation().compareTo(activityLocation.getLocation()) == 0) {
@@ -364,5 +404,10 @@ public class AmpLocationFormTableFeature extends
 
     public AmpPercentageCollectionValidatorField<AmpActivityLocation> getPercentageValidationField() {
         return percentageValidationField;
+    }
+
+    //expose searchLocations for testing
+    public AmpAutocompleteFieldPanel<AmpCategoryValueLocations> getSearchLocations() {
+        return searchLocations;
     }
 }

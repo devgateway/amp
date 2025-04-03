@@ -286,7 +286,7 @@ LoggerIdentifiable, Cloneable {
 
 //  @Interchangeable(fieldTitle = "Contracts", importable = true, fmPath="/Activity Form/Contracts")
     @VersionableCollection(fieldTitle = "Contracts")
-    protected Set<IPAContract> contracts=new HashSet<>();
+    protected Set<IPAContract> contracts;
 
     //TTIL
     @Interchangeable(fieldTitle = ActivityFieldsConstants.LOCATIONS, importable = true,
@@ -455,7 +455,7 @@ LoggerIdentifiable, Cloneable {
 
 //  @Interchangeable(fieldTitle = "Regional Observations", importable = true, fmPath = "/Activity Form/Regional Observations")
     @VersionableCollection(fieldTitle = "Regional Observations")
-    protected Set<AmpRegionalObservation> regionalObservations=new HashSet<>();
+    protected Set<AmpRegionalObservation> regionalObservations;
 
     @Interchangeable(fieldTitle = "Line Ministry Observations", importable = true,
             fmPath = "/Activity Form/Line Ministry Observations")
@@ -684,7 +684,7 @@ LoggerIdentifiable, Cloneable {
     // Aid Harmonization Survey Set
     // @Interchangeable(fieldTitle = "Surveys",fmPath="/Activity Form/Paris Indicators")
      @VersionableCollection(fieldTitle = "Surveys")
-    protected Set<AmpAhsurvey> survey=new HashSet<>();
+    protected Set<AmpAhsurvey> survey;
 
     // @Interchangeable(fieldTitle = "GPI Surveys",fmPath="/Activity Form/GPI")
      @VersionableCollection(fieldTitle = "GPI Surveys")
@@ -713,7 +713,7 @@ LoggerIdentifiable, Cloneable {
     protected Boolean deleted;
 
     @VersionableCollection(fieldTitle = "Aid Effectiveness")
-    protected Set<AmpAidEffectivenessIndicatorOption> selectedEffectivenessIndicatorOptions=new HashSet<>();
+    protected Set<AmpAidEffectivenessIndicatorOption> selectedEffectivenessIndicatorOptions;
 
     /**
      * Indicator connections.
@@ -985,7 +985,7 @@ LoggerIdentifiable, Cloneable {
      */
     @Interchangeable(fieldTitle = ActivityFieldsConstants.ACTIVITY_TYPE, pickIdOnly = true,
             label = "Activity Type", importable = false)
-    protected Long activityType = org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT; //default type
+    public Long activityType = org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT; //default type
 
     @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
     @VersionableCollection(fieldTitle = "PPC Annual Budgets")
@@ -1325,7 +1325,13 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setActivityContacts(Set<AmpActivityContact> activityContacts) {
-            this.activityContacts = activityContacts;
+            if (this.activityContacts == null) {
+                this.activityContacts = activityContacts;
+            } else {
+                this.activityContacts.clear();
+                if (activityContacts==null)activityContacts=new HashSet<>();
+                this.activityContacts.addAll(activityContacts);
+            }
         }
 
         /**
@@ -2159,7 +2165,13 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setContracts(Set<IPAContract> contracts) {
-            this.contracts = contracts;
+            if (this.contracts == null) {
+                this.contracts = contracts;
+            } else {
+                this.contracts.clear();
+                if (contracts==null)contracts=new HashSet<>();
+                this.contracts.addAll(contracts);
+            }
         }
 
 
@@ -2296,8 +2308,16 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setRegionalObservations(Set<AmpRegionalObservation> regionalObservations) {
-            this.regionalObservations = regionalObservations;
+            if (this.regionalObservations == null) {
+                this.regionalObservations = regionalObservations;
+            } else {
+                this.regionalObservations.clear();
+                if (regionalObservations==null)regionalObservations=new HashSet<>();
+                this.regionalObservations.addAll(regionalObservations);
+            }
         }
+
+
 
         public String getEmail() {
             return email;

@@ -15,9 +15,17 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
+import org.dgfoundation.amp.onepager.components.fields.AmpTreeCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
@@ -32,6 +40,7 @@ import org.digijava.module.aim.util.DbUtil;
 import java.text.DecimalFormat;
 import java.util.*;
 
+import static org.dgfoundation.amp.onepager.OnePagerMessages.HAS_SECTOR_INDICATOR_ALERT_MSG;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.MAXIMUM_PERCENTAGE;
 
 /**
@@ -181,6 +190,17 @@ public class AmpSectorsFormTableFeature extends
                         "delSector", "Delete Sector") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
+
+                        AmpActivityVersion activity = am.getObject();
+                        AmpActivitySector sector = item.getModelObject();
+
+                        boolean hasIndicators = ActivityUtil.hasSectorIndicatorsInActivity(activity, sector);
+                        if (hasIndicators) {
+                            String message = TranslatorUtil.getTranslation(HAS_SECTOR_INDICATOR_ALERT_MSG);
+                            target.appendJavaScript(OnePagerUtil.createJSAlert(message));
+                            return;
+                        }
+
                         setModel.getObject().remove(item.getModelObject());
                         target.add(listParent);
                         target.add(totalLabel);

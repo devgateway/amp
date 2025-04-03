@@ -280,8 +280,8 @@ public class AMPStartupListener extends HttpServlet implements
                     "gtopo30", "timezone", "lastModified" };
             
             GazeteerCSVImporter importer = new GazeteerCSVImporter(SERVLET_CONTEXT_ROOT_REAL_PATH+System.getProperty("file.separator")+ "doc"+System.getProperty("file.separator")+"gazeteer.csv",columnNames,prop);
-            
-            if (importer.isTableEmpty()) {
+
+            if (importer.isTableEmpty() && importer.fileExists()) {
                 importer.performImport();
             }
         }

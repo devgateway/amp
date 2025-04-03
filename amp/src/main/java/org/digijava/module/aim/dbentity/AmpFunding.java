@@ -1023,16 +1023,4 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
         return ampFundingId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AmpFunding that = (AmpFunding) o;
-        return Objects.equals(ampDonorOrgId, that.ampDonorOrgId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash( ampDonorOrgId, ampActivityId);
-    }
 }

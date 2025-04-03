@@ -4,18 +4,18 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@ page import="org.digijava.module.aim.form.ReportsForm"%>
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
-<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib uri="http://digijava.org/fields" prefix="field" %>
-<%@ taglib uri="http://digijava.org/features" prefix="feature" %>
-<%@ taglib uri="http://digijava.org/modules" prefix="module" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
-<%@ taglib uri="http://digijava.org/CategoryManager" prefix="category" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
 <%@ page import="org.dgfoundation.amp.ar.ArConstants" %>
@@ -30,7 +30,7 @@
 
 <!-- CSS -->
 <link href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css" type="text/css" rel="stylesheet">
-<!-- Commenting this out as they have a wrong path anyway, missing /
+<!-- Commenting this out as they have a wrong path anyway, missing / 
 <link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
 <link href='TEMPLATE/ampTemplate/css_2/tabs.css' rel='stylesheet' type='text/css'>
 -->
@@ -61,7 +61,7 @@
 	<c:set var="tabActivationLimit">
 		<digi:trn>Please deactivate other tabs first!</digi:trn>
 	</c:set>
-
+	
 	<jsp:include page="tabManager/tabManager.jsp" />
 </c:if>
 <digi:form action="/viewTeamReports.do" method="post">
@@ -83,7 +83,7 @@
 	<c:set var="generator">
 		<digi:trn>Report Generator</digi:trn>
 	</c:set>
-
+	
 </c:if>
 
 
@@ -96,7 +96,7 @@
 		</div>
 	</div>
 </div>
-<!-- BREADCRUMP END -->
+<!-- BREADCRUMP END --> 
 
 <SCRIPT TYPE="text/javascript">
 <!--
@@ -114,7 +114,7 @@ function popup(mylink, windowname)
 	if(windowname == ""){
 		windowname="popup"+new Date().getTime();
 	}
-
+	
 	var openedWindow = window.open('', windowname, 'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
 	if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
 		var referLink = document.createElement('a');
@@ -133,8 +133,8 @@ function popup(mylink, windowname)
 
 function confirmFunc() {
   return confirm("${translation}");
-
-
+  
+	
 	return false;
 }
 function activate(id){
@@ -147,15 +147,15 @@ function activate(id){
 			number=parseInt(data);
 			if(number<5){
 				$(".activateTab"+id).hide();
-				$(".savePosition"+id).show();
+				$(".savePosition"+id).show();	
 			}
 			else{
 				alert("${tabActivationLimit}");
 			}
 		   },
-	   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot get tab list.');}
+	   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot get tab list.');} 
 	});
-
+	
 	return false;
 }
 function showHidePositions(id,selectedPosition){
@@ -164,7 +164,7 @@ function showHidePositions(id,selectedPosition){
 	    cache : false,
 	    type: 'get',
 	    success: function(data, status) {
-    		updateChangesAppliedInfo(id);
+    		updateChangesAppliedInfo(id);	
     		var arrayPosition = jQuery.parseJSON(data);
 	    	var selects=$("select[class^='savePositionDropDow']");
 	    	for(var j=0;j<selects.length;j++){
@@ -190,10 +190,10 @@ function showHidePositions(id,selectedPosition){
 	            	    }
 	            	 }
 	    			if(!skip){
-	    				select.options[index]=new Option(label, currvalue, false, selected);
+	    				select.options[index]=new Option(label, currvalue, false, selected);	
 		    			index++;
 	    			}
-
+	    			
 	    		}
 	    	}
 	    	if(id!=null){
@@ -208,11 +208,11 @@ function showHidePositions(id,selectedPosition){
 	       		alert("unable to perform action!");
 	        }
 	    });
-
+	
 }
 
 function updateProcessingChangesInfo(id){
-	var processingChangesStr = "<img src='/TEMPLATE/ampTemplate/images/amploading.gif' width='10' height='10' />" +
+	var processingChangesStr = "<img src='/TEMPLATE/ampTemplate/images/amploading.gif' width='10' height='10' />" + 
 	"<digi:trn>applying changes</digi:trn>";
 	updateStatusInfo(id, processingChangesStr, "black");
 }
@@ -224,7 +224,7 @@ function updateChangesAppliedInfo(id){
 
 function updateStatusInfo(id, statusStr, color){
 	if (id == null)return;
-	var savePositionStatusInfoDiv = $(".savePositionStatusInfo" + id);
+	var savePositionStatusInfoDiv = $(".savePositionStatusInfo" + id); 
 	savePositionStatusInfoDiv.html(statusStr);
 	savePositionStatusInfoDiv.css("color", color);
 	savePositionStatusInfoDiv.css("white-space", "nowrap");
@@ -240,7 +240,7 @@ function savePosition(id){
     type: 'post',
     data: {position:selectedPosition, reportId:id},
     success: function(data, status) {
-    	showHidePositions(id,selectedPosition);
+    	showHidePositions(id,selectedPosition);   
         },
     error: function(xhr, desc, err) {
        		alert("unable to perform action!");
@@ -253,11 +253,11 @@ $(document).ready(function() {
 	$("select[class^='savePositionDropDow']").attr('disabled', 'disabled');
 	showHidePositions();
 	});
-
+	
 	function submitForm(action){
 		document.aimTeamReportsForm.action.value=action;
 		document.aimTeamReportsForm.submit();
-
+		
 	}
 <% if(SiteUtils.isEffectiveLangRTL()) { %>
 	//[6] - TitleTextAlign
@@ -301,17 +301,17 @@ $(document).ready(function() {
                    			<c:when test="${aimTeamReportsForm.showTabs}"><digi:trn>Tab Title</digi:trn></c:when>
                    			<c:otherwise><digi:trn>Report Title</digi:trn></c:otherwise>
                    		</c:choose>: <html:text property="keyword"/>
-
+                   		
                    		<c:if test="${!aimTeamReportsForm.showTabs}">
 	                   		<c:set var="translation">
 									<digi:trn>Please select a category from below</digi:trn>
 							</c:set>
 							<category:showoptions firstLine="${translation}" name="aimTeamReportsForm" property="selectedReportCategory"  keyName="<%= CategoryConstants.REPORT_CATEGORY_KEY %>" styleClass="dropdwn_sm" styleId="repCat" />
-	                   	</c:if>
+	                   	</c:if> 
                    	</td>
                    	<td id="reportsearchform1">
                    		<input type="button"  value="<digi:trn>Search</digi:trn>" onclick="submitForm('search')"/>
-                   	</td>
+                   	</td>                   	
                    	<td id="reportsearchform2">
                    		<input type="button"  value="<digi:trn>clear</digi:trn>" onclick="submitForm('clear')"/>
                    	</td>
@@ -338,12 +338,12 @@ $(document).ready(function() {
 									</td>
 									<td>
 										<span><digi:trn>Filtered Report</digi:trn>&nbsp;
-											<img src="/static/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
+											<img src= "/repository/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
 										</span>
 									</td>
 									<td>
 										<span><digi:trn>Edit Report</digi:trn>&nbsp;
-											<img src="/static/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
+											<img src= "/repository/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
 										</span>
 									</td>
 									<td>
@@ -361,12 +361,12 @@ $(document).ready(function() {
 						</span>
 						<span>
 							<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" />
-
+						
 						<digi:trn>Filtered Tab</digi:trn>&nbsp;</span>
-						<span><img src="/static/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" /></span>
+						<span><img src= "/repository/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" /></span>
 						<digi:trn>Edit Tab</digi:trn>&nbsp;
 							<span>
-								<img src="/static/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
+								<img src= "/repository/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
 							</span>
 						<span><digi:trn>Delete Tab</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;</span>
 						</div>
@@ -390,7 +390,7 @@ $(document).ready(function() {
 				</div>
 			</logic:present>
 			<table class="inside" style="font-size:11px; font-family: Arial,sans-serif; background-color: white;" width="950px">
-				<tr>
+				<tr> 
 					<td align="center" class="inside_header">&nbsp; </td>
 					<td align="center" class="inside_header">
 						<c:if test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=1}">
@@ -422,7 +422,7 @@ $(document).ready(function() {
 								<digi:trn key="aim:reportOwnerName">Owner</digi:trn>
 							</digi:link>
 							<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up" />
-						</c:if>
+						</c:if> 
 					</b></td>
 					<td align="center" class="inside_header"> <b>
 						<c:if test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=5}">
@@ -432,12 +432,12 @@ $(document).ready(function() {
 							<c:if test="${aimTeamReportsForm.sortBy==6}">
 								<img src="/TEMPLATE/ampTemplate/images/arrow_down.gif" alt="down" />
 							</c:if>
-						</c:if>
+						</c:if> 
 						<c:if test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==5}">
-							<digi:link href="/viewTeamReports.do?sortBy=6">
+							<digi:link href="/viewTeamReports.do?sortBy=6"> 
 								<digi:trn key="aim:reportCreationDate">Update Date</digi:trn>
 							</digi:link> <img src="/TEMPLATE/ampTemplate/images/arrow_up.gif" alt="up" />
-						</c:if>
+						</c:if> 
 					</b></td>
 					<c:if test="${!aimTeamReportsForm.tabs}">
 						<td align="center" class="inside_header"> <b>
@@ -485,7 +485,7 @@ $(document).ready(function() {
 				<%String color = ""; %>
 					<logic:iterate name="aimTeamReportsForm"  property="reportsList" id="report" indexId="idx"
 						type="org.digijava.module.aim.dbentity.AmpReports">
-						<tr onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');"
+						<tr onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
                               							onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" >
 							<c:set var="reportLink" value="${fn:getReportUrl(report)}" />
 							<%if(idx.intValue()%2==1) color = "#dbe5f1"; %>
@@ -555,7 +555,7 @@ $(document).ready(function() {
 							<c:if test="${!aimTeamReportsForm.tabs}">
 								<td class="inside inside-type" bgcolor="<%=color%>">
 									<div style="white-space: nowrap">
-										<ul>
+										<ul> 
 											<li>
 												<% if (report.getType()!=null && report.getType().equals(new Long(1))) { %>
 													<digi:trn key="aim:donorType">donor</digi:trn>
@@ -572,12 +572,12 @@ $(document).ready(function() {
 											<logic:equal name="report" property="drilldownTab" value="true">
 											<li> <digi:trn key="aim:typeDrilldownTab">Desktop Tab</digi:trn> </li>
 											</logic:equal>
-											<logic:equal name="report" property="publicReport" value="true">
+											<logic:equal name="report" property="publicReport" value="true"> 
 												<li> <digi:trn key="aim:typePublicReport">Public Report</digi:trn> </li>
 											</logic:equal>
 											<logic:equal name="report" property="hideActivities" value="true">
 												<li> <digi:trn key="aim:typeSummaryReport">Summary Report</digi:trn> </li>
-											</logic:equal>
+											</logic:equal> 
 											<logic:equal name="report" property="options" value="A">
 												<li> <digi:trn key="aim:annualreport">Annual</digi:trn> </li>
 											</logic:equal>
@@ -604,7 +604,7 @@ $(document).ready(function() {
 								</ul>
 							</td>
 							<%if (tm != null) {%>
-								<td width="200" class="inside" style="padding-right: 5px; padding-left: 5px; font-size: 11px; width: 150px;" align="center" bgcolor="<%=color%>">
+								<td width="200" class="inside" style="padding-right: 5px; padding-left: 5px; font-size: 11px; width: 150px;" align="center" bgcolor="<%=color%>">  
 									<div style='position:relative;display:none;' id='report-<bean:write name="report" property="ampReportId"/>'>
 										<ul class="content-direction">
 									<logic:iterate name="report" property="columns" id="column" indexId="index">
@@ -673,7 +673,7 @@ $(document).ready(function() {
 						</c:if>
 
 						<c:set target="${urlParams}" property="event" value="edit" />
-						<logic:equal name="teamLeadFlag" scope="session" value="true">
+						<logic:equal name="teamLeadFlag" scope="session" value="true"> 
 							<c:set var="translation">
 								<c:if test="${aimTeamReportsForm.showTabs}">
 									<digi:trn >Click on this icon to edit tab</digi:trn>&nbsp;
@@ -684,13 +684,13 @@ $(document).ready(function() {
 							</c:set>
 							<c:choose>
 								<c:when test="${report.budgetExporter}">
-									<a href="/TEMPLATE/reampv2/build/index.html#/report_generator/${report.ampReportId}" title="${translation}">
-										<img src="/static/message/view/images/edit.gif" border="0" class="img-padding" />
+									<a href="/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/report_generator/${report.ampReportId}" title="${translation}">
+										<img src= "/repository/message/view/images/edit.gif" border="0" class="img-padding" />
 									</a>
 								</c:when>
 								<c:otherwise>
-									<a href="/TEMPLATE/reampv2/build/index.html#/report_generator/${report.ampReportId}" title="${translation}">
-										<img src="/static/message/view/images/edit.gif" border="0" class="img-padding" />
+									<a href="/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/report_generator/${report.ampReportId}" title="${translation}">
+										<img src= "/repository/message/view/images/edit.gif" border="0" class="img-padding" />
 									</a>
 								</c:otherwise>
 							</c:choose>&nbsp;
@@ -705,12 +705,12 @@ $(document).ready(function() {
 								</c:if>
 							</c:set>
 								<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-									<img src="/static/message/view/images/trash_12.gif" border="0" class="img-padding" />
+									<img src= "/repository/message/view/images/trash_12.gif" border="0" class="img-padding" />
 								</digi:link>
 						</logic:equal>
 						<logic:equal name="teamLeadFlag" scope="session" value="false">
 							<logic:present name="report" property="ownerId">
-							<logic:equal  name="report" property="ownerId.ampTeamMemId" value="${aimTeamReportsForm.currentMemberId}">
+							<logic:equal  name="report" property="ownerId.ampTeamMemId" value="${aimTeamReportsForm.currentMemberId}"> 
 								<c:set var="translation">
 									<c:if test="${aimTeamReportsForm.showTabs}">
 										<digi:trn key="aim:ClickEditTab">Click on this icon to edit tab</digi:trn>&nbsp;
@@ -719,8 +719,8 @@ $(document).ready(function() {
 										<digi:trn key="aim:ClickEditReport">Click on this icon to edit report</digi:trn>&nbsp;
 									</c:if>
 								</c:set>
-								<a href="/TEMPLATE/reampv2/build/index.html#/report_generator/${report.ampReportId}" title="${translation}">
-									<img src="/static/message/view/images/edit.gif" border="0" class="img-padding" />
+								<a href="/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/report_generator/${report.ampReportId}" title="${translation}">
+									<img src= "/repository/message/view/images/edit.gif" border="0" class="img-padding" />
 								</a>
 								<c:set var="translation">
 									<c:if test="${aimTeamReportsForm.showTabs}">
@@ -733,9 +733,9 @@ $(document).ready(function() {
 									</c:if>
 								</c:set>
 								<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-									<img src="/static/message/view/images/trash_12.gif" border="0" class="img-padding" />
+									<img src= "/repository/message/view/images/trash_12.gif" border="0" class="img-padding" />
 								</digi:link>
-							</logic:equal>
+							</logic:equal>    
 						</logic:present>
 					</logic:equal>
 					</p> </td>

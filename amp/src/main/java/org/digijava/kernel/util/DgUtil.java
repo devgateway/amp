@@ -61,7 +61,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
@@ -69,15 +68,18 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static net.bull.javamelody.internal.common.Parameters.getServletContext;
-
 public class DgUtil {
-
+    
     private static Logger logger = I18NHelper.getKernelLogger(DgUtil.class);
 
     private static final int FASTSPLIT_MAXSIZE = 2048;
 
-    private static final Comparator userComparator = (o1, o2) -> ( (User) o1).getId().compareTo( ( (User) o2).getId());
+    private static final Comparator userComparator = new Comparator() {
+        public int compare(Object o1, Object o2) {
+            return ( (User) o1).getId().compareTo( ( (User) o2).getId());
+        }
+
+    };
 
     /**
      * Returns current site domain, using which the request was performed, or
@@ -205,7 +207,7 @@ public class DgUtil {
         }
         session.saveOrUpdate(ampAppSettings);
     }
-
+    
     /**
      *
      * @param language
@@ -222,7 +224,7 @@ public class DgUtil {
         }
 
         Site currentSite = RequestUtils.getSite(request);
-        if (currentSite != null) {
+        if (currentSite != null) {            
             if (getSupportedLanguage(language.getCode(), currentSite,
                                      isLocalTranslatorForSite(request)) == null) {
                 // Language is not supported
@@ -231,7 +233,7 @@ public class DgUtil {
                 DgUtil.setUserLanguage(request, response);
                 return;
             }
-
+           
             saveUserLanguagePreferences(request, language);
             saveWorkspaceLanguagePreferences(request, language);
             request.setAttribute(Constants.NAVIGATION_LANGUAGE, language);
@@ -239,14 +241,14 @@ public class DgUtil {
             setLanguageCookie(language, request, response);
         }
     }
-
+    
     public static void setSessionLanguage(HttpServletRequest request, HttpServletResponse response, Locale language) {
         request.setAttribute(Constants.NAVIGATION_LANGUAGE, language);
         if (request.getSession() != null)
             request.getSession().setAttribute(Constants.NAVIGATION_LANGUAGE, language);
         setLanguageCookie(language, request, response);
     }
-
+    
     private static void setLanguageCookie(Locale language, HttpServletRequest request, HttpServletResponse response) {
         SiteDomain currDomain = RequestUtils.getSiteDomain(request);
         Cookie cookie = new Cookie("digi_language", language.getCode());
@@ -341,19 +343,19 @@ public class DgUtil {
                 }
 
             }
-
+            
             if(request.getParameter("language")!=null){
                 language = getSupportedLanguage(request.getParameter("language"),
                         currentSite,
                         isLocalTranslatorForSite(request));
             }
-
+            
             if (language != null) {
                 logger.debug("Language, determined from request parameter: " +
                              language.getCode());
                 return language;
             }
-
+            
             // Determine language using cookies
             Cookie[] cookies = request.getCookies();
             if (cookies != null) {
@@ -374,7 +376,7 @@ public class DgUtil {
                              language.getCode());
                 return language;
             }
-
+            
             //using session attribute
             if (request.getSession() != null){
                 language = (Locale)request.getSession().getAttribute(Constants.NAVIGATION_LANGUAGE);
@@ -384,7 +386,7 @@ public class DgUtil {
                     return language;
                 }
             }
-
+                
             // Determine list of accepted languages from request
 
             // request.getLocales() contains at least one value: if
@@ -531,12 +533,10 @@ public class DgUtil {
      */
     public static String encodeBase64(String string) {
         try {
-            // Encode the string to Base64
-            byte[] encodedBytes = Base64.getEncoder().encode(string.getBytes(StandardCharsets.UTF_8));
-            // URL encode the Base64 encoded bytes
-            return URLEncoder.encode(new String(encodedBytes), "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            // Handle encoding errors
+            return URLEncoder.encode(new sun.misc.BASE64Encoder().encodeBuffer(
+                string.getBytes()), "UTF-8");
+        }
+        catch (UnsupportedEncodingException ex) {
             logger.error("Could not encode Base64", ex);
             throw new RuntimeException(ex);
         }
@@ -549,13 +549,9 @@ public class DgUtil {
      */
     public static String decodeBase64(String string) {
         try {
-            // Decode the URL encoded string
-            String decodedString = URLDecoder.decode(string, "UTF-8");
-            // Decode the Base64 encoded string
-            byte[] decodedBytes = Base64.getDecoder().decode(decodedString.getBytes(StandardCharsets.UTF_8));
-            return new String(decodedBytes, StandardCharsets.UTF_8);
+            return new String(Base64.getDecoder().decode(URLDecoder.decode(string, "UTF-8")), "UTF-8");
+
         } catch (UnsupportedEncodingException ex) {
-            // Handle encoding errors
             logger.error("Could not decode Base64", ex);
             throw new RuntimeException(ex);
         }
@@ -723,7 +719,7 @@ public class DgUtil {
         Locale language = DgUtil.getLanguageFromRequest(request);
         logger.debug("Navigation language, determined from request is: " +
                      language == null ? null : language.getCode());
-
+        
        setSessionLanguage(request, response, language);
 
         User user = RequestUtils.getUser(request);
@@ -1750,7 +1746,6 @@ public class DgUtil {
      * @return String
      */
     public static String htmlize(String src) {
-//        String.class.getName()
         String retVal = src.
             replaceAll("&lt;", "<").
             replaceAll("&gt;", ">").
@@ -1790,7 +1785,7 @@ public class DgUtil {
         }
         return retVal;
     }
-
+    
     /**
      * precompile these patterns (a slow process) for some speedup and for copy-paste avoidance
      */
@@ -1803,8 +1798,8 @@ public class DgUtil {
                                     Pattern.compile("StartFragment:[0-9]+"), // no DOTALL needed
                                     Pattern.compile("EndFragment:[0-9]+") // no DOTALL needed
     };
-
-
+    
+    
     private static Set<Character> trimmableChars = new HashSet<Character>() {{add(' '); add('\n'); add('\t');}};
 
     /**
@@ -1832,7 +1827,7 @@ public class DgUtil {
             return "";
         return src.substring(begPos, endPos + 1);
     }
-
+    
     /**
      * cleans a text copy-pasted from Word from all of its tags and returns the plain text
      * also does sanity cleanups, like replacing tabs with spaces and multiple spaces with a single one
@@ -1864,14 +1859,4 @@ public class DgUtil {
         String noNbsp = noTags.replace("&nbsp;", " ");
         return StringUtils.normalizeSpace(StringEscapeUtils.unescapeHtml4(noNbsp));
     }
-    public static String getWebInfPath(String path){
-        path=path.replace("/","");
-        return "/src/main/webapp/WEB-INF/"+path;
-    }
-    public static String getWebInfPathWithContext(String path){
-        path=path.replace("/","");
-        return getServletContext().getRealPath("/WEB-INF/"+path);
-
-    }
-
 }

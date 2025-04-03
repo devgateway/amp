@@ -1,0 +1,43 @@
+{
+  "name": "gulp-load-plugins",
+  "version": "0.10.0",
+  "description": "Automatically load any gulp plugins in your package.json",
+  "scripts": {
+    "test": "NODE_PATH=test/global_modules mocha"
+  },
+  "files": [
+    "index.js"
+  ],
+  "repository": "jackfranklin/gulp-load-plugins",
+  "keywords": [
+    "gulpfriendly",
+    "gulp",
+    "require",
+    "load",
+    "plugins"
+  ],
+  "author": "Jack Franklin",
+  "contributors": [
+    "Pascal Hartig",
+    "Ben Briggs",
+    "kombucha",
+    "Nicolas Froidure",
+    "Sindre Sorhus",
+    "Julien Fontanet <julien.fontanet@vates.fr>",
+    "Callum Macrae",
+    "Hutson Betts",
+    "Christian Maniewski",
+    "Connor Peet"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "findup-sync": "^0.2.1",
+    "multimatch": "2.0.0"
+  },
+  "devDependencies": {
+    "jshint": "^2.5.1",
+    "mocha": "^2.1.0",
+    "proxyquire": "^1.0.1",
+    "sinon": "^1.9.1"
+  }
+}

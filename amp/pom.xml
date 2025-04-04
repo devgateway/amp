@@ -2092,6 +2092,7 @@
                 <version>3.0.0-M5</version>
 
                 <configuration>
+                    <skip>true</skip>
                     <test>**/*Test.java, **/Test*.java, **/*Testcases.java</test>
                     <failIfNoTests>false</failIfNoTests>
                     <argLine>

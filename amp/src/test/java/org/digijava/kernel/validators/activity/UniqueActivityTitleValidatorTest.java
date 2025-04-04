@@ -16,40 +16,44 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hamcrest.Matcher;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
 import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Octavian Ciubotaru
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({FeaturesUtil.class})
 public class UniqueActivityTitleValidatorTest {
 
     private static APIField activityField;
     private static APIField activityFieldML;
+    private MockedStatic<FeaturesUtil> featuresUtilMock;
 
     @BeforeEach
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
-        PowerMockito.mockStatic(FeaturesUtil.class);
+        featuresUtilMock = Mockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
         activityFieldML = ValidatorUtil.getMetaData(AmpActivityFields.class, ImmutableSet.of(),
                 new TestFieldInfoProvider(true));
+    }
+
+    @AfterEach
+    public void tearDown() {
+        if (featuresUtilMock != null) {
+            featuresUtilMock.close();
+        }
     }
 
     @Test

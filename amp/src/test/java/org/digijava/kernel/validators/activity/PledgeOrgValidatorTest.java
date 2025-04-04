@@ -18,37 +18,35 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
 import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Octavian Ciubotaru
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({FeaturesUtil.class})
 public class PledgeOrgValidatorTest {
 
     private static APIField activityField;
     private static FundingPledges usaidPledge;
     private static InMemoryOrganisationManager organisationManager;
     private static InMemoryCategoryValuesManager categoryValues;
+    private MockedStatic<FeaturesUtil> mockedFeaturesUtil;
 
     @BeforeEach
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
-        PowerMockito.mockStatic(FeaturesUtil.class);
+        mockedFeaturesUtil = Mockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
 
         organisationManager = InMemoryOrganisationManager.getInstance();
@@ -59,6 +57,12 @@ public class PledgeOrgValidatorTest {
         usaidPledge.setOrganizationGroup(organisationManager.getUsaidGroup());
     }
 
+    @AfterEach
+    public void tearDown() throws Exception {
+            mockedFeaturesUtil.close();
+
+    }
+
     @Test
     public void testNullDonor() {
         AmpActivityVersion activity = new ActivityBuilder()
@@ -67,7 +71,7 @@ public class PledgeOrgValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -86,7 +90,7 @@ public class PledgeOrgValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -105,7 +109,7 @@ public class PledgeOrgValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        assertThat(violations, contains(violation(
+        MatcherAssert.assertThat(violations, contains(violation(
                 organisationManager.getWorldBank().getOrgGrpId().getAmpOrgGrpId(),
                 usaidPledge.getId())));
     }
@@ -135,7 +139,7 @@ public class PledgeOrgValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        assertThat(violations, contains(violation(
+        MatcherAssert.assertThat(violations, contains(violation(
                 organisationManager.getWorldBank().getOrgGrpId().getAmpOrgGrpId(),
                 usaidPledge.getId())));
     }
@@ -165,7 +169,7 @@ public class PledgeOrgValidatorTest {
         mockValidation();
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        assertThat(violations, containsInAnyOrder(
+        MatcherAssert.assertThat(violations, containsInAnyOrder(
                 violation(
                         organisationManager.getWbGroup().getAmpOrgGrpId(),
                         usaidPledge.getId()),
@@ -196,7 +200,7 @@ public class PledgeOrgValidatorTest {
                 "/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Pledges");
         Set<ConstraintViolation> violations = getConstraintViolations(ValidatorUtil.getMetaData(hiddenFm), activity);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     private Matcher<ConstraintViolation> violation(Long donorOrgGroupId, Object fundingPledgeId) {

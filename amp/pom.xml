@@ -2099,8 +2099,14 @@
                 <version>2.22.2</version>
 
                 <configuration>
-                    <test>**/*Test.java, **/Test*.java</test>
-<!--                    <testSourceDirectory>${project.build.testSourceDirectory}</testSourceDirectory>-->
+                    <test>**/*Test.java, **/Test*.java, **/*Testcases.java</test>
+                    <argLine>
+                        --add-opens java.base/java.lang=ALL-UNNAMED
+                        --add-opens java.base/java.lang.reflect=ALL-UNNAMED
+                        --add-opens java.base/java.util=ALL-UNNAMED
+                    </argLine>
+
+                    <!--                    <testSourceDirectory>${project.build.testSourceDirectory}</testSourceDirectory>-->
                     <includes>
 <!--                                                <include>**/Test*.java</include>-->
                         <!--                        <include>**/*Test.java</include>-->

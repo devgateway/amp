@@ -88,7 +88,7 @@ public class TLSUtils {
             return "en";
         }
     }
-    
+
     public void setForcedSSCWorkspace(Boolean forcedSSCWorkspace) {
         this.forcedSSCWorkspace = forcedSSCWorkspace;
     }
@@ -108,7 +108,7 @@ public class TLSUtils {
             return b == null;
         return a.equals(b);
     }
-    
+
     /**
      * DANGEROUS! ONLY USE IN TESTCASES!
      * @param langCode
@@ -129,11 +129,11 @@ public class TLSUtils {
         }
         offlineSetForcedLanguage(langCode);
     }
-    
+
     public static void offlineSetForcedLanguage(String langCode) {
         forcedLangCode = langCode;
     }
-    
+
     /**
      * calculates the effectively-used language code, e.g. either the currently-set one OR the default one ("en")
      * @return
@@ -151,13 +151,13 @@ public class TLSUtils {
         Site site = getSite();
         return Site.getIdOf(site);
     }
-    
+
     public static Site getSite()
     {
         TLSUtils instance = getThreadLocalInstance();
         return instance.site;
     }
-    
+
     public static HttpServletRequest getRequest()
     {
         TLSUtils instance = getThreadLocalInstance();
@@ -173,7 +173,7 @@ public class TLSUtils {
         }
         return res;
     }
-    
+
     public static void populate(HttpServletRequest request) {
         SiteDomain siteDomain = null;
         if (request.getServerName() == null) {
@@ -184,13 +184,13 @@ public class TLSUtils {
         }
         populate(request, siteDomain);
     }
-    
+
     public static void populate(HttpServletRequest request, SiteDomain siteDomain) {
         RequestUtils.setSiteDomain(request, siteDomain);
         TLSUtils.getThreadLocalInstance().request = request;
         TLSUtils.getThreadLocalInstance().site = siteDomain == null ? null : siteDomain.getSite();
     }
-    
+
     public static void clean() {
         TLSUtils.getThreadLocalInstance().request = null;
         TLSUtils.getThreadLocalInstance().site = null;
@@ -204,9 +204,9 @@ public class TLSUtils {
     public static void populateMockTlsUtils() {
         HttpServletRequest mockRequest = Mockito.mock(HttpServletRequest.class);
         HttpSession mockSession = Mockito.mock(HttpSession.class);
-        
+
         ServletContext mockServletContext=Mockito.mock(ServletContext.class);
-        
+
         Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
         final Map<String, Object> requestAttributes = new ConcurrentHashMap<String, Object>();
 
@@ -214,44 +214,44 @@ public class TLSUtils {
         getMockGetter(requestAttributes).when(mockRequest).getAttribute(Mockito.anyString());
 
         final Map<String, Object> sessionAttributes = new ConcurrentHashMap<String, Object>();
-        
+
         getMockSetter(sessionAttributes).when(mockSession).setAttribute(Mockito.anyString(), Mockito.anyObject());
         getMockGetter(sessionAttributes).when(mockSession).getAttribute(Mockito.anyString());
 
-        
+
         Mockito.when(mockRequest.getServletContext()).thenReturn(mockServletContext);
         Mockito.when(mockSession.getServletContext()).thenReturn(mockServletContext);
         final Map<String, Object> servletContextAttributes = new ConcurrentHashMap<String, Object>();
 
-        
+
         getMockSetter(servletContextAttributes).when(mockServletContext).setAttribute(Mockito.anyString(), Mockito.anyObject());
         getMockGetter(servletContextAttributes).when(mockServletContext).getAttribute(Mockito.anyString());
 
-        
+
         Stubber schemaStubber=Mockito.doAnswer(new Answer<String>() {
 
             @Override
             public String answer(InvocationOnMock invocation) throws Throwable {
-                String schemaPath = invocation.getArgumentAt(0, String.class);
+                String schemaPath = invocation.getArgument(0, String.class);
                 return Paths.get(schemaPath).toAbsolutePath().toString();
 
             }
-            
+
         });
         schemaStubber.when(mockServletContext).getRealPath(Mockito.anyString());
-        
+
         populateMockSiteDomain(mockRequest, "/");
         populate(mockRequest);
 
     }
-    
+
     /**
      * This method is used while executing api process outside the request context
      * @param apiContext
      */
     public static void populateMockTlsUtilsWithApiContext(ApiContext apiContext) {
         populateMockTlsUtils();
-        
+
         HttpServletRequest threadRequest = TLSUtils.getRequest();
         HttpSession threadSession = threadRequest.getSession();
         ServletContext servletContext = threadRequest.getServletContext();
@@ -267,9 +267,9 @@ public class TLSUtils {
                 apiContext.getSessionServletContext().getAttribute(AMP_TREE_VISIBILITY_ATTR));
         threadSession.getServletContext().setAttribute("templateVisibilityChangeDate",
                 apiContext.getSessionServletContext().getAttribute("templateVisibilityChangeDate"));
-    
+
         AmpClientModeHolder.setClientMode(apiContext.getClientMode());
-        
+
         Mockito.when(servletContext.getRealPath("/")).thenReturn(apiContext.getRootPath());
         TLSUtils.getRequest().getServletContext().getRealPath("/");
         Mockito.when(threadRequest.getRequestURL()).thenReturn(apiContext.getRequestURL());
@@ -290,7 +290,7 @@ public class TLSUtils {
         Mockito.doAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                String key = invocation.getArgumentAt(0, String.class);
+                String key = invocation.getArgument(0, String.class);
                 Object value = sessionAttributes.get(key);
                 return value;
             }
@@ -303,8 +303,8 @@ public class TLSUtils {
         Mockito.doAnswer(new Answer<Void>() {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
-                String key = invocation.getArgumentAt(0, String.class);
-                Object value = invocation.getArgumentAt(1, Object.class);
+                String key = invocation.getArgument(0, String.class);
+                Object value = invocation.getArgument(1, Object.class);
                 sessionAttributes.put(key, value);
                 return null;
             }

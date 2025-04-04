@@ -1,5 +1,6 @@
 package org.digijava.kernel.services;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -19,8 +20,8 @@ public class AmpOfflineVersionTest {
     public void testCompareEqual() {
         AmpOfflineVersion v1 = new AmpOfflineVersion("1.0.0");
         AmpOfflineVersion v2 = new AmpOfflineVersion("1.0.0");
-        assertEquals(0, v1.compareTo(v2));
-        assertEquals(0, v2.compareTo(v1));
+        Assertions.assertEquals(0, v1.compareTo(v2));
+        Assertions.assertEquals(0, v2.compareTo(v1));
     }
 
     @Test
@@ -50,7 +51,7 @@ public class AmpOfflineVersionTest {
 
     @Test
     public void testCompareSuffixCaseInsensitiveEqual() {
-        assertEquals(0, new AmpOfflineVersion("1.0.0-beta").compareTo(new AmpOfflineVersion("1.0.0-BETA")));
+        Assertions.assertEquals(0, new AmpOfflineVersion("1.0.0-beta").compareTo(new AmpOfflineVersion("1.0.0-BETA")));
     }
 
     @Test
@@ -60,7 +61,7 @@ public class AmpOfflineVersionTest {
     }
 
     private <T extends Comparable<T>> void assertGreater(T o1, T o2) {
-        assertEquals(1, o1.compareTo(o2));
-        assertEquals(-1, o2.compareTo(o1));
+        Assertions.assertEquals(1, o1.compareTo(o2));
+        Assertions.assertEquals(-1, o2.compareTo(o1));
     }
 }

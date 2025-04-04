@@ -7,6 +7,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.validator.fundings.TransactionOrgRole;
 import org.digijava.module.aim.validator.fundings.TransactionOrgRoleValidator;
 import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.ConstraintViolation;
@@ -29,29 +30,29 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
 
     private AmpRole executingAgencyRole =
             newRole(3L, Constants.ROLE_CODE_EXECUTING_AGENCY, "Executing Agency");
-    
+
     private AmpOrganisation org1 = newOrganisation(1L, "Org 1");
     private AmpOrganisation org2 = newOrganisation(2L, "Org 2");
     private AmpOrganisation org3 = newOrganisation(3L, "Org 3");
-    
+
     @Test
     public void testNotAppliedInHibernate() {
         AmpActivity activity = new AmpActivity();
-        
+
         Set<ConstraintViolation<AmpActivity>> violations = getValidator().validate(activity);
-        
-        assertThat(violations, emptyIterable());
+
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
-    
+
     @Test
     public void testNullOrgRolesAndFundings() {
         AmpActivity activity = new AmpActivity();
-        
+
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
-        
-        assertThat(violations, emptyIterable());
+
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
-    
+
     @Test
     public void testEmptyOrgRolesAndFundings() {
         AmpActivity activity = new AmpActivity();
@@ -60,25 +61,25 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
-    
+
     @Test
     public void testNullValues() {
         AmpActivity activity = new AmpActivity();
         activity.setOrgrole(ImmutableSet.of(newOrgRole(null, null)));
-    
+
         AmpFunding funding = newFunding(null, null);
         funding.setFundingDetails(ImmutableSet.of(newTransaction(Constants.COMMITMENT, null, null)));
-    
+
         activity.setFunding(ImmutableSet.of(funding));
-        
+
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
-        
-        assertThat(violations, emptyIterable());
+
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
-    
-    
+
+
     @Test
     public void testNullOrgRole() {
         AmpActivity activity = new AmpActivity();
@@ -86,126 +87,126 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
-    
+
     @Test
     public void testEmptyFunding() {
         AmpActivity activity = new AmpActivity();
         activity.setOrgrole(ImmutableSet.of(newOrgRole(org1, donorRole)));
         activity.setFunding(ImmutableSet.of());
-        
+
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
-        
-        assertThat(violations, emptyIterable());
+
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     @Test
     public void testEmptyOrgRole() {
         AmpActivity activity = new AmpActivity();
         activity.setOrgrole(ImmutableSet.of());
-        
+
         AmpFunding funding = newFunding(org1, implementingAgencyRole);
         funding.setFundingDetails(ImmutableSet.of(newTransaction(Constants.COMMITMENT, org2, implementingAgencyRole)));
-        
+
         activity.setFunding(ImmutableSet.of(funding));
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
-    
+
         assertThat(violations, contains(transactionOrgRoleViolation(Integer.valueOf(Constants.COMMITMENT))));
     }
-    
+
     @Test
     public void testInvalidOrgRole() {
         AmpActivity activity = new AmpActivity();
         activity.setOrgrole(ImmutableSet.of(newOrgRole(org1, implementingAgencyRole)));
-        
+
         AmpFunding funding = newFunding(org1, implementingAgencyRole);
         funding.setFundingDetails(ImmutableSet.of(newTransaction(Constants.DISBURSEMENT, org2, implementingAgencyRole)));
-        
+
         activity.setFunding(ImmutableSet.of(funding));
-        
+
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
-        
-        assertThat(violations, contains(transactionOrgRoleViolation(Integer.valueOf(Constants.DISBURSEMENT))));
+
+        MatcherAssert.assertThat(violations, contains(transactionOrgRoleViolation(Integer.valueOf(Constants.DISBURSEMENT))));
     }
-    
+
     @Test
     public void testValidOrgRole() {
         AmpActivity activity = new AmpActivity();
         activity.setOrgrole(ImmutableSet.of(newOrgRole(org1, donorRole)));
-        
+
         AmpFunding funding = newFunding(org1, implementingAgencyRole);
         funding.setFundingDetails(ImmutableSet.of(newTransaction(Constants.DISBURSEMENT, org1, donorRole)));
-        
+
         activity.setFunding(ImmutableSet.of(funding));
-        
+
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
-        
-        assertThat(violations, emptyIterable());
+
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
-    
+
     @Test
     public void testInvalidMultipleTransactions() {
         AmpActivity activity = new AmpActivity();
         activity.setOrgrole(ImmutableSet.of(
                 newOrgRole(org1, implementingAgencyRole),
                 newOrgRole(org2, executingAgencyRole)));
-        
+
         AmpFunding funding1 = newFunding(org1, implementingAgencyRole);
         funding1.setFundingDetails(ImmutableSet.of(newTransaction(Constants.COMMITMENT, org1, donorRole)));
-    
+
         AmpFunding funding2 = newFunding(org2, executingAgencyRole);
         funding2.setFundingDetails(ImmutableSet.of(newTransaction(Constants.DISBURSEMENT, org2, implementingAgencyRole)));
-        
+
         activity.setFunding(ImmutableSet.of(funding1, funding2));
-        
+
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
-        
-        assertThat(violations, containsInAnyOrder(transactionOrgRoleViolation(Integer.valueOf(Constants.COMMITMENT)),
+
+        MatcherAssert.assertThat(violations, containsInAnyOrder(transactionOrgRoleViolation(Integer.valueOf(Constants.COMMITMENT)),
                 transactionOrgRoleViolation(Integer.valueOf(Constants.DISBURSEMENT))));
     }
-    
+
     @Test
     public void testValidMultipleOrgRole() {
         AmpActivity activity = new AmpActivity();
         activity.setOrgrole(ImmutableSet.of(
                 newOrgRole(org1, donorRole),
                 newOrgRole(org2, executingAgencyRole)));
-        
+
         AmpFunding funding1 = newFunding(org1, implementingAgencyRole);
         funding1.setFundingDetails(ImmutableSet.of(newTransaction(Constants.DISBURSEMENT, org1, donorRole)));
-        
+
         AmpFunding funding2 = newFunding(org2, executingAgencyRole);
         funding2.setFundingDetails(ImmutableSet.of(newTransaction(Constants.DISBURSEMENT, org2, executingAgencyRole)));
-        
+
         activity.setFunding(ImmutableSet.of(funding1, funding2));
-        
+
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
-        
-        assertThat(violations, emptyIterable());
+
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
-    
+
     @Test
     public void testValidMultipleOrgRoleNull() {
         AmpActivity activity = new AmpActivity();
         activity.setOrgrole(ImmutableSet.of(
                 newOrgRole(org1, donorRole),
                 newOrgRole(org3, executingAgencyRole)));
-        
+
         AmpFunding funding1 = newFunding(org1, implementingAgencyRole);
         funding1.setFundingDetails(ImmutableSet.of(newTransaction(Constants.DISBURSEMENT, org1, donorRole)));
-        
+
         AmpFunding funding2 = newFunding(org2, executingAgencyRole);
         funding2.setFundingDetails(ImmutableSet.of(newTransaction(Constants.DISBURSEMENT, null, null)));
-        
+
         activity.setFunding(ImmutableSet.of(funding1, funding2));
-        
+
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
-        
-        assertThat(violations, emptyIterable());
+
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
-    
+
     /**
      * Matcher for an activity transaction recipient org role constraint violation.
      */
@@ -214,7 +215,7 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
                 ImmutableList.of(propertyNode("funding"), inIterableNode("fundingDetails"),
                         inIterableNodeAtKey("transaction", transactionType)));
     }
-    
+
     @Override
     public Set<ConstraintViolation<AmpActivity>> validateForAPI(AmpActivity activity) {
         setActivityInContext(activity);
@@ -226,15 +227,15 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
         role.setAmpRoleId(id);
         role.setRoleCode(code);
         role.setName(name);
-        
+
         return role;
     }
-    
+
     private AmpOrganisation newOrganisation(Long id, String name) {
         AmpOrganisation organisation = new AmpOrganisation();
         organisation.setAmpOrgId(id);
         organisation.setName(name);
-        
+
         return organisation;
     }
 
@@ -242,25 +243,25 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
         AmpOrgRole orgRole = new AmpOrgRole();
         orgRole.setOrganisation(org);
         orgRole.setRole(role);
-        
+
         return orgRole;
     }
-    
+
     private AmpFunding newFunding(AmpOrganisation org, AmpRole role) {
         AmpFunding funding = new AmpFunding();
         funding.setAmpDonorOrgId(org);
         funding.setSourceRole(role);
-        
+
         return funding;
     }
-    
+
     private AmpFundingDetail newTransaction(int transactionType, AmpOrganisation org, AmpRole role) {
         AmpFundingDetail transaction = new AmpFundingDetail();
         transaction.setTransactionType(transactionType);
         transaction.setRecipientOrg(org);
         transaction.setRecipientRole(role);
-        
+
         return transaction;
     }
-    
+
 }

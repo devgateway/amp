@@ -8,7 +8,8 @@ import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.hamcrest.Matcher;
-import org.junit.BeforeClass;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -20,12 +21,12 @@ import static org.junit.Assert.assertThat;
 /**
  * @author Octavian Ciubotaru
  */
-public class PrivateResourceValidatorTest {
+class PrivateResourceValidatorTest {
 
     private static APIField docField;
     private static PrivateResourceValidator.InMemoryResourceDAO dao;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         docField = ValidatorUtil.getMetaData(AmpActivityDocument.class);
@@ -39,7 +40,7 @@ public class PrivateResourceValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(doc);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -49,7 +50,7 @@ public class PrivateResourceValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(doc);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -59,7 +60,7 @@ public class PrivateResourceValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(doc);
 
-        assertThat(violations, contains(violation()));
+        MatcherAssert.assertThat(violations, contains(violation()));
     }
 
     @Test
@@ -69,7 +70,7 @@ public class PrivateResourceValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(doc);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     private Matcher<ConstraintViolation> violation() {

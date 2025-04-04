@@ -10,7 +10,8 @@ import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.kernel.validators.activity.ValidatorMatchers;
 import org.hamcrest.Matcher;
-import org.junit.BeforeClass;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -27,7 +28,7 @@ public class ResourceRequiredValidatorTest {
 
     private static APIField resourceField;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         resourceField = ValidatorUtil.getMetaData(AmpResource.class);
@@ -39,7 +40,7 @@ public class ResourceRequiredValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(resource);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -49,7 +50,7 @@ public class ResourceRequiredValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(resource);
 
-        assertThat(violations, contains(constraint("web_link")));
+        MatcherAssert.assertThat(violations, contains(constraint("web_link")));
     }
 
     @Test
@@ -60,7 +61,7 @@ public class ResourceRequiredValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(resource);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -70,7 +71,7 @@ public class ResourceRequiredValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(resource);
 
-        assertThat(violations, contains(constraint("file_name")));
+        MatcherAssert.assertThat(violations, contains(constraint("file_name")));
     }
 
     @Test
@@ -81,7 +82,7 @@ public class ResourceRequiredValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(resource);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     private Matcher<ConstraintViolation> constraint(String path) {

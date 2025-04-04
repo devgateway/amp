@@ -9,7 +9,8 @@ import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.kernel.validators.activity.ValidatorMatchers;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
-import org.junit.BeforeClass;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -21,7 +22,7 @@ import static org.junit.Assert.assertThat;
 /**
  * @author Octavian Ciubotaru
  */
-public class RegexValidatorTest {
+class RegexValidatorTest {
 
     private static APIField objField;
 
@@ -33,7 +34,7 @@ public class RegexValidatorTest {
         private String field;
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         objField = ValidatorUtil.getMetaData(Obj.class);
@@ -45,7 +46,7 @@ public class RegexValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(obj);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -55,7 +56,7 @@ public class RegexValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(obj);
 
-        assertThat(violations, contains(ValidatorMatchers.violationFor(
+        MatcherAssert.assertThat(violations, contains(ValidatorMatchers.violationFor(
                 RegexValidator.class, "field", anything(), ValidationErrors.FIELD_INVALID_VALUE)));
     }
 
@@ -66,7 +67,7 @@ public class RegexValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(obj);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     private Set<ConstraintViolation> getConstraintViolations(Object object) {

@@ -17,7 +17,6 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
-import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;

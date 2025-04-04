@@ -11,7 +11,7 @@ import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.hibernate.jdbc.Work;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
@@ -147,7 +147,7 @@ public class MiscTests28 extends ReportsTestCase {
         });
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
     }

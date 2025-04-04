@@ -18,7 +18,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.hamcrest.Matcher;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
@@ -45,7 +45,7 @@ public class PledgeOrgValidatorTest {
     private static InMemoryOrganisationManager organisationManager;
     private static InMemoryCategoryValuesManager categoryValues;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         PowerMockito.mockStatic(FeaturesUtil.class);

@@ -6,7 +6,7 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.joda.time.DateTime;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -39,7 +39,7 @@ public class InterchangeUtilsTest {
 
     @Mock private TranslatorService translatorService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         when(translatorService.loadFieldTranslations(any(), any(), any())).then(invocation -> Arrays.asList(
                 acm("en", "ct+en+" + invocation.getArguments()[1] + invocation.getArguments()[2]),

@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeAll;
 
 /**
  * @author Octavian Ciubotaru
@@ -24,7 +25,7 @@ public class SimpleFieldAccessorTest {
         private Set<Long> set;
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() throws Exception {
         set = TestObject.class.getDeclaredField("set");
     }

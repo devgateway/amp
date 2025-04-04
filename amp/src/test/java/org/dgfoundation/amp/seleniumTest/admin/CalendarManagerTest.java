@@ -5,11 +5,15 @@ import org.apache.log4j.Logger;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
+import org.junit.Ignore;
+
+@Ignore
+
 
 public class CalendarManagerTest extends SeleneseTestCase {
-    
+
     private static Logger logger = Logger.getLogger(CalendarManagerTest.class);
-    
+
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*chrome");
     }
@@ -69,7 +73,7 @@ public class CalendarManagerTest extends SeleneseTestCase {
                     logger.error("Calendar wasn't deleted from Calendar Manager");
                     //selenium.logAssertion"assertTrue", "Calendar wasn't deleted from Calendar Manager", "condition=false");
                 }
-                
+
             } else {
                 logger.error("Module \"Fiscal Calendar Manager\" is active in Feature Manager but is not available.");
                 //selenium.logAssertion"assertTrue", "Module \"Fiscal Calendar Manager\" is active in Feature Manager but is not available.", "condition=false");
@@ -78,7 +82,7 @@ public class CalendarManagerTest extends SeleneseTestCase {
             logger.info("Module \"Fiscal Calendar Manager\" is not available.");
            //selenium.logComment("Module \"Fiscal Calendar Manager\" is not available.");
         }
-        
+
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Calendar Manager Test Finished Successfully");

@@ -2,7 +2,7 @@ package org.digijava.kernel.ampregistry;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -52,7 +52,7 @@ public class AmpRegistryServiceTest {
     @Mock
     private AmpRegistryClient ampRegistryClient;
 
-    @Before
+    @BeforeEach
     public void setup() {
         ampRegistryService = new AmpRegistryService(() -> ampRegistryClient);
     }

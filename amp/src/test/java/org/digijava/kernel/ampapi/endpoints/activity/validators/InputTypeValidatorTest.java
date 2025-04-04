@@ -8,7 +8,8 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.util.SiteUtils;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
@@ -41,14 +42,14 @@ public class InputTypeValidatorTest {
             );
 
     private ActivityImporter importer;
-    private APIField translatableField;
+    private  APIField translatableField;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         PowerMockito.mockStatic(SiteUtils.class);
         when(SiteUtils.getUserLanguagesCodes(Matchers.any())).thenReturn(LOCALES);
-
         translatableField = new APIField();
+
         translatableField.setFieldName(TRANSLATABLE_FIELD);
         translatableField.setImportable(true);
         translatableField.setApiType(new APIType(String.class, FieldType.STRING));

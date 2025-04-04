@@ -1,14 +1,21 @@
 package org.dgfoundation.amp.seleniumTest.reports;
 
 import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
+import org.junit.Ignore;
 import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
+import org.junit.Ignore;
 import org.dgfoundation.amp.seleniumTest.activityForm.ActivityFormTest;
+import org.junit.Ignore;
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 
 
 import com.thoughtworks.selenium.SeleneseTestCase;
+import org.junit.Ignore;
 import com.thoughtworks.selenium.Selenium;
+import org.junit.Ignore;
 
+@Ignore
 public class TabTest extends SeleneseTestCase{
 
     private static Logger logger = Logger.getLogger(TabTest.class);

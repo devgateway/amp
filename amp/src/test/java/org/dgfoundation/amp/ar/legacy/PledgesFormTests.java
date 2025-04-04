@@ -10,7 +10,7 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.PledgeForm;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
@@ -165,7 +165,7 @@ public class PledgesFormTests extends ReportsTestCase {
 
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         StandaloneAMPInitializer.populateMockRequest();
 

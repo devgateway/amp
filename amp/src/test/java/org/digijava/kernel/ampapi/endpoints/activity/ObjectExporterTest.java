@@ -15,7 +15,7 @@ import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.hamcrest.Matcher;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.ConstraintViolationException;
@@ -36,7 +36,7 @@ public class ObjectExporterTest {
 
     private ObjectExporter<Dummy> exporter;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         TestTranslatorService translatorService = new TestTranslatorService();
 

@@ -10,7 +10,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
@@ -122,7 +122,7 @@ public class MultilingualTests28 extends ReportsTestCase {
         //MultilingualInputFieldValues.serialize(report, "name", null, mySession, request);
     }
     
-    @Before
+    @BeforeEach
     public void setUp() {
         locales = TranslatorUtil.getLanguages();
     }

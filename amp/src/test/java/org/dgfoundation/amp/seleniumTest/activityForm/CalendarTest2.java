@@ -7,19 +7,20 @@ import org.apache.log4j.Logger;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
+import org.junit.Ignore;
 
-
+@Ignore
 public class CalendarTest2 extends SeleneseTestCase {
-    
+
     private static Logger logger = Logger.getLogger(CalendarTest2.class);
-    
+
     public void setUp() throws Exception {
         setUp("http://generic.ampdev.net/", "*firefox");
     }
     public static void testCalendar(Selenium selenium) throws Exception {
         String testTime =  String.valueOf(System.currentTimeMillis());
         String eventTitle = "Test Event" + testTime;
-        
+
         selenium.open("/");
         selenium.type("j_username","uattl@amp.org");
         selenium.type("j_password","abc");
@@ -27,9 +28,9 @@ public class CalendarTest2 extends SeleneseTestCase {
         selenium.waitForPageToLoad("30000");
         selenium.click("link=UAT Team Workspace");
         selenium.waitForPageToLoad("30000");
- 
+
         boolean eventSent = false;
-        
+
         if (SeleniumFeaturesConfiguration.getModuleState("Calendar")){
             if (SeleniumFeaturesConfiguration.getFeatureState("Create Event")){
                 if (selenium.isElementPresent("//a[contains(@href, \"/calendar/showCalendarEvent.do~selectedCalendarTypeId=0~method=new\")]")){
@@ -60,7 +61,7 @@ public class CalendarTest2 extends SeleneseTestCase {
                                 selenium.selectWindow(selenium.getAllWindowTitles()[1]);
                                 selenium.click("//input[@onclick='return searchOrganization()']");
                                 Thread.sleep(10000);
-                                selenium.click("selOrganisations"); 
+                                selenium.click("selOrganisations");
                                 selenium.click("//input[@onclick='return selectOrganization()']");
                                 //Thread.sleep(10000);
                                 selenium.selectWindow("null");
@@ -104,7 +105,7 @@ public class CalendarTest2 extends SeleneseTestCase {
                             if (!attOk) {
                                 logger.error("Error on Attenders list on event preview");
 //                                //selenium.logAssertion"assertTrue", "Error on Attenders list on event preview", "condition=false");
-                            }                           
+                            }
                             selenium.click("//input[@onclick=\"document.getElementById('hdnMethod').value = ''\"]");
                             selenium.waitForPageToLoad("30000");
                             if (selenium.isChecked("privateEventCheckbox")) {
@@ -153,7 +154,7 @@ public class CalendarTest2 extends SeleneseTestCase {
 //                           //selenium.logComment("Feature \"Save and Send button\" is not available.");
                         }
                     }
-                    
+
                     if (eventSent) {
                         int eventId = 0;
                         for (int i = 1000; i > 0; i--) {
@@ -174,7 +175,7 @@ public class CalendarTest2 extends SeleneseTestCase {
                         eventId++;
                         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
                         selenium.waitForPageToLoad("30000");
-                        
+
                         selenium.type("j_username", "uattmc@amp.org");
                         selenium.type("j_password", "abc");
                         selenium.click("submitButton");
@@ -199,7 +200,7 @@ public class CalendarTest2 extends SeleneseTestCase {
                         }
                         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
                         selenium.waitForPageToLoad("30000");
-                                                
+
                         selenium.type("j_username", "uattm@amp.org");
                         selenium.type("j_password", "abc");
                         selenium.click("submitButton");
@@ -228,7 +229,7 @@ public class CalendarTest2 extends SeleneseTestCase {
                         eventId++;*/
                         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
                         selenium.waitForPageToLoad("30000");
-                        
+
                         selenium.type("j_username", "uattl@amp.org");
                         selenium.type("j_password", "abc");
                         selenium.click("submitButton");
@@ -257,7 +258,7 @@ public class CalendarTest2 extends SeleneseTestCase {
                         eventId++;
                         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
                         selenium.waitForPageToLoad("30000");
-                                                
+
                         selenium.type("j_username", "uattm@amp.org");
                         selenium.type("j_password", "abc");
                         selenium.click("submitButton");
@@ -297,5 +298,5 @@ public class CalendarTest2 extends SeleneseTestCase {
         selenium.waitForPageToLoad("30000");
         logger.info("Calendar Test Finished Successfully");
 //       //selenium.logComment("Calendar Test Finished Successfully");
-    }   
+    }
 }

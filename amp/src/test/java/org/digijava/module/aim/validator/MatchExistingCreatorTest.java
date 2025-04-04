@@ -6,7 +6,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.validator.user.MatchExistingCreator;
 import org.digijava.module.aim.validator.user.MatchExistingCreatorConstraint;
 import org.hamcrest.Matcher;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.ConstraintViolation;
@@ -30,7 +30,7 @@ public class MatchExistingCreatorTest extends AbstractActivityValidatorTest<Matc
     private AmpActivityVersion oldActivity;
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
 

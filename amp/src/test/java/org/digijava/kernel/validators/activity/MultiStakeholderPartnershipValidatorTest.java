@@ -12,7 +12,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.validator.groups.Submit;
 import org.hamcrest.Matcher;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
@@ -36,7 +36,7 @@ public class MultiStakeholderPartnershipValidatorTest {
 
     private static APIField activityField;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         PowerMockito.mockStatic(FeaturesUtil.class);

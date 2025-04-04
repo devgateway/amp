@@ -10,6 +10,7 @@ import org.junit.experimental.categories.Category;
 
 import java.util.LinkedHashMap;
 import java.util.Set;
+import org.junit.jupiter.api.BeforeAll;
 
 /**
  * ETL Testcases
@@ -19,7 +20,7 @@ import java.util.Set;
 @Category(DatabaseTests.class)
 public class SQLUtilsTests extends AmpTestCase {
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         StandaloneAMPInitializer.initialize();
     }
@@ -31,11 +32,11 @@ public class SQLUtilsTests extends AmpTestCase {
     public void testColumnTypeFetching() {
         LinkedHashMap<String, String> cols = SQLUtils.getTableColumnsWithTypes("dg_site_domain", true);
         assertEquals("{site_domain_id=bigint, site_domain=character varying, site_path=character varying, site_id=bigint, language_code=character varying, is_default=boolean, enable_security=boolean}", cols.toString());
-        
+
         cols = SQLUtils.getTableColumnsWithTypes("v_adm_level_2", true);
         assertEquals("{amp_activity_id=bigint, adm_level_2_name=character varying, adm_level_2_id=bigint, percentage=real, cnt_nulls=bigint}", cols.toString());
     }
-    
+
     /**
      * tests that SQLUtils fetches columns in correct order
      */

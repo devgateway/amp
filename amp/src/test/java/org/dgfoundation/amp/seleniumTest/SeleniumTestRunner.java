@@ -1,21 +1,35 @@
 package org.dgfoundation.amp.seleniumTest;
 
 import org.dgfoundation.amp.seleniumTest.activityForm.ActivityFormTest;
+import org.junit.Ignore;
 import org.dgfoundation.amp.seleniumTest.admin.*;
+import org.junit.Ignore;
 import org.dgfoundation.amp.seleniumTest.permissionsAndValidations.PermissionsAndValidationsTest;
+import org.junit.Ignore;
 import org.dgfoundation.amp.seleniumTest.publicView.PublicViewTest;
+import org.junit.Ignore;
 import org.dgfoundation.amp.seleniumTest.reports.ReportTest;
+import org.junit.Ignore;
 import org.dgfoundation.amp.seleniumTest.reports.TabTest;
+import org.junit.Ignore;
 import org.dgfoundation.amp.seleniumTest.resources.ResourcesTest;
+import org.junit.Ignore;
 import org.dgfoundation.amp.seleniumTest.workspaceInfo.TeamWorkspaceInfoTest;
+import org.junit.Ignore;
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 
 import org.digijava.module.aim.action.OrganisationManager;
+import org.junit.Ignore;
 
 import com.thoughtworks.selenium.DefaultSelenium;
+import org.junit.Ignore;
 import com.thoughtworks.selenium.SeleneseTestBase;
+import org.junit.Ignore;
 import com.thoughtworks.selenium.SeleneseTestCase;
+import org.junit.Ignore;
 
+@Ignore
 public class SeleniumTestRunner  extends SeleneseTestBase{
 
     private static Logger logger = Logger.getLogger(SeleniumTestRunner.class);

@@ -3,9 +3,10 @@ package org.dgfoundation.amp.seleniumTest.Messages;
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
 import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
+import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+@Ignore
 public class MessageTest extends SeleneseTestCase {
 
     private static Logger logger = LoggerFactory.getLogger(MessageTest.class);

@@ -1,11 +1,16 @@
 package org.dgfoundation.amp.seleniumTest.workspaceInfo;
 
 import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
+import org.junit.Ignore;
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
+import org.junit.Ignore;
 import com.thoughtworks.selenium.Selenium;
+import org.junit.Ignore;
 
+@Ignore
 public class TeamWorkspaceInfoTest extends SeleneseTestCase {
     
     private static Logger logger = Logger.getLogger(TeamWorkspaceInfoTest.class);

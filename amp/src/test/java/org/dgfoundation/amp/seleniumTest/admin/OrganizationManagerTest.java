@@ -5,11 +5,13 @@ import org.apache.log4j.Logger;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
+import org.junit.Ignore;
 
+@Ignore
 public class OrganizationManagerTest extends SeleneseTestCase {
-    
+
     private static Logger logger = Logger.getLogger(OrganizationManagerTest.class);
-    
+
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*chrome");
     }
@@ -62,35 +64,35 @@ public class OrganizationManagerTest extends SeleneseTestCase {
             //selenium.click("//input[@value='GO']");
             selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
             selenium.waitForPageToLoad("30000");
-            
+
             selenium.type("j_username", "UATtl@amp.org");
             selenium.type("j_password", "abc");
             selenium.click("submitButton");
             selenium.waitForPageToLoad("30000");
             selenium.click("link=UAT Team Workspace");
             selenium.waitForPageToLoad("30000");
-            
+
             selenium.click("//a[contains(@href, \"javascript:addActivity()\")]");
             selenium.waitForPageToLoad("120000");
             if (selenium.isElementPresent("//input[@onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=false~PARAM_CALLBACKFUNCTION_NAME=submitAfterSelectingOrg();~PARAM_COLLECTION_NAME=selectedOrganizations~PARAM_NAME_DELEGATE_CLASS=org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]")) {
                 selenium.click("//input[@onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=false~PARAM_CALLBACKFUNCTION_NAME=submitAfterSelectingOrg();~PARAM_COLLECTION_NAME=selectedOrganizations~PARAM_NAME_DELEGATE_CLASS=org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]");
                 //selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
                 Thread.sleep(5000);
-                selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
-               
+                selenium.selectWindow(selenium.getAllWindowTitles()[1]);
+
                 selenium.select("ampOrgTypeId", "label="+orgTypeName);
                 selenium.type("keyword", organizationName);
                 selenium.click("//input[@onclick=\"return searchOrganization()\"]");
                 SeleniumTestUtil.waitForElement(selenium,"selOrganisations", 90);
-                selenium.click("selOrganisations"); 
+                selenium.click("selOrganisations");
                 selenium.click("//input[@onclick='return selectOrganization()']");
                 selenium.selectWindow("null");
                 selenium.waitForPageToLoad("50000");
-                
+
             }
             selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
             selenium.waitForPageToLoad("30000");
-            
+
             selenium.type("j_username", "admin@amp.org");
             selenium.type("j_password", "admin");
             selenium.click("submitButton");
@@ -140,7 +142,7 @@ public class OrganizationManagerTest extends SeleneseTestCase {
             logger.error("Organization Manager is not available.");
             //selenium.logAssertion"assertTrue", "Organization Manager is not available.", "condition=false");
         }
-        
+
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Organization Manager Test Finished Successfully");

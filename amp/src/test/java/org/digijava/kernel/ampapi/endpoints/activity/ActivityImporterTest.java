@@ -27,7 +27,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -117,7 +117,7 @@ public class ActivityImporterTest {
     
     TranslationSettings trnSettings;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX, "");

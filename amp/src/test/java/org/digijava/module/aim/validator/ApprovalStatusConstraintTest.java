@@ -7,7 +7,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
 import org.digijava.module.aim.validator.approval.ApprovalStatusConstraint;
 import org.hamcrest.Matcher;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<ApprovalStatusConstraint> {
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
         PowerMockito.mockStatic(FeaturesUtil.class);

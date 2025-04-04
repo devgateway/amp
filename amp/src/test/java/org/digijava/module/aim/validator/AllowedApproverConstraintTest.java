@@ -7,7 +7,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.validator.approval.AllowedApprover;
 import org.digijava.module.aim.validator.approval.AllowedApproverConstraint;
 import org.hamcrest.Matcher;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
@@ -43,7 +43,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
 
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
         PowerMockito.mockStatic(FeaturesUtil.class);

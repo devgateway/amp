@@ -16,7 +16,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -54,7 +54,7 @@ public class PossibleValuesEnumeratorTest {
     @Mock private FieldInfoProvider provider;
     @Mock private FeatureManagerService fmService;
 
-    @Before
+    @BeforeEach
     public void setup() throws WorkerException {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
 

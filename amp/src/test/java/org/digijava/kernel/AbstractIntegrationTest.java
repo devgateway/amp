@@ -10,6 +10,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.junit.jupiter.api.BeforeAll;
 
 /**
  * Abstract class for tests that require standalone AMP with spring application context.
@@ -24,7 +25,7 @@ public abstract class AbstractIntegrationTest {
     @Rule
     public InTransactionRule inTransactionRule = new InTransactionRule();
 
-    @BeforeClass
+    @BeforeAll
     public static void staticSetUp() {
         StandaloneAMPInitializer.initialize();
     }

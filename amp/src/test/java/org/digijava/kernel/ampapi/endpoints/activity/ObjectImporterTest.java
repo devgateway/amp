@@ -14,7 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.persistence.InMemoryValueConverter;
 import org.digijava.module.aim.annotations.interchange.*;
 import org.hamcrest.Matcher;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -684,7 +684,7 @@ public class ObjectImporterTest {
      */
     private Map examples;
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
 

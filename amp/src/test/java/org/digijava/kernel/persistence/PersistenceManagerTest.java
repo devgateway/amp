@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeAll;
 
 /**
  * @author Octavian Ciubotaru
@@ -25,7 +26,7 @@ public class PersistenceManagerTest {
 
     private static final String TEST_REPORT_NAME = "test report name 1234567890";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         StandaloneAMPInitializer.initialize();
 

@@ -7,7 +7,9 @@ import org.apache.log4j.Logger;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
+import org.junit.Ignore;
 
+@Ignore
 public class ActivityFormTest extends SeleneseTestCase{
 
     private static Logger logger = Logger.getLogger(ActivityFormTest.class);

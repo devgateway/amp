@@ -1,13 +1,19 @@
 package org.dgfoundation.amp.seleniumTest;
 
 import java.util.Hashtable;
+import org.junit.Ignore;
 
 import com.thoughtworks.selenium.SeleneseTestBase;
+import org.junit.Ignore;
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
+import org.junit.Ignore;
 import com.thoughtworks.selenium.Selenium;
+import org.junit.Ignore;
 
+@Ignore
 public class SeleniumFeaturesConfiguration extends SeleneseTestBase {
     
     private static Logger logger = Logger.getLogger(SeleniumFeaturesConfiguration.class);

@@ -14,7 +14,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.*;
@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
  */
 public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRuleMatcherTests {
 
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
         definition = new NoDisbursementsAfterFundingDateMatcherDefinition();

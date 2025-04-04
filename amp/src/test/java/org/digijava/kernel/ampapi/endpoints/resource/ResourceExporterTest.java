@@ -12,7 +12,7 @@ import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
 import org.digijava.kernel.request.TLSUtils;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +37,7 @@ public class ResourceExporterTest {
     private TranslationSettings nonMultilingualTranslationSettings;
     private APIField root;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         Set<String> trnCodes = ImmutableSet.of("en", "fr");
         multilingualTranslationSettings = new TranslationSettings("en", trnCodes, true);

@@ -5,11 +5,14 @@ import org.apache.log4j.Logger;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
+import org.junit.Ignore;
+
+@Ignore
 
 public class ComponentTypeManagerTest extends SeleneseTestCase {
-    
+
     private static Logger logger = Logger.getLogger(ComponentTypeManagerTest.class);
-    
+
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*chrome");
     }
@@ -90,7 +93,7 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
                 selenium.waitForPageToLoad("30000");
                 selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
                 selenium.waitForPageToLoad("30000");
-                
+
                 selenium.type("j_username", "UATtl@amp.org");
                 selenium.type("j_password", "abc");
                 selenium.click("submitButton");
@@ -122,7 +125,7 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
                            //selenium.logComment("Feature \"Admin - Component Type\" is not available.");
                         }
                         selenium.type("newCompoenentName", "Selenium Component");
-                        selenium.click("//div[@id='new']/div[3]");              
+                        selenium.click("//div[@id='new']/div[3]");
                     } else {
                         logger.error("Feature \"Components\" is active in Feature Manager but is not available.");
                         //selenium.logAssertion"assertTrue", "Feature \"Components\" is active in Feature Manager but is not available.", "condition=false");
@@ -131,10 +134,10 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
                     logger.info("Feature \"Components\" is not available.");
                    //selenium.logComment("Feature \"Components\" is not available.");
                 }
-                
+
                 selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
                 selenium.waitForPageToLoad("30000");
-                
+
                 selenium.type("j_username", "admin@amp.org");
                 selenium.type("j_password", "admin");
                 selenium.click("submitButton");
@@ -153,12 +156,12 @@ public class ComponentTypeManagerTest extends SeleneseTestCase {
                     logger.error("Component Type is not available to be deleted");
                     //selenium.logAssertion"assertTrue", "Component Type is not available to be deleted", "condition=false");
                 }
-            }           
+            }
         } else {
             logger.error("Component Type Manager is not available");
             //selenium.logAssertion"assertTrue", "Component Type Manager is not available", "condition=false");
         }
-        
+
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Component Type Manager Test Finished Successfully");

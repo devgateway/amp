@@ -21,11 +21,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.junit.jupiter.api.BeforeAll;
 
 /**
- * 
+ *
  * testcases for the fetching states of AMP + the AMP schema
- * 
+ *
  * @author Constantin Dolghier
  *
  */
@@ -42,7 +43,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
         "Test MTEF directed",
         "activity with pipeline MTEFs and act. disb"
     );
-    
+
     final List<String> ppcActs = Arrays.asList(
             "Proposed Project Cost 1 - USD",
             "Proposed Project Cost 2 - EUR",
@@ -53,16 +54,16 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
             "activity 1 with agreement",
             "activity with directed MTEFs"
         );
-    
+
     final List<String> humanitarianAidActs = Arrays.asList(
-            "TAC_activity_1", 
-            "crazy funding 1", 
-            "date-filters-activity", 
-            "Activity with planned disbursements", 
-            "TAC_activity_2", 
+            "TAC_activity_1",
+            "crazy funding 1",
+            "date-filters-activity",
+            "Activity with planned disbursements",
+            "TAC_activity_2",
             "pledged 2"
         );
-    
+
     final List<String> sscActs = Arrays.asList(
         "Real SSC Activity 1",
         "Real SSC Activity 2"
@@ -70,38 +71,38 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
     final static GrandTotalsDigest proposedProjectCostDigester = new GrandTotalsDigest(z -> z.equals("RAW / Proposed Project Amount") || z.startsWith("RAW / Revised Project Amount"));
     final static String correctTotalsPPC = "{RAW / Proposed Project Amount=5096901.715878, RAW / Revised Project Amount=4412539.842263}";
-    
+
     @Override
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
         return getDbExecutor(activityNames);
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         StandaloneAMPInitializer.initialize();
     }
 
     @Test
-    public void testHierarchiesWithEverything() {       
-        List<String> columns = Arrays.asList(ColumnConstants.AC_CHAPTER, ColumnConstants.IMPLEMENTATION_LEVEL, ColumnConstants.IMPLEMENTATION_LOCATION, 
-                ColumnConstants.ACCESSION_INSTRUMENT, ColumnConstants.STATUS, ColumnConstants.TYPE_OF_ASSISTANCE, 
-                ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.DONOR_TYPE, ColumnConstants.CREDIT_DONATION, 
-                ColumnConstants.INSTITUTIONS, ColumnConstants.COMPONENT_TYPE, ColumnConstants.ACTIVITY_CREATED_BY, 
+    public void testHierarchiesWithEverything() {
+        List<String> columns = Arrays.asList(ColumnConstants.AC_CHAPTER, ColumnConstants.IMPLEMENTATION_LEVEL, ColumnConstants.IMPLEMENTATION_LOCATION,
+                ColumnConstants.ACCESSION_INSTRUMENT, ColumnConstants.STATUS, ColumnConstants.TYPE_OF_ASSISTANCE,
+                ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.DONOR_TYPE, ColumnConstants.CREDIT_DONATION,
+                ColumnConstants.INSTITUTIONS, ColumnConstants.COMPONENT_TYPE, ColumnConstants.ACTIVITY_CREATED_BY,
                 ColumnConstants.PROJECT_CATEGORY, ColumnConstants.FUNDING_STATUS, ColumnConstants.MODE_OF_PAYMENT,
                 ColumnConstants.PAYMENT_CAPITAL___RECURRENT, ColumnConstants.BUDGET_DEPARTMENT, ColumnConstants.BUDGET_ORGANIZATION,
-                ColumnConstants.BUDGET_SECTOR, ColumnConstants.BUDGET_PROGRAM, ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, 
+                ColumnConstants.BUDGET_SECTOR, ColumnConstants.BUDGET_PROGRAM, ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES,
                 ColumnConstants.JOINT_CRITERIA, ColumnConstants.ACTIVITY_BUDGET, ColumnConstants.MULTI_DONOR,
                 ColumnConstants.AGREEMENT_TITLE_CODE, ColumnConstants.AGREEMENT_CODE, ColumnConstants.PROJECT_IMPLEMENTING_UNIT,
-                ColumnConstants.TYPE_OF_COOPERATION, ColumnConstants.TYPE_OF_IMPLEMENTATION, ColumnConstants.MODALITIES, 
+                ColumnConstants.TYPE_OF_COOPERATION, ColumnConstants.TYPE_OF_IMPLEMENTATION, ColumnConstants.MODALITIES,
                 ColumnConstants.BUDGET_STRUCTURE, ColumnConstants.INDIRECT_ON_BUDGET, ColumnConstants.HUMANITARIAN_AID,
                 ColumnConstants.DISASTER_RESPONSE_MARKER);
-        
+
         buildDigest(
-            buildSpecification("testcase with all unusual hierarchies", 
-                columns, 
-                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-                columns, 
-                GroupingCriteria.GROUPING_TOTALS_ONLY), 
+            buildSpecification("testcase with all unusual hierarchies",
+                columns,
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+                columns,
+                GroupingCriteria.GROUPING_TOTALS_ONLY),
             new HardcodedActivities().getActNamesList(),
             new ReportModelGenerator());
     }
@@ -144,7 +145,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                 new HardcodedActivities().getActNamesList(),
                 new ReportModelGenerator());
     }
-    
+
     @Test
     public void testActivityIds() {
         NiReportModel cor = new NiReportModel("testcase amp activity ids")
@@ -160,11 +161,11 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                         new ReportAreaForTests(new AreaOwner(70), "Activity Id", "70", "Project Title", "Activity with both MTEFs and Act.Comms", "Totals-Actual Commitments", "888,000"),
                         new ReportAreaForTests(new AreaOwner(73), "Activity Id", "73", "Project Title", "activity with directed MTEFs", "Totals-Actual Commitments", "123,456")      ));
         runNiTestCase(
-                buildSpecification("testcase amp activity ids", 
-                        Arrays.asList(ColumnConstants.ACTIVITY_ID, ColumnConstants.PROJECT_TITLE), 
-                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                buildSpecification("testcase amp activity ids",
+                        Arrays.asList(ColumnConstants.ACTIVITY_ID, ColumnConstants.PROJECT_TITLE),
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
                         null, GroupingCriteria.GROUPING_TOTALS_ONLY),
-                "en", 
+                "en",
                 Arrays.asList("Pure MTEF Project", "activity with directed MTEFs", "Activity with both MTEFs and Act.Comms"),
                 cor);
     }
@@ -175,33 +176,33 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
      */
     @Test
     public void testProposedProjectCostDoesNotChangeTotals() throws Exception {
-        
+
         List<String> allActs = new ArrayList<>();
         allActs.addAll(acts);
         allActs.addAll(sscActs);
 
         ReportSpecificationImpl initSpec = buildSpecification("initSpec",
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.REVISED_PROJECT_AMOUNT), 
-                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
-                null, 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.REVISED_PROJECT_AMOUNT),
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+                null,
                 GroupingCriteria.GROUPING_YEARLY);
-                
+
         assertEquals(correctTotalsPPC, buildDigest(initSpec, allActs, proposedProjectCostDigester).toString());
 
         // single-hierarchy reports
         for(boolean isSummary:Arrays.asList(true, false)) {
             for (String hierName : DONOR_HIERARCHIES_TO_TRY) {
-                ReportSpecificationImpl spec = buildSpecification(String.format("%s summary: %b", hierName, isSummary), 
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.REVISED_PROJECT_AMOUNT, hierName), 
-                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
-                        Arrays.asList(hierName), 
+                ReportSpecificationImpl spec = buildSpecification(String.format("%s summary: %b", hierName, isSummary),
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.REVISED_PROJECT_AMOUNT, hierName),
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+                        Arrays.asList(hierName),
                         GroupingCriteria.GROUPING_YEARLY);
                 spec.setSummaryReport(isSummary);
                 assertEquals(spec.getReportName(), correctTotalsPPC, buildDigest(spec, allActs, proposedProjectCostDigester).toString());
             }
         }
     }
-    
+
     @Test
     public void testRawLocations() {
         NiReportModel cor = new NiReportModel("testcase raw locations (for pp), hier")
@@ -229,12 +230,12 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                         .withChildren(
                           new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Totals-Actual Commitments", "43,578,26")        )      ));
         runNiTestCase(
-                buildSpecification("testcase raw locations (for pp), hier", 
-                        Arrays.asList(ColumnConstants.LOCATION, ColumnConstants.PROJECT_TITLE), 
-                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
-                        Arrays.asList(ColumnConstants.LOCATION), 
+                buildSpecification("testcase raw locations (for pp), hier",
+                        Arrays.asList(ColumnConstants.LOCATION, ColumnConstants.PROJECT_TITLE),
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+                        Arrays.asList(ColumnConstants.LOCATION),
                         GroupingCriteria.GROUPING_TOTALS_ONLY),
-                "en", 
+                "en",
                 Arrays.asList("SSC Project 1", "activity with contracting agency", "Activity With Zones and Percentages"),
                 cor);
         cor = new NiReportModel("testcase raw locations (for pp), flat")
@@ -250,16 +251,16 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                         new ReportAreaForTests(new AreaOwner(36), "Location", "Dolboaca, Glodeni", "Project Title", "Activity With Zones and Percentages", "Totals-Actual Commitments", "890,000"),
                         new ReportAreaForTests(new AreaOwner(52), "Location", "Apareni, Slobozia", "Project Title", "activity with contracting agency", "Totals-Actual Commitments", "96,840,58") ));
         runNiTestCase(
-                buildSpecification("testcase raw locations (for pp), flat", 
-                        Arrays.asList(ColumnConstants.LOCATION, ColumnConstants.PROJECT_TITLE), 
-                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
-                        null, 
+                buildSpecification("testcase raw locations (for pp), flat",
+                        Arrays.asList(ColumnConstants.LOCATION, ColumnConstants.PROJECT_TITLE),
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+                        null,
                         GroupingCriteria.GROUPING_TOTALS_ONLY),
-                "en", 
+                "en",
                 Arrays.asList("SSC Project 1", "activity with contracting agency", "Activity With Zones and Percentages"),
                 cor);
     }
-    
+
     @Test
     public void testProjectImplementationDelay() {
         NiReportModel cor = new NiReportModel("testcase for Project Implementation Delay")
@@ -280,11 +281,11 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
         AmpReportsScratchpad.forcedNowDate = LocalDate.of(2016, 5, 3);
 
         runNiTestCase(
-                buildSpecification("testcase for Project Implementation Delay", 
-                        Arrays.asList(ColumnConstants.PROJECT_IMPLEMENTATION_DELAY, ColumnConstants.PROJECT_TITLE), 
-                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+                buildSpecification("testcase for Project Implementation Delay",
+                        Arrays.asList(ColumnConstants.PROJECT_IMPLEMENTATION_DELAY, ColumnConstants.PROJECT_TITLE),
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
                         null, GroupingCriteria.GROUPING_YEARLY),
-                "en", 
+                "en",
                 Arrays.asList("PID: original, proposed, actual", "PID: original, actual", "PID: original > actual", /*"PID: original", */"PID: original, proposed"),
                 cor);
         AmpReportsScratchpad.forcedNowDate = null;
@@ -304,18 +305,18 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                         new ReportAreaForTests(new AreaOwner("Beneficiary Agency", "Norway", 21694)).withContents("Project Title", "", "Beneficiary Agency  Department/Division", "", "Implementing Agency Department/Division", "", "Funding-2016-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333", "Beneficiary Agency", "Norway")
                         .withChildren(
                           new ReportAreaForTests(new AreaOwner(90), "Project Title", "department/division", "Beneficiary Agency  Department/Division", "norway benef dep", "Implementing Agency Department/Division", "minfin impl ag dep", "Funding-2016-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")        )      ));
-        
+
         runNiTestCase(
-                buildSpecification("testcase for Department Division", 
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.BENEFICIARY_AGENCY__DEPARTMENT_DIVISION, ColumnConstants.IMPLEMENTING_AGENCY_DEPARTMENT_DIVISION, ColumnConstants.BENEFICIARY_AGENCY), 
-                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
-                        Arrays.asList(ColumnConstants.BENEFICIARY_AGENCY), 
+                buildSpecification("testcase for Department Division",
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.BENEFICIARY_AGENCY__DEPARTMENT_DIVISION, ColumnConstants.IMPLEMENTING_AGENCY_DEPARTMENT_DIVISION, ColumnConstants.BENEFICIARY_AGENCY),
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+                        Arrays.asList(ColumnConstants.BENEFICIARY_AGENCY),
                         GroupingCriteria.GROUPING_YEARLY),
-                "en", 
+                "en",
                 Arrays.asList("department/division", "Test MTEF directed"),
                 cor);
     }
-    
+
     @Test
     public void testPlannedActualArrears() {
         NiReportModel cor = new NiReportModel("Testcase for Actual and Planned Arrears")
@@ -331,33 +332,33 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                     new ReportAreaForTests(new AreaOwner(80), "Project Title", "arrears test", "Totals-Actual Arrears", "132,000", "Totals-Planned Arrears", "72,000")      ));
 
         runNiTestCase(
-                buildSpecification("Testcase for Actual and Planned Arrears", 
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE), 
-                        Arrays.asList(MeasureConstants.ACTUAL_ARREARS, MeasureConstants.PLANNED_ARREARS), 
+                buildSpecification("Testcase for Actual and Planned Arrears",
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE),
+                        Arrays.asList(MeasureConstants.ACTUAL_ARREARS, MeasureConstants.PLANNED_ARREARS),
                         null, GroupingCriteria.GROUPING_TOTALS_ONLY),
-                "en", 
+                "en",
                 Arrays.asList("activity with many MTEFs", "arrears test"),
                 cor);
     }
-    
+
     @Test
     public void testMtefColumnsPlain() {
-        assertEquals("{RAW / Project Title=, RAW / MTEF 2011=1283182.4159, RAW / MTEF 2012=202437, RAW / MTEF 2013=120180.405, RAW / Funding / 2006 / Actual Commitments=80000, RAW / Funding / 2006 / Actual Disbursements=0, RAW / Funding / 2009 / Actual Commitments=78470, RAW / Funding / 2009 / Actual Disbursements=0, RAW / Funding / 2010 / Actual Commitments=0, RAW / Funding / 2010 / Actual Disbursements=613561.3161, RAW / Funding / 2011 / Actual Commitments=896327.2977, RAW / Funding / 2011 / Actual Disbursements=0, RAW / Funding / 2012 / Actual Commitments=19577.5, RAW / Funding / 2012 / Actual Disbursements=9162, RAW / Funding / 2013 / Actual Commitments=5905874.9666, RAW / Funding / 2013 / Actual Disbursements=954144.5636, RAW / Funding / 2014 / Actual Commitments=7409649.482335, RAW / Funding / 2014 / Actual Disbursements=576269.62, RAW / Funding / 2015 / Actual Commitments=1803396.8724, RAW / Funding / 2015 / Actual Disbursements=399024.454, RAW / Totals / Actual Commitments=16193296.119035, RAW / Totals / Actual Disbursements=2552161.9537, RAW / Totals / MTEF=1605799.8209}", 
+        assertEquals("{RAW / Project Title=, RAW / MTEF 2011=1283182.4159, RAW / MTEF 2012=202437, RAW / MTEF 2013=120180.405, RAW / Funding / 2006 / Actual Commitments=80000, RAW / Funding / 2006 / Actual Disbursements=0, RAW / Funding / 2009 / Actual Commitments=78470, RAW / Funding / 2009 / Actual Disbursements=0, RAW / Funding / 2010 / Actual Commitments=0, RAW / Funding / 2010 / Actual Disbursements=613561.3161, RAW / Funding / 2011 / Actual Commitments=896327.2977, RAW / Funding / 2011 / Actual Disbursements=0, RAW / Funding / 2012 / Actual Commitments=19577.5, RAW / Funding / 2012 / Actual Disbursements=9162, RAW / Funding / 2013 / Actual Commitments=5905874.9666, RAW / Funding / 2013 / Actual Disbursements=954144.5636, RAW / Funding / 2014 / Actual Commitments=7409649.482335, RAW / Funding / 2014 / Actual Disbursements=576269.62, RAW / Funding / 2015 / Actual Commitments=1803396.8724, RAW / Funding / 2015 / Actual Disbursements=399024.454, RAW / Totals / Actual Commitments=16193296.119035, RAW / Totals / Actual Disbursements=2552161.9537, RAW / Totals / MTEF=1605799.8209}",
             buildDigest(spec("AMP-16100-flat-mtefs-eur"), acts, new GrandTotalsDigest(z -> true)).toString());
     }
-    
+
     @Test
     public void testMtefColumnsMixedPlain() {
-        assertEquals("{RAW / Project Title=, RAW / MTEF 2011=1718011, RAW / Pipeline MTEF Projections 2011=908888, RAW / Projection MTEF Projections 2011=809123, RAW / MTEF 2012=271000, RAW / Pipeline MTEF Projections 2012=108000, RAW / Projection MTEF Projections 2012=163000, RAW / MTEF 2013=158654, RAW / Pipeline MTEF Projections 2013=158654, RAW / Projection MTEF Projections 2013=0, RAW / Funding / 2006 / Actual Commitments=96840.576201, RAW / Funding / 2009 / Actual Commitments=100000, RAW / Funding / 2011 / Actual Commitments=1213119, RAW / Funding / 2012 / Actual Commitments=25000, RAW / Funding / 2013 / Actual Commitments=7842086, RAW / Funding / 2014 / Actual Commitments=8159813.768451, RAW / Funding / 2015 / Actual Commitments=1971831.841736, RAW / Totals / Actual Commitments=19408691.186388, RAW / Totals / MTEF=2147665, RAW / Totals / Pipeline MTEF=1175542, RAW / Totals / Projection MTEF=972123}", 
+        assertEquals("{RAW / Project Title=, RAW / MTEF 2011=1718011, RAW / Pipeline MTEF Projections 2011=908888, RAW / Projection MTEF Projections 2011=809123, RAW / MTEF 2012=271000, RAW / Pipeline MTEF Projections 2012=108000, RAW / Projection MTEF Projections 2012=163000, RAW / MTEF 2013=158654, RAW / Pipeline MTEF Projections 2013=158654, RAW / Projection MTEF Projections 2013=0, RAW / Funding / 2006 / Actual Commitments=96840.576201, RAW / Funding / 2009 / Actual Commitments=100000, RAW / Funding / 2011 / Actual Commitments=1213119, RAW / Funding / 2012 / Actual Commitments=25000, RAW / Funding / 2013 / Actual Commitments=7842086, RAW / Funding / 2014 / Actual Commitments=8159813.768451, RAW / Funding / 2015 / Actual Commitments=1971831.841736, RAW / Totals / Actual Commitments=19408691.186388, RAW / Totals / MTEF=2147665, RAW / Totals / Pipeline MTEF=1175542, RAW / Totals / Projection MTEF=972123}",
             buildDigest(spec("AMP-21275-all-plain-mtefs"), acts, new GrandTotalsDigest(z -> true)).toString());
     }
 
     @Test
     public void testMtefColumnsMixedPlain2() {
-        assertEquals("{RAW / Project Title=, RAW / MTEF 2011=1718011, RAW / Pipeline MTEF Projections 2011=908888, RAW / MTEF 2012=271000, RAW / Projection MTEF Projections 2012=163000, RAW / MTEF 2013=158654, RAW / Funding / 2006 / Actual Commitments=96840.576201, RAW / Funding / 2009 / Actual Commitments=100000, RAW / Funding / 2011 / Actual Commitments=1213119, RAW / Funding / 2012 / Actual Commitments=25000, RAW / Funding / 2013 / Actual Commitments=7842086, RAW / Funding / 2014 / Actual Commitments=8159813.768451, RAW / Funding / 2015 / Actual Commitments=1971831.841736, RAW / Totals / Actual Commitments=19408691.186388, RAW / Totals / MTEF=2147665, RAW / Totals / Pipeline MTEF=908888, RAW / Totals / Projection MTEF=163000}", 
+        assertEquals("{RAW / Project Title=, RAW / MTEF 2011=1718011, RAW / Pipeline MTEF Projections 2011=908888, RAW / MTEF 2012=271000, RAW / Projection MTEF Projections 2012=163000, RAW / MTEF 2013=158654, RAW / Funding / 2006 / Actual Commitments=96840.576201, RAW / Funding / 2009 / Actual Commitments=100000, RAW / Funding / 2011 / Actual Commitments=1213119, RAW / Funding / 2012 / Actual Commitments=25000, RAW / Funding / 2013 / Actual Commitments=7842086, RAW / Funding / 2014 / Actual Commitments=8159813.768451, RAW / Funding / 2015 / Actual Commitments=1971831.841736, RAW / Totals / Actual Commitments=19408691.186388, RAW / Totals / MTEF=2147665, RAW / Totals / Pipeline MTEF=908888, RAW / Totals / Projection MTEF=163000}",
             buildDigest(spec("AMP-21275-all-plain-mtefs-rare"), acts, new GrandTotalsDigest(z -> true)).toString());
     }
-    
+
     @Test
     public void testMtefColumnsBehaveLikeTrivialMeasuresOnHierarchies() {
         NiReportModel cor = new NiReportModel("AMP-22422-test-mtefs-hiers")
@@ -416,7 +417,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
         runNiTestCase(cor, spec("AMP-22422-test-mtefs-hiers"), Arrays.asList("Pure MTEF Project", "activity with directed MTEFs", "Activity with both MTEFs and Act.Comms", "activity with many MTEFs", "mtef activity 1", "Test MTEF directed", "Eth Water"));
     }
-    
+
     @Test
     public void testMtefMeasuresOnHierarchies() {
         NiReportModel correctReport = new NiReportModel("testcase mtefs measures hiers")
@@ -464,16 +465,16 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                         new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Funding-2011-MTEF", "45,000", "Funding-2011-Projection MTEF Projections", "20,000", "Funding-2011-Pipeline MTEF Projections", "25,000", "Funding-2012-MTEF", "56,000", "Funding-2012-Projection MTEF Projections", "13,000", "Funding-2012-Pipeline MTEF Projections", "43,000", "Totals-MTEF", "101,000", "Totals-Projection MTEF Projections", "33,000", "Totals-Pipeline MTEF Projections", "68,000")          )        )      ));
 
         runNiTestCase(
-                this.buildSpecification("testcase mtefs measures hiers", 
-                        
-                        Arrays.asList(ColumnConstants.EXECUTING_AGENCY, ColumnConstants.CONTRACTING_AGENCY, ColumnConstants.PROJECT_TITLE), 
-                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.MTEF, MeasureConstants.PROJECTION_MTEF_PROJECTIONS, MeasureConstants.PIPELINE_MTEF_PROJECTIONS), 
-                        Arrays.asList(ColumnConstants.EXECUTING_AGENCY,ColumnConstants.CONTRACTING_AGENCY), GroupingCriteria.GROUPING_YEARLY),                       
-                        "en", 
+                this.buildSpecification("testcase mtefs measures hiers",
+
+                        Arrays.asList(ColumnConstants.EXECUTING_AGENCY, ColumnConstants.CONTRACTING_AGENCY, ColumnConstants.PROJECT_TITLE),
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.MTEF, MeasureConstants.PROJECTION_MTEF_PROJECTIONS, MeasureConstants.PIPELINE_MTEF_PROJECTIONS),
+                        Arrays.asList(ColumnConstants.EXECUTING_AGENCY,ColumnConstants.CONTRACTING_AGENCY), GroupingCriteria.GROUPING_YEARLY),
+                        "en",
                         Arrays.asList("Pure MTEF Project", "activity with directed MTEFs", "Activity with both MTEFs and Act.Comms", "activity with many MTEFs", "mtef activity 1", "Test MTEF directed", "Eth Water"),
-                        correctReport); 
+                        correctReport);
     }
-    
+
     @Test
     public void testProjectTitleLanguages() {
         NiReportModel correctReport = new NiReportModel("testcase EN")
@@ -488,16 +489,16 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                     new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Totals-Actual Disbursements", "545,000"),
                     new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Totals-Actual Commitments", "111,333", "Totals-Actual Disbursements", "555,111"),
                     new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000")      ));
-        
+
         runNiTestCase(
-                this.buildSpecification("testcase EN", 
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE), 
-                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-                        null, GroupingCriteria.GROUPING_TOTALS_ONLY),                       
-                        "en", 
+                this.buildSpecification("testcase EN",
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE),
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+                        null, GroupingCriteria.GROUPING_TOTALS_ONLY),
+                        "en",
                         Arrays.asList("Eth Water", "SSC Project 1", "pledged 2"),
-                        correctReport); 
-                
+                        correctReport);
+
         NiReportModel correctReportRu = new NiReportModel("testcase RU")
             .withHeaders(Arrays.asList(
                     "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
@@ -510,17 +511,17 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                     new ReportAreaForTests(new AreaOwner(24), "Project Title", "Вода Eth", "Totals-Actual Disbursements", "545,000"),
                     new ReportAreaForTests(new AreaOwner(30), "Project Title", "Проект КЮЮ 1", "Totals-Actual Commitments", "111,333", "Totals-Actual Disbursements", "555,111"),
                     new ReportAreaForTests(new AreaOwner(48), "Project Title", "обещание 2", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000")      ));
-        
+
         runNiTestCase(
-                buildSpecification("testcase RU", 
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE), 
-                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                buildSpecification("testcase RU",
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE),
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
                         null, GroupingCriteria.GROUPING_TOTALS_ONLY),
-                "ru", 
+                "ru",
                 Arrays.asList("Eth Water", "SSC Project 1", "pledged 2"),
                 correctReportRu);
     }
-    
+
     @Test
     public void testMtefColumnsInMillions() {
         NiReportModel cor =  new NiReportModel("MTEF millions")
@@ -541,15 +542,15 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                     new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "MTEF 2011", "0,04", "Totals-MTEF", "0,04")      ));
 
         ReportSpecificationImpl spec = buildSpecification("MTEF millions",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, "MTEF 2011"), 
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, "MTEF 2011"),
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
             null,
             GroupingCriteria.GROUPING_TOTALS_ONLY);
-        
+
         spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_MILLIONS);
         runNiTestCase(cor, spec, mtefActs);
     }
-    
+
     @Test
     public void testMtefMeasuresInMillions() {
         NiReportModel cor =  new NiReportModel("MTEF measures millions")
@@ -570,15 +571,15 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                     new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "MTEF 2011", "0,04", "Totals-MTEF", "0,04")      ));
 
         ReportSpecificationImpl spec = buildSpecification("MTEF measures millions",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, "MTEF 2011"), 
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, "MTEF 2011"),
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
             null,
             GroupingCriteria.GROUPING_TOTALS_ONLY);
-        
+
         spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_MILLIONS);
         runNiTestCase(cor, spec, mtefActs);
     }
-    
+
     @Test
     public void testAllMtefMeasures() {
         NiReportModel cor =  new NiReportModel("MTEF measures")
@@ -600,14 +601,14 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                     new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Funding-2011-MTEF", "45,000", "Funding-2011-Projection MTEF Projections", "20,000", "Funding-2011-Pipeline MTEF Projections", "25,000", "Funding-2012-MTEF", "56,000", "Funding-2012-Projection MTEF Projections", "13,000", "Funding-2012-Pipeline MTEF Projections", "43,000", "Totals-MTEF", "101,000", "Totals-Projection MTEF Projections", "33,000", "Totals-Pipeline MTEF Projections", "68,000")      ));
 
         ReportSpecificationImpl spec = buildSpecification("MTEF measures",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.MTEF, MeasureConstants.PROJECTION_MTEF_PROJECTIONS, MeasureConstants.PIPELINE_MTEF_PROJECTIONS, MeasureConstants.REAL_MTEF),
             null,
             GroupingCriteria.GROUPING_YEARLY);
-        
+
         runNiTestCase(cor, spec, mtefActs);
     }
-    
+
     @Test
     public void test_AMP_18499_should_fail_for_now() {
         // for running manually: open http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=73 OR http://localhost:8080/TEMPLATE/ampTemplate/saikuui_reports/index.html#report/open/73
@@ -623,18 +624,18 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                    new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD"),
                    new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents"),
                    new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Totals-Actual Commitments", "666,777")));
-        
+
         runNiTestCase(
                 buildSpecification("AMP-18499", Arrays.asList(ColumnConstants.PROJECT_TITLE), Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), null, GroupingCriteria.GROUPING_TOTALS_ONLY),
                 "en",
                 Arrays.asList("Proposed Project Cost 1 - USD", "Project with documents", "ptc activity 1"),
                 cor);
     }
-    
+
     @Test
     public void test_AMP_18504_should_fail_for_now() {
         // for running manually: http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=24 or http://localhost:8080/TEMPLATE/ampTemplate/saikuui_reports/index.html#report/open/24
-        
+
         NiReportModel cor = new NiReportModel("AMP-18504")
                 .withHeaders(Arrays.asList(
                         "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 14))",
@@ -647,7 +648,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                         .withChildren(
                                 new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Donor Agency", "Ministry of Finance", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
                                 new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Donor Agency", "Finland, USAID", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000")      ));
-        
+
         runNiTestCase(
             buildSpecification("AMP-18504",
                 Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY),
@@ -657,7 +658,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
         Arrays.asList("date-filters-activity", "pledged 2"),
         cor);
     }
-    
+
     @Test
     public void test_AMP_18509() {
         NiReportModel cor = new NiReportModel("AMP-18509")
@@ -673,9 +674,9 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                         .withChildren(
                                 new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Administrative Level 1", "", "AMP ID", "87211314", "Funding-2009-Q1-Actual Commitments", "100,000", "Funding-2009-Total-Actual Commitments", "100,000", "Funding-2010-Q2-Actual Disbursements", "60,000", "Funding-2010-Total-Actual Disbursements", "60,000", "Funding-2012-Q3-Actual Commitments", "25,000", "Funding-2012-Q4-Actual Disbursements", "12,000", "Funding-2012-Total-Actual Commitments", "25,000", "Funding-2012-Total-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
                                 new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Administrative Level 1", "Cahul County", "AMP ID", "87211347", "Funding-2013-Q4-Actual Commitments", "2,670,000", "Funding-2013-Total-Actual Commitments", "2,670,000", "Funding-2014-Q2-Actual Commitments", "4,400,000", "Funding-2014-Q2-Actual Disbursements", "450,000", "Funding-2014-Total-Actual Commitments", "4,400,000", "Funding-2014-Total-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000")      ));
-        
+
         runNiTestCase(
-            buildSpecification("AMP-18509", 
+            buildSpecification("AMP-18509",
                 Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.AMP_ID),
                 Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.ACTUAL_EXPENDITURES),
                 null,
@@ -684,7 +685,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
             Arrays.asList("date-filters-activity", "pledged 2"),
             cor);
     }
-    
+
     @Test
     public void test_AMP_18577_only_count_donor_transactions() {
         NiReportModel cor = new NiReportModel("AMP_18577_only_count_donor_transaction")
@@ -697,7 +698,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
             .withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "Administrative Level 1", "", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777")
               .withChildren(
                 new ReportAreaForTests(null, "Project Title", "Test MTEF directed", "Administrative Level 1", "Anenii Noi County", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777")      ));
-        
+
         runNiTestCase(
                 buildSpecification("AMP_18577_only_count_donor_transaction",
                 Arrays.asList("Project Title", "Administrative Level 1"),
@@ -709,7 +710,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
             cor
         );
     }
-    
+
     @Test
     public void test_AMP_18330_empty_rows() {
         NiReportModel cor = new NiReportModel("test_AMP_18330_empty_rows")
@@ -724,21 +725,21 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
               .withChildren(
                 new ReportAreaForTests(null, "Project Title", "Test MTEF directed", "Administrative Level 1", "Anenii Noi County", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777"),
                 new ReportAreaForTests(null, "Project Title", "activity with primary_program", "Administrative Level 1", "")      ));
-        
+
         ReportSpecificationImpl spec = buildSpecification("test_AMP_18330_empty_rows",
                 Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
                 Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
                 null,
                 GroupingCriteria.GROUPING_YEARLY);
-        
+
         spec.setDisplayEmptyFundingRows(true);
-        
+
         runNiTestCase(spec, "en",
             Arrays.asList("Test MTEF directed", "activity with primary_program"),
             cor
         );
     }
-    
+
     @Test
     public void test_AMP_18748_no_data() {
         NiReportModel cor = new NiReportModel("test_AMP_18748_no_data")
@@ -750,19 +751,19 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
             .withWarnings(Arrays.asList())
             .withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "Administrative Level 1", "", "Totals-Actual Disbursements", "0")
               .withChildren(      ));
-        
+
         ReportSpecificationImpl spec = buildSpecification("test_AMP_18748_no_data",
                 Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
                 Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
                 null,
                 GroupingCriteria.GROUPING_YEARLY);
-        
+
         runNiTestCase(spec, "en",
                 Arrays.asList("__hopefully____invalid________name____"),
             cor
         );
     }
-    
+
     @Test
     public void test_AMP_22343_Monthly_Fiscal_Calendar() {
         // tests that the headers come out with the months sorted out in the fiscal year order
@@ -781,12 +782,12 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                     new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Funding-Fiscal Year 2013 - 2014-August-Actual Commitments", "111 333", "Funding-Fiscal Year 2013 - 2014-August-Actual Disbursements", "555 111", "Totals-Actual Commitments", "111 333", "Totals-Actual Disbursements", "555 111"),
                     new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Funding-Fiscal Year 2013 - 2014-December-Actual Commitments", "890 000", "Totals-Actual Commitments", "890 000"),
                     new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Funding-Fiscal Year 2013 - 2014-February-Actual Commitments", "75 000", "Totals-Actual Commitments", "75 000")      ));
-        
+
         runNiTestCase(spec("AMP-22343-fiscal-monthly"), "en",
-            Arrays.asList("Eth Water", "SSC Project 1", "Activity With Zones and Percentages", "SubNational no percentages"), 
+            Arrays.asList("Eth Water", "SSC Project 1", "Activity With Zones and Percentages", "SubNational no percentages"),
             cor);
     }
-    
+
     @Test
     public void test_AMP_22322_directed_mtefs_as_plain_mtefs_columns() {
         NiReportModel corPlain = new NiReportModel("AMP-22322-directed-mtefs")
@@ -827,11 +828,11 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                       new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "MTEF 2011", "700 000", "MTEF 2012", "150 000", "Funding-2015-Actual Commitments", "888 000", "Totals-Actual Commitments", "888 000", "Totals-MTEF", "850 000"),
                       new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Funding-2013-Actual Disbursements", "35 000", "Funding-2014-Actual Disbursements", "75 000", "Totals-Actual Disbursements", "110 000"),
                       new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "MTEF 2011", "45 000", "MTEF 2012", "56 000", "Funding-2015-Actual Disbursements", "80 000", "Totals-Actual Disbursements", "80 000", "Totals-MTEF", "101 000")        )      ));
-        
+
         runNiTestCase(spec("AMP-22322-directed-mtefs"), "en", mtefActs, corPlain);
         runNiTestCase(spec("AMP-22322-directed-mtefs-by-beneficiary"), "en", mtefActs, corByBenf);
     }
-    
+
     @Test
     public void testProposedProjectCost() {
         NiReportModel corPPCUSD = new NiReportModel("Proposed-cost-USD")
@@ -854,7 +855,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                     new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Funding-2015-Actual Commitments", "123 456", "Totals-Actual Commitments", "123 456")      ));
 
         runNiTestCase(spec("Proposed-cost-USD"), "en", ppcActs, corPPCUSD);
-        
+
         NiReportModel corPPCEUR = new NiReportModel("Proposed-cost-EUR")
             .withHeaders(Arrays.asList(
                     "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 8))",
@@ -876,7 +877,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
         runNiTestCase(spec("Proposed-cost-EUR"), "en", ppcActs, corPPCEUR);
     }
-    
+
     @Test
     public void testProposedProjectCostMillions() {
         NiReportModel cor =  new NiReportModel("PPCMillions")
@@ -896,17 +897,17 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                     new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Proposed Project Amount", "0,07", "Totals-Actual Commitments", "0,02"),
                     new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Totals-Actual Commitments", "0,46"),
                     new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Totals-Actual Commitments", "0,12")      ));
-        
-        ReportSpecificationImpl spec = buildSpecification("PPCMillions", 
+
+        ReportSpecificationImpl spec = buildSpecification("PPCMillions",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT),
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
             null,
             GroupingCriteria.GROUPING_TOTALS_ONLY);
         spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_MILLIONS);
-        
+
         runNiTestCase(spec, "en", ppcActs, cor);
     }
-    
+
     @Test
     public void testAnnualProposedProjectCost() {
         NiReportModel corAnnualPPC = new NiReportModel("Annual-Proposed-Project-Cost")
@@ -930,7 +931,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
         runNiTestCase(spec("Annual-Proposed-Project-Cost"), "en", ppcActs, corAnnualPPC);
     }
-    
+
     @Test
     public void testRevisedProjectCost() {
         NiReportModel cor =  new NiReportModel("AMP-22375-revised-project-cost")
@@ -954,7 +955,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
         runNiTestCase(spec("AMP-22375-revised-project-cost"), "en", ppcActs, cor);
     }
-    
+
     @Test
     public void testHierByHumanitarianAid() {
         NiReportModel cor = new NiReportModel("AMP-20325-by-humanitarian-aid")
@@ -983,11 +984,11 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                       new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Funding-2010-Actual Disbursements", "453 213", "Funding-2011-Actual Commitments", "999 888", "Totals-Actual Commitments", "999 888", "Totals-Actual Disbursements", "453 213"),
                       new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Funding-2013-Actual Commitments", "2 670 000", "Funding-2014-Actual Commitments", "4 400 000", "Funding-2014-Actual Disbursements", "450 000", "Totals-Actual Commitments", "7 070 000", "Totals-Actual Disbursements", "450 000")        )      ));
 
-        
-        runNiTestCase(spec("AMP-20325-by-humanitarian-aid"), "en", 
+
+        runNiTestCase(spec("AMP-20325-by-humanitarian-aid"), "en",
             humanitarianAidActs, cor);
     }
-    
+
     @Test
     public void testHierByDisasterResponseMarker() {
         NiReportModel cor = new NiReportModel("AMP-20980-disaster-response-marker-hier")
@@ -1013,12 +1014,12 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                       new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Funding-2013-Actual Commitments", "2 670 000", "Funding-2014-Actual Commitments", "4 400 000", "Totals-Actual Commitments", "7 070 000"),
                       new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Funding-2015-Actual Commitments", "50 000", "Totals-Actual Commitments", "50 000")        )      ));
 
-        
+
         runNiTestCase(spec("AMP-20980-disaster-response-marker-hier"), "en",
-            Arrays.asList("activity_with_disaster_response", "date-filters-activity", "pledged 2"), 
+            Arrays.asList("activity_with_disaster_response", "date-filters-activity", "pledged 2"),
             cor);
     }
-    
+
     @Test
     public void testPlainDisasterResponseMarker() {
         NiReportModel cor = new NiReportModel("AMP-20980-disaster-response-marker")
@@ -1034,12 +1035,12 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                     new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Disaster Response Marker", "", "Funding-2009-Actual Commitments", "100 000", "Funding-2012-Actual Commitments", "25 000", "Totals-Actual Commitments", "125 000"),
                     new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Disaster Response Marker", "", "Funding-2013-Actual Commitments", "2 670 000", "Funding-2014-Actual Commitments", "4 400 000", "Totals-Actual Commitments", "7 070 000"),
                     new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Disaster Response Marker", "No, Yes", "Funding-2014-Actual Commitments", "33 000", "Funding-2015-Actual Commitments", "117 000", "Totals-Actual Commitments", "150 000")      ));
-        
+
         runNiTestCase(spec("AMP-20980-disaster-response-marker"), "en",
-            Arrays.asList("activity_with_disaster_response", "date-filters-activity", "pledged 2"), 
+            Arrays.asList("activity_with_disaster_response", "date-filters-activity", "pledged 2"),
             cor);
     }
-    
+
     @Test
     public void testActivityCountNonSummary() {
         NiReportModel cor = new NiReportModel("ActivityCountReport")
@@ -1069,10 +1070,10 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                       new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Administrative Level 2", "", "Totals-Actual Commitments", "65 760,63", "Totals-Actual Disbursements", "80 000"),
                       new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Administrative Level 2", "", "Totals-Actual Commitments", "1 200"),
                       new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Administrative Level 2", "", "Totals-Actual Disbursements", "110 000")        )      ));
-        
+
         runNiTestCase(spec("ActivityCountReport"), "en", acts, cor);
     }
-    
+
     @Test
     public void testActivityCountUnarySummary() {
         NiReportModel cor = new NiReportModel("activity-count-summary")
@@ -1091,10 +1092,10 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                     new ReportAreaForTests(new AreaOwner("Primary Sector", "120 - HEALTH", 6252), "Activity Count", "2", "Funding-2006-Actual Commitments", "29 052,17", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "623 000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "15 000", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "652 052,17", "Totals-Actual Disbursements", "15 000", "Primary Sector", "120 - HEALTH"),
                     new ReportAreaForTests(new AreaOwner("Primary Sector", "130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH", 6267), "Activity Count", "1", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "453 213", "Funding-2011-Actual Commitments", "999 888", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "999 888", "Totals-Actual Disbursements", "453 213", "Primary Sector", "130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH"),
                     new ReportAreaForTests(new AreaOwner("Primary Sector", "Primary Sector: Undefined", -999999999), "Activity Count", "1", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "12 000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "12 000", "Totals-Actual Disbursements", "0", "Primary Sector", "Primary Sector: Undefined")      ));
-        
+
         runNiTestCase(spec("activity-count-summary"), "en", acts, cor);
     }
-    
+
     @Test
     public void testActivityCountDoubleSummary() {
         NiReportModel cor = new NiReportModel("activity-count-summary-dual")
@@ -1156,10 +1157,10 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "112 - BASIC EDUCATION", 6242), "Activity Count", "2", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "363,21", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Actual Commitments", "9 393,08", "Funding-2015-Actual Disbursements", "570", "Totals-Actual Commitments", "9 756,3", "Totals-Actual Disbursements", "770", "Primary Sector", "112 - BASIC EDUCATION"),
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "113 - SECONDARY EDUCATION", 6246), "Activity Count", "1", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "13 200", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "46 800", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "60 000", "Totals-Actual Disbursements", "0", "Primary Sector", "113 - SECONDARY EDUCATION"),
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "Primary Sector: Undefined", -999999999), "Activity Count", "1", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "12 000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "12 000", "Totals-Actual Disbursements", "0", "Primary Sector", "Primary Sector: Undefined")        )      ));
-        
+
         runNiTestCase(spec("activity-count-summary-dual"), "en", acts, cor);
     }
-    
+
     @Test
     public void testCapitalExpenditurePercentages() {
         NiReportModel cor = new NiReportModel("testCapitalExpenditurePercentages")
@@ -1175,16 +1176,16 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                     new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2010-Actual Disbursements", "123,321", "Totals-Actual Disbursements", "123,321"),
                     new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Funding-2014-Planned Disbursements", "90,000", "Funding-2014-Actual Disbursements", "80,000", "Funding-2014-Planned Disbursements - Capital", "10,800", "Funding-2014-Planned Disbursements - Expenditure", "79,200", "Funding-2014-Actual Disbursements - Capital", "27,200", "Funding-2014-Actual Disbursements - Recurrent", "52,800", "Totals-Planned Disbursements", "90,000", "Totals-Actual Disbursements", "80,000", "Totals-Planned Disbursements - Capital", "10,800", "Totals-Planned Disbursements - Expenditure", "79,200", "Totals-Actual Disbursements - Capital", "27,200", "Totals-Actual Disbursements - Recurrent", "52,800")      ));
 
-        
-        ReportSpecificationImpl spec = buildSpecification("testCapitalExpenditurePercentages", 
+
+        ReportSpecificationImpl spec = buildSpecification("testCapitalExpenditurePercentages",
             Arrays.asList(ColumnConstants.PROJECT_TITLE),
-            Arrays.asList(MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL, MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT), 
-            null, 
+            Arrays.asList(MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL, MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT),
+            null,
             GroupingCriteria.GROUPING_YEARLY);
-        
+
         runNiTestCase(spec, "en", Arrays.asList("activity with capital spending", "TAC_activity_1"), cor);
     }
-    
+
     @Test
     public void testProjectTitleAsSingleHierarchy() {
         NiReportModel cor = new NiReportModel("testProjectTitleAsSingleHierarchy")
@@ -1309,16 +1310,16 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                 .withChildren(
                   new ReportAreaForTests(new AreaOwner(79), "Administrative Level 1", "", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION", "Funding-2014-Actual Commitments", "3,632,14", "Funding-2015-Actual Commitments", "93,930,84", "Totals-Actual Commitments", "97,562,98")        )      ));
 
-        
+
         ReportSpecificationImpl spec = buildSpecification("testProjectTitleAsSingleHierarchy",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_SECTOR),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
             Arrays.asList(ColumnConstants.PROJECT_TITLE),
             GroupingCriteria.GROUPING_YEARLY);
-        
+
         runNiTestCase(spec, "en", acts, cor);
     }
-    
+
     @Test
     public void testProjectTitleAsFirstHierarchy() {
         NiReportModel cor = new NiReportModel("testProjectTitleAsFirstHierarchy")
@@ -1531,13 +1532,13 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                   new ReportAreaForTests(new AreaOwner("Donor Agency", "Ministry of Finance", 21699)).withContents("Administrative Level 1", "", "Primary Sector", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "3,632,14", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "93,930,84", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "97,562,98", "Totals-Actual Disbursements", "0", "Donor Agency", "Ministry of Finance")
                   .withChildren(
                     new ReportAreaForTests(new AreaOwner(79), "Administrative Level 1", "", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION", "Funding-2014-Actual Commitments", "3,632,14", "Funding-2015-Actual Commitments", "93,930,84", "Totals-Actual Commitments", "97,562,98")          )        )      ));
-    
+
         ReportSpecificationImpl spec = buildSpecification("testProjectTitleAsFirstHierarchy",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.DONOR_AGENCY),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY),
             GroupingCriteria.GROUPING_YEARLY);
-        
+
         runNiTestCase(spec, "en", acts, cor);
     }
 
@@ -1555,14 +1556,14 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                         .withChildren(
                                 new ReportAreaForTests(new AreaOwner(38), "Project Title", "Real SSC Activity 2", "Donor Agency", "Norway", "Funding-2014-Official Development Aid Commitments", "25 000", "Totals-Official Development Aid Commitments", "25 000"),
                                 new ReportAreaForTests(new AreaOwner(39), "Project Title", "Real SSC Activity 1", "Donor Agency", "Finland, USAID, World Bank", "Funding-2012-Bilateral SSC Commitments", "12 000", "Funding-2012-Cumulated SSC Commitments", "12 000", "Funding-2013-Bilateral SSC Commitments", "42 000", "Funding-2013-Triangular SSC Commitments", "64 000", "Funding-2013-Cumulated SSC Commitments", "106 000", "Funding-2014-Official Development Aid Commitments", "150 000", "Totals-Official Development Aid Commitments", "150 000", "Totals-Bilateral SSC Commitments", "54 000", "Totals-Triangular SSC Commitments", "64 000", "Totals-Cumulated SSC Commitments", "118 000")      ));
-        
+
         runNiTestCase(spec("AMP-16688-all-flat"), "en", sscActs, cor);
     }
-    
+
     @Test
     public void testShowEmptyFundingRowsTransactionLevelHierarchies() {
         // transaction-level-hierarchies should never show empty funding rows, even if "Date Filter Hides Project" is false
-        
+
         NiReportModel cor = new NiReportModel("by-disaster-response")
             .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
@@ -1590,19 +1591,19 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                   new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "50,000"),
                   new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class"),
                   new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));
-        
+
         List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity with funded components", "activity 1 with indicators");
-        
+
         ReportSpecificationImpl spec = buildSpecification("by-disaster-response",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DISASTER_RESPONSE_MARKER), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DISASTER_RESPONSE_MARKER),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
-            Arrays.asList(ColumnConstants.DISASTER_RESPONSE_MARKER), 
+            Arrays.asList(ColumnConstants.DISASTER_RESPONSE_MARKER),
             GroupingCriteria.GROUPING_TOTALS_ONLY);
-        
+
         spec.setDisplayEmptyFundingRows(true);
         runNiTestCase(cor, spec, "en", someActs);
     }
-    
+
     @Test
     public void testShowEmptyFundingRowsDonorAgencyHierarchy() {
         NiReportModel cor = new NiReportModel("by-donor-agency")
@@ -1630,20 +1631,20 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                   new ReportAreaForTests(new AreaOwner(92), "Project Title", "second with disaster response", "Totals-Actual Commitments", "366,666")        ),
                 new ReportAreaForTests(new AreaOwner("Donor Agency", "Donor Agency: Undefined", -999999999)).withContents("Project Title", "", "Totals-Actual Commitments", "0", "Donor Agency", "Donor Agency: Undefined")
                 .withChildren(
-                  new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));   
-        
+                  new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));
+
         List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity 1 with indicators");
-        
+
         ReportSpecificationImpl spec = buildSpecification("by-donor-agency",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
-            Arrays.asList(ColumnConstants.DONOR_AGENCY), 
+            Arrays.asList(ColumnConstants.DONOR_AGENCY),
             GroupingCriteria.GROUPING_TOTALS_ONLY);
-        
+
         spec.setDisplayEmptyFundingRows(true);
         runNiTestCase(cor, spec, "en", someActs);
     }
-    
+
     @Test
     public void testShowEmptyFundingRowsModeOfPaymentAgencyHierarchy() {
         NiReportModel cor = new NiReportModel("by-mode-of-payment")
@@ -1667,19 +1668,19 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
               new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Disbursements", "253,700"),
               new ReportAreaForTests(new AreaOwner(92), "Project Title", "second with disaster response"),
               new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));
-        
+
         List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity 1 with indicators", "mtef activity 2", "Pure MTEF Project");
-        
+
         ReportSpecificationImpl spec = buildSpecification("by-mode-of-payment",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.MODE_OF_PAYMENT), 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.MODE_OF_PAYMENT),
             Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
-            Arrays.asList(ColumnConstants.MODE_OF_PAYMENT), 
+            Arrays.asList(ColumnConstants.MODE_OF_PAYMENT),
             GroupingCriteria.GROUPING_TOTALS_ONLY);
-        
+
         spec.setDisplayEmptyFundingRows(true);
         runNiTestCase(cor, spec, "en", someActs);
     }
-    
+
     @Test
     public void testSplitByMoP() {
         NiReportModel cor = new NiReportModel("AMP-15863-mode-of-payment-undisbursed-balance")
@@ -1746,7 +1747,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
             TestcasesReportsSchema.disableToAMoPSplitting = true;
         }
     }
-    
+
     @Test
     public void testSplitByMoPRussian() {
         NiReportModel cor = new NiReportModel("AMP-15863-mode-of-payment-undisbursed-balance")
@@ -1813,7 +1814,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
             TestcasesReportsSchema.disableToAMoPSplitting = true;
         }
     }
-    
+
     @Test
     public void testSplitByToA() {
         NiReportModel cor = new NiReportModel("a-type-of-assistance")
@@ -1880,7 +1881,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
             TestcasesReportsSchema.disableToAMoPSplitting = true;
         }
     }
-    
+
     @Test
     public void testSplitByToARussian() {
         NiReportModel cor = new NiReportModel("a-type-of-assistance")
@@ -1947,7 +1948,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
             TestcasesReportsSchema.disableToAMoPSplitting = true;
         }
     }
-    
+
     @Test
     public void testVSplitEmptyColumn() {
         NiReportModel cor = new NiReportModel("cumulated-disbursements-by-mop")
@@ -1969,11 +1970,11 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
         try {
             TestcasesReportsSchema.disableToAMoPSplitting = false;
-            runNiTestCase(cor, buildSpecification("cumulated-disbursements-by-mop", 
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.MODE_OF_PAYMENT), 
-                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.CUMULATED_DISBURSEMENTS), 
+            runNiTestCase(cor, buildSpecification("cumulated-disbursements-by-mop",
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.MODE_OF_PAYMENT),
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.CUMULATED_DISBURSEMENTS),
                 null,
-                GroupingCriteria.GROUPING_TOTALS_ONLY), 
+                GroupingCriteria.GROUPING_TOTALS_ONLY),
                 "en", humanitarianAidActs);
         }
         finally {
@@ -2040,7 +2041,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
         runNiTestCase(cor, spec("AMP-22639-predictability-of-funding"), "en", acts);
     }
-    
+
     @Test
     public void testPercentageOfCommsDisbsNoPrecursors() {
         NiReportModel cor = new NiReportModel("AMP-15795-percentage-of-total-commitments-no-precursors-hier")
@@ -2157,7 +2158,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                     new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Totals-Percentage Of Total Disbursements", "0,02"),
                     new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Percentage of Total Commitments", "0,77"),
                     new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Totals-Percentage of Total Commitments", "0,5")          )        )      ));
-        
+
         runNiTestCase(cor, spec("AMP-15795-percentage-of-total-commitments-no-precursors-hier"), "en", acts);
     }
 
@@ -2318,7 +2319,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
         runNiTestCase(specWithoutSplit, "en", acts, cor);
     }
-    
+
     @Test
     public void testSimpleHasExecutingAgencyReport() {
         NiReportModel cor = new NiReportModel("testSimpleHasExecutingAgencyReport")
@@ -2339,7 +2340,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
         List<String> execActs = Arrays.asList("Eth Water", "Test MTEF directed", "Activity with Zones",
                 "activity with contracting agency", "with weird currencies","activity with contracting agency");
-        
+
         ReportSpecificationImpl spec = buildSpecification("testSimpleHasExecutingAgencyReport",
                 Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.EXECUTING_AGENCY, ColumnConstants.HAS_EXECUTING_AGENCY),
                 Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
@@ -2348,7 +2349,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
         runNiTestCase(spec, "en", execActs, cor);
     }
-    
+
     @Test
     public void testReportWithHierByHasExecutingAgencyReport() {
         NiReportModel cor = new NiReportModel("testReportWithHierByHasExecutingAgencyReport")
@@ -2369,7 +2370,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
         List<String> execActs = Arrays.asList("Eth Water", "Test MTEF directed", "Activity with Zones",
                 "activity with contracting agency", "with weird currencies","activity with contracting agency");
-        
+
         ReportSpecificationImpl spec = buildSpecification("testReportWithHierByHasExecutingAgencyReport",
                 Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.EXECUTING_AGENCY, ColumnConstants.HAS_EXECUTING_AGENCY),
                 Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
@@ -2378,7 +2379,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
         runNiTestCase(spec, "en", execActs, cor);
     }
-    
+
     @Test
     public void testOverDisbursedAsScheduledFlatReport() {
         NiReportModel cor = new NiReportModel("testOverDisbursedAsScheduledFlatReport")
@@ -2498,17 +2499,17 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                     new ReportAreaForTests(new AreaOwner("Donor Agency", "World Bank", 21697)).withContents("Project Title", "", "Primary Sector", "", "Funding-2010-Planned Disbursements", "0", "Funding-2010-Actual Disbursements", "123,321", "Funding-2012-Planned Disbursements", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Planned Disbursements", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Planned Disbursements", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Planned Disbursements", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Planned Disbursements", "0", "Totals-Actual Disbursements", "123,321", "Donor Agency", "World Bank")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Primary Sector", "112 - BASIC EDUCATION", "Funding-2010-Actual Disbursements", "123,321", "Totals-Actual Disbursements", "123,321")        )      ));
-    
+
         ReportSpecificationImpl spec = buildSpecification("testOverDisbursedAsScheduledByDonor",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY, ColumnConstants.PRIMARY_SECTOR),
             Arrays.asList(MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.DISBURSED_AS_SCHEDULED, MeasureConstants.OVER_DISBURSED),
             Arrays.asList(ColumnConstants.DONOR_AGENCY),
             GroupingCriteria.GROUPING_YEARLY
         );
-        
+
         runNiTestCase(spec, "en", acts, cor);
     }
-    
+
     @Test
     public void testOverDisbursedAsScheduledByDonorByPrimarySector() {
         NiReportModel cor = new NiReportModel("testOverDisbursedAsScheduledByDonorByPrimarySector")
@@ -2596,17 +2597,17 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2010-Actual Disbursements", "123,321", "Totals-Actual Disbursements", "123,321")          )        )      ));
 
-        
+
         ReportSpecificationImpl spec = buildSpecification("testOverDisbursedAsScheduledByDonorByPrimarySector",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY, ColumnConstants.PRIMARY_SECTOR),
             Arrays.asList(MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.DISBURSED_AS_SCHEDULED, MeasureConstants.OVER_DISBURSED),
             Arrays.asList(ColumnConstants.DONOR_AGENCY, ColumnConstants.PRIMARY_SECTOR),
             GroupingCriteria.GROUPING_YEARLY
         );
-        
+
         runNiTestCase(spec, "en", acts, cor);
     }
-    
+
     @Test
     public void testEthCalendarDateColumns() {
         NiReportModel cor = new NiReportModel("test_eth_calendar_date_columns")
@@ -2622,15 +2623,15 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                         new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2", "Activity Created On", "29/11/2005", "Activity Updated On", "11/04/2006"),
                         new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Activity Created On", "13/12/2005", "Activity Updated On", "11/04/2006", "Totals-Actual Commitments", "666,777"),
                         new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Activity Created On", "13/12/2005", "Activity Updated On", "11/04/2006", "Totals-Actual Commitments", "333,222")      ));
-        
+
         ReportSpecificationImpl spec = buildSpecification("test_eth_calendar_date_columns",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.ACTIVITY_CREATED_ON, ColumnConstants.ACTIVITY_UPDATED_ON),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
             null,
             GroupingCriteria.GROUPING_TOTALS_ONLY);
-        
+
         spec.getOrCreateSettings().setCalendar(DbUtil.getAmpFiscalCalendar(172L));
-        
+
         runNiTestCase(spec, "en", Arrays.asList("ptc activity 1", "mtef activity 1", "mtef activity 2", "ptc activity 2"), cor);
     }
 

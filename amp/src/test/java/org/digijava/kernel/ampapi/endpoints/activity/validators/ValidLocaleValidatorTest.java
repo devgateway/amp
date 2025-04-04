@@ -8,7 +8,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.util.SiteUtils;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
@@ -41,7 +41,7 @@ public class ValidLocaleValidatorTest {
     
     private APIField translatableField;
     
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         PowerMockito.mockStatic(SiteUtils.class);
         when(SiteUtils.getUserLanguagesCodes(Matchers.any())).thenReturn(LOCALES);

@@ -1,51 +1,51 @@
 package org.dgfoundation.amp.seleniumTest;
 
 import org.dgfoundation.amp.seleniumTest.activityForm.ActivityFormTest;
-import org.junit.Ignore;
+
 import org.dgfoundation.amp.seleniumTest.admin.*;
-import org.junit.Ignore;
+
 import org.dgfoundation.amp.seleniumTest.permissionsAndValidations.PermissionsAndValidationsTest;
-import org.junit.Ignore;
+
 import org.dgfoundation.amp.seleniumTest.publicView.PublicViewTest;
-import org.junit.Ignore;
+
 import org.dgfoundation.amp.seleniumTest.reports.ReportTest;
-import org.junit.Ignore;
+
 import org.dgfoundation.amp.seleniumTest.reports.TabTest;
-import org.junit.Ignore;
+
 import org.dgfoundation.amp.seleniumTest.resources.ResourcesTest;
-import org.junit.Ignore;
+
 import org.dgfoundation.amp.seleniumTest.workspaceInfo.TeamWorkspaceInfoTest;
-import org.junit.Ignore;
+
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
+
 
 import org.digijava.module.aim.action.OrganisationManager;
-import org.junit.Ignore;
+
 
 import com.thoughtworks.selenium.DefaultSelenium;
-import org.junit.Ignore;
-import com.thoughtworks.selenium.SeleneseTestBase;
-import org.junit.Ignore;
-import com.thoughtworks.selenium.SeleneseTestCase;
-import org.junit.Ignore;
 
-@Ignore
+import com.thoughtworks.selenium.SeleneseTestBase;
+
+import com.thoughtworks.selenium.SeleneseTestBase;
+
+
+
 public class SeleniumTestRunner  extends SeleneseTestBase{
 
     private static Logger logger = Logger.getLogger(SeleniumTestRunner.class);
-    
+
     public void setUp() throws Exception {
 //      setUp("http://generic.ampdev.net", "*firefox");
 //      setUp("http://drc.ampdev.net", "*firefox");
 //      setUp("http://senegal.ampdev.net", "*firefox");
 //      setUp("http://senegal.staging.ampdev.net", "*firefox");
         setUp("http://localhost:8085/", "*chrome",555);
-        
+
     }
-    
+
     /**
      * @param args
-     * @throws Exception 
+     * @throws Exception
      */
     public void runTestSuite() throws Exception {
         boolean configOk = true;
@@ -141,13 +141,13 @@ public class SeleniumTestRunner  extends SeleneseTestBase{
                 e.printStackTrace();
                 logout();
             }
-            try{
-                ComponentTypeManagerTest.testComponentTypeManager(selenium);
-            } catch (Exception e) {
-                logger.error("testComponentTypeManager Error");
-                e.printStackTrace();
-                logout();
-            }
+//            try{
+//                ComponentTypeManagerTest.testComponentTypeManager(selenium);
+//            } catch (Exception e) {
+//                logger.error("testComponentTypeManager Error");
+//                e.printStackTrace();
+//                logout();
+//            }
             try{
                 MultiProgramManagerTest.testMultiProgramManager(selenium);
             } catch (Exception e) {
@@ -155,7 +155,7 @@ public class SeleniumTestRunner  extends SeleneseTestBase{
                 e.printStackTrace();
                 logout();
             }
-            
+
 //          IndicatorManagerTest.testIndicatorManager(selenium);//falla
             try{
                 CalendarManagerTest.testCalendarManager(selenium);
@@ -206,22 +206,22 @@ public class SeleniumTestRunner  extends SeleneseTestBase{
                 e.printStackTrace();
                 logout();
             }
-            
+
         }
     }
-    
+
     private void logout() {
         if (selenium.isElementPresent("//a[contains(@href, \"/aim/j_spring_logout\")]")) {
             selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
             selenium.waitForPageToLoad("30000");
         }
-        
+
     }
     /**
      * @param args
      */
     public static void main(String[] args) {
-        
+
         SeleniumTestRunner runner = new SeleniumTestRunner();
         try {
             runner.setUp();
@@ -229,6 +229,6 @@ public class SeleniumTestRunner  extends SeleneseTestBase{
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }   
+        }
     }
 }

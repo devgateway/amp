@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Pledges Form tests
@@ -122,10 +123,10 @@ public class MiscTests28 extends ReportsTestCase {
                     Long l = rs.rs.getLong(1);
                     Object obj = rs.rs.getObject(1);
                     if (v == null) {
-                        assertTrue("result should have been null but is " + obj + " for query " + query, obj == null);
+                        assertTrue( obj == null);
                         return;
                     }
-                    assertEquals("while running " + query, v.longValue(), l.longValue());
+                    assertEquals( v.longValue(), l.longValue());
                 }
             }
 

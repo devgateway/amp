@@ -2,14 +2,14 @@ package org.dgfoundation.amp.seleniumTest.admin;
 
 import org.apache.log4j.Logger;
 
-import com.thoughtworks.selenium.SeleneseTestCase;
+import com.thoughtworks.selenium.SeleneseTestBase;
 import com.thoughtworks.selenium.Selenium;
-import org.junit.Ignore;
-
-@Ignore
 
 
-public class CategoryManagerTest extends SeleneseTestCase {
+
+
+
+public class CategoryManagerTest extends SeleneseTestBase {
 
     private static Logger logger = Logger.getLogger(CategoryManagerTest.class);
 

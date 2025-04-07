@@ -11,10 +11,12 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
- * 
+ *
  * testcases for the pledges part of the AMP schema
- * 
+ *
  * @author Constantin Dolghier
  *
  */
@@ -66,10 +68,10 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
             "Unvalidated activity",
             "with weird currencies"
         );
-    
+
     public final static List<String> hierarchiesToTry = Arrays.asList(
             ColumnConstants.RELATED_PROJECTS, ColumnConstants.
-            PLEDGES_DONOR_GROUP, ColumnConstants.PLEDGES_DONOR_TYPE, 
+            PLEDGES_DONOR_GROUP, ColumnConstants.PLEDGES_DONOR_TYPE,
             ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_2, ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1,
             ColumnConstants.PLEDGES_AID_MODALITY, ColumnConstants.PLEDGE_STATUS,
             ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE,
@@ -79,24 +81,24 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
         );
 
     public final static String correctTotals = "{RAW / Funding / 1998 / Actual Pledge=938069.75219, RAW / Funding / 1998 / Actual Commitments=0, RAW / Funding / 1998 / Actual Disbursements=0, RAW / Funding / 1998 / Commitment Gap=938069.75219, RAW / Funding / 2012 / Actual Pledge=1041111.767105, RAW / Funding / 2012 / Actual Commitments=0, RAW / Funding / 2012 / Actual Disbursements=0, RAW / Funding / 2012 / Commitment Gap=1041111.767105, RAW / Funding / 2013 / Actual Pledge=1800000, RAW / Funding / 2013 / Actual Commitments=2670000, RAW / Funding / 2013 / Actual Disbursements=0, RAW / Funding / 2013 / Commitment Gap=-870000, RAW / Funding / 2014 / Actual Pledge=9186878.10434, RAW / Funding / 2014 / Actual Commitments=3350000, RAW / Funding / 2014 / Actual Disbursements=450000, RAW / Funding / 2014 / Commitment Gap=5836878.10434, RAW / Totals / Actual Pledge=12966059.623635, RAW / Totals / Actual Commitments=6020000, RAW / Totals / Actual Disbursements=450000, RAW / Totals / Commitment Gap=6946059.623635}";
-    
+
     protected ReportSpecificationImpl buildPledgeReport(String reportName, List<String> columns, List<String> measures,
             List<String> hierarchies, GroupingCriteria groupingCriteria) {
-        return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria, 
+        return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria,
                 ArConstants.PLEDGES_TYPE);
     }
-    
-    protected ReportSpecificationImpl buildPledgeReportFilter(String reportName, List<String> columns, List<String> measures, 
+
+    protected ReportSpecificationImpl buildPledgeReportFilter(String reportName, List<String> columns, List<String> measures,
             List<String> hierarchies, GroupingCriteria groupingCriteria, ReportElement elem, FilterRule rule) {
-        ReportSpecificationImpl spec = ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria, 
+        ReportSpecificationImpl spec = ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria,
                 ArConstants.PLEDGES_TYPE);
-        
+
         ReportFiltersImpl filters = new ReportFiltersImpl();
         filters.addFilterRule(elem, rule);
         spec.setFilters(filters);
         return spec;
     }
-    
+
     @Test
     public void testPlainPledgeReport() {
         NiReportModel cor = new NiReportModel("AMP-16003-flat")
@@ -114,10 +116,10 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                         new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2", "Pledge Status", "", "Funding-2012-Actual Pledge", "1 041 110,52", "Totals-Actual Pledge", "1 041 110,52"),
                         new ReportAreaForTests(new AreaOwner(6), "Pledges Titles", "Heavily used pledge", "Pledge Status", "default status", "Funding-2013-Actual Pledge", "1 800 000", "Funding-2014-Actual Pledge", "8 200 000", "Totals-Actual Pledge", "10 000 000")      ));
 
-        
+
         runNiTestCase(spec("AMP-16003-flat"), "en", acts, cor);
     }
-    
+
     @Test
     public void testActualPledgeActualCommitmentsByPrimarySector() {
         NiReportModel cor = new NiReportModel("AMP-17196-by-pledge-primary-sector")
@@ -144,10 +146,10 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                       new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Related Projects", "Activity Linked With Pledge", "Funding-1998-Actual Pledge", "938 069,75", "Funding-1998-Commitment Gap", "938 069,75", "Funding-2014-Actual Commitments", "50 000", "Funding-2014-Commitment Gap", "-50 000", "Totals-Actual Pledge", "938 069,75", "Totals-Actual Commitments", "50 000", "Totals-Commitment Gap", "888 069,75"),
                       new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2", "Funding-2012-Actual Pledge", "1 041 110,52", "Funding-2012-Commitment Gap", "1 041 110,52", "Totals-Actual Pledge", "1 041 110,52", "Totals-Commitment Gap", "1 041 110,52")        )      ));
 
-        
+
         runNiTestCase(spec("AMP-17196-by-pledge-primary-sector"), "en", acts, cor);
     }
-    
+
     @Test
     public void testPledgePrimarySectorPure() {
         NiReportModel cor = new NiReportModel("AMP-17196-by-pledge-primary-sector-pure")
@@ -173,10 +175,10 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Funding-1998-Actual Pledge", "938 069,75", "Funding-1998-Commitment Gap", "938 069,75", "Funding-2014-Actual Commitments", "50 000", "Funding-2014-Commitment Gap", "-50 000", "Totals-Actual Pledge", "938 069,75", "Totals-Actual Commitments", "50 000", "Totals-Commitment Gap", "888 069,75"),
                       new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2", "Funding-2012-Actual Pledge", "1 041 110,52", "Funding-2012-Commitment Gap", "1 041 110,52", "Totals-Actual Pledge", "1 041 110,52", "Totals-Commitment Gap", "1 041 110,52")        )      ));
-        
+
         runNiTestCase(spec("AMP-17196-by-pledge-primary-sector-pure"), "en", acts, cor);
     }
-    
+
     @Test
     public void testPledgeByRegion() {
         NiReportModel cor = new NiReportModel("AMP-17196-by-regions")
@@ -266,10 +268,10 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                         .withChildren(
                           new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Totals-Actual Pledge", "938 069,75"),
                           new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2", "Funding-2012-Actual Pledge", "1 041 110,52", "Totals-Actual Pledge", "1 041 110,52")        )      ));
-        
+
         runNiTestCase(spec("AMP-16003-by-pledge-status"), "en", acts, cor);
     }
-    
+
     @Test
     public void testActualPledgeDetailDatesAndContacts() {
         NiReportModel cor = new NiReportModel("AMP-21336-pledge-details-contacts")
@@ -286,10 +288,10 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                         new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Pledge Contact 1 - Address", "", "Pledge Contact 1 - Alternate Contact", "", "Pledge Contact 1 - Email", "virvan@gmail.com", "Pledge Contact 1 - Ministry", "Ministry of Pledges", "Pledge Contact 1 - Name", "Vanessa Goas", "Pledge Contact 1 - Telephone", "", "Pledge Contact 1 - Title", "Dr", "Pledge Contact 2 - Title", "", "Totals-Actual Pledge", "938 069,75"),
                         new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2", "Pledges Detail Date Range", "2012-03-02 - 2015-03-03", "Pledges Detail End Date", "03/03/2015", "Pledges Detail Start Date", "02/03/2012", "Pledge Contact 1 - Address", "", "Pledge Contact 1 - Alternate Contact", "", "Pledge Contact 1 - Email", "", "Pledge Contact 1 - Ministry", "", "Pledge Contact 1 - Name", "", "Pledge Contact 1 - Telephone", "", "Pledge Contact 1 - Title", "", "Pledge Contact 2 - Title", "", "Funding-2012-Actual Pledge", "1 041 110,52", "Totals-Actual Pledge", "1 041 110,52"),
                         new ReportAreaForTests(new AreaOwner(6), "Pledges Titles", "Heavily used pledge", "Pledges Detail Date Range", "2013-02-01 - 2014-04-29, 2014-04-08 - 2015-02-11", "Pledges Detail End Date", "29/04/2014, 11/02/2015", "Pledges Detail Start Date", "01/02/2013, 08/04/2014", "Pledge Contact 1 - Address", "", "Pledge Contact 1 - Alternate Contact", "", "Pledge Contact 1 - Email", "", "Pledge Contact 1 - Ministry", "", "Pledge Contact 1 - Name", "", "Pledge Contact 1 - Telephone", "", "Pledge Contact 1 - Title", "", "Pledge Contact 2 - Title", "", "Funding-2013-Actual Pledge", "1 800 000", "Funding-2014-Actual Pledge", "8 200 000", "Totals-Actual Pledge", "10 000 000")      ));
-        
+
         runNiTestCase(spec("AMP-21336-pledge-details-contacts"), "en", acts, cor);
     }
-    
+
     @Test
     public void testActualPledgeByAidModality() {
         // current result not matches old reports -> to re-check once actual pledge sum by hierarchy is fixed
@@ -323,10 +325,10 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                 new ReportAreaForTests(new AreaOwner("Pledges Aid Modality", "Pledges Aid Modality: Undefined", -999999999)).withContents("Pledges Titles", "", "Related Projects", "", "Funding-2012-Actual Pledge", "0", "Funding-2013-Actual Pledge", "1 800 000", "Funding-2014-Actual Pledge", "0", "Totals-Actual Pledge", "1 800 000", "Pledges Aid Modality", "Pledges Aid Modality: Undefined")
                 .withChildren(
                   new ReportAreaForTests(new AreaOwner(6), "Pledges Titles", "Heavily used pledge", "Related Projects", "pledged 2, pledged education activity 1", "Funding-2013-Actual Pledge", "1 800 000", "Totals-Actual Pledge", "1 800 000")        )      ));
-        
+
         runNiTestCase(spec("AMP-17153-aid-modality-hier"), "en", acts, cor);
     }
-    
+
     @Test
     public void testActualPledgeActualCommitmentsByRegions() {
         NiReportModel cor = new NiReportModel("Actual Pledge and Actual Commitments By Regions")
@@ -359,12 +361,12 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Funding-1998-Actual Pledge", "938,069,75", "Funding-2014-Actual Commitments", "50,000", "Totals-Actual Pledge", "938,069,75", "Totals-Actual Commitments", "50,000"),
                       new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2", "Funding-2012-Actual Pledge", "1,041,110,52", "Totals-Actual Pledge", "1,041,110,52")        )      ));
-        
-        ReportSpecificationImpl spec = buildPledgeReport("Actual Pledge and Actual Commitments By Regions", 
+
+        ReportSpecificationImpl spec = buildPledgeReport("Actual Pledge and Actual Commitments By Regions",
                 Arrays.asList(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1, ColumnConstants.PLEDGES_TITLES),
                 Arrays.asList(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, MeasureConstants.PLEDGES_ACTUAL_COMMITMENTS),
                 Arrays.asList(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1), GroupingCriteria.GROUPING_YEARLY);
-        
+
         runNiTestCase(spec, "en", acts, cor);
     }
 
@@ -391,15 +393,15 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                     new ReportAreaForTests(new AreaOwner("Pledges Donor Group", "European", 18)).withContents("Pledges Titles", "", "Pledges Sectors", "", "Pledges Programs", "", "Funding-1998-Actual Pledge", "0", "Funding-1998-Actual Commitments", "0", "Funding-2012-Actual Pledge", "1,25", "Funding-2012-Actual Commitments", "0", "Funding-2013-Actual Pledge", "0", "Funding-2013-Actual Commitments", "0", "Funding-2014-Actual Pledge", "986,878,1", "Funding-2014-Actual Commitments", "0", "Totals-Actual Pledge", "986,879,35", "Totals-Actual Commitments", "0", "Pledges Donor Group", "European")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(3), "Pledges Titles", "Test pledge 1", "Pledges Sectors", "112 - BASIC EDUCATION, 113 - SECONDARY EDUCATION", "Pledges Programs", "Subprogram p1.b", "Funding-2012-Actual Pledge", "1,25", "Funding-2014-Actual Pledge", "986,878,1", "Totals-Actual Pledge", "986,879,35")        )      ));
-        
-        ReportSpecificationImpl spec = buildPledgeReport("By Donor Group", 
-                Arrays.asList(ColumnConstants.PLEDGES_DONOR_GROUP, ColumnConstants.PLEDGES_TITLES, ColumnConstants.PLEDGES_SECTORS, ColumnConstants.PLEDGES_PROGRAMS), 
+
+        ReportSpecificationImpl spec = buildPledgeReport("By Donor Group",
+                Arrays.asList(ColumnConstants.PLEDGES_DONOR_GROUP, ColumnConstants.PLEDGES_TITLES, ColumnConstants.PLEDGES_SECTORS, ColumnConstants.PLEDGES_PROGRAMS),
                 Arrays.asList(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, MeasureConstants.PLEDGES_ACTUAL_COMMITMENTS),
                 Arrays.asList(ColumnConstants.PLEDGES_DONOR_GROUP), GroupingCriteria.GROUPING_YEARLY);
-        
+
         runNiTestCase(spec, "en", acts, cor);
     }
-    
+
     @Test
     public void testByRelatedProject() {
         NiReportModel cor = new NiReportModel("AMP-22686-Related-Projects-Hierarchy-AC-AP")
@@ -428,10 +430,10 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                           new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Totals-Actual Pledge", "938 069,75"),
                           new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2", "Funding-2012-Actual Pledge", "1 041 110,52", "Totals-Actual Pledge", "1 041 110,52"),
                           new ReportAreaForTests(new AreaOwner(6), "Pledges Titles", "Heavily used pledge", "Funding-2013-Actual Pledge", "1 800 000", "Funding-2014-Actual Pledge", "8 200 000", "Totals-Actual Pledge", "10 000 000")        )      ));;
-        
+
         runNiTestCase(spec("AMP-22686-Related-Projects-Hierarchy-AC-AP"), "en", acts, cor);
     }
-    
+
     @Test
     public void testFilterByDonorGroup() {
         NiReportModel cor = new NiReportModel("AMP-22686 Filter by Donor Group")
@@ -452,7 +454,7 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                           new ReportAreaForTests(new AreaOwner(3), "Pledges Titles", "Test pledge 1", "Funding-2012-Actual Pledge", "1,25", "Funding-2014-Actual Pledge", "986 878,1", "Totals-Actual Pledge", "986 879,35")        )      ));
         runNiTestCase(spec("AMP-22686 Filter by Donor Group"), "en", acts, cor);
     }
-    
+
     @Test
     public void testFilterByAidModality() {
         NiReportModel cor = new NiReportModel("Filter Pledges by Aid Modality")
@@ -465,17 +467,17 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                     .withBody(      new ReportAreaForTests(null).withContents("Pledges Aid Modality", "", "Pledges Titles", "", "Funding-2012-Actual Pledge", "1,25", "Funding-2012-Actual Commitments", "0", "Totals-Actual Pledge", "1,25", "Totals-Actual Commitments", "0")
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner(3), "Pledges Aid Modality", "Development of shared analytical studies", "Pledges Titles", "Test pledge 1", "Funding-2012-Actual Pledge", "1,25", "Totals-Actual Pledge", "1,25")      ));
-        
-        ReportSpecificationImpl spec = buildPledgeReportFilter("Filter Pledges by Aid Modality", 
-              Arrays.asList(ColumnConstants.PLEDGES_AID_MODALITY, ColumnConstants.PLEDGES_TITLES), 
+
+        ReportSpecificationImpl spec = buildPledgeReportFilter("Filter Pledges by Aid Modality",
+              Arrays.asList(ColumnConstants.PLEDGES_AID_MODALITY, ColumnConstants.PLEDGES_TITLES),
               Arrays.asList(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, MeasureConstants.PLEDGES_ACTUAL_COMMITMENTS),
               null, GroupingCriteria.GROUPING_YEARLY,
-              new ReportElement(new ReportColumn(ColumnConstants.PLEDGES_AID_MODALITY)), 
+              new ReportElement(new ReportColumn(ColumnConstants.PLEDGES_AID_MODALITY)),
               new FilterRule("2107", true)); // "Development of shared analytical studies"
-      
+
       runNiTestCase(spec, "en", acts, cor);
     }
-    
+
     @Test
     public void testPledgesActualDisbursements() {
         NiReportModel cor = new NiReportModel("AMP-22686-pledges-actual-disbursements")
@@ -492,10 +494,10 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                         new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Related Projects", "Activity Linked With Pledge", "Totals-Actual Pledge", "938 069,75"),
                         new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2", "Funding-2012-Actual Pledge", "1 041 110,52", "Totals-Actual Pledge", "1 041 110,52"),
                         new ReportAreaForTests(new AreaOwner(6), "Pledges Titles", "Heavily used pledge", "Related Projects", "pledged 2, pledged education activity 1", "Funding-2013-Actual Pledge", "1 800 000", "Funding-2014-Actual Pledge", "8 200 000", "Funding-2014-Actual Disbursements", "450 000", "Totals-Actual Pledge", "10 000 000", "Totals-Actual Disbursements", "450 000")      ));
-        
+
         runNiTestCase(spec("AMP-22686-pledges-actual-disbursements"), "en", acts, cor);
     }
-    
+
     @Test
     public void testPledgesPlannedAmounts() {
         NiReportModel cor = new NiReportModel("AMP-22686-planned-pledge-amounts")
@@ -512,10 +514,10 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                         new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Related Projects", "Activity Linked With Pledge", "Totals-Actual Pledge", "938 069,75"),
                         new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2", "Totals-Actual Pledge", "1 041 110,52"),
                         new ReportAreaForTests(new AreaOwner(6), "Pledges Titles", "Heavily used pledge", "Related Projects", "pledged 2, pledged education activity 1", "Funding-2014-Planned Commitments", "65 000 000", "Funding-2014-Actual Pledge", "8 200 000", "Totals-Planned Commitments", "65 000 000", "Totals-Actual Pledge", "10 000 000")      ));
-        
+
         runNiTestCase(spec("AMP-22686-planned-pledge-amounts"), "en", acts, cor);
     }
-    
+
     @Test
     public void testPledgeMergingFlat() {
         NiReportModel cor = new NiReportModel("pledges-test-merging-flat")
@@ -577,7 +579,7 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                         new ReportAreaForTests(new AreaOwner(800000005), "Project Title", "free text name 2", "Administrative Level 1", "", "Primary Sector", "", "Secondary Sector", "1-DEMOCRATIC COUNTRY", "National Planning Objectives Level 1", "", "Primary Program Level 1", "", "Secondary Program Level 1", "", "Tertiary Program Level 1", "", "Funding-2012-Actual Commitments", "1 041 110,52", "Totals-Actual Commitments", "1 041 110,52"),
                         new ReportAreaForTests(new AreaOwner(800000006), "Project Title", "Heavily used pledge", "Administrative Level 1", "Anenii Noi County, Lapusna County", "Primary Sector", "112 - BASIC EDUCATION", "Secondary Sector", "", "National Planning Objectives Level 1", "", "Primary Program Level 1", "", "Secondary Program Level 1", "", "Tertiary Program Level 1", "OP1 name, OP2 name", "Funding-2013-Actual Commitments", "-870 000", "Funding-2014-Actual Commitments", "4 900 000", "Totals-Actual Commitments", "4 030 000")      ));
 
-        
+
         runNiTestCase(spec("pledges-test-merging-flat"), "en", acts, cor);
     }
 
@@ -645,7 +647,7 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                           new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Administrative Level 1", "", "Primary Sector", "112 - BASIC EDUCATION", "Secondary Sector", "1-DEMOCRATIC COUNTRY", "National Planning Objectives Level 1", "", "Secondary Program Level 1", "", "Tertiary Program Level 1", "", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Actual Disbursements", "570", "Totals-Actual Disbursements", "770"),
                           new ReportAreaForTests(new AreaOwner(800000005), "Project Title", "free text name 2", "Administrative Level 1", "", "Primary Sector", "", "Secondary Sector", "1-DEMOCRATIC COUNTRY", "National Planning Objectives Level 1", "", "Secondary Program Level 1", "", "Tertiary Program Level 1", "", "Funding-2012-Actual Commitments", "1 041 110,52", "Totals-Actual Commitments", "1 041 110,52"),
                           new ReportAreaForTests(new AreaOwner(800000006), "Project Title", "Heavily used pledge", "Administrative Level 1", "Anenii Noi County, Lapusna County", "Primary Sector", "112 - BASIC EDUCATION", "Secondary Sector", "", "National Planning Objectives Level 1", "", "Secondary Program Level 1", "", "Tertiary Program Level 1", "OP1 name, OP2 name", "Funding-2013-Actual Commitments", "-870 000", "Funding-2014-Actual Commitments", "4 900 000", "Totals-Actual Commitments", "4 030 000")        )      ));
-        
+
         runNiTestCase(spec("pledges-test-merging-by-primary-program"), "en", acts, cor);
     }
 
@@ -728,7 +730,7 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                           new ReportAreaForTests(new AreaOwner(800000004), "Project Title", "ACVL Pledge Name 2", "Administrative Level 1", "", "Secondary Sector", "1-DEMOCRATIC COUNTRY", "National Planning Objectives Level 1", "", "Primary Program Level 1", "Subprogram p1.b", "Secondary Program Level 1", "", "Tertiary Program Level 1", "OP1 name", "Funding-2014-Actual Commitments", "-50 000", "Totals-Actual Commitments", "888 069,75"),
                           new ReportAreaForTests(new AreaOwner(800000005), "Project Title", "free text name 2", "Administrative Level 1", "", "Secondary Sector", "1-DEMOCRATIC COUNTRY", "National Planning Objectives Level 1", "", "Primary Program Level 1", "", "Secondary Program Level 1", "", "Tertiary Program Level 1", "", "Funding-2012-Actual Commitments", "1 041 110,52", "Totals-Actual Commitments", "1 041 110,52")        )      ));
 
-        
+
         runNiTestCase(spec("pledges-test-merging-by-primary-sector-2"), "en", acts, cor);
     }
 
@@ -827,7 +829,7 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                           new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION", "Secondary Sector", "1-DEMOCRATIC COUNTRY", "National Planning Objectives Level 1", "", "Primary Program Level 1", "Subprogram p1, Subprogram p1.b", "Secondary Program Level 1", "", "Tertiary Program Level 1", "", "Funding-2014-Actual Commitments", "3 632,14", "Funding-2015-Actual Commitments", "93 930,84", "Totals-Actual Commitments", "97 562,98"),
                           new ReportAreaForTests(new AreaOwner(800000004), "Project Title", "ACVL Pledge Name 2", "Primary Sector", "", "Secondary Sector", "1-DEMOCRATIC COUNTRY", "National Planning Objectives Level 1", "", "Primary Program Level 1", "Subprogram p1.b", "Secondary Program Level 1", "", "Tertiary Program Level 1", "OP1 name", "Funding-2014-Actual Commitments", "-50 000", "Totals-Actual Commitments", "888 069,75"),
                           new ReportAreaForTests(new AreaOwner(800000005), "Project Title", "free text name 2", "Primary Sector", "", "Secondary Sector", "1-DEMOCRATIC COUNTRY", "National Planning Objectives Level 1", "", "Primary Program Level 1", "", "Secondary Program Level 1", "", "Tertiary Program Level 1", "", "Funding-2012-Actual Commitments", "1 041 110,52", "Totals-Actual Commitments", "1 041 110,52")        )      ));
-        
+
         runNiTestCase(spec("pledges-test-merging-by-region"), "en", acts, cor);
     }
 
@@ -894,7 +896,7 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                           new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Administrative Level 1", "Chisinau County", "Primary Sector", "110 - EDUCATION", "Secondary Sector", "1-DEMOCRATIC COUNTRY", "National Planning Objectives Level 1", "", "Primary Program Level 1", "Subprogram p1.b", "Secondary Program Level 1", "", "Funding-2013-Actual Disbursements", "35 000", "Funding-2014-Actual Disbursements", "75 000", "Totals-Actual Disbursements", "110 000"),
                           new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Administrative Level 1", "", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION", "Secondary Sector", "1-DEMOCRATIC COUNTRY", "National Planning Objectives Level 1", "", "Primary Program Level 1", "Subprogram p1, Subprogram p1.b", "Secondary Program Level 1", "", "Funding-2014-Actual Commitments", "3 632,14", "Funding-2015-Actual Commitments", "93 930,84", "Totals-Actual Commitments", "97 562,98"),
                           new ReportAreaForTests(new AreaOwner(800000005), "Project Title", "free text name 2", "Administrative Level 1", "", "Primary Sector", "", "Secondary Sector", "1-DEMOCRATIC COUNTRY", "National Planning Objectives Level 1", "", "Primary Program Level 1", "", "Secondary Program Level 1", "", "Funding-2012-Actual Commitments", "1 041 110,52", "Totals-Actual Commitments", "1 041 110,52")        )      ));
-        
+
         runNiTestCase(spec("pledges-test-merging-by-tertiary-program"), "en", acts, cor);
     }
 
@@ -924,10 +926,10 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                           new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Administrative Level 1", "Dubasari County", "Primary Sector", "112 - BASIC EDUCATION", "Secondary Sector", "3 NATIONAL COMPETITIVENESS", "National Planning Objectives Level 1", "", "Secondary Program Level 1", "", "Tertiary Program Level 1", "", "Funding-2010-Actual Disbursements", "123 321", "Funding-2011-Actual Commitments", "213 231", "Totals-Actual Commitments", "213 231", "Totals-Actual Disbursements", "123 321"),
                           new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Administrative Level 1", "Edinet County", "Primary Sector", "112 - BASIC EDUCATION", "Secondary Sector", "3 NATIONAL COMPETITIVENESS", "National Planning Objectives Level 1", "", "Secondary Program Level 1", "", "Tertiary Program Level 1", "", "Funding-2013-Actual Commitments", "567 421", "Funding-2013-Actual Disbursements", "131 845", "Totals-Actual Commitments", "567 421", "Totals-Actual Disbursements", "131 845")        )      ));
 
-        
+
         runNiTestCase(spec("pledges-test-merging-by-primary-program-filter-by-secondary-sector"), "en", acts, cor);
     }
-    
+
     @Test
     public void testFilterMergedPledgesByPrimaryProgram() {
         NiReportModel cor = new NiReportModel("pledges-test-merging-by-primary-program-filtered-by-primary-program")
@@ -951,10 +953,10 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                       new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Administrative Level 1", "", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION", "Secondary Sector", "1-DEMOCRATIC COUNTRY", "National Planning Objectives Level 1", "", "Secondary Program Level 1", "", "Tertiary Program Level 1", "", "Funding-2014-Actual Commitments", "2 433,53", "Funding-2015-Actual Commitments", "62 933,66", "Totals-Actual Commitments", "65 367,2")        )      ));
 
 
-        
+
         runNiTestCase(spec("pledges-test-merging-by-primary-program-filtered-by-primary-program"), "en", acts, cor);
     }
-    
+
     @Test
     public void testFilterMergedPledgesByRegion() {
         NiReportModel cor = new NiReportModel("pledges-test-merging-by-primary-program-filtered-by-region")
@@ -982,7 +984,7 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                           new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Administrative Level 1", "Balti County", "Primary Sector", "110 - EDUCATION", "Secondary Sector", "1-DEMOCRATIC COUNTRY", "National Planning Objectives Level 1", "", "Secondary Program Level 1", "", "Tertiary Program Level 1", "", "Funding-2014-Actual Commitments", "37 500", "Totals-Actual Commitments", "37 500"),
                           new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Administrative Level 1", "Balti County", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION, 120 - HEALTH", "Secondary Sector", "5 REGIONAL DEVELOPMENT", "National Planning Objectives Level 1", "", "Secondary Program Level 1", "", "Tertiary Program Level 1", "", "Funding-2006-Actual Commitments", "53 262,32", "Funding-2014-Actual Disbursements", "27 500", "Totals-Actual Commitments", "53 262,32", "Totals-Actual Disbursements", "27 500"),
                           new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Administrative Level 1", "Balti County", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION", "Secondary Sector", "1-DEMOCRATIC COUNTRY", "National Planning Objectives Level 1", "", "Secondary Program Level 1", "", "Tertiary Program Level 1", "", "Funding-2015-Actual Commitments", "456 789", "Funding-2015-Actual Disbursements", "321 765", "Totals-Actual Commitments", "456 789", "Totals-Actual Disbursements", "321 765")        )      ));
-        
+
         runNiTestCase(spec("pledges-test-merging-by-primary-program-filtered-by-region"), "en", acts, cor);
     }
 
@@ -999,7 +1001,7 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                   .withChildren(
                     new ReportAreaForTests(new AreaOwner(3), "Pledges Titles", "Test pledge 1", "Pledges Aid Modality", "Development of shared analytical studies, Interchanging models, proposals, and printed materials, Sending and exchanging experts, researchers, and professors", "Pledges Administrative Level 3", "", "Pledges Donor Group", "European", "Pledge Status", "second status", "Pledges Sectors", "112 - BASIC EDUCATION, 113 - SECONDARY EDUCATION", "Pledges Programs", "Subprogram p1.b", "Pledges Administrative Level 1", "Transnistrian Region", "Pledges Secondary Sectors", "3 NATIONAL COMPETITIVENESS, 5 REGIONAL DEVELOPMENT", "Pledges Tertiary Programs", "OP1 name", "Funding-2012-Actual Pledge", "0,06", "Funding-2014-Actual Pledge", "49 343,91", "Totals-Actual Pledge", "49 343,97")      ));
 
-        
+
         runNiTestCase(spec("pledge-test-filters-location-transnistria"), "en", acts, cor);
     }
 
@@ -1018,7 +1020,7 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                     new ReportAreaForTests(new AreaOwner(3), "Pledges Titles", "Test pledge 1", "Pledges Aid Modality", "Development of shared analytical studies, Interchanging models, proposals, and printed materials, Sending and exchanging experts, researchers, and professors", "Pledges Administrative Level 3", "", "Pledges Donor Group", "European", "Pledge Status", "second status", "Pledges Sectors", "112 - BASIC EDUCATION, 113 - SECONDARY EDUCATION", "Pledges Programs", "Subprogram p1.b", "Pledges Administrative Level 1", "Balti County, Cahul County, Transnistrian Region", "Pledges Secondary Sectors", "3 NATIONAL COMPETITIVENESS, 5 REGIONAL DEVELOPMENT", "Pledges Tertiary Programs", "OP1 name", "Funding-2012-Actual Pledge", "1,25", "Funding-2014-Actual Pledge", "986 878,1", "Totals-Actual Pledge", "986 879,35"),
                     new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Pledges Aid Modality", "Conferences, seminars, capacity specializations", "Pledges Administrative Level 3", "", "Pledges Donor Group", "Default Group", "Pledge Status", "", "Pledges Sectors", "", "Pledges Programs", "Subprogram p1.b", "Pledges Administrative Level 1", "", "Pledges Secondary Sectors", "1-DEMOCRATIC COUNTRY", "Pledges Tertiary Programs", "OP1 name", "Totals-Actual Pledge", "938 069,75")      ));
 
-        
+
         runNiTestCase(spec("pledge-test-filters-prim-program-p1b"), "en", acts, cor);
     }
 
@@ -1034,7 +1036,7 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                 .withBody(      new ReportAreaForTests(null).withContents("Pledges Titles", "", "Pledges Aid Modality", "", "Pledges Administrative Level 3", "", "Pledges Donor Group", "", "Pledges National Plan Objectives", "", "Pledge Status", "", "Pledges Sectors", "", "Pledges Programs", "", "Pledges Administrative Level 1", "", "Pledges Secondary Programs", "", "Pledges Secondary Sectors", "", "Pledges Tertiary Programs", "", "Funding-2012-Actual Pledge", "0,81", "Funding-2014-Actual Pledge", "641 470,77", "Totals-Actual Pledge", "641 471,58")
                   .withChildren(
                     new ReportAreaForTests(new AreaOwner(3), "Pledges Titles", "Test pledge 1", "Pledges Aid Modality", "Development of shared analytical studies, Interchanging models, proposals, and printed materials, Sending and exchanging experts, researchers, and professors", "Pledges Administrative Level 3", "", "Pledges Donor Group", "European", "Pledge Status", "second status", "Pledges Sectors", "113 - SECONDARY EDUCATION", "Pledges Programs", "Subprogram p1.b", "Pledges Administrative Level 1", "Balti County, Cahul County, Transnistrian Region", "Pledges Secondary Sectors", "3 NATIONAL COMPETITIVENESS, 5 REGIONAL DEVELOPMENT", "Pledges Tertiary Programs", "OP1 name", "Funding-2012-Actual Pledge", "0,81", "Funding-2014-Actual Pledge", "641 470,77", "Totals-Actual Pledge", "641 471,58")      ));
-        
+
         runNiTestCase(spec("pledge-test-filters-prim-sector"), "en", acts, cor);
     }
 
@@ -1053,7 +1055,7 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                     new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Pledges Aid Modality", "Conferences, seminars, capacity specializations", "Pledges Administrative Level 3", "", "Pledges Donor Group", "Default Group", "Pledge Status", "", "Pledges Sectors", "", "Pledges Programs", "Subprogram p1.b", "Pledges Administrative Level 1", "", "Pledges Secondary Sectors", "1-DEMOCRATIC COUNTRY", "Pledges Tertiary Programs", "OP1 name", "Totals-Actual Pledge", "938 069,75"),
                     new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2", "Pledges Aid Modality", "Diplomats and courses", "Pledges Administrative Level 3", "", "Pledges Donor Group", "Default Group", "Pledge Status", "", "Pledges Sectors", "", "Pledges Administrative Level 1", "", "Pledges Secondary Sectors", "1-DEMOCRATIC COUNTRY", "Funding-2012-Actual Pledge", "1 041 110,52", "Totals-Actual Pledge", "1 041 110,52")      ));
 
-        
+
         runNiTestCase(spec("pledge-test-filters-secondary-sector"), "en", acts, cor);
     }
 
@@ -1070,10 +1072,10 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                 .withBody(      new ReportAreaForTests(null).withContents("Pledges Titles", "", "Pledges Aid Modality", "", "Pledges Administrative Level 3", "", "Pledges Donor Group", "", "Pledges National Plan Objectives", "", "Pledge Status", "", "Pledges Tertiary Sectors", "", "Pledges Sectors", "", "Pledges Type Of Assistance", "", "Pledges Programs", "", "Pledges Administrative Level 1", "", "Pledges Secondary Programs", "", "Pledges Secondary Sectors", "", "Pledges Tertiary Programs", "", "Funding-2014-Actual Pledge", "219 202,1", "Totals-Actual Pledge", "219 202,1")
                   .withChildren(
                     new ReportAreaForTests(new AreaOwner(3), "Pledges Titles", "Test pledge 1", "Pledges Aid Modality", "Development of shared analytical studies, Interchanging models, proposals, and printed materials, Sending and exchanging experts, researchers, and professors", "Pledges Administrative Level 3", "", "Pledges Donor Group", "European", "Pledge Status", "second status", "Pledges Tertiary Sectors", "", "Pledges Sectors", "112 - BASIC EDUCATION, 113 - SECONDARY EDUCATION", "Pledges Type Of Assistance", "second type of assistance", "Pledges Programs", "Subprogram p1.b", "Pledges Administrative Level 1", "Balti County, Cahul County, Transnistrian Region", "Pledges Secondary Sectors", "3 NATIONAL COMPETITIVENESS, 5 REGIONAL DEVELOPMENT", "Pledges Tertiary Programs", "OP1 name", "Funding-2014-Actual Pledge", "219 202,1", "Totals-Actual Pledge", "219 202,1")      ));
-        
+
         runNiTestCase(spec("pledge-test-filters-type-of-assistance"), "en", acts, cor);
     }
-    
+
     @Test
     public void test_NOT_IMPLEMENTED_YET_PledgesPercentageOfDisbursement() {
         NiReportModel cor = new NiReportModel("AMP-22686-Pledge-Percentage-of-Disbursement")
@@ -1090,29 +1092,29 @@ public class AmpSchemaPledgesTests extends AmpReportingTestCase {
                 new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Related Projects", "Activity Linked With Pledge"),
                 new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2"),
                 new ReportAreaForTests(new AreaOwner(6), "Pledges Titles", "Heavily used pledge", "Related Projects", "pledged 2, pledged education activity 1", "Funding-2014-Actual Disbursements", "450 000", "Totals-Actual Disbursements", "450 000", "Totals-Percentage of Disbursement", "100")      ));
-     
+
         runNiTestCase(spec("AMP-22686-Pledge-Percentage-of-Disbursement"), "en", acts, cor);
     }
-    
+
     @Test
     public void testHierarchiesDoNotChangeTotals() throws Exception {
         List<String> measures = Arrays.asList(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLEDGES_COMMITMENT_GAP);
-        
-        ReportSpecificationImpl initSpec = buildPledgeReport("initSpec", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE), 
-            measures, 
-            null, 
+
+        ReportSpecificationImpl initSpec = buildPledgeReport("initSpec",
+            Arrays.asList(ColumnConstants.PROJECT_TITLE),
+            measures,
+            null,
             GroupingCriteria.GROUPING_YEARLY);
-                
+
         assertEquals(correctTotals, buildDigest(initSpec, acts, BasicSanityChecks.fundingGrandTotalsDigester).toString());
-                
+
         // single-hierarchy reports
         for(boolean isSummary:Arrays.asList(true, false)) {
             for(String hierName:hierarchiesToTry) {
-                ReportSpecificationImpl spec = buildPledgeReport(String.format("%s summary: %b", hierName, isSummary), 
-                    Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName), 
-                    measures, 
-                    Arrays.asList(hierName), 
+                ReportSpecificationImpl spec = buildPledgeReport(String.format("%s summary: %b", hierName, isSummary),
+                    Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName),
+                    measures,
+                    Arrays.asList(hierName),
                     GroupingCriteria.GROUPING_YEARLY);
                 spec.setSummaryReport(isSummary);
                 assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, BasicSanityChecks.fundingGrandTotalsDigester).toString());

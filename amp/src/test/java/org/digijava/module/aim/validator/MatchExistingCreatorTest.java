@@ -13,9 +13,9 @@ import javax.validation.ConstraintViolation;
 import java.util.Set;
 
 import static org.digijava.module.aim.validator.ConstraintMatchers.hasViolation;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

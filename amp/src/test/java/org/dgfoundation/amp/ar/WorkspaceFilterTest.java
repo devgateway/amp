@@ -13,9 +13,9 @@ import org.hamcrest.MatcherAssert;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Collection;
 import java.util.List;
@@ -23,7 +23,6 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.Assert.assertThat;
 
 /**
  * Activity name format: ~wsf~ {$workspace_nr} {description}
@@ -117,11 +116,12 @@ import static org.junit.Assert.assertThat;
  *
  * @author Octavian Ciubotaru
  */
-@Category(DatabaseTests.class)
+@Tag("databasetests")
+@ExtendWith(InTransactionRule.class)
 class WorkspaceFilterTest {
 
-    @Rule
-    public InTransactionRule inTransactionRule = new InTransactionRule();
+
+//    public InTransactionRule inTransactionRule = new InTransactionRule();
 
     /**
      * Redoing public view caches to be able to properly test the anonymous case. See {@link #testAnonymous()}.

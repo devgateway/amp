@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TreeSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 /**
  * ETL Testcases
@@ -37,7 +37,7 @@ public class FilterRuleTests {
         assertEquals(FilterType.VALUES, outRule.filterType);
         assertEquals("[1, 2, 3, 4, 5, 6, 7, 8, 9]", new TreeSet<>(outRule.values).toString());
     }
-    
+
     @Test
     public void testMergingRangesAndIds() {
         List<FilterRule> in = new ArrayList<>();
@@ -48,6 +48,6 @@ public class FilterRuleTests {
         assertEquals(1, out.size());
         FilterRule outRule = out.get(0);
         assertEquals(FilterType.VALUES, outRule.filterType);
-        assertEquals("[1, 2, 3, 4, 5, 6]", new TreeSet<>(outRule.values).toString());   
-    }   
+        assertEquals("[1, 2, 3, 4, 5, 6]", new TreeSet<>(outRule.values).toString());
+    }
 }

@@ -1,33 +1,34 @@
 package org.dgfoundation.amp.seleniumTest.permissionsAndValidations;
 
+import com.thoughtworks.selenium.SeleneseTestBase;
 import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
-import org.junit.Ignore;
+
 import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
-import org.junit.Ignore;
+
 import org.dgfoundation.amp.seleniumTest.reports.TabTest;
-import org.junit.Ignore;
+
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
 
-import com.thoughtworks.selenium.SeleneseTestCase;
-import org.junit.Ignore;
+
+import com.thoughtworks.selenium.SeleneseTestBase;
+
 import com.thoughtworks.selenium.Selenium;
-import org.junit.Ignore;
 
-@Ignore
-public class PermissionsAndValidationsTest extends SeleneseTestCase {
-    
+
+
+public class PermissionsAndValidationsTest extends SeleneseTestBase {
+
     private static Logger logger = Logger.getLogger(PermissionsAndValidationsTest.class);
-    
+
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*firefox");
 //      setUp("http://senegal.staging.ampdev.net/", "*chrome");
     }
     public static void testPermissionsAndValidations(Selenium selenium) throws Exception {
-        
+
         String testTime =  String.valueOf(System.currentTimeMillis());
         String activityName ="Activity of testing setup " + testTime;
-        
+
         //Login as TM WS Team (create an activity)
         selenium.open("/");
         selenium.type("j_username", "uattm@amp.org");
@@ -55,7 +56,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         }
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
         //Login as TL WS Team (create a tab and validate the activity)
         logger.info("Permissions and Validation UAT Step 3'");
         selenium.type("j_username", "uattl@amp.org");
@@ -73,7 +74,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         selenium.waitForPageToLoad("50000");
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
         //Login as TL WS Team - Computed (use the tab created and check the activity)
         selenium.type("j_username", "uattl@amp.org");
         selenium.type("j_password", "abc");
@@ -95,7 +96,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 //      selenium.waitForPageToLoad("30000");
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
         //Login as TL WS Management (create a tab and check the activity)
         // aca hay un issue cuando creas un tab en un managment workspace filtra por draft=true en settings
         /*
@@ -116,8 +117,8 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         */
-        
-        //Login as Admin and change the permissions on feature manager 
+
+        //Login as Admin and change the permissions on feature manager
         logger.info("Permissions and Validation UAT Step 5'");
         selenium.type("j_username", "admin@amp.org");
         selenium.type("j_password", "admin");
@@ -137,50 +138,50 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         }
         String cId = "";
         if (selenium.isElementPresent("//li[@title='Project Title']/input")) {
-            cId = selenium.getAttribute("//li[@title='Project Title']/input@id");       
+            cId = selenium.getAttribute("//li[@title='Project Title']/input@id");
             cId = cId.substring(cId.indexOf("is:")+3);
         } else if (selenium.isElementPresent("//li[@title='project title']/input")) {
-            cId = selenium.getAttribute("//li[@title='project title']/input@id");       
+            cId = selenium.getAttribute("//li[@title='project title']/input@id");
             cId = cId.substring(cId.indexOf("is:")+3);
         } else if (selenium.isElementPresent("//li[@title='Project title']/input")) {
-            cId = selenium.getAttribute("//li[@title='Project title']/input@id");       
+            cId = selenium.getAttribute("//li[@title='Project title']/input@id");
             cId = cId.substring(cId.indexOf("is:")+3);
         }
-        
+
         selenium.click("//a[@onclick= \"openFieldPermissionsPopup("+cId+")\"]"); // Project Title
         //selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
         Thread.sleep(5000);
-        selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
+        selenium.selectWindow(selenium.getAllWindowTitles()[1]);
         selenium.uncheck("faRead");
         selenium.uncheck("faEdit");
         selenium.click("//input[@onclick='javascript:savePermissions();']");
-        selenium.selectWindow("null"); 
+        selenium.selectWindow("null");
         Thread.sleep(5000);
         if (selenium.isElementPresent("//li[@title='Status']/input")) {
-            cId = selenium.getAttribute("//li[@title='Status']/input@id");      
+            cId = selenium.getAttribute("//li[@title='Status']/input@id");
             cId = cId.substring(cId.indexOf("is:")+3);
         } else if (selenium.isElementPresent("//li[@title='status']/input")) {
-            cId = selenium.getAttribute("//li[@title='status']/input@id");      
+            cId = selenium.getAttribute("//li[@title='status']/input@id");
             cId = cId.substring(cId.indexOf("is:")+3);
         } else if (selenium.isElementPresent("//li[@title='STATUS']/input")) {
-            cId = selenium.getAttribute("//li[@title='STATUS']/input@id");      
+            cId = selenium.getAttribute("//li[@title='STATUS']/input@id");
             cId = cId.substring(cId.indexOf("is:")+3);
         }
-        
+
         selenium.click("//a[@onclick= \"openFieldPermissionsPopup("+cId+")\"]"); // Project Status
         //selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
         Thread.sleep(5000);
-        selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
+        selenium.selectWindow(selenium.getAllWindowTitles()[1]);
         selenium.uncheck("faRead");
         selenium.uncheck("faEdit");
         selenium.click("//input[@onclick='javascript:savePermissions();']");
-        selenium.selectWindow("null"); 
+        selenium.selectWindow("null");
         Thread.sleep(5000);
         selenium.click("//input[@name='saveTreeVisibility']");
         selenium.waitForPageToLoad("30000");
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
         //Login as TM WS Team (create a tab and check if the Project Title and Status are enabled)
         logger.info("Permissions and Validation UAT Step 6'");
         selenium.type("j_username", "uattm@amp.org");
@@ -216,7 +217,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         }
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
         //Login as TL WS Team (use the tab created and check if the Project Title and Status are enabled)
         logger.info("Permissions and Validation UAT Step 7'");
         selenium.type("j_username", "uattl@amp.org");
@@ -257,7 +258,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         }
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
         //Login as TMC WS Team (create a tab and check if the Project Title and Status are disabled)
         logger.info("Permissions and Validation UAT Step 8'");
         selenium.type("j_username", "uattmc@amp.org");
@@ -291,10 +292,10 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
             logger.error("Status field is enabled");
             //selenium.logAssertion"assertTrue", "Status field is enabled", "condition=false");
         }
-        
+
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-      
+
         //Login as TL WS Team (change the application settings)
         logger.info("Permissions and Validation UAT Step 9'");
         selenium.type("j_username", "uattl@amp.org");
@@ -312,7 +313,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         selenium.waitForPageToLoad("30000");
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-      
+
         //Login as TM WS Team (use the tab created, add an activity and check if the title is green and with an *)
         String testTime2 =  String.valueOf(System.currentTimeMillis());
         String activityName2 ="Activity of testing setup 2 " + testTime2;
@@ -340,7 +341,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         }
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
         //Login as TL WS Team (create a tab and validate the activity)
         logger.info("Permissions and Validation UAT Step 10'");
         selenium.type("j_username", "uattl@amp.org");
@@ -395,7 +396,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         selenium.waitForPageToLoad("30000");
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-      
+
         //Login as TM WS Team (use the tab created and check if the Project Title and Status are enabled)
         selenium.type("j_username", "uattm@amp.org");
         selenium.type("j_password", "abc");
@@ -432,7 +433,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         }
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
         //Login as TL WS Team (create a tab and validate the activity)
         logger.info("Permissions and Validation UAT Step 13 and 14'");
         selenium.type("j_username", "uattl@amp.org");
@@ -483,7 +484,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
             logger.error("Activity name is shown with *");
             //selenium.logAssertion"assertTrue", "Activity name is shown with *", "condition=false");
         }
-        
+
         selenium.click("//table[@id='reportTable']/tbody/tr[2]/td[1]/a/font/div");
         selenium.waitForPageToLoad("30000");
         if (!selenium.isElementPresent("//a[contains(@href, \"mailto:uattm@amp.org\")]")) {
@@ -521,7 +522,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
                 }
             }
         }
-    
+
         selenium.click("//a[contains(@href, \"showDesktop.do\")]");
         selenium.waitForPageToLoad("30000");
         selenium.click("//a[@id='Tab-Test Tab TL 2 " + testTime2 + "']/div");
@@ -530,7 +531,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
             logger.error("Activity is available for a wrong user");
             //selenium.logAssertion"assertTrue", "Activity is available for a wrong user", "condition=false");
         }
-        
+
         logger.info("Permissions and Validation UAT Step 16'");
         selenium.click("//a[@onclick=\"return teamWorkspaceSetup('-1');\"]");
         selenium.waitForPageToLoad("30000");
@@ -571,7 +572,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         }
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
         //Login as TMC WS Team (create a tab and check if the Project Title and Status are enabled)
         logger.info("Permissions and Validation UAT Step 17'");
         selenium.type("j_username", "uattmc@amp.org");
@@ -604,14 +605,14 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
             if (dis.equalsIgnoreCase("disabled")) {
                 logger.error("Status field is disabled");
                 //selenium.logAssertion"assertTrue", "Status field is disabled", "condition=false");
-            }           
+            }
         } catch (Exception e) {
             logger.info("Attribute 'Disabled' is not available for 'planning.statusId'");
            //selenium.logComment("Attribute 'Disabled' is not available for 'planning.statusId'");
         }
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
         selenium.type("j_username", "uattl@amp.org");
         selenium.type("j_password", "abc");
         selenium.click("submitButton");
@@ -623,7 +624,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         TabTest.deleteAllTabs(selenium);
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
         selenium.type("j_username", "uattm@amp.org");
         selenium.type("j_password", "abc");
         selenium.click("submitButton");
@@ -635,7 +636,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         TabTest.deleteAllTabs(selenium);
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
         selenium.type("j_username", "uattmc@amp.org");
         selenium.type("j_password", "abc");
         selenium.click("submitButton");
@@ -647,7 +648,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         TabTest.deleteAllTabs(selenium);
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
         selenium.type("j_username", "uattl@amp.org");
         selenium.type("j_password", "abc");
         selenium.click("submitButton");
@@ -659,7 +660,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         TabTest.deleteAllTabs(selenium);
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
         selenium.type("j_username", "admin@amp.org");
         selenium.type("j_password", "admin");
         selenium.click("submitButton");
@@ -699,17 +700,17 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
         }
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
-        
+
         logger.info("Permissions and Validations Test Finished Successfully");
        //selenium.logComment("Permissions and Validations Test Finished Successfully");
     }
-    
-    
-    
+
+
+
     /**
-     * 
+     *
      * @param activityName
-     * @throws Exception 
+     * @throws Exception
      */
     private static void addActivity (Selenium selenium, String activityName) throws Exception{
         boolean addAvailable = false;
@@ -729,10 +730,10 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
                 logger.info("Field \"Status\" is not available.");
                //selenium.logComment("Field \"Status\" is not available.");
             }
-            
+
             selenium.click("//a[@href='javascript:gotoStep(2)']");
             selenium.waitForPageToLoad("50000");
-            
+
             if (SeleniumFeaturesConfiguration.getFeatureState("Sectors")){
                 //Add Primary Sector
                 if (SeleniumFeaturesConfiguration.getFieldState("Primary Sector")){
@@ -743,7 +744,7 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
                             selenium.select("sector", "index=1");
                             Thread.sleep(5000);
                             selenium.click("addButton");
-                            selenium.waitForPageToLoad("50000");    
+                            selenium.waitForPageToLoad("50000");
                             if (selenium.isElementPresent("activitySectors[0].sectorPercentage")) {
                                 selenium.type("activitySectors[0].sectorPercentage", "100");
                             } else {
@@ -794,8 +795,8 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
                 logger.info("Feature \"Sectors\" is not available.");
                //selenium.logComment("Feature \"Sectors\" is not available.");
             }
-            
-            
+
+
             //Add Funding
             boolean fundingAvailable = false;
             if (selenium.isElementPresent("//a[@href='javascript:gotoStep(3)']")) {
@@ -806,21 +807,21 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
                 logger.info("Step \"Funding\" is not available.");
                //selenium.logComment("Step \"Funding\" is not available.");
             }
-            
+
             if (SeleniumFeaturesConfiguration.getFeatureState("Funding Information")){
-                
+
                 if (SeleniumFeaturesConfiguration.getFieldState("Add Donor Organization")){
                     if (selenium.isElementPresent("//input[@onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=true~PARAM_CALLBACKFUNCTION_NAME=doNothing();~PARAM_COLLECTION_NAME=fundingOrganizations~PARAM_NAME_DELEGATE_CLASS=org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]")) {
                         selenium.click("//input[@onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~PARAM_RESET_FORM=true~PARAM_REFRESH_PARENT=true~PARAM_CALLBACKFUNCTION_NAME=doNothing();~PARAM_COLLECTION_NAME=fundingOrganizations~PARAM_NAME_DELEGATE_CLASS=org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate~','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\"]");
                         //selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "50000");
                         Thread.sleep(10000);
-                        selenium.selectWindow(selenium.getAllWindowTitles()[1]); 
-                       
+                        selenium.selectWindow(selenium.getAllWindowTitles()[1]);
+
                         SeleniumTestUtil.waitForElement(selenium,"//input[@onclick='return searchOrganization()']", 90);
                         selenium.type("keyword", "World Bank");
                         selenium.click("//input[@onclick='return searchOrganization()']");
                         SeleniumTestUtil.waitForElement(selenium,"selOrganisations", 90);
-                        selenium.click("selOrganisations"); 
+                        selenium.click("selOrganisations");
                         selenium.click("//input[@onclick='return selectOrganization()']");
                         selenium.selectWindow("null");
                         selenium.waitForPageToLoad("50000");
@@ -836,15 +837,15 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
                 logger.info("Feature \"Funding Information\" is not available.");
                //selenium.logComment("Feature \"Funding Information\" is not available.");
             }
-            
+
             selenium.click("//input[@onclick='saveClicked()']");
             selenium.waitForPageToLoad("50000");
             if (selenium.isElementPresent("//input[@onclick='saveClicked()']")) {
-                logger.error("Save Activity Fail"); 
+                logger.error("Save Activity Fail");
                 //selenium.logAssertion"assertTrue", "Save Activity Fail", "condition=false");
             }
             if (selenium.isElementPresent("//input[@onclick='overwrite()']")) {
-                selenium.click("//input[@onclick='overwrite()']");          
+                selenium.click("//input[@onclick='overwrite()']");
             }
         }
     }

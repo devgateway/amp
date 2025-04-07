@@ -7,22 +7,22 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
 
 import javax.validation.ConstraintViolationException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.junit.jupiter.api.BeforeAll;
 
 /**
  * @author Octavian Ciubotaru
  */
-@Category(DatabaseTests.class)
+@Tag("databasetests")
 public class PersistenceManagerTest {
 
     private static final String TEST_REPORT_NAME = "test report name 1234567890";

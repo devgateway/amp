@@ -6,12 +6,14 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.joda.time.DateTime;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.validation.ConstraintViolationException;
 import java.lang.reflect.Field;
@@ -20,22 +22,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Octavian Ciubotaru
  */
+@ExtendWith({AMPRequestRule.class, MockitoExtension.class})
 public class InterchangeUtilsTest {
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
 
-    @Rule
-    public AMPRequestRule ampRequestRule = new AMPRequestRule();
 
     @Mock private TranslatorService translatorService;
 
@@ -69,7 +66,7 @@ public class InterchangeUtilsTest {
 
     @Test
     public void testTranslateTranslatableInMultilingual() throws Exception {
-        ampRequestRule.enableMultilingual();
+//        AMPRequestRule.enableMultilingual();
 
         assertEquals(translationsEnFr("ct+en+1name", "ct+fr+1name"),
                 translateFieldValue(AmpActivityFields.class, "name", "test", 1L));
@@ -95,7 +92,7 @@ public class InterchangeUtilsTest {
 
     @Test
     public void testTranslateTextEditorMultilingual() throws Exception {
-        ampRequestRule.enableMultilingual();
+        AMPRequestRule.enableMultilingual();
 
         assertEquals(translationsEnFr("ed+en+test", "ed+fr+test"),
                 translateFieldValue(AmpActivityFields.class, "projectImpact", "test", null));
@@ -109,7 +106,7 @@ public class InterchangeUtilsTest {
 
     @Test
     public void testTranslateWithoutId() throws Exception {
-        ampRequestRule.enableMultilingual();
+        AMPRequestRule.enableMultilingual();
 
         assertEquals(translationsEnFr(null, null),
                 translateFieldValue(AmpActivityFields.class, "name", "test", null));

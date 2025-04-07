@@ -5,7 +5,7 @@ import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
 import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
-import org.junit.Ignore;
+
 import org.junit.jupiter.api.Test;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
@@ -13,7 +13,7 @@ import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
 public class MultilingualThroughTrnTests extends ReportsTestCase {
 
     @Test
-    @Ignore
+    
     public void testHierByImplLevel()
     {
         GroupReportModel fddr_correct = 
@@ -325,7 +325,7 @@ public class MultilingualThroughTrnTests extends ReportsTestCase {
     }
 
     @Test
-    @Ignore
+    
     public void testFlat()
     {
         GroupReportModel fddr_correct = 

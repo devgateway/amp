@@ -2,8 +2,6 @@ package org.dgfoundation.amp.ar;
 
 import org.dgfoundation.amp.ar.legacy.*;
 import org.junit.platform.suite.api.SelectClasses;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 
 /**
  * entry point for AMP 2.6 tests. Initializes standalone AMP as part of the discovery process.

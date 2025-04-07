@@ -2,22 +2,22 @@ package org.dgfoundation.amp.ar.amp212;
 
 import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
 
 import java.util.LinkedHashMap;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * ETL Testcases
  * @author Dolghier Constantin
  *
  */
-@Category(DatabaseTests.class)
+@Tag("databasetests")
 public class SQLUtilsTests extends AmpTestCase {
 
     @BeforeAll

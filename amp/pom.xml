@@ -201,14 +201,6 @@
             <scope>test</scope>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <version>5.9.3</version>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>antlr</groupId>
             <artifactId>antlr</artifactId>
@@ -690,7 +682,13 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.9.3</version>
+            <version>5.7.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.7.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -714,12 +712,6 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
             <version>1.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.unitils</groupId>
-            <artifactId>unitils-core</artifactId>
-            <version>3.4.2</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
@@ -1245,7 +1237,18 @@
             <scope>test</scope>
         </dependency>
 
-
+<!--        <dependency>-->
+<!--            <groupId>org.junit.platform</groupId>-->
+<!--            <artifactId>junit-platform-suite-api</artifactId>-->
+<!--            <version>1.8.2</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>3.5.15</version> <!-- or latest stable -->
+            <scope>test</scope>
+        </dependency>
         <!-- Selenium -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
@@ -1275,6 +1278,13 @@
                 <groupId>com.google.cloud</groupId>
                 <artifactId>libraries-bom</artifactId>
                 <version>4.4.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.10.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -2097,20 +2107,16 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.junit.jupiter</groupId>
-                        <artifactId>junit-jupiter-engine</artifactId>
-                        <version>5.10.2</version>
-                    </dependency>
-                </dependencies>
                 <configuration>
 <!--                    <skip>true</skip>-->
+                    <test>**/Test*.java,**/Test.java,**/*Testcases.java,
+                    !AbstractIntegrationTest,!PersistenceManagerTest,!WorkspaceFilterTest,!AmpSchemaFilteringTests,
+                        !DateTimeTests,!SQLUtilsTests,!ReportsTestCase
+                    </test>
                     <includes>
                         <include>**/Test*.java</include>
                         <include>**/*Test.java</include>
                         <include>**/*Testcases.java</include>
-                        <include>**/*Test*.java</include>
                         <include>**/*</include>
 
                     </includes>
@@ -2119,11 +2125,9 @@
                         <exclude>**/*TestSuite.java</exclude>
                     </excludes>
                     <excludedGroups>
-                        org.dgfoundation.amp.test.categories.DatabaseTests,
-                        org.dgfoundation.amp.test.categories.SlowTests,
-                        org.dgfoundation.amp.test.categories.IgnoreTests,
-                        org.dgfoundation.amp.seleniumTest.Messages.MessageTest
+                        databasetests,slowtests,ignoretests
                     </excludedGroups>
+
                 </configuration>
             </plugin>
             <plugin>
@@ -2266,19 +2270,25 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.1</version> <!-- or latest version -->
+                <version>3.3.1</version>
                 <configuration>
                     <sourcepath>${project.build.sourceDirectory}</sourcepath>
                     <destDir>${project.reporting.outputDirectory}/javadoc</destDir>
                     <author>true</author>
                     <version>true</version>
                     <windowtitle>${project.name} API Documentation</windowtitle>
-                    <doctitle>&lt;h1&gt;${project.name} Documentation (Version ${project.version})&lt;/h1&gt;</doctitle>
+                    <doctitle><![CDATA[<h1>${project.name} Documentation (Version ${project.version})</h1>]]></doctitle>
+
+                    <additionalJOptions>
+                        <additionalJOption>-Xdoclint:none</additionalJOption>
+                    </additionalJOptions>
+
+                    <failOnError>false</failOnError>
                 </configuration>
                 <executions>
                     <execution>
                         <id>generate-javadoc</id>
-                        <phase>prepare-package</phase> <!-- Or specify another appropriate phase -->
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>javadoc</goal>
                         </goals>

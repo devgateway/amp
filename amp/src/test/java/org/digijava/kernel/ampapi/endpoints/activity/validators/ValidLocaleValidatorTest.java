@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -72,7 +72,7 @@ public class ValidLocaleValidatorTest {
 
         ValidLocaleValidator localeValidator = new ValidLocaleValidator();
 
-        assertFalse("Only allowed locales must be accepted",
+        assertFalse(
                 localeValidator.isValid(importer, newFieldParent, translatableField, TRANSLATABLE_FIELD));
     }
 
@@ -87,7 +87,7 @@ public class ValidLocaleValidatorTest {
 
         ValidLocaleValidator localeValidator = new ValidLocaleValidator();
 
-        assertFalse("Only allowed locales must be accepted",
+        assertFalse(
                 localeValidator.isValid(importer, newFieldParent, translatableField, TRANSLATABLE_FIELD));
     }
 
@@ -103,7 +103,7 @@ public class ValidLocaleValidatorTest {
 
         ValidLocaleValidator localeValidator = new ValidLocaleValidator();
 
-        assertTrue("Multilingual input must be valid",
+        assertTrue(
                 localeValidator.isValid(importer, newFieldParent, translatableField, TRANSLATABLE_FIELD));
     }
 
@@ -118,7 +118,7 @@ public class ValidLocaleValidatorTest {
 
         ValidLocaleValidator localeValidator = new ValidLocaleValidator();
 
-        assertTrue("Multilingual input must be valid",
+        assertTrue(
                 localeValidator.isValid(importer, newFieldParent, translatableField, TRANSLATABLE_FIELD));
     }
 
@@ -133,7 +133,7 @@ public class ValidLocaleValidatorTest {
 
         ValidLocaleValidator localeValidator = new ValidLocaleValidator();
 
-        assertFalse("Only allowed locales must be accepted",
+        assertFalse(
                 localeValidator.isValid(importer, newFieldParent, translatableField, TRANSLATABLE_FIELD));
     }
 

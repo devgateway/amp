@@ -16,33 +16,34 @@ import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 /**
  * Disbursements (actual or planned) from one or more donor have not been updated in the last 3 months
- * 
+ *
  * @author Viorel Chihai
  */
 public class NoUpdatedDisbursementsAfterTimePeriodMatcherTests extends PerformanceRuleMatcherTests {
-    
+
     @BeforeEach
     public void setUp() {
         super.setUp();
         definition = new NoUpdatedDisbursementsAfterTimePeriodMatcherDefinition();
     }
-    
+
     @Test
     public void testValidation() {
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", getCriticalLevel());
-        
+
         assertNotNull(definition.createMatcher(rule));
     }
 
     @Test
     public void testOneDisbursementLastPeriod() {
-       
+
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", getMajorLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -55,15 +56,15 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTests extends Performan
                                         .getOrganisation())
                                 .getFunding())
                 .getActivity();
-        
+
         assertEquals(findPerformanceIssue(rule, a).getDonors().size(), 1);
     }
-    
+
     @Test
     public void testNoDisbursementLastPeriod() {
-       
+
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", getMajorLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -76,16 +77,16 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTests extends Performan
                                         .getOrganisation())
                                 .getFunding())
                 .getActivity();
-        
+
         assertEquals(findPerformanceIssue(rule, a).getDonors().size(), 1);
     }
-    
+
     @Test
     public void testTwoDisbursementLastPeriod() {
-        
+
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_DAY, "120", getCriticalLevel());
         LocalDate currentDate = new LocalDate();
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -102,17 +103,17 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTests extends Performan
                                         .getOrganisation())
                                 .getFunding())
                 .getActivity();
-        
+
         assertNull(findPerformanceIssue(rule, a));
     }
-    
+
     @Test
     public void testTwoFundingsLastPeriod() {
-       
+
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_YEAR, "1", getCriticalLevel());
-        
+
         OrganisationBuilder orgBuilder = new OrganisationBuilder().withOrganisationName("Donor1");
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -139,7 +140,7 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTests extends Performan
                                 .withDonor(orgBuilder.getOrganisation())
                                 .getFunding())
                 .getActivity();
-        
+
         assertEquals(findPerformanceIssue(rule, a).getDonors().size(), 1);
     }
 
@@ -147,9 +148,9 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTests extends Performan
      * @return
      */
     public AmpPerformanceRule createRule(String timeUnit, String timeAmount, AmpCategoryValue level) {
-        
+
         AmpPerformanceRule rule = new AmpPerformanceRule();
-        
+
         AmpPerformanceRuleAttribute attr1 = new AmpPerformanceRuleAttribute();
         attr1.setName(PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT);
         attr1.setType(AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.TIME_UNIT);
@@ -158,11 +159,11 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTests extends Performan
         attr2.setName(PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT);
         attr2.setType(AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.AMOUNT);
         attr2.setValue(timeAmount);
-        
+
         rule.setAttributes(ImmutableSet.of(attr1, attr2));
         rule.setLevel(level);
 
         return rule;
     }
-    
+
 }

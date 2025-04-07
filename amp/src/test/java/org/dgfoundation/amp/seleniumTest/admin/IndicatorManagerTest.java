@@ -1,17 +1,17 @@
 package org.dgfoundation.amp.seleniumTest.admin;
 
 import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
-import org.junit.Ignore;
+
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
 
-import com.thoughtworks.selenium.SeleneseTestCase;
-import org.junit.Ignore;
+
+import com.thoughtworks.selenium.SeleneseTestBase;
+
 import com.thoughtworks.selenium.Selenium;
-import org.junit.Ignore;
 
-@Ignore
-public class IndicatorManagerTest extends SeleneseTestCase {
+
+
+public class IndicatorManagerTest extends SeleneseTestBase {
     
     private static Logger logger = Logger.getLogger(IndicatorManagerTest.class);
     

@@ -14,8 +14,8 @@ import javax.validation.ConstraintViolation;
 import java.util.Set;
 
 import static org.digijava.module.aim.validator.ConstraintMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author Viorel Chihai
@@ -85,31 +85,31 @@ public class PrimaryContactValidatorTest extends AbstractActivityValidatorTest<P
 
         assertThat(violations, emptyIterable());
     }
-    
+
     @Test
     public void testValidPrimaryContactType() {
         AmpActivity activity = new AmpActivity();
         activity.setActivityContacts(ImmutableSet.of(
                 newActivityContact(Constants.DONOR_CONTACT, true),
                 newActivityContact(Constants.DONOR_CONTACT, false)));
-        
+
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
-        
+
         assertThat(violations, emptyIterable());
     }
-    
+
     @Test
     public void testInvalidPrimarySameContactType() {
         AmpActivity activity = new AmpActivity();
         activity.setActivityContacts(ImmutableSet.of(
                 newActivityContact(Constants.DONOR_CONTACT, true),
                 newActivityContact(Constants.DONOR_CONTACT, true)));
-        
+
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
-    
+
         assertThat(violations, contains(primaryContactViolation(Constants.DONOR_CONTACT)));
     }
-    
+
     @Test
     public void testMultipleValidPrimaryContacts() {
         AmpActivity activity = new AmpActivity();
@@ -118,12 +118,12 @@ public class PrimaryContactValidatorTest extends AbstractActivityValidatorTest<P
                 newActivityContact(Constants.MOFED_CONTACT, null),
                 newActivityContact(Constants.MOFED_CONTACT, true),
                 newActivityContact(Constants.SECTOR_MINISTRY_CONTACT, false)));
-        
+
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
-        
+
         assertThat(violations, emptyIterable());
     }
-    
+
     @Test
     public void testMultipleInvalidPrimaryContacts() {
         AmpActivity activity = new AmpActivity();
@@ -133,9 +133,9 @@ public class PrimaryContactValidatorTest extends AbstractActivityValidatorTest<P
                 newActivityContact(Constants.MOFED_CONTACT, true),
                 newActivityContact(Constants.MOFED_CONTACT, true),
                 newActivityContact(Constants.SECTOR_MINISTRY_CONTACT, false)));
-        
+
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
-        
+
         assertThat(violations,
                 containsInAnyOrder(
                         primaryContactViolation(Constants.DONOR_CONTACT),
@@ -154,7 +154,7 @@ public class PrimaryContactValidatorTest extends AbstractActivityValidatorTest<P
         AmpActivityContact activityContact = new AmpActivityContact();
         activityContact.setContactType(contactType);
         activityContact.setPrimaryContact(primary);
-        
+
         return activityContact;
     }
 

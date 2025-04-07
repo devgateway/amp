@@ -28,13 +28,12 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.validator.groups.Submit;
 import org.hamcrest.MatcherAssert;
-import org.junit.Rule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.validation.ConstraintViolationException;
 import java.io.IOException;
@@ -54,6 +53,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author Octavian Ciubotaru
  */
+@ExtendWith(MockitoExtension.class)
 public class FieldsEnumeratorTest {
 
     private static final int SIZE_LIMIT = 3;
@@ -62,8 +62,6 @@ public class FieldsEnumeratorTest {
     private FeatureManagerService fmService;
     private FieldInfoProvider provider;
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
 
     @Mock private TranslatorService throwingTranslatorService;
     @Mock private TranslatorService emptyTranslatorService;

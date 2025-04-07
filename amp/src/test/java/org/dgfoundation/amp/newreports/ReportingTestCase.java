@@ -25,17 +25,22 @@ import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
 import org.hibernate.type.StringType;
-import org.junit.Rule;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.*;
 import java.util.function.Function;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.springframework.test.util.AssertionErrors.assertFalse;
+import static org.springframework.test.util.AssertionErrors.assertNotNull;
+
+@ExtendWith(InTransactionRule.class)
 public abstract class ReportingTestCase extends AmpTestCase {
 
     static protected int nrRunReports = 0;
 
-    @Rule
-    public InTransactionRule inTransactionRule = new InTransactionRule();
+
+//    public InTransactionRule inTransactionRule = new InTransactionRule();
 
     public static<K extends Cell> List<K> nicelySorted(Collection<K> in) {
         return AmpCollections.sorted(in, (a, b) -> {

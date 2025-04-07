@@ -1,27 +1,27 @@
 package org.dgfoundation.amp.ar.amp212;
 
 import org.dgfoundation.amp.StandaloneAMPInitializer;
-import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.dgfoundation.amp.testutils.InTransactionRule;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
 
 import java.time.LocalDate;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-@Category(DatabaseTests.class)
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+@Tag("databasetests")
+@ExtendWith(InTransactionRule.class)
 public class DateTimeTests {
 
-    @Rule
-    public InTransactionRule inTransactionRule = new InTransactionRule();
+
+//    public InTransactionRule inTransactionRule = new InTransactionRule();
 
     private final static Set<String> PATTERNS = AmpDateFormatter.generateSupportedPatterns();
 

@@ -3,12 +3,12 @@ package org.dgfoundation.amp.seleniumTest.admin;
 import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
 import org.apache.log4j.Logger;
 
-import com.thoughtworks.selenium.SeleneseTestCase;
+import com.thoughtworks.selenium.SeleneseTestBase;
 import com.thoughtworks.selenium.Selenium;
-import org.junit.Ignore;
 
-@Ignore
-public class OrganizationManagerTest extends SeleneseTestCase {
+
+
+public class OrganizationManagerTest extends SeleneseTestBase {
 
     private static Logger logger = Logger.getLogger(OrganizationManagerTest.class);
 

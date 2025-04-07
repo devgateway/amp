@@ -10,14 +10,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author Julian de Anquin
  */
 public class EditorTest {
 
-    @org.junit.Test
     @Test
     public void testParallel() {
 

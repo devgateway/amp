@@ -1,20 +1,20 @@
 package org.dgfoundation.amp.seleniumTest;
 import java.awt.Rectangle;
-import org.junit.Ignore;
+
 
 import javax.swing.JApplet;
-import org.junit.Ignore;
+
 import javax.swing.JButton;
-import org.junit.Ignore;
+
 import javax.swing.JLabel;
-import org.junit.Ignore;
+
 import javax.swing.JList;
-import org.junit.Ignore;
+
 import javax.swing.JPanel;
-import org.junit.Ignore;
 
 
-@Ignore
+
+
 public class UIRunner extends JApplet {
 
     private JPanel jContentPane = null;

@@ -1,10 +1,11 @@
 package org.dgfoundation.amp.newreports;
 
-import junit.framework.TestCase;
 import org.dgfoundation.amp.algo.AmpCollections;
 
 import java.util.*;
 import java.util.function.Function;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ReportAreaForTests extends ReportAreaImpl {
 
@@ -148,7 +149,7 @@ public class ReportAreaForTests extends ReportAreaImpl {
         if (outCell == null || corCell == null)
             return report_error(String.format("col %s of %s: different nullness: out %s vs cor %s", column, this.owner, outCell, corCell));
 
-        TestCase.assertEquals(corCell.displayedValue, outCell.displayedValue);
+        assertEquals(corCell.displayedValue, outCell.displayedValue);
 //      if (!outCell.displayedValue.equals(corCell.displayedValue))
 //          return report_error(String.format("col %s of %s: incorrect output: %s instead of the correct %s", column, this.owner, outCell, corCell));
 

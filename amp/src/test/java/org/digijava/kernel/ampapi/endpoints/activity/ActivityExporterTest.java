@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author Octavian Ciubotaru

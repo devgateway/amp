@@ -21,7 +21,6 @@ import java.util.stream.IntStream;
 
 import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author Octavian Ciubotaru

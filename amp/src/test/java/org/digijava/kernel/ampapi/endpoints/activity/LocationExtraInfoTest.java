@@ -3,11 +3,12 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Octavian Ciubotaru
@@ -47,7 +48,7 @@ public class LocationExtraInfoTest {
     private void assertJsonEquals(String expectedJson, LocationExtraInfo locationExtraInfo) {
         try {
             String actualJson = new ObjectMapper().writeValueAsString(locationExtraInfo);
-            Assert.assertEquals(expectedJson, actualJson);
+            assertEquals(expectedJson, actualJson);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

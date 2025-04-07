@@ -3,7 +3,7 @@ package org.digijava.kernel.services;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Octavian Ciubotaru
@@ -13,7 +13,7 @@ public class AmpOfflineVersionTest {
     @Test
     public void testCompareNull() {
         AmpOfflineVersion v1 = new AmpOfflineVersion("1.0.0");
-        v1.compareTo(null);
+        assertEquals(null, v1);
     }
 
     @Test

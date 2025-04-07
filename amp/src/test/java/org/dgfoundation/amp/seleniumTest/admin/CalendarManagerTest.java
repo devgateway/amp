@@ -3,14 +3,14 @@ package org.dgfoundation.amp.seleniumTest.admin;
 import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
 import org.apache.log4j.Logger;
 
-import com.thoughtworks.selenium.SeleneseTestCase;
+import com.thoughtworks.selenium.SeleneseTestBase;
 import com.thoughtworks.selenium.Selenium;
-import org.junit.Ignore;
-
-@Ignore
 
 
-public class CalendarManagerTest extends SeleneseTestCase {
+
+
+
+public class CalendarManagerTest extends SeleneseTestBase {
 
     private static Logger logger = Logger.getLogger(CalendarManagerTest.class);
 

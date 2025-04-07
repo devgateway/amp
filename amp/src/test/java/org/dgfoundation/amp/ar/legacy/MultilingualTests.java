@@ -19,6 +19,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+
 public class MultilingualTests extends ReportsTestCase {
 
     protected List<String> loadSectors(List<Long> ids){

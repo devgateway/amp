@@ -8,7 +8,7 @@ import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.kernel.request.TLSUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.Ignore;
+
 import org.junit.jupiter.api.Test;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
@@ -68,7 +68,7 @@ public class ProgramsTests extends ReportsTestCase {
     }
 
     @Test
-    @Ignore
+    
     public void testProgramsDetails()
     {
         GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-17190-all-details",

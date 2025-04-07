@@ -1,15 +1,11 @@
 package org.digijava.kernel;
 
-import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.testutils.InTransactionRule;
 
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.junit.jupiter.api.BeforeAll;
 
 /**
@@ -17,13 +13,13 @@ import org.junit.jupiter.api.BeforeAll;
  *
  * @author Octavian Ciubotaru
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/applicationContext.xml")
-@Category(DatabaseTests.class)
+@Tag("databasetests")
+@ExtendWith(InTransactionRule.class)
 public abstract class AbstractIntegrationTest {
 
-    @Rule
-    public InTransactionRule inTransactionRule = new InTransactionRule();
+
+//    public InTransactionRule inTransactionRule = new InTransactionRule();
 
     @BeforeAll
     public static void staticSetUp() {

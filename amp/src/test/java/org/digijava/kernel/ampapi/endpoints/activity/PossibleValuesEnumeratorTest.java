@@ -17,11 +17,12 @@ import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -30,23 +31,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.TYPE_VARCHAR;
-import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Octavian Ciubotaru
  */
+@ExtendWith({AMPRequestRule.class, MockitoExtension.class})
 public class PossibleValuesEnumeratorTest {
 
     private static final int MAX_STR_LEN = 10;
-
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
-
-    @Rule
-    public AMPRequestRule ampRequestRule = new AMPRequestRule();
 
     @Mock private PossibleValuesDAO possibleValuesDAO;
     @Mock private TranslatorService translatorService;
@@ -271,7 +266,7 @@ public class PossibleValuesEnumeratorTest {
 
     private void assertJsonEquals(List<PossibleValue> possibleValues, String expectedJson) throws IOException {
         for (Object obj : possibleValues) {
-            assertTrue("Possible value must extend PossibleValue class.", obj instanceof PossibleValue);
+            assertTrue( obj instanceof PossibleValue);
         }
         String actualJson = new ObjectMapper().writeValueAsString(possibleValues);
         assertEquals(expectedJson, actualJson);

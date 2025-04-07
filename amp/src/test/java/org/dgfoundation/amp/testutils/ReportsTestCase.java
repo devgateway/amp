@@ -10,18 +10,21 @@ import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
 
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-@Category(DatabaseTests.class)
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+@Tag("databasetests")
+@ExtendWith(InTransactionRule.class)
 public abstract class ReportsTestCase extends AmpTestCase {
 
-    @Rule
-    public InTransactionRule inTransactionRule = new InTransactionRule();
+
+//    public InTransactionRule inTransactionRule = new InTransactionRule();
 
     @BeforeAll
     public static void staticSetUp() {

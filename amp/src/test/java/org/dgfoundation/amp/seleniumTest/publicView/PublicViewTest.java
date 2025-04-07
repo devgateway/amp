@@ -1,14 +1,14 @@
 package org.dgfoundation.amp.seleniumTest.publicView;
 
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
-import com.thoughtworks.selenium.SeleneseTestCase;
-import org.junit.Ignore;
-import com.thoughtworks.selenium.Selenium;
-import org.junit.Ignore;
 
-@Ignore
-public class PublicViewTest extends SeleneseTestCase {
+import com.thoughtworks.selenium.SeleneseTestBase;
+
+import com.thoughtworks.selenium.Selenium;
+
+
+
+public class PublicViewTest extends SeleneseTestBase {
         
     private static Logger logger = Logger.getLogger(PublicViewTest.class);
     

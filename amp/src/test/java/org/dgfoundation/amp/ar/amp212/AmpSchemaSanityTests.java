@@ -11,17 +11,17 @@ import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.dgfoundation.amp.nireports.testcases.ReportModelGenerator;
 import org.dgfoundation.amp.nireports.testcases.generic.HardcodedActivities;
-import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.digijava.module.aim.util.DbUtil;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.BeforeAll;
  * @author Constantin Dolghier
  *
  */
-@Category(DatabaseTests.class)
+@Tag("databasetests")
 public class AmpSchemaSanityTests extends BasicSanityChecks {
 
     final List<String> mtefActs = Arrays.asList(

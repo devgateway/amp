@@ -1,16 +1,16 @@
 package org.dgfoundation.amp.seleniumTest.activityForm;
 
+import com.thoughtworks.selenium.SeleneseTestBase;
 import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
 import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
 import org.apache.log4j.Logger;
 
 
-import com.thoughtworks.selenium.SeleneseTestCase;
 import com.thoughtworks.selenium.Selenium;
-import org.junit.Ignore;
 
-@Ignore
-public class ActivityFormTest extends SeleneseTestCase{
+
+
+public class ActivityFormTest extends SeleneseTestBase {
 
     private static Logger logger = Logger.getLogger(ActivityFormTest.class);
     public static final String[] FUNDING_DATES = {"01/02/2008","13/06/2008","25/10/2008","10/03/2009","20/07/2009"};

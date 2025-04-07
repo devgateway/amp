@@ -11,13 +11,15 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.PledgeForm;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.Ignore;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Pledges Form tests
@@ -27,7 +29,6 @@ import java.util.List;
 public class PledgesFormTests extends ReportsTestCase {
 
     @Test
-    @Ignore
     public void testPledgeFormDocuments(){
 
         PledgeForm pledgeForm = new PledgeForm();
@@ -39,7 +40,6 @@ public class PledgesFormTests extends ReportsTestCase {
     }
 
     @Test
-    @Ignore
     public void testPledgeFormFundingUtils(){
         PledgeForm pledgeForm = new PledgeForm();
         pledgeForm.importPledgeData(PledgesEntityHelper.getPledgesById(3L));
@@ -49,7 +49,6 @@ public class PledgesFormTests extends ReportsTestCase {
     }
 
     @Test
-    @Ignore
     public void testPledgeFormUtils(){
         PledgeForm pledgeForm = new PledgeForm();
         pledgeForm.importPledgeData(PledgesEntityHelper.getPledgesById(3L));
@@ -80,7 +79,7 @@ public class PledgesFormTests extends ReportsTestCase {
     }
 
     @Test
-    @Ignore
+
     public void testPledgeFundingCalculator(){
         FundingPledges pledge = PledgesEntityHelper.getPledgesById(3L);
         assertEquals("986879.40", String.format("%.2f", pledge.getTotalPledgedAmount("USD")));
@@ -144,7 +143,7 @@ public class PledgesFormTests extends ReportsTestCase {
     public void testPledgesEntityHelperSanity()
     {
         FundingPledges pledge = PledgesEntityHelper.getPledgesById(3L);
-        assertTrue(PledgesEntityHelper.getPledges().size() > 0); // more like a check on non-crashing
+        assertTrue(!PledgesEntityHelper.getPledges().isEmpty()); // more like a check on non-crashing
         assertEquals(0, PledgesEntityHelper.getFundingRelatedToPledges(pledge).size());
         assertEquals(1, PledgesEntityHelper.getPledgesByDonorGroup(18L).size());
         assertEquals("Test pledge 1", PledgesEntityHelper.getPledgesByDonorGroup(18L).get(0).getTitleFreeText());

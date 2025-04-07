@@ -13,7 +13,6 @@ import java.util.*;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.WORKSPACE_PREFIX;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**

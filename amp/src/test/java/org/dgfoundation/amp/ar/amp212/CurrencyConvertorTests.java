@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  *
  * testcases for the AMP currency convertor

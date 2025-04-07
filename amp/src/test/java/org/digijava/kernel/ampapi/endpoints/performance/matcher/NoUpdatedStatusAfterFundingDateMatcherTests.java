@@ -14,7 +14,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * 3 months went by after the contract signature date and the project status was not modified from planned to ongoing

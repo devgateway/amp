@@ -8,22 +8,22 @@ import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
 import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.joda.time.DateTime;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.IOException;
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 /**
  * @author Octavian Ciubotaru
  */
+@ExtendWith(JacksonInTestRule.class)
 public class GPIEndPointsTest {
 
-    @Rule
-    public JacksonInTestRule jacksonInTestRule = new JacksonInTestRule(this::resolve);
+
 
     @Test
     public void testAidOnBudgetSerialization() throws JsonProcessingException {

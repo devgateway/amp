@@ -26,13 +26,13 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 import java.util.function.Function;
@@ -64,6 +64,7 @@ import static org.mockito.Mockito.when;
  * @author Octavian Ciubotaru
  */
 
+@ExtendWith({AMPRequestRule.class, MockitoExtension.class})
 public class ActivityImporterTest {
 
     public static final String ENDPOINT_CONTEXT_PATH = "/activity";
@@ -99,8 +100,7 @@ public class ActivityImporterTest {
             "/Activity Form/Identification/Required Validator for Humanitarian Aid"
     );
 
-    @Rule
-    public AMPRequestRule ampRequestRule = new AMPRequestRule();
+
 
     private TestTranslatorService translatorService;
     private FeatureManagerService fmService;
@@ -178,7 +178,7 @@ public class ActivityImporterTest {
         ActivityImporter importer = buildActivityImporter(false, false);
         importer.importOrUpdate(json, false, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
 
-        Assert.assertThat(importer.errors,
+        assertThat(importer.errors,
                 hasValue(error(SecurityErrors.NOT_ALLOWED, ActivityErrors.ADD_ACTIVITY_NOT_ALLOWED)));
     }
 
@@ -191,7 +191,7 @@ public class ActivityImporterTest {
         ActivityImporter importer = buildActivityImporter(true, false);
         importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
 
-        Assert.assertThat(importer.errors,
+        assertThat(importer.errors,
                 hasValue(error(SecurityErrors.NOT_ALLOWED, ActivityErrors.EDIT_ACTIVITY_NOT_ALLOWED)));
     }
 
@@ -204,7 +204,7 @@ public class ActivityImporterTest {
         ActivityImporter importer = buildActivityImporter(true, true, true);
         importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
 
-        Assert.assertThat(importer.errors,
+        assertThat(importer.errors,
                 hasValue(error(SecurityErrors.INVALID_TEAM, ActivityErrors.INVALID_MODIFY_BY_FIELD)));
     }
 
@@ -217,7 +217,7 @@ public class ActivityImporterTest {
         ActivityImporter importer = buildActivityImporter(true, true);
         importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
 
-        Assert.assertThat(importer.errors,
+        assertThat(importer.errors,
                 hasValue(error(ACTIVITY_IS_STALE, ActivityErrors.ACTIVITY_NOT_LAST_VERSION)));
     }
 
@@ -309,7 +309,7 @@ public class ActivityImporterTest {
         ActivityImporter importer = buildActivityImporter(true, true);
         importer.importOrUpdate(json, false, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
 
-        Assert.assertThat(importer, allOf(
+        assertThat(importer, allOf(
                 hasProperty("errors", Matchers.is(emptyMap())),
                 hasProperty("newActivity", allOf(
                         hasProperty("name", equalTo("Title")),
@@ -328,7 +328,7 @@ public class ActivityImporterTest {
         ActivityImporter importer = buildActivityImporter(true, true, false, false);
         importer.importOrUpdate(json, false, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
 
-        Assert.assertThat(importer, allOf(
+        assertThat(importer, allOf(
                 hasProperty("errors", Matchers.is(emptyMap())),
                 hasProperty("newActivity", allOf(
                         hasProperty("name", equalTo("Title")),
@@ -349,7 +349,7 @@ public class ActivityImporterTest {
         ActivityImporter importer = buildActivityImporter(true, true, false, false);
         importer.importOrUpdate(json, false, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
 
-        Assert.assertThat(importer, allOf(
+        assertThat(importer, allOf(
                 hasProperty("errors", Matchers.is(emptyMap())),
                 hasProperty("newActivity", allOf(
                         hasProperty("name", equalTo("Title")),
@@ -367,7 +367,7 @@ public class ActivityImporterTest {
         ActivityImporter importer = buildActivityImporter(true, true);
         importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
 
-        Assert.assertThat(importer.errors, hasValue(error(ActivityErrors.FIELD_ACTIVITY_ID_NULL)));
+        assertThat(importer.errors, hasValue(error(ActivityErrors.FIELD_ACTIVITY_ID_NULL)));
     }
 
     @Test
@@ -382,7 +382,7 @@ public class ActivityImporterTest {
         ActivityImporter importer = buildActivityImporter(true, true, false, false);
         importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
 
-        Assert.assertThat(importer.errors,
+        assertThat(importer.errors,
                 hasValue(error(ActivityErrors.ACTIVITY_IS_STALE, ActivityErrors.ACTIVITY_NOT_LAST_VERSION)));
     }
 
@@ -399,7 +399,7 @@ public class ActivityImporterTest {
         ActivityImporter importer = buildActivityImporter(true, true, false, false);
         importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
 
-        Assert.assertThat(importer.errors,
+        assertThat(importer.errors,
                 hasValue(error(ValidationErrors.FIELD_INVALID_VALUE, "amp_id")));
     }
 
@@ -417,7 +417,7 @@ public class ActivityImporterTest {
         ActivityImporter importer = buildActivityImporter(true, true, false, false);
         importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
 
-        Assert.assertThat(importer, allOf(
+        assertThat(importer, allOf(
                 hasProperty("errors", Matchers.is(emptyMap())),
                 hasProperty("oldActivity", allOf(
                         hasProperty("name", equalTo("Activity 1")),
@@ -447,7 +447,7 @@ public class ActivityImporterTest {
         ActivityImporter importer = buildActivityImporter(true, true, false, false);
         importer.importOrUpdate(json, true, ENDPOINT_CONTEXT_PATH, SOURCE_URL);
 
-        Assert.assertThat(importer, allOf(
+        assertThat(importer, allOf(
                 hasProperty("errors", Matchers.is(emptyMap())),
                 hasProperty("oldActivity", allOf(
                         hasProperty("name", equalTo("Activity 1")),

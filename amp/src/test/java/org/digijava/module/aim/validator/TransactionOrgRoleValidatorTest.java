@@ -14,8 +14,8 @@ import javax.validation.ConstraintViolation;
 import java.util.Set;
 
 import static org.digijava.module.aim.validator.ConstraintMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author Viorel Chihai
@@ -41,7 +41,7 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
 
         Set<ConstraintViolation<AmpActivity>> violations = getValidator().validate(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -61,7 +61,7 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -76,7 +76,7 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
 
@@ -87,7 +87,7 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -98,7 +98,7 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -128,7 +128,7 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
-        MatcherAssert.assertThat(violations, contains(transactionOrgRoleViolation(Integer.valueOf(Constants.DISBURSEMENT))));
+        assertThat(violations, contains(transactionOrgRoleViolation(Integer.valueOf(Constants.DISBURSEMENT))));
     }
 
     @Test
@@ -143,7 +143,7 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -163,7 +163,7 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
-        MatcherAssert.assertThat(violations, containsInAnyOrder(transactionOrgRoleViolation(Integer.valueOf(Constants.COMMITMENT)),
+        assertThat(violations, containsInAnyOrder(transactionOrgRoleViolation(Integer.valueOf(Constants.COMMITMENT)),
                 transactionOrgRoleViolation(Integer.valueOf(Constants.DISBURSEMENT))));
     }
 
@@ -184,7 +184,7 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -204,7 +204,7 @@ public class TransactionOrgRoleValidatorTest extends AbstractActivityValidatorTe
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     /**

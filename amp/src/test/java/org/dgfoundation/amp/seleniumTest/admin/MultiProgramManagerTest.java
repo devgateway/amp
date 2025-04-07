@@ -1,20 +1,21 @@
 package org.dgfoundation.amp.seleniumTest.admin;
 
+import com.thoughtworks.selenium.SeleneseTestBase;
 import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
-import org.junit.Ignore;
+
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
 
-import com.thoughtworks.selenium.SeleneseTestCase;
-import org.junit.Ignore;
+
+import com.thoughtworks.selenium.SeleneseTestBase;
+
 import com.thoughtworks.selenium.Selenium;
-import org.junit.Ignore;
 
-@Ignore
-public class MultiProgramManagerTest extends SeleneseTestCase {
-    
+
+
+public class MultiProgramManagerTest extends SeleneseTestBase {
+
     private static Logger logger = Logger.getLogger(MultiProgramManagerTest.class);
-    
+
     public void setUp() throws Exception {
         setUp("http://localhost:8080/", "*chrome");
     }
@@ -73,7 +74,7 @@ public class MultiProgramManagerTest extends SeleneseTestCase {
                 selenium.waitForPageToLoad("30000");
                 selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
                 selenium.waitForPageToLoad("30000");
-                
+
                 selenium.type("j_username", "UATtl@amp.org");
                 selenium.type("j_password", "abc");
                 selenium.click("submitButton");
@@ -100,7 +101,7 @@ public class MultiProgramManagerTest extends SeleneseTestCase {
                 }
                 selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
                 selenium.waitForPageToLoad("30000");
-                
+
                 selenium.type("j_username", "admin@amp.org");
                 selenium.type("j_password", "admin");
                 selenium.click("submitButton");
@@ -129,7 +130,7 @@ public class MultiProgramManagerTest extends SeleneseTestCase {
             logger.info("Module \"National Planning Dashboard\" is not available.");
            //selenium.logComment("Module \"National Planning Dashboard\" is not available.");
         }
-        
+
         selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
         selenium.waitForPageToLoad("30000");
         logger.info("Multi Program Manager Test Finished Successfully");

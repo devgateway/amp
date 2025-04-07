@@ -17,7 +17,8 @@ import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 /**
  * A period have passed since the project signature date and still no disbursement from donor

@@ -10,16 +10,18 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 
+ *
  * testcases for expenditure class
- * 
+ *
  * @author Constantin Dolghier
  *
  */
+import static org.junit.jupiter.api.Assertions.*;
+
 public class ExpenditureClassTests extends AmpReportingTestCase {
 
     final List<String> expClassActs = Arrays.asList("expenditure class", "Eth Water", "Test MTEF directed");
-    
+
     final List<String> acts = Arrays.asList(
             "Activity 2 with multiple agreements",
             "Activity with both MTEFs and Act.Comms",
@@ -58,10 +60,10 @@ public class ExpenditureClassTests extends AmpReportingTestCase {
             "with weird currencies",
             "expenditure class"
         );
-    
+
     final static List<String> hierarchiesToTry = Arrays.asList(
-            ColumnConstants.STATUS, ColumnConstants.IMPLEMENTATION_LEVEL, 
-            ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, 
+            ColumnConstants.STATUS, ColumnConstants.IMPLEMENTATION_LEVEL,
+            ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR,
             ColumnConstants.SECONDARY_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR,
             ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, ColumnConstants.PRIMARY_PROGRAM_LEVEL_2,
             ColumnConstants.LOCATION_ADM_LEVEL_0, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.LOCATION_ADM_LEVEL_2, ColumnConstants.LOCATION_ADM_LEVEL_3,
@@ -106,16 +108,16 @@ public class ExpenditureClassTests extends AmpReportingTestCase {
                       new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION", 6236)).withContents("Activity Id", "", "Project Title", "", "Totals-Total Actual Classified Expenditures-Capital Expenditure", "0", "Totals-Total Actual Classified Expenditures-Compensation / Salaries", "0", "Totals-Total Actual Classified Expenditures-Unassigned", "0", "Totals-Total Planned Classified Expenditures-Capital Expenditure", "0", "Totals-Total Planned Classified Expenditures-Compensation / Salaries", "0", "Totals-Total Planned Classified Expenditures-Goods and Services", "0", "Totals-Total Planned Classified Expenditures-Others", "0", "Totals-Total Planned Classified Expenditures-Unassigned", "0", "Totals-Actual Commitments", "0", "Totals-Real Disbursements-DN-EXEC", "415,000", "Totals-Real Disbursements-DN-IMPL", "0", "Totals-Planned Expenditures", "0", "Totals-Actual Expenditures", "0", "Primary Sector", "110 - EDUCATION")
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner(24), "Activity Id", "24", "Project Title", "Eth Water", "Totals-Real Disbursements-DN-EXEC", "415,000")          )        )      ));
-        
+
         runNiTestCase(
-            buildSpecification("testcase expenditure class with everything", 
-                Arrays.asList(ColumnConstants.ACTIVITY_ID, ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY, ColumnConstants.PRIMARY_SECTOR), 
-                Arrays.asList(MeasureConstants.ACTUAL_CLASSIFIED_EXPENDITURES, MeasureConstants.PLANNED_CLASSIFIED_EXPENDITURES, MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.REAL_COMMITMENTS, MeasureConstants.REAL_DISBURSEMENTS, MeasureConstants.PLANNED_EXPENDITURES, MeasureConstants.ACTUAL_EXPENDITURES), 
-                Arrays.asList(ColumnConstants.DONOR_AGENCY, ColumnConstants.PRIMARY_SECTOR), 
+            buildSpecification("testcase expenditure class with everything",
+                Arrays.asList(ColumnConstants.ACTIVITY_ID, ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY, ColumnConstants.PRIMARY_SECTOR),
+                Arrays.asList(MeasureConstants.ACTUAL_CLASSIFIED_EXPENDITURES, MeasureConstants.PLANNED_CLASSIFIED_EXPENDITURES, MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.REAL_COMMITMENTS, MeasureConstants.REAL_DISBURSEMENTS, MeasureConstants.PLANNED_EXPENDITURES, MeasureConstants.ACTUAL_EXPENDITURES),
+                Arrays.asList(ColumnConstants.DONOR_AGENCY, ColumnConstants.PRIMARY_SECTOR),
                 GroupingCriteria.GROUPING_TOTALS_ONLY),
                 "en", expClassActs, cor);
     }
-    
+
     @Test
     public void testByDonorOrgAndRealMeasures() {
         NiReportModel cor = new NiReportModel("testcase expenditure class with donor org and real measures")
@@ -142,16 +144,16 @@ public class ExpenditureClassTests extends AmpReportingTestCase {
                     new ReportAreaForTests(new AreaOwner("Donor Agency", "USAID", 21696)).withContents("Project Title", "", "Totals-Total Actual Classified Expenditures-Capital Expenditure", "0", "Totals-Total Actual Classified Expenditures-Compensation / Salaries", "0", "Totals-Total Actual Classified Expenditures-Unassigned", "0", "Totals-Total Planned Classified Expenditures-Capital Expenditure", "0", "Totals-Total Planned Classified Expenditures-Compensation / Salaries", "0", "Totals-Total Planned Classified Expenditures-Goods and Services", "0", "Totals-Total Planned Classified Expenditures-Others", "0", "Totals-Total Planned Classified Expenditures-Unassigned", "0", "Totals-Real Disbursements-DN-EXEC", "415,000", "Totals-Real Disbursements-DN-IMPL", "0", "Donor Agency", "USAID")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Totals-Real Disbursements-DN-EXEC", "415,000")        )      ));
-        
+
         runNiTestCase(
-            buildSpecification("testcase expenditure class with donor org and real measures", 
-                Arrays.asList(ColumnConstants.DONOR_AGENCY, ColumnConstants.PROJECT_TITLE), 
-                Arrays.asList(MeasureConstants.ACTUAL_CLASSIFIED_EXPENDITURES, MeasureConstants.PLANNED_CLASSIFIED_EXPENDITURES,  MeasureConstants.REAL_DISBURSEMENTS, MeasureConstants.REAL_COMMITMENTS), 
-                Arrays.asList(ColumnConstants.DONOR_AGENCY), 
+            buildSpecification("testcase expenditure class with donor org and real measures",
+                Arrays.asList(ColumnConstants.DONOR_AGENCY, ColumnConstants.PROJECT_TITLE),
+                Arrays.asList(MeasureConstants.ACTUAL_CLASSIFIED_EXPENDITURES, MeasureConstants.PLANNED_CLASSIFIED_EXPENDITURES,  MeasureConstants.REAL_DISBURSEMENTS, MeasureConstants.REAL_COMMITMENTS),
+                Arrays.asList(ColumnConstants.DONOR_AGENCY),
                 GroupingCriteria.GROUPING_TOTALS_ONLY),
                 "en", expClassActs, cor);
     }
-    
+
     @Test
     public void testByPrimarySector() {
         NiReportModel cor = new NiReportModel("testcase expenditure class with primary sector")
@@ -166,16 +168,16 @@ public class ExpenditureClassTests extends AmpReportingTestCase {
                     new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION", 6236)).withContents("Project Title", "", "Totals-Total Actual Classified Expenditures-Capital Expenditure", "22,000", "Totals-Total Actual Classified Expenditures-Compensation / Salaries", "24,000", "Totals-Total Actual Classified Expenditures-Unassigned", "26,000", "Totals-Total Planned Classified Expenditures-Capital Expenditure", "42,000", "Totals-Total Planned Classified Expenditures-Compensation / Salaries", "44,000", "Totals-Total Planned Classified Expenditures-Goods and Services", "46,000", "Totals-Total Planned Classified Expenditures-Others", "48,000", "Totals-Total Planned Classified Expenditures-Unassigned", "50,000", "Totals-Planned Expenditures", "230,000", "Primary Sector", "110 - EDUCATION")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Total Actual Classified Expenditures-Capital Expenditure", "22,000", "Totals-Total Actual Classified Expenditures-Compensation / Salaries", "24,000", "Totals-Total Actual Classified Expenditures-Unassigned", "26,000", "Totals-Total Planned Classified Expenditures-Capital Expenditure", "42,000", "Totals-Total Planned Classified Expenditures-Compensation / Salaries", "44,000", "Totals-Total Planned Classified Expenditures-Goods and Services", "46,000", "Totals-Total Planned Classified Expenditures-Others", "48,000", "Totals-Total Planned Classified Expenditures-Unassigned", "50,000", "Totals-Planned Expenditures", "230,000")        )      ));
-        
+
         runNiTestCase(
-            buildSpecification("testcase expenditure class with primary sector", 
-                Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PROJECT_TITLE), 
-                Arrays.asList(MeasureConstants.ACTUAL_CLASSIFIED_EXPENDITURES, MeasureConstants.PLANNED_CLASSIFIED_EXPENDITURES, MeasureConstants.PLANNED_EXPENDITURES), 
-                Arrays.asList(ColumnConstants.PRIMARY_SECTOR), 
+            buildSpecification("testcase expenditure class with primary sector",
+                Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PROJECT_TITLE),
+                Arrays.asList(MeasureConstants.ACTUAL_CLASSIFIED_EXPENDITURES, MeasureConstants.PLANNED_CLASSIFIED_EXPENDITURES, MeasureConstants.PLANNED_EXPENDITURES),
+                Arrays.asList(ColumnConstants.PRIMARY_SECTOR),
                 GroupingCriteria.GROUPING_TOTALS_ONLY),
                 "en", expClassActs, cor);
     }
-    
+
     @Test
     public void testByTypeOfAssistance() {
         NiReportModel cor = new NiReportModel("testcase expenditure class with assistance type")
@@ -190,36 +192,36 @@ public class ExpenditureClassTests extends AmpReportingTestCase {
             new ReportAreaForTests(new AreaOwner("Type Of Assistance", "default type of assistance", 2119)).withContents("Project Title", "", "Totals-Total Actual Classified Expenditures-Capital Expenditure", "22,000", "Totals-Total Actual Classified Expenditures-Compensation / Salaries", "24,000", "Totals-Total Actual Classified Expenditures-Unassigned", "26,000", "Totals-Total Planned Classified Expenditures-Capital Expenditure", "42,000", "Totals-Total Planned Classified Expenditures-Compensation / Salaries", "44,000", "Totals-Total Planned Classified Expenditures-Goods and Services", "46,000", "Totals-Total Planned Classified Expenditures-Others", "48,000", "Totals-Total Planned Classified Expenditures-Unassigned", "50,000", "Totals-Planned Expenditures", "230,000", "Type Of Assistance", "default type of assistance")
             .withChildren(
               new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Total Actual Classified Expenditures-Capital Expenditure", "22,000", "Totals-Total Actual Classified Expenditures-Compensation / Salaries", "24,000", "Totals-Total Actual Classified Expenditures-Unassigned", "26,000", "Totals-Total Planned Classified Expenditures-Capital Expenditure", "42,000", "Totals-Total Planned Classified Expenditures-Compensation / Salaries", "44,000", "Totals-Total Planned Classified Expenditures-Goods and Services", "46,000", "Totals-Total Planned Classified Expenditures-Others", "48,000", "Totals-Total Planned Classified Expenditures-Unassigned", "50,000", "Totals-Planned Expenditures", "230,000")        )      ));
-        
+
         runNiTestCase(
-            buildSpecification("testcase expenditure class with assistance type", 
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.TYPE_OF_ASSISTANCE), 
-                Arrays.asList(MeasureConstants.ACTUAL_CLASSIFIED_EXPENDITURES, MeasureConstants.PLANNED_CLASSIFIED_EXPENDITURES, MeasureConstants.PLANNED_EXPENDITURES), 
-                Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE), 
+            buildSpecification("testcase expenditure class with assistance type",
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.TYPE_OF_ASSISTANCE),
+                Arrays.asList(MeasureConstants.ACTUAL_CLASSIFIED_EXPENDITURES, MeasureConstants.PLANNED_CLASSIFIED_EXPENDITURES, MeasureConstants.PLANNED_EXPENDITURES),
+                Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE),
                 GroupingCriteria.GROUPING_TOTALS_ONLY),
-                "en", expClassActs, cor);   
+                "en", expClassActs, cor);
     }
-    
+
     @Test
     public void testHierarchiesDoNotChangeTotals() throws Exception {
         List<String> measures = Arrays.asList(MeasureConstants.ACTUAL_EXPENDITURES, MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_EXPENDITURES,
                 MeasureConstants.ACTUAL_CLASSIFIED_EXPENDITURES, MeasureConstants.PLANNED_CLASSIFIED_EXPENDITURES);
-        
+
         ReportSpecificationImpl initSpec = buildSpecification("initSpec",
             Arrays.asList(ColumnConstants.PROJECT_TITLE),
             measures,
             null,
             GroupingCriteria.GROUPING_YEARLY);
-                
+
         assertEquals(correctTotals, buildDigest(initSpec, acts, BasicSanityChecks.fundingGrandTotalsDigester).toString());
-                
+
         // single-hierarchy reports
         for(boolean isSummary:Arrays.asList(true, false)) {
             for(String hierName:hierarchiesToTry) {
-                ReportSpecificationImpl spec = buildSpecification(String.format("%s summary: %b", hierName, isSummary), 
-                    Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName), 
-                    measures, 
-                    Arrays.asList(hierName), 
+                ReportSpecificationImpl spec = buildSpecification(String.format("%s summary: %b", hierName, isSummary),
+                    Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName),
+                    measures,
+                    Arrays.asList(hierName),
                     GroupingCriteria.GROUPING_YEARLY);
                 spec.setSummaryReport(isSummary);
                 assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, BasicSanityChecks.fundingGrandTotalsDigester).toString());
@@ -244,13 +246,13 @@ public class ExpenditureClassTests extends AmpReportingTestCase {
                 .withChildren(
                   new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Funding-2016-Planned Expenditures", "46 000", "Funding-2016-Planned Classified Expenditures-Goods and Services", "46 000", "Totals-Planned Expenditures", "46 000", "Totals-Total Planned Classified Expenditures-Goods and Services", "46 000")        )      ));
 
-        
+
         runNiTestCase(spec("expenditure class-filtered-by-exp-class"), "en", acts, cor);
     }
     */
-    
+
     /* Commented out since Expenditure Class isn't a column anymore
-     * 
+     *
     @Test
     public void testExpenditureClassFilteringFlat() {
         NiReportModel cor = new NiReportModel("expenditure class-filtered-by-exp-class-flat")
@@ -264,9 +266,9 @@ public class ExpenditureClassTests extends AmpReportingTestCase {
             .withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "Expenditure Class", "", "Funding-2016-Actual Expenditures", "0", "Funding-2016-Actual Commitments", "0", "Funding-2016-Actual Disbursements", "0", "Funding-2016-Planned Expenditures", "46 000", "Funding-2016-Planned Classified Expenditures-Goods and Services", "46 000", "Totals-Actual Expenditures", "0", "Totals-Actual Commitments", "0", "Totals-Actual Disbursements", "0", "Totals-Planned Expenditures", "46 000", "Totals-Total Planned Classified Expenditures-Goods and Services", "46 000")
               .withChildren(
                 new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Expenditure Class", "Goods and Services", "Funding-2016-Planned Expenditures", "46 000", "Funding-2016-Planned Classified Expenditures-Goods and Services", "46 000", "Totals-Planned Expenditures", "46 000", "Totals-Total Planned Classified Expenditures-Goods and Services", "46 000")      ));
-        
+
         runNiTestCase(spec("expenditure class-filtered-by-exp-class-flat"), "en", acts, cor);
     }
-    
+
     */
 }

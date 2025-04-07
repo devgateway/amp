@@ -13,22 +13,22 @@ import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
 import org.digijava.kernel.request.TLSUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasEntry;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author Nadejda Mandrescu
  */
+@ExtendWith(AMPRequestRule.class)
 public class ResourceExporterTest {
-    @Rule
-    public AMPRequestRule ampRequestRule = new AMPRequestRule();
+
 
     private Map<String, String> translations;
     private Map<String, String> allTranslations;

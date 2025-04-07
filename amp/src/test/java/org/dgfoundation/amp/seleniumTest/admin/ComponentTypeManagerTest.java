@@ -2,170 +2,172 @@ package org.dgfoundation.amp.seleniumTest.admin;
 
 import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
 import org.apache.log4j.Logger;
+import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.thoughtworks.selenium.SeleneseTestCase;
-import com.thoughtworks.selenium.Selenium;
-import org.junit.Ignore;
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class ComponentTypeManagerTest {
 
-@Ignore
+    private static final Logger logger = Logger.getLogger(ComponentTypeManagerTest.class);
+    private static WebDriver driver;
+    private WebDriverWait wait;
 
-public class ComponentTypeManagerTest extends SeleneseTestCase {
-
-    private static Logger logger = Logger.getLogger(ComponentTypeManagerTest.class);
-
-    public void setUp() throws Exception {
-        setUp("http://localhost:8080/", "*chrome");
+    @BeforeAll
+    void setupClass() {
+        System.setProperty("webdriver.chrome.driver", "/path/to/chromedriver"); // Update path as needed
     }
-    public static void testComponentTypeManager(Selenium selenium) throws Exception {
+
+    @BeforeEach
+    void setup() {
+        driver = new ChromeDriver();
+        wait = new WebDriverWait(driver, 30);
+    }
+
+    @AfterEach
+    void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+
+    @Test
+    void testComponentTypeManager() throws Exception {
         String testTime =  String.valueOf(System.currentTimeMillis());
         String typeName ="Test Component Manager " + testTime;
         boolean checkable = true;
-        selenium.open("/");
-        selenium.type("j_username", "admin@amp.org");
-        selenium.type("j_password", "admin");
-        selenium.click("submitButton");
-        selenium.waitForPageToLoad("30000");
-        if (selenium.isElementPresent("//a[contains(@href, \"/aim/updateComponentType.do\")]")) {
-            selenium.click("//a[contains(@href, \"/aim/updateComponentType.do\")]");
-            selenium.waitForPageToLoad("30000");
-            selenium.click("submitButton");
-            //selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "30000");
+        driver.get("http://localhost:8080/");
+        driver.findElement(By.id("j_username")).sendKeys("admin@amp.org");
+        driver.findElement(By.id("j_password")).sendKeys("admin");
+        driver.findElement(By.id("submitButton")).click();
+        // Wait for the page to load
+        Thread.sleep(30000);
+        if (driver.findElements(By.xpath("//a[contains(@href, '/aim/updateComponentType.do')]")).size() > 0) {
+            driver.findElement(By.xpath("//a[contains(@href, '/aim/updateComponentType.do')]")).click();
+            // Wait for the page to load
+            Thread.sleep(30000);
+            driver.findElement(By.id("submitButton")).click();
             Thread.sleep(10000);
-            selenium.selectWindow(selenium.getAllWindowTitles()[1]);
+            driver.switchTo().window(driver.getWindowHandles().toArray()[1].toString());
             if (SeleniumFeaturesConfiguration.getFieldState("Admin - Component Type Name")){
-                if (selenium.isElementPresent("name")) {
-                    selenium.type("name", typeName);
+                if (driver.findElements(By.name("name")).size() > 0) {
+                    driver.findElement(By.name("name")).sendKeys(typeName);
                 } else {
                     checkable = false;
                     logger.error("Field \"Admin - Component Type Name\" is active in Feature Manager but is not available.");
-                    //selenium.logAssertion"assertTrue", "Field \"Admin - Component Type Name\" is active in Feature Manager but is not available.", "condition=false");
                 }
             } else {
                 checkable = false;
                 logger.info("Field \"Admin - Component Type Name\" is not available.");
-               //selenium.logComment("Field \"Admin - Component Type Name\" is not available.");
             }
             if (SeleniumFeaturesConfiguration.getFieldState("Admin - Component Type Code")){
-                if (selenium.isElementPresent("code")) {
-                    selenium.type("code", "SCT");
+                if (driver.findElements(By.name("code")).size() > 0) {
+                    driver.findElement(By.name("code")).sendKeys("SCT");
                 } else {
                     checkable = false;
                     logger.error("Field \"Admin - Component Type Code\" is active in Feature Manager but is not available.");
-                    //selenium.logAssertion"assertTrue", "Field \"Admin - Component Type Code\" is active in Feature Manager but is not available.", "condition=false");
                 }
             } else {
                 checkable = false;
                 logger.info("Field \"Admin - Component Type Code\" is not available.");
-               //selenium.logComment("Field \"Admin - Component Type Code\" is not available.");
             }
             if (SeleniumFeaturesConfiguration.getFieldState("Admin - Component Type Save Button")){
-                if (selenium.isElementPresent("addBtn")) {
-                    selenium.click("addBtn");
-                    selenium.selectWindow("null");
-                    selenium.waitForPageToLoad("30000");
+                if (driver.findElements(By.id("addBtn")).size() > 0) {
+                    driver.findElement(By.id("addBtn")).click();
+                    driver.switchTo().defaultContent();
+                    Thread.sleep(30000);
                 } else {
                     checkable = false;
-                    selenium.close();
-                    selenium.selectWindow("null");
+                    driver.close();
+                    driver.switchTo().defaultContent();
                     logger.error("Field \"Admin - Component Type Save Button\" is active in Feature Manager but is not available.");
-                    //selenium.logAssertion"assertTrue", "Field \"Admin - Component Type Save Button\" is active in Feature Manager but is not available.", "condition=false");
                 }
             } else {
                 checkable = false;
                 logger.info("Field \"Admin - Component Type Save Button\" is not available.");
-               //selenium.logComment("Field \"Admin - Component Type Save Button\" is not available.");
             }
             if (checkable) {
                 int tId = 0;
                 for (int i = 500; i > 0; i--) {
-                    if (selenium.isElementPresent("//a[contains(@href, 'javascript:editType("+i+")')]")) {
+                    if (driver.findElements(By.xpath("//a[contains(@href, 'javascript:editType("+i+")')]")).size() > 0) {
                         tId = i;
                         break;
                     }
                 }
-                selenium.click("//a[contains(@href, 'javascript:editType("+tId+")')]");
-                //selenium.waitForPopUp(selenium.getAllWindowTitles()[1], "30000");
+                driver.findElement(By.xpath("//a[contains(@href, 'javascript:editType("+tId+")')]")).click();
                 Thread.sleep(10000);
-                selenium.selectWindow(selenium.getAllWindowTitles()[1]);
-                selenium.type("name", typeName+" mod");
-                selenium.click("addBtn");
-                selenium.selectWindow("null");
-                selenium.waitForPageToLoad("30000");
-                selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
-                selenium.waitForPageToLoad("30000");
+                driver.switchTo().window(driver.getWindowHandles().toArray()[1].toString());
+                driver.findElement(By.name("name")).sendKeys(typeName+" mod");
+                driver.findElement(By.id("addBtn")).click();
+                driver.switchTo().defaultContent();
+                Thread.sleep(30000);
+                driver.findElement(By.xpath("//a[contains(@href, '/aim/j_spring_logout')]")).click();
+                Thread.sleep(30000);
 
-                selenium.type("j_username", "UATtl@amp.org");
-                selenium.type("j_password", "abc");
-                selenium.click("submitButton");
-                selenium.waitForPageToLoad("30000");
-                selenium.click("link=UAT Team Workspace");
-                selenium.waitForPageToLoad("30000");
-                selenium.click("//a[contains(@href, \"javascript:addActivity()\")]");
-                selenium.waitForPageToLoad("30000");
+                driver.findElement(By.id("j_username")).sendKeys("UATtl@amp.org");
+                driver.findElement(By.id("j_password")).sendKeys("abc");
+                driver.findElement(By.id("submitButton")).click();
+                Thread.sleep(30000);
+                driver.findElement(By.linkText("UAT Team Workspace")).click();
+                Thread.sleep(30000);
+                driver.findElement(By.xpath("//a[contains(@href, \"javascript:addActivity()\")]")).click();
+                Thread.sleep(30000);
                 if (SeleniumFeaturesConfiguration.getFeatureState("Components")){
-                    if (selenium.isElementPresent("//a[@href='javascript:gotoStep(5)']")) {
-                        selenium.click("//a[@href='javascript:gotoStep(5)']");
-                        selenium.waitForPageToLoad("30000");
-                        selenium.click("//input[@onclick=\"addComponents()\"]");
+                    if (driver.findElements(By.xpath("//a[@href='javascript:gotoStep(5)']")).size() > 0) {
+                        driver.findElement(By.xpath("//a[@href='javascript:gotoStep(5)']")).click();
+                        Thread.sleep(30000);
+                        driver.findElement(By.xpath("//input[@onclick=\"addComponents()\"]")).click();
                         Thread.sleep(5000);
                         if (SeleniumFeaturesConfiguration.getFeatureState("Admin - Component Type")){
-                            if (selenium.isElementPresent("//a[@href='javascript:gotoStep(5)']")) {
+                            if (driver.findElements(By.xpath("//a[@href='javascript:gotoStep(5)']")).size() > 0) {
                                 try {
-                                    selenium.select("selectedType", typeName+" mod");
+                                    driver.findElement(By.name("selectedType")).sendKeys(typeName+" mod");
                                 } catch (Exception e) {
                                     logger.error("Component type added is not available on Activity Form");
-                                    //selenium.logAssertion"assertTrue", "Component type added is not available on Activity Form", "condition=false");
                                 }
                             } else {
                                 logger.error("Feature \"Admin - Component Type\" is active in Feature Manager but is not available.");
-                                //selenium.logAssertion"assertTrue", "Feature \"Admin - Component Type\" is active in Feature Manager but is not available.", "condition=false");
                             }
                         } else {
                             logger.info("Feature \"Admin - Component Type\" is not available.");
-                           //selenium.logComment("Feature \"Admin - Component Type\" is not available.");
                         }
-                        selenium.type("newCompoenentName", "Selenium Component");
-                        selenium.click("//div[@id='new']/div[3]");
+                        driver.findElement(By.name("newCompoenentName")).sendKeys("Selenium Component");
+                        driver.findElement(By.xpath("//div[@id='new']/div[3]")).click();
                     } else {
                         logger.error("Feature \"Components\" is active in Feature Manager but is not available.");
-                        //selenium.logAssertion"assertTrue", "Feature \"Components\" is active in Feature Manager but is not available.", "condition=false");
                     }
                 } else {
                     logger.info("Feature \"Components\" is not available.");
-                   //selenium.logComment("Feature \"Components\" is not available.");
                 }
 
-                selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
-                selenium.waitForPageToLoad("30000");
+                driver.findElement(By.xpath("//a[contains(@href, '/aim/j_spring_logout')]")).click();
+                Thread.sleep(30000);
 
-                selenium.type("j_username", "admin@amp.org");
-                selenium.type("j_password", "admin");
-                selenium.click("submitButton");
-                selenium.waitForPageToLoad("30000");
-                selenium.click("//a[contains(@href, \"/aim/updateComponentType.do\")]");
-                selenium.waitForPageToLoad("30000");
+                driver.findElement(By.id("j_username")).sendKeys("admin@amp.org");
+                driver.findElement(By.id("j_password")).sendKeys("admin");
+                driver.findElement(By.id("submitButton")).click();
+                Thread.sleep(30000);
+                driver.findElement(By.xpath("//a[contains(@href, '/aim/updateComponentType.do')]")).click();
+                Thread.sleep(30000);
                 try {
-                    selenium.click("//a[contains(@href, 'javascript:deleteType("+tId+");')]");
-                    selenium.getConfirmation();
-                    selenium.waitForPageToLoad("30000");
-                    if (selenium.isTextPresent(typeName)) {
+                    driver.findElement(By.xpath("//a[contains(@href, 'javascript:deleteType("+tId+");')]")).click();
+                    driver.switchTo().alert().accept();
+                    Thread.sleep(30000);
+                    if (driver.getPageSource().contains(typeName)) {
                         logger.error("Component Type wasn't deleted");
-                        //selenium.logAssertion"assertTrue", "Component Type wasn't deleted", "condition=false");
                     }
                 } catch (Exception e) {
                     logger.error("Component Type is not available to be deleted");
-                    //selenium.logAssertion"assertTrue", "Component Type is not available to be deleted", "condition=false");
                 }
             }
         } else {
             logger.error("Component Type Manager is not available");
-            //selenium.logAssertion"assertTrue", "Component Type Manager is not available", "condition=false");
         }
 
-        selenium.click("//a[contains(@href, \"/aim/j_spring_logout\")]");
-        selenium.waitForPageToLoad("30000");
+        driver.findElement(By.xpath("//a[contains(@href, '/aim/j_spring_logout')]")).click();
+        Thread.sleep(30000);
         logger.info("Component Type Manager Test Finished Successfully");
-       //selenium.logComment("Component Type Manager Test Finished Successfully");
     }
 }
-

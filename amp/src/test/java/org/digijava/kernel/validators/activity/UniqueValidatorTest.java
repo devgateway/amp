@@ -24,7 +24,7 @@ import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Octavian Ciubotaru

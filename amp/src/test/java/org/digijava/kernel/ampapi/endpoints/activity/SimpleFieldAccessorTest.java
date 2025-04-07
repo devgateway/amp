@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.ConstraintViolationException;
@@ -9,8 +8,8 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeAll;
 

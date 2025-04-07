@@ -1,8 +1,6 @@
 package org.digijava.kernel.validators.activity;
 
 import org.junit.platform.suite.api.SelectClasses;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 
 /**
  * @author Octavian Ciubotaru

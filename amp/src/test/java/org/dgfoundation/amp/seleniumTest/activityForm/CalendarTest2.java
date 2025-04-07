@@ -5,12 +5,12 @@ import java.util.Date;
 import org.dgfoundation.amp.seleniumTest.SeleniumFeaturesConfiguration;
 import org.apache.log4j.Logger;
 
-import com.thoughtworks.selenium.SeleneseTestCase;
+import com.thoughtworks.selenium.SeleneseTestBase;
 import com.thoughtworks.selenium.Selenium;
-import org.junit.Ignore;
 
-@Ignore
-public class CalendarTest2 extends SeleneseTestCase {
+
+
+public class CalendarTest2 extends SeleneseTestBase {
 
     private static Logger logger = Logger.getLogger(CalendarTest2.class);
 

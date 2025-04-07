@@ -16,7 +16,6 @@ import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author Octavian Ciubotaru

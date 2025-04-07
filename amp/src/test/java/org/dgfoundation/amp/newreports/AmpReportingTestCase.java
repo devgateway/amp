@@ -2,9 +2,7 @@ package org.dgfoundation.amp.newreports;
 
 import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
-import org.dgfoundation.amp.test.categories.DatabaseTests;
-import org.junit.BeforeClass;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.util.List;
@@ -12,7 +10,7 @@ import java.util.List;
 /**
  * @author Octavian Ciubotaru
  */
-@Category(DatabaseTests.class)
+@Tag("databasetests")
 public class AmpReportingTestCase extends ReportingTestCase {
 
     @BeforeAll

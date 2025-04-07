@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author Octavian Ciubotaru

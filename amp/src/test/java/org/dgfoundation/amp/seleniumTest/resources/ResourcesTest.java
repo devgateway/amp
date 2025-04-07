@@ -1,15 +1,15 @@
 package org.dgfoundation.amp.seleniumTest.resources;
 
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
 
-import com.thoughtworks.selenium.SeleneseTestCase;
-import org.junit.Ignore;
+
+import com.thoughtworks.selenium.SeleneseTestBase;
+
 import com.thoughtworks.selenium.Selenium;
-import org.junit.Ignore;
 
-@Ignore
-public class ResourcesTest extends SeleneseTestCase {
+
+
+public class ResourcesTest extends SeleneseTestBase {
     
     private static Logger logger = Logger.getLogger(ResourcesTest.class);
     

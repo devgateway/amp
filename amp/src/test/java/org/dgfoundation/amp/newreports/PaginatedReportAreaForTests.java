@@ -11,6 +11,8 @@ import java.util.Map;
  *
  * @author Nadejda Mandrescu
  */
+import static org.junit.jupiter.api.Assertions.*;
+
 public class PaginatedReportAreaForTests extends ReportAreaForTests {
 
     protected int currentCount = -1;
@@ -49,8 +51,8 @@ public class PaginatedReportAreaForTests extends ReportAreaForTests {
          * can simplify on checks and just compare counts
          */
         PaginatedReportArea partial = (PaginatedReportArea) output;
-        junit.framework.TestCase.assertEquals("currentCount", this.currentCount, partial.getCurrentLeafActivitiesCount());
-        junit.framework.TestCase.assertEquals("totalCount", this.totalCount, partial.getTotalLeafActivitiesCount());
+        assertEquals(this.currentCount, partial.getCurrentLeafActivitiesCount());
+        assertEquals(this.totalCount, partial.getTotalLeafActivitiesCount());
         return null;
     }
 

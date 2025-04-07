@@ -1,7 +1,6 @@
 package org.digijava.kernel.security;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.ConstraintViolationException;
@@ -9,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Octavian Ciubotaru
@@ -95,6 +95,6 @@ public class TestRuleHierarchy {
     }
 
     private void assertCollection(Collection expected, Collection actual) {
-        Assert.assertTrue(CollectionUtils.isEqualCollection(expected, actual));
+        assertTrue(CollectionUtils.isEqualCollection(expected, actual));
     }
 }

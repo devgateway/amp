@@ -111,7 +111,7 @@
 					<digi:secure authenticated="true">
 					<div id="rightpanel">
 						<feature:display name="Desktop Search form" module="Tools">
-							<jsp:include page="/repository/search/view/desktopsearch.jsp" flush="true"/>
+							<jsp:include page="/WEB-INF/jsp/search/view/desktopsearch.jsp" flush="true"/>
 						</feature:display>
 						<logic:present name="currentMember">
 							<digi:insert attribute="myLastVersions"/>

@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author Octavian Ciubotaru
  */
-@ExtendWith(JacksonInTestRule.class)
+//@ExtendWith(JacksonInTestRule.class)
 public class GPIEndPointsTest {
 
 

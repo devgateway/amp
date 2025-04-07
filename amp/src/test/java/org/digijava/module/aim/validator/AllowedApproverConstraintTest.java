@@ -41,7 +41,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
     @BeforeEach
     public void setUp() {
         super.setUp();
-        closeable = Mockito.mockStatic(FeaturesUtil.class);
+//        closeable = Mockito.mockStatic(FeaturesUtil.class);
         // Mockito.mockStatic(FeaturesUtil.class);
         Mockito.mockStatic(DbUtil.class);
 

@@ -140,7 +140,7 @@ public class ActivityImporterTest {
         when(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION)).thenReturn(PROJECT_VALIDATION_ON);
         when(DbUtil.getValidationFromTeamAppSettings(org.mockito.Matchers.anyLong())).thenReturn(PROJECT_VALIDATION_FOR_ALL_EDITS);
         InMemoryActivityManager.getInstance().reset();
-        featuresUtilMockedStatic = Mockito.mockStatic(FeaturesUtil.class);
+//        featuresUtilMockedStatic = Mockito.mockStatic(FeaturesUtil.class);
         dbUtilMockedStatic = Mockito.mockStatic(DbUtil.class);
     }
 

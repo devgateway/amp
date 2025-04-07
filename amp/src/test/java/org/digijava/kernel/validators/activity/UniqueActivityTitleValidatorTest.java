@@ -43,7 +43,7 @@ public class UniqueActivityTitleValidatorTest {
     @BeforeEach
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
-        featuresUtilMock = Mockito.mockStatic(FeaturesUtil.class);
+//        featuresUtilMock = Mockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
         activityFieldML = ValidatorUtil.getMetaData(AmpActivityFields.class, ImmutableSet.of(),
                 new TestFieldInfoProvider(true));

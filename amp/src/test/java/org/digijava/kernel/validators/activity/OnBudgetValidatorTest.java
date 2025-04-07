@@ -37,7 +37,7 @@ public class OnBudgetValidatorTest {
     @BeforeEach
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
-        mockedStatic = Mockito.mockStatic(FeaturesUtil.class);
+//        mockedStatic = Mockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
         categoryValues = InMemoryCategoryValuesManager.getInstance();
     }

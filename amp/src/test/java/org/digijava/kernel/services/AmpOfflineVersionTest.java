@@ -13,7 +13,7 @@ public class AmpOfflineVersionTest {
     @Test
     public void testCompareNull() {
         AmpOfflineVersion v1 = new AmpOfflineVersion("1.0.0");
-        assertEquals(null, v1);
+        assertNotEquals(null, v1);
     }
 
     @Test

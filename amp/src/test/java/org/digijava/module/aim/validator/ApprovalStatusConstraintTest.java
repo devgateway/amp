@@ -32,7 +32,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     @BeforeEach
     public void setUp() {
         super.setUp();
-        Mockito.mockStatic(FeaturesUtil.class);
+//        Mockito.mockStatic(FeaturesUtil.class);
         Mockito.mockStatic(DbUtil.class);
     }
     @Test

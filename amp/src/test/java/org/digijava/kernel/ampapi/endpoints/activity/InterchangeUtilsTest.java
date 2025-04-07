@@ -38,15 +38,15 @@ public class InterchangeUtilsTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        when(translatorService.loadFieldTranslations(any(), any(), any())).then(invocation -> Arrays.asList(
-                acm("en", "ct+en+" + invocation.getArguments()[1] + invocation.getArguments()[2]),
-                acm("fr", "ct+fr+" + invocation.getArguments()[1] + invocation.getArguments()[2]),
-                acm("ru", "ct+ru+" + invocation.getArguments()[1] + invocation.getArguments()[2])));
+//        when(translatorService.loadFieldTranslations(any(), any(), any())).then(invocation -> Arrays.asList(
+//                acm("en", "ct+en+" + invocation.getArguments()[1] + invocation.getArguments()[2]),
+//                acm("fr", "ct+fr+" + invocation.getArguments()[1] + invocation.getArguments()[2]),
+//                acm("ru", "ct+ru+" + invocation.getArguments()[1] + invocation.getArguments()[2])));
 
-        when(translatorService.translateText(any())).then(invocation -> "tr+" + invocation.getArguments()[0]);
+//        when(translatorService.translateText(any())).then(invocation -> "tr+" + invocation.getArguments()[0]);
 
-        when(translatorService.getEditorBodyEmptyInclude(any(), any(), any()))
-                .then(invocation -> "ed+" + invocation.getArguments()[2] + "+" + invocation.getArguments()[1]);
+//        when(translatorService.getEditorBodyEmptyInclude(any(), any(), any()))
+//                .then(invocation -> "ed+" + invocation.getArguments()[2] + "+" + invocation.getArguments()[1]);
 
         ActivityTranslationUtils.setTranslatorService(translatorService);
     }

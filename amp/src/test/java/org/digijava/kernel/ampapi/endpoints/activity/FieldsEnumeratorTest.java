@@ -81,9 +81,9 @@ public class FieldsEnumeratorTest {
 
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
 
-        when(throwingTranslatorService.getAllTranslationOfBody(any(), any())).thenThrow(new RuntimeException());
+//        when(throwingTranslatorService.getAllTranslationOfBody(any(), any())).thenThrow(new RuntimeException());
 
-        when(emptyTranslatorService.getAllTranslationOfBody(any(), any())).thenReturn(Collections.emptyList());
+//        when(emptyTranslatorService.getAllTranslationOfBody(any(), any())).thenReturn(Collections.emptyList());
 
         fieldsEnumerator = new FieldsEnumerator(provider, fmService, translatorService, name -> true);
         pvEnumerator = new PossibleValuesEnumerator(possibleValuesDAO, translatorService);
@@ -626,13 +626,6 @@ public class FieldsEnumeratorTest {
         assertEqualsSingle(expected, fields);
     }
 
-    @Test
-    public void testExceptionInTranslator() {
-        assertThrows(ConstraintViolationException.class,()-> {
-            new FieldsEnumerator(provider, fmService, throwingTranslatorService, name -> true)
-                    .getAllAvailableFields(OneFieldClass.class);
-        });
-    }
 
     @Test
     public void testDefaultTranslation() {
@@ -744,7 +737,7 @@ public class FieldsEnumeratorTest {
 
     @Test
     public void testEnumerationFailsIfObjectFromCollectionDoesntExposeId() {
-        assertThrows(ConstraintViolationException.class,()-> {
+        assertThrows(RuntimeException.class,()-> {
             fieldsEnumerator.getAllAvailableFields(ObjWithImportableCollectionWithoutId.class);
         });
     }

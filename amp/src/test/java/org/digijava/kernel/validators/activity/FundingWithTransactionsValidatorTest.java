@@ -41,7 +41,7 @@ public class FundingWithTransactionsValidatorTest {
     @BeforeEach
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
-        featuresUtilMock = Mockito.mockStatic(FeaturesUtil.class);
+//        featuresUtilMock = Mockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
         categoryValues = InMemoryCategoryValuesManager.getInstance();
     }

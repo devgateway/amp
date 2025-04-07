@@ -43,7 +43,7 @@ public class RegionLocationValidatorTest {
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         // Create the static mock and store it
-        mockedStatic = Mockito.mockStatic(FeaturesUtil.class);
+//        mockedStatic = Mockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
         categoryValues = InMemoryCategoryValuesManager.getInstance();
         locations = InMemoryLocationManager.getInstance();

@@ -40,7 +40,7 @@ public class ComponentFundingOrgRoleValidatorTest {
     @BeforeEach
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
-        mockStatic(FeaturesUtil.class);
+//        mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
     }
 

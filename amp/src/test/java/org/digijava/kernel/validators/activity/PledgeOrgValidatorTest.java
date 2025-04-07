@@ -46,7 +46,7 @@ public class PledgeOrgValidatorTest {
     @BeforeEach
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
-        mockedFeaturesUtil = Mockito.mockStatic(FeaturesUtil.class);
+//        mockedFeaturesUtil = Mockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
 
         organisationManager = InMemoryOrganisationManager.getInstance();

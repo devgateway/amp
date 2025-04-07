@@ -1332,6 +1332,68 @@
 
         <plugins>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-digi-config</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/moduleConfig</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${deployConfigs}/${serverName}</directory>
+                                    <includes>
+                                        <include>digi.xml</include>
+                                    </includes>
+                                </resource>
+                                <!-- Add more resources as needed -->
+                            </resources>
+
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-repository-xml</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${jackrabbit}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${webinf}</directory>
+                                    <includes>
+                                        <include>repository.xml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-metainf</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${metainf}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${metainf}</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -1514,67 +1576,7 @@
             </plugin>
 
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>copy-digi-config</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>jsp</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${deployConfigs}/${serverName}</directory>
-                                    <includes>
-                                        <include>digi.xml</include>
-                                    </includes>
-                                </resource>
-                                <!-- Add more resources as needed -->
-                            </resources>
 
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>copy-repository-xml</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${jackrabbit}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${webinf}</directory>
-                                    <includes>
-                                        <include>repository.xml</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>create-metainf</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${metainf}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${metainf}</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
 
             <!-- Maven XML Plugin to perform XSLT transformations -->
 
@@ -1725,23 +1727,6 @@
             <artifactId>maven-clean-plugin</artifactId>
             <version>3.1.0</version>
             <executions>
-                <execution>
-                    <id>clean-repository</id>
-                    <phase>clean</phase>
-                    <goals>
-                        <goal>clean</goal>
-                    </goals>
-                    <configuration>
-                        <filesets>
-                            <fileset>
-                                <directory>${project.basedir}/src/main/webapp/WEB-INF/moduleConfig</directory>
-                                <includes>
-                                    <include>digi.xml</include>
-                                </includes>
-                            </fileset>
-                        </filesets>
-                    </configuration>
-                </execution>
                 <execution>
                     <id>clean-metainf</id>
                     <phase>clean</phase>

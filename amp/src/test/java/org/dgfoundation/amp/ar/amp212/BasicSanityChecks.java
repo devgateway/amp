@@ -434,7 +434,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 
 
     @Test
-    @Tag("slotests")
+    @Tag("slowtests")
     public void testTripleHierarchiesDoNotChangeTotals() {
         if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
             return; // these are too slow if backed by DB

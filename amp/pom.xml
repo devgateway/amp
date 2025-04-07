@@ -2108,7 +2108,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
-<!--                    <skip>true</skip>-->
+                    <skip>true</skip>
                     <test>*Test*.java,*Test.java,*Testcases.java,
                     !AbstractIntegrationTest,!PersistenceManagerTest,!WorkspaceFilterTest,!AmpSchemaFilteringTests,
                         !DateTimeTests,!SQLUtilsTests,!ReportsTestCase

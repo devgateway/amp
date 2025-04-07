@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.ar;
 
 import org.dgfoundation.amp.ar.legacy.*;
+import org.junit.platform.suite.api.SelectClasses;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -10,8 +11,8 @@ import org.junit.runners.Suite;
  * @author Dolghier Constantin
  *
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
+@org.junit.platform.suite.api.Suite
+@SelectClasses({
         DirectedDisbursementsTests.class,
         MtefTests.class,
         ActivityPreviewTests.class,

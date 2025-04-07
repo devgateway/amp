@@ -1,13 +1,14 @@
 package org.digijava.kernel.validators.common;
 
+import org.junit.platform.suite.api.SelectClasses;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 /**
  * @author Octavian Ciubotaru
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
+@org.junit.platform.suite.api.Suite
+@SelectClasses({
         RegexValidatorTest.class,
         SizeValidatorTest.class,
         TotalPercentageValidatorTest.class,

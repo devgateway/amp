@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import org.junit.platform.suite.api.SelectClasses;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -8,8 +9,8 @@ import org.junit.runners.Suite;
  *
  * @author Dolghier Constantin
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
+@org.junit.platform.suite.api.Suite
+@SelectClasses({
         GraphAlgorithmsTests.class,
         InclusiveRunnerTests.class,
         MetaInfoTests.class,

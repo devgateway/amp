@@ -2106,15 +2106,11 @@
                 </dependencies>
                 <configuration>
 <!--                    <skip>true</skip>-->
-<!--                    <test>**/*Test.java, **/Test*.java, **/*Testcases.java</test>-->
-                    <failIfNoTests>false</failIfNoTests>
-
-                    <!--                    <testSourceDirectory>${project.build.testSourceDirectory}</testSourceDirectory>-->
                     <includes>
-                                                <include>**/Test*.java</include>
-                                                <include>**/*Test.java</include>
-                                                <include>**/*Testcases.java</include>
-                                                <include>**/*Test*.java</include>
+                        <include>**/Test*.java</include>
+                        <include>**/*Test.java</include>
+                        <include>**/*Testcases.java</include>
+                        <include>**/*Test*.java</include>
                         <include>**/*</include>
 
                     </includes>

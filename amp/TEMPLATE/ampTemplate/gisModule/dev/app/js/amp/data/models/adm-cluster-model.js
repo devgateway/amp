@@ -5,7 +5,8 @@ var Backbone = require('backbone');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var countries = require('i18n-iso-countries');
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
-const AMP_WOCAT_API= 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search?country=';
+//TODO make it a GLOBAL SETTING
+const AMP_WOCAT_API= 'https://ggw-dashboard.dgstg.org/api/amp-wocat/search?countries=';
 
 
 module.exports = Backbone.Model

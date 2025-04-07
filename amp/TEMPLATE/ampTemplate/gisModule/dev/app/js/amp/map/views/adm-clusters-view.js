@@ -111,12 +111,10 @@ module.exports = Backbone.View.extend({
 
     return new L.geoJson(admLayer.get('features'), {
       pointToLayer: function(feature, latlng) {
-        console.log("Feature: " + JSON.stringify(feature));
         var htmlString = self.admTemplate(feature);
 
         if (feature.properties.admLevel==='Wocat')
         {
-          console.log("Setting wocat template")
            htmlString = self.wocatAdmTemplate(feature);
         }
         var myIcon = L.divIcon({

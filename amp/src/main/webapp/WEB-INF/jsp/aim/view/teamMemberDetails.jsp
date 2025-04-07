@@ -1,10 +1,10 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
-<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
-<%@ taglib uri="/taglib/struts-html" prefix="html" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <style>
 .contentbox_border{
 	border: 	1px solid #666666;
@@ -28,13 +28,13 @@
     if(idWMMmemeber!= idUpdaterMember){
         <c:set var="translation">
         <digi:trn>The Workspace Member does not have rights to change the role.</digi:trn>
-        </c:set>   			 
+        </c:set>
         alert("${translation}");
         return false;
     } else if(selectedRole== wmRole && idWMMmemeber!="" && idWMMmemeber!=idCurrentMember ){
         <c:set var="translation">
         <digi:trn key="aim:OneManagerPerWorkspace">Only one Manager is allowed per workspace. Please choose another role or keep the existing one.</digi:trn>
-       </c:set>   			 
+       </c:set>
         alert("${translation}");
         return false;
     } else {
@@ -42,7 +42,7 @@
         var valor = aimTeamMemberForm.role.options[indice].text;
         <c:set var="translation">
         <digi:trn key="aim:AreYouSureToChangerole">Are you sure you want to change this role to</digi:trn>
-        </c:set>				 
+        </c:set>
         return confirm("${translation} \""+valor+"\"?");
     }
   }
@@ -50,7 +50,7 @@
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
-<c:set target="${bcparams}" property="dest" value="teamLead"/>			
+<c:set target="${bcparams}" property="dest" value="teamLead"/>
 
 <digi:errors/>
 <digi:instance property="aimTeamMemberForm" />
@@ -82,7 +82,7 @@
 										<span class="sec_name">
 											<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
 										</span>
-										
+
 										<span class="breadcrump_sep">|</span>
 										<digi:link href="/viewMyDesktop.do" title="${translation}" styleClass="l_sm">
 											<digi:trn key="aim:portfolio">Portfolio</digi:trn>
@@ -103,22 +103,22 @@
 										<span class="breadcrump_sep"><b>�</b></span>
 										<span class="bread_sel"><digi:trn>Member Details</digi:trn></span>
 									</div>
-									
+
 								</td>
 							</tr>
 							<tr >
 								<td vAlign="top" width="100%">
-									
+
 									<c:set var="selectedTab" value="1" scope="request"/>
-										
+
 										<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-									<jsp:include page="teamSetupMenu.jsp"  />								
-									
-										
-								
-									
-									
-                                
+									<jsp:include page="teamSetupMenu.jsp"  />
+
+
+
+
+
+
 									<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 									<c:set target="${urlParams}" property="id">
 										<bean:write name="aimTeamMemberForm" property="teamMemberId" />
@@ -154,17 +154,17 @@
 													</tr>
 												</table>
 									</div>
-															
-															
-															
+
+
+
 </td>
 							</tr>
 						</table>
 						</div>
-						</div>												
-											
-											
-											
+						</div>
+
+
+
 		</td>
 	</tr>
 </table>

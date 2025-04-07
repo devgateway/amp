@@ -1520,7 +1520,7 @@
                 <version>3.2.0</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
+                        <id>copy-digi-config</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -2109,7 +2109,7 @@
                 <version>3.0.0-M5</version>
                 <configuration>
 <!--                    <skip>true</skip>-->
-                    <test>**/Test*.java,**/Test.java,**/*Testcases.java,
+                    <test>*Test*.java,*Test.java,*Testcases.java,
                     !AbstractIntegrationTest,!PersistenceManagerTest,!WorkspaceFilterTest,!AmpSchemaFilteringTests,
                         !DateTimeTests,!SQLUtilsTests,!ReportsTestCase
                     </test>

@@ -115,7 +115,7 @@ public class ConfigLoaderListener
                 }
             }
             // Custom cache manager must be initialized first
-            DigiConfigManager.initialize(sce.getServletContext().getRealPath("/WEB-INF/moduleConfig"));
+            DigiConfigManager.initialize("./src/main/webapp/WEB-INF/moduleConfig");
             // Initialize services
             ServiceContext serviceContext = new WebappServiceContext(sce.getServletContext());
             ServiceManager.getInstance().init(serviceContext, 0);

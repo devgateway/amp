@@ -57,11 +57,7 @@ public class PledgeOrgValidatorTest {
         usaidPledge.setOrganizationGroup(organisationManager.getUsaidGroup());
     }
 
-    @AfterEach
-    public void tearDown() throws Exception {
-            mockedFeaturesUtil.close();
 
-    }
 
     @Test
     public void testNullDonor() {

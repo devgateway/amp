@@ -129,8 +129,4 @@ public class FundingWithTransactionsValidatorTest {
                 FundingWithTransactionsValidator.class, path, anything(), ValidationErrors.FIELD_REQUIRED);
     }
 
-    @AfterEach
-    public void tearDown() {
-        featuresUtilMock.close();
-    }
 }

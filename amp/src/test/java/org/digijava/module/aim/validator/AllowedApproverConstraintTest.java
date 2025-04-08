@@ -43,7 +43,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
         super.setUp();
 //        closeable = Mockito.mockStatic(FeaturesUtil.class);
         // Mockito.mockStatic(FeaturesUtil.class);
-        Mockito.mockStatic(DbUtil.class);
+//        Mockito.mockStatic(DbUtil.class);
 
         computedAmpTeam = mock(AmpTeam.class);
         when(computedAmpTeam.getAmpTeamId()).thenReturn(CROSS_TEAM_ID);

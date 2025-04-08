@@ -29,6 +29,7 @@ import static org.digijava.kernel.validators.ValidatorUtil.filter;
 import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
 /**
@@ -76,7 +77,10 @@ public class UniqueActivityTitleValidatorTest {
     }
 
     private void mockValidation() {
-        when(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM)).thenReturn(null);
+        try(MockedStatic<FeaturesUtil> mockedStatic= mockStatic(FeaturesUtil.class)) {
+           mockedStatic.when(()->FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM)).thenReturn(null);
+
+        }
     }
 
     @Test

@@ -33,7 +33,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     public void setUp() {
         super.setUp();
 //        Mockito.mockStatic(FeaturesUtil.class);
-        Mockito.mockStatic(DbUtil.class);
+//        Mockito.mockStatic(DbUtil.class);
     }
     @Test
     public void testNotAppliedInHibernate() {

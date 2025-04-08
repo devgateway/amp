@@ -78,6 +78,9 @@ public class DigiConfigManager {
         File configFile = new File(configDirFile.getAbsolutePath() + File.separator + CONFIG_FILE);
         try {
             logger.debug("Parsing " + configFile.getName());
+            System.out.println("*****************************");
+            System.out.println("Parsing " + configFile.getName());
+            System.out.println("*****************************");
             digiConfig = (DigiConfig) digester.parse(configFile);
             afterDigiConfigParse();
             logger.info("File " + configFile.getName() + " was parsed successfully");

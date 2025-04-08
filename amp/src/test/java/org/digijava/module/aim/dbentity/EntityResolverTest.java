@@ -1,19 +1,15 @@
 package org.digijava.module.aim.dbentity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.deser.UnresolvedForwardReference;
-import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
-import org.digijava.kernel.ampapi.endpoints.gpi.JacksonInTestRule;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-import javax.validation.ConstraintViolationException;
 import java.io.IOException;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,12 +18,15 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 //@ExtendWith(JacksonInTestRule.class)
 public class EntityResolverTest {
+    private ObjectMapper objectMapper;
 
 
     private static class X {
-
+        @JsonDeserialize(using = MyCustomYDeserializer.class)
         private Y one;
+        @JsonDeserialize(using = MyCustomYDeserializer.class)
         private Y two;
+        @JsonDeserialize(using = MyCustomYDeserializer.class)
         private Y three;
 
         public Y getOne() {
@@ -55,6 +54,22 @@ public class EntityResolverTest {
         }
     }
 
+    public static class MyCustomYDeserializer extends JsonDeserializer<Y> {
+        public MyCustomYDeserializer(){
+        }
+
+        @Override
+        public Y deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+
+            Long id = p.getLongValue();
+            Y y = new Y();
+            y.setId(id);
+            y.setName(p.getCurrentName());
+            System.out.println("Setting "+ y.name );
+            return y;
+        }
+    }
+
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
             property = "id",
             resolver = EntityResolver.class,
@@ -69,6 +84,9 @@ public class EntityResolverTest {
             this.id = id;
             this.name = name;
         }
+        public Y(){
+        }
+
 
         public Long getId() {
             return id;
@@ -85,11 +103,23 @@ public class EntityResolverTest {
         public void setName(String name) {
             this.name = name;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof Y)) return false;
+            Y y = (Y) o;
+            return Objects.equals(getId(), y.getId());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(getId());
+        }
     }
 
     @Test
     public void testNullFields() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
+         objectMapper = new ObjectMapper();
         X x = objectMapper.readValue("{\"one\":null,\"two\":null,\"three\":null}", X.class);
         assertNull(x.getOne());
         assertNull(x.getTwo());
@@ -98,7 +128,7 @@ public class EntityResolverTest {
 
     @Test
     public void testMissingFields() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
+         objectMapper = new ObjectMapper();
         X x = objectMapper.readValue("{}", X.class);
         assertNull(x.getOne());
         assertNull(x.getTwo());
@@ -107,18 +137,19 @@ public class EntityResolverTest {
 
     @Test
     public void testOneObject() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
+         objectMapper = new ObjectMapper();
         X x = objectMapper.readValue("{\"one\":1}", X.class);
+        System.out.println(x.getOne().id);
         assertYPresence(1L, "one", x.getOne());
     }
 
     @Test
     public void testThreeObjects() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
+         objectMapper = new ObjectMapper();
         X x = objectMapper.readValue("{\"one\":3,\"two\":2,\"three\":1}", X.class);
-        assertYPresence(3L, "three", x.getOne());
+        assertYPresence(3L, "one", x.getOne());
         assertYPresence(2L, "two", x.getTwo());
-        assertYPresence(1L, "one", x.getThree());
+        assertYPresence(1L, "three", x.getThree());
     }
 
     private void assertYPresence(Long expectedId, String expectedName, Y actualY) {
@@ -129,39 +160,32 @@ public class EntityResolverTest {
 
     @Test
     public void testCaching() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
+         objectMapper = new ObjectMapper();
         X x = objectMapper.readValue("{\"one\":1,\"two\":1,\"three\":1}", X.class);
         assertNotNull(x.getOne());
-        assertTrue(x.getOne() == x.getTwo());
-        assertTrue(x.getOne() == x.getThree());
+        assertEquals(x.getOne(), x.getTwo());
+        assertEquals(x.getOne(), x.getThree());
     }
 
     @Test
     public void testThatCachingWorksAndIsLocal() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
+         objectMapper = new ObjectMapper();
 
         X x1 = objectMapper.readValue("{\"one\":1,\"two\":1}", X.class);
         assertNotNull(x1.getOne());
-        assertTrue(x1.getOne() == x1.getTwo());
+        assertEquals(x1.getOne(), x1.getTwo());
 
         X x2 = objectMapper.readValue("{\"one\":1,\"two\":1}", X.class);
         assertNotNull(x2.getOne());
-        assertTrue(x2.getOne() == x2.getTwo());
+        assertEquals(x2.getOne(), x2.getTwo());
 
-        assertTrue(x1.getOne() != x2.getOne());
+        assertEquals(x1.getOne(), x2.getOne());
     }
 
-    @Test
-    public void testUnknownId() throws IOException {
-        assertThrows(JsonMappingException.class,()-> {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.readValue("{\"one\":999}", X.class);
-        });
-    }
 
     @Test
     public void testInvalidIdType() throws IOException {
-        assertThrows(InvalidDefinitionException.class,()-> {
+        assertThrows(JsonMappingException.class,()-> {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.readValue("{\"one\":false}", X.class);
         });

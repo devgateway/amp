@@ -34,7 +34,8 @@ public class FundingOrganisationGate extends AbstractOrgRoleGate {
     }
     @Override
     public boolean logic() throws Exception {
-        return true;
+        enabled = fundingOrgGateEnabled();
+        return enabled;
     }
 
     @Override

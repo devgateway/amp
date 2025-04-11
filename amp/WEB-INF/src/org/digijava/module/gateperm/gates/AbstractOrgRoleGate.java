@@ -73,6 +73,12 @@ public abstract class AbstractOrgRoleGate extends Gate {
         paramRoleCode = parameters.poll().trim();
     }
 
+    protected boolean fundingOrgGateEnabled()
+    {
+        return "enabled".equalsIgnoreCase(paramRoleCode);
+    }
+
+
     protected Boolean checkIfDonorIsVerifiedOrganisation(boolean shouldCheckInRequest) {
         Boolean canDo = null;
         FundingOrganization org = (FundingOrganization) getObjectFromScope(GatePermConst.ScopeKeys.CURRENT_ORG,

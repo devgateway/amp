@@ -87,6 +87,21 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
+                boolean isEnabled=false;
+                if (Boolean.TRUE.equals(FundingOrganisationGate.enabled)) {
+                    Set<AmpOrganisation> orgs = TeamUtil.getCurrentUser().getAssignedOrgs();
+                    for (AmpOrganisation ampOrg : orgs) {
+                        if (ampOrg.getAmpOrgId().equals(model.getObject().getAmpOrgId()))
+                        {
+                            isEnabled=true;
+                            break;
+                        }
+
+                    }
+                    if(!TeamUtil.getCurrentUser().getEmail().equalsIgnoreCase("atl@amp.org")) {
+                        fundingItemFeature.setEnabled(isEnabled);
+                    }
+                }
                 item.add(fundingItemFeature);
             }
         };

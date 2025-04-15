@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.onepager.util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author Octavian Ciubotaru
@@ -50,12 +50,12 @@ public class PercentagesUtilTest {
         for (int i = 0; i < n; i++) {
             verifySum = verifySum.add(split.getValueFor(i));
         }
-        assertEquals(0, verifySum.compareTo(sum));
+        Assertions.assertEquals(0, verifySum.compareTo(sum));
     }
 
     @Test
     public void testClosestTo() {
-        assertEquals(0, PercentagesUtil.closestTo((float) 14.8999996185303, 2).compareTo(new BigDecimal("14.9")));
-        assertEquals(0, PercentagesUtil.closestTo((float) 85.0999984741211, 2).compareTo(new BigDecimal("85.1")));
+        Assertions.assertEquals(0, PercentagesUtil.closestTo((float) 14.8999996185303, 2).compareTo(new BigDecimal("14.9")));
+        Assertions.assertEquals(0, PercentagesUtil.closestTo((float) 85.0999984741211, 2).compareTo(new BigDecimal("85.1")));
     }
 }

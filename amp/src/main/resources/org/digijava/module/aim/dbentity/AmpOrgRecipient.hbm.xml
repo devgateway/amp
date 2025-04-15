@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.module.aim.dbentity.AmpOrgRecipient" table="AMP_ORG_RECIPIENT" lazy="false">
+        <cache usage="read-write" />
+        <id name="ampOrgRecipientId" column="amp_org_rec_id" type="java.lang.Long">
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_ORG_RECIPIENT_seq</param>
+            </generator>
+        </id>
+        <property name="description" column="description" type="java.lang.String" />
+        <many-to-one name="organization" column="amp_org_id" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
+        <many-to-one name="parentOrganization" column="parent_org_id" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
+    </class>
+</hibernate-mapping>

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.digijava.module.gateperm.action;
 
@@ -34,13 +34,13 @@ import java.util.*;
 
 /**
  * @author mihai
- * 
+ *
  */
 public class ExchangePermission extends MultiAction {
     private static Logger logger = Logger.getLogger(ExchangePermission.class);
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.dgfoundation.amp.utils.MultiAction#modePrepare(org.apache.struts.action.ActionMapping,
      *      org.apache.struts.action.ActionForm,
      *      javax.servlet.http.HttpServletRequest,
@@ -55,7 +55,7 @@ public class ExchangePermission extends MultiAction {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.dgfoundation.amp.utils.MultiAction#modeSelect(org.apache.struts.action.ActionMapping,
      *      org.apache.struts.action.ActionForm,
      *      javax.servlet.http.HttpServletRequest,
@@ -90,30 +90,28 @@ public class ExchangePermission extends MultiAction {
                 request.setAttribute(GatePermConst.UPDATED_PERMISSIONS,updated);
             fileData = xmlFile.getFileData();
             InputStream inputStream= new ByteArrayInputStream(fileData);
-        
+
             JAXBContext jc = JAXBContext.newInstance("org.digijava.module.gateperm.feed.schema");
             Unmarshaller m = jc.createUnmarshaller();
             Permissions xmlPermissions = (Permissions) m.unmarshal(inputStream);
             List gatePerm = xmlPermissions.getGatePerm();
             Iterator i=gatePerm.iterator();
+            Session session=PersistenceManager.getRequestDBSession();
             while (i.hasNext()) {
-                    Session session=PersistenceManager.getRequestDBSession();
-//beginTransaction();
                 GatePermType gp = (GatePermType) i.next();
                 GatePermission xmlToDbGatePermission = xmlToDbGatePermission(gp, added, updated);
-                session.saveOrUpdate(xmlToDbGatePermission);            
-                //transaction.commit();
+                session.saveOrUpdate(xmlToDbGatePermission);
+                session.flush();
             }
-            
+
             List compPerm = xmlPermissions.getCompositePerm();
             i=compPerm.iterator();
+            session=PersistenceManager.getRequestDBSession();
             while (i.hasNext()) {
-                    Session session=PersistenceManager.getRequestDBSession();
-//beginTransaction();
                     CompositePermType gp = (CompositePermType) i.next();
                 CompositePermission xmlToDbCompositePermission = xmlToDbCompositePermission(gp, added, updated);
                 session.saveOrUpdate(xmlToDbCompositePermission);
-                //transaction.commit();
+                session.flush();
             }
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
@@ -134,20 +132,20 @@ public class ExchangePermission extends MultiAction {
             // TODO Auto-generated catch block
             throw new RuntimeException( "SQLException Exception encountered", e);
         }
-        
+
         return mapping.findForward("importResult");
     }
-    
+
     private CompositePermission xmlToDbCompositePermission(CompositePermType elem, List<Permission> added, List<Permission> updated) throws DgException, HibernateException, SQLException {
 //      Session requestDBSession = PersistenceManager.getRequestDBSession();
         Permission dbp=PermissionUtil.findPermissionByName(elem.getName());
         if(dbp!=null) {
             if(dbp instanceof GatePermission) {
-                Session session = PersistenceManager.getRequestDBSession();             
+                Session session = PersistenceManager.getRequestDBSession();
                 session.delete(dbp);dbp=null;
             }
         }
-                
+
         if(dbp==null) {dbp=new CompositePermission();added.add(dbp);} else updated.add(dbp);
         CompositePermission dbCp=(CompositePermission) dbp;
         dbCp.setName(elem.getName());
@@ -176,41 +174,41 @@ public class ExchangePermission extends MultiAction {
         if(dbCp.getPermissibleObjects()==null) dbCp.setPermissibleObjects(new HashSet());
         dbCp.getPermissibleObjects().clear();
         dbCp.getPermissibleObjects().addAll(getAssignedLocalIds(elem.getAssignedObjId(),dbCp));
-        
+
         return dbCp;
     }
-    
+
     @SuppressWarnings("unchecked")
     private GatePermission xmlToDbGatePermission(GatePermType xmlGp,List<Permission> added,List<Permission> updated) throws DgException, HibernateException, SQLException {
         //try to fetch an existing gate permission or create a fresh one
         Permission dbp=PermissionUtil.findPermissionByName(xmlGp.getName());
         if(dbp!=null) {
-            
+
             if(dbp instanceof CompositePermission) {
                 Session session = PersistenceManager.getRequestDBSession();
                 session.delete(dbp);dbp=null;
                 }
         }
-        
+
         if(dbp==null) {dbp=new GatePermission();added.add(dbp);} else updated.add(dbp);
         GatePermission dbGp=(GatePermission) dbp;
-        
+
         dbGp.setName(xmlGp.getName());
         dbGp.getActions().clear();
         dbGp.getActions().addAll(xmlGp.getAction());
         dbGp.setDedicated(xmlGp.isDedicated());
         dbGp.setDescription(xmlGp.getDescription());
         dbGp.getGateParameters().clear();
-        for(Object param: xmlGp.getParam()) 
+        for(Object param: xmlGp.getParam())
             dbGp.getGateParameters().add(PermissionUtil.removeTabs((String) param));
-        
+
 
         dbGp.setGateTypeName(GatePermConst.availableGatesBySimpleNames.get(xmlGp.getGateClass()).getName());
-        
+
         if(dbGp.getPermissibleObjects()==null) dbGp.setPermissibleObjects(new HashSet());
         dbGp.getPermissibleObjects().clear();
         dbGp.getPermissibleObjects().addAll(getAssignedLocalIds(xmlGp.getAssignedObjId(),dbGp));
-            
+
         return dbGp;
     }
 
@@ -246,9 +244,9 @@ public class ExchangePermission extends MultiAction {
             ret.add(pm);
         }
         return ret;
-        
+
     }
-    
+
     private List<AssignedObjIdType> getAssignedClusterIds(
             ObjectFactory objFactory, Permission p) throws HibernateException,
             JAXBException, DgException {
@@ -271,7 +269,7 @@ public class ExchangePermission extends MultiAction {
                                             .get(permissionMap
                                                     .getPermissibleCategory()),
                                     permissionMap.getObjectIdentifier());
-                    if (ci == null)                             
+                    if (ci == null)
                         continue;
             }
             AssignedObjIdType clusterId = objFactory.createAssignedObjIdType();
@@ -357,8 +355,8 @@ public class ExchangePermission extends MultiAction {
 //      if(gp.isDedicated()) xmlPerm.setDedicated(true);
 //      return xmlPerm;
 //  }
-    
-    
+
+
     @SuppressWarnings("unchecked")
     private CompositePermType dbToXmlCompositePermission(ObjectFactory of,
             CompositePermission cp) throws JAXBException, HibernateException,

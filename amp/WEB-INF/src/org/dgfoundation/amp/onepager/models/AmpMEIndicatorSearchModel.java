@@ -33,8 +33,7 @@ public class AmpMEIndicatorSearchModel extends
     private Session session;
 
     public enum PARAM implements AmpAutoCompleteModelParam {
-        ACTIVITY_PROGRAM,
-        ACTIVITY_LOCATION
+        ACTIVITY_PROGRAM
     }
 
 
@@ -53,8 +52,6 @@ public class AmpMEIndicatorSearchModel extends
             Set<AmpActivityProgram> ampActivityPrograms = (Set<AmpActivityProgram>) getParam(PARAM.ACTIVITY_PROGRAM);
 
             // Get activity location
-            AmpActivityLocation ampActivityLocation = (AmpActivityLocation) getParam(PARAM.ACTIVITY_LOCATION);
-
             crit.setCacheable(false);
             if (input.trim().length() > 0) {
                 Junction junction = Restrictions.conjunction().add(getTextCriterion("name", input));
@@ -88,18 +85,6 @@ public class AmpMEIndicatorSearchModel extends
                     filterAmpIndicators = ret.stream()
                             .filter(indicator -> programThemesClone.contains(indicator.getProgram()))
                             .collect(Collectors.toList());
-                }
-            }
-
-            // Check if the indicator filter by location is active
-            boolean filterByLocation = FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_INDICATOR_LOCATION);
-            if(filterByLocation) {
-                // Filter indicators by the activity location
-                if (ampActivityLocation != null) {
-                    filterAmpIndicators = filterAmpIndicators.stream()
-                            .filter(indicator -> indicator.getIndicatorLocations().stream()
-                                    .anyMatch(indicatorLocation -> ampActivityLocation.getLocation().equals(indicatorLocation.getLocation()))
-                            ).collect(Collectors.toList());
                 }
             }
 

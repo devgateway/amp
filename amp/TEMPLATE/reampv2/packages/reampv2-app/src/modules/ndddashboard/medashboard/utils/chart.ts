@@ -76,6 +76,13 @@ class ChartUtils {
         return actualValue ? actualValue.value : 0;
     }
 
+    public static getMaxActualValue = (actualValues: ActualValue []) => {
+        if (!actualValues || actualValues.length === 0) return 0;
+
+        const sortedActualValues = actualValues.sort((a: any, b: any) => b.value - a.value);
+        return sortedActualValues[0].value;
+    }
+
     public static computeAggregateValues = (data: YearValues []) => {
         return data.reduce((acc, curr) => {
             if (!curr.actualValues || curr.actualValues.length === 0) {

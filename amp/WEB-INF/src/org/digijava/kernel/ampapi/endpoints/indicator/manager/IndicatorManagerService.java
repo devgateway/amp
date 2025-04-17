@@ -54,7 +54,6 @@ public class IndicatorManagerService {
 
     public static final String FILTER_BY_PROGRAM = "Filter By Program";
 
-    public static final String FILTER_BY_INDICATOR_LOCATION = "Filter By Indicator Location";
     public static final String FILTER_BY_SECTOR = "Filter By Sector";
 
     public static String INDICATOR_CATEGORY_KEY = "core_indicator_type";
@@ -429,11 +428,6 @@ public class IndicatorManagerService {
             Date baseRevisedValueDate = indicatorRequest.getBaseValue().getRevisedValueDate();
 
             if (originalBaseValue != null && revisedBaseValue != null) {
-                if (originalBaseValue > revisedBaseValue) {
-                    throw new ApiRuntimeException(BAD_REQUEST,
-                            ApiError.toError("Revised base value must be greater than original value"));
-                }
-
                 baseValues.setOriginalValue(originalBaseValue);
                 baseValues.setRevisedValue(revisedBaseValue);
             }
@@ -463,11 +457,6 @@ public class IndicatorManagerService {
             Date targetRevisedValueDate = indicatorRequest.getTargetValue().getRevisedValueDate();
 
             if (originalTargetValue != null && revisedTargetValue != null) {
-                if (originalTargetValue > revisedTargetValue) {
-                    throw new ApiRuntimeException(BAD_REQUEST,
-                            ApiError.toError("Revised target value must be greater than original value"));
-                }
-
                 targetValues.setOriginalValue(originalTargetValue);
                 targetValues.setRevisedValue(revisedTargetValue);
             }

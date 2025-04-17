@@ -57,7 +57,7 @@ import static org.hibernate.criterion.Restrictions.in;
 /**
  * Utilities related to translation import and export.
  * Initially XML tags were named not very well but basic idea is that
- * translations are grouped by key - for each key we may have several records 
+ * translations are grouped by key - for each key we may have several records
  * for different languages. Lets define in more details:
  * In XML there is root tag called {@link Translations} and it contains
  * groups called {@link Trn}. In java we have {@link MessageGroup} helper class
@@ -67,7 +67,7 @@ import static org.hibernate.criterion.Restrictions.in;
  * class is  {@link Language} and we also have old hibernate bean {@link Message} which
  * defines one translation record in AMP.
  * All methods below work with these classes.
- * @see ImportExportTranslations 
+ * @see ImportExportTranslations
  * @author Irakli Kobiashvili ikobiashvili@dgfoundation.org
  *
  */
@@ -80,7 +80,7 @@ public class ImportExportUtil {
     /**
      * Imports data from JAXB translations instance to database.
      * Also updates translation cache with only those messages that were affected.
-     * Cache is updated only it database transaction was successful. 
+     * Cache is updated only it database transaction was successful.
      * @param translations
      * @param option
      * @throws DgException
@@ -91,7 +91,7 @@ public class ImportExportUtil {
         if (worker instanceof CachedTranslatorWorker)
         {
             CachedTranslatorWorker ctw = (CachedTranslatorWorker) worker;
-            ctw.cleanMessageCache();            
+            ctw.cleanMessageCache();
         }
         worker.cleanTimeStampQueue();
         TrnAccesTimeSaver.SKIP_ALL_UPDATES = true;
@@ -101,10 +101,10 @@ public class ImportExportUtil {
                 Session session = PersistenceManager.openNewSession();
                 session.setFlushMode(FlushMode.MANUAL);
                 Transaction tx = session.beginTransaction();
-                
+
                 //set session in parameter
                 option.setDbSession(session);
-                //set list of affected messages 
+                //set list of affected messages
                 option.setAffectedMessages(new LinkedList<Message>());
 
                 for (Trn xmlGroup : groups) {
@@ -120,7 +120,7 @@ public class ImportExportUtil {
             }
         }
     }
-    
+
     /**
      * Converts XML group node to messages group and saves it.
      * message group is bean of {@link MessageGroup} type.
@@ -131,12 +131,12 @@ public class ImportExportUtil {
         MessageGroup group = new MessageGroup(xmlGroup);
         saveGroup(group, option);
     }
-    
+
     /**
      * Saves message group to database.
      * If allowed languages in option is set then translations in group with
      * those languages will be saved. If that option is not set (NULL) then all
-     * translations in group will be saved. 
+     * translations in group will be saved.
      * @param group
      * @param option
      */
@@ -153,14 +153,14 @@ public class ImportExportUtil {
                 Message message = group.getMessageByLocale(local);
                 if (message != null) saveMessage(message, option);
             }
-            
+
         }
     }
-    
+
     /**
      * Saves message in db according to rules specified in option.
      * Also tries to find already existing record with same key (key,locale,siteId) in db.
-     * This already existing record is used when checking save rules. 
+     * This already existing record is used when checking save rules.
      * @param message
      * @param option
      */
@@ -172,11 +172,11 @@ public class ImportExportUtil {
             String msgKey       = message.getKey();
             String msgLang      = message.getLocale();
             String msgSiteId    = message.getSiteId();
-            
+
             //find same record in db
             Message existingMessage = option.getSearcher().get(msgKey, msgLang, Long.parseLong(msgSiteId),
                     option.getDbSession());
-            
+
             //default type in case we do not have specified types.
             //This default type means that we will not skip any record. If this is not goo didea, change with return;
             ImportType type = ImportType.UPDATE;
@@ -199,15 +199,15 @@ public class ImportExportUtil {
             logger.error(e.getMessage(), e);
         }
     }
-    
+
     /**
      * Updates existing message with imported one only if imported message is newer then existing one.
-     * If there is no existing message (null specified) then imported one will be saved as new message. 
+     * If there is no existing message (null specified) then imported one will be saved as new message.
      * @param message
      * @param existingMessage
      * @param session
      * @param affected
-     * @throws Exception 
+     * @throws Exception
      */
     private static void updateByTimestamp(Message message, Message existingMessage, Session session, List<Message> affected) throws Exception{
         if (existingMessage==null){
@@ -230,7 +230,7 @@ public class ImportExportUtil {
                     }
         }
     }
-    
+
     /**
      * Overwrites existing message with imported one without checking time stamps.
      * If there is no existing message in db then imported one is saved as new.
@@ -238,7 +238,7 @@ public class ImportExportUtil {
      * @param existingMessage
      * @param session
      * @param affected
-     * @throws Exception 
+     * @throws Exception
      */
     private static void overwrite(Message message, Message existingMessage, Session session, List<Message> affected) throws Exception{
         if (existingMessage != null){
@@ -254,7 +254,7 @@ public class ImportExportUtil {
             affected.add(message);
         }
     }
-    
+
     /**
      * Saves only if imported message is new - there is no message with same key (key,locale,siteId) in database.
      * @param message
@@ -262,7 +262,7 @@ public class ImportExportUtil {
      * @param session
      * @param affected
      * @return true if record has been saved, false if not saved because we have existing record in database.
-     * @throws Exception 
+     * @throws Exception
      */
     private static boolean saveIfNew(Message message, Message existingMessage, Session session, List<Message> affected) throws Exception{
         if (existingMessage == null){
@@ -274,14 +274,14 @@ public class ImportExportUtil {
         }
         return false;
     }
-    
+
     /**
      * Imports translations from file if it exists in specific folder.
      * IMPORTANT: DO NOT CALL this method from regular code.
      * Only place where it is called from is startup code before initialization of translation cache.
-     * Method checks for XML file with specific name in specific folder. 
+     * Method checks for XML file with specific name in specific folder.
      * If that file is found then tries to import translations form it.
-     * That XML file must be product of export function for translations export-import wizard in AMP admin menu.  
+     * That XML file must be product of export function for translations export-import wizard in AMP admin menu.
      */
     public static void importIfFileExists(){
         try {
@@ -300,19 +300,19 @@ public class ImportExportUtil {
             logger.error("Error during import!!!",e);
         }
     }
-    
+
     /**
      * Returns file for importing.
      * File should exists and be readable.
      * @return file if it exists on disk and is readable otherwise null.
      */
     private static File getFle(){
-        final String IMPORT_FILE_NAME = "translationImport.xml"; 
+        final String IMPORT_FILE_NAME = "translationImport.xml";
         File file = new File(IMPORT_FILE_NAME);
         if (file.exists() && file.canRead()) return file;
         return null;
     }
-    
+
     /**
      * Retrieves root node from file.
      * @param file
@@ -328,7 +328,7 @@ public class ImportExportUtil {
         }
         return root;
     }
-    
+
     /**
      * Implements searcher that searches translation cache.
      */
@@ -343,10 +343,10 @@ public class ImportExportUtil {
             return worker.getByKey(key, null, null, locale, siteId, dbSession);
         }
     }
-    
+
     /**
      * Returns searcher which searches translation cache.
-     * Use this in actions or in any place when where cache is already initialized after startup. 
+     * Use this in actions or in any place when where cache is already initialized after startup.
      * @return searcher for cache
      */
     public static TranslationSearcher getCacheSearcher(){
@@ -356,7 +356,7 @@ public class ImportExportUtil {
     /**
      * Returns searcher which bypasses translations and searches directly in db.
      * Use this when cache is not initialized yet at startup time.
-     * DO NOT USE after cache initialization because its slow 
+     * DO NOT USE after cache initialization because its slow
      * and if you make changes to returned messages then cache will not "see" it.
      * NOTE: Currently not implemented - returns null.
      * @return searcher for db
@@ -365,7 +365,7 @@ public class ImportExportUtil {
         //TODO implement
         return null;
     }
-    
+
     /**
      * Returns set of language codes appearing in translation.
      * @param root unmarshalled XML
@@ -392,7 +392,7 @@ public class ImportExportUtil {
     private static JAXBContext getJAXBcontext() throws JAXBException{
         return JAXBContext.newInstance("org.digijava.module.translation.jaxb");
     }
-    
+
     /**
      * Returns JAXB unmarshaller for translations.
      * @return JAXB unmarshaller for translations.
@@ -402,7 +402,7 @@ public class ImportExportUtil {
         JAXBContext jaxbContext = getJAXBcontext();
         return jaxbContext.createUnmarshaller();
     }
-    
+
     /**
      * ReturnJAXB  marshaller for translations.
      * @return JAXB marshaller
@@ -411,10 +411,10 @@ public class ImportExportUtil {
     public static Marshaller getMarshaller() throws JAXBException{
         return getJAXBcontext().createMarshaller();
     }
-    
+
     /**
      * Exports translations in JAXB Translations instance.
-     * @param translations root object(tag) where should groups and its members go. Cannot be null. 
+     * @param translations root object(tag) where should groups and its members go. Cannot be null.
      * @param languagesToExport set of language codes. If null then all languages are loaded and exported.
      * @throws Exception
      */
@@ -429,7 +429,7 @@ public class ImportExportUtil {
             }
         }
     }
-    
+
     /**
      * Loads message groups for specified languages.
      * Loads messages filtered by languages codes and then groups them in {@link MessageGroup} beans.
@@ -472,7 +472,7 @@ public class ImportExportUtil {
     /**
      * Loads message for specified languages.
      * @param languagesToLoad set of language codes. If null then all messages will be grouped.
-     * @return list of message 
+     * @return list of message
      * @throws AimException
      */
     @SuppressWarnings("unchecked")
@@ -489,7 +489,7 @@ public class ImportExportUtil {
                 query.setParameterList("LANG_CODES", languagesToLoad);
             }
             messages = (List<Message>) query.list();
-            
+
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new AimException("Cannot load messages for expot.",e);
@@ -508,7 +508,7 @@ public class ImportExportUtil {
      * @param fsFileSystem
      * @param option
      * @param site
-     * @return list of errors 
+     * @return list of errors
      * @throws AimException
      */
     public static List<String> importExcelFile(POIFSFileSystem fsFileSystem, ImportExportOption option, Site site)
@@ -571,7 +571,11 @@ public class ImportExportUtil {
                             + " record skipped.").replace("{key}", key));
                     continue;
                 }
-                if (englishDate != null) {
+
+                if (englishText != null && !englishText.trim().isEmpty()) {
+                    if (englishDate == null) {
+                        englishDate = new Date();
+                    }
                     results.add(getMessage(option, site, LangSupport.ENGLISH.getLangCode(), executorPool, key,
                             englishText, new Timestamp(englishDate.getTime())));
                 }
@@ -630,7 +634,7 @@ public class ImportExportUtil {
                                                    ExecutorService executorPool, String key, String targetText,
                                                    Timestamp dateCreated) {
         Message targetMessage = new Message();
-        targetMessage.setKey(key);
+        targetMessage.  setKey(key);
         targetMessage.setMessage(targetText);
         targetMessage.setLocale(targetLanguage);
         targetMessage.setSite(site);

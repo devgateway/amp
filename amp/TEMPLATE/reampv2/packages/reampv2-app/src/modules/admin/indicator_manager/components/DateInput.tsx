@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-date-picker';
 import { useSelector } from 'react-redux';
-import { SettingsType } from '../types';
+import {DefaultTranslationPackTypes, SettingsType} from '../types';
 import { Value } from 'react-date-picker/dist/cjs/shared/types';
 import 'react-date-picker/dist/DatePicker.css';
 import './css/React-Calendar.css';
@@ -23,6 +23,7 @@ export interface DateInputProps {
     maxDate?: Date;
     onClear?: () => void;
     disableCalendar?: boolean;
+    translations: DefaultTranslationPackTypes;
 }
 
 const DateInput: React.FC<DateInputProps> = (props) => {
@@ -40,7 +41,8 @@ const DateInput: React.FC<DateInputProps> = (props) => {
         minDate,
         maxDate,
         onClear,
-        disableCalendar
+        disableCalendar,
+        translations
     } = props;
     const globalSettings: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
     const [dateFormat, setDateFormat] = useState<string | undefined>();
@@ -95,9 +97,9 @@ const DateInput: React.FC<DateInputProps> = (props) => {
                 <DatePicker
                     id={id}
                     format={dateFormat}
-                    monthPlaceholder="mm"
-                    dayPlaceholder="dd"
-                    yearPlaceholder="yyyy"
+                    monthPlaceholder={translations["amp.indicatormanager:mm"]}
+                    dayPlaceholder={translations["amp.indicatormanager:dd"]}
+                    yearPlaceholder={translations["amp.indicatormanager:yyyy"]}
                     className={className}
                     onChange={onChange}
                     name={name}

@@ -23,6 +23,8 @@ public class ReportOptionProvider {
     public static final List<ReportOptionConfiguration> REPORT_PROFILE_OPTIONS = ImmutableList.of(
         new ReportOptionConfiguration("funding-donor", "Donor Report (Donor Funding)", null,
                 "Donor Report", "Report Types"),
+            new ReportOptionConfiguration("funding-indicator", "Indicator Report (Indicator Funding)", null,
+                    "Indicator Report", "Report Types"),
         new ReportOptionConfiguration("funding-regional", "Regional Report (Regional Funding)", null,
                 "Regional Report", "Report Types"),
         new ReportOptionConfiguration("funding-component", "Component Report (Component Funding)", null,
@@ -80,7 +82,7 @@ public class ReportOptionProvider {
             "annual-report", "totals-only", "empty-funding-columns");
 
     public static final List<String> REPORT_OPTION_NAMES = ImmutableList.of("funding-donor", "funding-regional",
-            "funding-component", "summary-report", "annual-report", "quarterly-report",
+            "funding-component", "funding-indicator", "summary-report", "annual-report", "quarterly-report",
             "monthly-report", "totals-only", "show-pledges", "empty-funding-columns");
 
     private TranslatorService translatorService;

@@ -34,6 +34,7 @@ import org.dgfoundation.amp.reports.xml.ReportParameter;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.PublicServices;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
@@ -65,6 +66,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -773,6 +775,15 @@ public class Reports {
         return exporter.executor.newInstance().exportReport(report, dualReport);
     }
 
+    @OPTIONS
+    @Path("/report/columns")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeGetAllowedColumns() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
     @GET
     @Path("/report/columns")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -785,6 +796,15 @@ public class Reports {
         }
 
         return columnToDisplayName;
+    }
+
+    @OPTIONS
+    @Path("/report/measures")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeGetAllowedMeasures() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     @GET
@@ -801,6 +821,23 @@ public class Reports {
         return measuresToDisplayName;
     }
 
+    @GET
+    @Path("/report/measuresAsResponse")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiOperation("Get columns")
+    public final Response getAllowedMeasuresAsResponse() {
+        Map<String, String> measures = getAllowedMeasures();
+        return PublicServices.buildOkResponseWithOriginHeaders(measures);
+    }
+
+    @OPTIONS
+    @Path("/report/measuresAsResponse")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeAllowedMeasuresAsResponse() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
 
     @POST
     @Path("/report/saveTab/{report_id}")

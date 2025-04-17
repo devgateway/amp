@@ -7,6 +7,7 @@ public class IndicatorLayers {
     private String link;
     private String layer;
     private String legendNotes;
+    private String legendHtml;
 
     public IndicatorLayers() {
 
@@ -58,5 +59,13 @@ public class IndicatorLayers {
 
     public void setLayer(String layer) {
         this.layer = layer;
+    }
+
+    public String getLegendHtml() {
+        return legendHtml;
+    }
+
+    public void setLegendHtml(String legendHtml) {
+        this.legendHtml = legendHtml;
     }
 }

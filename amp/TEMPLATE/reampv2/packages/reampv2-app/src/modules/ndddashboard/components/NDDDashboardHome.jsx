@@ -151,13 +151,14 @@ const NDDDashboardHome = (props) => {
     }
 
     const handleOuterChartClick = (event, outerData) => {
+
         const {
             selectedDirectProgram, filters, settings, fundingType
         } = state;
         if (event.points[0].data.name === DIRECT) {
             if (!selectedDirectProgram) {
                 setState(prevState => ({ ...prevState, selectedDirectProgram: outerData[event.points[0].i], fundingByYearSource: SRC_DIRECT }));
-                _callTopReport(fundingType || dashboardSettings.find(i => i.id === FUNDING_TYPE).value.defaultId,
+                _callTopReport(fundingType || dashboardSettings?.find(i => i.id === FUNDING_TYPE).value.defaultId,
                   settings, filters, outerData[event.points[0].i]);
             } else {
                 _clearTopReport();

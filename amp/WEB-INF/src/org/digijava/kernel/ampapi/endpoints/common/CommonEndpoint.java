@@ -8,14 +8,18 @@ import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.fm.*;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.PublicServices;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
+import javax.ws.rs.core.Response;
 
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -53,6 +57,35 @@ public class CommonEndpoint implements AmpEndpoint {
         config.setDetailsFlat(true);
         return FMService.getFMSettingsResult(config);
     }
+
+    @POST
+    @Path("/fm/flatAsResponse")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiMethod(ui = false, name = "fm", id = "")
+    @ApiOperation(value = "Provides FM (Feature Manager) settings for the requested options in flat mode.")
+    public Response getFMSettingsFlatAsResponse(
+            @ApiParam("FM Settings with requested options") FMSettingsConfig config) {
+        return PublicServices.buildOkResponseWithOriginHeaders(FMService.getFMSettingsResult(config));
+    }
+
+    @OPTIONS
+    @Path("/fm/flatAsResponse")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeFMSettingsFlatAsResponse() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
+    @OPTIONS
+    @Path("/fm/flat")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeGetFMSettingsFlat() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
 
     @POST
     @Path("/fm-by-ws-member")

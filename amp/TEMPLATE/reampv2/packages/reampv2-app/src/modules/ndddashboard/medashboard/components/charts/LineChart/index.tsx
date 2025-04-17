@@ -20,12 +20,12 @@ const LineChart: React.FC<LineChartProps> = (props) => {
     let displayDataSet: LineChartData [] = [];
     let minMax: Record<any, number> = {
         min: 0,
-        max: 150
+        max: 0
     };
 
     if (data) {
         displayDataSet = ChartUtils.generateLineChartValues(data);
-        const actualValue = ChartUtils.getActualValueForCurrentYear(data.actualValues);
+        const actualValue = ChartUtils.getMaxActualValue(data.actualValues);
          const { min, max } = ChartUtils.getMaxAndMinValueForAxis({
             actualValue,
             baseValue: data.baseValue,
@@ -34,23 +34,23 @@ const LineChart: React.FC<LineChartProps> = (props) => {
          //round off the max value to the nearest 10
         minMax = {
             min: Math.floor(min / 10) * 10,
-            max: Math.ceil(max / 10) * 10 + (min > 1000 ? 500 : 100)
+            max: Math.ceil(max / 10) * 10 + (min > 1000 ? 400 : 100)
         };
     }
 
     const generateSteps = (max:number) => {
         let steps = 50;
 
-        if (minMax.max < 100) {
+        if (max < 100) {
             steps = 10;
-        } else if (minMax.max < 400) {
+        } else if (max < 400) {
             steps = 40;
         }
-        else if (minMax.max < 500) {
+        else if (max < 500) {
             steps = 50
-        } else if (minMax.max < 1000) {
+        } else if (max < 1000) {
             steps = 100;
-        }else if (minMax.max < 10_000) {
+        }else if (max < 10_000) {
             steps = 1000;
         }else {
             steps = 10_000;
@@ -60,8 +60,6 @@ const LineChart: React.FC<LineChartProps> = (props) => {
     }
 
     const tickValues = intervals || ChartUtils.generateTickValues(minMax.min, minMax.max, generateSteps(minMax.max));
-
-
 
     return (
         <div style={{ height: height || 360, width: width || 630 }}>
@@ -73,7 +71,7 @@ const LineChart: React.FC<LineChartProps> = (props) => {
                 yScale={{
                     type: "linear",
                     min: 0,
-                    max: minMax.max ? minMax.max + STEP_SIZE : 150,
+                    max: minMax.max ? minMax.max  : 150,
                     clamp: true,
                     stacked: false,
                     reverse: false
@@ -90,6 +88,7 @@ const LineChart: React.FC<LineChartProps> = (props) => {
                 enableGridY
                 axisBottom={{
                     tickSize: 0,
+                    tickRotation: displayDataSet[0].data.length > 15 ? -65 : 0,
                 }}
 
             />

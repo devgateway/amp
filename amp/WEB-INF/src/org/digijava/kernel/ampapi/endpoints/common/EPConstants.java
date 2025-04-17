@@ -66,6 +66,7 @@ public class EPConstants {
         put("C", ArConstants.COMPONENT_TYPE);
         put("P", ArConstants.PLEDGES_TYPE);
         put("R", ArConstants.REGIONAL_TYPE);
+        put("I", ArConstants.INDICATOR_TYPE);
     }};
 
     public static final Map<String, List<String>> REPORT_TYPE_ACTIVITY_MAP = new HashMap<String, List<String>>() {{

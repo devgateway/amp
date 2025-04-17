@@ -70,6 +70,7 @@ public class FMSettingsMediator {
             return enabledSettings;
         }
 
+
         return Collections.emptySet();
     }
 

@@ -4,27 +4,50 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.validator.RangeValidator;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.resource.AbstractResource;
+import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.util.lang.Bytes;
+import org.apache.wicket.util.upload.FileItem;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
+import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.PagingListEditor;
 import org.dgfoundation.amp.onepager.components.PagingListNavigator;
-import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
-import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.LatAndLongValidator;
+import org.dgfoundation.amp.onepager.components.features.CustomResourceLinkResourceLink;
+import org.dgfoundation.amp.onepager.components.features.ExportExcelResourceReference;
+import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.components.upload.FileUploadPanel;
+import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
 import org.dgfoundation.amp.onepager.helper.structure.ColorData;
 import org.dgfoundation.amp.onepager.helper.structure.CoordinateData;
 import org.dgfoundation.amp.onepager.helper.structure.MapData;
@@ -36,7 +59,11 @@ import org.digijava.module.aim.util.StructuresUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class AmpStructuresFormSectionFeature extends
@@ -308,6 +335,170 @@ public class AmpStructuresFormSectionFeature extends
        add(addbutton);
 
 
+
+        final Model<FileItem> fileItemModel = new Model<FileItem>();
+        FileUploadPanel fileUpload = new FileUploadPanel("file",String.valueOf(am.getObject().getAmpActivityId()), fileItemModel);
+        final Form<?> form = new Form<Void>("form") {
+
+
+            @Override
+            protected void onSubmit() {
+                if (fileItemModel.getObject() != null) {
+                    FileUpload upload = new FileUpload(fileItemModel.getObject());
+                    if (upload == null) {
+                        logger.info("No file uploaded");
+                    } else {
+                        logger.info("File-Name: " + upload.getClientFileName() + " File-Size: " +
+                                Bytes.bytes(upload.getSize()));
+                        try {
+                            XSSFWorkbook workbook = new XSSFWorkbook(upload.getInputStream());
+                            XSSFSheet sheet = workbook.getSheetAt(0);
+                            Iterator<Row> rowIterator = sheet.iterator();
+                            rowIterator.next();
+
+                            while (rowIterator.hasNext()) {
+                                XSSFRow row = (XSSFRow) rowIterator.next();
+                                String title = getStringValueFromCell(row.getCell(0));
+                                String description = getStringValueFromCell(row.getCell(1));
+                                String latitude = getStringValueFromCell(row.getCell(2));
+                                String longitude = getStringValueFromCell(row.getCell(3));
+
+                                AmpStructure stru = new AmpStructure();
+                                stru.setTitle(title);
+                                stru.setDescription(description);
+                                stru.setLatitude(latitude);
+                                stru.setLongitude(longitude);
+                                list.addItem(stru);
+                                list.goToLastPage();
+                                fileItemModel.setObject(null);
+                            }
+                        } catch (Exception e) {
+                            logger.error("Error reading excel file", e);
+                        }
+                    }
+                }
+
+                }
+        };
+
+
+        WebMarkupContainer rc = new WebMarkupContainer("resourcePanel");
+        rc.add(form);
+        rc.add(fileUpload);
+        rc.setOutputMarkupId(true);
+        add(rc);
+
+
+        form.add(fileUpload);
+        Button submit = new Button("ajaxSubmit");
+
+        submit.add(new AttributeModifier("class", new Model("addStructure button_green_btm")));
+
+
+        form.add(submit);
+        ResourceReference resourceReference = new ResourceReference("exportData-"+ System.currentTimeMillis()) {
+            @Override
+            public IResource getResource() {
+                return new AbstractResource() {
+                    @Override
+                    protected ResourceResponse newResourceResponse(Attributes attributes) {
+                        ResourceResponse response = new ResourceResponse();
+                        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                        response.setFileName("exported-structures-activity-"+am.getObject().getAmpId()+".xlsx");
+                        response.disableCaching();
+                        response.setWriteCallback(new WriteCallback() {
+                            @Override
+                            public void writeData(Attributes attributes) {
+                                try (OutputStream out = attributes.getResponse().getOutputStream()) {
+                                    writeExcelFile(out, list);
+                                } catch (IOException e) {
+                                    logger.error("Error writing data to file", e);
+                                }
+                            }
+                        });
+                        return response;
+                    }
+                };
+            }
+        };
+        ResourceLink<Void> downloadLink = new ResourceLink<>("downloadLink", resourceReference);
+        downloadLink.setOutputMarkupId(true);
+        add(downloadLink);
+
+        AmpAjaxLinkField exportStructures = new AmpAjaxLinkField("exportStructures", "Export Structures", "Export Structures") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                logger.info("Preparing to download data");
+                String downloadLinkMarkupId = downloadLink.getMarkupId();
+                target.add(list.getParent());
+                target.appendJavaScript("document.getElementById('" + downloadLinkMarkupId + "').click();");
+            }
+        };
+        add(exportStructures);
+
+
+    }
+    private static String getStringValueFromCell(Cell cell) {
+        if (cell == null) {
+            return null;
+        }
+        switch (cell.getCellType()) {
+            case Cell.CELL_TYPE_STRING:
+                return cell.getStringCellValue();
+            case Cell.CELL_TYPE_NUMERIC:
+                return String.valueOf(cell.getNumericCellValue());
+            case Cell.CELL_TYPE_BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case Cell.CELL_TYPE_FORMULA:
+                return cell.getCellFormula();
+            default:
+                return null;
+        }
+    }
+
+    private void writeExcelFile(OutputStream out,PagingListEditor<AmpStructure> list) throws IOException {
+        try(XSSFWorkbook workbook = new XSSFWorkbook()) {
+            // Create Excel sheet
+            XSSFSheet sheet = workbook.createSheet("Structures");
+
+            // Create header row
+            XSSFRow headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("Title");
+            headerRow.createCell(1).setCellValue("Description");
+            headerRow.createCell(2).setCellValue("Latitude");
+            headerRow.createCell(3).setCellValue("Longitude");
+
+            int rowIndex = 1;
+            for (Component child : list) {
+                if (child instanceof ListItem) {
+                    ListItem<AmpStructure> listItem = (ListItem<AmpStructure>) child;
+                    AmpStructure structure = listItem.getModelObject();
+
+                    // Create a new row for each structure
+                    XSSFRow row = sheet.createRow(rowIndex);
+                    if (structure != null) {
+                        createCellIfNotNull(row, 0, structure.getTitle());
+                        createCellIfNotNull(row, 1, structure.getDescription());
+                        createCellIfNotNull(row, 2, structure.getLatitude());
+                        createCellIfNotNull(row, 3, structure.getLongitude());
+                    }
+                    rowIndex++;
+                }
+            }
+
+            // Write workbook content to the output stream
+            workbook.write(out);
+
+            // Respond with the written content
+        } catch (IOException e) {
+            logger.error("Error exporting data to Excel", e);
+        }
+    }
+
+    private void createCellIfNotNull(XSSFRow row, int columnIndex, Object value) {
+        if (value != null) {
+            row.createCell(columnIndex).setCellValue(value.toString());
+        }
     }
 
     public StructureData getDataFromStructureModel(IModel<AmpStructure> structureModel) {
@@ -342,4 +533,24 @@ public class AmpStructuresFormSectionFeature extends
         return structureModel.getObject().getCoordinates() != null && structureModel.getObject().
                 getCoordinates().size() > 0;
     }
+
+    private void handleFileUpload(final FileUpload uploadedFile) throws IOException {
+        // Write the uploaded file to a temporary location
+        File tempFile = new File("temp_" + uploadedFile.getClientFileName());
+        uploadedFile.writeTo(tempFile);
+
+        try (InputStream inputStream = new FileInputStream(tempFile)) {
+            Workbook workbook = WorkbookFactory.create(inputStream);
+            // ...
+        } catch (IOException e) {
+            // Handle exception
+        } catch (InvalidFormatException e) {
+            throw new RuntimeException(e);
+        } finally {
+            // Delete the temporary file
+            tempFile.delete();
+        }
+    }
 }
+
+

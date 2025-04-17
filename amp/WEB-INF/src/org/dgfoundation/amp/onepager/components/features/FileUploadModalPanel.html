@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+    <title>File Upload Modal</title>
+</head>
+<body>
+<wicket:panel>
+    <!-- Ajax-enabled multipart form for file upload -->
+    <form wicket:id="uploadForm" enctype="multipart/form-data">
+        <div>
+            <label for="fileUploadField">Choose a file:</label>
+            <input wicket:id="fileUploadField" type="file" />
+        </div>
+        <div>
+            <!-- Ajax-enabled submit button -->
+            <button wicket:id="uploadButton" type="button">Upload</button>
+        </div>
+    </form>
+</wicket:panel>
+</body>
+</html>

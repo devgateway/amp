@@ -41,7 +41,7 @@ import java.net.SocketException;
  * @author mihai
  */
 public class OnePagerApp extends AuthenticatedWebApplication {
-    
+
     public static boolean IS_DEVELOPMENT_MODE = false;
 
     private static Logger logger = Logger.getLogger(OnePagerApp.class);
@@ -73,25 +73,26 @@ public class OnePagerApp extends AuthenticatedWebApplication {
             IS_DEVELOPMENT_MODE = true;
         }
 
+
         //getResourceSettings().setStripJavaScriptCommentsAndWhitespace(true);
         //getResourceSettings().setAddLastModifiedTimeToResourceReferenceUrl(true);
         //TODO:
         //TODO:1.5
         //TODO:
          /*
-          * 
-         if (true) {        
+          *
+         if (true) {
              ResourceMount.mountWicketResources("script", this);
 
              ResourceMount mount = new ResourceMount();
              //.setResourceVersionProvider(new RevisionVersionProvider());
-             
-             
+
+
              LinkedList<ResourceSpec> csslist = new LinkedList<ResourceSpec>();
              //csslist.add(new ResourceSpec(YuiLib.class, "calendar/assets/skins/sam/calendar.css"));
              //csslist.add(new ResourceSpec(new ResourceReference("TEMPLATE/ampTemplate/css_2/amp-wicket.css")));
-             
-             
+
+
              LinkedList<ResourceSpec> jslist = new LinkedList<ResourceSpec>();
              jslist.add(new ResourceSpec(JQueryBehavior.class, JQueryBehavior.JQUERY_FILE_NAME));
              //jslist.add(new ResourceSpec(AutoCompleteBehavior.class, "wicket-autocomplete.js"));
@@ -99,8 +100,8 @@ public class OnePagerApp extends AuthenticatedWebApplication {
              jslist.add(new ResourceSpec(IHeaderContributor.class, "wicket-event.js"));
              jslist.add(new ResourceSpec(AmpSubsectionFeaturePanel.class, "subsectionSlideToggle.js"));
              jslist.add(new ResourceSpec(AmpStructuresFormSectionFeature.class, "gisPopup.js"));
-//           jslist.add(new ResourceSpec(YuiLib.class, "yahoo/yahoo-min.js"));           
-//           jslist.add(new ResourceSpec(YuiLib.class, "yahoodomevent/yahoo-dom-event.js"));             
+//           jslist.add(new ResourceSpec(YuiLib.class, "yahoo/yahoo-min.js"));
+//           jslist.add(new ResourceSpec(YuiLib.class, "yahoodomevent/yahoo-dom-event.js"));
 //           jslist.add(new ResourceSpec(YuiLib.class, "yuiloader.js")); //can't use the min version, because the normal one will be included too
 //           jslist.add(new ResourceSpec(YuiLib.class, "calendar/calendar-min.js"));
 //           jslist.add(new ResourceSpec(DatePicker.class, "wicket-date.js"));
@@ -108,12 +109,12 @@ public class OnePagerApp extends AuthenticatedWebApplication {
              jslist.add(new ResourceSpec(AmpAjaxBehavior.class, "translationsOnDocumentReady.js"));
              jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "previewLogframe.js"));
              jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "saveNavigationPanel.js"));
-             
+
              mount.clone()
                 .setPath("/style/all-23.css")
                 .addResourceSpecs(csslist)
                 .mount(this);
-             
+
              mount.clone()
              .setPath("/style/all-2.js")
              .addResourceSpecs(jslist)
@@ -219,16 +220,17 @@ public class OnePagerApp extends AuthenticatedWebApplication {
     @Override
     protected WebResponse newWebResponse(WebRequest webRequest, HttpServletResponse httpServletResponse) {
         return new ServletWebResponse((ServletWebRequest) webRequest, httpServletResponse) {
+
             @Override
             public void flush() {
+                // Add the X-Frame-Options header
                 try {
                     getContainerResponse().flushBuffer();
                 } catch (SocketException e) {
                     logger.warn("Socket exception encountered, ignoring", e);
                 } catch (IOException e) {
-                    // Socket Exception can be wrapped by a container specific exception.
-                    // So we check the cause of the container exception
-                    Throwable rootCause = null != e.getCause() ? e.getCause() : e;
+                    // Check if the root cause is a SocketException
+                    Throwable rootCause = (e.getCause() != null) ? e.getCause() : e;
                     if (rootCause instanceof SocketException) {
                         logger.warn("Socket exception encountered, ignoring.", rootCause);
                         return;

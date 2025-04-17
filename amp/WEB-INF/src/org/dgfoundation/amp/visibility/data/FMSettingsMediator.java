@@ -4,16 +4,10 @@
 package org.dgfoundation.amp.visibility.data;
 
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Single point of reference for all FM settings groups
@@ -61,11 +55,14 @@ public class FMSettingsMediator {
         FMSettings fmGroup = getFMSettings(fmGroupName, templateId);
 
         if (fmGroup != null) {
-            Set<String> enabledSettings = fmGroup.getEnabledSettings(templateId);
+            Set<String> enabledSettings = new LinkedHashSet<>(fmGroup.getEnabledSettings(templateId));
             if (Objects.equals(fmGroupName, FMGROUP_MENU)) {
-                boolean loginRequired = FeaturesUtil.isVisibleFeature(GisConstants.LOGIN_REQUIRED);
-
-                if (!FeaturesUtil.isVisibleModule(MODULE_GIS) || (loginRequired && TeamUtil.getCurrentAmpTeamMember()==null)) {
+                if (!FeaturesUtil.isVisibleModule(MODULE_GIS)) {
+                    enabledSettings.remove(MODULE_MAP);
+                }
+                boolean loginRequired = FeaturesUtil.getGlobalSettingValueBoolean("Login Required For GIS");
+                if (loginRequired && TeamUtil.getCurrentUser()==null)
+                {
                     enabledSettings.remove(MODULE_MAP);
                 }
             }

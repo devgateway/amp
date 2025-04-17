@@ -28,8 +28,8 @@ public class UpdateComponents extends Action {
                 return mapping.findForward("index");
             }
         }
-        
-        
+
+
         // logger.debug("\n\ncame into the update components manager");
         String event = request.getParameter("event");
         String compId = request.getParameter("componentId");
@@ -46,9 +46,8 @@ public class UpdateComponents extends Action {
                 updCompForm.setCompType(null);
 
             } else if (event.equalsIgnoreCase("edit")) {
-                Iterator itr = ComponentsUtil.getComponentForEditing(new Long(compId)).iterator();
-                while (itr.hasNext()) {
-                    AmpComponent ampComp = (AmpComponent) itr.next();
+                for (Object o : ComponentsUtil.getComponentForEditing(new Long(compId))) {
+                    AmpComponent ampComp = (AmpComponent) o;
                     updCompForm.setId(ampComp.getAmpComponentId());
                     updCompForm.setCompTitle(ampComp.getTitle());
                     updCompForm.setCompDes(ampComp.getDescription());

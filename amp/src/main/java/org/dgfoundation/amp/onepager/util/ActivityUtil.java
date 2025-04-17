@@ -52,6 +52,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -205,8 +206,8 @@ public class ActivityUtil {
         //is versioning activated?
         boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
         boolean isActivityForm = context.getSource() == ActivitySource.ACTIVITY_FORM;
-        if (oldA.getAmpActivityId() != null)
-            session.evict(oldA);
+//        if (oldA.getAmpActivityId() != null)
+//            session.evict(oldA);
         if (createNewVersion) {
             try {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
@@ -222,7 +223,7 @@ public class ActivityUtil {
                     tmpGroup.setAmpActivityLastVersion(a);
 
                     //TODO this is a temporary status for the case when we have a new activity and we want to create a new version
-                    a.setApprovalStatus(ApprovalStatus.created);
+                    a.setApprovalStatus(ApprovalStatus.started);
                     Long id = (Long) session.save(tmpGroup);
                     tmpGroup.setAmpActivityGroupId(id);
                     a.setAmpActivityGroup(tmpGroup);
@@ -239,12 +240,10 @@ public class ActivityUtil {
                 logger.error("Can't clone current Activity: ", e);
             }
         }
-        logger.info("Object before prepare :" + a);
 
         if (context.isPrepareToSave()) {
             prepareToSave(a, oldA, ampCurrentMember, draft, context);
         }
-        logger.info("Object after prepare :" + a);
 
         if (a.getAmpActivityGroup() == null) {
             //we need to create a group for this activity
@@ -255,7 +254,6 @@ public class ActivityUtil {
             a.setAmpActivityGroup(tmpGroup);
 
         }
-//        session.flush();
 
         setCreationTimeOnStructureImages(a);
 
@@ -265,12 +263,13 @@ public class ActivityUtil {
         }
 
         if (!newActivity) {
-            session.clear();
+//            session.clear();
             //existing activity
             //previousVersion for current activity
             if (group.getAmpActivityLastVersion().getAmpActivityId().equals(a.getAmpActivityId())) {
                 forceVersionIncrement(session, group);
             }
+//            group = session.get(AmpActivityGroup.class, group.getAmpActivityGroupId()); // Reload
             group.setAmpActivityLastVersion(a);
             session.merge(group);
 
@@ -306,7 +305,6 @@ public class ActivityUtil {
 //            session.saveOrUpdate(a);
             session.merge(a);
         }
-        session.flush();
 
         updatePerformanceRules(oldA, a);
 
@@ -447,6 +445,12 @@ public class ActivityUtil {
      * increment explicitly.
      */
     private static void forceVersionIncrement(Session session, AmpActivityGroup group) {
+//        Serializable id = session.getIdentifier(group);
+//        boolean isSaved = (id != null);
+//        if (!isSaved) {
+//            session.saveOrUpdate(group);
+//            session.flush();
+//        }
         session.buildLockRequest(new LockOptions(LockMode.OPTIMISTIC_FORCE_INCREMENT)).lock(group);
     }
 
@@ -1284,7 +1288,7 @@ public class ActivityUtil {
         if (oldActivityId != null) {
             if (checkForContactsRemoval || !ActivityVersionUtil.isVersioningEnabled()) {
                 //List<AmpActivityContact> activityDbContacts=ContactInfoUtil.getActivityContacts(oldActivityId);
-                List<Long> activityDbContactsIds = ContactInfoUtil.getActivityContactIds(oldActivityId);
+                List<Long> activityDbContactsIds = ContactInfoUtil.getActivityContactIds(oldActivityId, session);
                 if (activityDbContactsIds != null && !activityDbContactsIds.isEmpty()) {
                     for (Long actContactId : activityDbContactsIds) {
                         int count = 0;
@@ -1332,18 +1336,20 @@ public class ActivityUtil {
                         session.saveOrUpdate(activityContact.getContact());
                         savedContacts.put(activityContact.getContact().getId(), true);
                     }
-                    if (activityContact.getId() == null) {
                         session.saveOrUpdate(activityContact);
                         if (!newActivity) {
                             session.merge(activityContact.getContact());
                         }
-                    }
+
                 }
             }
+        logger.info("Saving contacts {}"+savedContacts);
+            session.flush();
         }catch (Exception e)
         {
             logger.error("Error saving activity contact:",e);
         }
+
     }
     private static void saveAnnualProjectBudgets(AmpActivityVersion a,
                                                  Session session) {

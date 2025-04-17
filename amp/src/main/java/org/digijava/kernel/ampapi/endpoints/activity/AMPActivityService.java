@@ -19,37 +19,43 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Locale;
 
 import static org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion;
 
 public class AMPActivityService implements ActivityService {
-    
+
     /**
      * Checks if the activity is stale. Used only for the case when new activity versions are created.
      */
     @Override
     public boolean isActivityStale(Long ampActivityId, Long activityGroupVersion) {
-        Number activityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityVersion.class)
-                .add(Restrictions.eq("ampActivityId", ampActivityId))
-                .setProjection(Projections.count("ampActivityId"))
-                .uniqueResult();
-        if (activityCount.longValue() == 0) {
+        Session session = PersistenceManager.getSession();
+        session.clear();
+
+        // Check if activity exists
+        String activityCountHql = "SELECT COUNT(a) FROM AmpActivityVersion a WHERE a.ampActivityId = :ampActivityId";
+        TypedQuery<Long> activityCountQuery = session.createQuery(activityCountHql, Long.class);
+        activityCountQuery.setParameter("ampActivityId", ampActivityId);
+        Long activityCount = activityCountQuery.getSingleResult();
+
+        if (activityCount == 0) {
             return false;
         }
-        
-        Number latestActivityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityGroup.class)
-                .createAlias("ampActivityLastVersion", "a")
-                .add(Restrictions.and(
-                        Restrictions.eq("a.ampActivityId", ampActivityId),
-                        Restrictions.eq("version", activityGroupVersion)))
-                .setProjection(Projections.count("a.ampActivityId"))
-                .uniqueResult();
-        
-        return latestActivityCount.longValue() == 0;
+
+        // Check if latest activity version exists
+        String latestActivityCountHql = "SELECT COUNT(a) FROM AmpActivityGroup ag JOIN ag.ampActivityLastVersion a WHERE a.ampActivityId = :ampActivityId AND ag.version = :activityGroupVersion";
+
+        TypedQuery<Long> latestActivityCountQuery = session.createQuery(latestActivityCountHql, Long.class);
+        latestActivityCountQuery.setParameter("ampActivityId", ampActivityId);
+        latestActivityCountQuery.setParameter("activityGroupVersion", activityGroupVersion);
+        Long latestActivityCount = latestActivityCountQuery.getSingleResult();
+
+        return latestActivityCount == 0;
     }
-    
+
     /**
      * @param ampTeamMember    team member
      * @return true if add activity is allowed
@@ -61,7 +67,7 @@ public class AMPActivityService implements ActivityService {
                 && (FeaturesUtil.isVisibleField("Add Activity Button")
                 || FeaturesUtil.isVisibleField("Add SSC Button"));
     }
-    
+
     /**
      * @param ampTeamMember    team member
      * @param activityId    activity id
@@ -72,31 +78,27 @@ public class AMPActivityService implements ActivityService {
         TeamMember tm = new TeamMember(ampTeamMember);
         return activityId != null && ActivityUtil.getEditableActivityIdsNoSession(tm).contains(activityId);
     }
-    
+
     @Override
     public AmpActivityVersion getActivity(Long activityId) throws DgException {
         return ActivityUtil.loadActivity(activityId);
     }
-    
+
     @Override
     public AmpActivityVersion saveActivity(AmpActivityVersion newActivity, List<AmpContentTranslation> translations,
             List<AmpContentTranslation> cumulativeTranslations,
             AmpTeamMember modifiedBy, boolean draftChange, SaveContext saveContext,
             EditorStore editorStore, Site site) throws Exception {
-        
+
         Session session = PersistenceManager.getRequestDBSession();
-        Transaction transaction= session.getTransaction();
-        if (transaction==null || !transaction.isActive())
-        {
-            transaction=session.beginTransaction();
-        }
-        AmpActivityVersion ampActivityVersion= saveActivityNewVersion(newActivity, translations, cumulativeTranslations, modifiedBy,
+
+        AmpActivityVersion activityVersion = saveActivityNewVersion(newActivity, translations, cumulativeTranslations, modifiedBy,
                 Boolean.TRUE.equals(newActivity.getDraft()), draftChange,
                 session, saveContext, editorStore, site);
-        transaction.commit();
-        return ampActivityVersion;
+        return activityVersion;
+
     }
-    
+
     @Override
     public void updateLuceneIndex(AmpActivityVersion newActivity, AmpActivityVersion oldActivity, boolean update,
                                   TranslationSettings trnSettings, List<AmpContentTranslation> translations,
@@ -105,6 +107,6 @@ public class AMPActivityService implements ActivityService {
         Locale lang = Locale.forLanguageTag(trnSettings.getDefaultLangCode());
         LuceneUtil.addUpdateActivity(rootPath, update, site, lang, newActivity, oldActivity, translations);
     }
-    
-    
+
+
 }

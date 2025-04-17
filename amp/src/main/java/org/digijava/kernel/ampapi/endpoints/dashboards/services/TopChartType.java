@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author Octavian Ciubotaru
  */
 public enum TopChartType {
+
     @JsonProperty("do") DO,
     @JsonProperty("ro") RO,
     @JsonProperty("ba") BA,
@@ -16,7 +17,8 @@ public enum TopChartType {
     @JsonProperty("ss") SS,
     @JsonProperty("dg") DG,
     @JsonProperty("ndd") NDD,
-    @JsonProperty("pr") PR;
+    @JsonProperty("pr") PR,
+    @JsonProperty("ct") CT;
 
     public static TopChartType fromString(String value) {
         value = value.toUpperCase();

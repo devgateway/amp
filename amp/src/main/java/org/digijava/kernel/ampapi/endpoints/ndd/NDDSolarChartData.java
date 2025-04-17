@@ -124,7 +124,7 @@ public class NDDSolarChartData {
                             .getParentThemeId().getParentThemeId().getProgramSettings()
                             .stream().findAny().orElse(null);
                     if (activityProgramSettings != null) {
-                        configurationName = activityProgramSettings.getName();
+                        configurationName = NAME_TO_COLUMN.get(activityProgramSettings.getName());
                         this.programLvl1 = new Program(program.getParentThemeId().getThemeCode(),
                                 program.getParentThemeId().getName(), FilterUtils.INSTANCE.
                                 idFromColumnName(configurationName + " Level 1"),
@@ -149,7 +149,7 @@ public class NDDSolarChartData {
                             .getProgramSettings()
                             .stream().findAny().orElse(null);
                     if (activityProgramSettings != null) {
-                        configurationName = activityProgramSettings.getName();
+                        configurationName = NAME_TO_COLUMN.get(activityProgramSettings.getName());
                         this.programLvl1 = new Program(program.getThemeCode(),
                                 program.getName(), FilterUtils.INSTANCE.
                                 idFromColumnName(configurationName + " Level 1"),

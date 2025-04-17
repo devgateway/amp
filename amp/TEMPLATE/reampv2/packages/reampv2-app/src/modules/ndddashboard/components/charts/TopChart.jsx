@@ -3,7 +3,7 @@ import { ResponsiveBar } from '@nivo/bar';
 import PropTypes from 'prop-types';
 import { NDDTranslationContext } from '../StartUp';
 import ToolTip from '../tooltips/ToolTip';
-import { formatKMB, formatNumberWithSettings } from '../../utils/Utils';
+import {formatKMB, formatNumberAndAppendCurrency, formatNumberWithSettings} from '../../utils/Utils';
 import { CURRENCY_CODE } from '../../utils/constants';
 import SimpleLegend from '../../../../utils/components/SimpleLegend';
 
@@ -32,7 +32,7 @@ class TopChart extends Component {
       id: '-9999',
       name: translations['amp.ndd.dashboard:others'],
       value: o,
-      formattedAmount: formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings, o, true)
+      formattedAmount: formatNumberAndAppendCurrency(o,settings[CURRENCY_CODE], translations, globalSettings)
     };
     // TODO apply format from global settings
   }
@@ -43,7 +43,7 @@ class TopChart extends Component {
     } = this.props;
     const transformedData = data.values.slice(0, 5).map(v => ({
       id: v.id.toString(),
-      formattedAmount: formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings, v.amount, true),
+      formattedAmount: formatNumberAndAppendCurrency(v.amount,settings[CURRENCY_CODE], translations, globalSettings),
       name: v.name,
       value: v.amount,
     }));

@@ -6,6 +6,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintValidatorContext;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Map;
 
@@ -21,36 +22,38 @@ import java.util.Map;
  */
 public class TotalPercentageValidator implements ConstraintValidator {
 
-    private static final float ERROR = 0.0001f;
-    private static final float ONE_HUNDRED = 100f;
-
+    private static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100.0);
+    private static final BigDecimal ERROR = BigDecimal.valueOf(0.0001);
+    private static BigDecimal finalTotal=BigDecimal.ZERO;
     @Override
     public void initialize(Map<String, String> arguments) {
     }
 
     @Override
     public boolean isValid(APIField type, Object value, ConstraintValidatorContext context) {
-        Collection items = (Collection) value;
+        Collection<?> items = (Collection<?>) value;
 
         APIField percentageField = type.getPercentageField();
         if (percentageField == null || items == null || items.isEmpty()) {
             return true;
         }
 
-        float total = 0f;
+        BigDecimal total = BigDecimal.ZERO;
 
         for (Object item : items) {
             Float percentage = percentageField.getFieldAccessor().get(item);
             if (percentage != null) {
-                total += percentage;
+                total = total.add(BigDecimal.valueOf(percentage.doubleValue())); // Convert Float to BigDecimal
             }
         }
+        finalTotal=total;
 
-        return Math.abs(ONE_HUNDRED - total) < ERROR;
+        return total.subtract(ONE_HUNDRED).abs().compareTo(ERROR) < 0;
     }
 
     @Override
     public ApiErrorMessage getErrorMessage() {
+        ValidationErrors.FIELD_PERCENTAGE_SUM_BAD.description+=" but is "+finalTotal;
         return ValidationErrors.FIELD_PERCENTAGE_SUM_BAD;
     }
 }

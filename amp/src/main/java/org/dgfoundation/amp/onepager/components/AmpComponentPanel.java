@@ -35,7 +35,7 @@ import org.hibernate.Session;
  * component is visible or not and if this component is enabled or disabled.
  * This class can be used directly to create panels or extended to make amp
  * field /feature panels
- * 
+ *
  * @author mpostelnicu@dgateway.org since Sep 22, 2010
  */
 public abstract class AmpComponentPanel<T> extends Panel implements AmpFMConfigurable {
@@ -89,13 +89,13 @@ public abstract class AmpComponentPanel<T> extends Panel implements AmpFMConfigu
     protected static Logger logger = Logger.getLogger(AmpComponentPanel.class);
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 5847159396251223479L;
 
     /**
      * Constructs a new object using the component id, fmName and fmType
-     * 
+     *
      * @see AmpFMTypes
      * @param id
      *            the component id
@@ -111,7 +111,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements AmpFMConfigu
     /**
      * Constructs a new object using only the component id and the FM Name.
      * Assumes the FM Type is {@link AmpFMTypes#FEATURE}
-     * 
+     *
      * @param id
      * @param fmName
      */
@@ -126,7 +126,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements AmpFMConfigu
     /**
      * Switch visibility for this fm Control. Change Hide with Show for the FM
      * Button
-     * 
+     *
      * @param target
      *            the ajax target
      */
@@ -141,7 +141,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements AmpFMConfigu
     /**
      * Switch enabling/disabling for this fm Control. Change Hide with Show for
      * the FM Button
-     * 
+     *
      * @param target
      *            the ajax target
      */

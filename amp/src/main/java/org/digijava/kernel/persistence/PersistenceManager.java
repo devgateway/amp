@@ -730,7 +730,7 @@ public class PersistenceManager {
             return false;
         throw new RuntimeException("cannot convert object " + obj + " to boolean");
     }
-    
+
     public static StatelessSession openNewStatelessSession() {
         return sf.openStatelessSession();
     }
@@ -777,7 +777,7 @@ public class PersistenceManager {
 //                } finally {
 //                    // do we really want to attempt commit if flushing fails?
                 //session will be flushed automatically on transaction commit since we set the FlusmodeType as AUTO
-                    transaction.commit();
+                transaction.commit();
 //                }
             }
         }

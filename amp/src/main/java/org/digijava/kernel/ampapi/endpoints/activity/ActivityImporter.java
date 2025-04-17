@@ -275,6 +275,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 boolean draftChange = ActivityUtil.detectDraftChange(newActivity, oldActivityDraft);
 
                 List<AmpContentTranslation> cumulativeTranslations = new ArrayList<>();
+
                 newActivity = activityService.saveActivity(newActivity, getTranslations(), cumulativeTranslations,
                         modifiedBy, draftChange, saveContext, getEditorStore(), getSite());
 

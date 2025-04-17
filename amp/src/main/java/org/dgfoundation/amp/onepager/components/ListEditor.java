@@ -30,13 +30,13 @@ public abstract class ListEditor<T> extends RepeatingView implements IFormModelU
             ret = items.size();
         return ret;
     }
-    
+
     public void addItem(T value){
         origAddItem(value);
     }
-    
+
     public final void origAddItem(T value){
-        
+
         if(items == null)
             items = new ArrayList<T>();
         items.add(value);
@@ -85,5 +85,5 @@ public abstract class ListEditor<T> extends RepeatingView implements IFormModelU
     public IModel<Set<T>> getModel() {
         return model;
     }
-    
+
 }

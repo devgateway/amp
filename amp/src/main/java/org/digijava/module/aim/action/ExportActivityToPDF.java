@@ -60,7 +60,7 @@ import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
  */
 public class ExportActivityToPDF extends Action {
 
-    
+
     public static final int COLUMNS_3 = 3;
     public static final int COLUMNS_4 = 4;
     public static final int INDENTATION_LEFT = 5;
@@ -74,7 +74,7 @@ public class ExportActivityToPDF extends Action {
     private static final float SUBTOTAL_BORDER_TOP_WIDTH = 0.5f;
     private static final int ARRAY_IDX_3 = 3;
     private static final int SYMBOL_INDENT = 20;
-    
+
     private static Logger logger = Logger.getLogger(ExportActivityToPDF.class);
 
     /**
@@ -284,7 +284,7 @@ public class ExportActivityToPDF extends Action {
             if (identification.getTeam() != null && identification.getTeam().isSSCWorkspace()) {
                 sscPrefix = "SSC ";
             }
-            
+
             if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/" + sscPrefix + "Modalities")) {
                 columnName = TranslatorWorker.translateText("Modalities");
                 columnVal = identification.getSscModalitiesAsString("\n");
@@ -543,7 +543,7 @@ public class ExportActivityToPDF extends Action {
                 columnName=TranslatorWorker.translateText("Cris Number");
                 createGeneralInfoRow(mainLayout,columnName,activity.getCrisNumber());
             }
-    
+
             if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/IATI Identifier")) {
                 columnName = TranslatorWorker.translateText("IATI Identifier");
                 createGeneralInfoRow(mainLayout, columnName, activity.getIatiIdentifier());
@@ -826,74 +826,74 @@ public class ExportActivityToPDF extends Action {
                         value += (activity.getLineMinRank());
                     }
                     valuesTable.add(createGeneralInfoTable(
-                            TranslatorWorker.translateText("Line Ministry Rank") + ":", 
+                            TranslatorWorker.translateText("Line Ministry Rank") + ":",
                             value, false));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date")) {
                     valuesTable.add(createGeneralInfoTable(
-                            TranslatorWorker.translateText("Proposed Approval Date") + ":", 
+                            TranslatorWorker.translateText("Proposed Approval Date") + ":",
                             myForm.getPlanning().getOriginalAppDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date")) {
                     valuesTable.add(createGeneralInfoTable(
-                            TranslatorWorker.translateText("Actual Approval Date") + ":", 
+                            TranslatorWorker.translateText("Actual Approval Date") + ":",
                             myForm.getPlanning().getRevisedAppDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date")) {
                     valuesTable.add(createGeneralInfoTable(
-                            TranslatorWorker.translateText("Proposed Start Date") + ":", 
+                            TranslatorWorker.translateText("Proposed Start Date") + ":",
                             myForm.getPlanning().getOriginalStartDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date")) {
                     valuesTable.add(createGeneralInfoTable(
-                            TranslatorWorker.translateText("Actual Start Date") + ":", 
+                            TranslatorWorker.translateText("Actual Start Date") + ":",
                             myForm.getPlanning().getRevisedStartDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date")) {
                     valuesTable.add(createGeneralInfoTable(
-                            TranslatorWorker.translateText("Original Completion Date") + ":", 
+                            TranslatorWorker.translateText("Original Completion Date") + ":",
                             myForm.getPlanning().getOriginalCompDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date")) {
                     valuesTable.add(createGeneralInfoTable(
-                            TranslatorWorker.translateText("Proposed Completion Date") + ":", 
+                            TranslatorWorker.translateText("Proposed Completion Date") + ":",
                             myForm.getPlanning().getProposedCompDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date")) {
                     valuesTable.add(createGeneralInfoTable(
-                            TranslatorWorker.translateText("Actual Completion Date") + ":", 
+                            TranslatorWorker.translateText("Actual Completion Date") + ":",
                             myForm.getPlanning().getCurrentCompDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Project Implementation Delay")) {
                     valuesTable.add(createGeneralInfoTable(
-                            TranslatorWorker.translateText("Project Implementation Delay") + ":", 
+                            TranslatorWorker.translateText("Project Implementation Delay") + ":",
                             myForm.getPlanning().getProjectImplementationDelay(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting")) {
                     valuesTable.add(createGeneralInfoTable(
-                            TranslatorWorker.translateText("Final Date for Contracting") + ":", 
+                            TranslatorWorker.translateText("Final Date for Contracting") + ":",
                             myForm.getPlanning().getContractingDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements")) {
                     valuesTable.add(createGeneralInfoTable(
-                            TranslatorWorker.translateText("Final Date for Disbursements") + ":", 
+                            TranslatorWorker.translateText("Final Date for Disbursements") + ":",
                             myForm.getPlanning().getDisbursementsDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life")) {
                     Integer life = myForm.getPlanning().getProposedProjectLife();
                     valuesTable.add(createGeneralInfoTable(
-                            TranslatorWorker.translateText("Proposed Project Life") + ":", 
+                            TranslatorWorker.translateText("Proposed Project Life") + ":",
                             life == null ? "" : life.toString(), true));
                 }
 
@@ -901,11 +901,11 @@ public class ExportActivityToPDF extends Action {
                     BigDecimal duration = myForm.getPlanning().getProjectPeriod();
                     if (duration != null) {
                         valuesTable.add(createGeneralInfoTable(
-                                TranslatorWorker.translateText("Duration of Project") + ":", 
+                                TranslatorWorker.translateText("Duration of Project") + ":",
                                 duration.toString(), true));
                     }
                 }
-             
+
                 columnName = TranslatorWorker.translateText("Planning");
                 createGeneralInfoRow(mainLayout, columnName, valuesTable);
 
@@ -917,7 +917,7 @@ public class ExportActivityToPDF extends Action {
                     if(catVal!=null){
                         columnVal   = CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
                     }
-                    createGeneralInfoRow(mainLayout,columnName,columnVal+"\n"+myForm.getPlanning().getStatusReason());              
+                    createGeneralInfoRow(mainLayout,columnName,columnVal+"\n"+myForm.getPlanning().getStatusReason());
                 }
                 */
             }
@@ -1032,7 +1032,7 @@ public class ExportActivityToPDF extends Action {
                                 .toUpperCase()+":\n ";
 
                     }
-                    
+
                     if (myForm.getSectors().getActivitySectors() != null) {
                         for (ActivitySector actSect : myForm.getSectors().getActivitySectors()) {
                             if (actSect.getConfigId().equals(configuration.getId())) {
@@ -1062,21 +1062,21 @@ public class ExportActivityToPDF extends Action {
                 if (SiteUtils.isEffectiveLangRTL()) {
                     sectorTable.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
                 }
-                
+
                 PdfPCell sectorsCell1 = new PdfPCell();
                 p1 = new Paragraph(postprocessText(sectorsToAdd), plainFont);
                 p1.setAlignment(Element.ALIGN_LEFT);
                 sectorsCell1.addElement(p1);
                 sectorsCell1.setBorder(0);
                 sectorTable.addCell(sectorsCell1);
-                
+
                 PdfPCell sectorsCell2 = new PdfPCell();
                 p1 = new Paragraph(postprocessText(sectors), plainFont);
                 p1.setAlignment(Element.ALIGN_LEFT);
                 sectorsCell2.addElement(p1);
                 sectorsCell2.setBorder(0);
                 sectorTable.addCell(sectorsCell2);
-                
+
                 PdfPCell cell2 = new PdfPCell(sectorTable);
                 cell2.setBorder(0);
                 mainLayout.addCell(cell2);
@@ -1108,7 +1108,7 @@ public class ExportActivityToPDF extends Action {
                 if (SiteUtils.isEffectiveLangRTL()) {
                     programsTable.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
                 }
-                
+
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective")) {
                     if (hasContents(myForm.getPrograms().getNationalPlanObjectivePrograms())) {
                         String programs = buildProgramsOutput(myForm.getPrograms().getNationalPlanObjectivePrograms());
@@ -1116,7 +1116,7 @@ public class ExportActivityToPDF extends Action {
                         programsTable.addCell(buildProgramCell(programs, false));
                     }
                 }
-                
+
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs")) {
                     if (hasContents(myForm.getPrograms().getPrimaryPrograms())) {
                         String programs = buildProgramsOutput(myForm.getPrograms().getPrimaryPrograms());
@@ -1124,7 +1124,7 @@ public class ExportActivityToPDF extends Action {
                         programsTable.addCell(buildProgramCell(programs, false));
                     }
                 }
-                
+
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs")) {
                     if (hasContents(myForm.getPrograms().getSecondaryPrograms())) {
                         String programs = buildProgramsOutput(myForm.getPrograms().getSecondaryPrograms());
@@ -1132,7 +1132,7 @@ public class ExportActivityToPDF extends Action {
                         programsTable.addCell(buildProgramCell(programs, false));
                     }
                 }
-                
+
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs")) {
                     if (hasContents(myForm.getPrograms().getTertiaryPrograms())) {
                         String programs = buildProgramsOutput(myForm.getPrograms().getTertiaryPrograms());
@@ -1140,7 +1140,7 @@ public class ExportActivityToPDF extends Action {
                         programsTable.addCell(buildProgramCell(programs, false));
                     }
                 }
-                
+
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Program Description")) {
                     if (myForm.getPrograms().getProgramDescription() != null) {
                         String programs = processEditTagValue(request, myForm.getPrograms().getProgramDescription());
@@ -1148,12 +1148,12 @@ public class ExportActivityToPDF extends Action {
                         programsTable.addCell(buildProgramCell(programs, false));
                     }
                 }
-                
+
                 PdfPCell cell2 = new PdfPCell(programsTable);
                 cell2.setBorder(0);
                 mainLayout.addCell(cell2);
             }
-            
+
             /**
              * funding
              */
@@ -1236,18 +1236,18 @@ public class ExportActivityToPDF extends Action {
             if(FeaturesUtil.isVisibleModule("/Activity Form/Issues Section")){
                 buildIssuesPart(myForm, mainLayout,ampContext,session);
             }
-    
+
             /**
              * related documents
              */
             if(FeaturesUtil.isVisibleModule("/Activity Form/Related Documents")){
                 buildRelatedDocsPart(myForm, mainLayout, event,ampContext);
             }
-    
+
             if (FeaturesUtil.isVisibleModule("/Activity Form/Regional Observations")) {
                 buildRegionalObservationsPart(myForm, mainLayout);
             }
-    
+
             if (FeaturesUtil.isVisibleModule("/Activity Form/Line Ministry Observations")) {
                 buildLineMinistryObservationsPart(myForm, mainLayout);
             }
@@ -1309,14 +1309,14 @@ public class ExportActivityToPDF extends Action {
             /**
              *  Contact Informations
              */
-            
+
             boolean isContactInformationVisible = FeaturesUtil.isVisibleModule("/Activity Form/Contacts") &&
                     ((TeamMember) session.getAttribute(CURRENT_MEMBER) != null || FeaturesUtil.isVisibleFeature("Contacts"));
-            
+
             if(isContactInformationVisible){
                 //Funding contact information
                 if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Donor Contact Information")){
-                    buildContactInfoOutput(mainLayout,"Donor funding contact information",myForm.getContactInformation().getDonorContacts(),ampContext);
+                    buildContactInfoOutput(mainLayout,"Donor contact information",myForm.getContactInformation().getDonorContacts(),ampContext);
                 }
                 //MOFED contact information
                 if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Mofed Contact Information")){
@@ -1637,7 +1637,7 @@ public class ExportActivityToPDF extends Action {
                         costOutput += "\n" + TranslatorWorker.translateText("Type") + sep + struc.getType().getName();
                     }
                     if (struc.getDescription() != null) {
-                        costOutput += "\n" + TranslatorWorker.translateText("Description") + sep 
+                        costOutput += "\n" + TranslatorWorker.translateText("Description") + sep
                                 + struc.getDescription();
                     }
                     if (struc.getLatitude() != null) {
@@ -1681,7 +1681,7 @@ public class ExportActivityToPDF extends Action {
         p1.setAlignment(Element.ALIGN_LEFT);
         programsCell1.addElement(p1);
         programsCell1.setBorder(0);
-        
+
         return programsCell1;
     }
 
@@ -1878,34 +1878,34 @@ public class ExportActivityToPDF extends Action {
         }
         mainLayout.addCell(issuesCell2);
     }
-    
+
     private void buildRegionalObservationsPart(EditActivityForm myForm, PdfPTable mainLayout)
             throws WorkerException {
         ArrayList<Issues> regObs = myForm.getRegionalObservations().getIssues();
         if (regObs == null || regObs.isEmpty()) {
             return;
         }
-        
+
         PdfPCell regObsTitleCell = new PdfPCell();
         regObsTitleCell.setBackgroundColor(BACKGROUND_COLOR);
         regObsTitleCell.setBorder(0);
-        
+
         Paragraph p1;
         p1 = new Paragraph(postprocessText(TranslatorWorker.translateText("Regional Observations")), titleFont);
         p1.setAlignment(Element.ALIGN_RIGHT);
-        
+
         regObsTitleCell.addElement(p1);
         mainLayout.addCell(regObsTitleCell);
-        
+
         PdfPCell regObsValuesCell = new PdfPCell();
         regObsValuesCell.setBackgroundColor(BACKGROUND_COLOR_WHITE);
         regObsValuesCell.setBorder(0);
-        
+
         String regObsModulePath = "/Activity Form/Regional Observations/Observation";
         String regObsDatePath = regObsModulePath + "/Date";
         String regObsMeasurePath = regObsModulePath + "/Measure";
         String regObsActorPath = regObsMeasurePath + "/Actor";
-        
+
         for (Issues issue : regObs) {
             com.itextpdf.text.List issuesList = new com.itextpdf.text.List(false, SYMBOL_INDENT);
             issuesList.setListSymbol(new Chunk("\u2022"));
@@ -1913,23 +1913,23 @@ public class ExportActivityToPDF extends Action {
             if (FeaturesUtil.isVisibleModule(regObsDatePath)) {
                 issueName += " \t" + issue.getIssueDate();
             }
-            
+
             ListItem issueItem = new ListItem(new Phrase(issueName, plainFont));
             issuesList.add(issueItem);
             if (issue.getMeasures() != null && issue.getMeasures().size() > 0
                     && FeaturesUtil.isVisibleModule(regObsMeasurePath)) {
                 com.itextpdf.text.List measuresSubList = new com.itextpdf.text.List(false, SYMBOL_INDENT);
                 measuresSubList.setListSymbol("-");
-                
+
                 for (Measures measure : issue.getMeasures()) {
                     ListItem measureItem = new ListItem(new Phrase(measure.getName(), plainFont));
                     measuresSubList.add(measureItem);
-                    
+
                     if (measure.getActors() != null && measure.getActors().size() > 0
                             && FeaturesUtil.isVisibleModule(regObsActorPath)) {
                         com.itextpdf.text.List actorsSubList = new com.itextpdf.text.List(false, SYMBOL_INDENT);
                         actorsSubList.setListSymbol(new Chunk("\u2022"));
-                        
+
                         for (AmpActor actor : measure.getActors()) {
                             ListItem actorItem = new ListItem(new Phrase(actor.getName(), plainFont));
                             actorsSubList.add(actorItem);
@@ -1943,34 +1943,34 @@ public class ExportActivityToPDF extends Action {
         }
         mainLayout.addCell(regObsValuesCell);
     }
-    
+
     private void buildLineMinistryObservationsPart(EditActivityForm myForm, PdfPTable mainLayout)
             throws WorkerException {
         ArrayList<Issues> lmo = myForm.getLineMinistryObservations().getIssues();
         if (lmo == null || lmo.isEmpty()) {
             return;
         }
-    
+
         PdfPCell lmoTitleCell = new PdfPCell();
         lmoTitleCell.setBackgroundColor(BACKGROUND_COLOR);
         lmoTitleCell.setBorder(0);
-    
+
         Paragraph p1;
         p1 = new Paragraph(postprocessText(TranslatorWorker.translateText("Line Ministry Observations")), titleFont);
         p1.setAlignment(Element.ALIGN_RIGHT);
-    
+
         lmoTitleCell.addElement(p1);
         mainLayout.addCell(lmoTitleCell);
-    
+
         PdfPCell lmoValuesCell = new PdfPCell();
         lmoValuesCell.setBackgroundColor(BACKGROUND_COLOR_WHITE);
         lmoValuesCell.setBorder(0);
-    
+
         String lmoModulePath = "/Activity Form/Line Ministry Observations/Observation";
         String lmoDatePath = lmoModulePath + "/Date";
         String lmoMeasurePath = lmoModulePath + "/Measure";
         String lmoActorPath = lmoMeasurePath + "/Actor";
-    
+
         for (Issues issue : lmo) {
             com.itextpdf.text.List issuesList = new com.itextpdf.text.List(false, SYMBOL_INDENT);
             issuesList.setListSymbol(new Chunk("\u2022"));
@@ -1978,23 +1978,23 @@ public class ExportActivityToPDF extends Action {
             if (FeaturesUtil.isVisibleModule(lmoDatePath)) {
                 issueName += " \t" + issue.getIssueDate();
             }
-            
+
             ListItem issueItem = new ListItem(new Phrase(issueName, plainFont));
             issuesList.add(issueItem);
             if (issue.getMeasures() != null && issue.getMeasures().size() > 0
                     && FeaturesUtil.isVisibleModule(lmoMeasurePath)) {
                 com.itextpdf.text.List measuresSubList = new com.itextpdf.text.List(false, SYMBOL_INDENT);
                 measuresSubList.setListSymbol("-");
-                
+
                 for (Measures measure : issue.getMeasures()) {
                     ListItem measureItem = new ListItem(new Phrase(measure.getName(), plainFont));
                     measuresSubList.add(measureItem);
-                    
+
                     if (measure.getActors() != null && measure.getActors().size() > 0
                             && FeaturesUtil.isVisibleModule(lmoActorPath)) {
                         com.itextpdf.text.List actorsSubList = new com.itextpdf.text.List(false, SYMBOL_INDENT);
                         actorsSubList.setListSymbol(new Chunk("\u2022"));
-                        
+
                         for (AmpActor actor : measure.getActors()) {
                             ListItem actorItem = new ListItem(new Phrase(actor.getName(), plainFont));
                             actorsSubList.add(actorItem);
@@ -2008,7 +2008,7 @@ public class ExportActivityToPDF extends Action {
         }
         mainLayout.addCell(lmoValuesCell);
     }
-    
+
     public final static String getLatinLettersEquivalent(String src)// returns text without diacritics should be called with a Printable Equivalent
     {
         src = src.replace('ţ', 'ţ').replace("ț", "ţ").replace('Ţ', 'Ţ').replace('î', 'î').replace('ş', 'ş').replace('Ş', 'Ş').replace("ş", "ş").replace("î", "î").replace("ă", "ă").replace("ţ", "ţ");
@@ -2477,9 +2477,9 @@ public class ExportActivityToPDF extends Action {
         }
 
         //links
-        /*if(myForm.getDocuments().getLinksList()!=null && myForm.getDocuments().getLinksList().size()>0){              
-            for (RelatedLinks doc : (Collection<RelatedLinks>)myForm.getDocuments().getLinksList()) {   
-                    //document fields                       
+        /*if(myForm.getDocuments().getLinksList()!=null && myForm.getDocuments().getLinksList().size()>0){
+            for (RelatedLinks doc : (Collection<RelatedLinks>)myForm.getDocuments().getLinksList()) {
+                    //document fields
                     PdfPCell docTableNameCell1=new PdfPCell(new Paragraph(new Phrase(doc.getRelLink().getTitle())+"- \t",titleFont));
                     docTableNameCell1.setBackgroundColor( new BaseColor(255,255,255));
                     docTableNameCell1.setBorder(0);
@@ -2488,7 +2488,7 @@ public class ExportActivityToPDF extends Action {
                     docTableNameCell2.setBackgroundColor( new BaseColor(255,255,255));
                     docTableNameCell2.setBorder(0);
                     relatedDocnested.addCell(docTableNameCell2);
-                    
+
                     PdfPCell docTableDescCell1=new PdfPCell(new Phrase(TranslatorWorker.translateText("Description")+":",titleFont));
                     docTableDescCell1.setBackgroundColor( new BaseColor(255,255,255));
                     docTableDescCell1.setBorder(0);
@@ -2497,7 +2497,7 @@ public class ExportActivityToPDF extends Action {
                     docTableDescCell2.setBackgroundColor( new BaseColor(255,255,255));
                     docTableDescCell2.setBorder(0);
                     relatedDocnested.addCell(docTableDescCell2);
-                    
+
                     PdfPCell docTableDateCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Date")+":",titleFont));
                     docTableDateCell1.setBackgroundColor( new BaseColor(255,255,255));
                     docTableDateCell1.setBorder(0);
@@ -2505,8 +2505,8 @@ public class ExportActivityToPDF extends Action {
                     PdfPCell docTableDateCell2=new PdfPCell(new Paragraph(new Phrase(doc.getRelLink().getDate(), plainFont)));
                     docTableDateCell2.setBackgroundColor( new BaseColor(255,255,255));
                     docTableDateCell2.setBorder(0);
-                    relatedDocnested.addCell(docTableDateCell2);                
-            }               
+                    relatedDocnested.addCell(docTableDateCell2);
+            }
         }*/
         relDocCell2.addElement(relatedDocnested);
         mainLayout.addCell(relDocCell2);
@@ -2814,7 +2814,7 @@ public class ExportActivityToPDF extends Action {
     }
 
     /**
-     * convenience method for accessing {@link #addNewInfoCell(PdfPTable, String, String)}. 
+     * convenience method for accessing {@link #addNewInfoCell(PdfPTable, String, String)}.
      * Translates ACV if not null, else passes null
      * @param fundingTable
      * @param cellName
@@ -2825,13 +2825,13 @@ public class ExportActivityToPDF extends Action {
         addNewInfoCell(fundingTable, cellName, value);
     }
 
-    private void addTotalsOutput(PdfPTable fundingTable, String title, String value, String currencyCode) 
+    private void addTotalsOutput(PdfPTable fundingTable, String title, String value, String currencyCode)
             throws WorkerException {
-        
+
         if (value == null || value.isEmpty()) {
             return;
         }
-        
+
         String totalAmountType = postprocessText(TranslatorWorker.translateText(title)) + ":";
         addTotalAmountsCellsToFundingTable(fundingTable, totalAmountType, value, currencyCode);
     }
@@ -2916,7 +2916,7 @@ public class ExportActivityToPDF extends Action {
                             {
                                 addNewInfoCell(fundingTable, "Mode of Payment", funding.getModeOfPayment());
                             }
-                            
+
                             // Concessionality Level
                             if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Concessionality Level"))
                             {
@@ -2935,12 +2935,12 @@ public class ExportActivityToPDF extends Action {
                             {
                                 addNewInfoCell(fundingTable, "Funding Closing Date", funding.getFundingClosingDate());
                             }
-                            
+
                             if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Ratification Date"))
                             {
                                 addNewInfoCell(fundingTable, "Ratification Date", funding.getRatificationDate());
                             }
-                            
+
                             if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Maturity"))
                             {
                                 addNewInfoCell(fundingTable, "Maturity", funding.getMaturity());
@@ -2956,12 +2956,12 @@ public class ExportActivityToPDF extends Action {
                         }
                         //Donor objective
                         if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective") && (funding.getDonorObjective() != null))
-                        {                           
-                            addNewInfoCell(fundingTable, "Donor Objective", funding.getDonorObjective());                           
+                        {
+                            addNewInfoCell(fundingTable, "Donor Objective", funding.getDonorObjective());
                         }
                         //Funding conditions
-                        if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Conditions") && (funding.getConditions() != null)){                          
-                            addNewInfoCell(fundingTable, "Conditions", funding.getConditions());                                                       
+                        if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Conditions") && (funding.getConditions() != null)){
+                            addNewInfoCell(fundingTable, "Conditions", funding.getConditions());
                         }
                         //Agreement
                         if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement"))
@@ -3113,7 +3113,7 @@ public class ExportActivityToPDF extends Action {
                     addTotalsOutput(fundingTable, "TOTAL ACTUAL ARREARS", myForm.getFunding().getTotalArrears(), currencyCode);
                 }
 
-                
+
                 //TOTAL ACTUAL DISBURSEMENT ORDERS:
                 if (visibleModuleDisbOrders) {
                     addTotalsOutput(fundingTable, "TOTAL ACTUAL DISBURSEMENT ORDERS", myForm.getFunding().getTotalActualDisbursementsOrders(), currencyCode);
@@ -3121,7 +3121,7 @@ public class ExportActivityToPDF extends Action {
 
                 //UNDISBURSED BALANCE
                 if (FeaturesUtil.isVisibleFeature("Funding", "Undisbursed Balance")) {
-                    addTotalsOutput(fundingTable, "UNDISBURSED BALANCE", 
+                    addTotalsOutput(fundingTable, "UNDISBURSED BALANCE",
                             myForm.getFunding().getUnDisbursementsBalance(), currencyCode);
                 }
 
@@ -3137,8 +3137,8 @@ public class ExportActivityToPDF extends Action {
         mainLayout.addCell(fundingCell);
         //return fundingTable;
     }
-    
-    private void renderMtefSection(PdfPTable fundingTable, Funding funding, String currencyCode) 
+
+    private void renderMtefSection(PdfPTable fundingTable, Funding funding, String currencyCode)
             throws WorkerException {
         String output = TranslatorWorker.translateText("MTEF Projections") + ":";
         PdfPCell titleCell = new PdfPCell(new Paragraph(postprocessText(output), titleFont));
@@ -3152,7 +3152,7 @@ public class ExportActivityToPDF extends Action {
         if (funding.getMtefDetails() != null) {
             java.util.List<FundingDetail> mtefPipeline = new ArrayList<FundingDetail>();
             java.util.List<FundingDetail> mtefProjection = new ArrayList<FundingDetail>();
-            
+
             for (FundingDetail mtefFunding : funding.getMtefDetails()) {
                 if ("pipeline".equals(mtefFunding.getProjectionTypeName().getValue())) {
                     mtefPipeline.add(mtefFunding);
@@ -3160,13 +3160,13 @@ public class ExportActivityToPDF extends Action {
                     mtefProjection.add(mtefFunding);
                 }
             }
-            
+
             anythingAdded |= renderMtefSubsection(cells, mtefPipeline, "MTEF Projections Pipeline", funding.getSubtotalMTEFsPipeline(), currencyCode);
             anythingAdded |= renderMtefSubsection(cells, mtefProjection, "MTEF Projections Projection", funding.getSubtotalMTEFsProjection(), currencyCode);
         }
 
         fundingTable.addCell(titleCell);
-        
+
         if (anythingAdded) {
             renderMtefSubTotals(cells, "Total MTEF Projections", funding.getSubtotalMTEFs(), currencyCode);
             for (PdfPCell cell : cells) {
@@ -3182,7 +3182,7 @@ public class ExportActivityToPDF extends Action {
 
     private boolean renderMtefSubsection(ArrayList<PdfPCell> cells, java.util.List<FundingDetail> mtefList,
             String projectionType, String mtefSubTotal, String currencyCode) throws WorkerException {
-        
+
         boolean addedData = false;
         for (FundingDetail mtefFunding : mtefList) {
             if (FeaturesUtil.isVisibleModule(mtefProjectionFields[0])) {
@@ -3206,7 +3206,7 @@ public class ExportActivityToPDF extends Action {
 
             if (FeaturesUtil.isVisibleModule(mtefProjectionFields[2])) {
                 addedData = true;
-                PdfPTable mtefTable = createAmountCurrencyTable(mtefFunding.getTransactionAmount(), 
+                PdfPTable mtefTable = createAmountCurrencyTable(mtefFunding.getTransactionAmount(),
                         mtefFunding.getCurrencyCode());
 
                 PdfPCell innerCell = new PdfPCell(mtefTable);
@@ -3217,22 +3217,22 @@ public class ExportActivityToPDF extends Action {
                 cells.add(getEmptyCell(2));
             }
 
-            PdfPCell roleCell = getRoleOrgForFundingFlows(mtefFunding, 
+            PdfPCell roleCell = getRoleOrgForFundingFlows(mtefFunding,
                     ActivityUtil.getFmForFundingFlows(mtefFunding.getTransactionType()));
             roleCell.setColspan(COLUMNS_4);
             cells.add(roleCell);
         }
-        
+
         if (addedData) {
             renderMtefSubTotals(cells, "Sub-Total " + projectionType, mtefSubTotal, currencyCode);
         }
-        
+
         return addedData;
     }
-    
-    private void renderMtefSubTotals(ArrayList<PdfPCell> cells, String titleTotal, String subtotalMTEFs, 
+
+    private void renderMtefSubTotals(ArrayList<PdfPCell> cells, String titleTotal, String subtotalMTEFs,
             String currencyCode) throws WorkerException {
-        
+
         PdfPCell subTotalTitle = new PdfPCell(new Paragraph(TranslatorWorker.translateText(titleTotal), plainFont));
         subTotalTitle.setBackgroundColor(MTEF_BACKGROUND_COLOR);
         subTotalTitle.setColspan(2);
@@ -3243,12 +3243,12 @@ public class ExportActivityToPDF extends Action {
         subTotalAmount.setBackgroundColor(MTEF_BACKGROUND_COLOR);
         subTotalAmount.setColspan(2);
         subTotalAmount.setBorder(0);
-        
+
         cells.add(subTotalTitle);
         cells.add(subTotalAmount);
     }
 
-    private void createSubtotalRow(PdfPTable fundingTable, String title, String amount, String currencyCode) 
+    private void createSubtotalRow(PdfPTable fundingTable, String title, String amount, String currencyCode)
             throws WorkerException {
 
         PdfPCell subTotal = new PdfPCell(new Paragraph(TranslatorWorker.translateText(title), plainFont));
@@ -3286,12 +3286,12 @@ public class ExportActivityToPDF extends Action {
                 throw new WorkerException(e);
             }
         }
-        
+
         if (amount != null && !amount.isEmpty()) {
             if (SiteUtils.isEffectiveLangRTL()) {
                 valueTable.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
             }
-           
+
             PdfPCell amountCell = new PdfPCell(new Paragraph(amount, plainFont));
             amountCell.setBorder(0);
             if (SiteUtils.isEffectiveLangRTL()) {
@@ -3300,23 +3300,23 @@ public class ExportActivityToPDF extends Action {
             } else {
                 amountCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             }
-            
+
             PdfPCell currencyCell = new PdfPCell(new Paragraph(currencyCode, plainFont));
             currencyCell.setBorder(0);
             valueTable.addCell(amountCell);
             valueTable.addCell(currencyCell);
         }
-        
+
         return valueTable;
     }
-    
+
     /**
      * @param amount
      * @param currencyCode
      * @return
      * @throws WorkerException
      */
-    private PdfPTable createAmountCurrencyExchangeTable(String amount, String currencyCode, String exchangeRate, 
+    private PdfPTable createAmountCurrencyExchangeTable(String amount, String currencyCode, String exchangeRate,
             boolean isVisibleExchangeRate) throws WorkerException {
         PdfPTable valueTable = new PdfPTable(new float[] {AMOUNT_COLUMN_WIDTH, CURRENCY_COLUMN_WIDTH});
         if (SiteUtils.isEffectiveLangRTL()) {
@@ -3326,12 +3326,12 @@ public class ExportActivityToPDF extends Action {
                 throw new WorkerException(e);
             }
         }
-        
+
         if (amount != null && !amount.isEmpty()) {
             if (SiteUtils.isEffectiveLangRTL()) {
                 valueTable.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
             }
-           
+
             PdfPCell amountCell = new PdfPCell(new Paragraph(amount, plainFont));
             amountCell.setBorder(0);
             if (SiteUtils.isEffectiveLangRTL()) {
@@ -3340,13 +3340,13 @@ public class ExportActivityToPDF extends Action {
             } else {
                 amountCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             }
-            
+
             PdfPCell currencyCell = new PdfPCell(new Paragraph(currencyCode, plainFont));
             currencyCell.setBorder(0);
             valueTable.addCell(amountCell);
             valueTable.addCell(currencyCell);
         }
-        
+
         if (exchangeRate != null && isVisibleExchangeRate) {
             String exchange = TranslatorWorker.translateText("Exchange Rate:") + exchangeRate;
             PdfPCell exchangeRateCell = new PdfPCell(new Phrase(exchange));
@@ -3354,26 +3354,26 @@ public class ExportActivityToPDF extends Action {
             exchangeRateCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             valueTable.addCell(exchangeRateCell);
         }
-        
+
         return valueTable;
     }
 
-    private void addTotalAmountsCellsToFundingTable(PdfPTable fundingTable, String totalAmountType, 
+    private void addTotalAmountsCellsToFundingTable(PdfPTable fundingTable, String totalAmountType,
             String amount, String currencyCode) throws WorkerException {
-        
+
         Paragraph p1;
         PdfPCell totalPC = new PdfPCell(new Paragraph(postprocessText(totalAmountType), plainFont));
         totalPC.setColspan(2);
         totalPC.setBorder(0);
         totalPC.setBackgroundColor(SUBTOTAL_BACKGROUND_COLOR);
         fundingTable.addCell(totalPC);
-        
+
         PdfPTable amountValueTable = createAmountCurrencyTable(amount, currencyCode);
         PdfPCell totalPCAmount = new PdfPCell(amountValueTable);
         totalPCAmount.setBorder(0);
         totalPCAmount.setColspan(2);
         totalPCAmount.setBackgroundColor(SUBTOTAL_BACKGROUND_COLOR);
-        
+
         fundingTable.addCell(totalPCAmount);
         //empty cell
         buildEmptyCell(fundingTable);
@@ -3415,7 +3415,7 @@ public class ExportActivityToPDF extends Action {
 
         mainLayout.addCell(effectivenessTable);
     }
-    
+
     /**
      * Used to create simple two columned row
      * @param mainLayout
@@ -3425,7 +3425,7 @@ public class ExportActivityToPDF extends Action {
     private void createGeneralInfoRow(PdfPTable mainLayout, String columnName, String value) {
         createGeneralInfoRow(mainLayout, columnName, "", value, false);
     }
-    
+
     private void createGeneralInfoRow(PdfPTable mainLayout, String columnName, java.util.List<PdfPTable> valuesTable) {
         PdfPCell cell1 = new PdfPCell();
         Paragraph p1 = new Paragraph(postprocessText(columnName), titleFont);
@@ -3435,19 +3435,19 @@ public class ExportActivityToPDF extends Action {
         cell1.setBorder(0);
         cell1.setVerticalAlignment(Element.ALIGN_TOP);
         mainLayout.addCell(cell1);
-        
+
         PdfPTable cell2Table = new PdfPTable(1);
         for (PdfPTable table : valuesTable) {
             PdfPCell cell = new PdfPCell(table);
             cell.setBorder(0);
             cell2Table.addCell(cell);
         }
-        
+
         PdfPCell cell2 = new PdfPCell(cell2Table);
         cell2.setBorder(0);
         mainLayout.addCell(cell2);
     }
-    
+
     /**
      * Used to create simple two columned row
      * @param mainLayout
@@ -3456,9 +3456,9 @@ public class ExportActivityToPDF extends Action {
      * @param value
      * @param isLtr
      */
-    private void createGeneralInfoRow(PdfPTable mainLayout, String columnName, String label, String value, 
+    private void createGeneralInfoRow(PdfPTable mainLayout, String columnName, String label, String value,
             boolean isLtr) {
-        
+
         if (value == null || value.isEmpty()) {
             return;
         }
@@ -3469,34 +3469,34 @@ public class ExportActivityToPDF extends Action {
         cell1.setBackgroundColor(BACKGROUND_COLOR);
         cell1.setBorder(0);
         mainLayout.addCell(cell1);
-        
+
         PdfPCell cell2 = new PdfPCell(createGeneralInfoTable(label, value, isLtr));
         cell2.setBorder(0);
         mainLayout.addCell(cell2);
     }
-    
+
     /**
      * @param value
      * @return
      */
     private PdfPTable createGeneralInfoTable(String label, String value, boolean isLtr) {
         PdfPTable valueTable = new PdfPTable(2);
-        
+
         if (value != null && !value.isEmpty()) {
             if (SiteUtils.isEffectiveLangRTL()) {
                 valueTable.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
             }
-           
+
             PdfPCell labelCell = new PdfPCell(new Paragraph(label, plainFont));
             labelCell.setBorder(0);
 
             PdfPCell valueCell = new PdfPCell(new Paragraph(value, plainFont));
             valueCell.setBorder(0);
-            
+
             valueTable.addCell(labelCell);
             valueTable.addCell(valueCell);
         }
-        
+
         return valueTable;
     }
 
@@ -3550,7 +3550,7 @@ public class ExportActivityToPDF extends Action {
         if (FeaturesUtil.isVisibleModule(fmFields[0])) {
             innerCell.setBorder(0);
             innerCell = new PdfPCell();
-            
+
             Paragraph p = new Paragraph();
             p.add(new Phrase(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue()), plainFont));
             if (disasterResponse != null) {
@@ -3574,7 +3574,7 @@ public class ExportActivityToPDF extends Action {
 
         if (FeaturesUtil.isVisibleModule(fmFields[ARRAY_IDX_3])) {
             boolean isVisibleExchange = FeaturesUtil.isVisibleModule(fmFields[fmFields.length - 1]);
-            PdfPTable amountExchangeTable = createAmountCurrencyExchangeTable(fd.getTransactionAmount(), 
+            PdfPTable amountExchangeTable = createAmountCurrencyExchangeTable(fd.getTransactionAmount(),
                     fd.getCurrencyCode(), fd.getFormattedRate(), isVisibleExchange);
 
             innerCell = new PdfPCell(amountExchangeTable);
@@ -3584,11 +3584,11 @@ public class ExportActivityToPDF extends Action {
         } else {
             addEmptyCell(infoTable, 2);
         }
-        
+
         PdfPCell roleCell = getRoleOrgForFundingFlows(fd, ActivityUtil.getFmForFundingFlows(fd.getTransactionType()));
         roleCell.setColspan(COLUMNS_4);
         infoTable.addCell(roleCell);
-        
+
         if (fd.getAttachedPledgeName() != null) {
 
             PdfPCell plCommCell1=new PdfPCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Source Pledge") + ": " + fd.getAttachedPledgeName()), titleFont));
@@ -3597,7 +3597,7 @@ public class ExportActivityToPDF extends Action {
             plCommCell1.setColspan(4);
             fundingTable.addCell(plCommCell1);
         }
-        if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Expenditure Class") && 
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Expenditure Class") &&
                 fd.getExpenditureClass() != null) {
             PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Expenditure Class") + ": " + fd.getExpenditureClass()), plainFont));
             cell.setBorder(0);
@@ -3637,21 +3637,21 @@ public class ExportActivityToPDF extends Action {
         PdfPCell innerCell = new PdfPCell();
         innerCell.setBorder(0);
         innerCell.setBorder(0);
-        
+
         return innerCell;
     }
-    
+
     private PdfPCell getEmptyCell(int colspan) {
         PdfPCell innerCell = getEmptyCell();
         innerCell.setColspan(colspan);
-        
+
         return innerCell;
     }
 
     private void addEmptyCell(PdfPTable infoTable) {
         infoTable.addCell(getEmptyCell());
     }
-    
+
     private void addEmptyCell(PdfPTable infoTable, int colspan) {
         infoTable.addCell(getEmptyCell(colspan));
     }
@@ -3792,7 +3792,7 @@ public class ExportActivityToPDF extends Action {
             relatedOrgsTable.addCell(emptyCell);
         }
     }
-    
+
     protected PdfPCell buildPdfCell(String text, Font font, int colSpan)
     {
         PdfPCell result = new PdfPCell();

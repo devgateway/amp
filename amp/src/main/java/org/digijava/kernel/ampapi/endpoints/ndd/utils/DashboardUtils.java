@@ -7,6 +7,7 @@ import org.dgfoundation.amp.newreports.*;
 import org.digijava.kernel.ampapi.endpoints.ndd.*;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -26,7 +27,7 @@ public final class DashboardUtils {
     private static NDDService nddService = new NDDService();
 
     private DashboardUtils() {
-        
+
     }
 
     /**
@@ -133,8 +134,8 @@ public final class DashboardUtils {
      */
     public static void addFakeProgram(NDDSolarChartData nddSolarChartData, FlattenTwoProgramsRecord flatRecord) {
         AmpTheme fakeTheme = new AmpTheme();
-        fakeTheme.setThemeCode("Undef");
-        fakeTheme.setName("Undefined");
+        fakeTheme.setThemeCode(TranslatorWorker.translateText("Undef"));
+        fakeTheme.setName(TranslatorWorker.translateText("Undefined"));
         fakeTheme.setAmpThemeId(-1L);
         fakeTheme.setIndlevel(-1);
         fakeTheme.setParentThemeId(flatRecord.getOuterProgram().getParentThemeId());

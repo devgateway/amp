@@ -14,38 +14,47 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hamcrest.Matcher;
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Octavian Ciubotaru
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({FeaturesUtil.class})
 public class RegionLocationValidatorTest {
 
     private static APIField activityField;
     private static InMemoryCategoryValuesManager categoryValues;
     private static InMemoryLocationManager locations;
 
-    @Before
+    // Store the MockedStatic instance to deregister later
+    private MockedStatic<FeaturesUtil> mockedStatic;
+
+    @BeforeEach
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
-        PowerMockito.mockStatic(FeaturesUtil.class);
+        // Create the static mock and store it
+//        mockedStatic = Mockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
-        categoryValues =InMemoryCategoryValuesManager.getInstance();
+        categoryValues = InMemoryCategoryValuesManager.getInstance();
         locations = InMemoryLocationManager.getInstance();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        // Deregister the static mock
+        if (mockedStatic != null) {
+            mockedStatic.close();
+        }
     }
 
     @Test

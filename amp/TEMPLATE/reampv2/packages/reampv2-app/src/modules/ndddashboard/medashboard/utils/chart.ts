@@ -242,7 +242,7 @@ class ChartUtils {
     };
 
     public static formatNumber = (value: number) => {
-        return value.toLocaleString('en-US', {maximumFractionDigits: 4});
+        return value.toLocaleString('en-US', {maximumFractionDigits: 4}).replaceAll(',',' ');
     }
 
     public static getYearOptions = (startDate: string, endDate: string, dateFormat = 'dd/MM/yyyy', translations: DefaultTranslations) => {

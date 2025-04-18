@@ -30,7 +30,6 @@ module.exports = Backbone.View.extend({
     this.app = options.app;
     this.popup = popup;
     this.admLayer = admLayer;
-
   },
 
   render: function() {
@@ -246,7 +245,6 @@ module.exports = Backbone.View.extend({
   _loadMoreProjects: function(cluster) {
 	  var self = this;
 	  var startIndex = this._currentPage * this.PAGE_SIZE;
-      console.log("Wocat activities",self.cluster.properties.wocatCountryData);
 	  var activityIDs = this.cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
       var wocatData;
       if (self.cluster.properties.wocatCountryData)
@@ -302,20 +300,10 @@ module.exports = Backbone.View.extend({
 			  activity.set('formattedColumnName2', [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join(''));
 			  return activity;
 		  });
-          if (self.cluster.properties.wocatCountryData && self.cluster.properties.wocatCountryData.length>0)
-          {
-              self.tempDOM.find('.project-list').append(
-                  self.wocatProjectListTemplate({activities: wocatData,wocatUrl: 'https://qcat.wocat.net'})
-              );
-          }else
-          {
-              self.tempDOM.find('.project-list').append(
-                  self.projectListTemplate({activities: activityFormatted})
-              );
-          }
 
-
-
+		  self.tempDOM.find('.project-list').append(
+				  self.projectListTemplate({activities: activityFormatted})
+		  );
 
 	  });
   }

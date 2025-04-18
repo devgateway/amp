@@ -1,5 +1,5 @@
 import React, {Suspense, useEffect, useState} from "react";
-import {Col, Nav, Row, Tab} from "react-bootstrap";
+import {Col, Nav, Row, Tab, Tabs} from "react-bootstrap";
 import PrintDummy from "../../sscdashboard/utils/PrintDummy";
 import PropTypes from "prop-types";
 import {useSelector} from "react-redux";
@@ -34,84 +34,67 @@ const NDDDashboardTabs = (props)  => {
     }
 
     return (
-        <Tab.Container
-        activeKey={nddDashboard ? currentTab : 'me'}
-        onSelect={(key) => setCurrentTab(key)}
+
+
+    <Tabs
         id="ndd-tabs"
-        defaultActiveKey={nddDashboard ? 'ndd': 'me'}>
-        <Col style={{
-            backgroundColor: "#f5f5f5",
-            paddingTop: 25,
-            borderRadius: 5,
-        }}>
-            <Row sm={3}>
-                <Nav variant="pills" style={{
-                    marginLeft: 0,
-                    marginRight: -40
+        activeKey={nddDashboard ? currentTab : "me"}
+        onSelect={(key) => setCurrentTab(key)}
+        defaultActiveKey={nddDashboard ? "ndd" : "me"}
+        className="mb-3"
+    >
+        {nddDashboard && (
+            <Tab eventKey="ndd" title={translations["amp.ndd.dashboard:ndd-dashboard"]}>
+                <Col style={{
+                    backgroundColor: "#f5f5f5",
+                    borderRadius: 5,
                 }}>
-                    { nddDashboard && (
-                        <Nav.Item>
-                            <Nav.Link eventKey="ndd" title={translations["amp.ndd.dashboard:ndd-dashboard"]}>{translations["amp.ndd.dashboard:ndd-dashboard"]}</Nav.Link>
-                        </Nav.Item>
-                    ) }
-                    { meDashboard && (
-                        <Nav.Item>
-                            <Nav.Link eventKey="me" title={translations["amp.ndd.dashboard:me-dashboard"]}>{translations["amp.ndd.dashboard:me-dashboard"]}</Nav.Link>
-                        </Nav.Item>
-                    )}
+                    <Suspense fallback={<div className="loading" />}>
+                        <MainDashboardContainer
+                            handleOuterChartClick={props.handleOuterChartClick}
+                            selectedDirectProgram={props.selectedDirectProgram}
+                            filters={props.filters}
+                            ndd={props.ndd}
+                            nddLoaded={props.nddLoaded}
+                            nddLoadingPending={props.nddLoadingPending}
+                            dashboardSettings={props.dashboardSettings}
+                            onChangeFundingType={props.onChangeFundingType}
+                            onChangeProgram={props.onChangeProgram}
+                            fundingType={props.fundingType}
+                            selectedPrograms={props.selectedPrograms}
+                            mapping={props.mapping}
+                            settings={props.settings}
+                            globalSettings={props.globalSettings}
+                            noIndirectMapping={props.noIndirectMapping}
+                            downloadImage={props.downloadImage}
+                            embedded={props.embedded}
+                            onChangeSource={props.onChangeSource}
+                            fundingByYearSource={props.fundingByYearSource}
+                        />
+                    </Suspense>
+                    <PrintDummy />
+                </Col>
+            </Tab>
+        )}
 
-                </Nav>
-            </Row>
-            <Col md={12}>
-                <Tab.Content>
-                    {
-                        nddDashboard && (
-                            <Tab.Pane eventKey="ndd">
-                                <Suspense fallback={<div className="loading"/>}>
-                                    <MainDashboardContainer
-                                        handleOuterChartClick={props.handleOuterChartClick}
-                                        selectedDirectProgram={props.selectedDirectProgram}
-                                        filters={props.filters}
-                                        ndd={props.ndd}
-                                        nddLoaded={props.nddLoaded}
-                                        nddLoadingPending={props.nddLoadingPending}
-                                        dashboardSettings={props.dashboardSettings}
-                                        onChangeFundingType={props.onChangeFundingType}
-                                        onChangeProgram={props.onChangeProgram}
-                                        fundingType={props.fundingType}
-                                        selectedPrograms={props.selectedPrograms}
-                                        mapping={props.mapping}
-                                        settings={props.settings}
-                                        globalSettings={props.globalSettings}
-                                        noIndirectMapping={props.noIndirectMapping}
-                                        downloadImage={props.downloadImage}
-                                        embedded={props.embedded}
-                                        onChangeSource={props.onChangeSource}
-                                        fundingByYearSource={props.fundingByYearSource}
-                                    />
-                                </Suspense>
-                                <PrintDummy/>
-                            </Tab.Pane>
-                        )
-                    }
-
-                    {
-                        meDashboard && (
-                            <Tab.Pane eventKey="me">
-                                <Suspense fallback={<div className="loading" />}>
-                                    <MeDashboardContainer
-                                        dashboardSettings={props.dashboardSettings}
-                                        settings={props.settings}
-                                        globalSettings={props.globalSettings}
-                                        filters={props.filters}/>
-                                </Suspense>
-                            </Tab.Pane>
-                        )
-                    }
-                </Tab.Content>
-            </Col>
-        </Col>
-    </Tab.Container>
+        {meDashboard && (
+            <Tab eventKey="me" title={translations["amp.ndd.dashboard:me-dashboard"]}>
+                <Col style={{
+                    backgroundColor: "#f5f5f5",
+                    borderRadius: 5,
+                }}>
+                    <Suspense fallback={<div className="loading" />}>
+                        <MeDashboardContainer
+                            dashboardSettings={props.dashboardSettings}
+                            settings={props.settings}
+                            globalSettings={props.globalSettings}
+                            filters={props.filters}
+                        />
+                    </Suspense>
+                </Col>
+            </Tab>
+        )}
+    </Tabs>
     );
 }
 

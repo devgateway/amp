@@ -12,7 +12,7 @@ import {
   PROGRAMLVL2, TRN_PREFIX, CURRENCY_CODE, FUNDING_TYPE
 } from '../../utils/constants';
 import {
-  formatNumberWithSettings, getCustomColor, formatKMB
+  formatNumberWithSettings, getCustomColor, formatKMB, formatNumberAndAppendCurrency
 } from '../../utils/Utils';
 // eslint-disable-next-line no-unused-vars
 import styles from '../styles.css';
@@ -174,8 +174,7 @@ class FundingByYearChart extends Component {
         <ToolTip
           color={tooltipData.points[0].data.line.color}
           currencyCode={settings[CURRENCY_CODE]}
-          formattedValue={formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings,
-            tooltipData.points[0].y, true)}
+          formattedValue={formatNumberAndAppendCurrency(tooltipData.points[0].y,settings[CURRENCY_CODE], translations, globalSettings)}
           titleLabel={`${year} ${tooltipData.points[0].data.text}`}
           total={tooltipData.points[0].data.extraData
             .reduce((a, b) => (a + (b.values.find(i => i[year]) ? b.values.find(i => i[year])[year] : 0)), 0)}

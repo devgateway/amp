@@ -1,0 +1,28 @@
+div.grayBorder {
+
+	height: 85%;
+}
+div.otherCriteriaBigTable{
+	height: 48%;
+}
+
+.memberSelectorHeader {
+	font-size: 14px;
+	margin: 0px;
+}
+
+div.memberSelectorInputWrapper {
+	margin: 0px;
+}
+
+input.memberSelectorTextbox {
+	height: 15px; 
+	vertical-align: top;
+	font-size: 8px;
+}
+
+.memberSelectorButton  {
+	padding: 1px;
+	font-size: 9px; 
+	height: 15px;
+}

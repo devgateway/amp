@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
     <wb-module deploy-name="amp-2.13-release">
-        <wb-resource deploy-path="/WEB-INF/web.xml" source-path="/WEB-INF/web.xml"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/WEB-INF/src"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/gen-src"/>
+        <wb-resource deploy-path="/src/main/webapp/WEB-INF/web.xml" source-path="/src/main/webapp/WEB-INF/web.xml"/>
+        <wb-resource deploy-path="/src/main/webapp/WEB-INF/classes" source-path="/src/main/webapp/WEB-INF/src"/>
+        <wb-resource deploy-path="/src/main/webapp/WEB-INF/classes" source-path="/gen-src"/>
         <wb-resource deploy-path="/" source-path="/" tag="defaultRootSource"/>
         <property name="context-root" value="amp-2.13-release"/>
     </wb-module>

@@ -47,7 +47,7 @@ RUN --mount=type=cache,target=/root/.npm \
 
 FROM node as compile-amp-settings
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings
-#COPY TEMPLATE/ampTemplate/node_modules/amp-settings/.git .
+COPY TEMPLATE/ampTemplate/node_modules/amp-settings/.git .
 COPY TEMPLATE/ampTemplate/node_modules/amp-settings .
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 # HACK otherwise amp-settings won't compile!

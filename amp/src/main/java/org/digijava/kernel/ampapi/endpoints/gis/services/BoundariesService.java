@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 import static org.digijava.module.aim.util.LocationConstants.MULTI_COUNTRY_ISO_CODE;
@@ -18,9 +19,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static net.bull.javamelody.internal.common.Parameters.getServletContext;
 
@@ -40,7 +39,7 @@ public class BoundariesService {
      */
     public static List<Boundary> getBoundaries() {
         String path = CONTEXT_PATH + BOUNDARY_PATH + "regional-list.json";
-        logger.info("Country ISO: "+DynLocationManagerUtil.getDefaultCountry().getIso());
+        logger.info("Country ISO: "+ DynLocationManagerUtil.getDefaultCountry().getIso());
         if (!FeaturesUtil.isVisibleFeature(GisConstants.MULTICOUNTRY_ENABLED) && !DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
         {
                 String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
@@ -65,12 +64,12 @@ public class BoundariesService {
      *
      * @return
      */
-    public static Map<String, Boundary> getBoundariesAsList() {
+    public static Set<String> getAdmLevelsForBoundaries() {
         List<Boundary> boundaries = BoundariesService.getBoundaries();
-        Map<String, Boundary> boundariesMap = new HashMap<>();
+        Set<String> admLevels = new HashSet<>();
         for (Boundary boundary : boundaries) {
-            boundariesMap.put(boundary.getId().getLabel(), boundary);
+            admLevels.add(boundary.getAdmLevel().getLabel());
         }
-        return boundariesMap;
+        return admLevels;
     }
 }

@@ -58,8 +58,8 @@ public class BoundariesService {
     }
 
     /**
-     * Return the list of .json files for this country as a Map with the adm-N
-     * for key.
+     * Return the list of .json files for this country
+     * fo
      *
      * @return
      */

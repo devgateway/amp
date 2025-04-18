@@ -1113,6 +1113,8 @@ public class DbUtil {
         return organizations;
     }
 
+
+
     public static List<OrganizationSkeleton> getDonorOrganisationByGroupId(Long orgGroupId, boolean publicView) {
         List<OrganizationSkeleton> organizations = new ArrayList<OrganizationSkeleton>();
         StringBuilder queryString = new StringBuilder(
@@ -1260,14 +1262,29 @@ public class DbUtil {
         return qry.list();
     }
 
-    public static void add(Object object) {
-        PersistenceManager.getSession().save(object);
-        PersistenceManager.getSession().flush();
+    public static void addTheme(AmpTheme theme) {
+        add(theme);
+        evictCache();
     }
+    private static void evictCache(){
+        Session session = PersistenceManager.getSession();
+        session.getSessionFactory().getCache().evictEntityData(AmpTheme.class);
+        session.getSessionFactory().getCache().evictEntityData(AmpActivityProgramSettings.class);
+        session.getSessionFactory().getCache().evictCollectionRegion("org.digijava.module.aim.dbentity.AmpTheme.siblings");
 
+    }
+    public static void add(Object object) {
+        Session session = PersistenceManager.getSession();
+        session.save(object);
+
+    }
+    public static void updateTheme(Object theme) {
+        update(theme);
+        evictCache();
+    }
     public static void update(Object object) {
-        PersistenceManager.getSession().update(object);
-        PersistenceManager.getSession().flush();
+        Session session = PersistenceManager.getSession();
+        session.update(object);
     }
 
     public static void updateField(String className, Long id, String fieldName, Object newValue) {
@@ -1430,9 +1447,13 @@ public class DbUtil {
             throw new DgException(e);
         }
     }
-
+    public static void deleteTheme(AmpTheme theme){
+        delete(theme);
+        evictCache();
+    }
     public static void delete(Object object) throws JDBCException {
-        PersistenceManager.getSession().delete(object);
+        Session session = PersistenceManager.getSession();
+        session.delete(object);
     }
 
     public static void deleteOrg(AmpOrganisation org) throws JDBCException {

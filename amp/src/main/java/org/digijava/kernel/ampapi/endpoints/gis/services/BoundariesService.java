@@ -27,7 +27,6 @@ public class BoundariesService {
 
     protected static Logger logger = Logger.getLogger(BoundariesService.class);
 
-    private static final String CONTEXT_PATH = TLSUtils.getRequest().getServletContext().getRealPath("/");
     private static final String BOUNDARY_PATH = getServletContext().getRealPath( "/WEB-INF/gis" + File.separator + "boundaries" + File.separator);
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -38,13 +37,13 @@ public class BoundariesService {
      * @return
      */
     public static List<Boundary> getBoundaries() {
-        String path = CONTEXT_PATH + BOUNDARY_PATH + "regional-list.json";
+        String path = BOUNDARY_PATH + "regional-list.json";
         logger.info("Country ISO: "+ DynLocationManagerUtil.getDefaultCountry().getIso());
         if (!FeaturesUtil.isVisibleFeature(GisConstants.MULTICOUNTRY_ENABLED) && !DynLocationManagerUtil.getDefaultCountry().getIso().equals(MULTI_COUNTRY_ISO_CODE))
         {
                 String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
                 if (countryIso != null) {
-                    path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
+                    path = BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
                 }
 
         }

@@ -30,7 +30,7 @@ import static java.util.stream.Collectors.toMap;
 
 /**
  * Common Endpoint provides various settings (FM, settings)
- * 
+ *
  * @author Nadejda Mandrescu
  */
 @Path("common")
@@ -83,34 +83,6 @@ public class CommonEndpoint implements AmpEndpoint {
             value = "Describe options for endpoint",
             notes = "Enables Cross-Origin Resource Sharing for endpoint")
     public Response describeFMSettingsFlatAsResponse() {
-        return PublicServices.buildOkResponseWithOriginHeaders("");
-    }
-
-    @POST
-    @Path("/fm/flatAsResponse")
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiMethod(ui = false, name = "fm", id = "")
-    @ApiOperation(value = "Provides FM (Feature Manager) settings for the requested options in flat mode.")
-    public Response getFMSettingsFlatAsResponse(
-            @ApiParam("FM Settings with requested options") FMSettingsConfig config) {
-        return PublicServices.buildOkResponseWithOriginHeaders(FMService.getFMSettingsResult(config));
-    }
-
-    @OPTIONS
-    @Path("/fm/flatAsResponse")
-    @ApiOperation(
-            value = "Describe options for endpoint",
-            notes = "Enables Cross-Origin Resource Sharing for endpoint")
-    public Response describeFMSettingsFlatAsResponse() {
-        return PublicServices.buildOkResponseWithOriginHeaders("");
-    }
-
-    @OPTIONS
-    @Path("/fm/flat")
-    @ApiOperation(
-            value = "Describe options for endpoint",
-            notes = "Enables Cross-Origin Resource Sharing for endpoint")
-    public Response describeGetFMSettingsFlat() {
         return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 

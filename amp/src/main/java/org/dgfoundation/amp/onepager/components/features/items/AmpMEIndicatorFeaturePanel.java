@@ -154,7 +154,7 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                 value.setValueDate(new Date(System.currentTimeMillis()));
                 value.setValueType(AmpIndicatorValue.ACTUAL);
                 valuesTable.getEditorList().addItem(value);
-//                target.add(valuesTable);
+                target.add(valuesTable);
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
         };

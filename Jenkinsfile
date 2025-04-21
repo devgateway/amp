@@ -60,11 +60,14 @@ stage('Build') {
     }
 
     println "Using environment: ${environment}"
+        node('docker') {
+                checkout scm
+        sh "docker system prune -f"
+
+        }
 
     node('ansible') {
         checkout scm
-
-        sh "docker system prune -f"
 
         // Find AMP version
         codeVersion = readMavenPom(file: 'amp/pom.xml').version

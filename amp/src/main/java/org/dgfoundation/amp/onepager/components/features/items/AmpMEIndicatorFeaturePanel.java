@@ -154,6 +154,8 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
         };
+        addActualValue.setOutputMarkupId(true);
+        addActualValue.setOutputMarkupPlaceholderTag(true);
 
         add(addActualValue);
 

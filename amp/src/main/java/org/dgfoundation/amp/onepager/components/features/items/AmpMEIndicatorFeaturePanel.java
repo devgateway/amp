@@ -43,7 +43,7 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
      * @param fmName
      * @throws Exception
      */
-    
+
     public AmpMEIndicatorFeaturePanel(String id, String fmName, final IModel<IndicatorActivity> conn,
                                  IModel<AmpIndicator> indicator, final IModel<Set<AmpIndicatorValue>> values, IModel<AmpActivityLocation> location) throws Exception {
         super(id, fmName, true);
@@ -141,7 +141,7 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, location,"Actual Values", false, 7);
         add(valuesTable);
 
-        AmpAjaxLinkField addActualValue = new AmpAjaxLinkField("addActualValue", "Add Actual Value", "Add Actual Value") {
+        AmpAjaxLinkField addActualValue = new AmpAjaxLinkField("addActualMEValue", "Add Actual Value", "Add Actual Value") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 AmpIndicatorValue value = new AmpIndicatorValue();

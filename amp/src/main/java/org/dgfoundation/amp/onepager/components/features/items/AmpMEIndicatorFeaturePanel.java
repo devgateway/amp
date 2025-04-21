@@ -139,6 +139,8 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         add(indicatorTargetDateLabel);
 
         AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, location,"Actual Values", false, 7);
+        valuesTable.setOutputMarkupId(true);
+        valuesTable.setOutputMarkupPlaceholderTag(true);
         add(valuesTable);
 
         AmpAjaxLinkField addActualValue = new AmpAjaxLinkField("addActualMEValue", "Add Actual Value", "Add Actual Value") {
@@ -154,6 +156,8 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
         };
+        logger.info("Markup" + addActualValue.getMarkupId());
+        logger.info("Id" + addActualValue.getId());
         addActualValue.setOutputMarkupId(true);
         addActualValue.setOutputMarkupPlaceholderTag(true);
 

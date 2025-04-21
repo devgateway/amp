@@ -27,7 +27,7 @@ public class BoundariesService {
 
     protected static Logger logger = Logger.getLogger(BoundariesService.class);
 
-    private static final String BOUNDARY_PATH = getServletContext().getRealPath( "/WEB-INF/gis" + File.separator + "boundaries" + File.separator);
+    private static final String BOUNDARY_PATH =  "WEB-INF/gis" + File.separator + "boundaries" + File.separator;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 

@@ -173,35 +173,6 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             throw new RuntimeException(e);
         }
         add(baseValues);
-//        AmpAjaxLinkField setValue = new AmpAjaxLinkField("setValues", "Set Value", "Set Value") {
-//            @Override
-//            protected void onConfigure() {
-//                super.onConfigure();
-//                this.getButton().add(new AttributeAppender("class", new Model("mon_eval_button"), " "));
-//            }
-//
-//
-//            @Override
-//            protected void onClick(AjaxRequestTarget art) {
-//                Set<AmpIndicatorValue> vals = values.getObject();
-//                vals.clear();
-////
-////                AmpIndicatorValue tmp = (AmpIndicatorValue) actualVal.clone();
-////                tmp.setIndicatorConnection(conn.getObject());
-////                tmp.setIndValId(null); //for hibernate to think it's a new object
-////                vals.add(tmp);
-////
-////                if (!valuesSet.getObject()) {
-////                    target.setEnabled(false);
-////                    valuesSet.setObject(true);
-////                    art.add(target);
-////                }
-//
-//                art.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
-//                art.appendJavaScript(OnePagerUtil.getClickToggle2JS(this.getParent()));
-//            }
-//        };
-//
-//        add(setValue);
+
     }
 }

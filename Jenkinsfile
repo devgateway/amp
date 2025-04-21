@@ -60,11 +60,7 @@ stage('Build') {
     }
 
     println "Using environment: ${environment}"
-        node('docker') {
-                checkout scm
-        sh "docker system prune -f"
 
-        }
 
     node('ansible') {
         checkout scm

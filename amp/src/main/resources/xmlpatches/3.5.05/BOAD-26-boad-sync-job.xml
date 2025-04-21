@@ -8,6 +8,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+				SELECT setval('amp_global_settings_seq', (SELECT MAX(id) FROM amp_global_settings));
 				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable) VALUES (nextval('amp_global_settings_seq'),'BOAD API URL', 'http://localhost/', null, 'URL of the BOAD API', 'boad', null);
 				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable) VALUES (nextval('amp_global_settings_seq'),'BOAD Team', 'Team 1', null, 'Team of the BOAD activities', 'boad', null);
 				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable) VALUES (nextval('amp_global_settings_seq'),'BOAD Admin Email', '-', null, 'Email of the user responsible for the BOAD sync', 'boad', null);

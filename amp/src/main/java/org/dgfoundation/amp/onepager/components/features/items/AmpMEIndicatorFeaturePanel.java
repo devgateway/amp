@@ -143,6 +143,8 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         valuesTable.setOutputMarkupPlaceholderTag(true);
         add(valuesTable);
 
+        logger.info("Table" + valuesTable.getMarkupId());
+        logger.info("Id " + valuesTable.getId());
         AmpAjaxLinkField addActualValue = new AmpAjaxLinkField("addActualMEValue", "Add Actual Value", "Add Actual Value") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -152,12 +154,12 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                 value.setValueDate(new Date(System.currentTimeMillis()));
                 value.setValueType(AmpIndicatorValue.ACTUAL);
                 valuesTable.getEditorList().addItem(value);
-                target.add(valuesTable);
+//                target.add(valuesTable);
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
         };
-        logger.info("Markup" + addActualValue.getMarkupId());
-        logger.info("Id" + addActualValue.getId());
+        logger.info("Button" + addActualValue.getMarkupId());
+        logger.info("Id " + addActualValue.getId());
         addActualValue.setOutputMarkupId(true);
         addActualValue.setOutputMarkupPlaceholderTag(true);
 

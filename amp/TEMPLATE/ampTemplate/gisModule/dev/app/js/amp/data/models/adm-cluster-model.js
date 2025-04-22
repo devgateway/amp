@@ -21,7 +21,6 @@ module.exports = Backbone.Model
       },
 
         modifySync: function (response) {
-          var self = this;
 
             // Check if the response has features
             if (!response || !response.features) {
@@ -35,8 +34,6 @@ module.exports = Backbone.Model
 
                 // Fetch new activity IDs for the given country
                 return this.fetchWocat(country).then(function (responseObject) {
-                    console.log("Country: "+country);
-                    console.log("Response: "+responseObject);
                     var newActivityIds = responseObject.ids;
                     if (newActivityIds===undefined)
                     {
@@ -47,8 +44,6 @@ module.exports = Backbone.Model
                     {
                         data =[]
                     }
-                    console.log("This ", this);
-                    console.log("Self ", self);
                     if (this.get('id') === 'wocat') {
                         feature.properties.wocat = true;
                         feature.properties.wocatActivities = newActivityIds;

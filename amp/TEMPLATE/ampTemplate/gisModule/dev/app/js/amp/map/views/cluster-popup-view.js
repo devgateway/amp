@@ -203,6 +203,7 @@ module.exports = Backbone.View.extend({
 
 
   _generateProjectList: function(popup, cluster) {
+      console.log("Cluster 0: "+cluster)
     var self = this;
     this._currentPage = 0;
 
@@ -243,17 +244,18 @@ module.exports = Backbone.View.extend({
 
   //TODO: should be done in data.adm cluster..then we can cache for if someone closes and reopens
   _loadMoreProjects: function(cluster) {
+      console.log("Cluster : "+cluster);
 	  var self = this;
 	  var startIndex = this._currentPage * this.PAGE_SIZE;
-	  var activityIDs = this.cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
+	  var activityIDs = cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
       var wocatData;
-      if (self.cluster.properties.wocatCountryData)
+      if (cluster.properties.wocatCountryData)
       {
-          wocatData = self.cluster.properties.wocatCountryData.slice(startIndex, startIndex+this.PAGE_SIZE);
+          wocatData = cluster.properties.wocatCountryData.slice(startIndex, startIndex+this.PAGE_SIZE);
       }
 
 	  // hide load more button if all activities loaded.
-      if (self.cluster.properties.wocatCountryData)
+      if (cluster.properties.wocatCountryData)
       {
           if (startIndex + this.PAGE_SIZE >= this.cluster.properties.wocatActivities.length) {
               this.tempDOM.find('.load-more').hide();

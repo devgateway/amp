@@ -203,7 +203,7 @@ module.exports = Backbone.View.extend({
 
 
   _generateProjectList: function(popup, cluster) {
-      console.log("Cluster 0: "+cluster)
+      console.log("Cluster 0: "+JSON.stringify(cluster))
     var self = this;
     this._currentPage = 0;
 
@@ -247,15 +247,16 @@ module.exports = Backbone.View.extend({
       console.log("Cluster : "+cluster);
 	  var self = this;
 	  var startIndex = this._currentPage * this.PAGE_SIZE;
-	  var activityIDs = cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
+      console.log("Wocat activities",self.cluster.properties.wocatCountryData);
+	  var activityIDs = this.cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
       var wocatData;
-      if (cluster.properties.wocatCountryData)
+      if (self.cluster.properties.wocatCountryData)
       {
-          wocatData = cluster.properties.wocatCountryData.slice(startIndex, startIndex+this.PAGE_SIZE);
+          wocatData = self.cluster.properties.wocatCountryData.slice(startIndex, startIndex+this.PAGE_SIZE);
       }
 
 	  // hide load more button if all activities loaded.
-      if (cluster.properties.wocatCountryData)
+      if (self.cluster.properties.wocatCountryData)
       {
           if (startIndex + this.PAGE_SIZE >= this.cluster.properties.wocatActivities.length) {
               this.tempDOM.find('.load-more').hide();
@@ -302,10 +303,20 @@ module.exports = Backbone.View.extend({
 			  activity.set('formattedColumnName2', [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join(''));
 			  return activity;
 		  });
+          if (self.cluster.properties.wocatCountryData && self.cluster.properties.wocatCountryData.length>0)
+          {
+              self.tempDOM.find('.project-list').append(
+                  self.wocatProjectListTemplate({activities: wocatData,wocatUrl: 'https://qcat.wocat.net'})
+              );
+          }else
+          {
+              self.tempDOM.find('.project-list').append(
+                  self.projectListTemplate({activities: activityFormatted})
+              );
+          }
 
-		  self.tempDOM.find('.project-list').append(
-				  self.projectListTemplate({activities: activityFormatted})
-		  );
+
+
 
 	  });
   }

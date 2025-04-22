@@ -627,7 +627,7 @@ public class TeamUtil {
 
             Iterator itr = qry.list().iterator();
             if (itr.hasNext()) {
-                Integer cnt = (Integer) itr.next();
+                Long cnt = (Long) itr.next();
                 logger.info("cnt.intValue = " + cnt);
                 if (cnt > 0) {
                     memExist = true;
@@ -655,7 +655,7 @@ public class TeamUtil {
 
             Iterator itr = qry.list().iterator();
             if(itr.hasNext()) {
-                Integer cnt = (Integer) itr.next();
+                Long cnt = (Long) itr.next();
                 logger.info("cnt.intValue = " + cnt);
                 if(cnt > 0)
                     memExist = true;

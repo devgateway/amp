@@ -230,7 +230,7 @@ public class ActivityService {
                     columnName.equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8)) {
                 Map<String, Object> value = new HashMap<>();
                 AmpTheme theme = ActivityUtil.getAmpProgram(abs(id));
-                if (theme!=null) {
+                if (theme!=null && !Objects.equals(theme.getAmpThemeId(), Long.valueOf(ArConstants.UNDEFINED_KEY))) {
                     value.put("level", theme.getIndlevel());
                     value.put("code", theme.getThemeCode());
                     value.put("name", theme.getName());

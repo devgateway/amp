@@ -1,0 +1,7 @@
+.idea/
+.vscode/
+**/.DS_Store
+node_modules/
+node/
+src/compiled-js/
+.npmrc

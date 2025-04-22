@@ -13,7 +13,7 @@ import java.util.TreeSet;
  * CompositePermission.java
  * This is a permission object that consists of a group of other Permission objects
  * The actions allowed by this Permission object would be the union/intersection of all actions
- * added in this Composite. This is a convenience object that allows user to 
+ * added in this Composite. This is a convenience object that allows user to
  * quickly group permissions and add the group directly to objects instead of
  * each permission separately
  * @author mihai
@@ -21,41 +21,40 @@ import java.util.TreeSet;
  * @since 25.08.2007
  */
 public class CompositePermission extends Permission {
-    
+
     private static final long serialVersionUID = 7116433013946849925L;
     protected Boolean intersection;
     protected Set<Permission> permissions;
 
     public CompositePermission() {
-        permissions=new TreeSet<Permission>();
+        permissions= new TreeSet<>();
         dedicated=false;
     }
-    
+
     public CompositePermission(boolean dedicated) {
         super(dedicated);
         permissions=new TreeSet<Permission>();
     }
-    
+
     /** @see org.digijava.module.gateperm.core.Permission#getAllowedActions()
      */
     @Override
     public Set<String> getAllowedActions(Map scope) {
         TreeSet<String> actions=new TreeSet<String>();
         boolean firstRun=true;
-        Iterator<Permission> i=permissions.iterator();
-        while (i.hasNext()) {
-            Permission element = (Permission) i.next();
+        for (Permission element : permissions) {
             Set<String> allowedActions = element.getAllowedActions(scope);
-            if(intersection==null || !intersection.booleanValue()) {
-            if(allowedActions!=null) 
+            if (intersection == null || !intersection.booleanValue()) {
+                if (allowedActions != null)
                     actions.addAll(allowedActions);
             } else {
-                if(firstRun) {
-                        if(allowedActions!=null) actions.addAll(allowedActions);firstRun=false;
-                    }
-                    else if(allowedActions!=null) actions.retainAll(allowedActions); else actions.clear();
+                if (firstRun) {
+                    if (allowedActions != null) actions.addAll(allowedActions);
+                    firstRun = false;
+                } else if (allowedActions != null) actions.retainAll(allowedActions);
+                else actions.clear();
             }
-            
+
         }
         return actions;
     }

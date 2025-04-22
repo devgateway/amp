@@ -207,34 +207,31 @@ public class LocationService {
         }
 
         try {
-            PersistenceManager.getSession().doWork(new Work() {
-
-                @Override
-                public void execute(Connection connection) throws SQLException {
-                    try(RsInfo rsi = SQLUtils.rawRunQuery(connection, qry.value, null)) {
-                        ResultSet rs = rsi.rs;
-                        ClusteredPoints cp = null;
-                        Long rootLocationId = 0L;
-                        while (rs.next()) {
-                            if (!rootLocationId.equals(rs.getLong("root_location_id"))) {
-                                if (cp != null) {
-                                    l.add(cp);
-                                }
-                                rootLocationId = rs.getLong("root_location_id");
-                                cp = new ClusteredPoints();
-                                cp.setAdmId(rootLocationId);
-                                cp.setAdmin(rs.getString("root_location_description"));
-                                cp.setLat(rs.getString("gs_lat"));
-                                cp.setLon(rs.getString("gs_long"));
+            PersistenceManager.getSession().doWork(connection -> {
+                try(RsInfo rsi = SQLUtils.rawRunQuery(connection, qry.value, null)) {
+                    ResultSet rs = rsi.rs;
+                    ClusteredPoints cp = null;
+                    Long rootLocationId = 0L;
+                    while (rs.next()) {
+                        if (!rootLocationId.equals(rs.getLong("root_location_id"))) {
+                            if (cp != null) {
+                                l.add(cp);
                             }
-                            cp.getActivityids().add(rs.getLong("amp_activity_id"));
+                            rootLocationId = rs.getLong("root_location_id");
+                            cp = new ClusteredPoints();
+                            cp.setAdmId(rootLocationId);
+                            cp.setAdmin(rs.getString("root_location_description"));
+                            cp.setLat(rs.getString("gs_lat"));
+                            cp.setLon(rs.getString("gs_long"));
                         }
-                        if (cp != null) {
-                            l.add(cp);
-                        }
-                        logger.info("Point fetched is "+cp);
+                        cp.getActivityids().add(rs.getLong("amp_activity_id"));
                     }
-                }});
+                    if (cp != null) {
+                        l.add(cp);
+                    }
+                    logger.info("Point fetched is "+cp);
+                }
+            });
         } catch (HibernateException e) {
             throw new RuntimeException(e);
         }

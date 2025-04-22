@@ -36,6 +36,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author aartimon@dginternational.org
  * @since Feb 10, 2011

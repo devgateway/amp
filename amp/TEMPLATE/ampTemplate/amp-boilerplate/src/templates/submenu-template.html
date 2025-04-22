@@ -1,0 +1,117 @@
+<%
+  /* Prepare the A tag at top level menus */
+  	if (!obj.url) {
+  	  obj.url = '#';
+  	  if (!obj.children || obj.children.length === 0) {
+      	obj.className = 'hidden';
+      	obj.dataToggle = 'data-toggle=""';
+      } else {
+      	obj.className = 'dropdown-toggle';
+      	obj.dataToggle = 'data-toggle="dropdown"';
+      }
+    } else {
+      obj.className = '';
+      obj.dataToggle = '';
+    }
+
+    if (obj.tab) {
+      obj.tabTarget = 'target="_blank"';
+    }
+    else {
+      obj.tabTarget = '';
+    }
+    %>
+<%
+/* TODO escape the code in HTML */
+%>
+<a href="<%= url %>" class="<%= className %>" <%= dataToggle %> <%= obj.tabTarget %> >
+  <span class="dropdown-text" title="<%= obj.name.trim() %>"><%= obj.name.trim() %>&nbsp;</span><% if (obj.children && obj.children.length > 0) { %><span class="caret"></span><% } %>
+</a>
+<% if (obj.children && obj.children.length !== 0) { %>
+  <ul class="children dropdown-menu" role="menu">
+  <% _.each(obj.children, function(model) { %>
+
+    <%
+      /* Prepare the A tag at second level menus */
+      if (model.children && model.children.length !== 0) {
+        model.dropdownSubmenu = 'dropdown-submenu';
+       };
+
+       if (!model.tooltip) {
+         model.tooltip = '';
+       };
+       var elementClass = '2nd-level-item';
+       if (model.language) {
+			 elementClass = elementClass+ ' language';
+	   }
+       if (model.popup) {
+       	 elementClass = elementClass + ' popup';
+       }
+       if (model.tab) {
+         model.tabTarget = 'target="_blank"';
+       } else {
+         model.tabTarget = '';
+       }
+       var elementUrl = model.url;
+       if (model.post === true) {
+         elementUrl = 'javascript:switchTranslation ("'+elementUrl+'")';
+
+       }
+       if (!model.url) {
+        elementUrl = 'javascript:;';
+       }
+       /* if it doesn't have children, nor url. then it is the About */
+       if (!model.url && !model.children) {
+       elementClass = elementClass + ' about-amp';
+       }
+    %>
+
+    <li class='dropdown <%= model.dropdownSubmenu %>' >
+    <a href='<%=  elementUrl %>' title="<%= model.tooltip %>" onclick="return canExit()" class="<%= elementClass %>" <%= model.tabTarget %> ><%= model.name %></a>
+
+    <%
+      if (model.children && model.children.length !== 0) {
+     %>
+
+      <ul class="children dropdown-menu scrollable-menu" role="menu">
+      <% _.each(model.children, function(submodel) { %>
+
+        <%
+          /* Prepare the A tag at third level menus */
+          if (!submodel.url) {
+            submodel.url = '#';
+          };
+		  var itemClass = '3rd-level-item';
+		  if (submodel.language) {
+			 itemClass = itemClass+ ' language';
+		   }
+		  if (!submodel.tooltip) {
+            submodel.tooltip = '';
+          };
+
+          if (submodel.tab) {
+            submodel.tabTarget='target="_blank"';
+          } else {
+            submodel.tabTarget = '';
+          };
+        %>
+
+        <li class="menu-item"><a href="<%= submodel.url %>" onclick="return canExit()" class="<%= itemClass %>" <%= submodel.tabTarget %> title="<%= submodel.tooltip %>"><%= submodel.name %></a></li>
+
+      <% }) %>
+      </ul>
+    <% } %>
+
+    </li>
+
+  <% }); %>
+  </ul>
+<% }%>
+<!--
+<li class="menu-item dropdown dropdown-submenu"><a class="dropdown-toggle" data-toggle="dropdown">
+<ul class="children dropdown-menu scrollable-menu" role="menu">
+      <li class="menu-item first-of-type" id="yui-gen4" groupindex="0" index="0">
+  <a class="yuiampmenuitemlabel yuimenuitemlabel" href="/selectTeam.do?id=680" onclick="return canExit()">
+    Academy of Sciences
+  </a>
+</li>--!>

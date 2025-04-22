@@ -68,7 +68,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                 "implementationLevel",
                 CategoryConstants.IMPLEMENTATION_LEVEL_KEY,
                 new AmpCategoryValueByKeyModel(
-                        new PropertyModel<Set<AmpCategoryValue>>(am,
+                        new PropertyModel<>(am,
                                 "categories"),
                         CategoryConstants.IMPLEMENTATION_LEVEL_KEY),
                 CategoryConstants.IMPLEMENTATION_LEVEL_NAME, true, true, null, AmpFMTypes.MODULE);
@@ -80,7 +80,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                 "implementationLocation",
                 CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
                 new AmpCategoryValueByKeyModel(
-                        new PropertyModel<Set<AmpCategoryValue>>(am,
+                        new PropertyModel<>(am,
                                 "categories"),
                         CategoryConstants.IMPLEMENTATION_LOCATION_KEY),
                 CategoryConstants.IMPLEMENTATION_LOCATION_NAME, true, true,
@@ -135,7 +135,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                                 GlobalSettingsConstants.MIXED_IMPLEMENTATION_LOCATION);
                         if ("false".equals(mixedImplementationLocation)) {
                             Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
-                            if (set != null && set.size() > 0) {
+                            if (set != null && !set.isEmpty()) {
                                 if (canDeleteLocation(target, am, null)) {
                                     implementationLevel.getChoiceModel().setObject(
                                             new HashSet<>(Collections.singletonList(previousImplementationLevel)));
@@ -148,8 +148,12 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                                 locationsTable.getSearchLocations().setVisibilityAllowed(true);
                                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
                                 target.add(locationsTable);
-                                getRegionalFundingFeature().getMeFormSection().clearLocations(null);
-                                send(getPage(), Broadcast.BREADTH, new LocationChangedEvent(target));
+                                String defCountry = DynLocationManagerUtil.getDefCountryIso();
+                if (defCountry != null && defCountry.equalsIgnoreCase("zz")) {
+
+                    getRegionalFundingFeature().getMeFormSection().clearLocations(null);
+                    send(getPage(), Broadcast.BREADTH, new LocationChangedEvent(target));
+                }
 
                             }
                         }

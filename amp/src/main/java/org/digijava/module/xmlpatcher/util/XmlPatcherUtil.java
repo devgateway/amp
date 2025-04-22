@@ -5,6 +5,7 @@
  */
 package org.digijava.module.xmlpatcher.util;
 
+import net.sf.saxon.trans.XPathException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
@@ -67,12 +68,12 @@ public final class XmlPatcherUtil {
             throw new RuntimeException(
                     "Patch discovery location is not a directory!");
         String[] files = dir.list();
-        for (int i = 0; i < files.length; i++) {
-            File f = new File(dir, files[i]);
+        for (String file : files) {
+            File f = new File(dir, file);
             // directories ignored in xmlpatch dir
-            if (f.isDirectory()){
+            if (f.isDirectory()) {
                 if (f.getName().compareTo(".svn") != 0)
-                    recordNewPatchesInDir(appPath,f,patchNames, patchesMap);
+                    recordNewPatchesInDir(appPath, f, patchNames, patchesMap);
                 continue;
             }
             if (!FilenameUtils.getExtension(f.getName()).equalsIgnoreCase("xml")) {
@@ -83,24 +84,22 @@ public final class XmlPatcherUtil {
                 AmpXmlPatch patch = patchesMap.get(f.getName());
                 //if no recorded patch is found, then there are two unrecorded patches with same name=>fail
                 //if there is a recorded patch but its path is different than the current file=>fail
-                if(patch==null || !patch.getLocation().equals(computePatchFileLocation(f,appPath))) {
-                    if(patch!=null){
-                        logger.info("old location: "+patch.getLocation());
-                        logger.info("new location: "+computePatchFileLocation(f,appPath));
+                if (patch == null || !patch.getLocation().equals(computePatchFileLocation(f, appPath))) {
+                    if (patch != null) {
+                        logger.info("old location: " + patch.getLocation());
+                        logger.info("new location: " + computePatchFileLocation(f, appPath));
+                    } else {
+                        logger.info("patch is null ");
                     }
-                    else{
-                        logger.info("pacth is null ");
-                    }
-                    logger.error("Patch duplication detected! The name "+f.getName()+" is used by two or more patches." +
+                    logger.error("Patch duplication detected! The name " + f.getName() + " is used by two or more patches." +
                             " Remove duplicates and restart the server.\n You are not allowed to use one patch name twice even if the older patch has been deleted.");
                 }
-            }
-            else {
-                String location=computePatchFileLocation(f, appPath);
+            } else {
+                String location = computePatchFileLocation(f, appPath);
                 AmpXmlPatch patch = new AmpXmlPatch(f.getName(), location);
                 DbUtil.add(patch);
                 patchNames.add(f.getName());
-                logger.info("Found new patch "+patch.getPatchId()+" in "+patch.getLocation());
+                logger.info("Found new patch " + patch.getPatchId() + " in " + patch.getLocation());
             }
         }
     }
@@ -288,6 +287,13 @@ public final class XmlPatcherUtil {
             }
             return loadedPatches.get(p);
         }
+        catch (XPathException e)
+        {
+            logger.error(String.format("error while unmarshalling patch %s: %s", p, e.getMessage()), e);
+            if (log != null) log.appendToLog(e);
+            return null;
+
+        }
         catch (Exception e)
         {
             logger.error(String.format("error while unmarshalling patch %s: %s", p, e.getMessage()), e);
@@ -324,11 +330,11 @@ public final class XmlPatcherUtil {
             AmpXmlPatch lazyPatch = sess.load(AmpXmlPatch.class,
                     p.getPatchId());
             log.setPatch(lazyPatch);
+            DbUtil.saveOrUpdate(log);
             lazyPatch.getLogs().add(log);
             sess.saveOrUpdate(lazyPatch);
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            logger.error("Error updating log into patch" +e.getMessage(), e);
         }
     }
 
@@ -381,13 +387,12 @@ public final class XmlPatcherUtil {
      *
      * @see XmlPatcherConstants.PatchStates
      * @return the Hibernate query result
-     * @throws DgException
      * @throws HibernateException
-     * @throws SQLException
      */
     public static List<AmpXmlPatch> getAllDiscoveredUnclosedPatches()
-            throws DgException, HibernateException, SQLException {
+            throws HibernateException {
         Session session = PersistenceManager.getRequestDBSession();
+//        session.clear();
         Query query = session
                 .createQuery("from " + AmpXmlPatch.class.getName()
                         + " p WHERE p.state NOT IN ("
@@ -491,21 +496,28 @@ public final class XmlPatcherUtil {
      */
     public static String getFileMD5(File f) throws NoSuchAlgorithmException,
             IOException {
-        MessageDigest algorithm = MessageDigest.getInstance("MD5");
-        algorithm.reset();
+        try {
+            MessageDigest algorithm = MessageDigest.getInstance("MD5");
+            algorithm.reset();
 
-        BufferedInputStream bis = new BufferedInputStream(
-                new FileInputStream(f));
+            BufferedInputStream bis = new BufferedInputStream(
+                    new FileInputStream(f));
 
-        byte[] buffer = new byte[8192];
-        int read = 0;
-        while ((read = bis.read(buffer)) > 0) {
-            algorithm.update(buffer, 0, read);
+            byte[] buffer = new byte[8192];
+            int read = 0;
+            while ((read = bis.read(buffer)) > 0) {
+                algorithm.update(buffer, 0, read);
+            }
+            bis.close();
+            byte[] md5sum = algorithm.digest();
+            BigInteger bigInt = new BigInteger(1, md5sum);
+            String md5 = bigInt.toString(16);
+            return md5;
+        }catch (Exception e)
+        {
+            logger.error(e.getMessage(),e);
+            return null;
         }
-        bis.close();
-        byte[] md5sum = algorithm.digest();
-        BigInteger bigInt = new BigInteger(1, md5sum);
-        String md5 = bigInt.toString(16);
-        return md5;
+
     }
 }

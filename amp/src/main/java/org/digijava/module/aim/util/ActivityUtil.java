@@ -35,6 +35,7 @@ import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
@@ -486,7 +487,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     }
 
   public static AmpActivityVersion loadAmpActivity(Long id){
-     return PersistenceManager.getSession().load(AmpActivityVersion.class, id);
+     return (AmpActivityVersion) PersistenceManager.getSession().load(AmpActivityVersion.class, id);
   }
 
   public static List<AmpActivitySector> getAmpActivitySectors(Long actId) {
@@ -1636,37 +1637,76 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
     public static void deleteAmpActivityWithVersions(Long ampActId) throws Exception {
         Session session = PersistenceManager.getSession();
-        AmpActivityGroup ampActivityGroup = getActivityGroups(session, ampActId);
-        Set<AmpActivityVersion> activityversions = ampActivityGroup.getActivities();
-        if (activityversions != null && !activityversions.isEmpty()) {
-            session.delete(ampActivityGroup);
-//            for (AmpActivityVersion ampActivityVersion : activityversions) {
-//                deleteFullActivityContent(ampActivityVersion, session);
-//                session.flush();
-//                deleteActivity(session,ampActivityVersion);
-////                deleteActivity(session,ampActivityVersion);
-//            }
-        } else {
-            AmpActivityVersion ampAct = session.load(AmpActivityVersion.class, ampActId);
-            deleteFullActivityContent(ampAct, session);
-            session.flush();
-            session.delete(ampAct);
-            deleteActivity(session,ampAct);
 
-//            deleteActivity(session,ampAct);
+        try {
+            AmpActivityGroup ampActivityGroup = getActivityGroups(session, ampActId);
+            Set<AmpActivityVersion> activityversions = ampActivityGroup.getActivities();
+
+            if (activityversions != null && activityversions.size() > 0) {
+                for (AmpActivityVersion ampActivityVersion : activityversions) {
+                    deleteFullActivityContent(ampActivityVersion, session);
+                    // Remove associations with AmpCategoryValue
+                    ampActivityVersion.getCategories().clear();
+                    Set<AmpActivitySector> sectors = ampActivityVersion.getSectors();// query to fetch related sectors by amp_activity_id
+                    for (AmpActivitySector sector : sectors) {
+                        session.delete(sector);
+                    }
+                    ampActivityVersion.getSectors().clear();
+                    Set<AmpActivityLocation> locations = ampActivityVersion.getLocations();// query to fetch related sectors by amp_activity_id
+                    for (AmpActivityLocation location : locations) {
+                        session.delete(location);
+                    }
+                    ampActivityVersion.getLocations().clear();
+                    ampActivityVersion.getActPrograms().clear();
+                    ampActivityVersion.getOrgrole().clear();
+                    ampActivityVersion.getIndicators().clear();
+                    // Delete duplicate fields if any separately
+                    deleteDuplicateContent(ampActivityVersion, session);
+
+                    session.delete(ampActivityVersion);
+                }
+            } else {
+                AmpActivityVersion ampAct = session.load(AmpActivityVersion.class, ampActId);
+                deleteFullActivityContent(ampAct, session);
+                // Remove associations with AmpCategoryValue
+                ampAct.getCategories().clear();
+
+                session.delete(ampAct);
+            }
+
+            session.delete(ampActivityGroup);
+            session.getTransaction().commit();
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
         }
-        session.delete(ampActivityGroup);
     }
 
-    private static void deleteActivity(Session session, AmpActivityVersion ampAct)
-    {
-        logger.info("Deleting Real ... Activity # " + ampAct.getAmpActivityId());
-        Connection con = ((SessionImplementor)session).connection();
-        //   delete surveys
-//        String deleteActivityGPISurvey = "DELETE FROM amp_gpi_survey WHERE amp_activity_id = ?";
-//        SQLUtils.executePreparedQuery(con, deleteActivityGPISurvey,ampAct.getAmpActivityId() );
-        String deletActivity = "DELETE FROM amp_activity_version WHERE amp_activity_id = ?";
-        SQLUtils.executePreparedQuery(con, deletActivity,ampAct.getAmpActivityId(),"amp_activity_version" );
+    public static void deleteDuplicateContent(AmpActivityVersion ampActivityVersion, Session session){
+        List<AmpActivityLocation> existingActivityLocation = getActivityLocations(ampActivityVersion.getAmpActivityId());
+
+        String deleteActivityLocation = "DELETE FROM amp_activity_location" +
+                " WHERE amp_activity_id = " + ampActivityVersion.getAmpActivityId();
+        session.doWork(connection -> {
+            SQLUtils.executeQuery(connection, deleteActivityLocation);
+        });
+
+        String deleteActivitySector = "DELETE FROM amp_activity_sector" +
+                " WHERE amp_activity_id = " + ampActivityVersion.getAmpActivityId();
+        session.doWork(connection -> {
+            SQLUtils.executeQuery(connection, deleteActivitySector);
+        });
+
+        String deleteActivityProgram = "DELETE FROM amp_activity_program" +
+                " WHERE amp_activity_id = " + ampActivityVersion.getAmpActivityId();
+        session.doWork(connection -> {
+            SQLUtils.executeQuery(connection, deleteActivityProgram);
+        });
+
+        String deleteActivityOrgRole = "DELETE FROM amp_org_role" +
+                " WHERE activity = " + ampActivityVersion.getAmpActivityId();
+        session.doWork(connection -> {
+            SQLUtils.executeQuery(connection, deleteActivityOrgRole);
+        });
     }
 
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
@@ -1674,7 +1714,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         Long ampActId = ampAct.getAmpActivityId();
         //This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
         ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
-    }
+        }
 
     public static void  deleteAllActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
         ActivityUtil.deleteActivityContent(ampAct,session);

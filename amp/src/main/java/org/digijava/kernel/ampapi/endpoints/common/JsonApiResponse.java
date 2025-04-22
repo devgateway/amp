@@ -21,7 +21,7 @@ import java.util.Map;
  * @author Nadejda Mandrescu
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@ApiModel(description = "Reports any errors and warnings found, with posible other extra details like original input")
+@ApiModel(description = "Reports any errors and warnings found, with possible other extra details like original input")
 public class JsonApiResponse<T> extends ApiErrorResponse {
 
     @JsonProperty(EPConstants.WARNINGS)

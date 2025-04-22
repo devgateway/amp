@@ -59,6 +59,15 @@ stage('Build') {
         milestone()
     }
 
+     node('docker') {
+            checkout scm
+
+            sh "docker system prune -f"
+            }
+
+
+
+
     println "Using environment: ${environment}"
 
 

@@ -3043,8 +3043,7 @@ public class DbUtil {
         return image;
     }
 
-    public static void saveOrUpdate(List<?> list) throws Exception {
-        for (Object obj : list)
+    public static void saveOrUpdate(Object obj) throws Exception {
             saveOrUpdateObject(obj);
     }
 

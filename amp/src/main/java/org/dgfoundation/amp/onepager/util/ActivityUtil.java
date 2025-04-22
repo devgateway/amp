@@ -1290,7 +1290,7 @@ public class ActivityUtil {
         if (oldActivityId != null) {
             if (checkForContactsRemoval || !ActivityVersionUtil.isVersioningEnabled()) {
                 //List<AmpActivityContact> activityDbContacts=ContactInfoUtil.getActivityContacts(oldActivityId);
-                List<Long> activityDbContactsIds = ContactInfoUtil.getActivityContactIds(oldActivityId);
+                List<Long> activityDbContactsIds = ContactInfoUtil.getActivityContactIds(oldActivityId, session);
                 if (activityDbContactsIds != null && !activityDbContactsIds.isEmpty()) {
                     for (Long actContactId : activityDbContactsIds) {
                         int count = 0;

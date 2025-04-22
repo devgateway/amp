@@ -1063,15 +1063,7 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setActivityDocuments(Set<AmpActivityDocument> activityDocuments) {
-            if (activityDocuments instanceof PersistentSet) {
-                this.activityDocuments = activityDocuments;
-            } else {
-                if(this.activityDocuments==null) {
-                    this.activityDocuments = new HashSet<>(activityDocuments);
-                }
-                this.activityDocuments.clear();
-                this.activityDocuments.addAll(activityDocuments);
-            }
+            this.activityDocuments = activityDocuments;
         }
 
         /**

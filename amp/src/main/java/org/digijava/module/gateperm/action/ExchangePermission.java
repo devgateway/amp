@@ -96,24 +96,22 @@ public class ExchangePermission extends MultiAction {
             Permissions xmlPermissions = (Permissions) m.unmarshal(inputStream);
             List gatePerm = xmlPermissions.getGatePerm();
             Iterator i=gatePerm.iterator();
+            Session session=PersistenceManager.getRequestDBSession();
             while (i.hasNext()) {
-                    Session session=PersistenceManager.getRequestDBSession();
-//beginTransaction();
                 GatePermType gp = (GatePermType) i.next();
                 GatePermission xmlToDbGatePermission = xmlToDbGatePermission(gp, added, updated);
                 session.saveOrUpdate(xmlToDbGatePermission);
-                //transaction.commit();
+                session.flush();
             }
 
             List compPerm = xmlPermissions.getCompositePerm();
             i=compPerm.iterator();
+            session=PersistenceManager.getRequestDBSession();
             while (i.hasNext()) {
-                    Session session=PersistenceManager.getRequestDBSession();
-//beginTransaction();
                     CompositePermType gp = (CompositePermType) i.next();
                 CompositePermission xmlToDbCompositePermission = xmlToDbCompositePermission(gp, added, updated);
                 session.saveOrUpdate(xmlToDbCompositePermission);
-                //transaction.commit();
+                session.flush();
             }
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
@@ -141,10 +139,11 @@ public class ExchangePermission extends MultiAction {
     private CompositePermission xmlToDbCompositePermission(CompositePermType elem, List<Permission> added, List<Permission> updated) throws DgException, HibernateException, SQLException {
 //      Session requestDBSession = PersistenceManager.getRequestDBSession();
         Permission dbp=PermissionUtil.findPermissionByName(elem.getName());
-        if((dbp instanceof GatePermission)) {
+        if(dbp!=null) {
+            if(dbp instanceof GatePermission) {
                 Session session = PersistenceManager.getRequestDBSession();
                 session.delete(dbp);dbp=null;
-
+            }
         }
 
         if(dbp==null) {dbp=new CompositePermission();added.add(dbp);} else updated.add(dbp);
@@ -158,12 +157,18 @@ public class ExchangePermission extends MultiAction {
         while (iterator.hasNext()) {
             GatePermType xmlGp = (GatePermType) iterator.next();
             GatePermission xmlToDbGatePermission = xmlToDbGatePermission(xmlGp, added, updated);
+//beginTransaction();
+            //requestDBSession.saveOrUpdate(xmlToDbGatePermission);
+            ////transaction.commit();
             dbCp.getPermissions().add(xmlToDbGatePermission);
         }
         iterator = elem.getCompositePerm().iterator();
         while (iterator.hasNext()) {
             CompositePermType xmlGp = (CompositePermType) iterator.next();
             CompositePermission xmlToDbCompositePermission = xmlToDbCompositePermission(xmlGp, added, updated);
+//beginTransaction();
+//          requestDBSession.saveOrUpdate(xmlToDbCompositePermission);
+//          //transaction.commit();
             dbCp.getPermissions().add(xmlToDbCompositePermission);
         }
         if(dbCp.getPermissibleObjects()==null) dbCp.setPermissibleObjects(new HashSet());
@@ -177,10 +182,12 @@ public class ExchangePermission extends MultiAction {
     private GatePermission xmlToDbGatePermission(GatePermType xmlGp,List<Permission> added,List<Permission> updated) throws DgException, HibernateException, SQLException {
         //try to fetch an existing gate permission or create a fresh one
         Permission dbp=PermissionUtil.findPermissionByName(xmlGp.getName());
-        if(dbp!=null && (dbp instanceof CompositePermission)) {
+        if(dbp!=null) {
+
+            if(dbp instanceof CompositePermission) {
                 Session session = PersistenceManager.getRequestDBSession();
                 session.delete(dbp);dbp=null;
-
+                }
         }
 
         if(dbp==null) {dbp=new GatePermission();added.add(dbp);} else updated.add(dbp);

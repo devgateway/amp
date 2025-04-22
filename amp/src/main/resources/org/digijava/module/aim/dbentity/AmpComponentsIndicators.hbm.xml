@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpComponentsIndicators"
+		table="AMP_COMPONENTS_INDICATORS">
+		<cache usage="read-write" />
+		<id name="ampCompIndId" column="amp_component_indicator_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_COMPONENTS_INDICATORS_seq</param>
+			</generator>
+		</id>
+
+		<property name="code" column="code" type="java.lang.String" />
+		<property name="name" column="name" type="java.lang.String" />
+		<property name="description" column="description" type="text" />
+
+	</class>
+</hibernate-mapping>

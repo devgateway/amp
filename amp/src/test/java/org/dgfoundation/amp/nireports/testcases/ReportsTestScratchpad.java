@@ -1,7 +1,5 @@
 package org.dgfoundation.amp.nireports.testcases;
 
-import java.util.function.Function;
-
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
@@ -9,6 +7,8 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.AmpPrecisionSetting;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
+
+import java.util.function.Function;
 
 public class ReportsTestScratchpad implements SchemaSpecificScratchpad {
 

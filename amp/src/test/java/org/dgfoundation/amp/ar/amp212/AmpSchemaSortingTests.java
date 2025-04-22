@@ -1,32 +1,26 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.newreports.ReportAreaForTests;
-import org.dgfoundation.amp.newreports.AreaOwner;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Tag;
+
+import java.util.Arrays;
+import java.util.List;
+import org.junit.jupiter.api.BeforeAll;
 
 /**
- * 
+ *
  * testcases for the fetching states of AMP + the AMP schema
- * 
+ *
  * @author Constantin Dolghier
  *
  */
-@Category(DatabaseTests.class)
+@Tag("databasetests")
 public class AmpSchemaSortingTests extends SortingSanityChecks {
 
     @Override
@@ -34,7 +28,7 @@ public class AmpSchemaSortingTests extends SortingSanityChecks {
         return getDbExecutor(activityNames);
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         StandaloneAMPInitializer.initialize();
     }
@@ -94,17 +88,17 @@ public class AmpSchemaSortingTests extends SortingSanityChecks {
                                 new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Proposed Project Amount", "150,999", "Donor Agency", "Finland", "Totals-Actual Commitments", "50,000"),
                                 new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Amount", "1,000,000", "Donor Agency", "Finland"),
                                 new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Amount", "3,399,510,47", "Donor Agency", "Ministry of Economy")      ));
-        
-        ReportSpecificationImpl spec = buildSpecification("sort by ppc", 
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.DONOR_AGENCY), 
+
+        ReportSpecificationImpl spec = buildSpecification("sort by ppc",
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.DONOR_AGENCY),
                 Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                null, 
+                null,
                 GroupingCriteria.GROUPING_TOTALS_ONLY);
-        
+
         spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.PROPOSED_PROJECT_AMOUNT), true));
         runNiTestCase(spec, "en", acts, cor);
     }
-    
+
     @Test
     public void testSortingByDirectedMtef() {
         NiReportModel cor = new NiReportModel("sort by directed MTEF")
@@ -162,16 +156,16 @@ public class AmpSchemaSortingTests extends SortingSanityChecks {
                                 new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Donor Agency", "Finland, Norway, USAID", "Totals-Actual Disbursements", "80,000"),
                                 new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Donor Agency", "Finland, Ministry of Finance, Norway", "Totals-Actual Commitments", "97,562,98")      ));
 
-        ReportSpecificationImpl spec = buildSpecification("sort by directed MTEF", 
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, "Real MTEF 2011", ColumnConstants.DONOR_AGENCY), 
+        ReportSpecificationImpl spec = buildSpecification("sort by directed MTEF",
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, "Real MTEF 2011", ColumnConstants.DONOR_AGENCY),
                 Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                null, 
+                null,
                 GroupingCriteria.GROUPING_TOTALS_ONLY);
-        
+
         spec.addSorter(new SortingInfo(Arrays.asList("Real MTEF 2011", "EXEC-BENF"), SortingInfo.ROOT_PATH_NONE, false));
         runNiTestCase(spec, "en", acts, cor);
     }
-    
+
     public void testSortingByFlowTotal() {
         NiReportModel cor = new NiReportModel("sort by Real Disb Flow")
                 .withHeaders(Arrays.asList(
@@ -227,17 +221,17 @@ public class AmpSchemaSortingTests extends SortingSanityChecks {
                                 new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Donor Agency", "Ministry of Finance, UNDP", "Totals-Actual Disbursements", "90,000"),
                                 new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Donor Agency", "Finland, Norway, USAID", "Totals-Actual Disbursements", "80,000"),
                                 new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Donor Agency", "Finland, Ministry of Finance, Norway")      ));
-        
-        ReportSpecificationImpl spec = buildSpecification("sort by Real Disb Flow", 
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY), 
+
+        ReportSpecificationImpl spec = buildSpecification("sort by Real Disb Flow",
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY),
             Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.REAL_DISBURSEMENTS),
-            null, 
+            null,
             GroupingCriteria.GROUPING_TOTALS_ONLY);
-    
+
         spec.addSorter(new SortingInfo(Arrays.asList(MeasureConstants.REAL_DISBURSEMENTS, "DN-IMPL"), SortingInfo.ROOT_PATH_TOTALS, false));
         runNiTestCase(spec, "en", acts, cor);
     }
-    
+
     @Test
     public void testSortingStoredReportMeasure() {
         NiReportModel cor = new NiReportModel("AMP-22484-by-measure")
@@ -308,10 +302,10 @@ public class AmpSchemaSortingTests extends SortingSanityChecks {
                         new ReportAreaForTests(new AreaOwner("Administrative Level 2", "Apareni", 9113)).withContents("Project Title", "", "Real MTEF 2011-EXEC-BENF", "0", "Real MTEF 2011-IMPL-EXEC", "0", "Primary Sector", "", "Funding-2006-Actual Commitments", "53 262,32", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2010-Real Disbursements-DN-IMPL", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2013-Real Disbursements-DN-EXEC", "0", "Funding-2013-Real Disbursements-EXEC-IMPL", "0", "Funding-2013-Real Disbursements-IMPL-BENF", "0", "Funding-2013-Real Disbursements-IMPL-EXEC", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "27 500", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "53 262,32", "Totals-Actual Disbursements", "27 500", "Totals-Real Disbursements-DN-EXEC", "0", "Totals-Real Disbursements-DN-IMPL", "0", "Totals-Real Disbursements-EXEC-IMPL", "0", "Totals-Real Disbursements-IMPL-BENF", "0", "Totals-Real Disbursements-IMPL-EXEC", "0", "Totals-Real MTEF-EXEC-BENF", "0", "Totals-Real MTEF-IMPL-EXEC", "0", "Administrative Level 2", "Apareni")
                         .withChildren(
                           new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION, 120 - HEALTH", "Funding-2006-Actual Commitments", "53 262,32", "Funding-2014-Actual Disbursements", "27 500", "Totals-Actual Commitments", "53 262,32", "Totals-Actual Disbursements", "27 500"))));
-        
+
         runNiTestCase(spec("AMP-22484-by-measure"), "en", acts, cor);
     }
-    
+
     @Test
     public void testSortingStoredReportMeasureFlow() {
         NiReportModel cor = new NiReportModel("AMP-22484-by-measure-flow")
@@ -382,7 +376,7 @@ public class AmpSchemaSortingTests extends SortingSanityChecks {
                         new ReportAreaForTests(new AreaOwner("Administrative Level 2", "Apareni", 9113)).withContents("Project Title", "", "Real MTEF 2011-EXEC-BENF", "0", "Real MTEF 2011-IMPL-EXEC", "0", "Primary Sector", "", "Funding-2006-Actual Commitments", "53 262,32", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2010-Real Disbursements-DN-IMPL", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2013-Real Disbursements-DN-EXEC", "0", "Funding-2013-Real Disbursements-EXEC-IMPL", "0", "Funding-2013-Real Disbursements-IMPL-BENF", "0", "Funding-2013-Real Disbursements-IMPL-EXEC", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "27 500", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "53 262,32", "Totals-Actual Disbursements", "27 500", "Totals-Real Disbursements-DN-EXEC", "0", "Totals-Real Disbursements-DN-IMPL", "0", "Totals-Real Disbursements-EXEC-IMPL", "0", "Totals-Real Disbursements-IMPL-BENF", "0", "Totals-Real Disbursements-IMPL-EXEC", "0", "Totals-Real MTEF-EXEC-BENF", "0", "Totals-Real MTEF-IMPL-EXEC", "0", "Administrative Level 2", "Apareni")
                         .withChildren(
                           new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION, 120 - HEALTH", "Funding-2006-Actual Commitments", "53 262,32", "Funding-2014-Actual Disbursements", "27 500", "Totals-Actual Commitments", "53 262,32", "Totals-Actual Disbursements", "27 500"))));
-        
+
         runNiTestCase(spec("AMP-22484-by-measure-flow"), "en", acts, cor);
     }
 
@@ -460,7 +454,7 @@ public class AmpSchemaSortingTests extends SortingSanityChecks {
         runNiTestCase(spec("AMP-22484-by-project-title"), "en", acts, cor);
     }
 
-    
+
     @Test
     public void testSortingStoredReportTotalMeasure() {
         NiReportModel cor = new NiReportModel("AMP-22484-by-total-measure")
@@ -531,11 +525,11 @@ public class AmpSchemaSortingTests extends SortingSanityChecks {
                         new ReportAreaForTests(new AreaOwner("Administrative Level 2", "Bulboaca", 9108)).withContents("Project Title", "", "Real MTEF 2011-EXEC-BENF", "0", "Real MTEF 2011-IMPL-EXEC", "0", "Primary Sector", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2010-Real Disbursements-DN-IMPL", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "285 000", "Funding-2013-Actual Disbursements", "0", "Funding-2013-Real Disbursements-DN-EXEC", "0", "Funding-2013-Real Disbursements-EXEC-IMPL", "0", "Funding-2013-Real Disbursements-IMPL-BENF", "0", "Funding-2013-Real Disbursements-IMPL-EXEC", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "285 000", "Totals-Actual Disbursements", "0", "Totals-Real Disbursements-DN-EXEC", "0", "Totals-Real Disbursements-DN-IMPL", "0", "Totals-Real Disbursements-EXEC-IMPL", "0", "Totals-Real Disbursements-IMPL-BENF", "0", "Totals-Real Disbursements-IMPL-EXEC", "0", "Totals-Real MTEF-EXEC-BENF", "0", "Totals-Real MTEF-IMPL-EXEC", "0", "Administrative Level 2", "Bulboaca")
                         .withChildren(
                           new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Primary Sector", "110 - EDUCATION", "Funding-2013-Actual Commitments", "285 000", "Totals-Actual Commitments", "285 000"))));
-        
+
         runNiTestCase(spec("AMP-22484-by-total-measure"), "en", acts, cor);
     }
 
-    
+
     @Test
     public void testSortingStoredReportTotalMeasureFlow() {
         NiReportModel cor = new NiReportModel("AMP-22484-by-total-measure-flow")

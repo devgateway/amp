@@ -4,12 +4,11 @@ import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
 import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
 import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
-import org.dgfoundation.amp.testutils.*;
+import org.dgfoundation.amp.testutils.ReportsTestCase;
+
+import org.junit.jupiter.api.Test;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;
-
-import org.junit.Ignore;
-import org.junit.Test;
 
 /**
  * testcase for Directed Disbursements (AMP-15337)
@@ -23,7 +22,7 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
      * a flat report containing RealDisbursements of a single activity
      */
     @Test
-    @Ignore
+    
     public void testFlatReport()
     {
         // ========================= one more report ===============================
@@ -223,7 +222,7 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
      * same report as {@link #testFlatReport()}, but with a hierarchy by Executing Agency
      */
     @Test
-    @Ignore
+    
     public void testByExecuting()
     {
         /// ========================= one more report ===============================
@@ -263,7 +262,7 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
     }
 
     @Test
-    @Ignore
+    
     public void testActualDisbursementsNotDoubleCounted()
     {
         GroupReportModel by_exec_ddr_correct = GroupReportModel.withGroupReports("AMP-15988-actual-disbursements-doublecounting-real-disbursements",
@@ -312,7 +311,7 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
      * "Donor Agency" column for an activity with multiple donors and intermediary donors
      */
     @Test
-    @Ignore
+    
     public void testDonorAgencyFlat()
     {
         // ========================= one more report ===============================
@@ -334,7 +333,7 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
     }
 
     @Test
-    @Ignore
+    
     public void testDonorAgencyHier()
     {
         // ========================= one more report ===============================

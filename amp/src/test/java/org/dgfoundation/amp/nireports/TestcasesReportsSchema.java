@@ -2,6 +2,7 @@ package org.dgfoundation.amp.nireports;
 
 import org.dgfoundation.amp.newreports.IdsGeneratorSource;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
+
 import java.util.Set;
 
 public class TestcasesReportsSchema extends AmpReportsSchema {

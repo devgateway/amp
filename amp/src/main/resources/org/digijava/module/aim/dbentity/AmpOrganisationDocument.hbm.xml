@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpOrganisationDocument"
+		table="AMP_ORGANISATION_DOCUMENT">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ORGANISATION_DOCUMENT_seq</param>
+			</generator>
+		</id>
+
+		<property name="uuid" column="uuid" type="java.lang.String" index="value" />
+		<property name="selectedVersionUUID" column="selected_version_uuid" type="java.lang.String"
+			index="value" />
+		<many-to-one name="ampOrganisation" column="amp_org_id"
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
+
+	</class>
+</hibernate-mapping>

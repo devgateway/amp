@@ -1,15 +1,15 @@
 package org.digijava.module.aim.validator;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import javax.validation.ConstraintValidator;
-
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
+
+import javax.validation.ConstraintValidator;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Nadejda Mandrescu
@@ -30,7 +30,7 @@ public abstract class AbstractActivityValidatorTest<T extends ConstraintValidato
     }
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
         ampTeamMember = mock(AmpTeamMember.class);

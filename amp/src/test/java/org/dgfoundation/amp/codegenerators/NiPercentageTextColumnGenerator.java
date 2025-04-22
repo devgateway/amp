@@ -1,13 +1,11 @@
 package org.dgfoundation.amp.codegenerators;
 
+import org.dgfoundation.amp.nireports.PercentageTextCell;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.nireports.PercentageTextCell;
-import org.digijava.kernel.persistence.PersistenceManager;
 
 
 /**

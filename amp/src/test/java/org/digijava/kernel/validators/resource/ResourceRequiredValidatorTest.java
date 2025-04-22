@@ -1,18 +1,8 @@
 package org.digijava.kernel.validators.resource;
 
-import static org.digijava.kernel.validators.ValidatorUtil.filter;
-import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.assertThat;
-
-import java.util.Set;
-
 import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
-import org.digijava.kernel.ampapi.endpoints.resource.ResourceErrors;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.validation.ConstraintViolation;
@@ -20,8 +10,16 @@ import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.kernel.validators.activity.ValidatorMatchers;
 import org.hamcrest.Matcher;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import java.util.Set;
+
+import static org.digijava.kernel.validators.ValidatorUtil.filter;
+import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Octavian Ciubotaru
@@ -30,7 +28,7 @@ public class ResourceRequiredValidatorTest {
 
     private static APIField resourceField;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         resourceField = ValidatorUtil.getMetaData(AmpResource.class);
@@ -42,7 +40,7 @@ public class ResourceRequiredValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(resource);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -52,7 +50,7 @@ public class ResourceRequiredValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(resource);
 
-        assertThat(violations, contains(constraint("web_link")));
+        MatcherAssert.assertThat(violations, contains(constraint("web_link")));
     }
 
     @Test
@@ -63,7 +61,7 @@ public class ResourceRequiredValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(resource);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -73,7 +71,7 @@ public class ResourceRequiredValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(resource);
 
-        assertThat(violations, contains(constraint("file_name")));
+        MatcherAssert.assertThat(violations, contains(constraint("file_name")));
     }
 
     @Test
@@ -84,7 +82,7 @@ public class ResourceRequiredValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(resource);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     private Matcher<ConstraintViolation> constraint(String path) {

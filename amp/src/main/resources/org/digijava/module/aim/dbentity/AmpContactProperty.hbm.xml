@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpContactProperty" table="AMP_CONTACT_PROPERTIES" discriminator-value="null">
+		<cache usage="read-write" />
+	  	<id name="id" column="property_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_CONTACT_PROPERTIES_seq</param>
+			</generator>
+		</id>
+		<discriminator column="name" />
+		
+		<property name="name" column="name" type="java.lang.String" insert="false" update="false" />
+		<property name="value" column="value" type="java.lang.String" />
+		<many-to-one name="contact" column="contact_id" class="org.digijava.module.aim.dbentity.AmpContact" cascade="none" lazy="false"/>
+
+		<subclass name="org.digijava.module.aim.dbentity.AmpContactEmailProperty" discriminator-value="contact email" />
+
+		<subclass name="org.digijava.module.aim.dbentity.AmpContactPhoneProperty" discriminator-value="contact phone">
+			<property name="extensionValue" column="extension_value" type="java.lang.String" />
+			<many-to-one name="type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+		</subclass>
+
+		<subclass name="org.digijava.module.aim.dbentity.AmpContactFaxProperty" discriminator-value="contact fax" />
+
+	</class>
+</hibernate-mapping>

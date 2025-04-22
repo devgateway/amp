@@ -1,12 +1,12 @@
 package org.digijava.kernel.persistence;
 
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**
  * Non-persistent implementation of {@code InMemoryManager} which is backed by an in-memory map.

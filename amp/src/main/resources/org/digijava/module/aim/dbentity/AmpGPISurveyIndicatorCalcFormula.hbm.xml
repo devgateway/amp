@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpGPISurveyIndicatorCalcFormula"
+		table="AMP_GPI_SURVEY_CALC_FORMULA">
+		<cache usage="read-write" />
+		<id name="id" column="formula_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_GPI_SURVEY_CALC_FORMULA_seq</param>
+			</generator>
+		</id>
+
+		<property name="calcFormula" column="formula_text" type="java.lang.String" />
+		<property name="columnIndex" column="column_index" type="java.lang.Long" />
+		<property name="constantName" column="constant_name" type="java.lang.String" />
+		<property name="baseLineValue" column="base_line_value" type="java.lang.String" />
+		<property name="targetValue" column="target_value" type="java.lang.String" />
+		<property name="enabled" column="formula_status" type="java.lang.Boolean" />
+		<many-to-one name="parentIndicator" column="amp_indicator_id"
+			class="org.digijava.module.aim.dbentity.AmpGPISurveyIndicator" cascade="save-update"
+			not-null="true" />
+	</class>
+</hibernate-mapping>

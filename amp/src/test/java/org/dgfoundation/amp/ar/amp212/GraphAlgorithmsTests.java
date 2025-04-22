@@ -1,27 +1,25 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Collection;
-import java.util.function.Function;
-
 import org.dgfoundation.amp.algo.Graph;
 import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import java.util.*;
+import java.util.function.Function;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**
- * 
+ *
  * testcases for graph algorithms
  * @author Constantin Dolghier
  *
  */
 public class GraphAlgorithmsTests extends AmpTestCase {
-    
+
     public final static Function<String, Collection<String>> NO_DEPENDENCIES = new MapDrivenDepenciesSource(null);
-    
+
     @Test
     public void testToposortNoDependencies() {
         Graph<String> graph = new Graph<String>(Arrays.asList("one", "two", "three", "four"), NO_DEPENDENCIES);
@@ -34,7 +32,7 @@ public class GraphAlgorithmsTests extends AmpTestCase {
         assertEquals("[]", graph.sortTopologically().toString());
     }
 
-    
+
     @Test
     public void testToposortLongChain() {
         Graph<String> graph = new Graph<String>(Arrays.asList("one"), new MapDrivenDepenciesSource(
@@ -57,7 +55,7 @@ public class GraphAlgorithmsTests extends AmpTestCase {
         shouldFail(() -> {graph.sortTopologically().toString();}, new RuntimeException("cycle detected, the notoutput data is: [node one, id = 1][node two, id = 3]"));
     }
 
-    
+
     @Test
     public void testToposortDependsOnItself() {
         Graph<String> graph = new Graph<String>(Arrays.asList("one", "two", "three"), new MapDrivenDepenciesSource(
@@ -73,7 +71,7 @@ public class GraphAlgorithmsTests extends AmpTestCase {
         public MapDrivenDepenciesSource(Map<String, Collection<String>> src) {
             this.src = src;
         }
-        
+
         @Override
         public Collection<String> apply(String input) {
             if (src == null || !src.containsKey(input))

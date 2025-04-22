@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.nireports.testcases.drc;
 
-import java.util.List;
-import java.util.Map;
-
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.testcases.generic.AbstractFundingColumn;
+
+import java.util.List;
+import java.util.Map;
 
 
 public class DRCFundingCells extends AbstractFundingColumn {

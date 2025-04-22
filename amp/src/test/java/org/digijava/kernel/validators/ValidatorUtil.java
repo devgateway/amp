@@ -1,10 +1,5 @@
 package org.digijava.kernel.validators;
 
-import static java.util.stream.Collectors.toSet;
-
-import java.util.List;
-import java.util.Set;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
@@ -18,6 +13,11 @@ import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validation.TranslationContext;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+
+import java.util.List;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
 
 /**
  * @author Octavian Ciubotaru

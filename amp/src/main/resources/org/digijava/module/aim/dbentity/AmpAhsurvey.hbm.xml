@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpAhsurvey" table="AMP_AHSURVEY">
+		<cache usage="read-write" />
+		<id name="ampAHSurveyId" column="amp_ahsurvey_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_AHSURVEY_seq</param>
+			</generator>
+		</id>
+
+		<!--
+			<many-to-one name="ampFundingId" column="amp_funding_id" class="org.digijava.module.aim.dbentity.AmpFunding"
+			cascade="none" not-null="true" />
+			<property name="surveyYear" column="survey_year" type="java.lang.Integer"/>
+		-->
+
+		<many-to-one name="ampActivityId" column="amp_activity_id"
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete" not-null="true" />
+
+		<many-to-one name="ampDonorOrgId" column="amp_org_id"
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" not-null="true" />
+
+		<many-to-one name="pointOfDeliveryDonor" column="point_of_delivery_donor"
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
+
+		<set name="responses" table="AMP_AHSURVEY_RESPONSE" inverse="true" cascade="save-update" lazy="false" fetch="join">
+			<cache usage="read-write" />
+			<key column="amp_ahsurvey_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurveyResponse" />
+		</set>
+        <property name="surveyDate" column="survey_date" type="java.util.Date" />
+
+	</class>
+</hibernate-mapping>

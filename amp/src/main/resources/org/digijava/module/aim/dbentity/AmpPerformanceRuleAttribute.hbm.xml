@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute" table="AMP_PERFORMANCE_RULE_ATTRIBUTE">
+        <cache usage="read-write" />
+        
+        <id name="id" column="rule_attribute_id" type="java.lang.Long">
+		  <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+		      <param name="sequence_name">AMP_PERFORMANCE_RULE_ATTRIBUTE_seq</param>
+		  </generator>
+		</id>
+        
+        <property name="name" column="attribute_name" type="java.lang.String" not-null="true"/>
+        <property name="value" column="attribute_value" type="java.lang.String" not-null="true"/>
+        <property name="type" column="type">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute$PerformanceRuleAttributeType</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        
+        <many-to-one name="rule" column="rule_id"
+            class="org.digijava.module.aim.dbentity.AmpPerformanceRule" cascade="none" not-null="true"  />
+		
+    </class>
+</hibernate-mapping>

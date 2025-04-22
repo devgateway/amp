@@ -1170,6 +1170,7 @@ public class ProgramUtil {
                     AmpTheme tempTheme = (AmpTheme) sess.load(AmpTheme.class,ampTh.getAmpThemeId());
                     tempTheme.setDeleted(true);
                     sess.saveOrUpdate(tempTheme);
+                    sess.getSessionFactory().getCache().evictEntityData(AmpTheme.class);
                 } catch (HibernateException e) {
                     logger.error(e.getMessage(), e);
                     throw new AimException("Cannot delete theme with id "+themeId,e);
@@ -1321,9 +1322,7 @@ public class ProgramUtil {
                 tempAmpTheme.setTotalFinancing(editeTheme.getTotalFinancing());
                 tempAmpTheme.setShowInRMFilters(editeTheme.getShowInRMFilters());
 
-//beginTransaction();
-                session.update(tempAmpTheme);
-                //tx.commit();
+                DbUtil.updateTheme(tempAmpTheme);
             }
             catch(Exception ex)
             {
@@ -1413,7 +1412,8 @@ public class ProgramUtil {
           if (excludeIndirect) {
               queryString += " where ap.name <> :indirectName";
           }
-          Query qry = PersistenceManager.getSession().createQuery(queryString);
+          Session session = PersistenceManager.getRequestDBSession();
+          Query qry = session.createQuery(queryString);
           if (excludeIndirect) {
               qry.setParameter("indirectName", INDIRECT_PRIMARY_PROGRAM, StringType.INSTANCE);
           }
@@ -1435,14 +1435,7 @@ public class ProgramUtil {
             programSettings = createDefaultAmpActivityProgramSettingsList();
         }
 
-        Iterator<AmpActivityProgramSettings> iterator = programSettings.iterator();
-
-        while(iterator.hasNext()){
-            AmpActivityProgramSettings programSetting = iterator.next();
-            if(programSetting.getDefaultHierarchy() == null) {
-                iterator.remove();
-            }
-        }
+        programSettings.removeIf(programSetting -> programSetting.getDefaultHierarchy() == null);
 
         return programSettings;
     }

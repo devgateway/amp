@@ -14,26 +14,36 @@ public class GlobalSettingsForm extends ActionForm {
     Collection<AmpGlobalSettings> gsfCol = null;
     Collection countryNameCol = null;
     String countryName = null;
+
+    public Boolean getMultiCountryEnabled() {
+        return multiCountryEnabled;
+    }
+
+    public void setMultiCountryEnabled(Boolean multiCountryEnabled) {
+        this.multiCountryEnabled = multiCountryEnabled;
+    }
+
+    Boolean multiCountryEnabled = false;
     Long gsfId;
     String gsfName = null;
     String gsfValue = null;
     String indexTab = "0";
-    
+
     Long globalId;
     String globalSettingsName = null;
-    
-    
+
+
     Map<String, Collection<KeyValue>> possibleValues    = new HashMap<String, Collection<KeyValue>>();
     Map<String, Map<String, String>> possibleValuesDictionary = new HashMap<String, Map<String, String>>(); // The values are of also of type HashMap (key-value)
-    
+
     Map<String, String> globalSettingsType  = new HashMap<String, String>();
-    
+
     String newSettingName;
     String newTableName;
-    
-    
+
+
     private String allValues;
-    
+
     public String getAllValues() {
             return allValues;
         }
@@ -59,7 +69,7 @@ public class GlobalSettingsForm extends ActionForm {
         this.newTableName = newTableName;
     }
     public Long getGlobalId() {
-        return globalId; 
+        return globalId;
     }
     public void setGlobalId(Long gsfId) {
         this.globalId = gsfId;
@@ -76,15 +86,15 @@ public class GlobalSettingsForm extends ActionForm {
     public void setGsfValue(String gsfValue) {
         this.gsfValue = gsfValue;
     }
-    
+
     public Collection<AmpGlobalSettings> getGsfCol() {
         return Collections.unmodifiableCollection(gsfCol);
     }
-    
+
     public void setGsfCol(Collection<AmpGlobalSettings> gsfCol) {
         this.gsfCol = gsfCol;
     }
-    
+
     public String getCountryName() {
         return countryName;
     }
@@ -101,35 +111,35 @@ public class GlobalSettingsForm extends ActionForm {
     public void setPossibleValues(String key, Collection<KeyValue> values) {
         possibleValues.put(key, values);
     }
-    
+
     public Collection<KeyValue> getPossibleValues(String key) {
         return possibleValues.get(key);
     }
-    
+
     public void setPossibleValuesDictionary(String key, Map<String, String> dictionary) {
         possibleValuesDictionary.put(key, dictionary);
-    } 
-    
+    }
+
     public Map<String, String> getPossibleValuesDictionary(String key) {
         return possibleValuesDictionary.get(key);
     }
-    
+
     public String getGlobalSettingType(String gsName) {
         return globalSettingsType.get(gsName);
     }
-    
+
     public void setGlobalSettingType(String gsName, String gsType) {
         globalSettingsType.put(gsName, gsType);
     }
-    
+
     public String getIndexTab() {
         return indexTab;
     }
-    
+
     public void setIndexTab(String indexTab) {
         this.indexTab = indexTab;
     }
-    
+
     /**
      * returns the value of a GS by its given name
      * @param name
@@ -142,7 +152,7 @@ public class GlobalSettingsForm extends ActionForm {
         }
         throw new RuntimeException(String.format("global settings with name '%s' not found", name));
     }
-    
+
     /**
      * called JSP-side
      * @return

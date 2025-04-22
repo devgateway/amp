@@ -73,7 +73,7 @@ public class RequestUtils {
     }
 
     /**
-     * Get attribute from request/tiles context. Same as above, but with generics. 
+     * Get attribute from request/tiles context. Same as above, but with generics.
      * At first, method searches
      * attribute by key <code>attribute</code> in the tiles context (if it
      * exists for the current request). If search is unsuccessful, then it
@@ -553,11 +553,11 @@ public class RequestUtils {
         return siteDomain;
 
     }
-    
+
     /**
      * Check if the current user is an Admin, if not then the response is
      * redirected to the index page and the method returns false.
-     * 
+     *
      * @param response
      * @param session
      * @param request
@@ -578,7 +578,7 @@ public class RequestUtils {
         }
         return ret;
     }
-    
+
     public static boolean isLoggued(HttpServletResponse response, HttpSession session, HttpServletRequest request)
             throws IOException {
         boolean ret = true;

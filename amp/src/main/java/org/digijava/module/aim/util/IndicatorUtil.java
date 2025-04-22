@@ -662,7 +662,22 @@ public class IndicatorUtil {
             throw new DgException("Cannot update IndicatorTheme bean",e);
         }
     }
-    
+    private static Query activityIndicatorConnectionsQuery(AmpActivityVersion activity, AmpIndicator indicator) {
+        Long activityId = activity.getAmpActivityId();
+        Long indicatorId = indicator.getIndicatorId();
+        Session session = PersistenceManager.getRequestDBSession();
+        String oql = "from " + IndicatorActivity.class.getName() + " conn ";
+        oql += " where conn.activity.ampActivityId=:actId and conn.indicator.indicatorId=:indicId";
+        Query query = session.createQuery(oql);
+        query.setParameter("actId", activityId, LongType.INSTANCE);
+        query.setParameter("indicId", indicatorId, LongType.INSTANCE);
+        return query;
+    }
+   public static List<IndicatorActivity> findActivityIndicatorConnections(AmpActivityVersion activity,
+                                                                          AmpIndicator indicator) {
+       IndicatorActivity result = null;
+       return (List<IndicatorActivity>) activityIndicatorConnectionsQuery(activity, indicator).list();
+   }
     /**
      * Tries to find connection bean between activity and indicator.
      * If not found NULL is returned.
@@ -671,27 +686,37 @@ public class IndicatorUtil {
      * @return
      * @throws DgException
      */
-    public static IndicatorActivity findActivityIndicatorConnection(AmpActivityVersion activity,AmpIndicator indicator) throws DgException{
-        IndicatorActivity result=null;
-        //these two line may throw null pointer exception, but don't fix here, fix caller of this method to not path null here!
-        Long activityId=activity.getAmpActivityId();
-        Long indicatorId=indicator.getIndicatorId();
-        Session session=PersistenceManager.getRequestDBSession();
-        String oql="from "+IndicatorActivity.class.getName()+" conn ";
-        oql+=" where conn.activity.ampActivityId=:actId and conn.indicator.indicatorId=:indicId";
-        try {
-            Query query=session.createQuery(oql);
-            query.setParameter("actId", activityId, LongType.INSTANCE);
-            query.setParameter("indicId", indicatorId, LongType.INSTANCE);
-            result=(IndicatorActivity)query.uniqueResult();
-        } catch (ObjectNotFoundException e) {
-            logger.debug("Cannot find conenction for activity("+activityId+") and indicator("+indicatorId+")!");
-        } catch (HibernateException e) {
-            throw new DgException("Error searching conenction for activity("+activityId+") and indicator("+indicatorId+")!",e);
-        }
-        return result;
+    public static IndicatorActivity findActivityIndicatorConnection(AmpActivityVersion activity,AmpIndicator indicator){
+        return (IndicatorActivity) activityIndicatorConnectionsQuery(activity, indicator).uniqueResult();
+
     }
-    
+
+            /**
+             * Get indicator connection for a specific location category value i.e NIgeria, NIger
+             * @param locationId
+             * @throws DgException
+             * */
+            public static List<IndicatorActivity> findIndicatorConnectionByLocationCategoryValue(Long locationId) throws DgException{
+                List<IndicatorActivity> result=null;
+                Session session=PersistenceManager.getRequestDBSession();
+                String oql="from "+IndicatorActivity.class.getName()+" conn ";
+                if (locationId != null) {
+                    oql += " where conn.activityLocation.location.id=:locationId";
+                }
+                try {
+                    Query query=session.createQuery(oql);
+                    if (locationId != null) {
+                        query.setParameter("locationId", locationId, LongType.INSTANCE);
+                    }
+                    result= (List<IndicatorActivity>) query.list();
+                } catch (ObjectNotFoundException e) {
+                    logger.debug("Cannot find connection for location value("+locationId+")!");
+                } catch (HibernateException e) {
+                    throw new DgException("Error searching conenction for location category value("+locationId+")!",e);
+                }
+                return result;
+            }
+
     /**
      * Tries to find connection bean between activity and indicator.
      * If not found NULL is returned.

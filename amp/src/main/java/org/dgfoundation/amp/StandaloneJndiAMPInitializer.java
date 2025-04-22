@@ -27,13 +27,13 @@ import java.util.Properties;
  * 
  */
 public class StandaloneJndiAMPInitializer {
-    private static Logger logger = Logger
+    private static final Logger logger = Logger
             .getLogger(StandaloneJndiAMPInitializer.class);
     private static Context ctx = null;
     private static final String REAL_JNDI = "org.dgfoundation.amp.StandaloneAMPJNDIInitializer.RealJndi";
 
     private static class AMPInitialContext extends InitialContext {
-        private static Logger logger = Logger
+        private static final Logger logger = Logger
         .getLogger(AMPInitialContext.class);
 
         private String realJNDI;
@@ -60,8 +60,7 @@ public class StandaloneJndiAMPInitializer {
                 return super.lookup(name);
             } catch (CommunicationException e) {
                 logger
-                        .error("Cannot communicate with the naming server. Is JBoss running?");
-                e.printStackTrace();
+                        .error("Cannot communicate with the naming server. Is JBoss running?", e);
                 return null;
             }
         }
@@ -77,8 +76,7 @@ public class StandaloneJndiAMPInitializer {
                 return super.lookup(name);
             } catch (CommunicationException e) {
                 logger
-                        .error("Cannot communicate with the naming server. Is JBoss running?");
-                e.printStackTrace();
+                        .error("Cannot communicate with the naming server. Is JBoss running?",e);
                 return null;
             }
         }
@@ -89,8 +87,7 @@ public class StandaloneJndiAMPInitializer {
             InitialContextFactory {
 
     
-        public Context getInitialContext(Hashtable<?, ?> environment)
-                throws NamingException {
+        public Context getInitialContext(Hashtable<?, ?> environment) {
             return ctx;
         }
 
@@ -163,13 +160,7 @@ public class StandaloneJndiAMPInitializer {
         String realJndiName = null;
         try {
             realJndiName = parseJbossRealJndiName();
-        } catch (SAXException e) {
-            // TODO Auto-generated catch block
-            logger.error(e.getMessage(), e);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            logger.error(e.getMessage(), e);
-        } catch (ParserConfigurationException e) {
+        } catch (SAXException | ParserConfigurationException | IOException e) {
             // TODO Auto-generated catch block
             logger.error(e.getMessage(), e);
         }

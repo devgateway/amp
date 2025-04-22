@@ -36,4 +36,12 @@ public class SettingsAndFiltersParameters {
     public void setFilters(Map<String, Object> filters) {
         this.filters = filters;
     }
+
+    @Override
+    public String toString() {
+        return "SettingsAndFiltersParameters{" +
+                "settings=" + settings +
+                ", filters=" + filters +
+                '}';
+    }
 }

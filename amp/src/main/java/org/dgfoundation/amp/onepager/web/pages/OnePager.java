@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.OnepagerSection;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -63,6 +64,9 @@ public class OnePager extends AmpHeaderFooter {
 
     protected AmpActivityModel am;
 //  protected AmpActivityModel activityModelForSave;
+    static String defCountry = DynLocationManagerUtil.getDefCountryIso();
+
+
 
     static OnepagerSection[] staticOnepagerSectionList = {
         new OnepagerSection("Identification",AmpIdentificationFormSectionFeature.class.getName(), 1, false),
@@ -74,14 +78,14 @@ public class OnePager extends AmpHeaderFooter {
         new OnepagerSection("Sectors", AmpSectorsFormSectionFeature.class.getName(), 7, false),
         new OnepagerSection(DONOR_FUNDING_SECTION_NAME, AmpDonorFundingFormSectionFeature.class.getName(), 9, false),
         new OnepagerSection("Organizations", AmpRelatedOrganizationsFormSectionFeature.class.getName(), 8, false,true, AmpDonorFundingFormSectionFeature.class.getName()),
-        new OnepagerSection(REGIONAL_FUNDING_SECTION_NAME, AmpRegionalFundingFormSectionFeature.class.getName(), 10, false),
+        new OnepagerSection(REGIONAL_FUNDING_SECTION_NAME, AmpRegionalFundingFormSectionFeature.class.getName(), 10, false, true, AmpMEFormSectionFeature.class.getName()),
         new OnepagerSection(COMPONENTS_SECTION_NAME, AmpComponentsFormSectionFeature.class.getName(), 11, false),
         new OnepagerSection("Structures", AmpStructuresFormSectionFeature.class.getName(), 12, false),
         new OnepagerSection("Issues Section", AmpIssuesFormSectionFeature.class.getName(), 13, false),
         new OnepagerSection("Regional Observations", AmpRegionalObservationsFormSectionFeature.class.getName(), 14, false),
         new OnepagerSection("Contacts", AmpContactsFormSectionFeature.class.getName(), 15, false),
         new OnepagerSection("Contracts", AmpContractingFormSectionFeature.class.getName(), 16, false),
-        new OnepagerSection("M&E", AmpMEFormSectionFeature.class.getName(), 17, false),
+        defCountry!=null && defCountry.equalsIgnoreCase("zz")?new OnepagerSection("M&E", AmpMEFormSectionFeature.class.getName(), 17, false):new OnepagerSection("M&E", org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature.class.getName(), 17, false),
         new OnepagerSection("Paris Indicators", AmpPIFormSectionFeature.class.getName(), 18, false),
         new OnepagerSection("Related Documents", AmpResourcesFormSectionFeature.class.getName(), 19, false),
         new OnepagerSection("Line Ministry Observations", AmpLineMinistryObservationsFormSectionFeature.class.getName(), 20, false),
@@ -272,9 +276,9 @@ public class OnePager extends AmpHeaderFooter {
 
     /**
      * Decodes a URL in the form:
-     * 
-     * /mountpoint/paramName1/paramValue1/paramName2/paramValue2 
-     * 
+     *
+     * /mountpoint/paramName1/paramValue1/paramName2/paramValue2
+     *
      * (i.e. a URL using the pre wicket 1.5 Hybrid URL strategy)
      */
     public PageParameters decodePageParameters(Request request)
@@ -284,7 +288,7 @@ public class OnePager extends AmpHeaderFooter {
         Iterator<String> segment = request.getUrl().getSegments().iterator();
         if (segment.hasNext())
             segment.next();
-        
+
         while (segment.hasNext()){
             String key = segment.next();
             String value = null;
@@ -293,7 +297,7 @@ public class OnePager extends AmpHeaderFooter {
             if (value != null)
                 parameters.add(key, value);
         }
-        
+
         return parameters.isEmpty() ? null : parameters;
     }
 
@@ -400,6 +404,7 @@ public class OnePager extends AmpHeaderFooter {
             }
 
             public List<AmpComponentPanel> initObjects() {
+                logger.info("Initializing sections:"+sectionsList);
                 Iterator<OnepagerSection> it = sectionsList.iterator();
                 LinkedList<AmpComponentPanel> ret = new LinkedList<AmpComponentPanel>();
                 HashMap<String, AmpComponentPanel> temp = new HashMap<String, AmpComponentPanel>();
@@ -444,12 +449,7 @@ public class OnePager extends AmpHeaderFooter {
     }
 
     public static void sortSections(List<OnepagerSection> list){
-        Collections.sort(list, new Comparator<OnepagerSection>() {
-            @Override
-            public int compare(OnepagerSection o1, OnepagerSection o2) {
-                return o1.getPosition() - o2.getPosition();
-            }
-        });
+        list.sort(Comparator.comparingInt(OnepagerSection::getPosition));
     }
 
     private static List<OnepagerSection> loadPositions() {
@@ -479,6 +479,7 @@ public class OnePager extends AmpHeaderFooter {
             checkOrder(returnList);
             saveOnce(session, returnList);
             sortSections(returnList);
+            checkIfMultiCountry(returnList);
             return returnList;
         } catch (Exception e) {
             logger.error("Can't load onepager section positions:", e);
@@ -486,6 +487,25 @@ public class OnePager extends AmpHeaderFooter {
             return null;
         } finally {
            PersistenceManager.closeSession(session);
+        }
+    }
+    private static void checkIfMultiCountry(List<OnepagerSection> returnList)
+    {
+        logger.info("Checking for multi country");
+        String defCountryIso = DynLocationManagerUtil.getDefCountryIso();
+        if (defCountryIso!=null && !defCountryIso.equalsIgnoreCase("zz"))
+        {
+            for (OnepagerSection section: returnList)
+            {
+                if (section.getClassName().equalsIgnoreCase("org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature"))
+                {
+                    section.setClassName("org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature");
+                }
+                if (section.getClassName().equalsIgnoreCase("org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature"))
+                {
+                    section.setDependentClassName("org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature");
+                }
+            }
         }
     }
 

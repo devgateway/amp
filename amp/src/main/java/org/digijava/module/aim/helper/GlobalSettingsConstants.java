@@ -2,12 +2,43 @@ package org.digijava.module.aim.helper;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class GlobalSettingsConstants {
 
     public static final String DEFAULT_COUNTRY = "Default Country";
 
+    public static final List<String> ECOWAS_COUNTRIES = Arrays.asList(
+            "BJ", // Benin
+            "BF", // Burkina Faso
+            "CI", // Côte d'Ivoire
+            "GM", // Gambia
+            "GH", // Ghana
+            "GN", // Guinea
+            "GW", // Guinea-Bissau
+            "LR", // Liberia
+            "ML", // Mali
+            "NE", // Niger
+            "NG", // Nigeria
+            "SN", // Senegal
+            "SL", // Sierra Leone
+            "TG"  // Togo
+    );
+
+    public static final List<String> GGW_COUNTRIES = Arrays.asList(
+            "BF", // Burkina Faso
+            "MR", // Mauritania
+            "SD", // Sudan
+            "TD", // Chad
+            "DJ", // Djibouti
+            "ER", // Eritrea
+            "ML", // Mali
+            "NE", // Niger
+            "NG", // Nigeria
+            "SN", // Senegal
+            "ET" // Ethiopia
+    );
     public static final String FEATURE_TEMPLATE = "Feature Template";
 
     public static final String YEAR_RANGE_START = "Year Range Start";
@@ -39,6 +70,7 @@ public class GlobalSettingsConstants {
     public static final String GROUP_SEPARATOR = "Default Grouping Separator";
 
     public static final String DEFAULT_DATE_FORMAT = "Default Date Format";
+    public static final String GIS_COUNTRY = "GIS Country";
 
     public static final String SITE_DOMAIN = "Site Domain";
 
@@ -248,4 +280,8 @@ public class GlobalSettingsConstants {
     public static final String AMP_DASHBOARD_URL = "AMP Dashboard URL";
 
     public static final String NUMBER_OF_INDICATORS_IN_DASHBOARD = "Number of indicators in M&E Dashboard";
+
+    public static final String AMP_DASHBOARD_CORE_INDICATOR_URL = "AMP Dashboard Core Indicator URL";
+    public static final String AMP_DASHBOARD_CORE_INDICATOR_USERNAME = "AMP Dashboard Core Indicator Username";
+    public static final String AMP_DASHBOARD_CORE_INDICATOR_PASSWORD = "AMP Dashboard Core Indicator Password";
 }

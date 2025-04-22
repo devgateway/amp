@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 
 /**
  * This class generates the filter list (tree) object for programs
- * 
+ *
  * @author Viorel Chihai
  *
  */
 public class ProgramFilterListManager implements FilterListManager {
-    
+
     public static final String NATIONAL_PLANNING_OBJECTIVES_ITEMS_NAME = "nationalPlanningObjectives";
     public static final String INDIRECT_PRIMARY_PROGRAM_ITEMS_NAME = "indirectPrimaryPrograms";
     public static final String PRIMARY_PROGRAM_ITEMS_NAME = "primaryPrograms";
@@ -36,7 +36,7 @@ public class ProgramFilterListManager implements FilterListManager {
                     .put(ProgramUtil.TERTIARY_PROGRAM, TERTIARY_PROGRAM_COLUMNS_BY_LEVEL_ITEMS_NAME)
                     .put(ProgramUtil.INDIRECT_PRIMARY_PROGRAM, INDIRECT_PRIMARY_PROGRAM_ITEMS_NAME)
                     .build();
-    
+
     private static ProgramFilterListManager programFilterListManager;
 
     public static ProgramFilterListManager getInstance() {
@@ -46,21 +46,20 @@ public class ProgramFilterListManager implements FilterListManager {
 
         return programFilterListManager;
     }
-    
+
     protected ProgramFilterListManager() { }
 
     @Override
     public FilterList getFilterList() {
         List<FilterListDefinition> programListDefinitions = getProgramListDefinitions();
         Map<String, List<FilterListTreeNode>> programListItems = getProgramListItems();
-        
+
         return new FilterList(programListDefinitions, programListItems);
     }
-    
+
     protected List<FilterListDefinition> getProgramListDefinitions() {
         List<FilterListDefinition> listDefinitions = new ArrayList<>();
         List<AmpActivityProgramSettings> progarmSettings = getProgramSettings();
-       
         for (AmpActivityProgramSettings setting : progarmSettings) {
             String definitionName = getFilterDefinitionName(setting.getName());
             FilterListDefinition listDefinition = new FilterListDefinition();
@@ -72,12 +71,11 @@ public class ProgramFilterListManager implements FilterListManager {
             listDefinition.setItems(PROGRAM_NAME_TO_ITEMS_NAME.get(setting.getName()));
             listDefinitions.add(listDefinition);
         }
-        
+
         return listDefinitions;
     }
 
     protected List<String> getProgramFilterIds(AmpActivityProgramSettings setting) {
-
         List<String> filterIds = new ArrayList<>();
         for (String col : AmpActivityProgramSettings.NAME_TO_COLUMN_AND_LEVEL.get(setting.getName())
                 .values()) {
@@ -93,10 +91,10 @@ public class ProgramFilterListManager implements FilterListManager {
         Map<String, List<FilterListTreeNode>> items = new HashMap<>();
         for (AmpActivityProgramSettings setting : programSettings) {
             List<FilterListTreeNode> programItems = new ArrayList<>();
-            
+
             String programSettingName = setting.getName();
             Map<Long, AmpThemeSkeleton> programs = AmpThemeSkeleton.populateThemesTree(setting.getDefaultHierarchyId());
-            
+
             programItems.add(getPrograms(programs.get(setting.getDefaultHierarchyId())));
             programItems.add(getUndefinedOption());
             items.put(PROGRAM_NAME_TO_ITEMS_NAME.get(programSettingName), programItems);
@@ -104,7 +102,7 @@ public class ProgramFilterListManager implements FilterListManager {
 
         return items;
     }
-    
+
     protected List<AmpActivityProgramSettings> getProgramSettings() {
         Set<String> visibleCols = ColumnsVisibility.getVisibleColumns();
         Session session = PersistenceManager.getSession();
@@ -116,22 +114,22 @@ public class ProgramFilterListManager implements FilterListManager {
 
         return programSettings;
     }
-    
+
     private FilterListTreeNode getPrograms(AmpThemeSkeleton program) {
         FilterListTreeNode node = new FilterListTreeNode();
         node.setId(program.getId());
         node.setCode(program.getCode());
         node.setName(program.getName());
-        
-        
+
+
         List<AmpThemeSkeleton> orderedChildPrograms = program.getChildLocations().stream()
                 .sorted(Comparator.comparing(AmpThemeSkeleton::getName))
                 .collect(Collectors.toList());
-        
+
         for (AmpThemeSkeleton ampProgramChild : orderedChildPrograms) {
             node.addChild(getPrograms(ampProgramChild));
         }
-        
+
         return node;
     }
 

@@ -15,14 +15,14 @@
 			</script>
  			<test>val.equalsIgnoreCase("true")</test>
 		</condition>
-	</trigger> 
+	</trigger>
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_pledges_secondary_programs_level_0 CASCADE;
-			    CREATE OR REPLACE VIEW v_pledges_secondary_programs_level_0 AS 
-                    SELECT 
-                        afp.id AS pledge_id, 
+			    CREATE OR REPLACE VIEW v_pledges_secondary_programs_level_0 AS
+                    SELECT
+                        afp.id AS pledge_id,
                         v.name,
                         COALESCE(v.amp_program_id, -999999999) AS amp_program_id,
                         v.percentage,
@@ -39,7 +39,7 @@
 	     					JOIN all_programs_with_levels oapl ON afpp.amp_program_id = oapl.amp_theme_id
 	     					LEFT JOIN amp_theme level ON level.amp_theme_id = apl.id0
 	  					WHERE oapl.program_setting_name = 'Secondary Program'
-	  					GROUP BY afpp.pledge_id, apl.id0, level.amp_theme_id
+	  					GROUP BY afpp.pledge_id, apl.id0, level.amp_theme_id,level.name
                     ) v
                     ON afp.id = v.pledge_id;
        		</lang>

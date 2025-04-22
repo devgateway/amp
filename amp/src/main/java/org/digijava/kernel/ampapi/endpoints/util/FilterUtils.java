@@ -256,6 +256,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.QUINARY_SECTOR_SUB_SECTOR, ColumnConstants.QUINARY_SECTOR_SUB_SECTOR);
         mapSimpleColumn(FiltersConstants.QUINARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.QUINARY_SECTOR_SUB_SUB_SECTOR);
         mapSimpleColumn(FiltersConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_ASSISTANCE);
+        mapSimpleColumn(FiltersConstants.REPORTING_SYSTEM, ColumnConstants.REPORTING_SYSTEM);
         mapSimpleColumn(FiltersConstants.WORKSPACES, ColumnConstants.WORKSPACES);
         mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_2, ColumnConstants.LOCATION_ADM_LEVEL_2);
 
@@ -562,7 +563,7 @@ public class FilterUtils {
             filterRules = FilterUtils.getApiDateFilters(filters, filterRules);
             reportIgnoredFilters(filters);
         }
-        if(activityIds!=null && activityIds.size()>0){
+        if(activityIds!=null && !activityIds.isEmpty()){
             //if we have activityIds to add to the filter comming from the search by keyworkd
             if(filterRules==null){
                 filterRules = new AmpReportFilters();

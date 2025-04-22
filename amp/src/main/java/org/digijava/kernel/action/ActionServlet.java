@@ -38,7 +38,7 @@ public class ActionServlet extends org.apache.struts.action.ActionServlet {
 
             String configFiles = getConfigFiles();
 
-            if (configFiles != null && configFiles.trim().length() != 0) {
+            if (!configFiles.trim().isEmpty()) {
                 super.config = configFiles;
             }
 
@@ -55,7 +55,7 @@ public class ActionServlet extends org.apache.struts.action.ActionServlet {
 
         File configDir = new File(getServletContext().getRealPath(MODULE_DIRECTORY));
         File tmpFile;
-        StringBuffer retVal = new StringBuffer();
+        StringBuilder retVal = new StringBuilder();
 
         if (!configDir.exists() || !configDir.isDirectory()) {
             throw new DgException("Configuration directory " + MODULE_DIRECTORY + " does not exist or is not directory");

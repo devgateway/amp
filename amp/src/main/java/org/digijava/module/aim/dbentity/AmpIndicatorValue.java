@@ -22,17 +22,17 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     private static final Logger logger = Logger.getLogger(AmpIndicatorValue.class);
     /*
      * NOTICE
-     * 
+     *
      * When adding new fields please update the clone() method {@link #clone()}
-     * so that information is not lost. 
-     * 
+     * so that information is not lost.
+     *
      * Thanks!
      */
     public static final int TARGET = 0;
     public static final int ACTUAL = 1;
     public static final int BASE = 2;
     public static final int REVISED = 3;
-    
+
 
 
     private static final long serialVersionUID = 1L;
@@ -63,9 +63,11 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     private IndicatorConnection indicatorConnection;
 
     private AmpLocation location;
-    
+
     private AmpCategoryValue indicatorSource;
     private AmpIndicatorSubgroup subgroup;
+
+    private AmpActivityLocation activityLocation;
     private Boolean history;
 
     public Boolean getHistory() {
@@ -77,16 +79,16 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     }
     /*
      * NOTICE
-     * 
+     *
      * When adding new fields please update the clone() method {@link #clone()}
-     * so that information is not lost. 
-     * 
+     * so that information is not lost.
+     *
      * Thanks!
      */
 
         public AmpIndicatorValue() {
         }
-        
+
         public AmpIndicatorValue(int valueType) {
             this.valueType = valueType;
         }
@@ -102,7 +104,7 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
         }
 
         public void setValueDateString(String valueDateString) throws Exception{
-            if(!valueDateString.trim().equals("")){
+            if(!valueDateString.trim().isEmpty()){
                valueDate=DateTimeUtil.parseDate(valueDateString);
             }
         }
@@ -189,16 +191,16 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     public void setIndicatorSource(AmpCategoryValue indicatorSource) {
         this.indicatorSource = indicatorSource;
     }
-    
+
     public AmpIndicatorSource getSource() {
         return null;
     }
-    
+
     public void setSource(AmpIndicatorSource source) {
 
     }
 
-    
+
     @Override
     public Object clone() {
         try {
@@ -212,7 +214,7 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     @Override
     public AmpIndicatorValue clone() {
         AmpIndicatorValue r = new AmpIndicatorValue();
-        
+
         r.setValue(value);
         r.setValueDate(valueDate);
         r.setComment(comment);
@@ -248,5 +250,12 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
         //r.setSubgroup(subgroup);
     }
 
+    public AmpActivityLocation getActivityLocation() {
+        return activityLocation;
+    }
+
+    public void setActivityLocation(AmpActivityLocation activityLocation) {
+        this.activityLocation = activityLocation;
+    }
 }
 

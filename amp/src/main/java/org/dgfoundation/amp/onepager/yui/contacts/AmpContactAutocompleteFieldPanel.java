@@ -33,7 +33,7 @@ public abstract class AmpContactAutocompleteFieldPanel extends
     @Override
     protected String[][] getChoiceValues(String input) {
         Collection<AmpContact> choices = getChoices(input);
-        List<String[]> choiceValues = new ArrayList<String[]>();
+        List<String[]> choiceValues = new ArrayList<>();
         for (AmpContact choice : choices) {
             String choiceId = getChoiceId(choice);
             Integer choiceLevel = getChoiceLevel(choice);
@@ -101,10 +101,10 @@ public abstract class AmpContactAutocompleteFieldPanel extends
         if (contact.getId() == null || contact.getId().equals(-1L))
             return "";
         StringBuilder details = new StringBuilder();
-        String emails = "";
-        String orgs = "";
-        String phones = "";
-        String faxes = "";
+        StringBuilder emails = new StringBuilder();
+        StringBuilder orgs = new StringBuilder();
+        StringBuilder phones = new StringBuilder();
+        StringBuilder faxes = new StringBuilder();
         if (contact.getTitle() != null) {
             details.append(contact.getTitle().getValue());
         }
@@ -115,17 +115,17 @@ public abstract class AmpContactAutocompleteFieldPanel extends
             for (AmpContactProperty property : contact.getProperties()) {
                 if (property.getName().equals(
                         Constants.CONTACT_PROPERTY_NAME_EMAIL)
-                        && property.getValue().length() > 0) {
-                    emails += property.getValue() + "<br/>";
+                        && !property.getValue().isEmpty()) {
+                    emails.append(property.getValue()).append("<br/>");
                 } else if (property.getName().equals(
                         Constants.CONTACT_PROPERTY_NAME_PHONE)
-                        && ((AmpContactPhoneProperty) property).getValueAsFormatedPhoneNum().length() > 0) {
+                        && !((AmpContactPhoneProperty) property).getValueAsFormatedPhoneNum().isEmpty()) {
 
-                    phones += ((AmpContactPhoneProperty) property).getValueAsFormatedPhoneNum() + "<br/>";
+                    phones.append(((AmpContactPhoneProperty) property).getValueAsFormatedPhoneNum()).append("<br/>");
                 } else if (property.getName().equals(
                         Constants.CONTACT_PROPERTY_NAME_FAX)
-                        && property.getValue().length() > 0) {
-                    faxes += property.getValue() + "<br/>";
+                        && !property.getValue().isEmpty()) {
+                    faxes.append(property.getValue()).append("<br/>");
                 }
             }
         }
@@ -144,17 +144,17 @@ public abstract class AmpContactAutocompleteFieldPanel extends
         details.append(faxes);
         details.append("<br/>");
 
-        if ((contact.getOrganizationContacts() != null && contact
-                .getOrganizationContacts().size() > 0)
-                || (contact.getOrganisationName() != null && contact
-                        .getOrganisationName().length() > 0)) {
+        if ((contact.getOrganizationContacts() != null && !contact
+                .getOrganizationContacts().isEmpty())
+                || (contact.getOrganisationName() != null && !contact
+                .getOrganisationName().isEmpty())) {
             if (contact.getOrganisationName() != null
-                    && contact.getOrganisationName().length() > 0) {
-                orgs += DbUtil.filter(contact.getOrganisationName()) + "<br/>";
+                    && !contact.getOrganisationName().isEmpty()) {
+                orgs.append(DbUtil.filter(contact.getOrganisationName())).append("<br/>");
             }
             for (AmpOrganisationContact contOrg : contact
                     .getOrganizationContacts()) {
-                orgs += DbUtil.filter(contOrg.getOrganisation().getName()) + "<br/>";
+                orgs.append(DbUtil.filter(contOrg.getOrganisation().getName())).append("<br/>");
             }
         }
         details.append("<br/>");

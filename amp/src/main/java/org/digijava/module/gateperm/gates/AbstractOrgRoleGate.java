@@ -90,11 +90,7 @@ public abstract class AbstractOrgRoleGate extends Gate {
             if (roleCode == null) {
                 throw new RuntimeException("CURRENT_ORG specified in scope without CURRENT_ORG_ROLE!");
             }
-            if (roleCode.equals(paramRoleCode) && user.hasVerifiedOrganizationId(org.getAmpOrgId())) {
-                canDo = true;
-            } else {
-                canDo = false;
-            }
+            canDo = roleCode.equals(paramRoleCode) && user.hasVerifiedOrganizationId(org.getAmpOrgId());
         }
         return canDo;
     }

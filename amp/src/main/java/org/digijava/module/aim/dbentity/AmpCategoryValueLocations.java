@@ -39,6 +39,25 @@ public class AmpCategoryValueLocations implements Identifiable,
     private String iso3;
     private String fullName;
 
+    public Boolean isEcowas() {
+        return ecowas;
+    }
+
+    public void setEcowas(Boolean ecowas) {
+        this.ecowas = ecowas;
+    }
+
+    public Boolean isGgw() {
+        return ggw;
+    }
+
+    public void setGgw(Boolean ggw) {
+        this.ggw = ggw;
+    }
+
+    private Boolean ecowas=false;
+    private Boolean ggw=false;
+
     private Boolean deleted;
 
     private boolean translateable = false;
@@ -308,6 +327,4 @@ public class AmpCategoryValueLocations implements Identifiable,
         AmpCategoryValueLocations that = (AmpCategoryValueLocations) o;
         return Objects.equals(id, that.id);
     }
-
-
 }

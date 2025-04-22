@@ -17,6 +17,7 @@ public class AmpMapConfig {
     private String configName;
     private String legendNotes;
     private String layer;
+    private String legendHtml;
 
     public Long getId() {
         return id;
@@ -119,5 +120,13 @@ public class AmpMapConfig {
 
     public String getMapSubTypeName() {
         return mapSubTypeNames.get(this.mapSubType);
+    }
+
+    public String getLegendHtml() {
+        return legendHtml;
+    }
+
+    public void setLegendHtml(String legendHtml) {
+        this.legendHtml = legendHtml;
     }
 }

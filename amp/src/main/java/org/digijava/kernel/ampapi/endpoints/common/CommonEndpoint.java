@@ -12,6 +12,7 @@ import org.digijava.kernel.ampapi.endpoints.dashboards.services.PublicServices;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
+import javax.ws.rs.core.Response;
 
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
@@ -29,7 +30,7 @@ import static java.util.stream.Collectors.toMap;
 
 /**
  * Common Endpoint provides various settings (FM, settings)
- * 
+ *
  * @author Nadejda Mandrescu
  */
 @Path("common")
@@ -84,6 +85,7 @@ public class CommonEndpoint implements AmpEndpoint {
     public Response describeFMSettingsFlatAsResponse() {
         return PublicServices.buildOkResponseWithOriginHeaders("");
     }
+
 
     @POST
     @Path("/fm-by-ws-member")

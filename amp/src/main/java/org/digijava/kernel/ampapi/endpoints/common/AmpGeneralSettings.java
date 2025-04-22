@@ -47,6 +47,9 @@ public class AmpGeneralSettings {
     @JsonProperty("default-date-format")
     private String defaultDateFormat;
 
+    @JsonProperty("default-gis-country")
+    private String defaultGISCountry;
+
     @JsonProperty("hide-editable-export-formats-public-view")
     private Boolean hideEditableExportFormatsPublicView;
     @JsonProperty("hide-contacts-public-view")
@@ -57,6 +60,8 @@ public class AmpGeneralSettings {
 
     @JsonProperty("gap-analysis-map")
     private Boolean gapAnalysisMap;
+
+
 
     @JsonProperty("has-ssc-workspaces")
     private Boolean hasSscWorkspaces;
@@ -99,6 +104,21 @@ public class AmpGeneralSettings {
 
     @JsonProperty("ndd-mapping-indirect-level")
     private Integer nddMappingIndirectLevel;
+
+
+    @JsonProperty("multi-country-gis-enabled")
+    private Boolean multiCountryEnabled;
+    @JsonProperty("gis-sectors-enabled")
+    private Boolean sectorsEnabled;
+
+    @JsonProperty("gis-show-wocat")
+    private Boolean wocatEnabled;
+
+    @JsonProperty("gis-programs-enabled")
+    private Boolean programsEnabled;
+
+    @JsonProperty("login-required")
+    private Boolean loginRequired;
 
     @JsonProperty("ndd-mapping-program-level")
     private Integer nddMappingProgramLevel;
@@ -180,7 +200,13 @@ public class AmpGeneralSettings {
     public String getNumberFormat() {
         return numberFormat;
     }
+    public Boolean getWocatEnabled() {
+        return wocatEnabled;
+    }
 
+    public void setWocatEnabled(Boolean wocatEnabled) {
+        this.wocatEnabled = wocatEnabled;
+    }
     public void setNumberFormat(String numberFormat) {
         this.numberFormat = numberFormat;
     }
@@ -261,6 +287,13 @@ public class AmpGeneralSettings {
         return defaultDateFormat;
     }
 
+    public String getDefaultGISCountry() {
+        return defaultGISCountry;
+    }
+
+    public void setDefaultGISCountry(String defaultGISCountry) {
+        this.defaultGISCountry = defaultGISCountry;
+    }
     public void setDefaultDateFormat(String defaultDateFormat) {
         this.defaultDateFormat = defaultDateFormat;
     }
@@ -552,5 +585,37 @@ public class AmpGeneralSettings {
 
     public void setNumberOfIndicatorsInDashboard(Long numberOfIndicatorsInDashboard) {
         this.numberOfIndicatorsInDashboard = numberOfIndicatorsInDashboard;
+    }
+
+    public Boolean getMultiCountryEnabled() {
+        return multiCountryEnabled;
+    }
+
+    public void setMultiCountryEnabled(Boolean multiCountryEnabled) {
+        this.multiCountryEnabled = multiCountryEnabled;
+    }
+
+    public Boolean getSectorsEnabled() {
+        return sectorsEnabled;
+    }
+
+    public void setSectorsEnabled(Boolean sectorsEnabled) {
+        this.sectorsEnabled = sectorsEnabled;
+    }
+
+    public Boolean getProgramsEnabled() {
+        return programsEnabled;
+    }
+
+    public void setProgramsEnabled(Boolean programsEnabled) {
+        this.programsEnabled = programsEnabled;
+    }
+
+    public Boolean getLoginRequired() {
+        return loginRequired;
+    }
+
+    public void setLoginRequired(Boolean loginRequired) {
+        this.loginRequired = loginRequired;
     }
 }

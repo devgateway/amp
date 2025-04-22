@@ -278,7 +278,7 @@ public class Reports {
         GeneratedReport report = EndpointUtils.runReport(spec);
         SaikuReportHtmlRenderer htmlRenderer = new SaikuReportHtmlRenderer(report);
 
-        return htmlRenderer.toString();
+        return htmlRenderer.renderTable().toString();
     }
 
     /**

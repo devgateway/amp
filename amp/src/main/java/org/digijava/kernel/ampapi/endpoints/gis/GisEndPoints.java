@@ -3,16 +3,32 @@ package org.digijava.kernel.ampapi.endpoints.gis;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.node.POJONode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.PublicServices;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.SscDashboardResult;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.ssc.SscDashboardXlsResult;
-import org.digijava.kernel.ampapi.endpoints.gis.services.*;
+import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityList;
+import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityLocationExporter;
+import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
+import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityStructuresExporter;
+import org.digijava.kernel.ampapi.endpoints.gis.services.AdmLevel;
+import org.digijava.kernel.ampapi.endpoints.gis.services.AdmLevelTotals;
+import org.digijava.kernel.ampapi.endpoints.gis.services.BoundariesService;
+import org.digijava.kernel.ampapi.endpoints.gis.services.Boundary;
+import org.digijava.kernel.ampapi.endpoints.gis.services.GisUtils;
+import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
+import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
+import org.digijava.kernel.ampapi.endpoints.gis.services.PublicGapAnalysis;
+import org.digijava.kernel.ampapi.endpoints.gis.services.RecentlyUpdatedActivities;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ssc.SscDashboardService;
 import org.digijava.kernel.ampapi.endpoints.indicator.Indicator;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
@@ -39,11 +55,11 @@ import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.dbentity.ApiStateType;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
-import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -63,15 +79,14 @@ import java.util.stream.Collectors;
 
 /**
  * Class that holds entrypoing for GIS api methods
- * 
+ *
  * @author ddimunzio@developmentgateway.org jdeanquin@developmentgateway.org
- * 
  */
 @Path("gis")
 @Api("gis")
 public class GisEndPoints {
     private static final Logger logger = Logger.getLogger(GisEndPoints.class);
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation("Get available filters")
@@ -79,41 +94,36 @@ public class GisEndPoints {
         return EndpointUtils.getAvailableMethods(GisEndPoints.class.getName());
     }
 
-    @OPTIONS
-    @Path("/cluster")
-    @ApiOperation(
-            value = "Describe options for endpoint",
-            notes = "Enables Cross-Origin Resource Sharing for endpoint")
-    public Response getOptionsClusteredPointsByAdm() {
-        return PublicServices.buildOkResponseWithOriginHeaders("");
-    }
-
-
     @POST
     @Path("/cluster")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "ClusterPointsByAdmin")
     @ApiOperation("Returns Aggregate ADM info by ADM Level")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Aggregate ADM info by ADM Level",
-            response = FeatureCollectionGeoJSON.class))
-    public final Response getClusteredPointsByAdm(
+    public final FeatureCollectionGeoJSON getClusteredPointsByAdm(
             @ApiParam("filter") final PerformanceFilterParameters config) throws AmpApiException {
 
         List<ClusteredPoints> c = LocationService.getClusteredPoints(config);
+        logger.info("Clustered points :" + c.size());
         FeatureCollectionGeoJSON result = new FeatureCollectionGeoJSON();
         for (ClusteredPoints clusteredPoints : c) {
-            if (!clusteredPoints.getLon().equalsIgnoreCase("") && !clusteredPoints.getLat().equalsIgnoreCase("")){ 
-            result.features.add(getPoint(new Double(clusteredPoints.getLon()),
-                    new Double(clusteredPoints.getLat()),
-                    clusteredPoints.getActivityids(),
-                    clusteredPoints.getAdmin(), clusteredPoints.getAdmId()));
+            logger.info("Point is : " + clusteredPoints);
+
+            if (StringUtils.isNotBlank(clusteredPoints.getLon())
+                    && StringUtils.isNotBlank(clusteredPoints.getLat())) {
+                FeatureGeoJSON point = getPoint(new Double(clusteredPoints.getLon()),
+                        new Double(clusteredPoints.getLat()),
+                        clusteredPoints.getActivityids(),
+                        clusteredPoints.getAdmin(), clusteredPoints.getAdmId());
+                logger.info("Point is : " + point);
+                result.getFeatures().add(point);
             }
         }
-        return PublicServices.buildOkResponseWithOriginHeaders(result);
+
+        return result;
     }
 
     private FeatureGeoJSON getPoint(Double lat, Double lon,
-            List<Long> activityid, String adm, Long admId) {
+                                    List<Long> activityid, String adm, Long admId) {
         FeatureGeoJSON fgj = new FeatureGeoJSON();
         PointGeoJSON pg = new PointGeoJSON();
         pg.coordinates.add(lat);
@@ -134,18 +144,18 @@ public class GisEndPoints {
     public final FeatureCollectionGeoJSON getProjectSites(
             @ApiParam("filter") final PerformanceFilterParameters config,
             @QueryParam("startFrom") Integer startFrom,
-            @QueryParam("size")Integer size) throws AmpApiException {
+            @QueryParam("size") Integer size) throws AmpApiException {
         FeatureCollectionGeoJSON f = new FeatureCollectionGeoJSON();
-        List<AmpStructure> al = LocationService.getStructures( config);
+        List<AmpStructure> al = LocationService.getStructures(config);
         int start = 0;
-        int end = al.size() -1;
-        if (startFrom!=null && size!=null && startFrom < al.size()) {
+        int end = al.size() - 1;
+        if (startFrom != null && size != null && startFrom < al.size()) {
             start = startFrom;
-            if (al.size()>(startFrom + size)) {
+            if (al.size() > (startFrom + size)) {
                 end = startFrom + size;
             }
         }
-        
+
         for (; start <= end; start++) {
             AmpStructure structure = al.get(start);
             FeatureGeoJSON fgj = LocationService.buildFeatureGeoJSON(structure);
@@ -156,7 +166,7 @@ public class GisEndPoints {
         }
         return f;
     }
- 
+
     @POST
     @Path("/saved-maps")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -204,6 +214,9 @@ public class GisEndPoints {
                     .getMapType());
             i.setType(type);
             i.setLayer(ampMapConfig.getLayer());
+            if (ampMapConfig.getLegendHtml() != null) {
+                i.setLegendHtml(HtmlUtils.htmlUnescape(ampMapConfig.getLegendHtml()));
+            }
             indicatorLayers.add(i);
         }
         return indicatorLayers;
@@ -212,7 +225,7 @@ public class GisEndPoints {
     @POST
     @Path("/activities")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "ActivitiesById")
+    @ApiMethod(id = "ActivitiesById")
     @ApiOperation(value = "List activities", notes = "Returns activities that match both the filters and activity ids.")
     public ActivityList getActivities(
             @ApiParam(name = "Filters") PerformanceFilterParameters config,
@@ -256,11 +269,12 @@ public class GisEndPoints {
             PerformanceFilterParameters filters,
             @PathParam("admlevel") AdmLevel admlevel) {
         LocationService ls = new LocationService();
+        logger.info("Trying to get totals");
         // this Service was resetting the amount units so far (used by this EP only), now changed its interface to allow other "users" to not reset it
         return ls.getTotals(admlevel.getLabel(), filters, AmountsUnits.AMOUNTS_OPTION_UNITS);
     }
-    
-    
+
+
     @GET
     @Path("/indicators")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -269,11 +283,10 @@ public class GisEndPoints {
     @JsonView(Indicator.IndicatorView.class)
     public List<Indicator> getIndicators(@QueryParam("admLevel") AdmLevel admLevel) {
         List<AmpIndicatorLayer> indicators;
-        if (admLevel !=null) {
+        if (admLevel != null) {
             indicators = QueryUtil.getIndicatorByCategoryValue(admLevel);
             return IndicatorUtils.getApiIndicatorsForGis(indicators, false);
-        }
-        else {
+        } else {
             indicators = QueryUtil.getIndicatorLayers();
             return IndicatorUtils.getApiIndicatorsForGis(indicators, true);
         }
@@ -284,7 +297,7 @@ public class GisEndPoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation("Get indicator & values")
     @JsonView(Indicator.IndicatorView.class)
-    public Indicator getIndicatorsById(@PathParam ("indicatorId") Long indicatorId) {
+    public Indicator getIndicatorsById(@PathParam("indicatorId") Long indicatorId) {
         return IndicatorUtils.getIndicatorsAndLocationValues(indicatorId);
     }
 
@@ -295,7 +308,7 @@ public class GisEndPoints {
     @JsonView(Indicator.IndicatorView.class)
     public Indicator doGapAnalysisForIndicator(
             PerformanceFilterParameters input,
-            @PathParam ("indicatorId") Long indicatorId) {
+            @PathParam("indicatorId") Long indicatorId) {
         return IndicatorUtils.doGapAnalysis(indicatorId, input);
     }
 
@@ -322,7 +335,7 @@ public class GisEndPoints {
     public Indicator doGapAnalysis(RuntimeIndicatorGapAnalysisParameters input) {
         return new PublicGapAnalysis().doPublicGapAnalysis(input);
     }
-    
+
     @GET
     @Path("/export-map/")
     @Produces("application/vnd.ms-excel")
@@ -350,7 +363,7 @@ public class GisEndPoints {
             name = "map-export-administrative-Locations.xls";
             wb = new ActivityLocationExporter(filters).export(name);
         }
-        webResponse.setHeader("Content-Disposition","attachment; filename=" + name);
+        webResponse.setHeader("Content-Disposition", "attachment; filename=" + name);
 
         StreamingOutput streamOutput = new StreamingOutput() {
             public void write(OutputStream output) throws WebApplicationException {
@@ -381,13 +394,13 @@ public class GisEndPoints {
         }
         return clusters;
     }
-    
+
     private boolean hasMapBoundaries(AmpCategoryValue value, List<Boundary> boundaries) {
         AdmLevel admLevel = AdmLevel.fromString("adm-" + value.getIndex());
         for (Boundary boundary : boundaries) {
-            if (admLevel.equals(boundary.getId())) {
+            if (admLevel.equals(boundary.getAdmLevel())) {
                 return true;
-            }           
+            }
         }
         return false;
     }
@@ -409,9 +422,9 @@ public class GisEndPoints {
                 extraColumns.add(tokenizer.nextToken());
             }
         }
-        return ActivityService.getLastUpdatedActivities(extraColumns, limit,config);
+        return ActivityService.getLastUpdatedActivities(extraColumns, limit, config);
     }
-    
+
 
     @GET
     @Path("/boundaries")
@@ -420,7 +433,7 @@ public class GisEndPoints {
     public List<Boundary> getBoundaries() {
         return BoundariesService.getBoundaries();
     }
-    
+
     @GET
     @Path("/report/{report_config_id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -430,7 +443,7 @@ public class GisEndPoints {
     public AmpApiState getLastUpdated(@PathParam("report_config_id") String reportConfigId) {
         return ReportsUtil.getApiState(reportConfigId);
     }
-    
+
     @GET
     @Path("/has-enabled-performance-rules")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -443,17 +456,17 @@ public class GisEndPoints {
     public boolean hasEnabledPerformanceRules() {
         return !PerformanceRuleManager.getInstance().getPerformanceRuleMatchers().isEmpty();
     }
-    
+
     @GET
     @Path("/map-tiles")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE}, id = "mapTiles", ui = false)
     @ApiOperation(value = "Gets the map-tiles file from content repository.",
-    notes = "Return archived file with map-tiles.")
+            notes = "Return archived file with map-tiles.")
     public Response getMapTiles() {
         return MapTilesService.getInstance().getArchivedMapTiles();
     }
-    
+
     @GET
     @Path("/locators")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

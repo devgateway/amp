@@ -193,8 +193,8 @@ public class MEIndicatorsUtil
 
     public static List<AmpIndicatorRiskRatings> getAllIndicatorRisks()
     {
-        Session session = null;
-        Query qry = null;
+        Session session;
+        Query qry;
         List<AmpIndicatorRiskRatings> col = null;
         try
         {
@@ -205,8 +205,7 @@ public class MEIndicatorsUtil
         }
         catch (Exception e)
         {
-            logger.error("Unable to get the risk ratings");
-            logger.debug("Exception : " + e);
+            logger.error("Unable to get the risk ratings",e);
         }
         return col;
     }
@@ -214,7 +213,7 @@ public class MEIndicatorsUtil
 
     public static String getRiskColor(int overallRisk) {
         String fntColor = "";
-        int r = 0,g = 0,b = 0;
+        int r,g,b;
         switch (overallRisk) {
         case Constants.HIGHLY_SATISFACTORY:
             r = Constants.HIGHLY_SATISFACTORY_CLR.getRed();
@@ -245,6 +244,10 @@ public class MEIndicatorsUtil
             r = Constants.HIGHLY_UNSATISFACTORY_CLR.getRed();
             g = Constants.HIGHLY_UNSATISFACTORY_CLR.getGreen();
             b = Constants.HIGHLY_UNSATISFACTORY_CLR.getBlue();
+            break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + overallRisk);
+
         }
 
         String hexR = Integer.toHexString(r);
@@ -270,7 +273,7 @@ public class MEIndicatorsUtil
 
 
     public static String getRiskRatingName(int risk) {
-        Session session = null;
+        Session session;
         String riskName = "";
 
         try {
@@ -294,9 +297,9 @@ public class MEIndicatorsUtil
 
     public static void deleteProjIndicator(Long indId)
     {
-        Collection colMeIndValIds = null;
-        Collection ampMECurrValIds = null;
-        AmpMEIndicatorValue ampMEIndVal = null;
+        Collection colMeIndValIds;
+        Collection ampMECurrValIds;
+        AmpMEIndicatorValue ampMEIndVal;
 
         AmpMEIndicators ampMEInd = new AmpMEIndicators();
         ampMEInd.setAmpMEIndId(indId);

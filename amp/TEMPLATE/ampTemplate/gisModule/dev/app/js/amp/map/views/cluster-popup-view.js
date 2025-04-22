@@ -8,7 +8,9 @@ var nvd3 = window.nv;
 var util = require('../../../libs/local/chart-util');
 
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
+var WocatProjectListTemplate = fs.readFileSync(__dirname + '/../templates/wocat-project-list-template.html', 'utf8');
 var Template = fs.readFileSync(__dirname + '/../templates/cluster-popup-template.html', 'utf8');
+var WocatTemplate = fs.readFileSync(__dirname + '/../templates/wocat-cluster-popup-template.html', 'utf8');
 var topsTooltipTemplate = _.template(fs.readFileSync(__dirname + '/../templates/tooltip-tops.html', 'UTF-8'));
 
 //TODO: put cluster popup code in own folder,
@@ -16,7 +18,9 @@ var topsTooltipTemplate = _.template(fs.readFileSync(__dirname + '/../templates/
 // TODO: remove tempDOM and use this.$el
 module.exports = Backbone.View.extend({
   template: _.template(Template),
+  wocatTemplate: _.template(WocatTemplate),
   projectListTemplate: _.template(ProjectListTemplate),
+  wocatProjectListTemplate: _.template(WocatProjectListTemplate),
   PAGE_SIZE: 50,
   _currentPage: 0,
 
@@ -36,27 +40,38 @@ module.exports = Backbone.View.extend({
 
 
   generateInfoWindow: function(popup, admLayer) {
-    var featureCollection = admLayer.get('features');
-    this.cluster = _.find(featureCollection, function(feature) {
-      return feature.properties.admName === popup._source._clusterId;
-    });
+      var self = this;
+              var featureCollection = admLayer.get('features');
+              this.cluster = _.find(featureCollection, function (feature) {
+                  return feature.properties.admName === popup._source._clusterId;
+              });
 
-    this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();    
-    // get appropriate cluster model:
-    if (this.cluster) {
+      // this.cluster.gisSettings = gisSettings.gisSettings;
+                this.cluster.sectorsEnabled= self.app.data.generalSettings.get('gis-sectors-enabled');
+                this.cluster.programsEnabled= self.app.data.generalSettings.get('gis-programs-enabled');
+                 this.cluster.fundingType = this.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
+              // get appropriate cluster model:
       popup.setContent(this.template(this.cluster));
-      this.tempDOM = $(popup._contentNode);
 
-      this._generateCharts();
-      return this._generateProjectList(popup, this.cluster);
-    } else {
-      console.error('no matching cluster: ', admLayer, popup._source._clusterId);
-      this.popup.setContent('error finding cluster');
-    }
+      if (this.cluster) {
+                    if (this.cluster.properties.wocatCountryData && this.cluster.properties.wocatCountryData.length>0)
+                    {
+                        popup.setContent(this.wocatTemplate(this.cluster));
+                    }
+                  this.tempDOM = $(popup._contentNode);
+
+                  this._generateCharts();
+                  return this._generateProjectList(popup, this.cluster);
+              } else {
+                  console.error('no matching cluster: ', admLayer, popup._source._clusterId);
+                  this.popup.setContent('error finding cluster');
+              }
+
   },
 
   _generateCharts: function() {
     this._generateSectorChart();
+    this._generateProgramChart();
     var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
       if (selected.toLowerCase().indexOf('ssc') >= 0) {
           this._generateExecutingChart();
@@ -64,6 +79,14 @@ module.exports = Backbone.View.extend({
           this._generateDonorChart();
     }
   },
+    _generateProgramChart: function() {
+        var self = this;
+        // this.set('showProgramType', true);
+        this._getTops('pr').then(function(data) {
+            self.tempDOM.find('#charts-pane-program .loading').remove();
+            self._generateBaseChart(data, '#charts-pane-program .amp-chart svg');
+        });
+    },
 
   _generateSectorChart: function() {
     var self = this;
@@ -158,24 +181,29 @@ module.exports = Backbone.View.extend({
 
     var payload = { limit: 5};
     _.extend(payload, this.app.data.filter.serialize());
-
-    // get funding type, ask for consistancy form API, and at least put this function inside settings collection..
-    var settings = this.app.data.settingsWidget.toAPIFormat(); 	
-
+    // get funding type, ask for consistency form API, and at least put this function inside settings collection..
+    var settings = this.app.data.settingsWidget.toAPIFormat();
+    // settings['program-settings'] = 'National Plan Objective';
+      console.log("Settings",settings)
+      if (!settings['program-settings'])
+      {
+          _.extend(settings,{'program-settings':"National Planning Objectives Level 1"})
+      }
     _.extend(payload, {settings: settings});
 
     //API wants these in the url, but other params go in post, strange but it's the way it is...
     tmpModel.url += '?limit=' + payload.limit;
-    payload.filters['activity-id'] = this.cluster.properties.activityid;    
+    payload.filters['activity-id'] = this.cluster.properties.activityid;
     if (this.cluster.properties.admLevel) {
        payload.filters[this.cluster.properties.admLevel.toLowerCase()] = [this.cluster.properties.admId];
     }
-    
+
     return tmpModel.fetch({type:'POST', data:JSON.stringify(payload)});
   },
 
 
   _generateProjectList: function(popup, cluster) {
+      console.log("Cluster 0: "+JSON.stringify(cluster))
     var self = this;
     this._currentPage = 0;
 
@@ -193,7 +221,7 @@ module.exports = Backbone.View.extend({
   // table should show planned comitments and dispursements,
   // otherwise show actual values.
   _updatePlannedActualUI: function() {
-	  var self = this;       
+	  var self = this;
 	  var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
       self.tempDOM.find('.setting-scc').hide();
       self.tempDOM.find('.setting-executings').hide();
@@ -209,26 +237,43 @@ module.exports = Backbone.View.extend({
 	  } else {
 		  self.tempDOM.find('.setting-actual').show();
 		  self.tempDOM.find('.setting-planned').hide();
-	  }    
+	  }
   },
 
 
 
   //TODO: should be done in data.adm cluster..then we can cache for if someone closes and reopens
   _loadMoreProjects: function(cluster) {
+      console.log("Cluster : "+cluster);
 	  var self = this;
 	  var startIndex = this._currentPage * this.PAGE_SIZE;
-	  var activityIDs = this.cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
+      console.log("Wocat activities",self.cluster.properties.wocatCountryData);
+	  var activityIDs = cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
+      var wocatData;
+      if (cluster.properties.wocatCountryData)
+      {
+          wocatData = cluster.properties.wocatCountryData.slice(startIndex, startIndex+this.PAGE_SIZE);
+      }
 
 	  // hide load more button if all activities loaded.
-	  if (startIndex + this.PAGE_SIZE >= this.cluster.properties.activityid.length) {
-		  this.tempDOM.find('.load-more').hide();
-	  } else {
-		  this.tempDOM.find('.load-more').html('<span data-i18n="amp.gis:popup-loadmore">load more</span> ' +
-				  (startIndex + this.PAGE_SIZE) + '/' + this.cluster.properties.activityid.length);
-	  }
-      
-	  return this.app.data.activities.getActivitiesforLocation(activityIDs, cluster.properties.admLevel, cluster.properties.admId).then(function(activityCollection) {        
+      if (cluster.properties.wocatCountryData)
+      {
+          if (startIndex + this.PAGE_SIZE >= this.cluster.properties.wocatActivities.length) {
+              this.tempDOM.find('.load-more').hide();
+          } else {
+              this.tempDOM.find('.load-more').html('<span data-i18n="amp.gis:popup-loadmore">load more</span> ' +
+                  (startIndex + this.PAGE_SIZE) + '/' + this.cluster.properties.wocatActivities.length);
+          }
+      }else {
+          if (startIndex + this.PAGE_SIZE >= this.cluster.properties.activityid.length) {
+              this.tempDOM.find('.load-more').hide();
+          } else {
+              this.tempDOM.find('.load-more').html('<span data-i18n="amp.gis:popup-loadmore">load more</span> ' +
+                  (startIndex + this.PAGE_SIZE) + '/' + this.cluster.properties.activityid.length);
+          }
+      }
+
+	  return this.app.data.activities.getActivitiesforLocation(activityIDs, cluster.properties.admLevel, cluster.properties.admId).then(function(activityCollection) {
 		  self.tempDOM.find('#projects-pane .loading').remove();
 		  /* Format the numerical columns */
 		  var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));
@@ -249,7 +294,7 @@ module.exports = Backbone.View.extend({
               columnName2 = fundingType + ' Disbursements';
           }
 
-		  var activityFormatted = _.map(activityCollection, function(activity) {             
+		  var activityFormatted = _.map(activityCollection, function(activity) {
 			  var formattedColumnName1 = ampFormatter.format(activity.get(columnName1));
 			  var formattedColumnName2 = ampFormatter.format(activity.get(columnName2));
 
@@ -258,10 +303,20 @@ module.exports = Backbone.View.extend({
 			  activity.set('formattedColumnName2', [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join(''));
 			  return activity;
 		  });
+          if (cluster.properties.wocatCountryData && self.cluster.properties.wocatCountryData.length>0)
+          {
+              self.tempDOM.find('.project-list').append(
+                  self.wocatProjectListTemplate({activities: wocatData,wocatUrl: 'https://qcat.wocat.net'})
+              );
+          }else
+          {
+              self.tempDOM.find('.project-list').append(
+                  self.projectListTemplate({activities: activityFormatted})
+              );
+          }
 
-		  self.tempDOM.find('.project-list').append(
-				  self.projectListTemplate({activities: activityFormatted})
-		  );
+
+
 
 	  });
   }

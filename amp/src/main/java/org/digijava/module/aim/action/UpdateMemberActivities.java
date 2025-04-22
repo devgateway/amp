@@ -114,7 +114,7 @@ public class UpdateMemberActivities extends Action {
             String sort = (taForm.getSort() == null) ? null : taForm.getSort().trim();
             String sortOrder = (taForm.getSortOrder() == null) ? null : taForm.getSortOrder().trim();
             
-            if ( sort == null || "".equals(sort) || sortOrder == null || "".equals(sortOrder)) {
+            if ( sort == null || sort.isEmpty() || sortOrder == null || sortOrder.isEmpty()) {
                 Collections.sort(temp);
                 taForm.setSort("activity");
                 taForm.setSortOrder("asc");
@@ -124,16 +124,16 @@ public class UpdateMemberActivities extends Action {
                     if ("asc".equals(sortOrder))
                         Collections.sort(temp);
                     else
-                        Collections.sort(temp,Collections.reverseOrder());
+                        temp.sort(Collections.reverseOrder());
                 }
                 else if ("donor".equals(sort)) {
                     if ("asc".equals(sortOrder))
-                        Collections.sort(temp, acronymComp);
+                        temp.sort(acronymComp);
                     else
-                        Collections.sort(temp, racronymComp);
+                        temp.sort(racronymComp);
                 }
             }
-            col = (Collection) temp;            
+            col = temp;
             taForm.setActivities(col);
             taForm.setTeamId(tm.getTeamId());
             return mapping.findForward("showAddActivity");          

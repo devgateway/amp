@@ -4,7 +4,6 @@ import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.ExpiringMemoizer;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -30,7 +29,7 @@ import java.util.Set;
 public final class ContentRepositoryManager {
     private static Logger logger = Logger.getLogger(ContentRepositoryManager.class);
 
-    private static final String JACKRABBIT_DIR_PATH = DgUtil.getWebInfPath("jackrabbit");
+    private static final String JACKRABBIT_DIR_PATH = "/jackrabbit";
     private static final String REPOSITORY_CONFIG_FILE_PATH = "/repository.xml";
 
     private static final String AMP_LABLE_NAMESPACE = "http://amp-demo.code.ro/label";
@@ -100,7 +99,7 @@ public final class ContentRepositoryManager {
         try {
             readSession = getOrCloseIfNotLive(readSession);
             if (readSession == null) {
-                readSession = getRepositoryInstance().login(getCredentials(request));
+                readSession = getRepositoryInstance().login();
             }
         } catch (RepositoryException e) {
             throw new RuntimeException(e.getMessage(), e);

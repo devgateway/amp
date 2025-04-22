@@ -14,7 +14,6 @@ public class ActivityErrors {
     
     public static final ApiErrorMessage UNIQUE_ACTIVITY_TITLE = new ApiErrorMessage(ERROR_CLASS_ACTIVITY_ID, 0,
             "Activity title should be unique");
-    
     public static final ApiErrorMessage SAVE_AS_DRAFT_FM_DISABLED = new ApiErrorMessage(ERROR_CLASS_ACTIVITY_ID, 1,
             "Activity cannot be saved as draft, \"save as draft\" is disabled in FM");
     

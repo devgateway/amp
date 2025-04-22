@@ -1113,6 +1113,8 @@ public class DbUtil {
         return organizations;
     }
 
+
+
     public static List<OrganizationSkeleton> getDonorOrganisationByGroupId(Long orgGroupId, boolean publicView) {
         List<OrganizationSkeleton> organizations = new ArrayList<OrganizationSkeleton>();
         StringBuilder queryString = new StringBuilder(
@@ -1260,14 +1262,29 @@ public class DbUtil {
         return qry.list();
     }
 
-    public static void add(Object object) {
-        PersistenceManager.getSession().save(object);
-        PersistenceManager.getSession().flush();
+    public static void addTheme(AmpTheme theme) {
+        add(theme);
+        evictCache();
     }
+    private static void evictCache(){
+        Session session = PersistenceManager.getSession();
+        session.getSessionFactory().getCache().evictEntityData(AmpTheme.class);
+        session.getSessionFactory().getCache().evictEntityData(AmpActivityProgramSettings.class);
+        session.getSessionFactory().getCache().evictCollectionRegion("org.digijava.module.aim.dbentity.AmpTheme.siblings");
 
+    }
+    public static void add(Object object) {
+        Session session = PersistenceManager.getSession();
+        session.save(object);
+
+    }
+    public static void updateTheme(Object theme) {
+        update(theme);
+        evictCache();
+    }
     public static void update(Object object) {
-        PersistenceManager.getSession().update(object);
-        PersistenceManager.getSession().flush();
+        Session session = PersistenceManager.getSession();
+        session.update(object);
     }
 
     public static void updateField(String className, Long id, String fieldName, Object newValue) {
@@ -1430,9 +1447,13 @@ public class DbUtil {
             throw new DgException(e);
         }
     }
-
+    public static void deleteTheme(AmpTheme theme){
+        delete(theme);
+        evictCache();
+    }
     public static void delete(Object object) throws JDBCException {
-        PersistenceManager.getSession().delete(object);
+        Session session = PersistenceManager.getSession();
+        session.delete(object);
     }
 
     public static void deleteOrg(AmpOrganisation org) throws JDBCException {
@@ -2276,10 +2297,9 @@ public class DbUtil {
     public static Collection getActivityMEIndValue(Long ampActId) {
         Session session = null;
         Collection col = null;
-        Query qry;
+        Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-//            session.flush();
             String queryString = "select indAct from " + IndicatorActivity.class.getName() + " indAct "
                     + " where (indAct.activity=:ampActId)";
             qry = session.createQuery(queryString);
@@ -2953,18 +2973,18 @@ public class DbUtil {
     public static Comparator sortUsers(UserManagerSorting criteria) {
         Comparator comparator = null;
         switch (criteria) {
-        case NAMEASCENDING:
-            comparator = new HelperUserNameComparator(Order.ASC);
-            break;
-        case NAMEDESCENDING:
-            comparator = new HelperUserNameComparator(Order.DESC);
-            break;
-        case EMAILASCENDING:
-            comparator = new HelperEmailComparator(Order.ASC);
-            break;
-        case EMAILDESCENDING:
-            comparator = new HelperEmailComparator(Order.DESC);
-            break;
+            case NAMEASCENDING:
+                comparator = new HelperUserNameComparator(Order.ASC);
+                break;
+            case NAMEDESCENDING:
+                comparator = new HelperUserNameComparator(Order.DESC);
+                break;
+            case EMAILASCENDING:
+                comparator = new HelperEmailComparator(Order.ASC);
+                break;
+            case EMAILDESCENDING:
+                comparator = new HelperEmailComparator(Order.DESC);
+                break;
         }
         return comparator;
 
@@ -3023,8 +3043,7 @@ public class DbUtil {
         return image;
     }
 
-    public static void saveOrUpdate(List<?> list) throws Exception {
-        for (Object obj : list)
+    public static void saveOrUpdate(Object obj) throws Exception {
             saveOrUpdateObject(obj);
     }
 

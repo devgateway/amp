@@ -31,6 +31,7 @@ import org.hibernate.CacheMode;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.PathSegment;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -286,11 +287,71 @@ public final class ActivityInterchangeUtils {
     public static Map<String, Object> getActivity(Long projectId, boolean isOfflineClientCall) {
         Map<String, Object> activity = getActivity(projectId, null);
 
+        // Add actual indicator values in indicators activity, but we can also add base and target values
+        addExtraFieldsToActivity(activity, projectId);
         if (!isOfflineClientCall
                 && FeaturesUtil.isVisibleModule("Hide Documents if No Donor")) {
             filterPropertyBasedOnUserPermission(activity, projectId);
         }
             return activity;
+    }
+
+    private static void addExtraFieldsToActivity(Map<String, Object> activityFields, Long projectId){
+        if(activityFields != null){
+            Optional<Object> indicatorsObject = activityFields.entrySet().stream()
+                    .filter(entry -> "indicators".equals(entry.getKey()))
+                    .map(Map.Entry::getValue)
+                    .findFirst();
+
+            addActualIndicatorValues(indicatorsObject, projectId);
+        }
+    }
+
+    private static void addActualIndicatorValues(Optional<Object> indicatorsObject, Long projectId){
+        // Loop through the elements of the ArrayList if present in indicators
+        indicatorsObject.ifPresent(indicators -> {
+            if (indicators instanceof ArrayList) {
+                List<Map<String, Object>> indicatorsList = (ArrayList<Map<String, Object>>) indicators;
+                for (Map<String, Object> indicator : indicatorsList) {
+                    // If indicator already has actual data skip it, only add if actual data is missing
+                    if(indicator.get("actual") == null) {
+                        // Add the "actual" key with its array values to the indicator object
+                        List<Object> actualValues = new ArrayList<>();
+
+                        // Create an amp indicator class
+                        AmpIndicator ind = new AmpIndicator();
+                        ind.setIndicatorId((Long) indicator.get("indicator"));
+
+                        List<IndicatorActivity> results = null;
+                        AmpActivityVersion activity = null;
+
+                        try {
+                            activity = ActivityUtil.loadActivity(projectId);
+                        } catch (DgException e) {
+                            throw new RuntimeException(e);
+                        }
+                            results = IndicatorUtil.findActivityIndicatorConnections(activity, ind);
+
+                        for (IndicatorActivity result : results) {
+                            if (result != null && result.getValues() != null) {
+                                for (AmpIndicatorValue indicatorValue : result.getValues()) {
+                                    actualValues.add(new HashMap<String, Object>() {{
+                                        put("comment", indicatorValue.getComment());
+                                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Customize format as needed
+                                        Date valueDate = indicatorValue.getValueDate();
+                                        String formattedDate = dateFormat.format(valueDate);
+                                        put("date", formattedDate);
+                                        put("value", indicatorValue.getValue());
+                                    }});
+                                }
+                            }
+                        }
+
+                        indicator.put("actual", actualValues);
+                    }
+                }
+            }
+        });
     }
 
     private static void filterPropertyBasedOnUserPermission(Map<String, Object> activity, Long projectId) {

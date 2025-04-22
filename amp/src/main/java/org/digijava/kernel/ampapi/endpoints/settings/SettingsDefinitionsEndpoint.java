@@ -90,7 +90,7 @@ public class SettingsDefinitionsEndpoint {
                     + "funding type.")
     public final List<SettingField> getSettingDefinitionsForGisModule() {
         return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField(),
-                getFundingTypeField(new LinkedHashSet<>(GisConstants.FUNDING_TYPES)));
+                getFundingTypeField(new LinkedHashSet<>(GisConstants.FUNDING_TYPES)),getEnabledProgramField());
     }
 
     @GET

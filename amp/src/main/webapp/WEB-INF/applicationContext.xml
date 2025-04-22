@@ -17,6 +17,29 @@
 	<beans:bean id="customHttpFirewall" class="org.springframework.security.web.firewall.DefaultHttpFirewall"/>
 	<http-firewall ref="customHttpFirewall"/>
 
+	<beans:bean id="gisAuthenticationCheckService" class="org.digijava.kernel.util.GisSecurityUtilService"/>
+
+
+	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
+
+	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm"  >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
+
+	<http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm"  >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
+	<http pattern="/TEMPLATE/ampTemplate/gisModule/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
+	<http pattern="/gis/boundaries/**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="@gisAuthenticationCheckService.isUserAllowedAccess(request, authentication)" />
+		<csrf disabled="true"/>
+	</http>
+
 
 	<!-- by default allow displaying of the flag -->
 	<http pattern="/aim/default/displayFlag.do**" security="none" />
@@ -87,11 +110,10 @@
 	<http pattern="/rest/**" security="none" />
     <http pattern="/api-docs/**" security="none" />
 
-	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
-	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />
-    <http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />
-    <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />
-    <http pattern="/gis/boundaries/**" security="none" />
+<!--	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />-->
+<!--    <http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />-->
+<!--    <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />-->
+<!--    <http pattern="/gis/boundaries/**" security="none" />-->
 
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/**" security="none" />
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/build/**" security="none" />

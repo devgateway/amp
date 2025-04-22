@@ -20,13 +20,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static net.bull.javamelody.internal.common.Parameters.getServletContext;
 import static org.digijava.module.aim.util.LocationConstants.MULTI_COUNTRY_ISO_CODE;
 
 public class BoundariesService {
 
     protected static Logger logger = Logger.getLogger(BoundariesService.class);
 
-    private static final String CONTEXT_PATH = TLSUtils.getRequest().getServletContext().getRealPath("/");
+    private static final String CONTEXT_PATH = getServletContext().getRealPath("/WEB-INF/");
     private static final String BOUNDARY_PATH = "gis" + File.separator + "boundaries" + File.separator;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();

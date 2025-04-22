@@ -20,6 +20,8 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.gateperm.gates.FundingOrganisationGate;
 
 import java.util.Set;
 
@@ -33,17 +35,17 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
     private IModel<AmpRole> fundingRoleModel;
     private Integer tabIndex;
 
-    
+
     public ListEditor<AmpFunding> getList() {
         return list;
     }
-    
+
     public Integer getMaxFundingItemIndexFromList() {
         Integer max = null;
         for (AmpFunding af : list.items) {
             if (max == null)
                 max = af.getIndex();
-            if (max < af.getIndex()) 
+            if (max < af.getIndex())
                 max = af.getIndex();
         }
         return max;
@@ -56,7 +58,7 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
 
     }
 
-    public AmpFundingGroupFeaturePanel(String id, String fmName, final IModel<AmpRole> role, 
+    public AmpFundingGroupFeaturePanel(String id, String fmName, final IModel<AmpRole> role,
             IModel<Set<AmpFunding>> fundsModel, final IModel<AmpOrganisation> model,final IModel<AmpActivityVersion> am, final AmpDonorFundingFormSectionFeature parent) {
         super(id, model, fmName, true);
         fundingOrgModel = model;
@@ -71,28 +73,43 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
                         && item.getSourceRole().getAmpRoleId().equals(role.getObject().getAmpRoleId());
             }
         };
-        
+
         list = new ListEditor<AmpFunding>("listFunding", setModel) {
             @Override
             protected void onPopulateItem(
                     org.dgfoundation.amp.onepager.components.ListItem<AmpFunding> item) {
                 AmpFundingItemFeaturePanel fundingItemFeature;
                 try {
-                    
+
                     fundingItemFeature = new AmpFundingItemFeaturePanel(
                             "fundingItem", "Funding Item",
                             item.getModel(), am, parent,item.getIndex());
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
+                boolean isEnabled=false;
+                if (Boolean.TRUE.equals(FundingOrganisationGate.enabled)) {
+                    Set<AmpOrganisation> orgs = TeamUtil.getCurrentUser().getAssignedOrgs();
+                    for (AmpOrganisation ampOrg : orgs) {
+                        if (ampOrg.getAmpOrgId().equals(model.getObject().getAmpOrgId()))
+                        {
+                            isEnabled=true;
+                            break;
+                        }
+
+                    }
+                    if(!TeamUtil.getCurrentUser().getEmail().equalsIgnoreCase("atl@amp.org")) {
+                        fundingItemFeature.setEnabled(isEnabled);
+                    }
+                }
                 item.add(fundingItemFeature);
             }
         };
         add(list);
-        
+
         final Boolean isTabView=FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN);
-        
-        AmpAjaxLinkField addNewFunding= new AmpAjaxLinkField("addAnotherFunding","New Funding Item","New Funding Item") {           
+
+        AmpAjaxLinkField addNewFunding= new AmpAjaxLinkField("addAnotherFunding","New Funding Item","New Funding Item") {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -101,23 +118,38 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
                     AmpFunding funding = new AmpFunding();
                     funding.setAmpDonorOrgId(model.getObject());
                     funding.setSourceRole(role.getObject());
-                    
+
                     parent.addFundingItem(funding);
                     target.add(parent);
                     target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
                     if (isTabView) {
                         int index = parent.calculateTabIndex(funding.getAmpDonorOrgId(),
                                 funding.getSourceRole());
-                        
+
                         target.appendJavaScript("switchTabs("+ index +");");
                     }
                 }
             }
         };
-        
+        boolean isEnabled=false;
+        if (Boolean.TRUE.equals(FundingOrganisationGate.enabled)) {
+            Set<AmpOrganisation> orgs = TeamUtil.getCurrentUser().getAssignedOrgs();
+            for (AmpOrganisation ampOrg : orgs) {
+                if (ampOrg.getAmpOrgId().equals(model.getObject().getAmpOrgId()))
+                {
+                    isEnabled=true;
+                    break;
+                }
+
+            }
+            if(!TeamUtil.getCurrentUser().getEmail().equalsIgnoreCase("atl@amp.org")) {
+                addNewFunding.setEnabled(isEnabled);
+            }
+        }
+
         add(addNewFunding);
     }
-    
+
     public IModel<AmpRole> getRole() {
         return fundingRoleModel;
     }
@@ -129,5 +161,5 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
     public Integer getTabIndex() {
         return tabIndex;
     }
-    
+
 }

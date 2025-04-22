@@ -1063,15 +1063,7 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setActivityDocuments(Set<AmpActivityDocument> activityDocuments) {
-            if (activityDocuments instanceof PersistentSet) {
-                this.activityDocuments = activityDocuments;
-            } else {
-                if(this.activityDocuments==null) {
-                    this.activityDocuments = new HashSet<>(activityDocuments);
-                }
-                this.activityDocuments.clear();
-                this.activityDocuments.addAll(activityDocuments);
-            }
+            this.activityDocuments = activityDocuments;
         }
 
         /**
@@ -2174,17 +2166,11 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setContracts(Set<IPAContract> contracts) {
-            if (contracts instanceof PersistentSet) {
+            if (this.contracts == null) {
                 this.contracts = contracts;
             } else {
-                if(this.contracts==null) {
-                    if (contracts==null)
-                    {
-                        contracts=new HashSet<>();
-                    }
-                    this.contracts = new HashSet<>(contracts);
-                }
                 this.contracts.clear();
+                if (contracts==null)contracts=new HashSet<>();
                 this.contracts.addAll(contracts);
             }
         }

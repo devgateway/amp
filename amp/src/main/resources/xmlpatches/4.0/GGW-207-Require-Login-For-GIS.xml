@@ -8,6 +8,7 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
+            SELECT setval('amp_global_settings_seq', (SELECT MAX(id) FROM amp_global_settings));
 				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable, internal)
 				VALUES (nextval('amp_global_settings_seq'), 'Login Required For GIS', 'true', 't_Boolean', 'Login Required For GIS', 'gis', null, FALSE);
 			]]></lang>

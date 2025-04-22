@@ -61,8 +61,6 @@ stage('Build') {
 
 
     println "Using environment: ${environment}"
-
-
     node('ansible') {
         checkout scm
 

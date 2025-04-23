@@ -28,7 +28,7 @@ public class AmpImageFieldPanel extends AmpFieldPanel<List<FileUpload>>{
     private FileUploadField fileUploadField;
     private WebMarkupContainer previewContainer;
     private NonCachingImage previewImage;
-    private Label noImageLabel;
+    private Label fileNameText;
     private Label chooseImageLabel;
 
     public AmpImageFieldPanel(String id, String fmName){
@@ -68,17 +68,17 @@ public class AmpImageFieldPanel extends AmpFieldPanel<List<FileUpload>>{
         previewContainer.setVisible(false);
 
         // No-image label
-        noImageLabel = new Label("fileNameText", new LoadableDetachableModel<String>() {
+        fileNameText = new Label("fileNameText", new LoadableDetachableModel<String>() {
             @Override
             protected String load() {
                 FileUpload upload = fileUploadField.getFileUpload();
                 return (upload != null) ? upload.getClientFileName() : "No image chosen";
             }
         });
-        noImageLabel.setOutputMarkupId(true);
-        noImageLabel.setOutputMarkupPlaceholderTag(true);
+        fileNameText.setOutputMarkupId(true);
+        fileNameText.setOutputMarkupPlaceholderTag(true);
 
-        add(chooseImageLabel,fileUploadField, previewContainer, noImageLabel);
+        add(chooseImageLabel,fileUploadField, previewContainer, fileNameText);
         FeedbackPanel fieldFeedback = new FeedbackPanel("imageUploadFeedback", new ContainerFeedbackMessageFilter(fileUploadField));
         fieldFeedback.setOutputMarkupId(true);
         add(fieldFeedback);
@@ -96,10 +96,10 @@ public class AmpImageFieldPanel extends AmpFieldPanel<List<FileUpload>>{
             ));
             previewContainer.setVisible(true);
             previewImage.setVisible(true);
-            noImageLabel.setVisible(false);
+            fileNameText.setVisible(true);
         } else {
             previewContainer.setVisible(false);
-            noImageLabel.setVisible(true);
+            fileNameText.setVisible(true);
         }
     }
 

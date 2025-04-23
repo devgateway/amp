@@ -1,5 +1,5 @@
 <wicket:panel>
-    <label for="imageUpload"><wicket:message key="label.chooseImage">Choose image</wicket:message></label>
+    <label for="imageUpload"><wicket:message >Choose image</wicket:message></label>
     <input type="file" wicket:id="imageUpload" accept="image/png, image/jpeg" />
     <div class="feedback" wicket:id="imageUploadFeedback"></div>
     <div wicket:id="previewContainer" class="image-preview">
@@ -7,6 +7,6 @@
     </div>
 
     <div wicket:id="noImageMsg" class="no-image">
-        <wicket:message key="label.noImage">No image chosen</wicket:message>
+        <wicket:message>No image chosen</wicket:message>
     </div>
 </wicket:panel>

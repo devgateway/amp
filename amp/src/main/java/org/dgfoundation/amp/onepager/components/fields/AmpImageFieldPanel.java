@@ -64,7 +64,7 @@ public class AmpImageFieldPanel extends AmpFieldPanel<List<FileUpload>>{
         previewContainer.setVisible(false);
 
         // No-image label
-        noImageLabel = new Label("noImageMsg", new ResourceModel("label.noImage", "No image chosen"));
+        noImageLabel = new Label("noImageMsg","No Image Chosen" );
         noImageLabel.setOutputMarkupId(true);
         noImageLabel.setOutputMarkupPlaceholderTag(true);
 

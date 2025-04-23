@@ -5,7 +5,7 @@
     <jira>AMP-30955</jira>
     <keyword>Change url to new report generator</keyword>
     <author>bmokandu</author>
-    <description>Change menu entry for tab generator.</description>
+    <description>Change Url for report generator.</description>
     <apply>
         <script>
             <lang delimiter=";" type="postgres">

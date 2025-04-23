@@ -1,11 +1,13 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
+import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.NonCachingImage;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -67,6 +69,9 @@ public class AmpImageFieldPanel extends AmpFieldPanel<List<FileUpload>>{
         noImageLabel.setOutputMarkupPlaceholderTag(true);
 
         add(fileUploadField, previewContainer, noImageLabel);
+        FeedbackPanel fieldFeedback = new FeedbackPanel("imageUploadFeedback", new ContainerFeedbackMessageFilter(fileUploadField));
+        fieldFeedback.setOutputMarkupId(true);
+        add(fieldFeedback);
     }
 
     @Override

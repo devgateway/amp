@@ -1,12 +1,51 @@
-<wicket:panel>
-    <label for="imageUpload"><wicket:message >Choose image</wicket:message></label>
-    <input type="file" wicket:id="imageUpload" accept="image/png, image/jpeg" />
+<wicket:extend>
+    <style>
+        .file-upload-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input[type="file"] {
+            opacity: 0;
+            position: absolute;
+            z-index: -1;
+            width: 0;
+            height: 0;
+        }
+
+        .custom-file-label {
+            background-color: #fff;
+            color: #28a745;
+            border: 1px solid #28a745;
+            padding: 6px 12px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .custom-file-label:hover {
+            background-color: #e9f5ee;
+        }
+
+        .file-name-text {
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+    <div class="form-group file-upload-wrapper">
+        <input type="file" wicket:id="imageUpload" id="imageUpload" accept="image/png,image/jpeg"/>
+        <label for="imageUpload" class="custom-file-label">
+            <div wicket:id="chooseImage" >Choose image</div>
+        </label>
+        <span class="file-name-text" wicket:id="fileNameText">No image chosen</span>
+    </div>
+
     <div class="feedback" wicket:id="imageUploadFeedback"></div>
     <div wicket:id="previewContainer" class="image-preview">
         <img wicket:id="previewImage" width="20" height="20" style="cursor:pointer;" />
     </div>
 
-    <div wicket:id="noImageMsg" class="no-image">
-        <wicket:message>No image chosen</wicket:message>
-    </div>
-</wicket:panel>
+    <div wicket:id="noImageMsg" class="no-image"></div>
+</wicket:extend>

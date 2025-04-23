@@ -8,10 +8,8 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.*;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.validation.IValidatable;
@@ -31,6 +29,7 @@ public class AmpImageFieldPanel extends AmpFieldPanel<List<FileUpload>>{
     private WebMarkupContainer previewContainer;
     private NonCachingImage previewImage;
     private Label noImageLabel;
+    private Label chooseImageLabel;
 
     public AmpImageFieldPanel(String id, String fmName){
         super(id, fmName);
@@ -47,6 +46,11 @@ public class AmpImageFieldPanel extends AmpFieldPanel<List<FileUpload>>{
     }
 
     private void initComponents() {
+
+        // No-image label
+        chooseImageLabel = new Label("chooseImage",Model.of("Choose Image") );
+        chooseImageLabel.setOutputMarkupId(true);
+        chooseImageLabel.setOutputMarkupPlaceholderTag(true);
         // File upload input
         fileUploadField = new FileUploadField("imageUpload", getModel());
 //        fileUploadField.setRequired(isRequired);
@@ -64,11 +68,17 @@ public class AmpImageFieldPanel extends AmpFieldPanel<List<FileUpload>>{
         previewContainer.setVisible(false);
 
         // No-image label
-        noImageLabel = new Label("noImageMsg","No Image Chosen" );
+        noImageLabel = new Label("fileNameText", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                FileUpload upload = fileUploadField.getFileUpload();
+                return (upload != null) ? upload.getClientFileName() : "No image chosen";
+            }
+        });
         noImageLabel.setOutputMarkupId(true);
         noImageLabel.setOutputMarkupPlaceholderTag(true);
 
-        add(fileUploadField, previewContainer, noImageLabel);
+        add(chooseImageLabel,fileUploadField, previewContainer, noImageLabel);
         FeedbackPanel fieldFeedback = new FeedbackPanel("imageUploadFeedback", new ContainerFeedbackMessageFilter(fileUploadField));
         fieldFeedback.setOutputMarkupId(true);
         add(fieldFeedback);

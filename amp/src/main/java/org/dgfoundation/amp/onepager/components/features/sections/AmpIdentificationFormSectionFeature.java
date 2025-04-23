@@ -13,6 +13,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -61,7 +62,7 @@ implements AmpRequiredComponentContainer{
     /**
      * @param id
      * @param fmName
-     * @throws Exception 
+     * @throws Exception
      *
      */
     public AmpIdentificationFormSectionFeature(String id, String fmName,
@@ -138,7 +139,7 @@ implements AmpRequiredComponentContainer{
 
                     for (String ampId : duplicatedAmpIds.keySet()) {
                             moreThanSelf = true;
-                            logger.info("There is a similiarity match!. Current amp id: " + currentAmpId
+                            logger.info("There is a similarity match!. Current amp id: " + currentAmpId
                                     + " Match activity with amp id " + ampId);
                             ret += " - " + duplicatedAmpIds.get(ampId) + "\n";
                     }
@@ -160,6 +161,10 @@ implements AmpRequiredComponentContainer{
             titleSimilarityWarning.getWarning().setVisible(true);
             titleSimilarityWarning.setVisible(true);
             add(titleSimilarityWarning);
+        IModel<List<FileUpload>> imageModel = new PropertyModel<>(am, "projectThumbnail");
+
+        AmpImageFieldPanel projectThumbnail = new AmpImageFieldPanel("projectThumbnail",imageModel,"Project Thumbnail",false,false,true);
+        add(projectThumbnail);
 
              AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(
                     "status", CategoryConstants.ACTIVITY_STATUS_KEY,
@@ -561,5 +566,5 @@ implements AmpRequiredComponentContainer{
     public List<FormComponent<?>> getRequiredRichTextFormComponents() {
         return requiredRichTextFormComponents;
     }
-    
+
 }

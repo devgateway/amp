@@ -71,6 +71,21 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldTextEditor(fieldTitle = "Activity Summary")
     protected String activitySummary;
 
+
+    @Interchangeable(
+            fieldTitle = "Project Thumbnail",
+            importable = false,
+            fmPath = "/Activity Form/Identification/Project Thumbnail",
+            interValidators = @InterchangeableValidator(RequiredValidator.class)
+    )
+//    @VersionableCollection(
+//            fieldTitle = "Project Thumbnail"
+//    )
+//    @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
+    @VersionableFieldSimple(fieldTitle = "Project Thumbnail", mandatoryForSingleChange = true)
+    @TranslatableField
+    protected byte[] projectThumbnail;
+
     @Interchangeable(fieldTitle = "Conditionalities", importable = true,
             fmPath = "/Activity Form/Identification/Conditionalities")
     @VersionableFieldTextEditor(fieldTitle = "Conditionality")
@@ -1320,6 +1335,14 @@ LoggerIdentifiable, Cloneable {
             return (myName.trim().toLowerCase().compareTo(hisName.trim().toLowerCase()));
 
         }
+
+    public byte[] getProjectThumbnail() {
+        return projectThumbnail;
+    }
+
+    public void setProjectThumbnail(byte[] projectThumbnail) {
+        this.projectThumbnail = projectThumbnail;
+    }
 
         public Set<AmpActivityContact> getActivityContacts() {
             return activityContacts;

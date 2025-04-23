@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.codegenerators;
 
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.persistence.PersistenceManager;
+
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.digijava.kernel.persistence.PersistenceManager;
 
 /**
  * Tree generator used in dimensions code generation. 

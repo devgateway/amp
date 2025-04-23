@@ -1,19 +1,17 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static org.hamcrest.Matchers.both;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
 
+import javax.validation.ConstraintViolationException;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeAll;
 
 /**
  * @author Octavian Ciubotaru
@@ -26,17 +24,19 @@ public class SimpleFieldAccessorTest {
         private Set<Long> set;
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() throws Exception {
         set = TestObject.class.getDeclaredField("set");
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testReadNullSet() {
-        TestObject obj = new TestObject();
+        assertThrows(NullPointerException.class,()-> {
+            TestObject obj = new TestObject();
 
-        SimpleFieldAccessor acc = new SimpleFieldAccessor(set);
-        acc.get(obj);
+            SimpleFieldAccessor acc = new SimpleFieldAccessor(set);
+            acc.get(obj);
+        });
     }
 
     @Test

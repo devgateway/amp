@@ -1,19 +1,14 @@
 package org.digijava.module.aim.validator;
 
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.validator.groups.API;
+import org.junit.jupiter.api.BeforeEach;
+
+import javax.validation.*;
+import javax.validation.groups.Default;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Set;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import javax.validation.groups.Default;
-
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.validator.groups.API;
-import org.junit.Before;
 
 /**
  * @author Octavian Ciubotaru
@@ -27,7 +22,7 @@ public abstract class AbstractValidatorTest<T extends ConstraintValidator> {
         this.clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();

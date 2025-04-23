@@ -1,10 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.struts.mock.MockHttpServletRequest;
 import org.apache.struts.mock.MockHttpSession;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -12,32 +7,20 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 
-/**
- * @author Octavian Ciubotaru
- */
-public class AMPRequestRule implements TestRule {
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+
+public class AMPRequestRule implements BeforeEachCallback, AfterEachCallback {
 
     @Override
-    public Statement apply(Statement base, Description description) {
-        return new Statement() {
-
-            @Override
-            public void evaluate() throws Throwable {
-                try {
-                    populateRequest();
-                    base.evaluate();
-                } finally {
-                    cleanupRequest();
-                }
-            }
-        };
-    }
-
-    private void populateRequest() {
+    public void beforeEach(ExtensionContext context) throws Exception {
         MockHttpServletRequest mockRequest = new MockHttpServletRequest(new MockHttpSession());
 
         Site site = new Site("Test Site", "1");
@@ -49,20 +32,20 @@ public class AMPRequestRule implements TestRule {
 
         Set<String> trnCodes = Collections.singleton("en");
         mockRequest.setAttribute(EPConstants.TRANSLATIONS, new TranslationSettings("en", trnCodes, false));
-    
+
         TLSUtils.populate(mockRequest, siteDomain);
 
         TranslationSettings defaultTranslationSettings = new TranslationSettings("en", trnCodes, false);
         TranslationSettings.setDefaultOverride(defaultTranslationSettings);
     }
 
-    private void cleanupRequest() {
+    @Override
+    public void afterEach(ExtensionContext context) throws Exception {
         TLSUtils.clean();
-
         TranslationSettings.setDefaultOverride(null);
     }
 
-    public void enableMultilingual() {
+    public static void enableMultilingual() {
         Set<String> trnCodes = new HashSet<>(Arrays.asList("en", "fr"));
         TLSUtils.getRequest().setAttribute(EPConstants.TRANSLATIONS, new TranslationSettings("en", trnCodes, true));
 

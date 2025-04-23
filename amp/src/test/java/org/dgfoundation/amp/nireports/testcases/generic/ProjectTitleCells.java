@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.nireports.testcases.generic;
 
+import org.dgfoundation.amp.nireports.TextCell;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import org.dgfoundation.amp.nireports.TextCell;
 
 
 public class ProjectTitleCells extends HardcodedCells<TextCell>{

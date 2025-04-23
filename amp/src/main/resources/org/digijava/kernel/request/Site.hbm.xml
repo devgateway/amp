@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.kernel.request.Site" table="DG_SITE" discriminator-value="null" lazy="false">
+		<cache usage="read-write" />
+		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">dg_site_seq</param>
+			</generator>
+		</id>
+
+		<property name="name" column="NAME" type="java.lang.String" />
+		<property name="inheritSecurity" column="INHERIT_SECURITY" type="boolean" />
+		<property name="creationDate" column="CREATION_DATE" type="java.util.Date" />
+		<property name="creationIP" column="CREATION_IP" type="java.lang.String" />
+		<property name="lastModified" column="LAST_MODIFIED" type="java.util.Date" />
+		<property name="modifyingIP" column="MODIFYING_IP" type="java.lang.String" />
+		<property name="parentId" column="PARENT_ID" type="java.lang.Long" not-null="false" />
+
+		<property name="siteId" type="string" column="SITE_ID" />
+		<property name="secure" type="boolean" column="PRIVATE_P" />
+		<property name="metaDescription" type="string" column="METADESCRIPTION" />
+		<property name="metaKeywords" type="string" column="METAKEYWORDS" />
+		<property name="priority" type="int" column="PRIORITY" />
+		<property name="mission" type="string" column="MISSION" />
+		<property name="folder" type="string" column="FOLDER" />
+		<property name="invisible" type="boolean" column="INVISIBLE" />
+		<property name="sendAlertsToAdmin" type="java.lang.Boolean" column="ALERTS_TO_ADMIN" />
+
+
+		<set name="translationLanguages" table="DG_SITE_TRANS_LANG_MAP" lazy="false">
+			<cache usage="read-write" />
+			<key column="SITE_ID" />
+			<many-to-many class="org.digijava.kernel.entity.Locale" column="CODE" />
+		</set>
+		<set name="userLanguages" table="DG_SITE_USER_LANG_MAP" lazy="false">
+			<cache usage="read-write" />
+			<key column="SITE_ID" />
+			<many-to-many class="org.digijava.kernel.entity.Locale" column="CODE" />
+		</set>
+		<many-to-one name="defaultLanguage" column="DEFAULT_LANGUAGE"
+			class="org.digijava.kernel.entity.Locale" cascade="none" />
+		<set name="groups" cascade="all" inverse="true" lazy="false">
+			<cache usage="read-write" />
+			<key column="SITE_ID" />
+			<one-to-many class="org.digijava.kernel.user.Group" />
+		</set>
+		<set name="siteDomains" cascade="all" inverse="true" lazy="false">
+			<cache usage="read-write" />
+			<key column="SITE_ID" />
+			<one-to-many class="org.digijava.kernel.request.SiteDomain" />
+		</set>
+		<set name="moduleInstances" cascade="all" inverse="true" lazy="false"
+			order-by="module_name, module_instance asc">
+			<cache usage="read-write" />
+			<key column="SITE_ID" />
+			<one-to-many class="org.digijava.kernel.entity.ModuleInstance" />
+		</set>
+		<set name="countries" table="DG_SITE_COUNTRY_MAP" lazy="false">
+			<cache usage="read-write" />
+			<key column="SITE_ID" />
+			<many-to-many class="org.digijava.kernel.dbentity.Country" column="ISO" />
+		</set>
+		<many-to-one name="defaultInstance" column="DEFAULT_INSTANCE"
+			class="org.digijava.kernel.entity.ModuleInstance" cascade="none" />
+	</class>
+</hibernate-mapping>

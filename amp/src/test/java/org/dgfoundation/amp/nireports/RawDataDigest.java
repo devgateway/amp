@@ -1,15 +1,15 @@
 package org.dgfoundation.amp.nireports;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-
 import org.dgfoundation.amp.nireports.output.NiColumnReportData;
 import org.dgfoundation.amp.nireports.output.NiGroupReportData;
 import org.dgfoundation.amp.nireports.output.NiReportDataVisitor;
 import org.dgfoundation.amp.nireports.output.NiRowId;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 
 public class RawDataDigest implements NiReportDataVisitor<Map<Long, NiOutCell>> {

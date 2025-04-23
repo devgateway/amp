@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.autopatcher.core.PatchFile" table="PATCH_FILE">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">patch_file_SEQ</param>
+			</generator>
+		</id>
+
+		<property name="absolutePatchName" column="absolute_patch_name" type="java.lang.String" />
+		<property name="invoked" column="invoked" type="java.sql.Timestamp" />
+	</class>
+</hibernate-mapping>

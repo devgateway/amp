@@ -1,38 +1,34 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.StringJoiner;
-
 import org.dgfoundation.amp.StandaloneAMPInitializer;
-import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.dgfoundation.amp.testutils.InTransactionRule;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Tag;
 
-@Category(DatabaseTests.class)
+import java.time.LocalDate;
+import java.util.*;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+@Tag("databasetests")
+@ExtendWith(InTransactionRule.class)
 public class DateTimeTests {
 
-    @Rule
-    public InTransactionRule inTransactionRule = new InTransactionRule();
+
+//    public InTransactionRule inTransactionRule = new InTransactionRule();
 
     private final static Set<String> PATTERNS = AmpDateFormatter.generateSupportedPatterns();
-    
+
     private final static List<String> LIMITED_PATTERNS = Arrays.asList("dd/MMM/yyyy", "MMM/dd/yyyy", "yyyy/MMM/dd");
-    
+
     private final static List<LocalDate> LIMITED_DATES = generateLimitedDates();
-    
+
     private static List<LocalDate> generateLimitedDates() {
         List<LocalDate> res = new ArrayList<>();
         res.add(LocalDate.of(1990, 4, 11));
@@ -41,8 +37,8 @@ public class DateTimeTests {
         res.add(LocalDate.of(1990, 1, 2));
         return res;
     }
-    
-    
+
+
     private final static List<LocalDate> DATES = generateDates();
     private static List<LocalDate> generateDates() {
         List<LocalDate> res = new ArrayList<>();
@@ -53,7 +49,7 @@ public class DateTimeTests {
         return res;
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void staticSetUp() {
         StandaloneAMPInitializer.initialize();
     }
@@ -71,7 +67,7 @@ public class DateTimeTests {
     }
 
 
-    
+
     private void runLocalizedWithPattern(Locale locale) {
         for (LocalDate ld : DATES) {
             for (String pattern : PATTERNS) {
@@ -82,22 +78,22 @@ public class DateTimeTests {
             }
         }
     }
-    
+
     @Test
     public void testLocalizedWithPatternRussian() {
         runLocalizedWithPattern(Locale.forLanguageTag("ru"));
     }
-    
+
     @Test
     public void testLocalizedWithPatternTimor() {
         runLocalizedWithPattern(Locale.forLanguageTag("tm"));
     }
-    
+
     @Test
     public void testLocalizedWithPatternFrench() {
         runLocalizedWithPattern(Locale.FRENCH);
     }
-    
+
     @Test
     public void testUnsupportedPatternYears() {
         try {
@@ -106,7 +102,7 @@ public class DateTimeTests {
         } catch(IllegalArgumentException e) {
         }
     }
-    
+
     @Test
     public void testUnsupportedPatternMonths() {
         try {
@@ -115,7 +111,7 @@ public class DateTimeTests {
         } catch(IllegalArgumentException e) {
         }
     }
-    
+
     @Test
     public void testUnsupportedPatternYears2() {
         try {
@@ -124,7 +120,7 @@ public class DateTimeTests {
         } catch(IllegalArgumentException e) {
         }
     }
-    
+
     @Test
     public void testLocalizedWithPatternOneWayRu() {
         List<String> cor = Arrays.asList("11/апр/1990","апр/11/1990","1990/апр/11","11/ноя/1990","ноя/11/1990","1990/ноя/11",
@@ -138,14 +134,14 @@ public class DateTimeTests {
                 "2/Abr/1990","Abr/2/1990","1990/Abr/2","2/Jan/1990","Jan/2/1990","1990/Jan/2");
         runShortLocalizedWithPattern(Locale.forLanguageTag("tm"), cor);
     }
-    
+
     @Test
     public void testLocalizedWithPatternOneWayFr() {
         List<String> cor = Arrays.asList("11/avr./1990","avr./11/1990","1990/avr./11","11/nov./1990","nov./11/1990","1990/nov./11",
                 "02/avr./1990","avr./02/1990","1990/avr./02","02/janv./1990","janv./02/1990","1990/janv./02");
         runShortLocalizedWithPattern(Locale.forLanguageTag("fr"), cor);
     }
-    
+
     @Test
     public void testFormatterWithAmpFormats() {
         for (LocalDate ld : DATES) {
@@ -173,11 +169,11 @@ public class DateTimeTests {
         }
         assertEquals(cor, res);
     }
-    
+
     private void printCorrect(List<String> values, String message) {
         System.out.println(message);
         StringJoiner sj = new StringJoiner(",");
-        
+
         for (String p : values) {
             sj.add("\"" + p + "\"");
         }

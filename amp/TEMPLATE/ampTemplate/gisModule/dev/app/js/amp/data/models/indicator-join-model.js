@@ -28,17 +28,17 @@ module.exports = Backbone.Model
     this.listenTo(this, 'change:selected', function(blah, show) {
       this.trigger(show ? 'show' : 'hide', this);
     });
-    
-    this.listenTo(this, 'change:values', function() {   
-    	this.analyzeValues(); 
+
+    this.listenTo(this, 'change:values', function() {
+    	this.analyzeValues();
     	this.updatePaletteRange();
         this.trigger('valuesChanged', this);
      });
-    
+
     this.listenTo(this, 'change:selectedGapAnalysis', function(blah, show) {
         this.trigger('sync', this);
     });
-       
+
     // We listen to the "apply" event on filter widget and trigger a "filter" event that will be listened by our view.
     // This way the view will also receive this model as parameter.
     this.listenTo(app.data.filter, 'apply', function(blah, show) {
@@ -47,7 +47,7 @@ module.exports = Backbone.Model
     this.listenTo(app.data.settingsWidget, 'applySettings', function(blah, show) {
         this.trigger('applySettings', this);
     });
-    this.initializePalette();        
+    this.initializePalette();
   },
   initializePalette: function() {
 	  var numStops = this.get('classes') || 5;
@@ -60,13 +60,13 @@ module.exports = Backbone.Model
 			  var multiColorSet = [];
 			  _.each(this.get('colorRamp'),function(colorRamp) {
 				  multiColorSet.push(husl.fromHex(colorRamp.color));
-			  });           	
-			  this.palette.set('multiColorSet', multiColorSet);         
+			  });
+			  this.palette.set('multiColorSet', multiColorSet);
 		  } else {
 			  var colorHex = this.get('colorRamp')[0].color; //choose last or first colour from ramp.
 			  this.palette.set('rootHue', husl.fromHex(colorHex)[0]);//Math.floor(seedrandom(options.seed)() * 360));
-		  }      
-	  } 
+		  }
+	  }
   },
   loadBoundary: function() {
     // Phil's ideal way of being able to join with non-hosted boundaries.:
@@ -74,32 +74,31 @@ module.exports = Backbone.Model
     // var boundaryId = boundaryLink.split('gis/boundaries/')[1];  // for now, (for ever?,) they are all local
     // var boundary = this.collection.boundaries.find(function(boundary) { return boundary.id === boundaryId; });
 
-    var boundary = this.collection.boundaries.findWhere({id: this.get('adminLevel')});
-    if (!boundary) {  // sanity check
-      throw new Error('No boundary found for indicator layer:', this.get('title'));
-    }
-
-    var boundaryLoaded = boundary.load();
-    when(boundaryLoaded, this.load())         // Order is important...
-      .done(function(boundaryModel, self) {  // ...args follow "when" order
-        var topoboundaries = boundaryModel.toJSON();
-        var topoJsonObjectsIndex = _.chain(topoboundaries.objects)
-                                 .keys()
-                                 .first()
-                                 .value();
-        var boundaries = TopojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
-        self._joinDataWithBoundaries(boundaries);               
-      });
-
-    return boundaryLoaded;
+    var boundaries = this.collection.boundaries.where({admLevel: this.get('adminLevel')});
+		var promises = [ this.load() ];
+		boundaries.forEach(function (b) { promises.push(b.load()); });
+		return $.when.apply($, promises)
+			.done(function() {
+				var self = arguments[0];
+				var boundaryModels = Array.prototype.slice.call(arguments, 1);
+				var features = boundaryModels.map(function(model) {
+					var topoboundaries = model.toJSON();
+					var topoJsonObjectsIndex = _.chain(topoboundaries.objects)
+						.keys()
+						.first()
+						.value();
+					return TopojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
+				});
+				self._joinDataWithBoundaries(features);
+			});
   },
 
 loadAll: function(options) {
-	  if(this.get('type') === 'joinBoundaries' && this.get('colorRamp')){		  	  
+	  if(this.get('type') === 'joinBoundaries' && this.get('colorRamp')){
 		  this.url = INDICATOR_LAYER_URL + this.getId();
 	  }else if(this.get('type') === 'Indicator Layers'){
 		  this.url = '/rest/gis/indicator-layers/' + this.get('id');
-	  }	
+	  }
 	  return when(this.load(options), this.loadBoundary()).promise().done(function() {
 		  $('#map-loading').hide();
 	  });
@@ -108,31 +107,31 @@ loadAll: function(options) {
 	  var id = this.get('id');
 	  if(typeof this.get('id') === 'string' || this.get('id') instanceof String){
 		  id = parseInt(this.get('id').replace( /^\D+/g, ''));
-      }	
+      }
 	  return id
   },
-  fetch: function(){	
+  fetch: function(){
 	  var self = this;
 	  var isGapAnalysis = app.mapView.headerGapAnalysisView.model.get('isGapAnalysisSelected');
 	  var httpMethod = isGapAnalysis || this.attributes.isStoredInLocalStorage ? 'POST' : 'GET';
-	  var settings = app.data.settingsWidget.toAPIFormat();	  
+	  var settings = app.data.settingsWidget.toAPIFormat();
 	  var filter = {};
-	  
+
 	  if (app.data.filter) {
 		  _.extend(filter, app.data.filter.serialize());
-	  }	  	  	  
-	  
-	  if (this.attributes.isStoredInLocalStorage === true) {		  
+	  }
+
+	  if (this.attributes.isStoredInLocalStorage === true) {
 	     return this._fetchLocalLayer(httpMethod, filter, settings, isGapAnalysis);
 	  } else {
 		return this._fetchServerLayer(httpMethod, filter, settings, isGapAnalysis);
-	  }	  
+	  }
   },
   _fetchLocalLayer: function(httpMethod, filter, settings, isGapAnalysis) {
 	  IndicatorLayerLocalStorage.cleanUp();
 	  var layer = IndicatorLayerLocalStorage.findById(this.getId());
 	  if (!_.isUndefined(layer)) {
-		  IndicatorLayerLocalStorage.updateLastUsedTime(layer);			  
+		  IndicatorLayerLocalStorage.updateLastUsedTime(layer);
 		  var params = {};
 		  params.type = httpMethod;
 		  if (isGapAnalysis) {
@@ -236,8 +235,7 @@ loadAll: function(options) {
    	   this.minValue = this._getMinValue();
    	   this.valuesAreIntegers = this._valuesAreIntegers();
    },
-  _joinDataWithBoundaries: function(boundaryGeoJSON) {
-    var self = this;
+  _joinDataWithBoundaries: function(features) {
     var values = _.map(this.get('values'), function(value){
     	value.geoId = value.geoId ? $.trim(value.geoId) : value.geoId;
     	return value;
@@ -248,31 +246,35 @@ loadAll: function(options) {
         indexedValues[0] = indexedValues["null"]; //hack for some countries the geoId is null.
     }
 
-    var admKey = this.get('adminLevel').replace('-', '').toUpperCase();
 
-    // copy boundary geoJSON, and inject data
-    var geoJSON = _.extend({}, boundaryGeoJSON, {
-      features: _.map(boundaryGeoJSON.features, function(feature) {
-        // replace boundary properties with {value: value}
-        // TODO... keep the existing properties and just add value?
-        // replacing for now, to save weight
-    	var admCode = feature.properties[admKey + '_CODE'];
-    	feature.id = admCode ? $.trim(admCode) : admCode;
-        feature.properties.name = feature.properties[admKey + '_NAME'] || '';
+    var admKey = parseInt(this.get('adminLevel').substring(4), 10);
 
-        var value = null;
-        if (!_.isUndefined(indexedValues[feature.id]) && !_.isNull(indexedValues[feature.id])) {
-        	value = indexedValues[feature.id].value;
-        }
+		// copy boundary geoJSON, and inject data
+		var geoJSONs = features.map(function(feature) {
+    	return _.extend({}, feature, {
+				features: _.map(feature.features, function(feature) {
+					// replace boundary properties with {value: value}
+					// TODO... keep the existing properties and just add value?
+					// replacing for now, to save weight
 
-        return _.extend(feature, {
-          properties: _.extend(feature.properties, {
-            value: value
-          })
-        });
-      })
-    });
-    this.set('geoJSON', geoJSON);
+					var admCode =  feature.properties['ID_' + admKey];
+					feature.id = admCode ? $.trim(admCode) : admCode;
+					feature.properties.name = feature.properties['NAME_' + admKey] || '';
+					var value = null;
+					if (!_.isUndefined(indexedValues[feature.id]) && !_.isNull(indexedValues[feature.id])) {
+						value = indexedValues[feature.id].value;
+					}
+
+
+					return _.extend(feature, {
+						properties: _.extend(feature.properties, {
+							value: value
+						})
+					});
+				})
+			});
+		});
+    this.set('geoJSONs', geoJSONs);
   }
 
 });

@@ -1,20 +1,5 @@
 package org.digijava.kernel.validators.common;
 
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.assertThat;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
@@ -38,13 +23,21 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.util.Identifiable;
 import org.hamcrest.Matcher;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Octavian Ciubotaru
  */
-public class RequiredValidatorTest {
+class RequiredValidatorTest {
 
     @TranslatableClass(displayName = "Foo")
     public static class Foo implements Identifiable {
@@ -80,7 +73,7 @@ public class RequiredValidatorTest {
         @Interchangeable(fieldTitle = "bar", fmPath = "bar",
                 interValidators = @InterchangeableValidator(RequiredValidator.class))
         private Bar bar;
-    
+
         @Interchangeable(fieldTitle = "multilingual_translation", fmPath = "multilingualTranslation",
                 interValidators = @InterchangeableValidator(RequiredValidator.class))
         private MultilingualContent multilingualTranslation;
@@ -120,7 +113,7 @@ public class RequiredValidatorTest {
         return fmPaths;
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         titleField = ValidatorUtil.getMetaData(Foo.class, getAllTestFmPathsExcept("title"));
@@ -539,89 +532,89 @@ public class RequiredValidatorTest {
 
         assertThat(violations, emptyIterable());
     }
-    
+
     @Test
     public void test_multilingualTranslation_null() {
         Foo foo = new Foo();
-        
+
         Set<ConstraintViolation> violations = getConstraintViolations(mtField, foo);
-        
+
         assertThat(violations, contains(violation("multilingual_translation")));
     }
-    
+
     @Test
     public void test_multilingualTranslation_empty() {
         Foo foo = new Foo();
         foo.multilingualTranslation = new MultilingualContent("");
-        
+
         Set<ConstraintViolation> violations = getConstraintViolations(mtField, foo);
-        
+
         assertThat(violations, contains(violation("multilingual_translation")));
     }
-    
+
     @Test
     public void test_multilingualTranslation_blank() {
         Foo foo = new Foo();
         foo.multilingualTranslation = new MultilingualContent(" ");
-        
+
         Set<ConstraintViolation> violations = getConstraintViolations(mtField, foo);
-        
+
         assertThat(violations, contains(violation("multilingual_translation")));
     }
-    
+
     @Test
     public void test_multilingualTranslation_valid() {
         Foo foo = new Foo();
         foo.multilingualTranslation = new MultilingualContent("Foo Mt");
-        
+
         Set<ConstraintViolation> violations = getConstraintViolations(mtField, foo);
-        
+
         assertThat(violations, emptyIterable());
     }
-    
+
     @Test
     public void test_ml_multilingualTranslation_blankValue() {
         Foo foo = new Foo();
         foo.multilingualTranslation = new MultilingualContent(" ", getMultilingualTranslationSettings());
-    
+
         Set<ConstraintViolation> violations = getConstraintViolations(multilingualMtField, foo);
-        
+
         assertThat(violations, contains(violation("multilingual_translation")));
     }
-    
+
     @Test
     public void test_ml_multilingualTranslation_validValue() {
         Foo foo = new Foo();
         foo.multilingualTranslation = new MultilingualContent("title", getMultilingualTranslationSettings());
-        
+
         Set<ConstraintViolation> violations = getConstraintViolations(multilingualMtField, foo);
-        
+
         assertThat(violations, emptyIterable());
     }
-    
+
     @Test
     public void test_ml_multilingualTranslation_invalidValue_lang() {
         Map<String, String> translations = new HashMap<>();
         translations.put("fr", "text");
-        
+
         Foo foo = new Foo();
         foo.multilingualTranslation = new MultilingualContent(translations, getMultilingualTranslationSettings());
-        
+
         Set<ConstraintViolation> violations = getConstraintViolations(multilingualMtField, foo);
-        
+
         assertThat(violations, contains(violation("multilingual_translation")));
     }
-    
+
     @Test
     public void test_ml_multilingualTranslation_validValue_lang() {
         Map<String, String> translations = new HashMap<>();
         translations.put("en", "text");
-        
+
         Foo foo = new Foo();
         foo.multilingualTranslation = new MultilingualContent(translations, getMultilingualTranslationSettings());
-        
+
         Set<ConstraintViolation> violations = getConstraintViolations(multilingualMtField, foo);
-        
+
         assertThat(violations, emptyIterable());
     }
 
@@ -646,7 +639,7 @@ public class RequiredValidatorTest {
         return validator.validate(objField, object,
                 ValidatorUtil.getDefaultTranslationContext(editorStore, contentTranslations));
     }
-    
+
     private TranslationSettings getMultilingualTranslationSettings() {
         Set<String> languages = Stream.of("en", "fr").collect(Collectors.toSet());
         TranslationSettings settings = new TranslationSettings("en", "en", languages, true);

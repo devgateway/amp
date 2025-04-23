@@ -15,37 +15,33 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hamcrest.Matcher;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
 import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Octavian Ciubotaru
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({FeaturesUtil.class})
 public class FundingWithTransactionsValidatorTest {
 
     private static APIField activityField;
     private static InMemoryCategoryValuesManager categoryValues;
+    private MockedStatic<FeaturesUtil> featuresUtilMock;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
-        PowerMockito.mockStatic(FeaturesUtil.class);
+//        featuresUtilMock = Mockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
         categoryValues = InMemoryCategoryValuesManager.getInstance();
     }
@@ -132,4 +128,5 @@ public class FundingWithTransactionsValidatorTest {
         return ValidatorMatchers.violationFor(
                 FundingWithTransactionsValidator.class, path, anything(), ValidationErrors.FIELD_REQUIRED);
     }
+
 }

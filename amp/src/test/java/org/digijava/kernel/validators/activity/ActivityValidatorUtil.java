@@ -1,14 +1,14 @@
 package org.digijava.kernel.validators.activity;
 
-import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
-
-import java.util.Set;
-
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validation.TranslationContext;
 import org.digijava.kernel.validation.Validator;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
+
+import java.util.Set;
+
+import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 
 /**
  * @author Octavian Ciubotaru

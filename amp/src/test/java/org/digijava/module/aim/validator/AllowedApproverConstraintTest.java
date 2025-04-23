@@ -1,45 +1,32 @@
 package org.digijava.module.aim.validator;
 
-import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_FOR_ALL_EDITS;
-import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_FOR_NEW_ONLY;
-import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_OFF;
-import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_ON;
-import static org.digijava.module.aim.validator.ConstraintMatchers.hasViolation;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Date;
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
-import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.validator.approval.AllowedApprover;
 import org.digijava.module.aim.validator.approval.AllowedApproverConstraint;
 import org.hamcrest.Matcher;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Matchers;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.Mockito;
+
+import javax.validation.ConstraintViolation;
+import java.util.Date;
+import java.util.Set;
+
+import static org.digijava.module.aim.helper.Constants.*;
+import static org.digijava.module.aim.validator.ConstraintMatchers.hasViolation;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyIterable;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Nadejda Mandrescu
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ FeaturesUtil.class, DbUtil.class })
 public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest<AllowedApproverConstraint> {
 
     private static final Long NOT_APPROVER_TEAM_MEMBER_ID = 200l;
@@ -48,14 +35,15 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
     private AmpTeamMember notApprover;
     private AmpTeam computedAmpTeam;
     private AmpTeamMemberRoles notApproverRoles;
-
+    private AutoCloseable closeable;
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
-        PowerMockito.mockStatic(FeaturesUtil.class);
-        PowerMockito.mockStatic(DbUtil.class);
+//        closeable = Mockito.mockStatic(FeaturesUtil.class);
+        // Mockito.mockStatic(FeaturesUtil.class);
+//        Mockito.mockStatic(DbUtil.class);
 
         computedAmpTeam = mock(AmpTeam.class);
         when(computedAmpTeam.getAmpTeamId()).thenReturn(CROSS_TEAM_ID);
@@ -69,6 +57,15 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
         when(notApprover.getAmpTeamMemId()).thenReturn(NOT_APPROVER_TEAM_MEMBER_ID);
         when(notApprover.getAmpTeam()).thenReturn(ampTeam);
         when(notApprover.getAmpMemberRole()).thenReturn(notApproverRoles);
+    }
+
+    @org.junit.jupiter.api.AfterEach
+    public void tearDown() throws Exception {
+        if (closeable != null) {
+            closeable.close();
+        }
+        // Add the following line to close the mocked static FeaturesUtil
+        Mockito.mockStatic(FeaturesUtil.class).close();
     }
 
     @Test
@@ -105,7 +102,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
 
     @Test
     public void testValidNullApprovedByWhenNewActivityNotApproved() {
-        AmpActivity newActivity = getAmpActivity(null, notApprover, ApprovalStatus.STARTED);
+        AmpActivity newActivity = getAmpActivity(null, notApprover, ApprovalStatus.started);
 
         mockValidation("any", "any", newActivity, null);
 
@@ -116,8 +113,8 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
 
     @Test
     public void testInvalidNullApprovedByWhenPreviouselyApprovedActivityNotApproved() {
-        AmpActivity newActivity = getAmpActivity(null, notApprover, ApprovalStatus.EDITED);
-        AmpActivity oldActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.APPROVED);
+        AmpActivity newActivity = getAmpActivity(null, notApprover, ApprovalStatus.edited);
+        AmpActivity oldActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.approved);
 
         mockValidation("any", "any", newActivity, oldActivity);
 
@@ -128,7 +125,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
 
     @Test
     public void testNullApprovedByWhenApproved() {
-        AmpActivity newActivity = getAmpActivity(null, ampTeamMember, ApprovalStatus.APPROVED);
+        AmpActivity newActivity = getAmpActivity(null, ampTeamMember, ApprovalStatus.approved);
 
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, newActivity, null);
 
@@ -139,7 +136,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
 
     @Test
     public void testValidApprovedByWhenNotApprovedAndApproverCannotApproveNow() {
-        AmpActivity newActivity = getAmpActivity(notApprover, ampTeamMember, ApprovalStatus.EDITED);
+        AmpActivity newActivity = getAmpActivity(notApprover, ampTeamMember, ApprovalStatus.edited);
 
         mockValidation("any", "any", newActivity, null);
 
@@ -151,8 +148,8 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
 
     @Test
     public void testValidApprovedByWhenNotMatchingModifiedByValidateNewOnly() {
-        AmpActivity newActivity = getAmpActivity(notApprover, ampTeamMember, ApprovalStatus.APPROVED);
-        AmpActivity oldActivity = getAmpActivity(notApprover, notApprover, ApprovalStatus.APPROVED);
+        AmpActivity newActivity = getAmpActivity(notApprover, ampTeamMember, ApprovalStatus.approved);
+        AmpActivity oldActivity = getAmpActivity(notApprover, notApprover, ApprovalStatus.approved);
         oldActivity.setApprovalDate(new Date());
         newActivity.setApprovalDate(oldActivity.getApprovalDate());
 
@@ -164,8 +161,8 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
     }
 
     public void testInvalidApprovedByForValidatedActivityWhenNotMatchingModifiedByAndPastApprovedByValidateNewOnly() {
-        AmpActivity newActivity = getAmpActivity(notApprover, ampTeamMember, ApprovalStatus.APPROVED);
-        AmpActivity oldActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.APPROVED);
+        AmpActivity newActivity = getAmpActivity(notApprover, ampTeamMember, ApprovalStatus.approved);
+        AmpActivity oldActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.approved);
         oldActivity.setApprovalDate(new Date());
         newActivity.setApprovalDate(oldActivity.getApprovalDate());
 
@@ -178,9 +175,9 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
 
     @Test
     public void testInvalidApprovedByForUnvalidatedActivityWhenNotMatchingModifiedByAndPastAppDateValidateNewOnly() {
-        AmpActivity newActivity = getAmpActivity(notApprover, ampTeamMember, ApprovalStatus.APPROVED);
-        AmpActivity oldActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.APPROVED);
-        
+        AmpActivity newActivity = getAmpActivity(notApprover, ampTeamMember, ApprovalStatus.approved);
+        AmpActivity oldActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.approved);
+
         Date approvalDate = new Date();
         oldActivity.setApprovalDate(approvalDate);
         newActivity.setApprovalDate(approvalDate);
@@ -194,7 +191,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
 
     @Test
     public void testInvalidApprovedByForValidatedNewActivityWhenNotMatchingModifiedBy() {
-        AmpActivity newActivity = getAmpActivity(notApprover, ampTeamMember, ApprovalStatus.APPROVED);
+        AmpActivity newActivity = getAmpActivity(notApprover, ampTeamMember, ApprovalStatus.approved);
 
         mockValidation("any", "any", newActivity, null);
 
@@ -205,7 +202,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
 
     @Test
     public void testInvalidApprovedByForValidatedExistingActivityWhenNotMatchingModifiedByValidateAll() {
-        AmpActivity newActivity = getAmpActivity(notApprover, ampTeamMember, ApprovalStatus.APPROVED);
+        AmpActivity newActivity = getAmpActivity(notApprover, ampTeamMember, ApprovalStatus.approved);
 
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, newActivity, null);
 
@@ -216,7 +213,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
 
     @Test
     public void testValidApprovedByForNewActivityValidationOn() {
-        AmpActivity newActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.APPROVED);
+        AmpActivity newActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.approved);
 
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, newActivity, null);
 
@@ -227,7 +224,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
 
     @Test
     public void testValidApprovedByForNewActivityValidationOff() {
-        AmpActivity newActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.STARTED_APPROVED);
+        AmpActivity newActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.startedapproved);
 
         mockValidation(PROJECT_VALIDATION_OFF, PROJECT_VALIDATION_FOR_ALL_EDITS, newActivity, null);
 
@@ -238,8 +235,8 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
 
     @Test
     public void testValidApprovedByWhenValidationIsOffForOldActivity() {
-        AmpActivity newActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.APPROVED);
-        AmpActivity oldActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.STARTED_APPROVED);
+        AmpActivity newActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.approved);
+        AmpActivity oldActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.startedapproved);
 
         mockValidation(PROJECT_VALIDATION_OFF, PROJECT_VALIDATION_FOR_ALL_EDITS, newActivity, oldActivity);
 
@@ -250,8 +247,8 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
 
     @Test
     public void testInvalidApprovedByWhenValidationIsForNewOnlyExistingActivity() {
-        AmpActivity newActivity = getAmpActivity(notApprover, notApprover, ApprovalStatus.APPROVED);
-        AmpActivity oldActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.STARTED);
+        AmpActivity newActivity = getAmpActivity(notApprover, notApprover, ApprovalStatus.approved);
+        AmpActivity oldActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.started);
 
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, newActivity, oldActivity);
 
@@ -262,7 +259,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
 
     @Test
     public void testInvalidApprovedByWhenValidationIsForNewOnlyNewActivity() {
-        AmpActivity newActivity = getAmpActivity(notApprover, notApprover, ApprovalStatus.APPROVED);
+        AmpActivity newActivity = getAmpActivity(notApprover, notApprover, ApprovalStatus.approved);
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_NEW_ONLY, newActivity, null);
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(newActivity);
@@ -275,7 +272,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
         AmpTeamMember crossTeamValidator = ampTeamMember;
         when(ampTeamMember.getAmpTeam()).thenReturn(computedAmpTeam);
 
-        AmpActivity newActivity = getAmpActivity(crossTeamValidator, crossTeamValidator, ApprovalStatus.APPROVED);
+        AmpActivity newActivity = getAmpActivity(crossTeamValidator, crossTeamValidator, ApprovalStatus.approved);
 
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, newActivity, null);
 
@@ -290,7 +287,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
         when(ampTeamMember.getAmpTeam()).thenReturn(computedAmpTeam);
         when(computedAmpTeam.getCrossteamvalidation()).thenReturn(Boolean.FALSE);
 
-        AmpActivity newActivity = getAmpActivity(crossTeamValidator, crossTeamValidator, ApprovalStatus.APPROVED);
+        AmpActivity newActivity = getAmpActivity(crossTeamValidator, crossTeamValidator, ApprovalStatus.approved);
 
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, newActivity, null);
 

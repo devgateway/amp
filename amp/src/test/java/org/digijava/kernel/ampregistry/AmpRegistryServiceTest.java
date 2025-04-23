@@ -1,22 +1,22 @@
 package org.digijava.kernel.ampregistry;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Octavian Ciubotaru
  */
+@ExtendWith(MockitoExtension.class)
 public class AmpRegistryServiceTest {
 
     private static final String TEST_SECRET_TOKEN = "testSecretToken";
@@ -48,13 +48,11 @@ public class AmpRegistryServiceTest {
 
     private AmpRegistryService ampRegistryService;
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
 
     @Mock
     private AmpRegistryClient ampRegistryClient;
 
-    @Before
+    @BeforeEach
     public void setup() {
         ampRegistryService = new AmpRegistryService(() -> ampRegistryClient);
     }
@@ -98,7 +96,7 @@ public class AmpRegistryServiceTest {
         verify(ampRegistryClient).destroy();
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testDestroyOnException() {
         when(ampRegistryClient.listAmpInstallations(TEST_SECRET_TOKEN)).thenThrow(new RuntimeException());
 

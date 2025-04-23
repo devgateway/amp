@@ -48,7 +48,7 @@
       <property name="allowStaticMemberImports" value="true"/>
     </module>
     <module name="IllegalImport"/>
-    <module name="RedundantImport"/>    
+    <module name="RedundantImport"/>
     <module name="LineLength">
       <property name="max" value="120"/>
     </module>
@@ -122,7 +122,7 @@
     <property name="severity" value="ignore"/>
     <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
   </module>
-  <module name="Translation"/>  
+  <module name="Translation"/>
   <module name="FileTabCharacter">
        <property name="fileExtensions" value="java,xml,html,md"/>
   </module>

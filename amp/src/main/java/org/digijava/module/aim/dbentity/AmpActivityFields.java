@@ -14,6 +14,7 @@ import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
+import org.digijava.module.aim.annotations.activityversioning.VersionableFieldBinary;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.*;
@@ -82,8 +83,8 @@ LoggerIdentifiable, Cloneable {
 //            fieldTitle = "Project Thumbnail"
 //    )
 //    @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
-    @VersionableFieldSimple(fieldTitle = "Project Thumbnail", mandatoryForSingleChange = true)
-    @TranslatableField
+//    @VersionableFieldBinary(fieldTitle = "Project Thumbnail")
+//    @TranslatableField
     protected byte[] projectThumbnail;
 
     @Interchangeable(fieldTitle = "Conditionalities", importable = true,

@@ -55,6 +55,7 @@ public class AmpImageFieldPanel extends AmpFieldPanel<List<FileUpload>>{
         fileUploadField = new FileUploadField("imageUpload", getModel());
 //        fileUploadField.setRequired(isRequired);
         fileUploadField.add(new ImageFileValidator());
+        fileUploadField.setOutputMarkupId(true);
 
         // Image preview
         previewImage = new NonCachingImage("previewImage", Model.of((IResourceStream) null));

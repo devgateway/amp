@@ -1,76 +1,104 @@
 <wicket:extend>
     <style>
-        .file-upload-wrapper {
+        #imageUploadContainer {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin: 10px 0;
+            gap: 10px;
+            margin: 16px 0;
+            max-width: 100%;
         }
 
-        .file-upload-input {
-            position: relative;
-            overflow: hidden;
+        /* Label styling - styled as a button */
+        #uploadLabel {
             display: inline-block;
-        }
-
-        .file-upload-input input[type="file"] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-
-        .custom-file-label {
-            background-color: #28a745;
-            color: white;
-            padding: 8px 16px;
-            font-weight: bold;
-            cursor: pointer;
+            padding: 6px 16px;
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #4CAF50;
             border-radius: 4px;
-            display: inline-block;
-            transition: background-color 0.3s;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
             text-align: center;
-            min-width: 120px;
+            white-space: nowrap;
+            transition: background-color 0.2s ease;
         }
 
-        .custom-file-label:hover {
-            background-color: #218838;
+        #uploadLabel:hover {
+            background: #f0fff0;
         }
 
-        .file-name-text {
-            font-style: italic;
-            color: #666;
-            margin-left: 10px;
+        /* Hide native file input */
+        #projectThumbnailInput {
+            display: none;
         }
 
-        .image-preview {
-            margin-top: 15px;
+        #projectThumbnailInputPreviewContainer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .image-preview img {
-            max-width: 200px;
-            max-height: 200px;
+        #projectThumbnailInputPreview {
             border: 1px solid #ddd;
             border-radius: 4px;
-            padding: 5px;
+            object-fit: cover;
+            background: #f5f5f5;
+            width: 20px;
+            height: 20px;
+            display: none;
+            cursor: zoom-in;
+        }
+
+        #projectThumbnailInputPreview:hover {
+            transform: scale(1.05);
+            transition: transform 0.2s ease;
+        }
+
+        #projectThumbnailInputNoImage {
+            font-size: 14px;
+            color: #333;
+        }
+
+        #projectThumbnailInputError {
+            color: #d32f2f;
+            font-size: 13px;
+            margin-top: 4px;
+            min-height: 18px;
+        }
+
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+
+        .image-modal img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
         }
     </style>
 
-    <div class="form-group file-upload-wrapper">
-        <div class="file-upload-input">
-            <input type="file" wicket:id="imageUpload" id="imageUpload" accept="image/png,image/jpeg"/>
-            <label for="imageUpload" class="custom-file-label" wicket:id="chooseImage">
-                Choose Image
-            </label>
+    <div id="imageUploadContainer">
+        <label wicket:id="label" for="projectThumbnailInput" id="uploadLabel">Choose Image</label>
+        <input type="file" wicket:id="fileUpload" id="projectThumbnailInput" accept=".png,.jpg,.jpeg"/>
+        <div id="projectThumbnailInputPreviewContainer">
+            <img wicket:id="previewImage" id="projectThumbnailInputPreview" />
+            <span wicket:id="noImage" id="projectThumbnailInputNoImage">No image chosen</span>
         </div>
-        <span class="file-name-text" wicket:id="fileNameText">No image chosen</span>
+        <div id="projectThumbnailInputError"></div>
     </div>
 
-    <span class="feedback" wicket:id="imageUploadFeedback"></span>
-    <div wicket:id="previewContainer" class="image-preview" style="display:none;">
-        <img wicket:id="previewImage" alt="Image preview"/>
+    <div id="imagePreviewModal" class="image-modal">
+        <img id="fullSizePreviewImage" />
     </div>
 </wicket:extend>

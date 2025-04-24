@@ -24,6 +24,8 @@ import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.protocol.http.servlet.ServletWebResponse;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.dgfoundation.amp.onepager.translation.TranslationComponentResolver;
@@ -41,7 +43,7 @@ import java.net.SocketException;
  * @author mihai
  */
 public class OnePagerApp extends AuthenticatedWebApplication {
-    
+
     public static boolean IS_DEVELOPMENT_MODE = false;
 
     private static Logger logger = Logger.getLogger(OnePagerApp.class);
@@ -79,19 +81,19 @@ public class OnePagerApp extends AuthenticatedWebApplication {
         //TODO:1.5
         //TODO:
          /*
-          * 
-         if (true) {        
+          *
+         if (true) {
              ResourceMount.mountWicketResources("script", this);
 
              ResourceMount mount = new ResourceMount();
              //.setResourceVersionProvider(new RevisionVersionProvider());
-             
-             
+
+
              LinkedList<ResourceSpec> csslist = new LinkedList<ResourceSpec>();
              //csslist.add(new ResourceSpec(YuiLib.class, "calendar/assets/skins/sam/calendar.css"));
              //csslist.add(new ResourceSpec(new ResourceReference("TEMPLATE/ampTemplate/css_2/amp-wicket.css")));
-             
-             
+
+
              LinkedList<ResourceSpec> jslist = new LinkedList<ResourceSpec>();
              jslist.add(new ResourceSpec(JQueryBehavior.class, JQueryBehavior.JQUERY_FILE_NAME));
              //jslist.add(new ResourceSpec(AutoCompleteBehavior.class, "wicket-autocomplete.js"));
@@ -99,8 +101,8 @@ public class OnePagerApp extends AuthenticatedWebApplication {
              jslist.add(new ResourceSpec(IHeaderContributor.class, "wicket-event.js"));
              jslist.add(new ResourceSpec(AmpSubsectionFeaturePanel.class, "subsectionSlideToggle.js"));
              jslist.add(new ResourceSpec(AmpStructuresFormSectionFeature.class, "gisPopup.js"));
-//           jslist.add(new ResourceSpec(YuiLib.class, "yahoo/yahoo-min.js"));           
-//           jslist.add(new ResourceSpec(YuiLib.class, "yahoodomevent/yahoo-dom-event.js"));             
+//           jslist.add(new ResourceSpec(YuiLib.class, "yahoo/yahoo-min.js"));
+//           jslist.add(new ResourceSpec(YuiLib.class, "yahoodomevent/yahoo-dom-event.js"));
 //           jslist.add(new ResourceSpec(YuiLib.class, "yuiloader.js")); //can't use the min version, because the normal one will be included too
 //           jslist.add(new ResourceSpec(YuiLib.class, "calendar/calendar-min.js"));
 //           jslist.add(new ResourceSpec(DatePicker.class, "wicket-date.js"));
@@ -108,12 +110,12 @@ public class OnePagerApp extends AuthenticatedWebApplication {
              jslist.add(new ResourceSpec(AmpAjaxBehavior.class, "translationsOnDocumentReady.js"));
              jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "previewLogframe.js"));
              jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "saveNavigationPanel.js"));
-             
+
              mount.clone()
                 .setPath("/style/all-23.css")
                 .addResourceSpecs(csslist)
                 .mount(this);
-             
+
              mount.clone()
              .setPath("/style/all-2.js")
              .addResourceSpecs(jslist)
@@ -149,6 +151,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
         mountPage(OnePagerConst.ONEPAGER_URL_PREFIX, OnePager.class);
         mountPage("permmanager", PermissionManager.class);
 
+
 //       ServletContext servletContext = getServletContext();
 //       Resource resource = new FileSystemResource(servletContext.getRealPath("spring-config.xml"));
 //       BeanFactory factory = new XmlBeanFactory(resource);
@@ -166,6 +169,23 @@ public class OnePagerApp extends AuthenticatedWebApplication {
         //set UTF-8 as the default encoding for all requests
         getRequestCycleSettings().setResponseRequestEncoding("UTF-8");
         getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
+
+//        getRequestCycleListeners().add(new AbstractRequestCycleListener() {
+//            @Override
+//            public void onBeginRequest(RequestCycle cycle) {
+//                WebResponse response = (WebResponse) cycle.getResponse();
+//                response.setHeader("Content-Security-Policy",
+//                        "default-src 'self'; " +
+//                                "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
+//                                "style-src 'self' 'unsafe-inline'; " +
+//                                "img-src 'self' data:; " +
+//                                "frame-ancestors 'none'; " +
+//                                "object-src 'none';");
+//                response.setHeader("X-Frame-Options", "SAMEORIGIN");
+//            }
+//        });
+
+
 
         setHeaderResponseDecorator(new IHeaderResponseDecorator() {
             @Override

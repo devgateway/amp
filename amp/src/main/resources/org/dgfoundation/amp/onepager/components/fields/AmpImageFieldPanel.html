@@ -4,47 +4,73 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            margin: 10px 0;
         }
 
-        input[type="file"] {
-            opacity: 0;
+        .file-upload-input {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-upload-input input[type="file"] {
             position: absolute;
-            z-index: -1;
-            width: 0;
-            height: 0;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
         }
 
         .custom-file-label {
-            background-color: #fff;
-            color: #28a745;
-            border: 1px solid #28a745;
-            padding: 6px 12px;
+            background-color: #28a745;
+            color: white;
+            padding: 8px 16px;
             font-weight: bold;
             cursor: pointer;
             border-radius: 4px;
             display: inline-block;
+            transition: background-color 0.3s;
+            text-align: center;
+            min-width: 120px;
         }
 
         .custom-file-label:hover {
-            background-color: #e9f5ee;
+            background-color: #218838;
         }
 
         .file-name-text {
             font-style: italic;
             color: #666;
+            margin-left: 10px;
+        }
+
+        .image-preview {
+            margin-top: 15px;
+        }
+
+        .image-preview img {
+            max-width: 200px;
+            max-height: 200px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
         }
     </style>
+
     <div class="form-group file-upload-wrapper">
-        <input type="file" wicket:id="imageUpload" id="imageUpload" accept="image/png,image/jpeg"/>
-        <label for="imageUpload" class="custom-file-label" wicket:id="chooseImage">
-       Choose image
-        </label>
+        <div class="file-upload-input">
+            <input type="file" wicket:id="imageUpload" id="imageUpload" accept="image/png,image/jpeg"/>
+            <label for="imageUpload" class="custom-file-label" wicket:id="chooseImage">
+                Choose Image
+            </label>
+        </div>
         <span class="file-name-text" wicket:id="fileNameText">No image chosen</span>
     </div>
 
     <span class="feedback" wicket:id="imageUploadFeedback"></span>
-    <div wicket:id="previewContainer" class="image-preview">
-        <img wicket:id="previewImage" width="20" height="20" style="cursor:pointer;" />
+    <div wicket:id="previewContainer" class="image-preview" style="display:none;">
+        <img wicket:id="previewImage" alt="Image preview"/>
     </div>
-
 </wicket:extend>

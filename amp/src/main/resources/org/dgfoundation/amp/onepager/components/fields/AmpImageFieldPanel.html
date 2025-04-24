@@ -36,13 +36,13 @@
     </style>
     <div class="form-group file-upload-wrapper">
         <input type="file" wicket:id="imageUpload" id="imageUpload" accept="image/png,image/jpeg"/>
-        <label for="imageUpload" class="custom-file-label">
-            <div wicket:id="chooseImage" >Choose image</div>
+        <label for="imageUpload" class="custom-file-label" wicket:id="chooseImage">
+       Choose image
         </label>
         <span class="file-name-text" wicket:id="fileNameText">No image chosen</span>
     </div>
 
-    <div class="feedback" wicket:id="imageUploadFeedback"></div>
+    <span class="feedback" wicket:id="imageUploadFeedback"></span>
     <div wicket:id="previewContainer" class="image-preview">
         <img wicket:id="previewImage" width="20" height="20" style="cursor:pointer;" />
     </div>

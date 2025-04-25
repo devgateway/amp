@@ -86,7 +86,6 @@ public class InterchangeEndpoints {
     @GET
     @Path("/thumbnail/{projectId}")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getProjectThumbnail")
-    @Produces({"image/jpeg", "image/png"})
     @ApiOperation(value = "Returns the project's thumbnail if available",
             notes = "Returns the project's thumbnail if available.")
     public Response getThumbnail(@PathParam("projectId") String projectId) {

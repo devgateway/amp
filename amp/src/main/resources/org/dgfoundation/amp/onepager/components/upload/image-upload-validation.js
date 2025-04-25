@@ -8,7 +8,7 @@ function setupImageUploadValidation(options) {
 
     if (!input) return;
 
-    // Initialize labels
+    input.required = options.isRequired;
     if (label) {
         label.textContent = options.chooseImageText;
     }

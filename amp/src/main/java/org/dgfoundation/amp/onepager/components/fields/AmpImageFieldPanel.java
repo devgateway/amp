@@ -1,26 +1,27 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.upload.FileItem;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.upload.ImageUploadValidationBehavior;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpProjectThumbnail;
-
-import java.util.List;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class AmpImageFieldPanel extends AmpFieldPanel<AmpProjectThumbnail> {
-
-//    private FileUploadField fileUploadField;
+    boolean isRequired = false;
     public AmpImageFieldPanel(String id, IModel<AmpProjectThumbnail> model, String fmName,
                               boolean hideLabel, boolean hideNewLine,
                               boolean showReqStarForNotReqComp, IModel<AmpActivityVersion> am) {
@@ -33,25 +34,27 @@ public class AmpImageFieldPanel extends AmpFieldPanel<AmpProjectThumbnail> {
         Label label = new Label("label", Model.of("Choose Image"));
         add(label);
 
-        // File input
-//        fileUploadField = new FileUploadField("fileUpload", model);
-//        fileUploadField.setOutputMarkupId(true);
-//        fileUploadField.setMarkupId("projectThumbnailInput");
-//
+
         String activityId = "new";
         if (am.getObject().getAmpActivityId() != null)
             activityId = Long.toString(am.getObject().getAmpActivityId());
         final IModel<FileItem> fileItemModel = new Model<FileItem>();
         AmpProjectThumbnail existingThumbnail = am.getObject().getProjectThumbnail();
+        add(new AmpComponentPanel("projectThumbnailRequired", "Required Validator for Project Thumbnail") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                isRequired = this.isVisible();
+            }
+        });
         add(new ImageUploadValidationBehavior(
                 "projectThumbnailInput",
                 "projectThumbnailInputPreview",
                 "projectThumbnailInputNoImage",
                 "projectThumbnailInputError",
-                activityId, fileItemModel,existingThumbnail
+                activityId, fileItemModel,existingThumbnail, isRequired
         ));
 
-//        add(fileUploadField);
 
         // Preview image
         Image previewImage = new Image("previewImage", Model.of(""));
@@ -60,7 +63,6 @@ public class AmpImageFieldPanel extends AmpFieldPanel<AmpProjectThumbnail> {
         previewImage.add(new AttributeModifier("style", "display:none;"));
         add(previewImage);
 
-        // "No image chosen"
         Label noImage = new Label("noImage", Model.of("No Image Chosen"));
         noImage.setOutputMarkupId(true);
         noImage.setMarkupId("projectThumbnailInputNoImage");
@@ -87,10 +89,9 @@ public class AmpImageFieldPanel extends AmpFieldPanel<AmpProjectThumbnail> {
         button.setVisibilityAllowed(true);
         button.add(AttributeAppender.append("style", "display:none;"));
         add(button);
+
+
     }
 
-//    public FileUpload getSelectedFileUpload() {
-//        return fileUploadField.getFileUpload();
-//    }
 
 }

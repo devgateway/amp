@@ -165,6 +165,7 @@ implements AmpRequiredComponentContainer{
         IModel<AmpProjectThumbnail> imageModel = new PropertyModel<>(am, "projectThumbnail");
 
         AmpImageFieldPanel projectThumbnail = new AmpImageFieldPanel("projectThumbnail",imageModel,"Project Thumbnail",false,false,true, am);
+
         add(projectThumbnail);
 
              AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(
@@ -179,6 +180,7 @@ implements AmpRequiredComponentContainer{
             AmpTextAreaFieldPanel statusOtherInfo = new AmpTextAreaFieldPanel("statusOtherInfo",
                 new PropertyModel<String>(am, "statusOtherInfo"), "Status Other Info", false,
                     AmpFMTypes.MODULE);
+
 
             statusOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(
                     OnePagerConst.STRING_VALIDATOR_MAX_LENGTH));

@@ -13,9 +13,11 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -167,6 +169,31 @@ implements AmpRequiredComponentContainer{
         AmpImageFieldPanel projectThumbnail = new AmpImageFieldPanel("projectThumbnail",imageModel,"Project Thumbnail",false,false,true, am);
 
         add(projectThumbnail);
+
+        AmpTextFieldPanel<String> textField = new AmpTextFieldPanel<String>(
+                "hiddenTextField", Model.of(""), "Project Thumbnail Hide");
+        textField.setOutputMarkupId(true);
+        textField.setVisibilityAllowed(true);
+        AmpProjectThumbnail existingThumbnail = am.getObject().getProjectThumbnail();
+        if (existingThumbnail!=null)
+        {
+            textField.setDefaultModelObject(existingThumbnail.getImgFileName());
+        }
+
+        add(new AmpComponentPanel("projectThumbnailRequired", "Required Validator for Project Thumbnail") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+
+                if (this.isVisible())
+                {
+                    textField.getTextContainer().setRequired(true);
+                    requiredFormComponents.add(textField.getTextContainer());
+                }
+
+            }
+        });
+        add(textField);
 
              AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(
                     "status", CategoryConstants.ACTIVITY_STATUS_KEY,

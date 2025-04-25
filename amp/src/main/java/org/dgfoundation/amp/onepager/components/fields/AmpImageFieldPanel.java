@@ -10,21 +10,26 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.upload.ImageUploadValidationBehavior;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpProjectThumbnail;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
+import java.util.List;
+
 public class AmpImageFieldPanel extends AmpFieldPanel<AmpProjectThumbnail> {
-    boolean isRequired = false;
     public AmpImageFieldPanel(String id, IModel<AmpProjectThumbnail> model, String fmName,
                               boolean hideLabel, boolean hideNewLine,
-                              boolean showReqStarForNotReqComp, IModel<AmpActivityVersion> am) {
+                              boolean showReqStarForNotReqComp, IModel<AmpActivityVersion> am ) {
         super(id, model, fmName, hideLabel, hideNewLine, showReqStarForNotReqComp);
 
         setOutputMarkupId(true);
@@ -35,24 +40,23 @@ public class AmpImageFieldPanel extends AmpFieldPanel<AmpProjectThumbnail> {
         add(label);
 
 
-        String activityId = "new";
+        final String[] activityId = {"new"};
         if (am.getObject().getAmpActivityId() != null)
-            activityId = Long.toString(am.getObject().getAmpActivityId());
+            activityId[0] = Long.toString(am.getObject().getAmpActivityId());
         final IModel<FileItem> fileItemModel = new Model<FileItem>();
+
+
+
         AmpProjectThumbnail existingThumbnail = am.getObject().getProjectThumbnail();
-        add(new AmpComponentPanel("projectThumbnailRequired", "Required Validator for Project Thumbnail") {
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                isRequired = this.isVisible();
-            }
-        });
+
+
+
         add(new ImageUploadValidationBehavior(
                 "projectThumbnailInput",
                 "projectThumbnailInputPreview",
                 "projectThumbnailInputNoImage",
                 "projectThumbnailInputError",
-                activityId, fileItemModel,existingThumbnail, isRequired
+                activityId[0], fileItemModel,existingThumbnail
         ));
 
 

@@ -9,7 +9,7 @@
         }
 
         /* Label styling - styled as a button */
-        #uploadLabel {
+        #imageUploadLabel {
             display: inline-block;
             padding: 6px 16px;
             background: #ffffff;
@@ -24,7 +24,7 @@
             transition: background-color 0.2s ease;
         }
 
-        #uploadLabel:hover {
+        #imageUploadLabel:hover {
             background: #f0fff0;
         }
 
@@ -89,7 +89,7 @@
     </style>
 
     <div id="imageUploadContainer">
-        <label wicket:id="label" for="projectThumbnailInput" id="uploadLabel">Choose Image</label>
+        <label wicket:id="label" for="projectThumbnailInput" id="imageUploadLabel">Choose Image</label>
         <input type="file" name="projectThumbnailInput" id="projectThumbnailInput" accept=".png,.jpg,.jpeg"/>
         <div id="projectThumbnailInputPreviewContainer">
             <img wicket:id="previewImage" id="projectThumbnailInputPreview" />
@@ -102,7 +102,6 @@
     <img id="fullSizePreviewImage" />
     </div>
     <button id="submitButton" wicket:id="submitButton">Submit</button>
-    <span wicket:id="projectThumbnailRequired"></span>
 
 
 </wicket:extend>

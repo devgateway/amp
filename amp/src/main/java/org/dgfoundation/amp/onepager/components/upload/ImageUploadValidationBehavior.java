@@ -38,8 +38,7 @@ public class ImageUploadValidationBehavior extends Behavior {
     private String activityId ;
     private IModel<FileItem> fileItemModel;
     private AmpProjectThumbnail projectThumbnail;
-    private boolean isRequired;
-    public ImageUploadValidationBehavior(String inputId, String previewId, String noImageId, String errorId,String activityId, IModel<FileItem> fileItemModel, AmpProjectThumbnail projectThumbnail, boolean isRequired) {
+    public ImageUploadValidationBehavior(String inputId, String previewId, String noImageId, String errorId,String activityId, IModel<FileItem> fileItemModel, AmpProjectThumbnail projectThumbnail) {
     this.inputId = inputId;
     this.previewId = previewId;
     this.noImageId=noImageId;
@@ -47,7 +46,6 @@ public class ImageUploadValidationBehavior extends Behavior {
     this.activityId=activityId;
     this.fileItemModel= fileItemModel;
     this.projectThumbnail=projectThumbnail;
-    this.isRequired = isRequired;
     }
 
     @Override
@@ -84,7 +82,6 @@ public class ImageUploadValidationBehavior extends Behavior {
         options.put("validTypes", validTypes);
         options.put("markupId", markupId);
         options.put("uploadUrl", uploadUrl);
-        options.put("isRequired", isRequired);
 
         // Generate and render the initialization script
         response.render(JavaScriptHeaderItem.forReference(

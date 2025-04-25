@@ -4,7 +4,7 @@ function setupImageUploadValidation(options) {
     var noImage = document.getElementById(options.noImageId);
     var errorDiv = document.getElementById(options.errorId);
     var label = document.querySelector('label[for="' + options.inputId + '"]') ||
-        document.getElementById('uploadLabel');
+        document.getElementById('imageUploadLabel');
 
     if (!input) return;
 
@@ -180,7 +180,7 @@ function setupImageUploadValidation(options) {
 function displayExistingImage(dataUrl, contentType, previewId, noImageId, inputId, fileName) {
     const previewImg = document.getElementById(previewId);
     const noImage = document.getElementById(noImageId);
-    const label = document.querySelector('label[for="' + inputId + '"]') || document.getElementById('uploadLabel');
+    const label = document.querySelector('label[for="' + inputId + '"]') || document.getElementById('imageUploadLabel');
 
     if (previewImg) {
         previewImg.src = dataUrl;

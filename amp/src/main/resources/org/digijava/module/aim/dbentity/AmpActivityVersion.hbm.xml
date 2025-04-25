@@ -12,10 +12,6 @@
 		<property name="budgetprogram" column="budget_program" type="java.lang.Long"/>
 		<property name="budget" column="budget" type="java.lang.Integer" />
 
-		<property name="projectThumbnail" type="binary">
-			<column name="project_thumbnail" sql-type="bytea"/>
-		</property>
-
 		<property name="iatiIdentifier" column="iati_identifier" type="java.lang.String" />
 
 		<property name="description" column="description" type="text"  index="amp_activity_version_description_idx" />
@@ -104,6 +100,11 @@
 		<property name="multiStakeholderPartners" column="multi_stakeholder_partners"
 			type="java.lang.String" />
 
+	  <many-to-one name="projectThumbnail"
+                 class="org.digijava.module.aim.dbentity.AmpProjectThumbnail"
+                 column="project_thumbnail_id"
+                 unique="true"
+                 cascade="all"/>
 
 		<many-to-one name="team" column="amp_team_id"
 			class="org.digijava.module.aim.dbentity.AmpTeam" />

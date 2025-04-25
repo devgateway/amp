@@ -85,7 +85,7 @@ LoggerIdentifiable, Cloneable {
 //    @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
 //    @VersionableFieldBinary(fieldTitle = "Project Thumbnail")
 //    @TranslatableField
-    protected byte[] projectThumbnail;
+    protected AmpProjectThumbnail projectThumbnail;
 
     @Interchangeable(fieldTitle = "Conditionalities", importable = true,
             fmPath = "/Activity Form/Identification/Conditionalities")
@@ -1337,11 +1337,11 @@ LoggerIdentifiable, Cloneable {
 
         }
 
-    public byte[] getProjectThumbnail() {
+    public AmpProjectThumbnail getProjectThumbnail() {
         return projectThumbnail;
     }
 
-    public void setProjectThumbnail(byte[] projectThumbnail) {
+    public void setProjectThumbnail(AmpProjectThumbnail projectThumbnail) {
         this.projectThumbnail = projectThumbnail;
     }
 
@@ -2190,11 +2190,18 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setContracts(Set<IPAContract> contracts) {
-            if (this.contracts == null) {
+
+            if (contracts instanceof PersistentSet) {
                 this.contracts = contracts;
             } else {
+                if(this.contracts==null) {
+                    if (contracts==null)
+                    {
+                        contracts=new HashSet<>();
+                    }
+                    this.contracts = new HashSet<>(contracts);
+                }
                 this.contracts.clear();
-                if (contracts==null)contracts=new HashSet<>();
                 this.contracts.addAll(contracts);
             }
         }

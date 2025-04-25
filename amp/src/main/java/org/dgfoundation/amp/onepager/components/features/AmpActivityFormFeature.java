@@ -288,9 +288,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             }
         };
         activityForm.setOutputMarkupId(true);
-//        activityForm.setMultiPart(true);
-        add(new AttributeModifier("onsubmit", "return Wicket.$$validateAndSubmit(this)"));
-
 
         String actNameStr = am.getObject().getName();
         if (actNameStr != null && !actNameStr.trim().isEmpty()) {

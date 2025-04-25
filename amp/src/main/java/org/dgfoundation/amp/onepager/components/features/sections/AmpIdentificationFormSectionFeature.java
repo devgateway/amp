@@ -36,6 +36,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpProjectThumbnail;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -161,9 +162,9 @@ implements AmpRequiredComponentContainer{
             titleSimilarityWarning.getWarning().setVisible(true);
             titleSimilarityWarning.setVisible(true);
             add(titleSimilarityWarning);
-        IModel<List<FileUpload>> imageModel = new PropertyModel<>(am, "projectThumbnail");
+        IModel<AmpProjectThumbnail> imageModel = new PropertyModel<>(am, "projectThumbnail");
 
-        AmpImageFieldPanel projectThumbnail = new AmpImageFieldPanel("projectThumbnail",imageModel,"Project Thumbnail",false,false,true);
+        AmpImageFieldPanel projectThumbnail = new AmpImageFieldPanel("projectThumbnail",imageModel,"Project Thumbnail",false,false,true, am);
         add(projectThumbnail);
 
              AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(

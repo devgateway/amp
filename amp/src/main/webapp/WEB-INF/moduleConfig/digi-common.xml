@@ -48,8 +48,6 @@
 		<hibernate-class>org.digijava.module.common.dbentity.ItemStatus</hibernate-class>
 		<hibernate-class>org.digijava.module.common.dbentity.ModuleTeaser</hibernate-class>
         <hibernate-class>org.digijava.kernel.entity.MailSpool</hibernate-class>
-        <hibernate-class>org.digijava.module.admin.dbentity.ImportedFilesRecord</hibernate-class>
-        <hibernate-class>org.digijava.module.admin.dbentity.ImportedProject</hibernate-class>
     </hibernate-classes>
 
 

@@ -19,7 +19,7 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
 			</tr>
 			<tr valign="top">
 				<td class="main_side">
-				<form wicket:id="activityForm">
+				<form wicket:id="activityForm" id="activityForm">
 				<div id="mainContent" class="main_side_cont">
 				<div style="float: right;"></div>
 					<span name="section" wicket:id="featureList">
@@ -59,10 +59,10 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
 										onclick="switchOnepagerMode(); return true;"/>
 								</div>
 								<div class="right_menu_box" style="margin-top:0px;background:#fff;">
-									<div class="padding-two-pixels" wicket:id="saveAndSubmit"></div>
+									<div class="padding-two-pixels" wicket:id="saveAndSubmit" id="saveAndSubmit"></div>
 									<div class="padding-two-pixels" wicket:id="saveAsDraft"></div>
 									<div class="padding-two-pixels" wicket:id="saveReject"></div>
-									 
+
 									<div class="padding-two-pixels" wicket:id="preview"></div>
 									<div wicket:id="autoSaveDiv"></div>
 								</div>
@@ -123,7 +123,7 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
 
 
                         <div class="ft"></div>
-                    </div>                    
+                    </div>
 				</form>
 				</td>
 				<td>

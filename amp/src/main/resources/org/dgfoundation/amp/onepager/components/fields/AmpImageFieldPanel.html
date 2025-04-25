@@ -90,7 +90,7 @@
 
     <div id="imageUploadContainer">
         <label wicket:id="label" for="projectThumbnailInput" id="uploadLabel">Choose Image</label>
-        <input type="file" wicket:id="fileUpload" id="projectThumbnailInput" accept=".png,.jpg,.jpeg"/>
+        <input type="file" name="projectThumbnailInput" id="projectThumbnailInput" accept=".png,.jpg,.jpeg"/>
         <div id="projectThumbnailInputPreviewContainer">
             <img wicket:id="previewImage" id="projectThumbnailInputPreview" />
             <span wicket:id="noImage" id="projectThumbnailInputNoImage">No image chosen</span>
@@ -101,4 +101,7 @@
     <div id="imagePreviewModal" class="image-modal">
         <img id="fullSizePreviewImage" />
     </div>
+    <button id="submitButton" wicket:id="submitButton">Submit</button>
+
+
 </wicket:extend>

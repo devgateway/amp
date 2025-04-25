@@ -233,6 +233,7 @@
 
         <hibernate-class>org.digijava.module.aim.dbentity.GPISetup</hibernate-class>
         <hibernate-class>org.digijava.module.aim.dbentity.GPIDefaultFilters</hibernate-class>
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpProjectThumbnail</hibernate-class>
 
         <!-- Aid Effectiveness Indicators -->
         <hibernate-class>org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator</hibernate-class>

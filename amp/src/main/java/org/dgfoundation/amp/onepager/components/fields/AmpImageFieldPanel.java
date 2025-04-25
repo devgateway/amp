@@ -42,12 +42,13 @@ public class AmpImageFieldPanel extends AmpFieldPanel<AmpProjectThumbnail> {
         if (am.getObject().getAmpActivityId() != null)
             activityId = Long.toString(am.getObject().getAmpActivityId());
         final IModel<FileItem> fileItemModel = new Model<FileItem>();
+        AmpProjectThumbnail existingThumbnail = am.getObject().getProjectThumbnail();
         add(new ImageUploadValidationBehavior(
                 "projectThumbnailInput",
                 "projectThumbnailInputPreview",
                 "projectThumbnailInputNoImage",
                 "projectThumbnailInputError",
-                activityId, fileItemModel
+                activityId, fileItemModel,existingThumbnail
         ));
 
 //        add(fileUploadField);

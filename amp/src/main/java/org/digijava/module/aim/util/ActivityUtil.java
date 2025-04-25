@@ -43,6 +43,7 @@ import org.hibernate.query.Query;
 import org.hibernate.type.*;
 import org.joda.time.Period;
 
+import javax.ws.rs.core.Response;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.sql.Connection;
@@ -82,6 +83,38 @@ public class ActivityUtil {
       logger.error(e.getMessage());
     }
     return col;
+  }
+
+  public static Response getProjectThumbnail(String projectId)
+  {
+    Session session = null;
+    Response response = Response.status(Response.Status.BAD_REQUEST).build();
+    try {
+      session = PersistenceManager.getRequestDBSession();
+      Long ampActivityId = Long.parseLong(projectId);
+      AmpActivityVersion ampActivityVersion = session.get(AmpActivityVersion.class, ampActivityId);
+      if(ampActivityVersion==null)
+      {
+          return Response.status(Response.Status.NOT_FOUND).entity("Activity not found").build();
+      }
+      AmpProjectThumbnail projectThumbnail = ampActivityVersion.getProjectThumbnail();
+      if(projectThumbnail==null)
+      {
+          return Response.status(Response.Status.NOT_FOUND).entity("Image not found").build();
+      }
+      else
+      {
+          {
+              response = Response.ok(projectThumbnail.getImgFile(),projectThumbnail.getContentType()).build();
+          }
+      }
+    }catch (Exception e){
+      logger.error("Unable to get project thumbnail");
+      logger.error(e.getMessage());
+      return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Unable to get project thumbnail: "+e.getMessage()).build();
+    }
+    return response;
+
   }
 
   /**

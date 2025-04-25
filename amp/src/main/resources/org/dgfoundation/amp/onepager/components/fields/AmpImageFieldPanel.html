@@ -98,8 +98,8 @@
         <div id="projectThumbnailInputError"></div>
     </div>
 
-    <div id="imagePreviewModal" class="image-modal">
-        <img id="fullSizePreviewImage" />
+    <div id="imagePreviewModal" class="image-modal" onclick="if (event.target === this) this.style.display = 'none'">
+    <img id="fullSizePreviewImage" />
     </div>
     <button id="submitButton" wicket:id="submitButton">Submit</button>
 

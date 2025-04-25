@@ -83,7 +83,15 @@ public class InterchangeEndpoints {
         }
         return Response.ok(possibleValues, responseType).build();
     }
-
+    @GET
+    @Path("/thumbnail/{projectId}")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getProjectThumbnail")
+    @Produces({"image/jpeg", "image/png"})
+    @ApiOperation(value = "Returns the project's thumbnail if available",
+            notes = "Returns the project's thumbnail if available.")
+    public Response getThumbnail(@PathParam("projectId") String projectId) {
+        return ActivityUtil.getProjectThumbnail(projectId);
+    }
     // TODO TO be removed after AMP-29486 is merged into FUTURE.
     // Restored so the new preview works until AMP-29486 is done.
     @GET

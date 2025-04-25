@@ -14,6 +14,9 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.digijava.module.aim.dbentity.AmpProjectThumbnail;
+
+import java.util.Base64;
 
 public class ImageUploadValidationBehavior extends Behavior {
     private static final long serialVersionUID = 1L;
@@ -34,13 +37,15 @@ public class ImageUploadValidationBehavior extends Behavior {
     private final String errorId;
     private String activityId ;
     private IModel<FileItem> fileItemModel;
-    public ImageUploadValidationBehavior(String inputId, String previewId, String noImageId, String errorId,String activityId, IModel<FileItem> fileItemModel) {
+    private AmpProjectThumbnail projectThumbnail;
+    public ImageUploadValidationBehavior(String inputId, String previewId, String noImageId, String errorId,String activityId, IModel<FileItem> fileItemModel, AmpProjectThumbnail projectThumbnail) {
     this.inputId = inputId;
     this.previewId = previewId;
     this.noImageId=noImageId;
     this.errorId=errorId;
     this.activityId=activityId;
     this.fileItemModel= fileItemModel;
+    this.projectThumbnail=projectThumbnail;
     }
 
     @Override
@@ -84,6 +89,22 @@ public class ImageUploadValidationBehavior extends Behavior {
         String script = String.format("jQuery(function() { setupImageUploadValidation(%s); });",
                 options.toString());
         response.render(OnDomReadyHeaderItem.forScript(script));
+        if (projectThumbnail!=null)
+        {
+            String base64Data = Base64.getEncoder().encodeToString(projectThumbnail.getImgFile());
+            String dataUrl = "data:" + projectThumbnail.getContentType() + ";base64," + base64Data;
+
+            String script1 = String.format(
+                    "displayExistingImage('%s', '%s', '%s', '%s', '%s', '%s');",
+                    dataUrl,
+                    projectThumbnail.getContentType(),
+                    previewId ,
+                   noImageId,
+                    inputId,
+                    projectThumbnail.getImgFileName()
+            );
+            response.render(OnDomReadyHeaderItem.forScript(script1));
+        }
     }
 
 }

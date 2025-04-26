@@ -102,7 +102,6 @@ stage('Build') {
 
     node('docker') {
         checkout scm
-        sh "docker system prune -f"
         def image = "${dockerRepo}amp/webapp:${tag}"
         def hash = sh(returnStdout: true, script: "git log --pretty=%H -n 1").trim()
         docker.withRegistry("https://798366298150.dkr.ecr.us-east-1.amazonaws.com", "ecr:us-east-1:aws-ecr-credentials-id") {

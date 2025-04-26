@@ -839,6 +839,16 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 }
 
             });
+        form.visitChildren(AmpImageFieldPanel.class,new IVisitor<AmpImageFieldPanel, Void>() {
+
+            @Override
+            public void component(AmpImageFieldPanel object,
+                                  IVisit<Void> visit) {
+                object.validateIfThumbnailisRequired(target);
+                visit.dontGoDeeper();
+            }
+
+        });
 
         form.visitChildren(AbstractTextComponent.class,
                 new IVisitor<Component, Object>() {

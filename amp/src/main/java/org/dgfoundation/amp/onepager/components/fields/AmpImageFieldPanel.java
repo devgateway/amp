@@ -6,6 +6,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
@@ -13,12 +14,14 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.upload.ImageUploadValidationBehavior;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpProjectThumbnail;
@@ -48,6 +51,7 @@ public class AmpImageFieldPanel extends AmpFieldPanel<AmpProjectThumbnail> {
 
 
         AmpProjectThumbnail existingThumbnail = am.getObject().getProjectThumbnail();
+        model.setObject(existingThumbnail);
 
 
 
@@ -59,7 +63,12 @@ public class AmpImageFieldPanel extends AmpFieldPanel<AmpProjectThumbnail> {
                 activityId[0], fileItemModel,existingThumbnail
         ));
 
-
+        add(new AmpComponentPanel("projectThumbnailRequired", "Required Validator for Project Thumbnail") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+            }
+        });
         // Preview image
         Image previewImage = new Image("previewImage", Model.of(""));
         previewImage.setOutputMarkupId(true);
@@ -71,6 +80,9 @@ public class AmpImageFieldPanel extends AmpFieldPanel<AmpProjectThumbnail> {
         noImage.setOutputMarkupId(true);
         noImage.setMarkupId("projectThumbnailInputNoImage");
         add(noImage);
+        FeedbackPanel feedbackPanel = new FeedbackPanel("thumbnailUploadFeedBack", new ContainerFeedbackMessageFilter(this));
+        feedbackPanel.setOutputMarkupId(true);
+        add(feedbackPanel);
 
         Button button = new Button("submitButton");
         button.add(new AjaxEventBehavior("click") {
@@ -84,7 +96,8 @@ public class AmpImageFieldPanel extends AmpFieldPanel<AmpProjectThumbnail> {
                     ampProjectThumbnail.setContentType(fileItemModel.getObject().getContentType());
                     ampProjectThumbnail.setImgFile(fileItemModel.getObject().get());
                     ampProjectThumbnail.setImgFileName(fileItemModel.getObject().getName());
-                    am.getObject().setProjectThumbnail(ampProjectThumbnail);
+//                    am.getObject().setProjectThumbnail(ampProjectThumbnail);
+                    model.setObject(ampProjectThumbnail);
                 }
 
             }
@@ -95,6 +108,23 @@ public class AmpImageFieldPanel extends AmpFieldPanel<AmpProjectThumbnail> {
         add(button);
 
 
+    }
+
+
+    public AmpProjectThumbnail getProjectThumbnail(){
+        return getModel().getObject();
+    }
+
+    public void validateIfThumbnailisRequired(AjaxRequestTarget target) {
+        AmpComponentPanel ampComponentPanel = (AmpComponentPanel) this.get("projectThumbnailRequired");
+        if (ampComponentPanel.isVisible()) {
+            if (getProjectThumbnail() == null) {
+                error(TranslatorUtil.getTranslation("Field is required!"));
+            } else {
+                getFeedbackMessages().clear();
+            }
+            target.add(this);
+        }
     }
 
 

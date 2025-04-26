@@ -137,7 +137,6 @@ function setupImageUploadValidation(options) {
                         resetInput(); // Reset on invalid dimensions
                         resetDisplay();
                     } else {
-                        console.log("Image size is okay");
                         if (previewImg) {
                             previewImg.src = e.target.result;
                             previewImg.style.display = 'inline';
@@ -145,6 +144,7 @@ function setupImageUploadValidation(options) {
                         }
                         if (noImage) noImage.style.display = 'none';
                         if (label) label.textContent = file.name;
+                        document.getElementById("thumbnailUploadFeedBack").textContent='';
                         if (currentFileData) {
                             currentFileData.submit();
                             currentFileData = null;
@@ -202,8 +202,7 @@ function displayExistingImage(dataUrl, contentType, previewId, noImageId, inputI
         }
     }
 
-
     if (label && fileName) {
-        label.textContent = fileName;
+        label.innerText = fileName;
     }
 }

@@ -170,31 +170,6 @@ implements AmpRequiredComponentContainer{
 
         add(projectThumbnail);
 
-        AmpTextFieldPanel<String> textField = new AmpTextFieldPanel<String>(
-                "hiddenTextField", Model.of(""), "Project Thumbnail Hide");
-        textField.setOutputMarkupId(true);
-        textField.setVisibilityAllowed(true);
-        AmpProjectThumbnail existingThumbnail = am.getObject().getProjectThumbnail();
-        if (existingThumbnail!=null)
-        {
-            textField.setDefaultModelObject(existingThumbnail.getImgFileName());
-        }
-
-        add(new AmpComponentPanel("projectThumbnailRequired", "Required Validator for Project Thumbnail") {
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-
-                if (this.isVisible())
-                {
-                    textField.getTextContainer().setRequired(true);
-                    requiredFormComponents.add(textField.getTextContainer());
-                }
-
-            }
-        });
-        add(textField);
-
              AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(
                     "status", CategoryConstants.ACTIVITY_STATUS_KEY,
                     new AmpCategoryValueByKeyModel(

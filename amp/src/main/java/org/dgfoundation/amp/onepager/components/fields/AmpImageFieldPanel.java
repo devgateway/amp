@@ -88,15 +88,11 @@ public class AmpImageFieldPanel extends AmpFieldPanel<AmpProjectThumbnail> {
         button.add(new AjaxEventBehavior("click") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
-                System.out.println("Button was clicked via AJAX!");
-                System.out.println("FileUploadField: " + fileItemModel.getObject());
                 if (fileItemModel.getObject() != null) {
-                    System.out.println("FileUploadField: " + fileItemModel.getObject().getName());
                     AmpProjectThumbnail ampProjectThumbnail = new AmpProjectThumbnail();
                     ampProjectThumbnail.setContentType(fileItemModel.getObject().getContentType());
                     ampProjectThumbnail.setImgFile(fileItemModel.getObject().get());
                     ampProjectThumbnail.setImgFileName(fileItemModel.getObject().getName());
-//                    am.getObject().setProjectThumbnail(ampProjectThumbnail);
                     model.setObject(ampProjectThumbnail);
                 }
 

@@ -76,7 +76,7 @@ public class AmpImageFieldPanel extends AmpFieldPanel<AmpProjectThumbnail> {
         previewImage.add(new AttributeModifier("style", "display:none;"));
         add(previewImage);
 
-        Label noImage = new Label("noImage", Model.of("No Image Chosen"));
+        Label noImage = new Label("noImage", Model.of(TranslatorUtil.getTranslatedText("No Image Chosen")));
         noImage.setOutputMarkupId(true);
         noImage.setMarkupId("projectThumbnailInputNoImage");
         add(noImage);

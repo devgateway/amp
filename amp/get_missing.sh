@@ -1,40 +1,37 @@
 #!/bin/bash
 
-# Set source and target directories
-SOURCE_DIR="/Users/brianbrix/IdeaProjects/amp copy/amp/WEB-INF/src/org"
-TARGET_DIR="/Users/brianbrix/IdeaProjects/amp/amp/src/main/java/org"
+# Set your base directory (can be passed as an argument)
+BASE_DIR="${1:-generated}"  # Default to "generated" if not specified
 
-# Ensure source directory exists
-if [ ! -d "$SOURCE_DIR" ]; then
-    echo "Error: Source directory does not exist!"
-    exit 1
-fi
+# Define the search pattern
+PATTERN="Generated on: 2025.04.26 at"
 
-# Ensure target directory exists
-if [ ! -d "$TARGET_DIR" ]; then
-    echo "Creating target directory: $TARGET_DIR"
-    mkdir -p "$TARGET_DIR"
-fi
+# Temporary file to store matched file paths
+MATCHED_FILES=$(mktemp)
 
-# Find all .java files in source directory
-find "$SOURCE_DIR" -type f -name "*.java" | while read -r src_file; do
-    # Get the relative path from source directory
-    rel_path="${src_file#$SOURCE_DIR/}"
+# Step 1: Find matching files inside BASE_DIR
+grep -rlF "$PATTERN" "$BASE_DIR" > "$MATCHED_FILES"
 
-    # Construct the destination file path
-    dest_file="$TARGET_DIR/$rel_path"
+# Step 2: Remove matching files from Git tracking (but keep locally)
+while read -r file; do
+    if [ -f "$file" ]; then
+        echo "Untracking $file"
+        git rm --cached "$file"
 
-    # Check if the file already exists in the target directory
-    if [ ! -f "$dest_file" ]; then
-        # Ensure the target subdirectory exists
-        mkdir -p "$(dirname "$dest_file")"
-
-        # Copy the missing file
-        cp "$src_file" "$dest_file"
-        echo "Copied: $rel_path"
-    else
-        echo "Skipped (exists): $rel_path"
+        # Add to .gitignore if not already present
+        if ! grep -Fxq "$file" .gitignore; then
+            echo "$file" >> .gitignore
+        fi
     fi
-done
+done < "$MATCHED_FILES"
 
-echo "Sync complete!"
+# Step 3: Clean up
+rm "$MATCHED_FILES"
+
+# Step 4: Stage changes
+git add .gitignore
+
+# Step 5: Commit
+git commit -m "Remove JAXB generated files from $BASE_DIR and add to .gitignore"
+
+echo "✅ Done! Files inside $BASE_DIR processed."

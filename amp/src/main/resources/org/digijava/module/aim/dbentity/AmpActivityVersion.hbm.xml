@@ -100,6 +100,11 @@
 		<property name="multiStakeholderPartners" column="multi_stakeholder_partners"
 			type="java.lang.String" />
 
+	  <many-to-one name="projectThumbnail"
+                 class="org.digijava.module.aim.dbentity.AmpProjectThumbnail"
+                 column="project_thumbnail_id"
+                 unique="true"
+                 cascade="all"/>
 
 		<many-to-one name="team" column="amp_team_id"
 			class="org.digijava.module.aim.dbentity.AmpTeam" />

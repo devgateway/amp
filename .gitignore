@@ -52,3 +52,17 @@ amp/src/main/java/org/dgfoundation/amp/reports/xml/GroupingOption.java
 amp/src/main/java/org/dgfoundation/amp/reports/xml/Cell.java
 amp/src/main/java/org/dgfoundation/amp/reports/xml/package-info.java
 amp/src/main/java/org/dgfoundation/amp/reports/xml/Filter.java
+amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/LangType.java
+amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/Patch.java
+amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/Lang.java
+amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/TriggerType.java
+amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/ObjectFactory.java
+amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/Rollback.java
+amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/Trigger.java
+amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/ScriptGroup.java
+amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/Condition.java
+amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/Script.java
+amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/ConditionType.java
+amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/package-info.java
+amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/ConditionParam.java
+amp/src/main/java/org/digijava/module/help/jaxbi/AmpHelpType.java

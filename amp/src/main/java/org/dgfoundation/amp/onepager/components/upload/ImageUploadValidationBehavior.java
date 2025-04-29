@@ -21,7 +21,6 @@ import java.util.Base64;
 public class ImageUploadValidationBehavior extends Behavior {
     private static final long serialVersionUID = 1L;
 
-    // Configurable properties with defaults
     private String chooseImageText = TranslatorUtil.getTranslatedText("Choose Image");
     private String noImageText = TranslatorUtil.getTranslatedText("No image chosen");
     private String invalidTypeMessage = TranslatorUtil.getTranslatedText("Only PNG or JPG images are allowed.");
@@ -52,7 +51,6 @@ public class ImageUploadValidationBehavior extends Behavior {
     public void renderHead(Component component, IHeaderResponse response) {
         super.renderHead(component, response);
 
-        // Reference the external JS file
 
         String uploadUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(
                 Url.parse(component.urlFor(new FileUploadResourceReference(activityId, fileItemModel), null).toString()));
@@ -65,7 +63,6 @@ public class ImageUploadValidationBehavior extends Behavior {
         response.render(JavaScriptHeaderItem.forReference(
                 new JavaScriptResourceReference(this.getClass(), "jquery.fileupload.js"), System.currentTimeMillis() +"c", true));
 
-        // Create JSON object with all options
         JSONObject options = new JSONObject();
         options.put("inputId", inputId);
         options.put("previewId", previewId );
@@ -83,7 +80,6 @@ public class ImageUploadValidationBehavior extends Behavior {
         options.put("markupId", markupId);
         options.put("uploadUrl", uploadUrl);
 
-        // Generate and render the initialization script
         response.render(JavaScriptHeaderItem.forReference(
                 new PackageResourceReference(this.getClass(), "image-upload-validation.js")));
         String script = String.format("jQuery(function() { setupImageUploadValidation(%s); });",

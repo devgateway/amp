@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.integration;
 
-import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.multipart.FormDataParam;
+
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
@@ -15,6 +14,8 @@ import org.digijava.kernel.ampapi.endpoints.integration.service.DagService;
 import org.digijava.kernel.ampapi.endpoints.integration.service.DagServiceImpl;
 import org.digijava.kernel.ampapi.endpoints.integration.service.FileInformationServiceImpl;
 import org.digijava.kernel.ampapi.endpoints.integration.service.FileUploaderServiceImpl;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;

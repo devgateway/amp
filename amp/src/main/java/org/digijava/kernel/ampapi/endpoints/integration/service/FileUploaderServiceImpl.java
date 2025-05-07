@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.integration.service;
 
-import com.sun.jersey.core.header.FormDataContentDisposition;
 import org.digijava.kernel.ampapi.endpoints.integration.IntegraionUploadsDirectoryConfig;
 import org.digijava.kernel.ampapi.endpoints.integration.dto.FileUploadedResponseDTO;
 import org.digijava.kernel.entity.integration.FileUploaded;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

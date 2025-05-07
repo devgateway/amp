@@ -1,7 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.integration.service;
 
-import com.sun.jersey.core.header.FormDataContentDisposition;
 import org.digijava.kernel.ampapi.endpoints.integration.dto.FileUploadedResponseDTO;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Part;

@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.integration.service;
 
-import com.sun.jersey.api.client.ClientResponse;
 import org.digijava.kernel.ampapi.endpoints.integration.IntegraionUploadsDirectoryConfig;
 import org.digijava.kernel.ampapi.endpoints.integration.dto.DagRunsRequestDTO;
 import org.digijava.kernel.ampapi.endpoints.integration.dto.DagRunsResponseDTO;
@@ -15,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import javax.ws.rs.core.Response;
 import java.nio.charset.StandardCharsets;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -83,9 +83,9 @@ public class DagServiceImpl implements DagService {
         RestClient client = RestClient.getInstance(RestClient.Type.JSON);
         String airflowUrl = endpointUrl + dagRunsUrl.replace("#template", dagRunsRequest.getDagId());
         LOGGER.info("Airflow url {}", airflowUrl);
-        ClientResponse response = client.requestPOST(airflowUrl, requestEntity);
+        Response response = client.requestPOST(airflowUrl, requestEntity);
         if (response.getStatus() == HttpStatus.OK.value()) {
-            return ObjectMapperUtils.readValueFromString(response.getEntity(String.class), DagRunsResponseDTO.class);
+            return ObjectMapperUtils.readValueFromString(response.readEntity(String.class), DagRunsResponseDTO.class);
         } else {
             LOGGER.error("DAG run failed with status code: {}", response.getStatus());
             throw new RuntimeException("Failed to execute DAG run");

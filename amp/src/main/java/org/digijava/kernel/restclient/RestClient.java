@@ -3,48 +3,39 @@
  */
 package org.digijava.kernel.restclient;
 
-import java.util.*;
-
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-
+import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.WebResource.Builder;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
 import org.springframework.http.HttpEntity;
 
-/**
- * A simple Rest client
- *
- * @author Nadejda Mandrescu
- */
+import java.util.*;
+
 public class RestClient {
     public enum Type {
         JSON
-    };
+    }
 
     protected static final Logger logger = Logger.getLogger(RestClient.class);
 
-    protected static Map<Type, Client> existingClients = new TreeMap<Type, Client>();
-    protected static Map<Client, String> clientsMediaType = new HashMap<Client, String>();
+    protected static final Map<Type, Client> existingClients = new TreeMap<>();
+    protected static final Map<Client, String> clientsMediaType = new HashMap<>();
 
-    protected Client client;
-    protected String mediaType;
+    protected final Client client;
+    protected final String mediaType;
 
     public static synchronized RestClient getInstance(Type type) {
         if (!existingClients.containsKey(type)) {
-            Client client = null;
-            switch (type) {
-                case JSON:
-                    client = Client.create();
-                    clientsMediaType.put(client, MediaType.APPLICATION_JSON);
-                    break;
-                default:
-                    throw new RuntimeException("Rest client not implemented for " + type + " type.");
+            Client client;
+            if (Objects.requireNonNull(type) == Type.JSON) {
+                client = ClientBuilder.newClient();
+                clientsMediaType.put(client, MediaType.APPLICATION_JSON);
+            } else {
+                throw new RuntimeException("Rest client not implemented for " + type + " type.");
             }
             existingClients.put(type, client);
         }
@@ -56,29 +47,33 @@ public class RestClient {
         this.mediaType = clientsMediaType.get(client);
     }
 
-    /**
-     * Executes a GET request
-     * @param url REST Endpoint
-     * @param queryParams (optional) query parameters, multiple values allowed per parameter
-     * @return JSON string
-     */
     public String requestGET(String endpointURL, Map<String, List<String>> queryParams) {
-        WebResource webResource = client.resource(endpointURL);
+        WebTarget webTarget = client.target(endpointURL);
 
-        MultivaluedMap<String, String> qP = new MultivaluedMapImpl();
-        qP.putAll(queryParams);
+        if (queryParams != null) {
+            for (Map.Entry<String, List<String>> entry : queryParams.entrySet()) {
+                for (String value : entry.getValue()) {
+                    webTarget = webTarget.queryParam(entry.getKey(), value);
+                }
+            }
+        }
 
-        webResource = webResource.queryParams(qP);
-        Builder builder = webResource.accept(mediaType);
-        ClientResponse response = builder.get(ClientResponse.class);
-        String info = String.format("[HTTP %d] GET %s", response.getStatus(), webResource.getURI());
+        Builder builder = webTarget.request().accept(mediaType);
+        Response response = builder.get();
+
+        String info = String.format("[HTTP %d] GET %s", response.getStatus(), webTarget.getUri());
         logger.debug(info);
-        return response.getEntity(String.class);
+
+        String result = response.readEntity(String.class);
+        response.close(); // Always close Response in Jersey 2.x
+
+        return result;
     }
 
-    public ClientResponse requestPOST(String endpointURL, HttpEntity<Map<String, Object>> requestBody) {
-        WebResource webResource = client.resource(endpointURL);
-        Builder builder = webResource.accept(mediaType);
+    public Response requestPOST(String endpointURL, HttpEntity<Map<String, Object>> requestBody) {
+        WebTarget webTarget = client.target(endpointURL);
+        Builder builder = webTarget.request().accept(mediaType);
+
         if (requestBody != null) {
             for (String headerName : requestBody.getHeaders().keySet()) {
                 for (String headerValue : Objects.requireNonNull(requestBody.getHeaders().get(headerName))) {
@@ -86,11 +81,17 @@ public class RestClient {
                 }
             }
         }
-        ClientResponse response = builder.post(ClientResponse.class, requestBody.getBody());
 
-        String info = String.format("[HTTP %d] POST %s", response.getStatus(), webResource.getURI());
+        Entity<?> entity = Entity.entity(
+                requestBody != null ? requestBody.getBody() : null,
+                mediaType
+        );
+
+        Response response = builder.post(entity);
+
+        String info = String.format("[HTTP %d] POST %s", response.getStatus(), webTarget.getUri());
         logger.debug(info);
+
         return response;
     }
-
 }

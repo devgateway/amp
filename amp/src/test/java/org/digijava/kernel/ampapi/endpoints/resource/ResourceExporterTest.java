@@ -1,22 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.resource;
 
-import static org.hamcrest.Matchers.hasEntry;
-import static org.junit.Assert.assertThat;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
 import org.dgfoundation.amp.testutils.TransactionUtil;
-import org.digijava.kernel.ampapi.endpoints.activity.AMPRequestRule;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityTranslationUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.NoTranslatedFieldReader;
-import org.digijava.kernel.ampapi.endpoints.activity.TestFMService;
-import org.digijava.kernel.ampapi.endpoints.activity.TestFieldInfoProvider;
-import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
+import org.digijava.kernel.ampapi.endpoints.activity.*;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -25,16 +12,23 @@ import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
 import org.digijava.kernel.request.TLSUtils;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasEntry;
 
 /**
  * @author Nadejda Mandrescu
  */
+@ExtendWith(AMPRequestRule.class)
 public class ResourceExporterTest {
-    @Rule
-    public AMPRequestRule ampRequestRule = new AMPRequestRule();
+
 
     private Map<String, String> translations;
     private Map<String, String> allTranslations;
@@ -43,7 +37,7 @@ public class ResourceExporterTest {
     private TranslationSettings nonMultilingualTranslationSettings;
     private APIField root;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         Set<String> trnCodes = ImmutableSet.of("en", "fr");
         multilingualTranslationSettings = new TranslationSettings("en", trnCodes, true);

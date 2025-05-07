@@ -1,21 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasEntry;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.collect.ImmutableList;
-
 import org.dgfoundation.amp.reports.converters.HardcodedThemes;
 import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -26,9 +11,14 @@ import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.*;
+
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Octavian Ciubotaru
@@ -37,7 +27,7 @@ public class ActivityExporterTest {
 
     private List<APIField> fields;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         TestTranslatorService translatorService = new TestTranslatorService();
 
@@ -61,7 +51,7 @@ public class ActivityExporterTest {
 
         Map<String, Object> jsonActivity = createExporter().export(activity);
 
-        assertThat(jsonActivity, hasEntry("project_title", "test"));// fixme there are 100+ fields with null values!
+        MatcherAssert.assertThat(jsonActivity, hasEntry("project_title", "test"));// fixme there are 100+ fields with null values!
     }
 
     @Test
@@ -97,14 +87,13 @@ public class ActivityExporterTest {
 
         Map<String, Object> jsonActivity = createExporter().export(activity);
 
-        assertThat(jsonActivity,
-                (Matcher) allOf(
-                        hasEntry(equalTo("primary_programs"),
-                                contains(actProgram(axe1.getAmpThemeId(), 100F))),
-                        hasEntry(equalTo("secondary_programs"),
-                                containsInAnyOrder(
-                                        actProgram(instReform.getAmpThemeId(), 78F),
-                                        actProgram(edReform.getAmpThemeId(), 22F)))));
+        MatcherAssert.assertThat(jsonActivity, (Matcher) allOf(
+                hasEntry(equalTo("primary_programs"),
+                        contains(actProgram(axe1.getAmpThemeId(), 100F))),
+                hasEntry(equalTo("secondary_programs"),
+                        containsInAnyOrder(
+                                actProgram(instReform.getAmpThemeId(), 78F),
+                                actProgram(edReform.getAmpThemeId(), 22F)))));
     }
 
     /**
@@ -126,10 +115,9 @@ public class ActivityExporterTest {
 
         Map<String, Object> jsonActivity = exporter.export(activity);
 
-        assertThat(jsonActivity,
-                allOf(
-                        hasEntry("description", "desc"),
-                        not(hasEntry("project_title", "test"))));
+        MatcherAssert.assertThat(jsonActivity, allOf(
+                hasEntry("description", "desc"),
+                not(hasEntry("project_title", "test"))));
     }
 
     private ActivityExporter createExporter() {

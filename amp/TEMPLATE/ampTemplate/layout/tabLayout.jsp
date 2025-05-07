@@ -1,12 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 
-<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
 
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
@@ -28,7 +28,7 @@
 			String key=(title.replaceAll(" ",""));
 			%>
 			<c:set var="key">aim:pagetitle:<%=key%></c:set>
-				<digi:trn key="aim:pagetitle:amp">AMP </digi:trn> 
+				<digi:trn key="aim:pagetitle:amp">AMP </digi:trn>
 				<digi:trn key="aim:pagetitle:${key}">
 					<%=title%>
 				</digi:trn>
@@ -102,7 +102,7 @@
 
 				<TD width="100%" vAlign="top" align="left">
 
-					<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp"  />
+					<jsp:include page="../../../src/main/webapp/WEB-INF/jsp/aim/view/teamPagesHeader.jsp"  />
 
 				</TD>
 

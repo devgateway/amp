@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-30885</jira>
+    <keyword>Ecowas</keyword>
+    <author>bmokandu</author>
+    <description>add the global setting to specify a name for the Donor to be used for Ecowas internal projects</description>
+
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                insert into amp_global_settings(id,settingsName,settingsValue,possibleValues,description, section)
+                values ((SELECT MAX(id) + 1 FROM amp_global_settings), 'Recreate the views on the next server restart','true','t_Boolean','Recreate the views on the next server restart', 'general');
+                DROP VIEW IF EXISTS v_amp_organisations;
+                CREATE OR REPLACE VIEW v_amp_organisations AS
+                SELECT name AS id, name AS value FROM amp_organisation;
+
+                INSERT INTO amp_global_settings(id, settingsName, settingsValue, possiblevalues, description, section)
+                VALUES ((SELECT MAX(id) + 1 FROM amp_global_settings), 'Internal Ecowas Donor',
+                (SELECT id FROM v_amp_organisations WHERE value = 'ECOWAS'),
+                'v_amp_organisations', 'Internal Ecowas Donor', 'funding');
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

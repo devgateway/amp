@@ -9,20 +9,21 @@ module.exports = ChartViewBase.extend({
 
   uiDefaults: {
     adjtype: 'FAKE',
+    programType: 'FAKE',
     showTotal: true,
     showMeasuresSelector: true,
     showTopLegends: true,
-    showCommonChartArea: true    
+    showCommonChartArea: true
   },
-  
+
   chartViews: [
 	'bar',
     'pie',
-    'table'    
+    'table'
   ],
-  
+
   modalView: undefined,
-  
+
   //Dont try to call initialize here because it throws a 'Module initialization error' :((
   /*initialize: function(options) {
 	  this.modalView = new ModalView({ app: options.app, collection: this.model.collection });
@@ -36,7 +37,7 @@ module.exports = ChartViewBase.extend({
 	var ofTotal = app.translator.translateSync("amp.dashboard:of-total","of total");
 	var units = app.translator.translateSync(app.generalSettings.numberDividerDescription);
     var self = this;
-    
+
     var currencyName =  app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;
       var ofTotal = app.translator.translateSync("amp.dashboard:of-total", "of total");
 
@@ -49,12 +50,12 @@ module.exports = ChartViewBase.extend({
     }};
   },
 
-  chartClickHandler: function(context) {	  
+  chartClickHandler: function(context) {
     // clicking on the "others" bar loads five more.
     if (context.data[context.series.index]
                .values[context.x.index].special === 'others') {
         this.model.set('limit', this.model.get('limit') + 5);
-        this.model.set('big', true);      
+        this.model.set('big', true);
     } else {
     	this.modalView = new ProjectsListModalView({ app: app, context: context, model: this.model });
     	this.openInfoWindow((context.x.fmt || context.x.raw));

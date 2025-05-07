@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.nireports.testcases;
 
-import java.util.*;
-
 import org.dgfoundation.amp.ar.Column;
-import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.GroupColumn;
-import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
 import org.dgfoundation.amp.testutils.ColumnComparator;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * a model (sketch) of a GroupColumn

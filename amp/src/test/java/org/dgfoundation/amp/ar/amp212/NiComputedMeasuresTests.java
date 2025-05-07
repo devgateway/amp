@@ -1,24 +1,18 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.newreports.*;
+import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
+import org.dgfoundation.amp.nireports.testcases.NiReportModel;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.newreports.ReportAreaForTests;
-import org.dgfoundation.amp.newreports.AmpReportingTestCase;
-import org.dgfoundation.amp.newreports.AmpReportFilters;
-import org.dgfoundation.amp.newreports.AreaOwner;
-import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
-import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * 
@@ -291,12 +285,12 @@ public class NiComputedMeasuresTests extends AmpReportingTestCase {
         
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         AmpReportsScratchpad.forcedNowDate = LocalDate.of(2016, 5, 3);
     }
     
-    @After
+    @AfterEach
     public void tearDown() {
         AmpReportsScratchpad.forcedNowDate = null;
     }

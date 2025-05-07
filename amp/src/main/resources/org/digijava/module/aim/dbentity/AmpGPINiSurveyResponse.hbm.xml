@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse"
+		table="AMP_GPI_NI_SURVEY_RESPONSE">
+		<cache usage="read-write" />
+		<id name="ampGPINiSurveyResponseId" column="amp_gpi_ni_survey_response_id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_GPI_NI_SURVEY_RESPONSE_seq</param>
+			</generator>
+		</id>
+					
+		<property name="integerResponse" column="integer_response" type="java.lang.Long" />		
+		<property name="textResponse" column="text_response" type="text" />		
+				
+		<many-to-one name="questionOption" column="question_option_id"
+			class="org.digijava.module.aim.dbentity.AmpGPINiQuestionOption" cascade="none"
+			not-null="false" />
+			
+		<many-to-one name="ampGPINiSurvey" column="amp_gpi_ni_survey_id"
+			class="org.digijava.module.aim.dbentity.AmpGPINiSurvey" cascade="none"
+			not-null="true" index="idx_amp_gpi_ni_survey_response_amp_gpi_ni_survey_id" />
+			
+		<many-to-one name="ampGPINiQuestion" column="amp_gpi_ni_question_id"
+			class="org.digijava.module.aim.dbentity.AmpGPINiQuestion" cascade="none"
+			not-null="true" />
+		
+		<set name="supportingDocuments" lazy="false" inverse="true" cascade="all-delete-orphan">
+			<cache usage="read-write" />
+			<key column="amp_gpi_ni_survey_response_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument" />
+		</set>		
+
+	</class>
+</hibernate-mapping>

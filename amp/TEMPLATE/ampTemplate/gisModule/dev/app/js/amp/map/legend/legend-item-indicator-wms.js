@@ -17,11 +17,12 @@ module.exports = Backbone.View.extend({
     var qs = '?request=GetLegendGraphic&version=1.1.1&format=image/png&layer=';
     var wmsLayer = this.model.get('layer');
     var self = this;
-
+    var legendHtml = this.model.get('legendHtml');
 
     self.app.translator.translateDOM(this.template(_.extend({}, this.model.toJSON(), {
       status: 'loaded',
-      legendSrc: base + qs + wmsLayer
+      legendSrc: base + qs + wmsLayer,
+      legendHtml: legendHtml
     }))).then(function(legend) {
       self.$el.html(legend);
     });

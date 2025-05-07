@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.nireports.testcases;
 
-import java.util.Collections;
-import java.util.Map;
-
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
 import org.digijava.module.aim.helper.Constants;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * copied from trivial AmpTrivialMeasure

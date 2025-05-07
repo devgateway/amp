@@ -46,3 +46,5 @@ export const PRODUCTION = 'production';
 export const REGIONAL_FUNDINGS = [ActivityConstants.REGIONAL_FUNDINGS_COMMITMENTS,
     ActivityConstants.REGIONAL_FUNDINGS_DISBURSEMENTS,
     ActivityConstants.REGIONAL_FUNDINGS_EXPENDITURES];
+
+export const MULTILINGUAL = 'multilingual';

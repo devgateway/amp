@@ -1,7 +1,5 @@
 package org.dgfoundation.amp;
 
-import java.util.HashSet;
-
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
@@ -18,19 +16,21 @@ import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
 
+import java.util.HashSet;
+
 /**
  * Initializes standalone AMP for testing purposes.<br />
  * Standalone AMP configuration is taken off standAloneAmpHibernate.cfg.xml <br />
- * 
+ *
  * @author Nadejda Mandrescu
  */
 public class StandaloneAMPInitializer {
-    
+
     /**
      * set to true once hibernate has been initialized
      */
     private static boolean SETUP = false;
-    
+
     public static synchronized void initialize() {
         PersistenceManager.inTransaction(() -> {
             try {
@@ -43,7 +43,7 @@ public class StandaloneAMPInitializer {
 
                 ResourceStreamHandlerFactory.installIfNeeded();
 
-                DigiConfigManager.initialize("./repository");
+                DigiConfigManager.initialize("/WEB-INF/moduleConfig");
                 PersistenceManager.initialize(false, null);
                 ContentRepositoryManager.initialize();
 
@@ -65,9 +65,9 @@ public class StandaloneAMPInitializer {
         TLSUtils.populate(mockRequest, SiteUtils.getDefaultSiteDomain(SiteUtils.getDefaultSite()));
         return mockRequest;
     }
-    
+
     public static void configureMockTranslationRequest() {
-        TranslationSettings trnSettings = new TranslationSettings(TLSUtils.getEffectiveLangCode(), 
+        TranslationSettings trnSettings = new TranslationSettings(TLSUtils.getEffectiveLangCode(),
                 new HashSet<>(SiteUtils.getUserLanguagesCodes(TLSUtils.getSite())));
         TLSUtils.getRequest().setAttribute(EPConstants.TRANSLATIONS, trnSettings);
     }

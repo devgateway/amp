@@ -6,12 +6,12 @@
 <!-- ************************************************** -->
 
 <xs:schema targetNamespace="http://dgfoundation.org/amp/visibility/feed/fm/schema.xml"
-	xmlns="http://dgfoundation.org/amp/visibility/feed/fm/schema.xml"
-	xmlns:fm="http://dgfoundation.org/amp/visibility/feed/fm/schema.xml"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-	xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" elementFormDefault="qualified"
-	id="fm"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" jaxb:version="1.0">
+           xmlns="http://dgfoundation.org/amp/visibility/feed/fm/schema.xml"
+           xmlns:fm="http://dgfoundation.org/amp/visibility/feed/fm/schema.xml"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" elementFormDefault="qualified"
+           id="fm"
+           jaxb:version="1.0">
 
 	<xs:element name="visibilityTemplates" msdata:IsDataSet="true">
 		<xs:complexType>

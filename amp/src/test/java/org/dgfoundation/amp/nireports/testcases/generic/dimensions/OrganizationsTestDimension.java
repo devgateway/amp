@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.nireports.testcases.generic.dimensions;
 
-import static org.dgfoundation.amp.nireports.testcases.HNDNode.element;
+import org.dgfoundation.amp.nireports.testcases.HNDNode;
+import org.dgfoundation.amp.nireports.testcases.HardcodedNiDimension;
+import org.dgfoundation.amp.nireports.testcases.TestModelConstants;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.dgfoundation.amp.nireports.testcases.HNDNode;
-import org.dgfoundation.amp.nireports.testcases.HardcodedNiDimension;
-import org.dgfoundation.amp.nireports.testcases.TestModelConstants;
+import static org.dgfoundation.amp.nireports.testcases.HNDNode.element;
 
 
 public class OrganizationsTestDimension extends HardcodedNiDimension {

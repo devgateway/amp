@@ -1,13 +1,5 @@
 package org.digijava.kernel.validators.activity;
 
-import static org.digijava.kernel.validators.ValidatorUtil.filter;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.*;
-
-import java.util.Set;
-
 import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
@@ -15,17 +7,23 @@ import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.hamcrest.Matcher;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import java.util.Set;
+
+import static org.digijava.kernel.validators.ValidatorUtil.filter;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Octavian Ciubotaru
  */
-public class AgreementCodeValidatorTest {
+class AgreementCodeValidatorTest {
 
     private static APIField agreementField;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         agreementField = ValidatorUtil.getMetaData(AmpAgreement.class);
@@ -38,7 +36,7 @@ public class AgreementCodeValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(agreement);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -48,7 +46,7 @@ public class AgreementCodeValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(agreement);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -58,7 +56,7 @@ public class AgreementCodeValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(agreement);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -68,7 +66,7 @@ public class AgreementCodeValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(agreement);
 
-        assertThat(violations, emptyIterable());
+        MatcherAssert.assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -78,7 +76,7 @@ public class AgreementCodeValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(agreement);
 
-        assertThat(violations, contains(violation()));
+        MatcherAssert.assertThat(violations, contains(violation()));
     }
 
     private Matcher<ConstraintViolation> violation() {

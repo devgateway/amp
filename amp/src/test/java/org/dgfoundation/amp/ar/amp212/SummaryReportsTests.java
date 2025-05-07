@@ -1,24 +1,20 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.newreports.*;
+import org.dgfoundation.amp.nireports.testcases.NiReportModel;
+import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.newreports.ReportAreaForTests;
-import org.dgfoundation.amp.newreports.ReportingTestCase;
-import org.dgfoundation.amp.newreports.AreaOwner;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
-import org.junit.Test;
-
 /**
- * 
+ *
  * sanity checks for NiReports running offdb
- * 
+ *
  * @author Alexandru Cartaleanu
  *
  */
@@ -27,9 +23,6 @@ public class SummaryReportsTests extends ReportingTestCase {
     HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
     final static List<String> ACTS = Arrays.asList("TAC_activity_1", "Eth Water", "Unvalidated activity");
 
-    public SummaryReportsTests() {
-        inTransactionRule = null;
-    }
 
     /**
      * builds a summary report spec with given hiers, AC / AD as measures
@@ -38,13 +31,13 @@ public class SummaryReportsTests extends ReportingTestCase {
      */
     protected ReportSpecificationImpl summarySpec(String reportName, List<String> hiers, GroupingCriteria groupingCrit) {
         ReportSpecificationImpl ret = buildSpecification(reportName, hiers,
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-            hiers, 
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+            hiers,
             groupingCrit);
         ret.setSummaryReport(true);
         return ret;
     }
-    
+
     @Test
     public void testSummary_report_flat() {
         NiReportModel cor = new NiReportModel("flat-summary")
@@ -55,9 +48,9 @@ public class SummaryReportsTests extends ReportingTestCase {
                 "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1))"))
             .withWarnings(Arrays.asList())
             .withBody(      new ReportAreaForTests(null, "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "545,000", "Funding-2015-Actual Commitments", "45,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "258,231", "Totals-Actual Disbursements", "668,321"));
-    
+
         runNiTestCase(cor, summarySpec("flat-summary", Collections.emptyList(), GroupingCriteria.GROUPING_YEARLY), ACTS);
-        
+
         NiReportModel corTotalsOnly = new NiReportModel("flat-summary")
         .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 2))",
@@ -65,10 +58,10 @@ public class SummaryReportsTests extends ReportingTestCase {
                 "(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 0, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1))"))
             .withWarnings(Arrays.asList())
             .withBody(      new ReportAreaForTests(null, "Totals-Actual Commitments", "258,231", "Totals-Actual Disbursements", "668,321"));
-        
+
         runNiTestCase(corTotalsOnly, summarySpec("flat-summary-totals-only", Collections.emptyList(), GroupingCriteria.GROUPING_TOTALS_ONLY), ACTS);
     }
-    
+
     @Test
     public void testSummaryReport_single_hier() {
         NiReportModel cor = new NiReportModel("by-region-summary")
@@ -84,9 +77,9 @@ public class SummaryReportsTests extends ReportingTestCase {
                 new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Anenii Noi County"), "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "545,000", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "0", "Totals-Actual Disbursements", "545,000", "Administrative Level 1", "Anenii Noi County"),
                 new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Dubasari County"), "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "123,321", "Administrative Level 1", "Dubasari County"),
                 new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Administrative Level 1: Undefined"), "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "45,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "45,000", "Totals-Actual Disbursements", "0", "Administrative Level 1", "Administrative Level 1: Undefined")      ));
-        
+
         runNiTestCase(cor, summarySpec("by-region-summary", Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1), GroupingCriteria.GROUPING_YEARLY), ACTS);
-        
+
         NiReportModel corTotalsOnly = new NiReportModel("by-region-summary-totals-only")
         .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
@@ -102,7 +95,7 @@ public class SummaryReportsTests extends ReportingTestCase {
 
         runNiTestCase(corTotalsOnly, summarySpec("by-region-summary-totals-only", Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1), GroupingCriteria.GROUPING_TOTALS_ONLY), ACTS);
     }
-    
+
     @Test
     public void testSummaryReport_double_hier() {
         NiReportModel cor =  new NiReportModel("by-region-sector")
@@ -126,7 +119,7 @@ public class SummaryReportsTests extends ReportingTestCase {
                   new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION"), "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "45,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "45,000", "Totals-Actual Disbursements", "0", "Primary Sector", "110 - EDUCATION")        )      ));
 
         runNiTestCase(cor, summarySpec("by-region-sector", Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_SECTOR), GroupingCriteria.GROUPING_YEARLY), ACTS);
-        
+
         NiReportModel corTotalsOnly = new NiReportModel("by-region-sector-totals-only")
         .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",

@@ -23,7 +23,7 @@
   "author": "Alexei Savca",
   "license": "inherit",
   "devDependencies": {
-    "amp-ui": "github:devgateway/amp-ui#35d15a9efe2de868113fd47218a10743a393d5d4",
+    "amp-ui": "github:devgateway/amp-ui#develop",
     "babel-core": "^6.26.3",
     "babel-jest": "^6.0.1",
     "babel-loader": "^6.3.2",
@@ -60,6 +60,7 @@
     "redux": "^3.6.0",
     "redux-logger": "^2.7.4",
     "redux-thunk": "2.2.0",
+    "source-map-loader": "^0.2.4",
     "style-loader": "^0.12.3",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^1.10.1",

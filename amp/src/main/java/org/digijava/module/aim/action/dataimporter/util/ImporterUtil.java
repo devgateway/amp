@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
@@ -188,24 +189,44 @@ public class ImporterUtil {
     }
 
     private static String getDateFromExcel(Row row, int columnIndex) {
-        Cell cell = row.getCell(columnIndex); // Assuming the date is in the first column
-        try {
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            logger.info("Date TYpe: " + cell.getCellType());
-//            if (DateUtil.isCellDateFormatted(cell)) {
-            String date = cell.getStringCellValue();
-            String formattedDate = formatDateFromDateObject(date);
-            logger.info("Formatted Date: " + formattedDate);
-            return formattedDate;
-//            } else {
-//                logger.info("The cell does not contain a valid date.");
-//                return null;
-//            }
-        } catch (Exception e) {
-            logger.error("Error parsing date column", e);
+        Cell cell = row.getCell(columnIndex);
+        return extractDateFromStringCell(cell);
+
+    }
+
+    private static String extractDateFromStringCell(Cell cell) {
+        if (cell == null) {
             return null;
         }
 
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            String rawValue = cell.getStringCellValue().trim();
+
+            if (rawValue.isEmpty()) {
+                return null;
+            }
+
+            if (rawValue.matches("\\d+")) {
+                double numericValue = Double.parseDouble(rawValue);
+                if (numericValue > 59) {  // Excel bug: after 28 Feb 1900, 60+ is valid
+                    Date date = DateUtil.getJavaDate(numericValue);
+                    return outputFormat.format(date);
+                }
+            }
+
+            String formatted = formatDateFromDateObject(rawValue);
+            if (formatted != null) {
+                return formatted;
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error extracting date: " + e.getMessage());
+        }
+
+        return null;
     }
 
     private static void saveCurrencyCode(String currencyCode, String projectName) {
@@ -308,19 +329,20 @@ public class ImporterUtil {
                 // Parse the year and create a Date object for January 1 of that year
                 Date januaryFirst = new SimpleDateFormat("yyyy-MM-dd").parse(date + "-01-01");
                 return new SimpleDateFormat("yyyy-MM-dd").format(januaryFirst); // Return as "yyyy-MM-dd"
-            } catch (ParseException e) {
-                // Log error if needed, or handle exception for invalid date format
+            } catch (Exception e) {
+                logger.info("Error parsing date", e);
             }
         }
 
         // Try other date formats if not year-only
         for (SimpleDateFormat formatter : formatters) {
             try {
+                formatter.setLenient(false);
                 Date parsedDate = formatter.parse(date);
                 formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(parsedDate); // Convert to "yyyy-MM-dd"
                 break;
             } catch (ParseException e) {
-                // Continue to next formatter
+                logger.info("Error formatting date:"+e.getMessage());
             }
         }
 
@@ -349,6 +371,7 @@ public class ImporterUtil {
                 return true;
             } catch (Exception e) {
                 // Ignore and continue with the next format
+                logger.info("Date format error: ",e);
             }
         }
 

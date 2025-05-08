@@ -369,7 +369,6 @@ public abstract class ViewConfigUtil
         String fileName = expandFilePath(path, folderName, isTemplate,
                                          groupType,
                                          groupName);
-        logger.info("EXPANDED: "+servletContext.getRealPath(fileName));
         File file = new File(servletContext.getRealPath(fileName));
 
         if (!file.exists()) {
@@ -395,7 +394,6 @@ public abstract class ViewConfigUtil
                             " with absolute path " +
                             file.getAbsolutePath());
                     }
-                    logger.info("FILE PATH: "+fileName);
 
                     return fileName;
                 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-</jira>
+    <keyword>Reset some table columns for importer</keyword>
+    <author>bmokandu</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+
+                ALTER TABLE IMPORTED_FILES_RECORD ALTER COLUMN import_status TYPE integer USING 0;
+                SELECT setval('data_importer_config_seq', (SELECT MAX(id) FROM data_importer_config));
+                SELECT setval('data_importer_config_values_seq', (SELECT MAX(id) FROM data_importer_config_values));
+                SELECT setval('imported_project_seq', (SELECT MAX(id) FROM imported_project));
+                SELECT setval('IMPORTED_PROJECT_CURRENCY_ID', (SELECT MAX(id) FROM imported_project_currency));
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

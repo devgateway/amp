@@ -12,7 +12,8 @@
                 ALTER TABLE IMPORTED_FILES_RECORD ALTER COLUMN import_status TYPE integer USING 0;
                 SELECT setval('data_importer_config_seq', (SELECT MAX(id) FROM data_importer_config));
                 SELECT setval('data_importer_config_values_seq', (SELECT MAX(id) FROM data_importer_config_values));
-
+                SELECT setval('imported_project_seq', (SELECT MAX(id) FROM imported_project));
+                SELECT setval('imported_project_currency_seq', (SELECT MAX(id) FROM imported_project_currency));
             </lang>
         </script>
     </apply>

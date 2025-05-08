@@ -57,7 +57,6 @@ public class ViewImportProgress extends Action {
             String jsonData = objectMapper.writeValueAsString(data);
 
             response.setContentType("application/json");
-            logger.info("Json Data: "+jsonData);
             response.getWriter().write(jsonData);
             response.setCharacterEncoding("UTF-8");
             return null;

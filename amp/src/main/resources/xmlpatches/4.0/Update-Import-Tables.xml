@@ -11,6 +11,7 @@
 
                 ALTER TABLE IMPORTED_FILES_RECORD ALTER COLUMN import_status TYPE integer USING 0;
                 SELECT setval('data_importer_config_seq', (SELECT MAX(id) FROM data_importer_config));
+
             </lang>
         </script>
     </apply>

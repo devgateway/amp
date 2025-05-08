@@ -57,4 +57,14 @@ public class DagRunsRequestDTO {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
+    @Override
+    public String toString() {
+        return "DagRunsRequestDTO{" +
+                "username='" + username + '\'' +
+                ", workspaceId='" + workspaceId + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", dagId='" + dagId + '\'' +
+                '}';
+    }
 }

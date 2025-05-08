@@ -13,7 +13,7 @@
                 SELECT setval('data_importer_config_seq', (SELECT MAX(id) FROM data_importer_config));
                 SELECT setval('data_importer_config_values_seq', (SELECT MAX(id) FROM data_importer_config_values));
                 SELECT setval('imported_project_seq', (SELECT MAX(id) FROM imported_project));
-                SELECT setval('imported_project_currency_seq', (SELECT MAX(id) FROM imported_project_currency));
+                SELECT setval('IMPORTED_PROJECT_CURRENCY_ID', (SELECT MAX(id) FROM imported_project_currency));
             </lang>
         </script>
     </apply>

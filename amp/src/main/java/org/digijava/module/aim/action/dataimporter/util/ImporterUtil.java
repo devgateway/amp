@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
@@ -188,26 +189,44 @@ public class ImporterUtil {
     }
 
     private static String getDateFromExcel(Row row, int columnIndex) {
-        Cell cell = row.getCell(columnIndex); // Assuming the date is in the first column
-        try {
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            logger.info("Date TYpe: " + cell.getCellType());
-//            if (DateUtil.isCellDateFormatted(cell)) {
-            String date = cell.getStringCellValue();
-            logger.info("String Date: " + date);
+        Cell cell = row.getCell(columnIndex);
+        return extractDateFromStringCell(cell);
 
-            String formattedDate = formatDateFromDateObject(date);
-            logger.info("Formatted Date: " + formattedDate);
-            return formattedDate;
-//            } else {
-//                logger.info("The cell does not contain a valid date.");
-//                return null;
-//            }
-        } catch (Exception e) {
-            logger.error("Error parsing date column", e);
+    }
+
+    private static String extractDateFromStringCell(Cell cell) {
+        if (cell == null) {
             return null;
         }
 
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            String rawValue = cell.getStringCellValue().trim();
+
+            if (rawValue.isEmpty()) {
+                return null;
+            }
+
+            if (rawValue.matches("\\d+")) {
+                double numericValue = Double.parseDouble(rawValue);
+                if (numericValue > 59) {  // Excel bug: after 28 Feb 1900, 60+ is valid
+                    Date date = DateUtil.getJavaDate(numericValue);
+                    return outputFormat.format(date);
+                }
+            }
+
+            String formatted = formatDateFromDateObject(rawValue);
+            if (formatted != null) {
+                return formatted;
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error extracting date: " + e.getMessage());
+        }
+
+        return null;
     }
 
     private static void saveCurrencyCode(String currencyCode, String projectName) {

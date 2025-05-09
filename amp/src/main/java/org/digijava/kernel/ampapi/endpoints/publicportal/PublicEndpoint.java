@@ -159,7 +159,7 @@ public class PublicEndpoint {
     public final Response searchProjects(ReportFormParameters formParams) {
         ApiErrorResponse result = ReportsUtil.validateReportConfig(formParams, true);
         if (result != null) {
-            return Response.ok(result).build(); // FIXME return bad request
+           return PublicServices.buildBadRequestResponseWithOriginHeaders(result);
         }
         // we need reportId only to store the report result in cache
         Long reportId = (long) formParams.getReportName().hashCode();

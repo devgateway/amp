@@ -157,9 +157,9 @@ public class PublicEndpoint {
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "successful operation",
             response = PublicTopData.class))
     public final Response searchProjects(ReportFormParameters formParams) {
-        ApiErrorResponse result = ReportsUtil.validateReportConfig(formParams, true);
-        if (result != null) {
-           return PublicServices.buildBadRequestResponseWithOriginHeaders(result);
+        ApiErrorResponse errorResponse = ReportsUtil.validateReportConfig(formParams, true);
+        if (errorResponse != null) {
+           return PublicServices.buildBadRequestResponseWithOriginHeaders(errorResponse);
         }
         // we need reportId only to store the report result in cache
         Long reportId = (long) formParams.getReportName().hashCode();

@@ -9,27 +9,12 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
-        ALTER TABLE amp_category_value_location
-        ADD COLUMN IF NOT EXISTS is_ggw BOOLEAN DEFAULT FALSE;
-
-        ALTER TABLE amp_category_value_location
-        ADD COLUMN IF NOT EXISTS is_ecowas BOOLEAN DEFAULT FALSE;
-
-        -- Update for GGW countries
-        UPDATE AMP_CATEGORY_VALUE_LOCATION
-        SET is_ggw = TRUE
-        WHERE UPPER(iso) IN (
-            'BF', 'TD', 'DJ', 'ER', 'ET',
-            'ML', 'MR', 'NE', 'NG', 'SN', 'SD'
-        );
 
         -- Update for ECOWAS countries
         UPDATE AMP_CATEGORY_VALUE_LOCATION
-        SET is_ecowas = TRUE
+        SET is_ecowas = FALSE
         WHERE UPPER(iso) IN (
-            'BJ', 'CV', 'CI', 'GM',
-            'GH', 'GN', 'GW', 'LR',
-            'NG', 'SN', 'SL', 'TG'
+             'BF','ML','NE'
         );
             ]]></lang>
         </script>

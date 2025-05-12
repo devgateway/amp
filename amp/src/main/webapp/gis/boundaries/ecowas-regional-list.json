@@ -1,23 +1,5 @@
 [
   {
-    "id": "ML-adm-0",
-    "admLevel": "adm-0",
-    "label": "ADM 0",
-    "country": "ML"
-  },
-  {
-    "id": "ML-adm-1",
-    "admLevel": "adm-1",
-    "label": "ADM 1",
-    "country": "ML"
-  },
-  {
-    "id": "ML-adm-2",
-    "admLevel": "adm-2",
-    "label": "ADM 2",
-    "country": "ML"
-  },
-  {
     "id": "SN-adm-0",
     "admLevel": "adm-0",
     "label": "ADM 0",
@@ -34,24 +16,6 @@
     "admLevel": "adm-2",
     "label": "ADM 2",
     "country": "SN"
-  },
-  {
-    "id": "NE-adm-0",
-    "admLevel": "adm-0",
-    "label": "ADM 0",
-    "country": "NE"
-  },
-  {
-    "id": "NE-adm-1",
-    "admLevel": "adm-1",
-    "label": "ADM 1",
-    "country": "NE"
-  },
-  {
-    "id": "NE-adm-2",
-    "admLevel": "adm-2",
-    "label": "ADM 2",
-    "country": "NE"
   },
   {
     "id": "BJ-adm-0",
@@ -143,18 +107,6 @@
     "admLevel": "adm-2",
     "label": "ADM 2",
     "country": "GH"
-  },
-  {
-    "id": "BF-adm-0",
-    "admLevel": "adm-0",
-    "label": "ADM 0",
-    "country": "BF"
-  },
-  {
-    "id": "BF-adm-1",
-    "admLevel": "adm-1",
-    "label": "ADM 1",
-    "country": "BF"
   },
   {
     "id": "GM-adm-2",

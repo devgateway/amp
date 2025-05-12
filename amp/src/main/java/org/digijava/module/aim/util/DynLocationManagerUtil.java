@@ -442,7 +442,7 @@ public class DynLocationManagerUtil {
                 qry.setParameter("parentLocationId", parentLocation.getId(), LongType.INSTANCE);
 
             Collection<AmpCategoryValueLocations> locations = qry.list();
-            if (locations != null && locations.size() > 0) {
+            if (locations != null && !locations.isEmpty()) {
                 return locations.toArray(new AmpCategoryValueLocations[0])[0];
             }
         } catch (Exception e) {
@@ -1033,7 +1033,7 @@ public class DynLocationManagerUtil {
                             break;
                         }
                         String location = cell;
-                        if (location == null || location.trim().length() == 0) {
+                        if (location.trim().isEmpty()) {
                             k = hierarchyNumberOfCells + 1;
                             break;
                         }

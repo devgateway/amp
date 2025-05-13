@@ -92,6 +92,7 @@ module.exports = BackboneDash.View.extend({
             }
             });
         }
+
         if (_.find(enabledCharts, function (item) {
             return item === RE;
         })) {

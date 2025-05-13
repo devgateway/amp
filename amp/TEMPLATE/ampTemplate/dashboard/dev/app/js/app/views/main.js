@@ -81,16 +81,15 @@ module.exports = BackboneDash.View.extend({
             return item === MCT;
         })) {
             $.when(this.app.generalSettings.loaded).done(function() {
-                var self= this;
-                var isMultiCountry = self.app.generalSettings.get("multi-country");
-                console.log("Settings", self.app.generalSettings)
-                console.log("Charts", enabledCharts)
-                console.log("Multi", isMultiCountry)
-                if (isMultiCountry) {
-                    col.push(new TopsChart(
-                        {name: 'Top Countries', big: false, view: 'bar'},
-                        {app: self.app, url: '/rest/dashboard/tops/mct'}));
-                }
+            var isMultiCountry = this.app.generalSettings.get("multi-country");
+            console.log("Settings", this.app.generalSettings.data)
+            console.log("Charts", enabledCharts)
+            console.log("Multi", isMultiCountry)
+            if(isMultiCountry) {
+                col.push(new TopsChart(
+                    {name: 'Top Countries', big: false, view: 'bar'},
+                    {app: this.app, url: '/rest/dashboard/tops/mct'}));
+            }
             });
         }
         if (_.find(enabledCharts, function (item) {

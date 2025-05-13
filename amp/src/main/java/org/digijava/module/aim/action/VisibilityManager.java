@@ -349,12 +349,6 @@ public class VisibilityManager extends MultiAction {
 
             if (request.getParameter("moduleVis:" + existentModule) != null)
                 if (request.getParameter("moduleVis:" + existentModule).compareTo("enable") == 0) {
-                    boolean topCountriesAllowed  = checkMultiCountryForTopCountries(existentModule);
-                    if (!topCountriesAllowed)
-                    {
-                        logger.info("Top countries cannot be enabled");
-                        continue;
-                    }
                     newTemplateModulesList.add(ampModule);
 
                 }
@@ -458,6 +452,12 @@ public class VisibilityManager extends MultiAction {
             if(auxTree.getRoot() instanceof AmpFeaturesVisibility)
                 if(request.getParameter("featureVis:"+auxTree.getRoot().getId())!=null)
                 {
+                    boolean topCountriesAllowed  = checkMultiCountryForTopCountries(auxTree.getRoot().getName());
+                    if (!topCountriesAllowed)
+                    {
+                        logger.info("Top countries cannot be enabled");
+                        continue;
+                    }
                     features.add((AmpFeaturesVisibility) auxTree.getRoot());
                 }
             if(auxTree.getRoot() instanceof AmpFieldsVisibility)

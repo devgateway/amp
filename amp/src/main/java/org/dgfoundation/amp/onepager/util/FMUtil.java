@@ -442,7 +442,12 @@ public final class FMUtil {
                 throw new Exception("Current component [" + fmPathString + "] has it's visibility status different from it's presence in the tree!");
             }
             boolean topCountriesAllowed  = checkMultiCountryForTopCountries(fmPathString);
-            if (!visible || !topCountriesAllowed){
+            if (!topCountriesAllowed)
+            {
+                logger.info("Top countries cannot be enabled");
+                set.remove(obj);
+            }
+            else if (!visible){
                 set.remove(obj);
             }
             else{

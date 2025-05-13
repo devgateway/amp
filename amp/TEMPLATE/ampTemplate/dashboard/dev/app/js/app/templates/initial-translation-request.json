@@ -73,6 +73,7 @@
 "amp.dashboard:chart-FundingType-others": "Others",
 "amp.dashboard:chart-TopRegions-DistrictUndefined": "District: U",
 "amp.dashboard:chart-TopRegions-others": "Others",
+"amp.dashboard:chart-TopCountries-others": "Others",
 "amp.dashboard:chart-TopSectors-others": "Others",
 "amp.dashboard:chart-TopDonorAgencies-others": "Others",
 "amp.dashboard:chart-TopDonorGroups-others": "Others",

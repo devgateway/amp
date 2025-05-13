@@ -14,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
@@ -405,6 +406,7 @@ public final class FMUtil {
         }
         String fmPathString = getFmPathString(fmInfoPath);
 
+
         if (fmc.getFMType() != AmpFMTypes.MODULE && fmc.getFMType() != AmpFMTypes.MODULE)
             throw new RuntimeException("We shouldn't have components that are not MODULES or FEATURES!");
 
@@ -439,8 +441,8 @@ public final class FMUtil {
             if (found != isVisible){
                 throw new Exception("Current component [" + fmPathString + "] has it's visibility status different from it's presence in the tree!");
             }
-
-            if (!visible){
+            boolean topCountriesAllowed  = checkMultiCountryForTopCountries(fmPathString);
+            if (!visible || !topCountriesAllowed){
                 set.remove(obj);
             }
             else{
@@ -463,6 +465,14 @@ public final class FMUtil {
             logger.error("Exception : " + ex.getMessage()+" while changing FM visible status for "+fmc.getFMName());
         }
     }
+
+    private static boolean checkMultiCountryForTopCountries(String fmPathString) {
+        if (fmPathString.toLowerCase().contains("dashboards") && fmPathString.toLowerCase().contains("top countries")) {
+            return DynLocationManagerUtil.getDefCountryIso().equalsIgnoreCase("ZZ") || DynLocationManagerUtil.getDefCountryIso().equalsIgnoreCase("GG");
+        }
+        return true;
+    }
+
 
     public static final void setFmEnabled(Component c, Boolean value) {
         AmpFMConfigurable fmc = (AmpFMConfigurable) c;

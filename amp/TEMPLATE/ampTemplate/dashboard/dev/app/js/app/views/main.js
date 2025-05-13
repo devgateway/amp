@@ -80,7 +80,7 @@ module.exports = BackboneDash.View.extend({
         if (_.find(enabledCharts, function (item) {
             return item === MCT;
         })) {
-            var isMultiCountry = this.app.generalSettings.get("multi-country");
+            var isMultiCountry = this.app.generalSettings.attributes["multi-country"];
             console.log("Settings", this.app.generalSettings)
             console.log("Charts", enabledCharts)
             console.log("Multi", isMultiCountry)

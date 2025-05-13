@@ -23,6 +23,7 @@ var HeatmapsConfigCollection = require('../models/heatmaps-config-collection');
 
 var DO = '/Dashboards[true]/Top Donors[true]';
 var DG = '/Dashboards[true]/Top Donor Group[true]';
+var MCT = '/Dashboards[true]/Top Countries[true]';
 var RE = '/Dashboards[true]/Top Regions[true]';
 var PS = '/Dashboards[true]/Top Sectors[true]';
 var AP = '/Dashboards[true]/Aid Predictability[true]';
@@ -75,6 +76,13 @@ module.exports = BackboneDash.View.extend({
             col.push(new TopsChart(
                 {name: 'Top Donor Groups', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/dg'}));
+        }
+        if (_.find(enabledCharts, function (item) {
+            return item === MCT;
+        })) {
+            col.push(new TopsChart(
+                {name: 'Top Countries', big: false, view: 'bar'},
+                {app: this.app, url: '/rest/dashboard/tops/mct'}));
         }
         if (_.find(enabledCharts, function (item) {
             return item === RE;

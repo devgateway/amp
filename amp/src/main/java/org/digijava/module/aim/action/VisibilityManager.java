@@ -456,6 +456,7 @@ public class VisibilityManager extends MultiAction {
                     if (!topCountriesAllowed)
                     {
                         logger.info("Top countries cannot be enabled");
+                        features.remove((AmpFeaturesVisibility) auxTree.getRoot());
                         continue;
                     }
                     features.add((AmpFeaturesVisibility) auxTree.getRoot());

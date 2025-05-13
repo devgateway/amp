@@ -2,13 +2,16 @@ define([ 'underscore', 'backbone', 'models/document' ], function(_, Backbone, Do
 	var Documents = Backbone.Collection.extend({
 		model : Document,
 		url : '/rest/documents/getTopDocuments',
-		fetchData : function() {			
+		fetchData : function() {
 			this.fetch({
 				async : false,
+				xhrFields: {
+					withCredentials: true
+				},
 				error : function(collection, response) {
 					console.error('error loading documents url');
 				},
-				success : function(collection, response) {					
+				success : function(collection, response) {
 				}
 			});
 		}

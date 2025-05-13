@@ -34,12 +34,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.*;
 
+import static org.dgfoundation.amp.onepager.util.FMUtil.checkMultiCountryForTopCountries;
+
 public class VisibilityManager extends MultiAction {
 
     private static Logger logger = Logger.getLogger(VisibilityManager.class);
 
     private ServletContext ampContext = null;
-    
+
     public ActionForward modePrepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         //generateAllFieldsInFile();
         HttpSession session = request.getSession();
@@ -70,7 +72,7 @@ public class VisibilityManager extends MultiAction {
 
                 return modeEditTemplate(mapping, form, request, response);
             }
-            if(request.getParameter("action").compareTo("delete")==0) return modeDeleteTemplate(mapping, form, request, response);              
+            if(request.getParameter("action").compareTo("delete")==0) return modeDeleteTemplate(mapping, form, request, response);
             if(request.getParameter("action").compareTo("deleteFFM")==0) return modeDeleteFFM(mapping, form, request, response);
             if(request.getParameter("action").compareTo("manageTemplates")==0) return modeManageTemplates(mapping, form, request, response);
         }
@@ -79,7 +81,7 @@ public class VisibilityManager extends MultiAction {
         if(request.getParameter("saveTreeVisibility")!=null) return modeSaveTreeVisibility(mapping, (VisibilityManagerForm) form, request, response);
         if(request.getParameter("exportTreeVisibility")!=null) return modeExportTreeVisibility(mapping, form, request, response);
         if(request.getParameter("importTreeVisibility")!=null) return modeImportTreeVisibility(mapping, form, request, response);
-        
+
         Collection templates=FeaturesUtil.getAMPTemplatesVisibilityWithSession();
         FeaturesUtil.setUsedByTeamNames(templates);
         VisibilityManagerForm vForm=(VisibilityManagerForm) form;
@@ -87,7 +89,7 @@ public class VisibilityManager extends MultiAction {
         vForm.setMode("manageTemplates");
         return mapping.findForward("forward");
     }
-    
+
     public ActionForward modeImportTreeVisibility(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
         VisibilityManagerForm vForm=(VisibilityManagerForm) form;
         JAXBContext jc = JAXBContext.newInstance("org.dgfoundation.amp.visibility.feed.fm.schema");
@@ -101,7 +103,7 @@ public class VisibilityManager extends MultiAction {
         }
         return modeManageTemplates(mapping, form, request, response);
     }
-    
+
     public ActionForward modeExportTreeVisibility(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
         JAXBContext jc = JAXBContext.newInstance("org.dgfoundation.amp.visibility.feed.fm.schema");
         Marshaller m = jc.createMarshaller();
@@ -113,7 +115,7 @@ public class VisibilityManager extends MultiAction {
         }
         return null;
 }
-    
+
     public ActionForward modeManageTemplates(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // TODO Auto-generated method stub
         Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
@@ -143,8 +145,8 @@ public class VisibilityManager extends MultiAction {
         Collection features=FeaturesUtil.getAMPFeaturesVisibility();
         Collection fields=FeaturesUtil.getAMPFieldsVisibility();
         vForm.setMode("viewFields");
-        
-        // Create a new Collection only with AmpModulesVisibility object not repeated (can't change the query because is used elsewhere). 
+
+        // Create a new Collection only with AmpModulesVisibility object not repeated (can't change the query because is used elsewhere).
         Collection modulesGrouped = new ArrayList<AmpModulesVisibility>();
         String nameAux = "";
 
@@ -156,7 +158,7 @@ public class VisibilityManager extends MultiAction {
                 nameAux = auxAmp.getName();
             }
         }
-        
+
         vForm.setAllModules(modulesGrouped);
         vForm.setAllFeatures(features);
         vForm.setAllFields(fields);
@@ -165,14 +167,14 @@ public class VisibilityManager extends MultiAction {
     }
 
 
-    public ActionForward modeStartCleanUp(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
+    public ActionForward modeStartCleanUp(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         VisibilityManagerForm vForm=(VisibilityManagerForm) form;
         vForm.setMode("step1clean");
         logger.info("First step of the wizzard");
         return mapping.findForward("cleaning");
     }
-    public ActionForward modeCleanUpStep2(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
+    public ActionForward modeCleanUpStep2(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         VisibilityManagerForm vForm=(VisibilityManagerForm) form;
         vForm.setMode("step2clean");
@@ -181,7 +183,7 @@ public class VisibilityManager extends MultiAction {
         //return mapping.findForward("cleaning");
     }
 
-    public ActionForward modeCleanUpStep3(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
+    public ActionForward modeCleanUpStep3(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         VisibilityManagerForm vForm=(VisibilityManagerForm) form;
         vForm.setMode("step3clean");
@@ -198,7 +200,7 @@ public class VisibilityManager extends MultiAction {
         return mapping.findForward("cleaning");
     }
 
-    public ActionForward modeCleanUpStep4(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
+    public ActionForward modeCleanUpStep4(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         //  VisibilityManagerForm vForm=(VisibilityManagerForm) form;
         //vForm.setMode("step4clean");
@@ -294,7 +296,7 @@ public class VisibilityManager extends MultiAction {
     }
 
     public ActionForward modeEditTemplate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        
+
         VisibilityManagerForm vForm = (VisibilityManagerForm) form;
         Long templateId = null;
         HttpSession session=request.getSession();
@@ -344,9 +346,17 @@ public class VisibilityManager extends MultiAction {
 
             AmpModulesVisibility ampModule = (AmpModulesVisibility) allAmpModule;
             String existentModule = ampModule.getName().replaceAll(" ", "");
+
             if (request.getParameter("moduleVis:" + existentModule) != null)
                 if (request.getParameter("moduleVis:" + existentModule).compareTo("enable") == 0) {
+                    boolean topCountriesAllowed  = checkMultiCountryForTopCountries(existentModule);
+                    if (!topCountriesAllowed)
+                    {
+                        logger.info("Top countries cannot be enabled");
+                        continue;
+                    }
                     newTemplateModulesList.add(ampModule);
+
                 }
         }
         FeaturesUtil.updateModulesTemplate(newTemplateModulesList, templateId, vForm.getTemplateName());
@@ -365,7 +375,7 @@ public class VisibilityManager extends MultiAction {
         FeaturesUtil.deleteTemplateVisibility(Long.parseLong(request.getParameter("templateId")));
         ((VisibilityManagerForm)form).addMessage("aim:fm:message:deletedTemplate", "The template was deleted.");
 //      return modeManageTemplates(mapping, form, request, response);
-        
+
         {//for refreshing the page
             VisibilityManagerForm vForm = (VisibilityManagerForm) form;
             Collection templates=FeaturesUtil.getAMPTemplatesVisibilityWithSession();
@@ -392,7 +402,7 @@ public class VisibilityManager extends MultiAction {
         Session hbsession = PersistenceManager.getRequestDBSession();
         HttpSession session=request.getSession();
         Long templateId = (Long)session.getAttribute("templateId");
-        
+
         if(FeaturesUtil.existTemplateVisibility(request.getParameter("templateName"),templateId)) {
             form.addError("aim:fm:errortemplateExistent", "Template name already exist in database. Please choose another name for template.");
             request.setAttribute("templateId", templateId);
@@ -416,9 +426,9 @@ public class VisibilityManager extends MultiAction {
             FeaturesUtil.updateAmpFeaturesTreeVisibility(features, templateId, hbsession);
             FeaturesUtil.updateAmpFieldsTreeVisibility(fields, templateId, hbsession);
             request.setAttribute("templateId", templateId);
-            
+
             form.addMessage("aim:ampfeaturemanager:visibilityTreeUpdated", Constants.FEATURE_MANAGER_VISIBILITY_TREE_UPDATED);
-            // we need to refresh FM cache for non-default templates, since a user can continue to use a WS based on it  
+            // we need to refresh FM cache for non-default templates, since a user can continue to use a WS based on it
             FeaturesUtil.setAmpTreeVisibility(this.getServlet().getServletContext(), session, ampTreeVisibility);
 
             AmpTemplatesVisibility currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
@@ -426,7 +436,7 @@ public class VisibilityManager extends MultiAction {
 
             ampContext=this.getServlet().getServletContext();
             FeaturesUtil.setAmpTreeVisibility(ampContext, session, ampTreeVisibility);
-            
+
             // notify about visibility change
             DataVisibility.notifyVisibilityChanged();
         }
@@ -458,12 +468,12 @@ public class VisibilityManager extends MultiAction {
             recursivelyParseFMTree(auxTree, modules, features, fields, request);
         }
     }
-    
+
     public String trimString(String s)
     {
         StringTokenizer st = new StringTokenizer(s);
         StringBuilder result= new StringBuilder();
-        while (st.hasMoreTokens()) 
+        while (st.hasMoreTokens())
             result.append(st.nextToken()).append(" ");
         return result.toString();
 
@@ -538,7 +548,7 @@ public class VisibilityManager extends MultiAction {
                 }catch(Exception e){ e.printStackTrace(); }
                 return 1;
     }
-    
+
     private void updateAmpContext(AmpTreeVisibility ampTreeVisibility, Session hbsession,HttpSession session) throws HibernateException {
         AmpTemplatesVisibility currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
         ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);

@@ -441,12 +441,7 @@ public final class FMUtil {
             if (found != isVisible){
                 throw new Exception("Current component [" + fmPathString + "] has it's visibility status different from it's presence in the tree!");
             }
-            boolean topCountriesAllowed  = checkMultiCountryForTopCountries(fmPathString);
-            if (!topCountriesAllowed)
-            {
-                logger.info("Top countries cannot be enabled");
-                set.remove(obj);
-            }
+
             else if (!visible){
                 set.remove(obj);
             }
@@ -471,7 +466,7 @@ public final class FMUtil {
         }
     }
 
-    private static boolean checkMultiCountryForTopCountries(String fmPathString) {
+    public static boolean checkMultiCountryForTopCountries(String fmPathString) {
         logger.info("Checking if top countries are allowed for "+fmPathString);
         if (fmPathString.toLowerCase().contains("dashboards") && fmPathString.toLowerCase().contains("top countries")) {
             return DynLocationManagerUtil.getDefCountryIso().equalsIgnoreCase("ZZ") || DynLocationManagerUtil.getDefCountryIso().equalsIgnoreCase("GG");

@@ -468,7 +468,7 @@ public final class FMUtil {
 
     public static boolean checkMultiCountryForTopCountries(String fmPathString) {
         logger.info("Checking if top countries are allowed for "+fmPathString);
-        if (fmPathString.toLowerCase().contains("dashboards") && fmPathString.toLowerCase().contains("top countries")) {
+        if (fmPathString.toLowerCase().contains("top countries")) {
             return DynLocationManagerUtil.getDefCountryIso().equalsIgnoreCase("ZZ") || DynLocationManagerUtil.getDefCountryIso().equalsIgnoreCase("GG");
         }
         return true;

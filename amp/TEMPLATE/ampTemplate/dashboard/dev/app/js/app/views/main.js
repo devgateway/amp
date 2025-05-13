@@ -80,9 +80,8 @@ module.exports = BackboneDash.View.extend({
         if (_.find(enabledCharts, function (item) {
             return item === MCT;
         })) {
-            $.when(this.app.generalSettings.loaded).done(function() {
             var isMultiCountry = this.app.generalSettings.get("multi-country");
-            console.log("Settings", this.app.generalSettings.data)
+            console.log("Settings", this.app.generalSettings)
             console.log("Charts", enabledCharts)
             console.log("Multi", isMultiCountry)
             if(isMultiCountry) {
@@ -90,7 +89,6 @@ module.exports = BackboneDash.View.extend({
                     {name: 'Top Countries', big: false, view: 'bar'},
                     {app: this.app, url: '/rest/dashboard/tops/mct'}));
             }
-            });
         }
 
         if (_.find(enabledCharts, function (item) {

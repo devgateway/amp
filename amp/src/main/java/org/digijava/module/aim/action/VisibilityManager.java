@@ -451,7 +451,7 @@ public class VisibilityManager extends MultiAction {
                 }
             if(auxTree.getRoot() instanceof AmpFeaturesVisibility)
                 if(request.getParameter("featureVis:"+auxTree.getRoot().getId())!=null)
-                {
+                {// ONly enable Top Countries in Multi-country mode
                     boolean topCountriesAllowed  = checkMultiCountryForTopCountries(auxTree.getRoot().getName());
                     if (!topCountriesAllowed)
                     {

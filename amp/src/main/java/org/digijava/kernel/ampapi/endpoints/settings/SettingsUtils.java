@@ -450,6 +450,7 @@ public class SettingsUtils {
 
         settings.setDefaultDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
         settings.setDefaultGISCountry(DynLocationManagerUtil.getGISCountry());
+        settings.setMultiCountry(DynLocationManagerUtil.getDefCountryIso().equalsIgnoreCase("ZZ") || DynLocationManagerUtil.getDefCountryIso().equalsIgnoreCase("GG"));
         settings.setHideEditableExportFormatsPublicView(!FeaturesUtil.showEditableExportFormats());
 
         settings.setDownloadMapSelector(FeaturesUtil.isVisibleFeature(GisConstants.DOWNLOAD_MAP_SELECTOR));

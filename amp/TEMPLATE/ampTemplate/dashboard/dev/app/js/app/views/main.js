@@ -81,6 +81,8 @@ module.exports = BackboneDash.View.extend({
             return item === MCT;
         })) {
             var isMultiCountry = this.app.generalSettings.get("multi-country");
+            console.log("Settings", this.app.generalSettings)
+            console.log("Multi", isMultiCountry)
             if(isMultiCountry) {
                 col.push(new TopsChart(
                     {name: 'Top Countries', big: false, view: 'bar'},

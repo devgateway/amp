@@ -420,7 +420,7 @@ public class SettingsUtils {
         settings.setProjectSites(FeaturesUtil.isVisibleFeature(GisConstants.PROJECT_SITES));
         settings.setProgramsEnabled(FeaturesUtil.isVisibleFeature(GisConstants.GIS_PROGRAMS_ENABLED));
         settings.setSectorsEnabled(FeaturesUtil.isVisibleFeature(GisConstants.GIS_SECTORS_ENABLED));
-        settings.setWocatEnabled(FeaturesUtil.getGlobalSettingValueBoolean(GisConstants.SHOW_WOCAT));
+        settings.setWocatEnabled(FeaturesUtil.getGlobalSettingValueBoolean(GisConstants.WOCAT));
         settings.setMultiCountryEnabled(FeaturesUtil.isVisibleFeature(GisConstants.MULTICOUNTRY_ENABLED));
         settings.setLoginRequired(FeaturesUtil.isVisibleFeature(GisConstants.LOGIN_REQUIRED));
 

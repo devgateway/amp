@@ -1387,7 +1387,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     private static String numericAmpId(User user, Long actId, Session session){
         String countryCode = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
         String userId = user.getId().toString();
-        Country country = (Country) session.load(Country.class, countryCode);
+        Country country = session.load(Country.class, countryCode);
         String countryId = "0";
         if (country != null){
             countryId = country.getCountryId().toString();

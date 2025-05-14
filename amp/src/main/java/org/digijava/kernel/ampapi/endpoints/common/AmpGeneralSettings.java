@@ -44,6 +44,9 @@ public class AmpGeneralSettings {
     @JsonProperty("multilingual")
     private Boolean multilingual;
 
+    @JsonProperty("multi-country")
+    private Boolean multiCountry;
+
     @JsonProperty("default-date-format")
     private String defaultDateFormat;
 
@@ -617,5 +620,13 @@ public class AmpGeneralSettings {
 
     public void setLoginRequired(Boolean loginRequired) {
         this.loginRequired = loginRequired;
+    }
+
+    public Boolean getMultiCountry() {
+        return multiCountry;
+    }
+
+    public void setMultiCountry(Boolean multiCountry) {
+        this.multiCountry = multiCountry;
     }
 }

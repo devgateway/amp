@@ -46,15 +46,15 @@ public class AmpRegionalFundingFormSectionFeature extends
                                                 final IModel<AmpActivityVersion> am, AmpComponentPanel meFormSectionFeature) throws Exception {
         super(id, fmName, am);
                         String defCountry = DynLocationManagerUtil.getDefCountryIso();
-                if (defCountry != null && defCountry.equalsIgnoreCase("zz")) {
+//                if (defCountry != null && defCountry.equalsIgnoreCase("zz")) {
                     this.meFormSection = (AmpMEFormSectionFeature) meFormSectionFeature;
 
-                }
-                else
-                {
-                    this.singleCountryMeFormSection = (org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature) meFormSectionFeature;
+//                }
+//                else
+//                {
+//                    this.singleCountryMeFormSection = (org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature) meFormSectionFeature;
 
-                }
+//                }
 
         final IModel<Set<AmpRegionalFunding>> setModel = new PropertyModel<Set<AmpRegionalFunding>>(
                 am, "regionalFundings");

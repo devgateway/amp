@@ -50,11 +50,7 @@ public class AmpRegionalFundingFormSectionFeature extends
                     this.meFormSection = (AmpMEFormSectionFeature) meFormSectionFeature;
 
                 }
-                else
-                {
-                    this.singleCountryMeFormSection = (org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEFormSectionFeature) meFormSectionFeature;
 
-                }
 
         final IModel<Set<AmpRegionalFunding>> setModel = new PropertyModel<Set<AmpRegionalFunding>>(
                 am, "regionalFundings");

@@ -1,6 +1,6 @@
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
-<%@ taglib uri="/taglib/struts-html" prefix="html" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <html>
 <digi:base />
 <link href="css/global.css" rel="stylesheet" type="text/css">

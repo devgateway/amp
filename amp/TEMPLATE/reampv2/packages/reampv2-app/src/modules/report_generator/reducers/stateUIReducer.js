@@ -4,6 +4,8 @@ import {
   UPDATE_REPORT_DETAILS_FUNDING_GROUPING,
   UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES,
   UPDATE_REPORT_DETAILS_SPLIT_BY_FUNDING,
+    UPDATE_PUBLIC_VIEW,
+    UPDATE_WORKSPACE_LINKED,
   UPDATE_REPORT_DETAILS_TOTAL_GROUPING,
   UPDATE_REPORT_DETAILS_TOTALS_ONLY,
   UPDATE_COLUMNS_SELECTED_COLUMN,
@@ -142,6 +144,22 @@ export default (state = initialState, action) => {
         reportDetails: {
           ...state.reportDetails,
           selectedSplitByFunding: action.payload
+        }
+      };
+    case UPDATE_PUBLIC_VIEW:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          publicView: action.payload
+        }
+      };
+    case UPDATE_WORKSPACE_LINKED:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          workspaceLinked: action.payload
         }
       };
     case UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES:

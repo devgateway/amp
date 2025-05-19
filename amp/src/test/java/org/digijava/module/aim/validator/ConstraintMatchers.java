@@ -1,5 +1,6 @@
 package org.digijava.module.aim.validator;
 
+
 import org.hamcrest.Matcher;
 import org.hamcrest.collection.IsIterableContainingInOrder;
 

@@ -7,6 +7,7 @@ var TopojsonLibrary = require('../../../libs/local/topojson.js');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
 var ADMTemplate = fs.readFileSync(__dirname + '/../templates/map-adm-template.html', 'utf8');
+var WocatADMTemplate = fs.readFileSync(__dirname + '/../templates/wocat-adm-template.html', 'utf8');
 
 var ClusterPopupView = require('../views/cluster-popup-view');
 
@@ -14,6 +15,7 @@ module.exports = Backbone.View.extend({
   leafletLayerMap: {},
 
   admTemplate: _.template(ADMTemplate),
+  wocatAdmTemplate: _.template(WocatADMTemplate),
 
   initialize: function(options) {
     this.app = options.app;
@@ -110,6 +112,11 @@ module.exports = Backbone.View.extend({
     return new L.geoJson(admLayer.get('features'), {
       pointToLayer: function(feature, latlng) {
         var htmlString = self.admTemplate(feature);
+
+        if (feature.properties.admLevel==='Wocat')
+        {
+           htmlString = self.wocatAdmTemplate(feature);
+        }
         var myIcon = L.divIcon({
           className: 'map-adm-icon',
           html: htmlString,
@@ -117,38 +124,40 @@ module.exports = Backbone.View.extend({
         });
         return L.marker(latlng, {icon: myIcon});//L.circleMarker(latlng, geojsonMarkerOptions);
       },
-      onEachFeature: function (feature, layer) {    	  
+      onEachFeature: function (feature, layer) {
     	  self._onEachFeature(feature, layer, admLayer);
       }
-    	  
+
     });
   },
 
   // TODO: currently reparses topojson everytime settings/filters change...
   // instead it should do it once and cache it in a variable like boundaryLayerMap
   getNewBoundary: function(admLayer) {
-    var topoboundaries = admLayer.get('boundary');
+    var boundaries = admLayer.get('boundaries');
 
-    if (topoboundaries) {
-      /* retrieve the TopoJSON index key */
-      var topoJsonObjectsIndex = _.chain(topoboundaries.objects)
-                               .keys()
-                               .first()
-                               .value();
-      var boundaries = TopojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
+    if (boundaries) {
+      var geoJson = new L.geoJson(null, {
+        style: {
+          weight: 1,
+          dashArray: '3',
+          color: '#243241',
+          fillColor: 'transparent'
+        }
+      });
 
-      if (boundaries) {
-        return new L.geoJson(boundaries, {
-          style: {
-            weight: 1,
-            dashArray: '3',
-            color: '#243241',
-            fillColor: 'transparent'
-          }
-        });
-      } else {
-        console.error('no boundaries for admLayer?', admLayer);
-      }
+      boundaries.forEach(function (boundary) {
+        var i = _.chain(boundary.objects)
+          .keys()
+          .first()
+          .value();
+        var feature = TopojsonLibrary.feature(boundary, boundary.objects[i]);
+        if (feature) {
+          geoJson.addData(feature);
+        }
+      });
+
+      return geoJson;
     }
   },
 

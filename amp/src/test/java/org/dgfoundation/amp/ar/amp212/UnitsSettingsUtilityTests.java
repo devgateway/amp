@@ -3,12 +3,14 @@ package org.dgfoundation.amp.ar.amp212;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests report settings
  * @author Nadejda Mandrescu
  */
+import static org.junit.jupiter.api.Assertions.*;
+
 public class UnitsSettingsUtilityTests extends AmpTestCase {
 
     @Test
@@ -25,7 +27,7 @@ public class UnitsSettingsUtilityTests extends AmpTestCase {
         assertEquals(AmpARFilter.AMOUNT_OPTION_IN_BILLIONS, AmountsUnits.AMOUNTS_OPTION_BILLIONS.code);
         assertEquals(1000 * 1000 * 1000, AmountsUnits.AMOUNTS_OPTION_BILLIONS.divider);
     }
-    
+
     @Test
     public void testCrashes() {
         shouldFail(() -> AmountsUnits.getForValue(15));

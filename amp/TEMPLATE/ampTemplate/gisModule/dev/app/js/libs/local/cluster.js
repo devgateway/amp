@@ -1,8 +1,8 @@
 Number.prototype.formatMoney = function (c, d, t) {
     var n = this,
         c = isNaN(c = Math.abs(c)) ? 2 : c,
-        d = d == undefined ? "." : d,
-        t = t == undefined ? "," : t,
+        d = d === undefined ? "." : d,
+        t = t === undefined ? "," : t,
         s = n < 0 ? "-" : "",
         i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
         j = (j = i.length) > 3 ? j % 3 : 0;
@@ -552,8 +552,8 @@ define(["dojo/_base/declare", "dojo", "dojox/lang/functional", "dojox/lang/funct
                        }  
                  }                                                  
                }              
-               commitment = (commitment!='' && commitment!=0) ? commitment.formatMoney(2, '.', ',') : '';
-               var currency = (commitment!='' && commitment!=0) ? "USD" : '';
+               commitment = (commitment!=='' && commitment!==0) ? commitment.formatMoney(2, '.', ',') : '';
+               var currency = (commitment!=='' && commitment!==0) ? "USD" : '';
                var sector = (result.sector3)? result.sector3.name:'';
                var endDate = formatDate(result.end_Date);
                var startDate = formatDate(result.start_Date);

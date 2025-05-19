@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>GGW-204</jira>
+    <keyword>Add GIS Features to feature visibility</keyword>
+    <author>bmokandu</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                insert into amp_features_visibility (id, name, haslevel, parent) values
+                (nextval('amp_features_visibility_seq'), 'Multicountry Enabled', true, (select id from amp_modules_visibility where name = '/GIS'));
+                insert into amp_features_visibility (id, name, haslevel, parent) values
+                (nextval('amp_features_visibility_seq'), 'Programs Enabled', true, (select id from amp_modules_visibility where name = '/GIS'));
+                insert into amp_features_visibility (id, name, haslevel, parent) values
+                (nextval('amp_features_visibility_seq'), 'Sectors Enabled', true, (select id from amp_modules_visibility where name = '/GIS'));
+                insert into amp_features_visibility (id, name, haslevel, parent) values
+                (nextval('amp_features_visibility_seq'), 'Login Required', true, (select id from amp_modules_visibility where name = '/GIS'));
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

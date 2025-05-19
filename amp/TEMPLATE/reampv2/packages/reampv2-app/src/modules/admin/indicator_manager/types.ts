@@ -127,3 +127,14 @@ export interface AmpCategoryValue {
     defaultUsedValue: null;
     ampCategoryClass: AmpCategoryClass;
 }
+
+export interface SelectValue {
+    label: string;
+    value: string | number;
+}
+
+
+export interface GroupSelectValue {
+    label: string;
+    options: SelectValue[];
+}

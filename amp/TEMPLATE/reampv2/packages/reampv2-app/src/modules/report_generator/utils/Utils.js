@@ -64,6 +64,8 @@ export function convertReportType(value) {
       return 'C';
     case 'funding-pledges':
       return 'P';
+    case 'funding-indicator':
+      return 'I';
     default:
       return null;
   }
@@ -79,6 +81,8 @@ export function revertReportType(value) {
       return 'funding-component';
     case 'P':
       return 'funding-pledges';
+    case 'I':
+      return 'funding-indicator';
     default:
       return null;
   }

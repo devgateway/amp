@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30885</jira>
+    <keyword>Add Donor orgs to Db</keyword>
+    <author>bmokandu</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+
+                -- Insert into amp_org_group
+                INSERT INTO amp_org_group (amp_org_grp_id, org_grp_name, org_grp_code, org_type)
+                VALUES
+                (nextval('AMP_ORG_GROUP_seq'), 'Système des nations unies', 'SD', 3),
+                (nextval('AMP_ORG_GROUP_seq'), 'Banque mondiale, BAD et FMI', 'SD', 3),
+                (nextval('AMP_ORG_GROUP_seq'), 'Fonds arabes', 'SD', 3),
+                (nextval('AMP_ORG_GROUP_seq'), 'Pays membres de l''OCDE', 'PO', 3),
+                (nextval('AMP_ORG_GROUP_seq'), 'Coopération Sud-Sud', 'CS', 3),
+                (nextval('AMP_ORG_GROUP_seq'), 'NGO', 'CS', 3),
+                (nextval('AMP_ORG_GROUP_seq'), 'Institution sous régionale et UE', 'SD', 3);
+
+                -- Insert into amp_organisation
+                INSERT INTO amp_organisation (amp_org_id, name, org_code, org_grp_id)
+                VALUES
+                (nextval('AMP_ORGANISATION_seq'), 'PNUD', 'PNUD', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Système des nations unies' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'UNICEF', 'UNICEF', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Système des nations unies' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'PAM', 'PAM', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Système des nations unies' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'OIM', 'OIM', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Système des nations unies' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'OIT', 'OIT', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Système des nations unies' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'UNHCR', 'UNHCR', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Système des nations unies' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'FAO', 'FAO', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Système des nations unies' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'FEM', 'FEM', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Système des nations unies' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'ONUSIDA', 'ONUSIDA', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Système des nations unies' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'UNREC', 'PNUD', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Système des nations unies' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'ONUDI', 'ONUDI', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Système des nations unies' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'UNFPA', 'UNFPA', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Système des nations unies' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'OMS', 'OMS', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Système des nations unies' LIMIT 1)),
+
+                (nextval('AMP_ORGANISATION_seq'), 'BM', 'BM', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Banque mondiale, BAD et FMI' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'BAD', 'BAD', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Banque mondiale, BAD et FMI' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'FMI', 'FMI', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Banque mondiale, BAD et FMI' LIMIT 1)),
+
+                (nextval('AMP_ORGANISATION_seq'), 'BOAD', 'BOAD', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Institution sous régionale et UE' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'BAD', 'BAD', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Institution sous régionale et UE' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'UEMOA', 'UEMOA', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Institution sous régionale et UE' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'CEDEAO', 'CEDEAO', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Institution sous régionale et UE' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'UE', 'UE', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Institution sous régionale et UE' LIMIT 1)),
+
+                (nextval('AMP_ORGANISATION_seq'), 'BID', 'BID', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Fonds arabes' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'BADEA', 'BADEA', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Fonds arabes' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'OFID', 'OFID', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Fonds arabes' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'Fonds d''abudabi', 'FA', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Fonds arabes' LIMIT 1)),
+
+                (nextval('AMP_ORGANISATION_seq'), 'Allemagne', 'AM', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Pays membres de l''OCDE' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'France', 'FR', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Pays membres de l''OCDE' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'USA', 'USA', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Pays membres de l''OCDE' LIMIT 1)),
+
+                (nextval('AMP_ORGANISATION_seq'), 'Chine', 'CN', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Coopération Sud-Sud' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'Japon', 'JP', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Coopération Sud-Sud' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'Inde', 'IN', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Coopération Sud-Sud' LIMIT 1)),
+                (nextval('AMP_ORGANISATION_seq'), 'Corée du Sud', 'CDS', (SELECT amp_org_grp_id FROM amp_org_group WHERE org_grp_name = 'Coopération Sud-Sud' LIMIT 1));
+
+
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

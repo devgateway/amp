@@ -1,0 +1,12 @@
+this is AMP-Bootstrap's copy of https://github.com/blueimp/jQuery-File-Upload/
+This is also used in ActivityForm (I found out after having researched this independently), but the AF version is quite old. 
+I did not risk updating the AF version; at the same time I did not want to reuse old JS libraries.
+So, we end up (hopefully only temporarily) with 2 copies: one new for AMP-Bootstrap and one old for AF.
+Browser support:
+	https://github.com/blueimp/jQuery-File-Upload/wiki/Browser-support grabbed on 14/apr/2014: 
+	-> works on: Chrome 1+, Safari 4+, Firefox 3+, Opera 11+, IE 6+ 
+	-> uses AJAX POST on:
+		Chrome 1+, Safari 5+, Firefox 4+, Opera 12+, IE 10+,
+		for the others it uses iframe transport
+	-> should report progress on: Chrome 1+, Safari 5+, Firefox 4+, Opera 12+, IE 10+
+

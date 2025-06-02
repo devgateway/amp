@@ -9,6 +9,7 @@ import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.IntCell;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
@@ -62,12 +63,17 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         List<ReportsDashboard> ampDashboardFunding = processReportData(fundingReport, currencyCode);
         // The ampDashboardFunding data contains objects for commitments and disbursment differently in
         // separate objects. We need to combine them in same object combining commitment and disbursment values.
+        //Make year configurable
         List<ReportsDashboard> ampDashboardFundingCombined = ampDashboardFunding.stream()
                 .collect(Collectors.toMap(
-                        report -> report.getDonorAgency() + "|" + report.getImplementingAgency() + "|"
-                                + report.getPillar() + "|" + report.getCountry() + "|"
-                                + report.getImplementationLevel() + "|" +
-                                report.getStatus() + "|" + report.getYear() + "|" + report.getReportingSystem()
+                        report -> report.getDonorAgency()
+                                + "|" + report.getImplementingAgency()
+                                + "|" + report.getPillar()
+                                + "|" + report.getCountry()
+                                + "|" + report.getImplementationLevel()
+                                + "|" + report.getStatus()
+                                //+ "|" + report.getYear()
+                                + "|" + report.getReportingSystem()
                                 + "|" + report.getTypeOfAssistance(),
                         report -> report,
                         (report1, report2) -> {
@@ -112,11 +118,18 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                         for (ReportArea reportSystemData : typeOfAssistanceData.getChildren()) {
                                             TextCell reportSystemCell = (TextCell) reportSystemData.getContents().get(reportingSystem);
                                             //este viene de count data
+                                            Long activityCount = 0L;
                                             for (Map.Entry<ReportOutputColumn, ReportCell> content : reportSystemData.getContents().entrySet()) {
 
                                                 ReportOutputColumn col = content.getKey();
+                                                if(col.originalColumnName.equals(ColumnConstants.ACTIVITY_COUNT)) {
+                                                    IntCell amount = (IntCell) content.getValue();
+                                                    activityCount =(Long) amount.value;
+                                                    System.out.println("Activity Count: " + amount.value);
+                                                }
                                                 if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS) || col.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
-                                                    if (!col.parentColumn.originalColumnName.equals("Totals")) {
+                                                    //if (!col.parentColumn.originalColumnName.equals("Totals")) {
+                                                    if (col.parentColumn.originalColumnName.equals("Totals")) {
                                                         ReportsDashboard fundingReport = new ReportsDashboard();
                                                         fundingReport.setDonorAgency(donorAgencyCell.value.toString());
                                                         fundingReport.setImplementingAgency(implementingAgencyCell.value.toString());
@@ -126,13 +139,14 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                                         fundingReport.setStatus(statusCell.value.toString());
                                                         fundingReport.setReportingSystem(reportSystemCell.value.toString());
                                                         fundingReport.setTypeOfAssistance(typeOfAssistanceCell.value.toString());
-                                                        fundingReport.setYear(col.parentColumn.originalColumnName);
+                                                        //fundingReport.setYear(col.parentColumn.originalColumnName);
                                                         AmountCell amount = (AmountCell) content.getValue();
                                                         if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS)) {
                                                             fundingReport.setActualCommitment(amount.extractValue());
                                                         } else {
                                                             fundingReport.setActualDisbursement(amount.extractValue());
                                                         }
+                                                        fundingReport.setActivityCount(activityCount);
                                                         fundingReport.setCurrency(currencyCode);
                                                         ampDashboardFunding.add(fundingReport);
                                                     }
@@ -171,7 +185,8 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         addColumnsToSpecification(spec);
 
         spec.setSummaryReport(true);
-        spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+        //TODO broken by year configurable
+        spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
         spec.setShowOriginalCurrency(false);
         spec.setDisplayEmptyFundingRows(true);
         ReportSettingsImpl reportSettings = new ReportSettingsImpl();
@@ -189,9 +204,12 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         spec.addColumn(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0));
         spec.addColumn(new ReportColumn(ColumnConstants.STATUS));
         spec.addColumn(new ReportColumn(ColumnConstants.TYPE_OF_ASSISTANCE));
-        spec.addColumn(new ReportColumn(ColumnConstants.REPORTING_SYSTEM));
+        //TODO for GGW this is reporting system, for others it is Sectors
+        spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
+        //spec.addColumn(new ReportColumn(ColumnConstants.REPORTING_SYSTEM));
 
         spec.setHierarchies(spec.getColumns());
+        spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_COUNT));
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
     }

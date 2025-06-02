@@ -13,7 +13,7 @@ public class ReportsDashboard {
     private String reportingSystem;
     private String typeOfAssistance;
     private String currency;
-    private String year;
+    //private String year;
     private BigDecimal actualCommitment;
     private BigDecimal actualDisbursement;
     private Long activityCount;
@@ -48,7 +48,7 @@ public class ReportsDashboard {
     public void setPillar(String pillar) {
         this.pillar = pillar;
     }
-
+/*
     public String getYear() {
         return year;
     }
@@ -56,7 +56,7 @@ public class ReportsDashboard {
     public void setYear(String year) {
         this.year = year;
     }
-
+*/
     public BigDecimal getActualCommitment() {
         return actualCommitment;
     }

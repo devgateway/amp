@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public class ReportsDashboard {
     private String donorAgency;
+    private String implementingAgency;
     private String pillar;
     private String implementationLevel;
 
@@ -15,10 +16,12 @@ public class ReportsDashboard {
     private String year;
     private BigDecimal actualCommitment;
     private BigDecimal actualDisbursement;
+    private Long activityCount;
 
     public ReportsDashboard() {
         this.actualCommitment = BigDecimal.ZERO;
         this.actualDisbursement = BigDecimal.ZERO;
+        this.activityCount = 0L;
     }
 
 
@@ -28,6 +31,14 @@ public class ReportsDashboard {
 
     public void setDonorAgency(String donorAgency) {
         this.donorAgency = donorAgency;
+    }
+
+    public String getImplementingAgency() {
+        return implementingAgency;
+    }
+
+    public void setImplementingAgency(String implementingAgency) {
+        this.implementingAgency = implementingAgency;
     }
 
     public String getPillar() {
@@ -117,5 +128,13 @@ public class ReportsDashboard {
 
     public void setTypeOfAssistance(String typeOfAssistance) {
         this.typeOfAssistance = typeOfAssistance;
+    }
+
+    public Long getActivityCount() {
+        return activityCount;
+    }
+
+    public void setActivityCount(Long activityCount) {
+        this.activityCount = activityCount;
     }
 }

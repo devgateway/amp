@@ -573,6 +573,11 @@ public class PersistenceManager {
      * upon creating a new session, a transaction is created.
      */
     public static Session getSession() {
+        Session session = threadSession.get();
+        if (session == null) {
+            session = sf.openSession();
+            threadSession.set(session);
+        }
         return threadSession.get();
     }
 

@@ -562,7 +562,7 @@ public class PersistenceManager {
         try {
             CURRENT_SESSION_IS_MANAGED.set(true);
 
-            if (!isSessionProvided) {
+            if (!isSessionProvided || !session.isOpen()) {
                 // Start a new session and bind it to ThreadLocal
                 session = sf().openSession();
                 session.beginTransaction();

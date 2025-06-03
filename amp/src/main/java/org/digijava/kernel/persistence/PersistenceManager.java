@@ -555,15 +555,40 @@ public class PersistenceManager {
     }
 
     public static <T> T supplyInTransaction(Supplier<T> supplier) {
+        Session session = getSession();
+        boolean isSessionProvided = (session != null);
         boolean prevManagedFlag = CURRENT_SESSION_IS_MANAGED.get();
+
         try {
             CURRENT_SESSION_IS_MANAGED.set(true);
-            return supplier.get();
+
+            if (!isSessionProvided) {
+                // Start a new session and bind it to ThreadLocal
+                session = sf().openSession();
+                session.beginTransaction();
+                setCurrentSession(session);
+            }
+
+            T result = supplier.get();
+
+            if (!isSessionProvided) {
+                session.getTransaction().commit();
+            }
+
+            return result;
+
         } catch (Throwable e) {
-            PersistenceManager.rollbackCurrentSessionTx();
-            throw e;
+            if (!isSessionProvided && session != null && session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
+            }
+            throw new RuntimeException("Transaction failed", e);
+
         } finally {
-            PersistenceManager.endSessionLifecycle();
+            if (!isSessionProvided && session != null && session.isOpen()) {
+                session.close();
+                clearCurrentSession();
+            }
+
             CURRENT_SESSION_IS_MANAGED.set(prevManagedFlag);
         }
     }

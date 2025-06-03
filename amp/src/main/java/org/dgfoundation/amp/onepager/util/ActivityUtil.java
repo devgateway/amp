@@ -178,6 +178,7 @@ public class ActivityUtil {
      * saves a new version of an activity
      * returns newActivity
      */
+
     public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
                                                             Collection<AmpContentTranslation> translations, List<AmpContentTranslation> cumulativeTranslations,
                                                             AmpTeamMember ampCurrentMember, boolean draft,
@@ -234,6 +235,7 @@ public class ActivityUtil {
                 }
 
                 session.flush();
+                session.clear();
 
             } catch (CloneNotSupportedException e) {
                 logger.error("Can't clone current Activity: ", e);
@@ -307,6 +309,7 @@ public class ActivityUtil {
             session.merge(a);
         }
         session.flush();
+        session.clear();
 
         updatePerformanceRules(oldA, a);
 

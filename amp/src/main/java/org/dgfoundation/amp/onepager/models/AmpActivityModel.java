@@ -74,8 +74,8 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 
             translationHashMap = new HashMap<String, AmpContentTranslation>();
         }
-        Session ses = getHibernateSession(reset);
-        ses.clear();
+//        Session ses = getHibernateSession(reset);
+//        ses.clear();
     }
 
 
@@ -87,7 +87,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
      * @return
      */
     public static Session getHibernateSession(){
-        return getHibernateSession(false);
+        return PersistenceManager.getSession();
     }
 
     private static Session getHibernateSession(boolean reset) {

@@ -69,6 +69,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
             WicketSource.configure(this);
             IS_DEVELOPMENT_MODE = true;
         }
+        getRequestCycleListeners().add(new HibernateRequestCycleListener());
 
         //getResourceSettings().setStripJavaScriptCommentsAndWhitespace(true);
         //getResourceSettings().setAddLastModifiedTimeToResourceReferenceUrl(true);

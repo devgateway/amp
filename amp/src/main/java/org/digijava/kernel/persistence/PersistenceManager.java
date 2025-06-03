@@ -171,6 +171,7 @@ public class PersistenceManager {
     public static ClassMetadata getClassMetadata(Class<?> clazz) {
         return sf.getClassMetadata(clazz);
     }
+    private static final ThreadLocal<Session> threadSession = new ThreadLocal<>();
 
     public static PersistentClass getClassMapping(Class<?> clazz)
     {
@@ -572,21 +573,14 @@ public class PersistenceManager {
      * upon creating a new session, a transaction is created.
      */
     public static Session getSession() {
-        boolean currentSessionIsManaged = CURRENT_SESSION_IS_MANAGED.get();
-        if (!currentSessionIsManaged) {
-            throw new IllegalStateException("Called outside of managed session context.");
-        }
-        Session sess = sf().getCurrentSession();
-        sess.setFlushMode(FlushModeType.AUTO);
+        return threadSession.get();
+    }
 
-        Transaction transaction = sess.getTransaction();
-        if (transaction == null || !transaction.isActive()) {
-            sess.beginTransaction();
-        }
-//        sess.clear();
-
-        addSessionToStackTraceMap(sess);
-        return sess;
+    public static void setCurrentSession(Session session) {
+        threadSession.set(session);
+    }
+    public static void clearCurrentSession() {
+        threadSession.remove();
     }
 
     /**

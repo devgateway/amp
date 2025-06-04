@@ -549,12 +549,12 @@ public class PersistenceManager {
         } catch (Exception e) {
             if (!existingTransaction && transaction != null && transaction.isActive()) {
                 try {
-                    transaction.rollback();
+                    rollbackCurrentSessionTx();
+
                 } catch (HibernateException he) {
                     logger.error("Failed to rollback transaction", he);
                 }
             }
-            rollbackCurrentSessionTx();
             throw new RuntimeException("Transaction failed", e);
         } finally {
             if (!existingTransaction && session != null && session.isOpen()) {

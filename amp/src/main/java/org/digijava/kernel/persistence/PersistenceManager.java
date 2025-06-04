@@ -275,6 +275,81 @@ public class PersistenceManager {
         }
     }
 
+    public static <T> T doReturningWorkInTransaction(ReturningWork<T> returningWork) {
+        return doInTransaction(session -> {
+            return session.doReturningWork(returningWork);
+        });
+    }
+
+    /**
+     * Executes a function within a transactional context with proper session management
+     *
+     * @param <R> The return type
+     * @param function The function to execute within transaction
+     * @return The result of the function execution
+     * @throws RuntimeException if any error occurs during execution
+     */
+    public static <R> R doInTransaction(Function<Session, R> function) {
+        boolean isExistingSession = PersistenceManager.isSessionManaged();
+        Session session = null;
+        Transaction transaction = null;
+
+        try {
+            // Get or create session based on current context
+            session = isExistingSession ? PersistenceManager.getSession() : PersistenceManager.openNewSession();
+
+            // Begin transaction if needed
+            if (!session.getTransaction().isActive()) {
+                transaction = session.beginTransaction();
+                logger.debug("Started new transaction for doInTransaction");
+            }
+
+            // Execute the business logic
+            R result = function.apply(session);
+
+            // Commit if we started the transaction
+            if (transaction != null && transaction.isActive()) {
+                transaction.commit();
+                logger.debug("Successfully committed transaction in doInTransaction");
+            }
+
+            return result;
+
+        } catch (Exception e) {
+            // Handle transaction rollback
+            if (transaction != null && transaction.isActive()) {
+                try {
+                    transaction.rollback();
+                    logger.debug("Rolled back transaction due to error", e);
+                } catch (HibernateException rollbackEx) {
+                    logger.error("Failed to rollback transaction", rollbackEx);
+                }
+            }
+            throw new RuntimeException("Transaction failed in doInTransaction", e);
+
+        } finally {
+            // Clean up resources if we created them
+            if (!isExistingSession && session != null && session.isOpen()) {
+                try {
+                    session.close();
+                    logger.debug("Closed unmanaged session in doInTransaction");
+                } catch (HibernateException e) {
+                    logger.error("Failed to close session", e);
+                }
+            }
+        }
+    }
+
+    /**
+     * Convenience method for void operations
+     */
+    public static void doInTransaction(Consumer<Session> consumer) {
+        doInTransaction(session -> {
+            consumer.accept(session);
+            return null;
+        });
+    }
+
     /**
      * Clean up resources
      */

@@ -81,56 +81,6 @@ public class PersistenceManager {
     public static final long MAX_HIBERNATE_SESSION_LIFE_MILLIS=60*60*1000;
 
 
-    /**
-     * Special execution method for Quartz jobs and other background tasks
-     */
-    public static void executeInJobContext(Runnable jobTask) {
-        executeInJobContext(() -> {
-            jobTask.run();
-            return null;
-        });
-    }
-
-    public static <T> T executeInJobContext(Supplier<T> jobTask) {
-        Session session = null;
-        Transaction transaction = null;
-        boolean success = false;
-
-        try {
-            session = openNewSession();
-            transaction = session.beginTransaction();
-
-            T result = jobTask.get();
-
-            transaction.commit();
-            success = true;
-            return result;
-        } catch (Exception e) {
-            if (transaction != null && transaction.isActive()) {
-                try {
-                    transaction.rollback();
-                } catch (HibernateException he) {
-                    logger.error("Failed to rollback job transaction", he);
-                }
-            }
-            throw new RuntimeException("Job execution failed", e);
-        } finally {
-            if (session != null && session.isOpen()) {
-                try {
-                    if (!success && transaction != null && transaction.isActive()) {
-                        transaction.rollback();
-                    }
-                    session.close();
-                } catch (HibernateException e) {
-                    logger.error("Failed to close job session", e);
-                }
-            }
-        }
-    }
-    private static boolean isQuartzJobThread() {
-        String threadName = Thread.currentThread().getName();
-        return threadName != null && threadName.contains("QuartzScheduler");
-    }
 
 
     /**
@@ -604,6 +554,7 @@ public class PersistenceManager {
                     logger.error("Failed to rollback transaction", he);
                 }
             }
+            rollbackCurrentSessionTx();
             throw new RuntimeException("Transaction failed", e);
         } finally {
             if (!existingTransaction && session != null && session.isOpen()) {

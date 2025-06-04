@@ -10,7 +10,7 @@ public abstract class ConnectionCleaningJob implements Job {
     @Override public final void execute(JobExecutionContext context) throws JobExecutionException {
         try {
             if (shouldExecuteInTransaction()) {
-                PersistenceManager.executeInJobContext(() -> {
+                PersistenceManager.inTransaction(() -> {
                     try {
                         executeInternal(context);
                     } catch (JobExecutionException e) {

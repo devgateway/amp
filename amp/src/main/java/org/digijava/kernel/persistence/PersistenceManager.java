@@ -529,39 +529,45 @@ public class PersistenceManager {
 
     public static <T> T supplyInTransaction(Supplier<T> supplier) {
         Session session = getSession();
-        boolean isSessionProvided = (session != null);
-        boolean prevManagedFlag = CURRENT_SESSION_IS_MANAGED.get();
+        boolean existingTransaction = session.getTransaction().isActive();
+        Transaction transaction = null;
 
         try {
-            CURRENT_SESSION_IS_MANAGED.set(true);
-
-            if (!isSessionProvided || !session.isOpen()) {
-                session = sf().openSession();
-                session.beginTransaction();
-                setCurrentSession(session);
+            if (!existingTransaction) {
+                transaction = session.beginTransaction();
             }
 
             T result = supplier.get();
 
-            if (!isSessionProvided) {
-                session.getTransaction().commit();
+            if (!existingTransaction && transaction != null) {
+                transaction.commit();
             }
 
             return result;
-
-        } catch (Throwable e) {
-            if (!isSessionProvided && session != null && session.getTransaction().isActive()) {
-                session.getTransaction().rollback();
+        } catch (Exception e) {
+            if (!existingTransaction && transaction != null && transaction.isActive()) {
+                try {
+                    transaction.rollback();
+                } catch (HibernateException he) {
+                    logger.error("Failed to rollback transaction", he);
+                }
             }
             throw new RuntimeException("Transaction failed", e);
         } finally {
-            if (!isSessionProvided && session != null && session.isOpen()) {
-                session.close();
+            if (!existingTransaction && session != null && session.isOpen()) {
+                try {
+                    if (session.getTransaction().isActive()) {
+                        session.getTransaction().rollback();
+                    }
+                    session.close();
+                } catch (HibernateException e) {
+                    logger.error("Failed to close session", e);
+                }
                 clearCurrentSession();
             }
-            CURRENT_SESSION_IS_MANAGED.set(prevManagedFlag);
         }
     }
+
 
     /**
      * Returns the current Session. If there is none, creates one and returns it
@@ -571,12 +577,16 @@ public class PersistenceManager {
         Session session = threadSession.get();
         if (session == null || !session.isOpen()) {
             session = sf.openSession();
-            session.setHibernateFlushMode(FlushMode.AUTO);
+            session.setFlushMode(FlushModeType.AUTO);
             threadSession.set(session);
             addSessionToStackTraceMap(session);
-            activeSessions.incrementAndGet();
-            logger.debug("Opened new managed session. Active sessions: " + activeSessions.get());
         }
+
+        // Ensure we have an active transaction for write operations
+        if (!session.getTransaction().isActive()) {
+            session.beginTransaction();
+        }
+
         return session;
     }
 

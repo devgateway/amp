@@ -549,8 +549,8 @@ public class PersistenceManager {
         } catch (Exception e) {
             if (!existingTransaction && transaction != null && transaction.isActive()) {
                 try {
-                    rollbackCurrentSessionTx();
-
+                    logger.info("Rolling back after exception");
+                    transaction.rollback();
                 } catch (HibernateException he) {
                     logger.error("Failed to rollback transaction", he);
                 }

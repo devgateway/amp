@@ -82,6 +82,58 @@ public class PersistenceManager {
 
 
     /**
+     * Special execution method for Quartz jobs and other background tasks
+     */
+    public static void executeInJobContext(Runnable jobTask) {
+        executeInJobContext(() -> {
+            jobTask.run();
+            return null;
+        });
+    }
+
+    public static <T> T executeInJobContext(Supplier<T> jobTask) {
+        Session session = null;
+        Transaction transaction = null;
+        boolean success = false;
+
+        try {
+            session = openNewSession();
+            transaction = session.beginTransaction();
+
+            T result = jobTask.get();
+
+            transaction.commit();
+            success = true;
+            return result;
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                try {
+                    transaction.rollback();
+                } catch (HibernateException he) {
+                    logger.error("Failed to rollback job transaction", he);
+                }
+            }
+            throw new RuntimeException("Job execution failed", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                try {
+                    if (!success && transaction != null && transaction.isActive()) {
+                        transaction.rollback();
+                    }
+                    session.close();
+                } catch (HibernateException e) {
+                    logger.error("Failed to close job session", e);
+                }
+            }
+        }
+    }
+    private static boolean isQuartzJobThread() {
+        String threadName = Thread.currentThread().getName();
+        return threadName != null && threadName.contains("QuartzScheduler");
+    }
+
+
+    /**
      * Invoked at the end of each request. Iterates and removes Hibernate closed sessions from the trace map.
      * It also checks the long running sessions and forces closure on ones that are longer than
      * The {@link HashMap} is synchronized to prevent concurrency issues between HTTP threads

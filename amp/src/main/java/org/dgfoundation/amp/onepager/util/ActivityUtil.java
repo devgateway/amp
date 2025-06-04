@@ -97,7 +97,7 @@ public class ActivityUtil {
         am.setObject(newA);
 
         ActivityGatekeeper.unlockActivity(String.valueOf(am.getId()), am.getEditingKey());
-//        AmpActivityModel.endConversation();
+        AmpActivityModel.endConversation();
     }
 
     /**

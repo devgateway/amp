@@ -74,8 +74,8 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 
             translationHashMap = new HashMap<String, AmpContentTranslation>();
         }
-//        Session ses = getHibernateSession(reset);
-//        ses.clear();
+        Session ses = getHibernateSession(reset);
+        ses.clear();
     }
 
 

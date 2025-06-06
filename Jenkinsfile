@@ -78,7 +78,7 @@ stage('Build') {
                 //******************************************************
 
         countries = sh(returnStdout: true,
-                script: "ssh ${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                script: "ssh  ${env.jenkinsUser}${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
                 .trim()
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"

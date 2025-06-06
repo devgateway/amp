@@ -14,6 +14,8 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -21,30 +23,31 @@ import java.util.Set;
 
 /**
  * Creates a new indicator or updates an existing one
- * 
+ *
  * @author Nadejda Mandrescu
  */
 public class IndicatorUpdater {
-    
+
     private Indicator indicator;
-    
-    private ApiEMGroup errors = new ApiEMGroup(); 
+    private static final Logger logger = LoggerFactory.getLogger(IndicatorUpdater.class);
+
+    private ApiEMGroup errors = new ApiEMGroup();
     private TranslationUtil contentTranslator = new TranslationUtil();
     private Long indicatorId;
     private boolean indicatorIdDetected;
-    
+
     public IndicatorUpdater(Indicator indicator) {
         this.indicator = indicator;
     }
-    
+
     public ApiEMGroup getApiErrors() {
         return errors;
     }
-    
+
     public TranslationUtil getContentTranslator() {
         return contentTranslator;
     }
-    
+
     public Long getIndicatorId() {
         if (!indicatorIdDetected) {
             indicatorIdDetected = true;
@@ -72,7 +75,8 @@ public class IndicatorUpdater {
                 IndicatorEPConstants.UNIT, indicatorLayer, indicator.getUnit()));
         indicatorLayer.setNumberOfClasses(indicator.getNumberOfClasses());
         addIndicatorType(indicatorLayer);
-
+        logger.info("Saving layer",indicatorLayer.getId());
+        logger.info("Saving Member",TeamUtil.getCurrentAmpTeamMember().getUser().getEmail());
         if (indicatorLayer.getId() == null) {
             indicatorLayer.setCreatedOn(new Date());
             indicatorLayer.setCreatedBy(TeamUtil.getCurrentAmpTeamMember());
@@ -80,8 +84,8 @@ public class IndicatorUpdater {
         indicatorLayer.setUpdatedOn(new Date());
         indicatorLayer.setAccessType((indicator.getAccessTypeId() != null
                 ? IndicatorAccessType.getValueFromLong(indicator.getAccessTypeId()) : IndicatorAccessType.TEMPORARY));
-        setAdmLevel(indicatorLayer);  
-        
+        setAdmLevel(indicatorLayer);
+
         if (indicator.getZeroCategoryEnabled() != null) {
            indicatorLayer.setZeroCategoryEnabled(indicator.getZeroCategoryEnabled());
         }
@@ -98,10 +102,10 @@ public class IndicatorUpdater {
                 color.setIndicatorLayer(indicatorLayer);
                 colorRamp.add(color);
             }
-            
+
             if (indicatorLayer.getColorRamp() != null) {
                 indicatorLayer.getColorRamp().clear();
-                indicatorLayer.getColorRamp().addAll(colorRamp); 
+                indicatorLayer.getColorRamp().addAll(colorRamp);
             } else {
                 indicatorLayer.setColorRamp(colorRamp);
             }
@@ -116,10 +120,10 @@ public class IndicatorUpdater {
                 indicatorWs.setIndicatorLayer(indicatorLayer);
                 teams.add(indicatorWs);
             }
-            
+
             if (indicatorLayer.getSharedWorkspaces() != null) {
                 indicatorLayer.getSharedWorkspaces().clear();
-                indicatorLayer.getSharedWorkspaces().addAll(teams); 
+                indicatorLayer.getSharedWorkspaces().addAll(teams);
             } else {
                 indicatorLayer.setSharedWorkspaces(teams);
             }
@@ -160,10 +164,10 @@ public class IndicatorUpdater {
                             IndicatorEPConstants.FIELD_ID + " = " + locId);
                 }
             }
-            
+
             if (indicatorLayer.getIndicatorValues() != null) {
                 indicatorLayer.getIndicatorValues().clear();
-                indicatorLayer.getIndicatorValues().addAll(locationIndicatorValues); 
+                indicatorLayer.getIndicatorValues().addAll(locationIndicatorValues);
             } else {
                 indicatorLayer.setIndicatorValues(locationIndicatorValues);
             }
@@ -171,7 +175,7 @@ public class IndicatorUpdater {
 
         return indicatorLayer;
     }
-    
+
     private void setAdmLevel(AmpIndicatorLayer indicatorLayer) {
         AmpCategoryValue newAdmLevel = CategoryManagerUtil.getAmpCategoryValueFromDb(indicator.getAdmLevelId());
         // configure or update population flag: true if was already designated AND has & have the same valid admLevel
@@ -180,7 +184,7 @@ public class IndicatorUpdater {
         indicatorLayer.setPopulation(isPopulation);
         indicatorLayer.setAdmLevel(newAdmLevel);
     }
-    
+
     private void addIndicatorType(AmpIndicatorLayer ampIndicatorLayer) {
         Long typeId = indicator.getIndicatorTypeId();
         AmpCategoryValue acv = typeId == null ? null : CategoryManagerUtil.getAmpCategoryValueFromDb(typeId);

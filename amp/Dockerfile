@@ -41,7 +41,7 @@ RUN --mount=type=cache,target=/root/.npm \
 FROM node as compile-gis-layers-manager
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
-COPY TEMPLATE/ampTemplate/node_modules/gis-layers-manager .
+COPY TEMPLATE/ampTemplate/gis-layers-manager .
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \
     && npm run build

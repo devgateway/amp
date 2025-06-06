@@ -112,15 +112,15 @@
                             <td class="admin_box_label">
                               <c:set var="trnDataFreezeManager">
                                 <digi:trn invisibleLinks="true">Click here to access Data Freeze Manager</digi:trn>
-                              </c:set>                             
+                              </c:set>
                               <a href="/TEMPLATE/reamp/modules/admin/data-freeze-manager/index.html"
                                  title="${trnDataFreezeManager}">
                                 <digi:trn>Data Freeze Manager</digi:trn>
                               </a>
                             </td>
                           </tr>
-                        </module:display>                        
-                        
+                        </module:display>
+
                         <module:display name="Project Performance Alerts Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
@@ -128,7 +128,7 @@
                                 <c:set var="trnProjectPerformanceAlertsManager">
                                     <digi:trn invisibleLinks="true">Click here to access Project Performance Alerts Manager</digi:trn>
                                 </c:set>
-                                <a href="/TEMPLATE/reamp/modules/admin/performance-alert-manager/index.html" 
+                                <a href="/TEMPLATE/reamp/modules/admin/performance-alert-manager/index.html"
                                 title="${trnProjectPerformanceAlertsManager}">
                                     <digi:trn>Project Performance Alerts Manager</digi:trn>
                                 </a>
@@ -340,10 +340,10 @@
                           <tr>
                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                            <td>
-                             <a href="/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist/index.html" >
+                             <a href="/TEMPLATE/ampTemplate/gis-layers-manager/dist/index.html" >
                                 <digi:trn>GIS Layers Manager</digi:trn>
                              </a>
-                           </td>                          
+                           </td>
                           </tr>
                         </module:display>
 
@@ -694,7 +694,7 @@
 								<td class="admin_box_label">
 									<c:set var="translation">
 										<digi:trn invisibleLinks="true">Click here to view Document manager admin</digi:trn>
-									</c:set> 
+									</c:set>
 									<a href="/TEMPLATE/reamp/modules/admin/resource-manager-admin/index.html"
 									title="${translation}"> <digi:trn>Resource Manager</digi:trn>
 									</a>

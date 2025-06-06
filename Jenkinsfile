@@ -72,9 +72,9 @@ stage('Build') {
 
          //Used in the initial generation of keys when working with a new jenkins instance
                 //****************************************************************
-               sh "ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N ''"
-                sh "ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts"
-               sh "cat /root/.ssh/id_rsa.pub"
+//                sh "ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N ''"
+//                 sh "ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts"
+//                sh "cat /root/.ssh/id_rsa.pub"
                 //******************************************************
 
         countries = sh(returnStdout: true,

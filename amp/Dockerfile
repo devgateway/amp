@@ -55,7 +55,7 @@ COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-fi
 # HACK otherwise amp-filter won't compile!
 COPY TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
 COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings ../node_modules/amp-settings
-COPY --from=compile-gis-layers-manager /tmp/amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager ../node_modules/gis-layers-manager
+COPY --from=compile-gis-layers-manager /tmp/amp/TEMPLATE/ampTemplate/gis-layers-manager ../gis-layers-manager
 COPY TEMPLATE/ampTemplate/gisModule .
 RUN --mount=type=cache,target=/root/.npm \
     cd dev \
@@ -109,7 +109,7 @@ COPY . .
 COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist
 COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter/dist TEMPLATE/ampTemplate/node_modules/amp-filter/dist
 COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings/dist TEMPLATE/ampTemplate/node_modules/amp-settings/dist
-COPY --from=compile-gis-layers-manager /tmp/amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist
+COPY --from=compile-gis-layers-manager /tmp/amp/TEMPLATE/ampTemplate/gis-layers-manager/dist TEMPLATE/ampTemplate/gis-layers-manager/dist
 COPY --from=compile-gis-module /tmp/amp/TEMPLATE/ampTemplate/gisModule/dist TEMPLATE/ampTemplate/gisModule/dist
 COPY --from=compile-dashboard /tmp/amp/TEMPLATE/ampTemplate/dashboard/build TEMPLATE/ampTemplate/dashboard/build
 COPY --from=compile-reamp /tmp/amp/TEMPLATE/reamp TEMPLATE/reamp

@@ -340,7 +340,7 @@
                           <tr>
                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                            <td>
-                             <a href="/TEMPLATE/ampTemplate/gis-layers-manager/dist/index.html" >
+                             <a href="/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist/index.html" >
                                 <digi:trn>GIS Layers Manager</digi:trn>
                              </a>
                            </td>

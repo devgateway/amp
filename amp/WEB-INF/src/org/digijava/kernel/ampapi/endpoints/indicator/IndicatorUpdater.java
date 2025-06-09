@@ -76,10 +76,10 @@ public class IndicatorUpdater {
         indicatorLayer.setNumberOfClasses(indicator.getNumberOfClasses());
         addIndicatorType(indicatorLayer);
         logger.info("Saving layer "+indicatorLayer.getId());
-        logger.info("Saving Member " +TeamUtil.getCurrentAmpTeamMember().getUser().getEmail());
+        logger.info("Saving Member " +TeamUtil.getCurrentUser().getEmail());
         if (indicatorLayer.getId() == null) {
             indicatorLayer.setCreatedOn(new Date());
-            indicatorLayer.setCreatedBy(TeamUtil.getCurrentAmpTeamMember());
+            indicatorLayer.setCreatedBy(TeamUtil.getCurrentUser());
         }
         logger.info("Indiator date "+indicatorLayer.getCreatedOn());
         indicatorLayer.setUpdatedOn(new Date());

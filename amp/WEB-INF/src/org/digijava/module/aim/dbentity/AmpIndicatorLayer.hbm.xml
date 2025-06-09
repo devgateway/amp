@@ -33,7 +33,8 @@
 		<property name="zeroCategoryEnabled" type="java.lang.Boolean">
 		  <column name="zero_category_enabled" default="false"/>
 		</property>
-		<many-to-one name="createdBy" cascade="save-update" column="created_by" class="org.digijava.module.aim.dbentity.AmpTeamMember" />
+<!--		<many-to-one name="createdBy" cascade="save-update" column="created_by" class="org.digijava.module.aim.dbentity.AmpTeamMember" />-->
+		<many-to-one name="createdBy" cascade="save-update" column="created_by" class="org.digijava.kernel.user.User" />
 
 		<set name="colorRamp" cascade="all-delete-orphan" order-by="amp_indicator_color_id asc" lazy="false">
 			<cache usage="read-write" />

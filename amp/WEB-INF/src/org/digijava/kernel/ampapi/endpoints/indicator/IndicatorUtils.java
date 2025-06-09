@@ -1,12 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.core.Response;
@@ -93,7 +88,7 @@ public class IndicatorUtils {
         apiIndicator.setUpdatedOn(indLayer.getUpdatedOn());
 
         if (indLayer.getCreatedBy() != null) {
-                apiIndicator.setCreatedBy(indLayer.getCreatedBy().getUser().getEmail());
+                apiIndicator.setCreatedBy(indLayer.getCreatedBy().getEmail());
         }
 
         List<AmpIndicatorColor> colorList = new ArrayList<>(indLayer.getColorRamp());
@@ -193,7 +188,7 @@ public class IndicatorUtils {
                 AmpTeamMember ampTeamMember = TeamUtil.getCurrentAmpTeamMember();
                 if (ampTeamMember != null) {
                     AmpIndicatorLayer indicatorLayer =DynLocationManagerUtil.getIndicatorLayerById(indicatorId);
-                    if (indicatorLayer.getCreatedBy() != null && indicatorLayer.getCreatedBy().getUser().getId() == ampTeamMember.getUser().getId()){
+                    if (indicatorLayer.getCreatedBy() != null && Objects.equals(indicatorLayer.getCreatedBy().getId(), ampTeamMember.getUser().getId())){
                         return true;
                     }
                 }

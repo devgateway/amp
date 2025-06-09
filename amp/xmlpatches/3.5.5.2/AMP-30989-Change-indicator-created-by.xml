@@ -9,23 +9,33 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
-               -- Drop the existing constraint (whatever its name is)
-                ALTER TABLE AMP_INDICATOR_LAYER
-                DROP CONSTRAINT IF EXISTS (
-                    SELECT conname
-                    FROM pg_constraint
-                    JOIN pg_class ON pg_constraint.conrelid = pg_class.oid
-                    JOIN pg_attribute ON pg_attribute.attrelid = pg_class.oid
-                        AND pg_attribute.attnum = ANY(pg_constraint.conkey)
-                    WHERE relname = 'amp_indicator_layer'
-                      AND attname = 'created_by'
-                      AND contype = 'f'
-                );
+               -- First, drop any existing constraint without knowing its exact name
+-- This uses a more compatible approach without DO block
+CREATE OR REPLACE FUNCTION drop_created_by_fk() RETURNS void AS $$
+DECLARE
+    constraint_record RECORD;
+BEGIN
+    FOR constraint_record IN
+        SELECT con.conname AS constraint_name
+        FROM pg_constraint con
+                 JOIN pg_class cl ON con.conrelid = cl.oid
+                 JOIN pg_attribute attr ON attr.attrelid = cl.oid AND attr.attnum = ANY(con.conkey)
+        WHERE cl.relname = 'amp_indicator_layer'
+          AND attr.attname = 'created_by'
+          AND con.contype = 'f'
+        LOOP
+            EXECUTE 'ALTER TABLE amp_indicator_layer DROP CONSTRAINT ' || constraint_record.constraint_name;
+        END LOOP;
+END;
+$$ LANGUAGE plpgsql;
 
-                -- Add new constraint
-                ALTER TABLE AMP_INDICATOR_LAYER
-                ADD CONSTRAINT fk_created_by_user
-                FOREIGN KEY (created_by) REFERENCES "user"(id);
+SELECT drop_created_by_fk();
+DROP FUNCTION drop_created_by_fk();
+
+-- Then add the new constraint
+ALTER TABLE amp_indicator_layer
+    ADD CONSTRAINT fk_created_by_user
+        FOREIGN KEY (created_by) REFERENCES "user"(id);
             ]]></lang>
         </script>
     </apply>

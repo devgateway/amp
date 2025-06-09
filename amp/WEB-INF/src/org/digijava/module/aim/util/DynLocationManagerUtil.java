@@ -56,15 +56,15 @@ public class DynLocationManagerUtil {
     public static final int NON_HIERARCHY_CELLS_CNT = 6;
     private static Logger logger = Logger
             .getLogger(DynLocationManagerUtil.class);
-    
+
     public static List<AmpCategoryValueLocations> regionsOfDefaultCountry = new ArrayList<AmpCategoryValueLocations>();
-    
+
     public static void clearRegionsOfDefaultCountryCache() {
         synchronized (DynLocationManagerUtil.regionsOfDefaultCountry) {
             DynLocationManagerUtil.regionsOfDefaultCountry.clear();
         }
     }
-    
+
     public static Collection<AmpCategoryValueLocations> getHighestLayerLocations(DynLocationManagerForm myForm, ActionMessages errors) {
         Collection<AmpCategoryValueLocations> locations = null;
         Session dbSession = null;
@@ -96,36 +96,36 @@ public class DynLocationManagerUtil {
         return rootLocations;
     }
 
-    
+
     public static List<AmpCategoryValueLocations> loadLocations(Set<Long> allSelectedLocations) {
         if (allSelectedLocations == null)
             return null;
         Session dbSession = PersistenceManager.getSession();
-        
+
         String queryString = "select loc from "
                 + AmpCategoryValueLocations.class.getName() + " loc WHERE loc.id IN (" + Util.toCSStringForIN(allSelectedLocations) + ")";
         Query qry = dbSession.createQuery(queryString);
         List<AmpCategoryValueLocations> locations = qry.list();
         return locations;
     }
-    
-    
+
+
     public static void deleteLocation(Long id, ActionMessages errors) {
         Session dbSession = PersistenceManager.getSession();
         try {
             AmpCategoryValueLocations loc = (AmpCategoryValueLocations) dbSession.load(AmpCategoryValueLocations.class, id);
             loc.setDeleted(true);
             dbSession.save(loc);
-            
+
             AmpLocation ampLocation = LocationUtil.getAmpLocationByCVLocation(loc.getId());
             if (ampLocation != null && LocationUtil.getIndicatorValuesCountByAmpLocation(ampLocation) == 0) {
                 dbSession.delete(ampLocation);
             }
-            
+
             for (AmpCategoryValueLocations l : loc.getChildLocations()) {
                 deleteLocation(l.getId(), errors);
             }
-            
+
         } catch (Exception e) {
             errors.add("title", new ActionMessage("error.aim.dynRegionManager.cannotSaveOrUpdate"));
             logger.error(e.getMessage(), e);
@@ -211,13 +211,13 @@ public class DynLocationManagerUtil {
 
     private static Collection<AmpCategoryValueLocations> findRootLocations(Collection<AmpCategoryValueLocations> allLocations) {
         TreeSet<AmpCategoryValueLocations> returnLocations = new TreeSet<AmpCategoryValueLocations>(alphabeticalLocComp);
-        
+
         for(AmpCategoryValueLocations loc : allLocations) {
             if (loc.getParentLocation() == null && !loc.isSoftDeleted()) {
                 returnLocations.add(loc);
             }
         }
-        
+
         return returnLocations;
     }
 
@@ -400,7 +400,7 @@ public class DynLocationManagerUtil {
     }
 
     /**
-     * 
+     *
      * @param locationIso
      * @param cvLocationLayer
      *            the AmpCategoryValue specifying the layer (level) of the
@@ -510,7 +510,7 @@ public class DynLocationManagerUtil {
      * We need this in cases when the default value is cached (say, implementation_location=Region)
      * But we need to load (say, the defaultCountry, where implementation_location=Country)
      * Otherwise we get null.
-     * 
+     *
      * !! CONSTANTIN: on 12/03/2014, the code branches under if (readLayerFromCache) {} else {} are both reimplementations of the same thing. Rewriting to ignore the parameter !!
      *
      * @param locationIso
@@ -530,7 +530,7 @@ public class DynLocationManagerUtil {
     }
 
     /**
-     * 
+     *
      * @param locationIso
      * @param cvLocationLayer
      *            the AmpCategoryValue specifying the layer (level) of the
@@ -570,7 +570,7 @@ public class DynLocationManagerUtil {
             dbSession = PersistenceManager.getRequestDBSession();
             String queryString = "select loc from "
             + AmpCategoryValueLocations.class.getName()
-            + " loc where (loc.id=:id)" ;                   
+            + " loc where (loc.id=:id)" ;
             Query qry = dbSession.createQuery(queryString);
             qry.setLong("id", id);
             AmpCategoryValueLocations returnLoc = (AmpCategoryValueLocations)qry.uniqueResult();
@@ -580,7 +580,7 @@ public class DynLocationManagerUtil {
         }
         return null;
     }
-    
+
     public static AmpCategoryValueLocations getLocationByCode(
             String locationCode, HardCodedCategoryValue hcLocationLayer) {
         try {
@@ -593,7 +593,7 @@ public class DynLocationManagerUtil {
     }
 
     /**
-     * 
+     *
      * @param locationIso
      * @param cvLocationLayer
      *            the AmpCategoryValue specifying the layer (level) of the
@@ -627,7 +627,7 @@ public class DynLocationManagerUtil {
     }
 
     /**
-     * 
+     *
      * @param id
      * @param initChildLocs
      *            child locations are lazily initialized, so if you want to
@@ -675,25 +675,25 @@ public class DynLocationManagerUtil {
      */
     public static Set<Long> populateWithDescendantsIds(Collection<AmpCategoryValueLocations> locations, boolean includeDeleted) {
         Set<Long> allOutputLocations = getRecursiveChildrenOfCategoryValueLocations(AlgoUtils.collectIds(new HashSet<Long>(), locations), includeDeleted);
-        
+
         return allOutputLocations;
     }
-    
+
     /**
      * returns set of all (recursive) descendants of a given set of locations
      * @param destCollection
      * @param locations
      */
-    public static void populateWithDescendants(Set<AmpCategoryValueLocations> destCollection, 
+    public static void populateWithDescendants(Set<AmpCategoryValueLocations> destCollection,
             Collection<AmpCategoryValueLocations> locations, boolean includeDeleted) {
-        
+
         Set<Long> allOutputLocations = populateWithDescendantsIds(locations, includeDeleted);
-        
+
         for(Long outputId:allOutputLocations) {
             destCollection.add(getLocation(outputId, false));
         }
     }
-    
+
     /**
      * recursively get all ancestors (parents) of a set of AmpCategoryValueLocations, by a wave algorithm
      * @param inIds
@@ -701,16 +701,16 @@ public class DynLocationManagerUtil {
      */
     public static Set<Long> getRecursiveAscendantsOfCategoryValueLocations(Collection<Long> inIds, boolean includeDeleted) {
         String exludeDeletedCriteria = " deleted IS NOT TRUE AND";
-        
+
         if (includeDeleted) {
             exludeDeletedCriteria = "";
         }
-        
-        return AlgoUtils.runWave(inIds, 
+
+        return AlgoUtils.runWave(inIds,
                 new DatabaseWaver("SELECT DISTINCT(parent_location) FROM amp_category_value_location WHERE "
                         + exludeDeletedCriteria + " (parent_location IS NOT NULL) AND (id IN ($))"));
     }
-        
+
     /**
      * recursively get all children of a set of AmpCategoryValueLocations, by a wave algorithm
      * @param inIds
@@ -719,31 +719,31 @@ public class DynLocationManagerUtil {
      */
     public static Set<Long> getRecursiveChildrenOfCategoryValueLocations(Collection<Long> inIds, boolean includeDeleted) {
         String exludeDeletedCriteria = " deleted IS NOT TRUE AND";
-        
+
         if (includeDeleted) {
             exludeDeletedCriteria = "";
         }
-        
-        return AlgoUtils.runWave(inIds, 
+
+        return AlgoUtils.runWave(inIds,
                 new DatabaseWaver("SELECT DISTINCT id FROM amp_category_value_location WHERE "
                         + exludeDeletedCriteria + " parent_location IN ($)"));
     }
-    
-    public static void populateWithAscendants(Collection <AmpCategoryValueLocations> destCollection, 
+
+    public static void populateWithAscendants(Collection <AmpCategoryValueLocations> destCollection,
             Collection<AmpCategoryValueLocations> locations ) {
         if (  locations != null ) {
             Iterator<AmpCategoryValueLocations> iterLoc = locations.iterator();
             while (iterLoc.hasNext()) {
                 AmpCategoryValueLocations loc    = iterLoc.next();
-                
+
                 while (loc.getParentLocation() != null){
                     loc     = loc.getParentLocation();
                     destCollection.add(loc);
                 }
             }
-        }       
+        }
     }
-    
+
     /**
      * returns the ACVL of the country the current AMP installation is running on
      * @return
@@ -754,9 +754,9 @@ public class DynLocationManagerUtil {
                 FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
         return country;
     }
-    
-    public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws DgException 
-    {   
+
+    public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws DgException
+    {
         synchronized (DynLocationManagerUtil.regionsOfDefaultCountry)
         {
             if ( DynLocationManagerUtil.regionsOfDefaultCountry.isEmpty())
@@ -764,16 +764,16 @@ public class DynLocationManagerUtil {
                 AmpCategoryValueLocations country = DynLocationManagerUtil.getDefaultCountry();
                 if (country != null){
                     country = getLocationOpenedSession( country.getId() );
-                    
+
                     Set<AmpCategoryValueLocations> children             = country.getChildLocations();
-                    
+
                     DynLocationManagerUtil.regionsOfDefaultCountry.addAll(children);
                 }
             }
             return Collections.unmodifiableList(regionsOfDefaultCountry);
         }
      }
-    
+
     public static Set<AmpCategoryValueLocations> getLocationsOfTypeAdmLevel1OfDefCountry()
             throws Exception {
         TreeSet<AmpCategoryValueLocations> returnSet = new TreeSet<AmpCategoryValueLocations>(
@@ -831,11 +831,11 @@ public class DynLocationManagerUtil {
         return null;
     }
 
-    
-    
-    
+
+
+
     /**
-     * 
+     *
      * @param cvLayer
      * @return
      */
@@ -890,7 +890,7 @@ public class DynLocationManagerUtil {
     }
 
     /**
-     * 
+     *
      * @param ampCVLocation
      * @return If there is a corresponding AmpLocation object in the database
      *         then it is returned. Otherwise a new entity is being created and
@@ -908,34 +908,34 @@ public class DynLocationManagerUtil {
             ampLoc = new AmpLocation();
             ampLoc.setName(ampCVLocation.getName());
             ampLoc.setLocation(ampCVLocation);
-            
+
             AmpCategoryValueLocations regionLocation = DynLocationManagerUtil
                     .getAncestorByLayer(ampCVLocation, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
-            
+
             if (regionLocation != null) {
                 ampLoc.setRegionLocation(regionLocation);
             }
-            
+
             DbUtil.add(ampLoc);
         }
-        
+
         return ampLoc;
     }
-    
+
     /** Get AmpLocation object by Category Value Location Id. If it doesn't exist, create a new one.
-     * 
+     *
      * @param ampCVLocationId
      * @return
      * @throws Exception
      */
     public static AmpLocation getOrCreateAmpLocationByCVLId(Long ampCVLocationId) {
         AmpCategoryValueLocations acvLocation = getLocationByIdRequestSession(ampCVLocationId);
-        
+
         return getOrCreateAmpLocationByCVL(acvLocation);
     }
 
     /**
-     * 
+     *
      * @param indexOfLayer
      * @return Number of locations of the layer specified by indexOfLayer
      */
@@ -981,11 +981,11 @@ public class DynLocationManagerUtil {
             return result;
         }
     };
-    
+
     public static ErrorCode importExcelFile(InputStream inputStream, Option option) throws AimException {
         return importExcelFile(getCells(inputStream), option);
     }
-    
+
     public static List<List<String>> getCells(InputStream inputStream) {
         try {
             List<List<String>> rows = new ArrayList<>();
@@ -1012,7 +1012,7 @@ public class DynLocationManagerUtil {
 
             List<AmpCategoryValue> implLocs = new ArrayList<AmpCategoryValue>(
                     CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.IMPLEMENTATION_LOCATION_KEY));
-            
+
             int i = 1;
             int hierarchyNumberOfCells=implLocs.size();
             // last five cells are not hierarchy cells and first cell is db id
@@ -1026,7 +1026,7 @@ public class DynLocationManagerUtil {
                         && !StringUtils.equalsIgnoreCase(cellValue, TranslatorWorker.translateText(location.getValue()))) {
                     return ErrorCode.NAME_NOT_MATCH;
                 }
-                
+
                 i++;
             }
 
@@ -1057,11 +1057,11 @@ public class DynLocationManagerUtil {
                     String latitude = hssfRow.get(k++);
                     String longitude = hssfRow.get(k++);
                     String geoID = hssfRow.get(k++);
-                    
+
                     if (geoID != null && geoID.contains(".0")) {
                         geoID = geoID.replace(".0", "");
                     }
-                    
+
                     String iso = hssfRow.get(k++);
                     String iso3 = hssfRow.get(k++);
                     for (k = 0; k < locationNames.size(); k++) {
@@ -1090,9 +1090,9 @@ public class DynLocationManagerUtil {
                                 if (location.getParentCategoryValue() != null && !location.getParentCategoryValue().equals(implLoc)) {
                                     break;
                                 }
-                                
+
                                 AmpCategoryValueLocations oldParent = location.getParentLocation();
-                                
+
                                 location.setName(name);
                                 location.setGsLat(getValueOrNull(latitude));
                                 location.setGsLong(getValueOrNull(longitude));
@@ -1103,14 +1103,14 @@ public class DynLocationManagerUtil {
                                 location.setParentLocation(parentLoc);
                                 location.setDeleted(false);
                                 boolean edit = location.getId() != null;
-    
-    
+
+
                                 if (edit && oldParent != null && parentLoc != null
                                         && !oldParent.getId().equals(parentLoc.getId())) {
                                     oldParent.getChildLocations().remove(location);
                                     parentLoc.getChildLocations().add(location);
                                 }
-                                
+
                                 LocationUtil.saveLocation(location, edit);
                             }
                         } else {
@@ -1139,14 +1139,14 @@ public class DynLocationManagerUtil {
             }
             return cell.getStringCellValue();
         }
-        
+
         return "";
     }
-    
+
     private static String getValueOrNull(String value) {
         return StringUtils.isNotBlank(value) ? value : null;
     }
-    
+
     public enum ErrorCode{
         NUMBER_NOT_MATCH, NAME_NOT_MATCH, INCORRECT_CONTENT, CORRECT_CONTENT, INEXISTANT_ADM_LEVEL, LOCATION_NOT_FOUND
     }
@@ -1207,7 +1207,7 @@ public class DynLocationManagerUtil {
         }
 
     }
-    
+
  public static List <AmpIndicatorLayer> getIndicatorByCategoryValueId (Long id) {
         Session dbSession = PersistenceManager.getSession();
         String queryString = "select ind from "
@@ -1217,7 +1217,7 @@ public class DynLocationManagerUtil {
         qry.setCacheable(true);
         qry.setLong("id", id);
         return qry.list();
-     
+
  }
 
  public static List <AmpIndicatorLayer> getIndicatorByCategoryValueIdAndIndicatorId(Long admLevelId, Long indicatorId) {
@@ -1243,7 +1243,7 @@ public class DynLocationManagerUtil {
 
         String queryString = "select indicator from "
                 + AmpIndicatorLayer.class.getName() + " indicator "
-                + " left join indicator.createdBy.user c "
+                + " left join indicator.createdBy c "
                 + " order by " + orderBy + " " + sort;
         Query qry = dbSession.createQuery(queryString);
         return qry.list();
@@ -1264,7 +1264,7 @@ public class DynLocationManagerUtil {
         Session dbSession = PersistenceManager.getSession();
         String queryString = "select indicator from " + AmpIndicatorLayer.class.getName() + " indicator ";
         queryString += " left join indicator.sharedWorkspaces s ";
-        queryString += " where indicator.createdBy.user.id=:userId ";
+        queryString += " where indicator.createdBy.id=:userId ";
 
         Collection<AmpTeam> workspaces = null;
         TeamMember tm = TeamUtil.getCurrentMember();
@@ -1314,7 +1314,7 @@ public class DynLocationManagerUtil {
         Query qry = dbSession.createQuery(queryString);
         qry.setCacheable(true);
         qry.setLong("id", location.getId());
-        return qry.list(); 
+        return qry.list();
  }
 
     public static List <AmpLocationIndicatorValue> getLocationIndicatorValueByLocationAndIndicatorName (AmpCategoryValueLocations location,String name) {
@@ -1344,19 +1344,19 @@ public class DynLocationManagerUtil {
         qry.setLong("indicatorId", indicator.getId());
         return qry.list();
  }
- 
+
  public static void deleteIndicatorLayer (AmpIndicatorLayer indLayer) {
      Session dbSession = PersistenceManager.getSession();
      String queryString = "delete from "
                 + AmpLocationIndicatorValue.class.getName()
                 + "  where indicator.id=:indicatorLayerId";
-    
+
      Query qry = dbSession.createQuery(queryString);
      qry.setLong("indicatorLayerId", indLayer.getId());
      qry.executeUpdate();
      dbSession.delete(indLayer);
  }
- 
+
  public static AmpLocationIndicatorValue getLocationIndicatorValue (Long indicator, Long location) {
      Session dbSession = PersistenceManager.getSession();
         String queryString = "select value from "
@@ -1366,12 +1366,12 @@ public class DynLocationManagerUtil {
         qry.setCacheable(true);
         qry.setLong("locationId", location);
         qry.setLong("indicatorId", indicator);
-        return (AmpLocationIndicatorValue)qry.uniqueResult(); 
+        return (AmpLocationIndicatorValue)qry.uniqueResult();
  }
 
 
     /**
-     * 
+     *
      * @param id
      * @param cvLocationLayer
      *            the AmpCategoryValue specifying the layer (level) of the
@@ -1417,9 +1417,9 @@ public class DynLocationManagerUtil {
         public void setErrorCode(ErrorCode errorCode) {this.errorCode = errorCode;}
         public Set<String> getMoreinfo() {return moreinfo;}
         public void setMoreinfo(Set<String> moreinfo) {this.moreinfo = moreinfo;}
-        
+
     }
-    
+
     /**
      * Reset population flag for all AmpIndicatorLayer entries to the given state
      * @param isPopulation
@@ -1430,7 +1430,7 @@ public class DynLocationManagerUtil {
         return PersistenceManager.getSession().createQuery("update " + AmpIndicatorLayer.class.getName() + " o "
                 + "set o.population=:isPopulation" + whereIds).setBoolean("isPopulation", isPopulation).executeUpdate();
     }
-    
+
     public static List<Long> getIndicatorLayersIdsByTypeExcludeAdm(Long indicatorTypeId, Long implLocIdToExclude) {
         return PersistenceManager.getSession().createQuery("select o.id from " + AmpIndicatorLayer.class.getName() + " o "
                 + "where o.indicatorType != null and o.indicatorType.id = :indicatorTypeId "

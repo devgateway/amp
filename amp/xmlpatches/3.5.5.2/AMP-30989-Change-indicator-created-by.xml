@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-26594</jira>
+    <keyword>Remove Contribution Reports</keyword>
+    <author>vchihai</author>
+    <description>update amp offline compatibility to 1.5.0</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+
+               DO $$
+                DECLARE
+                    constraint_name text;
+                BEGIN
+                    -- Step 1: Find the name of the foreign key constraint on the "created_by" column
+                    SELECT conname INTO constraint_name
+                    FROM pg_constraint
+                    JOIN pg_class ON pg_constraint.conrelid = pg_class.oid
+                    JOIN pg_attribute ON pg_attribute.attrelid = pg_class.oid AND pg_attribute.attnum = ANY(pg_constraint.conkey)
+                    WHERE relname = 'AMP_INDICATOR_LAYER'
+                      AND attname = 'created_by'
+                      AND contype = 'f';
+
+                    -- Step 2: Drop the foreign key constraint if it exists
+                    IF constraint_name IS NOT NULL THEN
+                        EXECUTE format('ALTER TABLE AMP_INDICATOR_LAYER DROP CONSTRAINT %I', constraint_name);
+                    END IF;
+
+                    -- Step 3: Add the new foreign key to user(id)
+                    EXECUTE 'ALTER TABLE AMP_INDICATOR_LAYER ADD CONSTRAINT fk_created_by_user FOREIGN KEY (created_by) REFERENCES "user"(id)';
+                END $$;
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

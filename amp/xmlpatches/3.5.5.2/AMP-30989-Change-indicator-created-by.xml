@@ -25,7 +25,7 @@
                     EXECUTE format('ALTER TABLE AMP_INDICATOR_LAYER DROP CONSTRAINT %I', constraint_name);
                 END IF;
 
-                EXECUTE 'ALTER TABLE AMP_INDICATOR_LAYER ADD CONSTRAINT fk_created_by_user FOREIGN KEY (created_by) REFERENCES "user"(id)';
+                EXECUTE 'ALTER TABLE AMP_INDICATOR_LAYER ADD CONSTRAINT fk_created_by_user FOREIGN KEY (created_by) REFERENCES "dg_user"(id)';
             END
             $$@;
 

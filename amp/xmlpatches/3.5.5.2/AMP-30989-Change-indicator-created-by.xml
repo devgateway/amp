@@ -9,27 +9,32 @@
     <apply>
         <script>
             <lang delimiter="@" type="postgres"><![CDATA[
-               DO $$
-            DECLARE
-                constraint_name text;
-            BEGIN
-                SELECT conname INTO constraint_name
-                FROM pg_constraint
-                         JOIN pg_class ON pg_constraint.conrelid = pg_class.oid
-                         JOIN pg_attribute ON pg_attribute.attrelid = pg_class.oid AND pg_attribute.attnum = ANY(pg_constraint.conkey)
-                WHERE relname = 'AMP_INDICATOR_LAYER'
-                  AND attname = 'created_by'
-                  AND contype = 'f';
+       DO $$
+    DECLARE
+        constraint_rec record;
+    BEGIN
+        -- Drop ALL foreign key constraints on created_by column
+        FOR constraint_rec IN
+            SELECT c.conname as constraint_name
+            FROM pg_constraint c
+            JOIN pg_class t ON c.conrelid = t.oid
+            JOIN pg_namespace n ON t.relnamespace = n.oid
+            JOIN pg_attribute a ON a.attrelid = t.oid AND a.attnum = ANY(c.conkey)
+            WHERE t.relname = 'amp_indicator_layer'
+              AND n.nspname = 'public'  -- or your schema name
+              AND a.attname = 'created_by'
+              AND c.contype = 'f'
+        LOOP
+            RAISE NOTICE 'Dropping constraint: %', constraint_rec.constraint_name;
+            EXECUTE format('ALTER TABLE amp_indicator_layer DROP CONSTRAINT %I', constraint_rec.constraint_name);
+        END LOOP;
 
-                IF constraint_name IS NOT NULL THEN
-                    EXECUTE format('ALTER TABLE AMP_INDICATOR_LAYER DROP CONSTRAINT %I', constraint_name);
-                END IF;
-
-                EXECUTE 'ALTER TABLE AMP_INDICATOR_LAYER ADD CONSTRAINT fk_created_by_user FOREIGN KEY (created_by) REFERENCES "dg_user"(id)';
-            END
-            $$@;
-
-            ]]></lang>
+        -- Add the new constraint (only to dg_user)
+        RAISE NOTICE 'Adding new foreign key constraint';
+        EXECUTE 'ALTER TABLE amp_indicator_layer ADD CONSTRAINT fk_created_by_user FOREIGN KEY (created_by) REFERENCES dg_user(id)';
+    END
+    $$@;
+    ]]></lang>
         </script>
     </apply>
 </tns:patch>

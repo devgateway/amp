@@ -41,7 +41,6 @@ module.exports = Backbone.View.extend({
   render: function() {
 	  var self = this;
       this.def.push(this.layers.fetch());
-      console.log('Layers', self.layers);
       $.when.apply($, this.def).then(function () {
     	  var language = self.settings.get('language');
           self.$el.html(self.template({

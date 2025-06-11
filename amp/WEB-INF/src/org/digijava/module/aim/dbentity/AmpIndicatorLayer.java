@@ -1,5 +1,6 @@
 package org.digijava.module.aim.dbentity;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -13,7 +14,7 @@ import java.util.Set;
 
 @TranslatableClass (displayName = "IndicatorLayer")
 public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicatorLayer>, LoggerIdentifiable {
-    
+
     private Long id;
     @TranslatableField
     private String name;
@@ -31,9 +32,9 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
     private IndicatorAccessType accessType;
     private Date createdOn;
     private Date updatedOn;
-    private AmpTeamMember createdBy;
+    private User createdBy;
     private Boolean zeroCategoryEnabled;
-    
+
     public Long getId() {
         return id;
     }
@@ -65,7 +66,7 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
     public void setNumberOfClasses(Long numberOfClasses) {
         this.numberOfClasses = numberOfClasses;
     }
-    
+
     @Override
     public int compareTo(AmpIndicatorLayer o) {
         return id.compareTo(o.getId());
@@ -136,11 +137,11 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
         this.createdOn = createdOn;
     }
 
-    public AmpTeamMember getCreatedBy() {
+    public User getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(AmpTeamMember createdBy) {
+    public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -196,5 +197,5 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
         this.zeroCategoryEnabled = zeroCategoryEnabled;
     }
 
-   
+
 }

@@ -11,6 +11,8 @@
             <lang delimiter=";" type="postgres"><![CDATA[
              UPDATE amp_indicator_layer set created_by = (select id from dg_user where email = 'admin@amp.org')
              WHERE created_by IS NULL;
+                UPDATE amp_indicator_layer set created_by = NULL where access_type=0;
+
     ]]></lang>
         </script>
     </apply>

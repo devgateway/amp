@@ -533,6 +533,7 @@ public class PersistenceManager {
         Session session = getSession();
         boolean existingTransaction = session.getTransaction().isActive();
         Transaction transaction = null;
+        boolean committed = false;
 
         try {
             if (!existingTransaction) {
@@ -543,6 +544,7 @@ public class PersistenceManager {
 
             if (!existingTransaction && transaction != null) {
                 transaction.commit();
+                committed = true;
             }
 
             return result;
@@ -559,7 +561,7 @@ public class PersistenceManager {
         } finally {
             if (!existingTransaction && session != null && session.isOpen()) {
                 try {
-                    if (session.getTransaction().isActive()) {
+                    if (!committed && session.getTransaction().isActive()) {
                         session.getTransaction().rollback();
                     }
                     session.close();

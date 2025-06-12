@@ -141,7 +141,7 @@ public class ExcelImporter {
                 importDataModel.setModified_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
                 importDataModel.setCreated_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
                 importDataModel.setTeam(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeam().getAmpTeamId());
-                importDataModel.setIs_draft(true);
+                importDataModel.setIs_draft(false);
                 OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
                 importDataModel.setCreation_date(now.format(formatter));
                 setStatus(importDataModel);

@@ -1229,7 +1229,7 @@ public class DynLocationManagerUtil {
 
         String queryString = "select indicator from "
                 + AmpIndicatorLayer.class.getName() + " indicator "
-                + " left join indicator.createdBy.user c "
+                + " left join indicator.createdBy c "
                 + " order by " + orderBy + " " + sort;
         Query qry = dbSession.createQuery(queryString);
         return qry.list();
@@ -1250,7 +1250,7 @@ public class DynLocationManagerUtil {
         Session dbSession = PersistenceManager.getSession();
         String queryString = "select indicator from " + AmpIndicatorLayer.class.getName() + " indicator ";
         queryString += " left join indicator.sharedWorkspaces s ";
-        queryString += " where indicator.createdBy.user.id=:userId ";
+        queryString += " where indicator.createdBy.id=:userId ";
 
         Collection<AmpTeam> workspaces = null;
         TeamMember tm = TeamUtil.getCurrentMember();

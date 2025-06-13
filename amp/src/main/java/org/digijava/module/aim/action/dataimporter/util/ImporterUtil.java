@@ -628,7 +628,7 @@ public class ImporterUtil {
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                     });
-            activity.putAll(map);
+            mergeMaps(activity, map);
             response = ActivityInterchangeUtils.importActivity(activity, true, rules, "activity/update");
         }
         if (response != null) {
@@ -657,6 +657,22 @@ public class ImporterUtil {
         session.flush();
 
         logger.info("Imported project: " + importedProject);
+    }
+    public static void mergeMaps(Map<String, Object> targetMap, Map<String, Object> sourceMap) {
+        for (Map.Entry<String, Object> entry : sourceMap.entrySet()) {
+            String key = entry.getKey();
+            Object sourceValue = entry.getValue();
+            Object targetValue = targetMap.get(key);
+
+            if (targetValue instanceof Collection && sourceValue instanceof Collection) {
+                List<Object> mergedList = new ArrayList<>((List<?>) targetValue);
+                mergedList.addAll((List<?>) sourceValue);
+                targetMap.put(key, mergedList);
+            } else {
+                // Add or overwrite
+                targetMap.put(key, sourceValue);
+            }
+        }
     }
 
     private static void updateFundingOrgsAndSectorsWithAlreadyExisting(AmpActivityVersion ampActivityVersion, ImportDataModel importDataModel) {

@@ -537,12 +537,14 @@ public class PersistenceManager {
 
         try {
             if (!existingTransaction) {
+                logger.info("Starting new transaction...");
                 transaction = session.beginTransaction();
+                logger.info("Transaction started: " + transaction.isActive());
             }
 
             T result = supplier.get();
 
-            if (!existingTransaction && transaction != null) {
+            if (!existingTransaction) {
                 transaction.commit();
                 committed = true;
             }

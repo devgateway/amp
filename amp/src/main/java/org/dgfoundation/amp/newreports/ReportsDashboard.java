@@ -7,7 +7,7 @@ public class ReportsDashboard {
     private String implementingAgency;
     private String pillar;
     private String implementationLevel;
-
+    private String procurementSystem;
     private String country;
     private String status;
     private String reportingSystem;
@@ -136,5 +136,11 @@ public class ReportsDashboard {
 
     public void setActivityCount(Long activityCount) {
         this.activityCount = activityCount;
+    }
+    public String getProcurementSystem() {
+        return procurementSystem;
+    }
+    public void setProcurementSystem(String procurementSystem) {
+        this.procurementSystem = procurementSystem;
     }
 }

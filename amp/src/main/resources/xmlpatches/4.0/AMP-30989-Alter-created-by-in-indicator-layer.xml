@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30989</jira>
+    <keyword>Modify indicator layer created by</keyword>
+    <author>bmokandu</author>
+    <description>Modify indicator layer created by</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+            -- Drop created_by amp_team_member foreign key manually
+  ALTER TABLE amp_indicator_layer ADD CONSTRAINT fk_created_by_user FOREIGN KEY (created_by) REFERENCES dg_user(id);
+    ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

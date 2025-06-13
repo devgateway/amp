@@ -87,7 +87,7 @@ public class IndicatorUtils {
         apiIndicator.setUpdatedOn(indLayer.getUpdatedOn());
 
         if (indLayer.getCreatedBy() != null) {
-            apiIndicator.setCreatedBy(indLayer.getCreatedBy().getUser().getEmail());
+            apiIndicator.setCreatedBy(indLayer.getCreatedBy().getEmail());
         }
 
         List<AmpIndicatorColor> colorList = new ArrayList<>(indLayer.getColorRamp());
@@ -187,9 +187,7 @@ public class IndicatorUtils {
                 AmpTeamMember ampTeamMember = TeamUtil.getCurrentAmpTeamMember();
                 if (ampTeamMember != null) {
                     AmpIndicatorLayer indicatorLayer =DynLocationManagerUtil.getIndicatorLayerById(indicatorId);
-                    if (indicatorLayer.getCreatedBy() != null && indicatorLayer.getCreatedBy().getUser().getId() == ampTeamMember.getUser().getId()){
-                        return true;
-                    }
+                    return indicatorLayer.getCreatedBy() != null && Objects.equals(indicatorLayer.getCreatedBy().getId(), ampTeamMember.getUser().getId());
                 }
             }
         }
@@ -237,7 +235,7 @@ public class IndicatorUtils {
         return ("desc".equalsIgnoreCase(sort) || "asc".equalsIgnoreCase(sort)) ? null
                 : IndicatorErrors.INVALID_SORT.withPrefix(sort);
     }
-    
+
     /**
      * Get unique Population Layer designated for the given implementation location
      * @param hardcodedCatValue implLoc the implementation location (Region, etc)
@@ -246,7 +244,7 @@ public class IndicatorUtils {
     public static AmpIndicatorLayer getPopulationLayer(HardCodedCategoryValue hardcodedCatValue) {
         return getPopulationLayer(hardcodedCatValue == null ? null : hardcodedCatValue.getAmpCategoryValueFromDB());
     }
-    
+
     /**
      * Get unique Population Layer designated for the given implementation location
      * @param implementationLocation the implementation location (Region, etc)
@@ -268,7 +266,7 @@ public class IndicatorUtils {
         }
         return ail;
     }
-    
+
     public static Indicator getIndicatorsAndLocationValues(Long indicatorId) {
         AmpIndicatorLayer indicator = getAmpIndicatorLayer(indicatorId);
         return getIndicatorsAndLocationValues(indicator);
@@ -340,7 +338,7 @@ public class IndicatorUtils {
     /**
      * Find the corresponding adm-0, adm-1, etc for the selected implementation location
      * @param indicator the indicator
-     * @return the corresponding adm-x 
+     * @return the corresponding adm-x
      */
     public static String getAdmX(AmpIndicatorLayer indicator) {
         String implementationLocation = indicator.getAdmLevel() == null ? null : indicator.getAdmLevel().getValue();

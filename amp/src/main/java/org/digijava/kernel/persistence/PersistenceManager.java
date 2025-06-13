@@ -68,6 +68,7 @@ public class PersistenceManager {
     private static Logger logger = I18NHelper.getKernelLogger(PersistenceManager.class);
     private static final AtomicInteger activeSessions = new AtomicInteger();
 
+    private static final ThreadLocal<Boolean> transactionOwner = new ThreadLocal<>();
 
     private static final HashMap<Session, Object[]> sessionStackTraceMap = new HashMap<>();
 
@@ -564,7 +565,7 @@ public class PersistenceManager {
                     if (!committed && session.getTransaction().isActive()) {
                         session.getTransaction().rollback();
                     }
-                    session.close();
+                    closeSession(session);
                 } catch (HibernateException e) {
                     logger.error("Failed to close session", e);
                 }
@@ -587,19 +588,23 @@ public class PersistenceManager {
             addSessionToStackTraceMap(session);
         }
 
-        // Ensure we have an active transaction for write operations
         if (!session.getTransaction().isActive()) {
             session.beginTransaction();
+            transactionOwner.set(true);
+        } else {
+            transactionOwner.set(false);
         }
 
         return session;
     }
+
 
     public static void setCurrentSession(Session session) {
         threadSession.set(session);
     }
     public static void clearCurrentSession() {
         threadSession.remove();
+        transactionOwner.remove();
     }
 
     public static boolean isSessionManaged() {
@@ -770,7 +775,7 @@ public class PersistenceManager {
 
         try {
             if (session.isOpen()) {
-                if (session.getTransaction().isActive()) {
+                if (Boolean.TRUE.equals(transactionOwner.get()) && session.getTransaction().isActive()) {
                     try {
                         session.getTransaction().rollback();
                     } catch (HibernateException e) {

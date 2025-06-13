@@ -68,7 +68,6 @@ public class PersistenceManager {
     private static Logger logger = I18NHelper.getKernelLogger(PersistenceManager.class);
     private static final AtomicInteger activeSessions = new AtomicInteger();
 
-    private static final ThreadLocal<Boolean> transactionOwner = new ThreadLocal<>();
 
     private static final HashMap<Session, Object[]> sessionStackTraceMap = new HashMap<>();
 
@@ -531,7 +530,7 @@ public class PersistenceManager {
     }
 
     public static <T> T supplyInTransaction(Supplier<T> supplier) {
-        Session session = getSession();
+        Session session = getSessionWithoutBeginningTransaction();
         boolean existingTransaction = session.getTransaction().isActive();
         Transaction transaction = null;
         boolean committed = false;
@@ -565,7 +564,7 @@ public class PersistenceManager {
                     if (!committed && session.getTransaction().isActive()) {
                         session.getTransaction().rollback();
                     }
-                    closeSession(session);
+                    session.close();
                 } catch (HibernateException e) {
                     logger.error("Failed to close session", e);
                 }
@@ -580,6 +579,15 @@ public class PersistenceManager {
      * upon creating a new session, a transaction is created.
      */
     public static Session getSession() {
+        Session session = getSessionWithoutBeginningTransaction();
+        if (session.getTransaction() == null || !session.getTransaction().isActive()) {
+            session.beginTransaction();
+        }
+
+        return session;
+    }
+
+    public static Session getSessionWithoutBeginningTransaction() {
         Session session = threadSession.get();
         if (session == null || !session.isOpen()) {
             session = sf.openSession();
@@ -587,24 +595,14 @@ public class PersistenceManager {
             threadSession.set(session);
             addSessionToStackTraceMap(session);
         }
-
-        if (!session.getTransaction().isActive()) {
-            session.beginTransaction();
-            transactionOwner.set(true);
-        } else {
-            transactionOwner.set(false);
-        }
-
         return session;
     }
-
 
     public static void setCurrentSession(Session session) {
         threadSession.set(session);
     }
     public static void clearCurrentSession() {
         threadSession.remove();
-        transactionOwner.remove();
     }
 
     public static boolean isSessionManaged() {
@@ -775,7 +773,7 @@ public class PersistenceManager {
 
         try {
             if (session.isOpen()) {
-                if (Boolean.TRUE.equals(transactionOwner.get()) && session.getTransaction().isActive()) {
+                if (session.getTransaction().isActive()) {
                     try {
                         session.getTransaction().rollback();
                     } catch (HibernateException e) {

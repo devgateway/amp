@@ -623,13 +623,11 @@ public class ImporterUtil {
             importDataModel.setProject_title(existing.getName());
             importDataModel.setProject_code(!Objects.equals(importDataModel.getProject_code(), "") ? importDataModel.getProject_code() : existing.getProjectCode());
             updateFundingOrgsAndSectorsWithAlreadyExisting(existing, importDataModel);
-            Map<String, Object> activity = ActivityInterchangeUtils.getActivity(existing.getAmpActivityId(),
-                    AmpClientModeHolder.isOfflineClient());
+
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                     });
-            mergeMaps(activity, map);
-            response = ActivityInterchangeUtils.importActivity(activity, true, rules, "activity/update");
+            response = ActivityInterchangeUtils.importActivity(map, true, rules, "activity/update");
         }
         if (response != null) {
             if (!response.getErrors().isEmpty()) {
@@ -658,22 +656,7 @@ public class ImporterUtil {
 
         logger.info("Imported project: " + importedProject);
     }
-    public static void mergeMaps(Map<String, Object> targetMap, Map<String, Object> sourceMap) {
-        for (Map.Entry<String, Object> entry : sourceMap.entrySet()) {
-            String key = entry.getKey();
-            Object sourceValue = entry.getValue();
-            Object targetValue = targetMap.get(key);
 
-            if (targetValue instanceof Collection && sourceValue instanceof Collection) {
-                List<Object> mergedList = new ArrayList<>((List<?>) targetValue);
-                mergedList.addAll((List<?>) sourceValue);
-                targetMap.put(key, mergedList);
-            } else {
-                // Add or overwrite
-                targetMap.put(key, sourceValue);
-            }
-        }
-    }
 
     private static void updateFundingOrgsAndSectorsWithAlreadyExisting(AmpActivityVersion ampActivityVersion, ImportDataModel importDataModel) {
 

@@ -545,7 +545,7 @@ public class PersistenceManager {
             T result = supplier.get();
 
             if (!existingTransaction) {
-                if (!transaction.getStatus().equals(TransactionStatus.COMMITTED)) {
+                if (transaction.getStatus().equals(TransactionStatus.ACTIVE)) {
                     transaction.commit();
                     committed = true;
                 }

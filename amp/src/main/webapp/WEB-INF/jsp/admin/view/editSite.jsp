@@ -25,7 +25,7 @@
 </script>
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="${pageContext.request.contextPath}/resources/images/module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
 				<digi:trn key="admin:editSite">Edit Site</digi:trn>
@@ -34,7 +34,7 @@
 	</tr>
 	<tr>
 		<td colspan="2" class="yellow" valign="top" align="left">
-		
+
 <digi:errors/>
       <digi:form action="/editSite.do" method="post" >
       <input type="hidden" name="referrer" value="editSite" />
@@ -44,7 +44,7 @@
         <TR>
           <TD>&nbsp;</TD></TR>
         <TR>
-          <TD class=title align=left colSpan=2><digi:trn key="admin:siteInfo">Site information</digi:trn> 
+          <TD class=title align=left colSpan=2><digi:trn key="admin:siteInfo">Site information</digi:trn>
           </TD></TR>
         <TR>
           <TD class=text align=left colSpan=2>
@@ -69,12 +69,12 @@
             <TD class=text noWrap align=left><html:text styleClass="admin" property="folderName"/></TD>
           </TR>
           <TR bgColor=#f0f0f0>
-            <TD class=text noWrap align=left>&nbsp;<digi:trn key="admin:metaDescription">Meta 
+            <TD class=text noWrap align=left>&nbsp;<digi:trn key="admin:metaDescription">Meta
             Description</digi:trn></TD>
             <TD class=text noWrap align=left><html:text styleClass="admin" property="metaDescription"/></TD>
           </TR>
           <TR bgColor=#f0f0f0>
-            <TD class=text noWrap align=left>&nbsp;<digi:trn key="admin:metaKeywords">Meta 
+            <TD class=text noWrap align=left>&nbsp;<digi:trn key="admin:metaKeywords">Meta
             Keywords</digi:trn></TD>
             <TD class=text noWrap align=left><html:text styleClass="admin" property="metaKeywords"/></TD>
           </TR>
@@ -106,7 +106,7 @@
             <TD class=text noWrap align=left>
               <html:select property="priority" style="text">
                 <html:options name="siteForm" property="priorities" />
-              </html:select>     
+              </html:select>
             </TD>
           </TR>
           <TR bgColor=#f0f0f0>
@@ -143,17 +143,17 @@
 										<html:radio name="siteForm" property="recieveEmailAlerts" value="3"/>
 										<digi:trn key="admin:inherit">inherit</digi:trn>
 									</td>
-							    </tr>		
+							    </tr>
 								</table>
 		           			</TD>
 		         		</TR>
-					</table>		  
+					</table>
 		  </TD>
 		  </TR>
           <TR>
             <TD align=left noWrap class="title"><digi:trn key="admin:siteDomains">Site Domains</digi:trn></TD>
             <TD align=left noWrap class=text>&nbsp;</TD>
-          </TR>		  
+          </TR>
           <TR>
             <TD align=left noWrap class=text>
           	<table cellpadding="0" cellspacing="0" border="0">
@@ -198,16 +198,16 @@
             <TD align=left noWrap class=text>&nbsp;</TD>
           </TR>
           <TR>
-            <TD> 
+            <TD>
             <table>
             <logic:iterate id="childSite" name="siteForm" property="children" indexId="index" type="org.digijava.module.admin.form.SiteForm.SiteInfo">
             <tr><td class="text"><c:out value="${childSite.site.name}" /></td>
-            <td class="text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<digi:link href="/removeChildSite.do" paramId="id" paramName="childSite" paramProperty="site.id"><digi:trn key="admin:remove">Remove</digi:trn></digi:link></td>      
+            <td class="text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<digi:link href="/removeChildSite.do" paramId="id" paramName="childSite" paramProperty="site.id"><digi:trn key="admin:remove">Remove</digi:trn></digi:link></td>
             <td class="text">&nbsp;<a href='<%= childSite.getViewSite() %>'><digi:trn key="admin:view">View</digi:trn></a></td>
             <td class="text">&nbsp;<a href='<%= childSite.getAdmin() %>'><digi:trn key="admin:admin">Admin</digi:trn></a></td>
             </tr>
-            </logic:iterate> 
-            </table> </TD>      
+            </logic:iterate>
+            </table> </TD>
           </TR>
           <TR bgColor=#FFFFFF>
             <digi:context name="editSiteLink" property="/module/moduleinstance/showEditSite.do" />
@@ -238,7 +238,7 @@
 	   		</c:if>
             <c:if test="${ empty siteForm.parentSiteName}"><digi:trn key="admin:notDefined">Not defined</digi:trn></c:if>
             </TD>
-          </TR> 
+          </TR>
           <TR bgColor=#FFFFFF>
             <TD align=left noWrap class=text>
              </TD>
@@ -256,7 +256,7 @@
             <TD align=left noWrap class=text>
               <html:select  property="defaultLanguage">
 				<html:option value="">- <digi:trn key="admin:useDefSettings">Use default settings</digi:trn> -</html:option>
-				<c:set var="languages" value="${siteForm.languages}" scope="page" />				
+				<c:set var="languages" value="${siteForm.languages}" scope="page" />
                 <html:options  collection="languages" property="code" labelProperty="name" />
               </html:select>
              </TD>
@@ -302,11 +302,11 @@
           <TR>
 				<TD noWrap align="left">
 					<html:select property="country">
-					<c:set var="countries" value="${siteForm.countries}" scope="page" />					
+					<c:set var="countries" value="${siteForm.countries}" scope="page" />
 					<html:options collection="countries" property="iso" labelProperty="name"/></html:select>
 				</TD>
           </TR>
-          
+
 <TR>
 <TD colspan=2 align="center">
 <html:submit/>

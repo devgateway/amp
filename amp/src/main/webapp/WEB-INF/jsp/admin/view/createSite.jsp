@@ -26,7 +26,7 @@
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="${pageContext.request.contextPath}/resources/images/module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle"><digi:trn key="admin:createSite">Create Site</digi:trn></font>
 		</td>
@@ -34,8 +34,8 @@
 	<tr>
 		<td colspan="2" class="yellow" valign="top" align="left">
 
-		
-		
+
+
 <digi:errors/>
 <html:messages id="null" message="true" />
 
@@ -54,15 +54,15 @@
           <digi:trn key="admin:toCreateChildSite">
             To create a new child site of Site</digi:trn> <b><c:out value="${siteForm.parentSiteName}" /></b>
             <digi:trn key="admin:pleaseCompleteTheForm">please complete the form below.</digi:trn></TD>
-          </c:if> 
+          </c:if>
           <c:if test="${ empty siteForm.parentSiteName}" >
           <TD class=text align=left colSpan=2><digi:trn key="admin:createNewSite">To create a new site, please complete the form below.</digi:trn></TD>
-          </c:if> 
+          </c:if>
           </TR>
         <TR>
           <TD>&nbsp;</TD></TR>
         <TR>
-          <TD class=title align=left colSpan=2><digi:trn key="admin:siteInfo">Site information</digi:trn> 
+          <TD class=title align=left colSpan=2><digi:trn key="admin:siteInfo">Site information</digi:trn>
           </TD></TR>
         <TR>
           <TD class=text align=left colSpan=2>
@@ -128,7 +128,7 @@
           <TR bgColor=#FFFFFF>
             <TD align=left noWrap class=text>
               <html:select  property="template">
-                 <html:options  name="siteForm" property="templates" />    
+                 <html:options  name="siteForm" property="templates" />
               </html:select>
              </TD>
             <TD align=left noWrap class=text>&nbsp;</TD>

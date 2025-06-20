@@ -13,7 +13,7 @@
 <digi:form action="/administrateUser.do">
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="${pageContext.request.contextPath}/resources/images/module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
 				<digi:trn key="admin:userAdministration">User Administration</digi:trn>!!!
@@ -26,14 +26,14 @@
 <digi:errors/>
   <table border="0" cellpadding="0" cellspacing="0" >
     <tr>
-  	<td width="50%" bgcolor="#EEEEEE" align="center"><c:out value="${administrateUserForm.firstNames}" /> 
-                                                     <c:out value="${administrateUserForm.lastName}" /> 
+  	<td width="50%" bgcolor="#EEEEEE" align="center"><c:out value="${administrateUserForm.firstNames}" />
+                                                     <c:out value="${administrateUserForm.lastName}" />
         </td>
-          <td width="50%"  align="right"><digi:link href="/becomeUser.do" paramName="administrateUserForm"  paramId="selectedUserId" paramProperty="selectedUserId">&nbsp;<digi:trn key="admin:becomeUser">Become user</digi:trn></digi:link>     
+          <td width="50%"  align="right"><digi:link href="/becomeUser.do" paramName="administrateUserForm"  paramId="selectedUserId" paramProperty="selectedUserId">&nbsp;<digi:trn key="admin:becomeUser">Become user</digi:trn></digi:link>
         </td>
     </tr>
   </table>
-  <br> 
+  <br>
 <HR>
   <table border="0" class="border" width="30%">
     <tr>
@@ -54,7 +54,7 @@
   </table>
   <br>
   <table>
-    <tr><td align="left"><html:submit value="Submit" /></td></tr>    
+    <tr><td align="left"><html:submit value="Submit" /></td></tr>
   </table>
 </digi:form>
 		</td>

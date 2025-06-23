@@ -16,6 +16,8 @@
 <!--                WHERE name = 'View Progress';-->
 <!--                DELETE FROM amp_menu_entry-->
 <!--                WHERE name = 'Data Importer';-->
+                SELECT * FROM amp_menu_entry
+                WHERE name = 'Import Data';
 
             </lang>
         </script>

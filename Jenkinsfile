@@ -63,7 +63,7 @@ stage('Build') {
 
     println "Using environment: ${environment}"
 
-    node {
+    node('ansible') {
         checkout scm
 
         // Find AMP version
@@ -102,7 +102,7 @@ stage('Build') {
 
     println "amp url is ${ampUrl}"
 
-    node {
+    node('docker') {
         checkout scm
 
         def image = "${dockerRepo}amp/webapp:${tag}"
@@ -144,7 +144,7 @@ def deployed = false
 
 // If this stage fails then next stage will retry deployment. Otherwise next stage will be skipped.
 stage('Deploy') {
-    node {
+    node('ansible') {
         try {
             // Find latest database version compatible with ${codeVersion}
             dbVersion = sh(returnStdout: true, script: "ssh ${env.jenkinsUser}@${environment} 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
@@ -173,7 +173,7 @@ stage('Deploy again') {
             input message: "Proceed with repeated deploy for ${country}?"
             milestone()
         }
-        node {
+        node('ansible') {
             try {
                 sh "ssh ${env.jenkinsUser}@${environment} 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
 

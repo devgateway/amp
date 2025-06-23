@@ -10,12 +10,12 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
-                DELETE FROM amp_menu_entry
-                WHERE name = 'Import Data';
-                DELETE FROM amp_menu_entry
-                WHERE name = 'View Progress';
-                DELETE FROM amp_menu_entry
-                WHERE name = 'Data Importer';
+<!--                DELETE FROM amp_menu_entry-->
+<!--                WHERE name = 'Import Data';-->
+<!--                DELETE FROM amp_menu_entry-->
+<!--                WHERE name = 'View Progress';-->
+<!--                DELETE FROM amp_menu_entry-->
+<!--                WHERE name = 'Data Importer';-->
 
             </lang>
         </script>

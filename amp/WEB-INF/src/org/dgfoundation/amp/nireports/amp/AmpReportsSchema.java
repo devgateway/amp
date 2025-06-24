@@ -123,7 +123,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                     ColumnConstants.DONOR_TYPE, ColumnConstants.FUNDING_ID,
                     ColumnConstants.COMPONENT_FUNDING_ORGANIZATION,
                     ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION,
-                    ColumnConstants.CONCESSIONALITY_LEVEL, ColumnConstants.DISBURSEMENT_ID)));
+                    ColumnConstants.CONCESSIONALITY_LEVEL, ColumnConstants.DISBURSEMENT_ID,
+                    ColumnConstants.PROCUREMENT_SYSTEM)));
 
     public final static OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
     public final static LocationsDimension locsDimension = LocationsDimension.instance;
@@ -348,6 +349,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             .put(ColumnConstants.PROJECT_RESULTS_AVAILABLE, "project_results_available_id")
             .put(ColumnConstants.VULNERABLE_GROUP, "vulnerable_group_id")
             .put(ColumnConstants.DONOR_COUNTRY, "donor_org_country_id")
+            .put(ColumnConstants.PROCUREMENT_SYSTEM, "procurement_system_id")
             .build());
 
     private SubDimensions indicatorSubDimensions = new SubDimensions(new ImmutableMap.Builder<String, String>()

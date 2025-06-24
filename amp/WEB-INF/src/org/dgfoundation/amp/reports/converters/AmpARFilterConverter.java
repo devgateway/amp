@@ -73,6 +73,7 @@ public class AmpARFilterConverter {
                 put("humanitarianAid", ColumnConstants.HUMANITARIAN_AID);
                 put("disasterResponse", ColumnConstants.DISASTER_RESPONSE_MARKER);
                 put("statuses", ColumnConstants.STATUS);
+                put("procurementSystem", ColumnConstants.PROCUREMENT_SYSTEM);
             }});
 
     /**
@@ -169,6 +170,7 @@ public class AmpARFilterConverter {
                     ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
             addCategoryValueNamesFilter(arFilter.getActivityPledgesTitle(), ColumnConstants.PLEDGES_TITLES);
             addCategoryValueNamesFilter(arFilter.getPerformanceAlertLevel(), ColumnConstants.PERFORMANCE_ALERT_LEVEL);
+            addCategoryValueNamesFilter(arFilter.getProcurementSystem(), ColumnConstants.PROCUREMENT_SYSTEM);
             addPerformanceAlertTypeFilter();
         } else {
             addCategoryValueNamesFilter(arFilter.getStatuses(), ColumnConstants.PLEDGE_STATUS);
@@ -501,7 +503,7 @@ public class AmpARFilterConverter {
         addCategoryValueNamesFilter(arFilter.getModeOfPayment(), ColumnConstants.MODE_OF_PAYMENT);
         addCategoryValueNamesFilter(arFilter.getExpenditureClass(), ColumnConstants.EXPENDITURE_CLASS);
         addCategoryValueNamesFilter(arFilter.getConcessionalityLevel(), ColumnConstants.CONCESSIONALITY_LEVEL);
-        
+
         if (arFilter.isPledgeFilter()) {
             addCategoryValueNamesFilter(arFilter.getTypeOfAssistance(), ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
         } else {

@@ -24,6 +24,9 @@ export const RUN_REPORT_NAME = 'Dynamic Report';
 
 export const SUMMARY_REPORT = 'summary-report';
 export const ANNUAL_REPORT = 'annual-report';
+export const PUBLIC_VIEW = 'public-view';
+export const WORKSPACE_LINKED = 'workspace-linked';
+export const PUBLIC_VIEW_OPTIONS =[PUBLIC_VIEW,WORKSPACE_LINKED];
 export const QUARTERLY_REPORT = 'quarterly-report';
 export const MONTHLY_REPORT = 'monthly-report';
 export const TOTALS_ONLY = 'totals-only';
@@ -34,7 +37,9 @@ export const FUNDING_DONOR = 'funding-donor';
 export const REGIONAL_REPORT = 'funding-regional';
 export const COMPONENT_REPORT = 'funding-component';
 export const PLEDGES_REPORT = 'funding-pledges';
-export const FUNDING_GROUPING_RADIO_OPTIONS = [FUNDING_DONOR, REGIONAL_REPORT, COMPONENT_REPORT, PLEDGES_REPORT];
+
+export const INDICATOR_REPORT = 'funding-indicator';
+export const FUNDING_GROUPING_RADIO_OPTIONS = [FUNDING_DONOR, REGIONAL_REPORT, COMPONENT_REPORT, PLEDGES_REPORT, INDICATOR_REPORT];
 
 export const SHOW_PLEDGES = 'show-pledges';
 export const EMPTY_FUNDING_COLUMNS = 'empty-funding-columns';

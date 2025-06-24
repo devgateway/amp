@@ -3,14 +3,13 @@ package org.digijava.kernel.validators;
 import org.digijava.kernel.validators.activity.ActivityValidatorsTestSuite;
 import org.digijava.kernel.validators.common.CommonValidatorsTestSuite;
 import org.digijava.kernel.validators.resource.ResourceRequiredValidatorTest;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.platform.suite.api.SelectClasses;
 
 /**
  * @author Octavian Ciubotaru
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
+@org.junit.platform.suite.api.Suite
+@SelectClasses({
         ActivityValidatorsTestSuite.class,
         ResourceRequiredValidatorTest.class,
         CommonValidatorsTestSuite.class

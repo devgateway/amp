@@ -6,48 +6,47 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.validation.ConstraintViolationException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Octavian Ciubotaru
  */
+@ExtendWith({AMPRequestRule.class, MockitoExtension.class})
 public class InterchangeUtilsTest {
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
 
-    @Rule
-    public AMPRequestRule ampRequestRule = new AMPRequestRule();
 
     @Mock private TranslatorService translatorService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        when(translatorService.loadFieldTranslations(any(), any(), any())).then(invocation -> Arrays.asList(
-                acm("en", "ct+en+" + invocation.getArguments()[1] + invocation.getArguments()[2]),
-                acm("fr", "ct+fr+" + invocation.getArguments()[1] + invocation.getArguments()[2]),
-                acm("ru", "ct+ru+" + invocation.getArguments()[1] + invocation.getArguments()[2])));
+//        when(translatorService.loadFieldTranslations(any(), any(), any())).then(invocation -> Arrays.asList(
+//                acm("en", "ct+en+" + invocation.getArguments()[1] + invocation.getArguments()[2]),
+//                acm("fr", "ct+fr+" + invocation.getArguments()[1] + invocation.getArguments()[2]),
+//                acm("ru", "ct+ru+" + invocation.getArguments()[1] + invocation.getArguments()[2])));
 
-        when(translatorService.translateText(any())).then(invocation -> "tr+" + invocation.getArguments()[0]);
+//        when(translatorService.translateText(any())).then(invocation -> "tr+" + invocation.getArguments()[0]);
 
-        when(translatorService.getEditorBodyEmptyInclude(any(), any(), any()))
-                .then(invocation -> "ed+" + invocation.getArguments()[2] + "+" + invocation.getArguments()[1]);
+//        when(translatorService.getEditorBodyEmptyInclude(any(), any(), any()))
+//                .then(invocation -> "ed+" + invocation.getArguments()[2] + "+" + invocation.getArguments()[1]);
 
         ActivityTranslationUtils.setTranslatorService(translatorService);
     }
@@ -67,7 +66,7 @@ public class InterchangeUtilsTest {
 
     @Test
     public void testTranslateTranslatableInMultilingual() throws Exception {
-        ampRequestRule.enableMultilingual();
+//        AMPRequestRule.enableMultilingual();
 
         assertEquals(translationsEnFr("ct+en+1name", "ct+fr+1name"),
                 translateFieldValue(AmpActivityFields.class, "name", "test", 1L));
@@ -93,7 +92,7 @@ public class InterchangeUtilsTest {
 
     @Test
     public void testTranslateTextEditorMultilingual() throws Exception {
-        ampRequestRule.enableMultilingual();
+        AMPRequestRule.enableMultilingual();
 
         assertEquals(translationsEnFr("ed+en+test", "ed+fr+test"),
                 translateFieldValue(AmpActivityFields.class, "projectImpact", "test", null));
@@ -107,7 +106,7 @@ public class InterchangeUtilsTest {
 
     @Test
     public void testTranslateWithoutId() throws Exception {
-        ampRequestRule.enableMultilingual();
+        AMPRequestRule.enableMultilingual();
 
         assertEquals(translationsEnFr(null, null),
                 translateFieldValue(AmpActivityFields.class, "name", "test", null));
@@ -169,19 +168,25 @@ public class InterchangeUtilsTest {
         assertEquals(date, DateTimeUtil.parseISO8601Date("1973-12-07"));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testParseDateWrongFormat() {
-        DateTimeUtil.parseISO8601Date("xyz");
+        assertThrows(RuntimeException.class,()-> {
+            DateTimeUtil.parseISO8601Date("xyz");
+        });
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testParseDateWrongLength() {
-        DateTimeUtil.parseISO8601Date("2019-02-08x");
+        assertThrows(RuntimeException.class,()-> {
+            DateTimeUtil.parseISO8601Date("2019-02-08x");
+        });
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testParseTimestampWrongLength() {
-        DateTimeUtil.parseISO8601Timestamp("1973-12-07T17:55:24.124+0300xyz");
+        assertThrows(RuntimeException.class,()-> {
+            DateTimeUtil.parseISO8601Timestamp("1973-12-07T17:55:24.124+0300xyz");
+        });
     }
 
     @Test

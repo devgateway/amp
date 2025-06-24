@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.module.aim.dbentity.AmpIndicatorTaggedValue" table="AMP_INDICATOR_TAGGED_VALUES">
+        <cache usage="read-write" />
+
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_INDICATOR_TAGGED_VALUES_seq</param>
+            </generator>
+        </id>
+        <property name="tag" column="tag" type="java.lang.String" />
+        <property name="value" column="value" type="java.lang.Double" />
+        <many-to-one name="overallValue" column="ind_val_id"
+                     class="org.digijava.module.aim.dbentity.AmpIndicatorValue" cascade="none" />
+    </class>
+</hibernate-mapping>

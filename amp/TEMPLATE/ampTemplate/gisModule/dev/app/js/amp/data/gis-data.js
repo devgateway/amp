@@ -33,12 +33,12 @@ _.extend(GISData.prototype, Backbone.Events, {
 
   layerEvents: ['show', 'hide', 'refresh', 'loaded', 'processed', 'sync'],
 
-  initialize: function() {  
+  initialize: function() {
 	_.bindAll(this, 'initializeCollectionsAndModels');
     this.savedMaps = new SavedMaps([], {appData: this});
-    this.title = new Title({ data: this });    
+    this.title = new Title({ data: this });
   },
-  
+
   initializeCollectionsAndModels: function(){
 	  var self = this;
 	  /* stub filled in by Filters service */
@@ -55,7 +55,7 @@ _.extend(GISData.prototype, Backbone.Events, {
 	  		isPopup: false,
 	  		definitionUrl: '/rest/settings-definitions/gis'
 	   });
-	
+
 	   this.generalSettings = new Settings.GeneralSettings();
 	   this.generalSettings.load();
 	   this.indicatorTypes = new IndicatorTypes();
@@ -63,12 +63,12 @@ _.extend(GISData.prototype, Backbone.Events, {
 
 	    //setup performance rule model
 	    var PerformanceToggleModel = Backbone.Model.extend({defaults: {isPerformanceToggleAvailable: false, isPerformanceToggleSelected: null}});
-	    this.performanceToggleModel = new PerformanceToggleModel();	    
+	    this.performanceToggleModel = new PerformanceToggleModel();
 	    $.ajax({
-			  url: '/rest/gis/has-enabled-performance-rules'			 
-	      }).done(function(data) {	    	  
+			  url: '/rest/gis/has-enabled-performance-rules'
+	      }).done(function(data) {
 	    	  self.performanceToggleModel.set('isPerformanceToggleAvailable', data);
-		});		
+		});
 
 	    this.activities = new Activities([], {
 	      settingsWidget: this.settingsWidget,
@@ -88,7 +88,8 @@ _.extend(GISData.prototype, Backbone.Events, {
 	    ], {
 	      settingsWidget: this.settingsWidget,
 	      filter: this.filter,
-	      appData: this
+			generalSettings: this.generalSettings,
+			appData: this,
 	    });
 
 
@@ -103,16 +104,16 @@ _.extend(GISData.prototype, Backbone.Events, {
 
 	    // TODO get these from the api
 	    this.hilightFundingCollection = new HilightFundingCollection([],
-	      { boundaries: this.boundaries, filter: this.filter, settingsWidget: this.settingsWidget });  
-	 
+	      { boundaries: this.boundaries, filter: this.filter, settingsWidget: this.settingsWidget });
+
 	    // bubble indicator events on the data object
 	    this.listenTo(this.indicators, 'all', this.bubbleLayerEvents('indicator'));
 	    this.listenTo(this.hilightFundingCollection, 'all', this.bubbleLayerEvents('highlightFunding'));
 	    this.listenTo(this.structuresMenu, 'all', this.bubbleLayerEvents('structure'));
 	    this.listenTo(this.structures, 'all', this.bubbleLayerEvents('structure'));
 	    this.listenTo(this.admClusters, 'all', this.bubbleLayerEvents('adm-cluster'));
-	    
-	    
+
+
   },
   addState: function(state) {
     this.state = state;

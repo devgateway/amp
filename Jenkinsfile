@@ -59,18 +59,17 @@ stage('Build') {
         milestone()
     }
 
-    println "Using environment: ${environment}"
 
+    println "Using environment: ${environment}"
     node('ansible') {
         checkout scm
-
 
         // Find AMP version
         codeVersion = readMavenPom(file: 'amp/pom.xml').version
         println "AMP Version: ${codeVersion}"
         //Used in the initial generation of keys when working with a new jenkins instance
         //****************************************************************
-//        sh "ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N '' -y"
+//        sh "ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N ''"
         sh "ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts"
 //        sh "cat /root/.ssh/id_rsa.pub"
         //******************************************************
@@ -103,10 +102,8 @@ stage('Build') {
 
     node('docker') {
         checkout scm
-
         def image = "${dockerRepo}amp/webapp:${tag}"
         def hash = sh(returnStdout: true, script: "git log --pretty=%H -n 1").trim()
-
         docker.withRegistry("https://798366298150.dkr.ecr.us-east-1.amazonaws.com", "ecr:us-east-1:aws-ecr-credentials-id") {
             try {
                 updateGitHubCommitStatus('jenkins/build', 'Build in progress', 'PENDING')

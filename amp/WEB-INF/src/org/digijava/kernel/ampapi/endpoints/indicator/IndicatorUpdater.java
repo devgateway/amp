@@ -76,9 +76,11 @@ public class IndicatorUpdater {
 
         if (indicatorLayer.getId() == null) {
             indicatorLayer.setCreatedOn(new Date());
-            indicatorLayer.setCreatedBy(TeamUtil.getCurrentUser());
-            indicatorLayer.setTeamMember(TeamUtil.getCurrentAmpTeamMember());
         }
+
+        indicatorLayer.setCreatedBy(TeamUtil.getCurrentUser());
+        indicatorLayer.setTeamMember(TeamUtil.getCurrentAmpTeamMember());
+
         indicatorLayer.setUpdatedOn(new Date());
         indicatorLayer.setAccessType((indicator.getAccessTypeId() != null
                 ? IndicatorAccessType.getValueFromLong(indicator.getAccessTypeId()) : IndicatorAccessType.TEMPORARY));

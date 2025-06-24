@@ -15,19 +15,19 @@
   <digi:instance property="datadispatcherform" />
    <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
-    <!--The viewport meta tag is used to improve the presentation and behavior of the samples 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--The viewport meta tag is used to improve the presentation and behavior of the samples
       on iOS devices-->
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/> 
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
     <digi:ref href="/TEMPLATE/ampTemplate/css_2/leaflet.css" type="text/css" rel="stylesheet" />
     <digi:ref href="/TEMPLATE/ampTemplate/tabs/css/jquery-ui.min.css" type="text/css" rel="stylesheet" />
     <digi:ref href="/TEMPLATE/ampTemplate/css_2/mappopupstyles.css" type="text/css" rel="stylesheet" />
     <digi:ref href="/TEMPLATE/ampTemplate/css_2/amp-wicket.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"/>"></script>    
+    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/leaflet/leaflet.js"/>"></script>
-    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/leaflet/esri-leaflet.js"/>"></script>      
-     <!--Leaflet Draw-->      
+    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/leaflet/esri-leaflet.js"/>"></script>
+     <!--Leaflet Draw-->
      <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/Leaflet.draw.js"></script>
     <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/Leaflet.Draw.Event.js"></script>
     <link rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/leaflet-draw/leaflet.draw.css"/>
@@ -63,16 +63,16 @@
     <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/edit/handler/Edit.Circle.js"></script>
     <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/edit/handler/Edit.Rectangle.js"></script>
     <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/edit/handler/Edit.Marker.js"></script>
-    
+
     <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
     <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-ui-1.9.2.custom.min.js"/>"></script>
     <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mainmapPopup.js"/>"></script>
-   	    
+
    	 <script type="text/javascript">
    	$(document).ready(function() {
 	new MapPopup (<%=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LATITUDE)%>,<%=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LONGITUDE)%>);
    	});
-   	 </script> 
+   	 </script>
   </head>
   <body>
   	<img id="loadingImg" src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif" style="position:absolute;left:50%;top:50%; z-index:100;display: none;" />
@@ -86,39 +86,39 @@
 	</span>
 	<div id="basemaps-wrapper" class="leaflet-bar">
 	  <select name="basemaps" id="basemaps">
-	    <option value="None" selected="selected"><digi:trn>Default</digi:trn><options>
-	    <option value="Topographic"><digi:trn>Topographic</digi:trn><options>
+	    <option value="None" selected="selected"><digi:trn>Default</digi:trn><option>
+	    <option value="Topographic"><digi:trn>Topographic</digi:trn><option>
 	    <option value="Streets"><digi:trn>Streets</digi:trn></option>
-	    <option value="NationalGeographic"><digi:trn>National Geographic</digi:trn><options>
-	    <option value="Oceans"><digi:trn>Oceans</digi:trn><options>
-	    <option value="Gray"><digi:trn>Gray</digi:trn><options>
-	    <option value="DarkGray"><digi:trn>Dark Gray</digi:trn><options>
-	    <option value="Imagery"><digi:trn>Imagery</digi:trn><options>
-	    <option value="ShadedRelief"><digi:trn>Shaded Relief</digi:trn><options>
+	    <option value="NationalGeographic"><digi:trn>National Geographic</digi:trn><option>
+	    <option value="Oceans"><digi:trn>Oceans</digi:trn><option>
+	    <option value="Gray"><digi:trn>Gray</digi:trn><option>
+	    <option value="DarkGray"><digi:trn>Dark Gray</digi:trn><option>
+	    <option value="Imagery"><digi:trn>Imagery</digi:trn><option>
+	    <option value="ShadedRelief"><digi:trn>Shaded Relief</digi:trn><option>
 	  </select>
 	</div>
    <span id="custom-menu-wrapper">
    <ul class='custom-menu'>
 	  <li data-action="select"><digi:trn>Select</digi:trn></li>
-	  <li data-action="remove"><digi:trn>Remove</digi:trn></li>	  
+	  <li data-action="remove"><digi:trn>Remove</digi:trn></li>
 	</ul>
   </span>
-   <div id="locationTitleDialog"> 
+   <div id="locationTitleDialog">
    <div id="errorMsg"></div>
-   
+
     <label><digi:trn>Title</digi:trn></label><span class="required"> * </span><input id="locationTitle" type="text"/> </br>
     <div>
-     
+
      <div id="colors-section">
      <label><digi:trn>Select a color</digi:trn></label>
-     <ul class="colors">	  
-	   
+     <ul class="colors">
+
 	 </ul>
      </div>
-    
+
     </div>
-    
-      
+
+
    </div>
   </body>
 </html>

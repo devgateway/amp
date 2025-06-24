@@ -1264,7 +1264,7 @@ public class DynLocationManagerUtil {
         Session dbSession = PersistenceManager.getSession();
         String queryString = "select indicator from " + AmpIndicatorLayer.class.getName() + " indicator ";
         queryString += " left join indicator.sharedWorkspaces s ";
-        queryString += " where indicator.createdBy.id=:userId ";
+        queryString += " where indicator.createdBy.id=:userId and (indicator.teamMember.user.id=:userId or indicator.teamMember is null ) ";
 
         Collection<AmpTeam> workspaces = null;
         TeamMember tm = TeamUtil.getCurrentMember();

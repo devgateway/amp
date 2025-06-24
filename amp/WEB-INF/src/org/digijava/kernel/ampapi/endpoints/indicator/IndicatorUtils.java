@@ -90,6 +90,9 @@ public class IndicatorUtils {
         if (indLayer.getCreatedBy() != null) {
             apiIndicator.setCreatedBy(indLayer.getCreatedBy().getEmail());
         }
+        if (indLayer.getTeamMember() != null) {
+            apiIndicator.setTeamMemberId(indLayer.getTeamMember().getAmpTeamMemId());
+        }
 
         List<AmpIndicatorColor> colorList = new ArrayList<>(indLayer.getColorRamp());
         colorList.sort(Comparator.comparing(AmpIndicatorColor::getPayload));
@@ -188,6 +191,9 @@ public class IndicatorUtils {
                 AmpTeamMember ampTeamMember = TeamUtil.getCurrentAmpTeamMember();
                 if (ampTeamMember != null) {
                     AmpIndicatorLayer indicatorLayer =DynLocationManagerUtil.getIndicatorLayerById(indicatorId);
+                    if (indicatorLayer == null) {
+                        return false;
+                    }
                     return indicatorLayer.getCreatedBy() != null && Objects.equals(indicatorLayer.getCreatedBy().getId(), ampTeamMember.getUser().getId());
                 }
             }

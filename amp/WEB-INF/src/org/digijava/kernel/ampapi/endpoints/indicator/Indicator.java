@@ -30,6 +30,14 @@ import io.swagger.annotations.ApiModelProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Indicator {
 
+    public Long getTeamMemberId() {
+        return teamMemberId;
+    }
+
+    public void setTeamMemberId(Long teamMemberId) {
+        this.teamMemberId = teamMemberId;
+    }
+
     public static class IndicatorView {
     }
 
@@ -100,6 +108,10 @@ public class Indicator {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonView(IndicatorView.class)
     private String createdBy;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonView(IndicatorView.class)
+    private Long teamMemberId;
 
     @JsonProperty(value = "isMultiColor", access = JsonProperty.Access.READ_ONLY)
     @JsonView(IndicatorView.class)

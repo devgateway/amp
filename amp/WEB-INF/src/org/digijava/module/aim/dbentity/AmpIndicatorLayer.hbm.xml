@@ -34,6 +34,7 @@
 		  <column name="zero_category_enabled" default="false"/>
 		</property>
 		<many-to-one name="createdBy" column="created_by" class="org.digijava.kernel.user.User" />
+		<many-to-one name="teamMember" column="team_member" class="org.digijava.module.aim.dbentity.AmpTeamMember" />
 
 		<set name="colorRamp" cascade="all-delete-orphan" order-by="amp_indicator_color_id asc" lazy="false">
 			<cache usage="read-write" />

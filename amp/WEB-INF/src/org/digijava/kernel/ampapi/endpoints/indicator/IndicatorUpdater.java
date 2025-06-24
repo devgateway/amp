@@ -10,6 +10,7 @@ import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -76,6 +77,7 @@ public class IndicatorUpdater {
         if (indicatorLayer.getId() == null) {
             indicatorLayer.setCreatedOn(new Date());
             indicatorLayer.setCreatedBy(TeamUtil.getCurrentUser());
+            indicatorLayer.setTeamMember(TeamUtil.getCurrentAmpTeamMember());
         }
         indicatorLayer.setUpdatedOn(new Date());
         indicatorLayer.setAccessType((indicator.getAccessTypeId() != null

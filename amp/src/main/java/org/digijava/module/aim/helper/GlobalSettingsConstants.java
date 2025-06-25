@@ -11,15 +11,12 @@ public class GlobalSettingsConstants {
 
     public static final List<String> ECOWAS_COUNTRIES = Arrays.asList(
             "BJ", // Benin
-            "BF", // Burkina Faso
             "CI", // Côte d'Ivoire
             "GM", // Gambia
             "GH", // Ghana
             "GN", // Guinea
             "GW", // Guinea-Bissau
             "LR", // Liberia
-            "ML", // Mali
-            "NE", // Niger
             "NG", // Nigeria
             "SN", // Senegal
             "SL", // Sierra Leone

@@ -340,7 +340,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
     }
     private Label getRequiredAsterik(String wicketId, boolean visible)
     {
-        Label requiredStar = new Label("requiredAsterisk", "*");
+        Label requiredStar = new Label(wicketId, "*");
         requiredStar.add(new AttributeModifier("style", "color:red; font-weight:bold; margin-left:5px;"));
         requiredStar.setVisible(visible);
         requiredStar.setOutputMarkupId(true);

@@ -358,7 +358,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
             protected void onConfigure() {
                 super.onConfigure();
                 if (this.isVisible()) {
-                    AmpFunding funding = (AmpFunding) objectToValidate.getModel();
+                    AmpFunding funding = (AmpFunding) objectToValidate.getModel().getObject();
                     logger.info("Funding:"+funding);
                     boolean hasItems = funding.getFundingDetails() != null
                             && !funding.getFundingDetails().isEmpty();

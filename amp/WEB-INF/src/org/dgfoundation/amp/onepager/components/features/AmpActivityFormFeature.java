@@ -77,6 +77,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpLineMinistr
 import org.dgfoundation.amp.onepager.components.features.sections.AmpPlanningFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalObservationsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorFundingInfoSubsectionFeature;
+import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeatureFundingPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
@@ -140,11 +141,11 @@ import org.digijava.module.message.util.AmpMessageUtil;
 public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> {
 
     private static final long serialVersionUID = 1L;
-    protected static Form<AmpActivityVersion> activityForm;
+    protected  Form<AmpActivityVersion> activityForm;
     private static final Integer GO_TO_DESKTOP=1;
     private static final Integer STAY_ON_PAGE=2;
     private AbstractAjaxTimerBehavior autoSaveTimer;
-    public static Form<AmpActivityVersion> getActivityForm() {
+    public  Form<AmpActivityVersion> getActivityForm() {
         return activityForm;
     }
 
@@ -1427,6 +1428,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             }
         });
 
+
         // visit all funding groups for validation erros
         form.visitChildren(AmpFundingGroupFeaturePanel.class, new IVisitor<AmpFundingGroupFeaturePanel, Void>() {
 
@@ -1438,10 +1440,26 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
                     @Override
                     public void component(Component component, IVisit<Void> visit) {
-
-                        if (component.hasErrorMessage()) {
-                            hasError.value = true;
+                        if (component.getId().equals("commitments")|| component.getId().equals("disbursements")) {
+                            AmpSubsectionFeatureFundingPanel subsectionFeatureFundingPanel =(AmpSubsectionFeatureFundingPanel)component;
+                            subsectionFeatureFundingPanel.validateIfCommitmentOrDisbursementIsRequired(target);
+                            logger.info("Inside commitments and disbursements :"+component.getId());
+                            logger.info("Has error message: "+component.hasErrorMessage());
+                            if (component.hasErrorMessage()) {
+                                hasError.value=true;
+                                    component.add(new AttributeModifier("style", "border: 2px solid red; padding: 3px;"));
+                            }
+                            else
+                            {
+                                component.add(new AttributeModifier("style", ""));
+                            }
                             visit.stop();
+                        }
+                        else {
+                            if (component.hasErrorMessage()) {
+                                hasError.value = true;
+                                visit.stop();
+                            }
                         }
                     }
 

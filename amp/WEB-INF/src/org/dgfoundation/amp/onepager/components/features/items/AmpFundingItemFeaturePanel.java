@@ -4,24 +4,22 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.IFormSubmitter;
-import org.apache.wicket.markup.html.form.IFormSubmittingComponent;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.ValidationError;
 import org.dgfoundation.amp.onepager.OnePagerMessages;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
@@ -47,8 +45,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-
-import static org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature.getActivityForm;
 
 /**
  * Represents visually one funding item {@link AmpFunding} The model here is
@@ -302,19 +298,16 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 
         AmpDonorCommitmentsSubsectionFeature commitments = new AmpDonorCommitmentsSubsectionFeature(
                 "commitments", fundingModel, Constants.COMMITMENT);
-        AmpComponentPanel requireCommitments = getRequiredItemValidator(commitments,"requireCommitments", "Commitments");
+        AmpComponentPanel requireCommitments = commitments.getRequiredItemValidator("requireCommitments", "Commitments");
         wmc.add(requireCommitments);
         wmc.add(commitments);
-        wmc.add(getRequiredAsterik("commitmentsAsterik", shouldRequireItem(requireCommitments)));
 
 
         disbursements = new AmpDonorDisbursementsSubsectionFeature(
                 "disbursements", fundingModel, Constants.DISBURSEMENT);
-        AmpComponentPanel requireDisbursements = getRequiredItemValidator(disbursements, "requireDisbursements", "Disbursements");
-
+        AmpComponentPanel requireDisbursements = disbursements.getRequiredItemValidator( "requireDisbursements", "Disbursements");
         wmc.add(requireDisbursements);
         wmc.add(disbursements);
-        wmc.add(getRequiredAsterik("disbursementsAsterik", shouldRequireItem(requireDisbursements)));
 
         AmpDonorArrearsSubsectionFeature arrears = new AmpDonorArrearsSubsectionFeature(
                 "arrears", fundingModel, Constants.ARREARS);
@@ -342,69 +335,10 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 
 
     }
-    private Label getRequiredAsterik(String wicketId, boolean visible)
-    {
-        Label requiredStar = new Label(wicketId, "*");
-        String visibility;
-        if (visible)
-            visibility = "inline-block";
-        else
-            visibility = "none";
-        requiredStar.add(new AttributeModifier("style", "color:red; font-weight:bold; margin-left:5px;display:"+visibility+";"));
-        requiredStar.setVisible(visible);
-        requiredStar.setOutputMarkupId(true);
-        return requiredStar;
-    }
 
-    boolean shouldRequireItem(AmpComponentPanel requiredValidator)
-    {
-        return requiredValidator.isVisible();
-    }
 
-    private AmpComponentPanel getRequiredItemValidator(AmpSubsectionFeatureFundingPanel objectToValidate,
-                                                       String wicketId, String fmName) {
-        return new AmpComponentPanel(wicketId, "Required Validator for " + fmName) {
 
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
 
-                // Only validate when component is visible
-                if (!isVisible()) {
-                    return;
-                }
-
-                // Get the form through Wicket's visitor pattern
-                Form<?> form = Form.findForm(this);
-                if (form == null || !form.isSubmitted()) {
-                    return;
-                }
-
-                String buttonId = Optional.ofNullable(form.getRootForm().findSubmittingButton())
-                        .filter(Component.class::isInstance)
-                        .map(c -> ((Component)c).getId())
-                        .orElse(null);
-
-                if (!"saveAndSubmit".equals(buttonId) && !"saveAsDraftAction".equals(buttonId)) {
-                    return;
-                }
-
-                // Perform validation
-                AmpFunding funding = (AmpFunding) objectToValidate.getModel().getObject();
-                if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
-                    // Prevent submission
-                    ValidationError error = new ValidationError()
-                            .addKey("required.funding.items")
-                            .setVariable("label", fmName);
-                    objectToValidate.error(error);
-
-                    objectToValidate.add(AttributeModifier.replace("style", "border: 2px solid red; padding: 3px;display: inline-block;"));
-                } else {
-                    objectToValidate.add(AttributeModifier.replace("style", "display: inline-block;"));
-                }
-            }
-        };
-    }
 
     public AmpDonorFundingInfoSubsectionFeature getFundingInfo() {
         return fundingInfo;

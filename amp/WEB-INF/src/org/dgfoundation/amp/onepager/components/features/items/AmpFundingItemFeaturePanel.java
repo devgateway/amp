@@ -11,11 +11,14 @@ import java.util.TreeSet;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.IFormSubmitter;
+import org.apache.wicket.markup.html.form.IFormSubmittingComponent;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -45,6 +48,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import static org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature.getActivityForm;
 
 /**
  * Represents visually one funding item {@link AmpFunding} The model here is
@@ -341,7 +346,12 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
     private Label getRequiredAsterik(String wicketId, boolean visible)
     {
         Label requiredStar = new Label(wicketId, "*");
-        requiredStar.add(new AttributeModifier("style", "color:red; font-weight:bold; margin-left:5px;"));
+        String visibility;
+        if (visible)
+            visibility = "inline-block";
+        else
+            visibility = "none";
+        requiredStar.add(new AttributeModifier("style", "color:red; font-weight:bold; margin-left:5px;display:"+visibility+";"));
         requiredStar.setVisible(visible);
         requiredStar.setOutputMarkupId(true);
         return requiredStar;
@@ -358,19 +368,25 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
             protected void onConfigure() {
                 super.onConfigure();
                 if (this.isVisible()) {
-                    AmpFunding funding = (AmpFunding) objectToValidate.getModel().getObject();
-                    logger.info("Funding:"+funding);
-                    boolean hasItems = funding.getFundingDetails() != null
-                            && !funding.getFundingDetails().isEmpty();
-                    if (!hasItems) {
-                        logger.info("No funding details found");
-                        objectToValidate.add(new AttributeModifier("style", "border: 2px solid red; padding: 3px;"));
+                    IFormSubmittingComponent submitter = (IFormSubmittingComponent)getActivityForm().findSubmittingButton();
+                    Component submitterComponent = (Component) submitter;
+
+                    if (submitterComponent != null && ("saveAndSubmit".equals(submitterComponent.getId())|| "saveAsDraftAction".equals(submitterComponent.getId()))) {
+                        AmpFunding funding = (AmpFunding) objectToValidate.getModel().getObject();
+                        logger.info("Funding:"+funding);
+                        boolean hasItems = funding.getFundingDetails() != null
+                                && !funding.getFundingDetails().isEmpty();
+                        if (!hasItems) {
+                            logger.info("No funding details found");
+                            objectToValidate.add(new AttributeModifier("style", "border: 2px solid red; padding: 3px;"));
+                        }
+                        else
+                        {
+                            logger.info("Funding details found");
+                            objectToValidate.add(new AttributeModifier("style", ""));
+                        }
                     }
-                    else
-                    {
-                        logger.info("Funding details found");
-                        objectToValidate.add(new AttributeModifier("style", ""));
-                    }
+
                 }
             }
         };

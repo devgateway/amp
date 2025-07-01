@@ -4,10 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.AttributeModifier;
@@ -16,6 +13,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IFormSubmitter;
 import org.apache.wicket.markup.html.form.IFormSubmittingComponent;
@@ -23,6 +21,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.ValidationError;
 import org.dgfoundation.amp.onepager.OnePagerMessages;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
@@ -362,31 +361,46 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
         return requiredValidator.isVisible();
     }
 
-    private AmpComponentPanel getRequiredItemValidator(AmpSubsectionFeatureFundingPanel objectToValidate, String wicketId, String fmName) {
+    private AmpComponentPanel getRequiredItemValidator(AmpSubsectionFeatureFundingPanel objectToValidate,
+                                                       String wicketId, String fmName) {
         return new AmpComponentPanel(wicketId, "Required Validator for " + fmName) {
+
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                if (this.isVisible()) {
-                    IFormSubmittingComponent submitter = (IFormSubmittingComponent)getActivityForm().findSubmittingButton();
-                    Component submitterComponent = (Component) submitter;
 
-                    if (submitterComponent != null && ("saveAndSubmit".equals(submitterComponent.getId())|| "saveAsDraftAction".equals(submitterComponent.getId()))) {
-                        AmpFunding funding = (AmpFunding) objectToValidate.getModel().getObject();
-                        logger.info("Funding:"+funding);
-                        boolean hasItems = funding.getFundingDetails() != null
-                                && !funding.getFundingDetails().isEmpty();
-                        if (!hasItems) {
-                            logger.info("No funding details found");
-                            objectToValidate.add(new AttributeModifier("style", "border: 2px solid red; padding: 3px;"));
-                        }
-                        else
-                        {
-                            logger.info("Funding details found");
-                            objectToValidate.add(new AttributeModifier("style", ""));
-                        }
-                    }
+                // Only validate when component is visible
+                if (!isVisible()) {
+                    return;
+                }
 
+                // Get the form through Wicket's visitor pattern
+                Form<?> form = Form.findForm(this);
+                if (form == null || !form.isSubmitted()) {
+                    return;
+                }
+
+                String buttonId = Optional.ofNullable(form.getRootForm().findSubmittingButton())
+                        .filter(Component.class::isInstance)
+                        .map(c -> ((Component)c).getId())
+                        .orElse(null);
+
+                if (!"saveAndSubmit".equals(buttonId) && !"saveAsDraftAction".equals(buttonId)) {
+                    return;
+                }
+
+                // Perform validation
+                AmpFunding funding = (AmpFunding) objectToValidate.getModel().getObject();
+                if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
+                    // Prevent submission
+                    ValidationError error = new ValidationError()
+                            .addKey("required.funding.items")
+                            .setVariable("label", fmName);
+                    objectToValidate.error(error);
+
+                    objectToValidate.add(AttributeModifier.replace("style", "border: 2px solid red; padding: 3px;"));
+                } else {
+                    objectToValidate.add(AttributeModifier.replace("style", ""));
                 }
             }
         };

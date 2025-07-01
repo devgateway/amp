@@ -299,8 +299,8 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
         AmpDonorCommitmentsSubsectionFeature commitments = new AmpDonorCommitmentsSubsectionFeature(
                 "commitments", fundingModel, Constants.COMMITMENT);
         AmpComponentPanel requireCommitments = commitments.getRequiredItemValidator("requireCommitments", "Commitments");
-        wmc.add(requireCommitments);
-        wmc.add(commitments);
+        add(requireCommitments);
+        add(commitments);
 
 
         disbursements = new AmpDonorDisbursementsSubsectionFeature(

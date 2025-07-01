@@ -16,6 +16,7 @@ import java.util.Set;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -1420,16 +1421,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
                 String id = component.getId();
 
-                if (id.equals("requireCommitments"))
-                {
-                    commitmentsRequired[0] = true;
-                    logger.info("Require commitments: "+true);
-                }
-                if (id.equals("requireDisbursements"))
-                {
-                    logger.info("Require disbursements"+ true);
-                    disbursementsRequired[0] = true;
-                }
 
 
                 if ("commitments".equals(id) || "disbursements".equals(id)) {
@@ -1437,13 +1428,19 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     logger.info("Inside commitments and disbursements");
 
                     AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+                    boolean commitmentsRequired = findComponentById(form,"requireCommitments").isVisible();
+                    boolean disbursementsRequired = findComponentById(form,"requireDisbursements").isVisible();
+                    logger.info("Commitments required: " + commitmentsRequired);
+                    logger.info("Disbursements required: " + disbursementsRequired);
 
                     if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
-                        if ((commitmentsRequired[0] && "commitments".equals(id))|| (disbursementsRequired[0] &&"disbursements".equals(id) )) {
+                        logger.info("Funding items not found");
+
+                        if ((commitmentsRequired && "commitments".equals(id))|| (disbursementsRequired &&"disbursements".equals(id) )) {
                             panelHasError.value = true;
-                            logger.info("Funding items not found");
+                            logger.info("Setting funding item error");
                         }
-//                    visit.stop();
+                    visit.stop();
                     }
 
                     if (panelHasError.value) {
@@ -1474,6 +1471,16 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         if (hasErrors.value) {
             form.error("Please fix errors in commitments or disbursements panels before submitting.");
         }
+    }
+    public static Component findComponentById(MarkupContainer root, String id) {
+        return root.visitChildren(Component.class, new IVisitor<Component, Component>() {
+            @Override
+            public void component(Component component, IVisit<Component> visit) {
+                if (id.equals(component.getId())) {
+                    visit.stop(component);  // Found the component, return it
+                }
+            }
+        });
     }
 
     public void showFundingTabsErrors(Form<?> form, final AjaxRequestTarget target) {

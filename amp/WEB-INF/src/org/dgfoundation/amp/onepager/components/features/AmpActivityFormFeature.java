@@ -877,6 +877,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         }
         am.setObject(am.getObject());
         toggleSemanticValidation(notDraft, form, target);
+        checkFundingPanelsForErrors(form, target);
 
         form.process(button);
 
@@ -1304,6 +1305,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
         processAndUpdateForm(false, am, form, target, actionButton.getButton());
 
+        // Check for errors in funding panels with id "commitments" or "disbursements"
+
         // only in the eventuality that the title field is valid (is not empty) we proceed with the real save!
         if (form.hasError()) {
             // We need to re-enable the keepAlive here or it will fail to start after a failed save as submit.
@@ -1397,6 +1400,67 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
     }
 
+    /**
+     * Checks for errors in AmpSubsectionFeatureFundingPanel components with id "commitments" or "disbursements"
+     * and adds a red border if errors are found
+     * @param form The form to check
+     * @param target The AjaxRequestTarget
+     */
+    private void checkFundingPanelsForErrors(Form<?> form, final AjaxRequestTarget target) {
+        final ValueWrapper<Boolean> hasErrors = new ValueWrapper<>(false);
+
+        form.visitChildren(AmpSubsectionFeatureFundingPanel.class, new IVisitor<AmpSubsectionFeatureFundingPanel, Void>() {
+            @Override
+            public void component(final AmpSubsectionFeatureFundingPanel panel, IVisit<Void> visit) {
+                String id = panel.getId();
+                if ("commitments".equals(id) || "disbursements".equals(id)) {
+                    final ValueWrapper<Boolean> panelHasError = new ValueWrapper<>(false);
+
+                    // Check if the panel itself has errors
+                    if (panel.hasErrorMessage()) {
+                        panelHasError.value = true;
+                    } else {
+                        // Check if any child component has errors
+                        panel.visitChildren(Component.class, new IVisitor<Component, Void>() {
+                            @Override
+                            public void component(Component component, IVisit<Void> childVisit) {
+                                AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+                                if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
+                                    panelHasError.value = true;
+                                    childVisit.stop();
+                                }
+
+                            }
+                        });
+                    }
+
+                    if (panelHasError.value) {
+                        hasErrors.value = true;
+                        // Add red border to the panel
+                        panel.add(AttributeModifier.replace("style", "border: 2px solid red;"));
+                        target.add(panel);
+                    } else {
+                        // Remove red border if no errors
+                        panel.add(AttributeModifier.replace("style", ""));
+                        target.add(panel);
+                    }
+                }
+                String js = "$(\"a[href='#tab0']\").parent()";
+                if (hasErrors.value) {
+                    js += ".addClass('error');";
+                } else {
+                    js += ".removeClass('error');";
+                }
+                target.appendJavaScript(js);
+            }
+        });
+
+        // If errors were found, add an error to the form to prevent submission
+        if (hasErrors.value) {
+            form.error("Please fix errors in commitments or disbursements panels before submitting.");
+        }
+    }
+
     public void showFundingTabsErrors(Form<?> form, final AjaxRequestTarget target) {
         System.out.println(form.hasError());
 
@@ -1440,26 +1504,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
                     @Override
                     public void component(Component component, IVisit<Void> visit) {
-                        if (component.getId().equals("commitments")|| component.getId().equals("disbursements")) {
-                            AmpSubsectionFeatureFundingPanel subsectionFeatureFundingPanel =(AmpSubsectionFeatureFundingPanel)component;
-                            subsectionFeatureFundingPanel.validateIfCommitmentOrDisbursementIsRequired(target);
-                            logger.info("Inside commitments and disbursements :"+component.getId());
-                            logger.info("Has error message: "+component.hasErrorMessage());
-                            if (component.hasErrorMessage()) {
-                                hasError.value=true;
-                                    component.add(new AttributeModifier("style", "border: 2px solid red; padding: 3px;"));
-                            }
-                            else
-                            {
-                                component.add(new AttributeModifier("style", ""));
-                            }
+
+                        if (component.hasErrorMessage()) {
+                            hasError.value = true;
                             visit.stop();
-                        }
-                        else {
-                            if (component.hasErrorMessage()) {
-                                hasError.value = true;
-                                visit.stop();
-                            }
                         }
                     }
 

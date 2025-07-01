@@ -72,6 +72,7 @@ public class AmpSubsectionFeatureFundingPanel<T> extends AmpSubsectionFeaturePan
                         "color:red; font-weight:bold; margin-left:5px;" +
                                 "display:" + (shouldShow ? "inline-block" : "none") + ";"));
             }
+
         };
         panel.setOutputMarkupId(true);
         return panel;
@@ -81,11 +82,5 @@ public class AmpSubsectionFeatureFundingPanel<T> extends AmpSubsectionFeaturePan
         requiredStar.setOutputMarkupId(true);
         return requiredStar;
     }
-    public void validateIfCommitmentOrDisbursementIsRequired(AjaxRequestTarget ajaxRequestTarget) {
-        AmpFunding funding = (AmpFunding) getModel().getObject();
-        if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
-            error(new ValidationError("You should have atleast a single transaction added."));
-            error("You should have atleast a single transaction added.");
-        }
-    }
+
 }

@@ -1414,12 +1414,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         final ValueWrapper<Boolean> hasErrors = new ValueWrapper<>(false);
         final boolean[] commitmentsRequired = {false};
         final boolean[] disbursementsRequired = {false};
-        form.visitChildren(new IVisitor<Component, Void>() {
+        form.visitChildren(AmpFundingItemFeaturePanel.class,new IVisitor<AmpFundingItemFeaturePanel, Void>() {
 
             @Override
-            public void component(Component component, IVisit<Void> visit) {
+            public void component(AmpFundingItemFeaturePanel component, IVisit<Void> visit) {
 
                 String id = component.getId();
+
 
 
 
@@ -1440,18 +1441,31 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                             panelHasError.value = true;
                             logger.info("Setting funding item error");
                         }
-                    visit.stop();
+//                    visit.stop();
                     }
+                    Component fundingNameDiv = component.get("funding_name");
+                    if (fundingNameDiv == null) {
+                        // Alternative way to find by class if direct path doesn't work
+                        fundingNameDiv = component.visitChildren(Component.class, (child, ivisit) -> {
+                            if (child.getMarkupAttributes().getString("class") != null &&
+                                    child.getMarkupAttributes().getString("class").contains("funding_name")) {
+                                ivisit.stop(child);
+                            }
+                        });
+                    }
+                    logger.info("Found div"+fundingNameDiv);
+                    if (fundingNameDiv != null) {
 
-                    if (panelHasError.value) {
-                        hasErrors.value = true;
-                        // Add red border to the panel
-                        component.add(AttributeModifier.replace("style", "border: 2px solid red;"));
-                        target.add(component);
-                    } else {
-                        // Remove red border if no errors
-                        component.add(AttributeModifier.replace("style", ""));
-                        target.add(component);
+                        if (panelHasError.value) {
+                            hasErrors.value = true;
+                            // Add red border to the div
+                            fundingNameDiv.add(AttributeModifier.replace("style", "border: 2px solid red;"));
+                            target.add(fundingNameDiv);
+                        } else {
+                            // Remove red border if no errors
+                            fundingNameDiv.add(AttributeModifier.replace("style", ""));
+                            target.add(fundingNameDiv);
+                        }
                     }
                 }
 

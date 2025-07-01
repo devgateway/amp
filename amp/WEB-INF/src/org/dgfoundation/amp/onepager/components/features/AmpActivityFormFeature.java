@@ -78,6 +78,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpPlanningFor
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalObservationsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorFundingInfoSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeatureFundingPanel;
+import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
@@ -1409,50 +1410,47 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
     private void checkFundingPanelsForErrors(Form<?> form, final AjaxRequestTarget target) {
         final ValueWrapper<Boolean> hasErrors = new ValueWrapper<>(false);
 
-        form.visitChildren(AmpSubsectionFeatureFundingPanel.class, new IVisitor<AmpSubsectionFeatureFundingPanel, Void>() {
-            @Override
-            public void component(final AmpSubsectionFeatureFundingPanel panel, IVisit<Void> visit) {
-                String id = panel.getId();
-                if ("commitments".equals(id) || "disbursements".equals(id)) {
-                    final ValueWrapper<Boolean> panelHasError = new ValueWrapper<>(false);
+        form.visitChildren(AmpSubsectionFeaturePanel.class, (IVisitor<AmpSubsectionFeaturePanel, Void>) (panel, visit) -> {
+            String id = panel.getId();
+            if ("commitments".equals(id) || "disbursements".equals(id)) {
+                final ValueWrapper<Boolean> panelHasError = new ValueWrapper<>(false);
 
-                    // Check if the panel itself has errors
-                    if (panel.hasErrorMessage()) {
-                        panelHasError.value = true;
-                    } else {
-                        // Check if any child component has errors
-                        panel.visitChildren(Component.class, new IVisitor<Component, Void>() {
-                            @Override
-                            public void component(Component component, IVisit<Void> childVisit) {
-                                AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
-                                if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
-                                    panelHasError.value = true;
-                                    childVisit.stop();
-                                }
-
-                            }
-                        });
-                    }
-
-                    if (panelHasError.value) {
-                        hasErrors.value = true;
-                        // Add red border to the panel
-                        panel.add(AttributeModifier.replace("style", "border: 2px solid red;"));
-                        target.add(panel);
-                    } else {
-                        // Remove red border if no errors
-                        panel.add(AttributeModifier.replace("style", ""));
-                        target.add(panel);
-                    }
-                }
-                String js = "$(\"a[href='#tab0']\").parent()";
-                if (hasErrors.value) {
-                    js += ".addClass('error');";
+                // Check if the panel itself has errors
+                if (panel.hasErrorMessage()) {
+                    panelHasError.value = true;
                 } else {
-                    js += ".removeClass('error');";
+                    // Check if any child component has errors
+                    panel.visitChildren(Component.class, new IVisitor<Component, Void>() {
+                        @Override
+                        public void component(Component component, IVisit<Void> childVisit) {
+                            AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+                            if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
+                                panelHasError.value = true;
+                                childVisit.stop();
+                            }
+
+                        }
+                    });
                 }
-                target.appendJavaScript(js);
+
+                if (panelHasError.value) {
+                    hasErrors.value = true;
+                    // Add red border to the panel
+                    panel.add(AttributeModifier.replace("style", "border: 2px solid red;"));
+                    target.add(panel);
+                } else {
+                    // Remove red border if no errors
+                    panel.add(AttributeModifier.replace("style", ""));
+                    target.add(panel);
+                }
             }
+            String js = "$(\"a[href='#tab0']\").parent()";
+            if (hasErrors.value) {
+                js += ".addClass('error');";
+            } else {
+                js += ".removeClass('error');";
+            }
+            target.appendJavaScript(js);
         });
 
         // If errors were found, add an error to the form to prevent submission

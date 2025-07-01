@@ -36,14 +36,7 @@ public class AmpSubsectionFeatureFundingPanel<T> extends AmpSubsectionFeaturePan
         c.add(UpdateEventBehavior.of(OverallFundingTotalsEvents.class));
         add(c);
     }
-    public T getModelObject(){
-        return (T) this.getDefaultModelObject();
-    }
-    public boolean getIfModelForFundingItemIsEmptyOrNull() {
 
-        AmpFunding funding = (AmpFunding) getModel().getObject();
-        return funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty();
-    }
 
     @Override
     public void renderHead(IHeaderResponse response) {
@@ -52,35 +45,6 @@ public class AmpSubsectionFeatureFundingPanel<T> extends AmpSubsectionFeaturePan
     }
 
 
-    public AmpComponentPanel getRequiredItemValidator(String wicketId, String fmName) {
-        AmpComponentPanel panel = new AmpComponentPanel(wicketId, "Required Validator for " + fmName) {
-            private Label requiredAsterisk;
 
-            @Override
-            protected void onInitialize() {
-                super.onInitialize();
-                requiredAsterisk = getRequiredAsterisk("requiredAsterik");
-                add(requiredAsterisk);
-            }
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                boolean shouldShow = this.isVisible();
-                requiredAsterisk.setVisible(shouldShow);
-                requiredAsterisk.add(AttributeModifier.replace("style",
-                        "color:red; font-weight:bold; margin-left:5px;" +
-                                "display:" + (shouldShow ? "inline-block" : "none") + ";"));
-            }
-
-        };
-        panel.setOutputMarkupId(true);
-        return panel;
-    }
-    private Label getRequiredAsterisk(String wicketId) {
-        Label requiredStar = new Label(wicketId, "*");
-        requiredStar.setOutputMarkupId(true);
-        return requiredStar;
-    }
 
 }

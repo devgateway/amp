@@ -61,7 +61,7 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
 
         String amountsInThousandsStr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS);
         if (amountsInThousandsStr != null){
-            int atVal = Integer.valueOf(amountsInThousandsStr);
+            int atVal = Integer.parseInt(amountsInThousandsStr);
             if (atVal == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){
                 labelText.setObject(TranslatorUtil.getTranslation("Please enter amounts in thousands (000)"));
                 amountsInThousandsLabel.setVisibilityAllowed(true);

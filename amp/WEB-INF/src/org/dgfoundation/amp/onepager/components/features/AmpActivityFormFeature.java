@@ -30,6 +30,7 @@ import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectP
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.markup.WicketTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -54,6 +55,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.util.tester.TagTester;
+import org.apache.wicket.util.tester.WicketTester;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
@@ -1439,35 +1442,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                 logger.info("Funding items not found");
 
                                 if ((commitmentsRequired && "commitments".equals(id))|| (disbursementsRequired &&"disbursements".equals(id) )) {
-                                    panelHasError.value = true;
+                                    component.add(AttributeModifier.replace("style", "border: 2px solid red;"));
+
                                     logger.info("Setting funding item error");
                                 }
 //                    visit.stop();
                             }
-                            Component fundingNameDiv = component.get("funding_name");
-                            if (fundingNameDiv == null) {
-                                // Alternative way to find by class if direct path doesn't work
-                                fundingNameDiv = ampFundingItemFeaturePanel.visitChildren(Component.class, (child, ivisit) -> {
-                                    if (child.getMarkupAttributes().getString("class") != null &&
-                                            child.getMarkupAttributes().getString("class").contains("funding_name")) {
-                                        ivisit.stop(child);
-                                    }
-                                });
-                            }
-                            logger.info("Found div"+fundingNameDiv);
-                            if (fundingNameDiv != null) {
 
-                                if (panelHasError.value) {
-                                    hasErrors.value = true;
-                                    // Add red border to the div
-                                    fundingNameDiv.add(AttributeModifier.replace("style", "border: 2px solid red;"));
-                                    target.add(fundingNameDiv);
-                                } else {
-                                    // Remove red border if no errors
-                                    fundingNameDiv.add(AttributeModifier.replace("style", ""));
-                                    target.add(fundingNameDiv);
-                                }
-                            }
+
+
                         }
                     }
                 });

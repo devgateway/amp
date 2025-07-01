@@ -1417,57 +1417,62 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         form.visitChildren(AmpFundingItemFeaturePanel.class,new IVisitor<AmpFundingItemFeaturePanel, Void>() {
 
             @Override
-            public void component(AmpFundingItemFeaturePanel component, IVisit<Void> visit) {
-
-                String id = component.getId();
-
+            public void component(AmpFundingItemFeaturePanel ampFundingItemFeaturePanel, IVisit<Void> visit) {
+                ampFundingItemFeaturePanel.visitChildren(Component.class,new IVisitor<Component, Void>() {
 
 
+                    @Override
+                    public void component(Component component, IVisit<Void> visit) {
+                        String id = component.getId();
 
-                if ("commitments".equals(id) || "disbursements".equals(id)) {
-                    final ValueWrapper<Boolean> panelHasError = new ValueWrapper<>(false);
-                    logger.info("Inside commitments and disbursements");
+                        if ("commitments".equals(id) || "disbursements".equals(id)) {
+                            final ValueWrapper<Boolean> panelHasError = new ValueWrapper<>(false);
+                            logger.info("Inside commitments and disbursements");
 
-                    AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
-                    boolean commitmentsRequired = findComponentById(form,"requireCommitments").isVisible();
-                    boolean disbursementsRequired = findComponentById(form,"requireDisbursements").isVisible();
-                    logger.info("Commitments required: " + commitmentsRequired);
-                    logger.info("Disbursements required: " + disbursementsRequired);
+                            AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+                            boolean commitmentsRequired = findComponentById(form,"requireCommitments").isVisible();
+                            boolean disbursementsRequired = findComponentById(form,"requireDisbursements").isVisible();
+                            logger.info("Commitments required: " + commitmentsRequired);
+                            logger.info("Disbursements required: " + disbursementsRequired);
 
-                    if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
-                        logger.info("Funding items not found");
+                            if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
+                                logger.info("Funding items not found");
 
-                        if ((commitmentsRequired && "commitments".equals(id))|| (disbursementsRequired &&"disbursements".equals(id) )) {
-                            panelHasError.value = true;
-                            logger.info("Setting funding item error");
-                        }
+                                if ((commitmentsRequired && "commitments".equals(id))|| (disbursementsRequired &&"disbursements".equals(id) )) {
+                                    panelHasError.value = true;
+                                    logger.info("Setting funding item error");
+                                }
 //                    visit.stop();
-                    }
-                    Component fundingNameDiv = component.get("funding_name");
-                    if (fundingNameDiv == null) {
-                        // Alternative way to find by class if direct path doesn't work
-                        fundingNameDiv = component.visitChildren(Component.class, (child, ivisit) -> {
-                            if (child.getMarkupAttributes().getString("class") != null &&
-                                    child.getMarkupAttributes().getString("class").contains("funding_name")) {
-                                ivisit.stop(child);
                             }
-                        });
-                    }
-                    logger.info("Found div"+fundingNameDiv);
-                    if (fundingNameDiv != null) {
+                            Component fundingNameDiv = component.get("funding_name");
+                            if (fundingNameDiv == null) {
+                                // Alternative way to find by class if direct path doesn't work
+                                fundingNameDiv = ampFundingItemFeaturePanel.visitChildren(Component.class, (child, ivisit) -> {
+                                    if (child.getMarkupAttributes().getString("class") != null &&
+                                            child.getMarkupAttributes().getString("class").contains("funding_name")) {
+                                        ivisit.stop(child);
+                                    }
+                                });
+                            }
+                            logger.info("Found div"+fundingNameDiv);
+                            if (fundingNameDiv != null) {
 
-                        if (panelHasError.value) {
-                            hasErrors.value = true;
-                            // Add red border to the div
-                            fundingNameDiv.add(AttributeModifier.replace("style", "border: 2px solid red;"));
-                            target.add(fundingNameDiv);
-                        } else {
-                            // Remove red border if no errors
-                            fundingNameDiv.add(AttributeModifier.replace("style", ""));
-                            target.add(fundingNameDiv);
+                                if (panelHasError.value) {
+                                    hasErrors.value = true;
+                                    // Add red border to the div
+                                    fundingNameDiv.add(AttributeModifier.replace("style", "border: 2px solid red;"));
+                                    target.add(fundingNameDiv);
+                                } else {
+                                    // Remove red border if no errors
+                                    fundingNameDiv.add(AttributeModifier.replace("style", ""));
+                                    target.add(fundingNameDiv);
+                                }
+                            }
                         }
                     }
-                }
+                });
+
+
 
 
             }

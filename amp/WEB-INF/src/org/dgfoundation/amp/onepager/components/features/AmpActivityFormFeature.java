@@ -1443,14 +1443,14 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
                                 if ((commitmentsRequired && "commitments".equals(id))|| (disbursementsRequired &&"disbursements".equals(id) )) {
                                     hasErrors.value = true;
-                                    component.add(AttributeModifier.replace("style", "border: 2px solid red;"));
+                                    component.add(AttributeModifier.append("style", "border: 2px solid red;"));
                                     target.add(component);
                                     logger.info("Setting funding item error");
                                 }
                                 else
                                 {
                                     hasErrors.value = false;
-                                    component.add(AttributeModifier.replace("style", ""));
+                                    component.add(AttributeModifier.append("style", ""));
                                     target.add(component);
                                 }
 //                    visit.stop();

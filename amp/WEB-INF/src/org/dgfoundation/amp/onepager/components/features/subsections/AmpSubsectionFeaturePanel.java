@@ -87,7 +87,7 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
         }
     }
     public AmpComponentPanel getRequiredItemValidator(String wicketId, String fmName) {
-        AmpComponentPanel panel = new AmpComponentPanel(wicketId, "Required Validator for " + fmName) {
+        AmpComponentPanel panel = new AmpComponentPanel(wicketId, fmName +" validator") {
 
             @Override
             protected void onInitialize() {

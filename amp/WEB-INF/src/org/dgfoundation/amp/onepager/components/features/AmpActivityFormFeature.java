@@ -69,6 +69,7 @@ import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAgreementItemPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpAidEffectivenessFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
@@ -1409,38 +1410,60 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
      */
     private void checkFundingPanelsForErrors(Form<?> form, final AjaxRequestTarget target) {
         final ValueWrapper<Boolean> hasErrors = new ValueWrapper<>(false);
+        final boolean[] commitmentsRequired = {false};
+        final boolean[] disbursementsRequired = {false};
+        form.visitChildren(new IVisitor<Component, Void>() {
 
-        form.visitChildren(AmpSubsectionFeaturePanel.class, (IVisitor<AmpSubsectionFeaturePanel, Void>) (panel, visit) -> {
-            String id = panel.getId();
-            if ("commitments".equals(id) || "disbursements".equals(id)) {
-                final ValueWrapper<Boolean> panelHasError = new ValueWrapper<>(false);
+            @Override
+            public void component(Component component, IVisit<Void> visit) {
 
-                AmpFunding funding = (AmpFunding) panel.getDefaultModel().getObject();
-                if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
-                    panelHasError.value = true;
+                String id = component.getId();
+
+                if (id.equals("requireCommitments"))
+                {
+                    commitmentsRequired[0] = true;
+                }
+                if (id.equals("requireDisbursements"))
+                {
+                    disbursementsRequired[0] = true;
+                }
+
+
+                if ("commitments".equals(id) || "disbursements".equals(id)) {
+                    final ValueWrapper<Boolean> panelHasError = new ValueWrapper<>(false);
+
+                    AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+
+                    if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
+                        if ((commitmentsRequired[0] && "commitments".equals(id))|| (disbursementsRequired[0] &&"disbursements".equals(id) )) {
+                            panelHasError.value = true;
+                        }
 //                    visit.stop();
+                    }
+
+                    if (panelHasError.value) {
+                        hasErrors.value = true;
+                        // Add red border to the panel
+                        component.add(AttributeModifier.replace("style", "border: 2px solid red;"));
+                        target.add(component);
+                    } else {
+                        // Remove red border if no errors
+                        component.add(AttributeModifier.replace("style", ""));
+                        target.add(component);
+                    }
                 }
 
 
-                if (panelHasError.value) {
-                    hasErrors.value = true;
-                    // Add red border to the panel
-                    panel.add(AttributeModifier.replace("style", "border: 2px solid red;"));
-                    target.add(panel);
-                } else {
-                    // Remove red border if no errors
-                    panel.add(AttributeModifier.replace("style", ""));
-                    target.add(panel);
-                }
             }
-            String js = "$(\"a[href='#tab0']\").parent()";
-            if (hasErrors.value) {
-                js += ".addClass('error');";
-            } else {
-                js += ".removeClass('error');";
-            }
-            target.appendJavaScript(js);
         });
+        String js = "$(\"a[href='#tab0']\").parent()";
+        if (hasErrors.value) {
+            js += ".addClass('error');";
+        } else {
+            js += ".removeClass('error');";
+        }
+        target.appendJavaScript(js);
+
 
         // If errors were found, add an error to the form to prevent submission
         if (hasErrors.value) {

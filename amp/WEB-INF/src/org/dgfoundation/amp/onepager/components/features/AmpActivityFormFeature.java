@@ -1415,23 +1415,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             if ("commitments".equals(id) || "disbursements".equals(id)) {
                 final ValueWrapper<Boolean> panelHasError = new ValueWrapper<>(false);
 
-                // Check if the panel itself has errors
-                if (panel.hasErrorMessage()) {
+                AmpFunding funding = (AmpFunding) panel.getDefaultModel().getObject();
+                if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
                     panelHasError.value = true;
-                } else {
-                    // Check if any child component has errors
-                    panel.visitChildren(Component.class, new IVisitor<Component, Void>() {
-                        @Override
-                        public void component(Component component, IVisit<Void> childVisit) {
-                            AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
-                            if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
-                                panelHasError.value = true;
-                                childVisit.stop();
-                            }
-
-                        }
-                    });
+                    visit.stop();
                 }
+
 
                 if (panelHasError.value) {
                     hasErrors.value = true;

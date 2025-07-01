@@ -79,6 +79,7 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
         slider.setOutputMarkupId(true);
         add(slider);
         requiredAsterisk = getRequiredAsterisk("requiredAsterisk");
+        requiredAsterisk.add(new AttributeModifier("style", "display:none;"));
         add(requiredAsterisk);
         if (showSummary) {
             TransparentWebMarkupContainer summary = new TransparentWebMarkupContainer("featureSummary");

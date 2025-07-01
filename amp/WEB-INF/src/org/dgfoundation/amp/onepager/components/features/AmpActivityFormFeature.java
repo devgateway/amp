@@ -1442,9 +1442,16 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                 logger.info("Funding items not found");
 
                                 if ((commitmentsRequired && "commitments".equals(id))|| (disbursementsRequired &&"disbursements".equals(id) )) {
+                                    hasErrors.value = true;
                                     component.add(AttributeModifier.replace("style", "border: 2px solid red;"));
-
+                                    target.add(component);
                                     logger.info("Setting funding item error");
+                                }
+                                else
+                                {
+                                    hasErrors.value = false;
+                                    component.add(AttributeModifier.replace("style", ""));
+                                    target.add(component);
                                 }
 //                    visit.stop();
                             }

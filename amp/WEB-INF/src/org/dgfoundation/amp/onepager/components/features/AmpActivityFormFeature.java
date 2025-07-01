@@ -1443,7 +1443,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
                                 if ((commitmentsRequired && "commitments".equals(id))|| (disbursementsRequired &&"disbursements".equals(id) )) {
                                     hasErrors.value = true;
-                                    component.add(AttributeModifier.append("style", "border: 2px solid red;"));
+                                    component.add(AttributeModifier.append("style", ";border: 2px solid red;"));
                                     target.add(component);
                                     logger.info("Setting funding item error");
                                 }
@@ -1467,13 +1467,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
             }
         });
-        String js = "$(\"a[href='#tab0']\").parent()";
-        if (hasErrors.value) {
-            js += ".addClass('error');";
-        } else {
-            js += ".removeClass('error');";
-        }
-        target.appendJavaScript(js);
+//        String js = "$(\"a[href='#tab0']\").parent()";
+//        if (hasErrors.value) {
+//            js += ".addClass('error');";
+//        } else {
+//            js += ".removeClass('error');";
+//        }
+//        target.appendJavaScript(js);
 
 
         // If errors were found, add an error to the form to prevent submission

@@ -1415,8 +1415,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
     private void checkFundingPanelsForErrors(Form<?> form, final AjaxRequestTarget target) {
         logger.info("Checking for funding panel errors");
         final ValueWrapper<Boolean> hasErrors = new ValueWrapper<>(false);
-        final boolean[] commitmentsRequired = {false};
-        final boolean[] disbursementsRequired = {false};
+        String errorCss = ".has-error { border: 2px solid red !important; }";
+
         form.visitChildren(AmpFundingItemFeaturePanel.class,new IVisitor<AmpFundingItemFeaturePanel, Void>() {
 
             @Override
@@ -1427,38 +1427,53 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     @Override
                     public void component(Component component, IVisit<Void> visit) {
                         String id = component.getId();
-
-                        if ("commitments".equals(id) || "disbursements".equals(id)) {
-                            final ValueWrapper<Boolean> panelHasError = new ValueWrapper<>(false);
-                            logger.info("Inside commitments and disbursements");
+                        if ("commitments".equals(id))
+                        {
 
                             AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                             boolean commitmentsRequired = findComponentById(form,"requireCommitments").isVisible();
-                            boolean disbursementsRequired = findComponentById(form,"requireDisbursements").isVisible();
                             logger.info("Commitments required: " + commitmentsRequired);
-                            logger.info("Disbursements required: " + disbursementsRequired);
-
                             if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
                                 logger.info("Funding items not found");
 
-                                if ((commitmentsRequired && "commitments".equals(id))|| (disbursementsRequired &&"disbursements".equals(id) )) {
+                                if ((commitmentsRequired)) {
                                     hasErrors.value = true;
-                                    component.add(AttributeModifier.append("style", ";border: 2px solid red;"));
+                                    component.add(new AttributeModifier("class", "funding-has-error"));
                                     target.add(component);
                                     logger.info("Setting funding item error");
                                 }
                                 else
                                 {
                                     hasErrors.value = false;
-                                    component.add(AttributeModifier.append("style", ""));
+                                    component.add(new AttributeModifier("class", ""));
                                     target.add(component);
                                 }
-//                    visit.stop();
                             }
-
-
-
                         }
+                        if ("disbursements".equals(id))
+                        {
+                            AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+                            boolean disbursementsRequired = findComponentById(form,"requireCommitments").isVisible();
+                            logger.info("Disbursements required: " + disbursementsRequired);
+                            if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
+                                logger.info("Funding items not found");
+
+                                if ((disbursementsRequired)) {
+                                    hasErrors.value = true;
+                                    component.add(new AttributeModifier("class", "funding-has-error"));
+                                    target.add(component);
+                                    logger.info("Setting funding item error");
+                                }
+                                else
+                                {
+                                    hasErrors.value = false;
+                                    component.add(new AttributeModifier("class", ""));
+                                    target.add(component);
+                                }
+                            }
+                        }
+
+
                     }
                 });
 
@@ -1467,13 +1482,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
             }
         });
-//        String js = "$(\"a[href='#tab0']\").parent()";
-//        if (hasErrors.value) {
-//            js += ".addClass('error');";
-//        } else {
-//            js += ".removeClass('error');";
-//        }
-//        target.appendJavaScript(js);
+        String js = "$(\"a[href='#tab0']\").parent()";
+        if (hasErrors.value) {
+            js += ".addClass('error');";
+        } else {
+            js += ".removeClass('error');";
+        }
+        target.appendJavaScript(js);
 
 
         // If errors were found, add an error to the form to prevent submission

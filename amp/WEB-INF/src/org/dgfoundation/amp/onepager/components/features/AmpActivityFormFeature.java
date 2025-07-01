@@ -1418,7 +1418,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 AmpFunding funding = (AmpFunding) panel.getDefaultModel().getObject();
                 if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
                     panelHasError.value = true;
-                    visit.stop();
+//                    visit.stop();
                 }
 
 

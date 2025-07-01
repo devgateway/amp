@@ -300,13 +300,13 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
                 "commitments", fundingModel, Constants.COMMITMENT);
         AmpComponentPanel requireCommitments = commitments.getRequiredItemValidator("requireCommitments", "Commitments");
         add(requireCommitments);
-        add(commitments);
+        wmc.add(commitments);
 
 
         disbursements = new AmpDonorDisbursementsSubsectionFeature(
                 "disbursements", fundingModel, Constants.DISBURSEMENT);
         AmpComponentPanel requireDisbursements = disbursements.getRequiredItemValidator( "requireDisbursements", "Disbursements");
-        wmc.add(requireDisbursements);
+        add(requireDisbursements);
         wmc.add(disbursements);
 
         AmpDonorArrearsSubsectionFeature arrears = new AmpDonorArrearsSubsectionFeature(

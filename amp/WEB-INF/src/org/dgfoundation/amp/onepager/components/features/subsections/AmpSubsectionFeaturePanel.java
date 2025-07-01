@@ -23,6 +23,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
 
     private TransparentWebMarkupContainer slider;
+    private Label requiredAsterisk;
 
     /**
      * @param id
@@ -77,6 +78,8 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
         slider = new TransparentWebMarkupContainer("slider");
         slider.setOutputMarkupId(true);
         add(slider);
+        requiredAsterisk = getRequiredAsterisk("requiredAsterisk");
+        add(requiredAsterisk);
         if (showSummary) {
             TransparentWebMarkupContainer summary = new TransparentWebMarkupContainer("featureSummary");
             add(summary);
@@ -84,13 +87,10 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
     }
     public AmpComponentPanel getRequiredItemValidator(String wicketId, String fmName) {
         AmpComponentPanel panel = new AmpComponentPanel(wicketId, "Required Validator for " + fmName) {
-            private Label requiredAsterisk;
 
             @Override
             protected void onInitialize() {
                 super.onInitialize();
-                requiredAsterisk = getRequiredAsterisk("requiredAsterisk");
-                add(requiredAsterisk);
             }
 
             @Override

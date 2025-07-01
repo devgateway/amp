@@ -89,7 +89,7 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
             @Override
             protected void onInitialize() {
                 super.onInitialize();
-                requiredAsterisk = getRequiredAsterisk("requiredAsterik");
+                requiredAsterisk = getRequiredAsterisk("requiredAsterisk");
                 add(requiredAsterisk);
             }
 

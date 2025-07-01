@@ -1409,6 +1409,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
      * @param target The AjaxRequestTarget
      */
     private void checkFundingPanelsForErrors(Form<?> form, final AjaxRequestTarget target) {
+        logger.info("Checking for funding panel errors");
         final ValueWrapper<Boolean> hasErrors = new ValueWrapper<>(false);
         final boolean[] commitmentsRequired = {false};
         final boolean[] disbursementsRequired = {false};
@@ -1422,21 +1423,25 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 if (id.equals("requireCommitments"))
                 {
                     commitmentsRequired[0] = true;
+                    logger.info("Require commitments: "+true);
                 }
                 if (id.equals("requireDisbursements"))
                 {
+                    logger.info("Require disbursements"+ true);
                     disbursementsRequired[0] = true;
                 }
 
 
                 if ("commitments".equals(id) || "disbursements".equals(id)) {
                     final ValueWrapper<Boolean> panelHasError = new ValueWrapper<>(false);
+                    logger.info("Inside commitments and disbursements");
 
                     AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
 
                     if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
                         if ((commitmentsRequired[0] && "commitments".equals(id))|| (disbursementsRequired[0] &&"disbursements".equals(id) )) {
                             panelHasError.value = true;
+                            logger.info("Funding items not found");
                         }
 //                    visit.stop();
                     }

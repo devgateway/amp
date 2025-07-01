@@ -398,9 +398,9 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
                             .setVariable("label", fmName);
                     objectToValidate.error(error);
 
-                    objectToValidate.add(AttributeModifier.replace("style", "border: 2px solid red; padding: 3px;"));
+                    objectToValidate.add(AttributeModifier.replace("style", "border: 2px solid red; padding: 3px;display: inline-block;"));
                 } else {
-                    objectToValidate.add(AttributeModifier.replace("style", ""));
+                    objectToValidate.add(AttributeModifier.replace("style", "display: inline-block;"));
                 }
             }
         };

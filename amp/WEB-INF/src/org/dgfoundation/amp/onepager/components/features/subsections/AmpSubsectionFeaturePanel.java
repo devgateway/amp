@@ -96,8 +96,8 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                boolean shouldShow = this.isVisible();
-                logger.info("Visible :"+FMUtil.isFmVisible(this));
+                boolean shouldShow = FMUtil.isFmVisible(this);
+                logger.info("Visible :"+shouldShow);
 
                 requiredAsterisk.setVisible(shouldShow);
                 requiredAsterisk.add(AttributeModifier.replace("style",

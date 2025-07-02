@@ -30,7 +30,16 @@ public class ReportsDesignerEndpoint {
 
     private final ReportDesignerService reportDesignerService = new ReportDesignerService();
 
-    @ApiOperation("Retrieve the information needed for the report designer")
+    @ApiOperation(
+                value = "Retrieve configuration information for the report designer",
+                notes = "This endpoint returns all the necessary configuration information needed to initialize " +
+                        "and populate the AMP Report Designer interface.\n\n" +
+                        "The response includes available report columns, measures, hierarchies, filters, and other " +
+                        "metadata required to build and customize reports. This information is structured according " +
+                        "to the specified report profile and type.\n\n" +
+                        "**Parameters:**\n" +
+                        "- **profile**: Report profile code (default: 'R' for Reports)\n" +
+                        "- **type**: Report type code (default: 'D' for Donor)")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "report designer info",
                     response = ReportDesigner.class))
     @ApiMethod(id = "designer")
@@ -42,7 +51,13 @@ public class ReportsDesignerEndpoint {
         return reportDesignerService.getReportDesigner(getReportProfile(profile), getReportType(type));
     }
 
-    @ApiOperation("Retrieve the report by specifying the id")
+    @ApiOperation(
+                value = "Retrieve a specific report by ID",
+                notes = "This endpoint returns detailed information about a single report identified by its ID.\n\n" +
+                        "The response includes the report's configuration, columns, measures, filters, and other " +
+                        "settings that define how the report is structured and what data it displays.\n\n" +
+                        "This information can be used to view, edit, or duplicate an existing report. The endpoint " +
+                        "requires that the user has access to the specified report and is a member of a workspace.")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "report",
             response = Report.class))
     @ApiMethod(id = "getReport", authTypes = AuthRule.IN_WORKSPACE)
@@ -53,7 +68,17 @@ public class ReportsDesignerEndpoint {
         return reportDesignerService.getReport(reportId);
     }
 
-    @ApiOperation(value = "Creates a report.")
+    @ApiOperation(
+                value = "Create a new report",
+                notes = "This endpoint allows users to create a new report with custom configuration.\n\n" +
+                        "The request must include the report's name, columns, measures, filters, and other " +
+                        "settings that define how the report is structured and what data it displays.\n\n" +
+                        "**Parameters:**\n" +
+                        "- **reportRequest**: The complete report configuration in JSON format\n" +
+                        "- **isDynamic**: Whether the report should be created as a dynamic report (default: false)\n\n" +
+                        "On success, the response includes the newly created report with its assigned ID and " +
+                        "other metadata. If there are validation errors or other issues, appropriate error " +
+                        "messages will be returned.")
     @ApiMethod(id = "createReport")
     @ApiResponses({
             @ApiResponse(code = HttpServletResponse.SC_OK, reference = "JsonApiResponse",
@@ -68,7 +93,19 @@ public class ReportsDesignerEndpoint {
         return reportDesignerService.createReport(reportRequest, isDynamic);
     }
 
-    @ApiOperation(value = "Updates a report.")
+    @ApiOperation(
+                value = "Update an existing report",
+                notes = "This endpoint allows users to modify an existing report identified by its ID.\n\n" +
+                        "The request must include the updated report configuration including name, columns, " +
+                        "measures, filters, and other settings that define how the report is structured and " +
+                        "what data it displays.\n\n" +
+                        "**Parameters:**\n" +
+                        "- **reportRequest**: The complete updated report configuration in JSON format\n" +
+                        "- **reportId**: The ID of the report to update\n\n" +
+                        "On success, the response includes the updated report with its metadata. If there are " +
+                        "validation errors or other issues, appropriate error messages will be returned.\n\n" +
+                        "This endpoint requires that the user is a member of a workspace and has permission " +
+                        "to modify the specified report.")
     @ApiMethod(id = "updateReport", authTypes = AuthRule.IN_WORKSPACE)
     @ApiResponses({
             @ApiResponse(code = HttpServletResponse.SC_OK, reference = "JsonApiResponse",

@@ -56,6 +56,7 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
         super(id, model,fmName, hideLabel);
         Model<String> labelText = new Model<String>();
         TransparentWebMarkupContainer fundingItemsContainer = new TransparentWebMarkupContainer("fundingItemsContainer");
+        fundingItemsContainer.setOutputMarkupId(true);
         add(fundingItemsContainer);
         Label amountsInThousandsLabel = new Label("amountsInThousands", labelText);
         amountsInThousandsLabel.setVisibilityAllowed(false);

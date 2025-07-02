@@ -96,6 +96,7 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
             protected void onConfigure() {
                 super.onConfigure();
                 boolean shouldShow = this.isVisible();
+                logger.info("Visible :"+this.isVisible());
                 this.setMarkupId("dummy");
                 if (shouldShow) {
                     this.setMarkupId(fmName);

@@ -1423,36 +1423,35 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     @Override
                     public void component(Component component, IVisit<Void> visit) {
                         String id = component.getId();
-                        if (component.getDefaultModel()!=null)
-                        {
+                        if (component.getDefaultModel()!=null) {
+                            if ("commitments".equals(id) || "disbursements".equals(id)) {
 
-                            if ("commitments".equals(id)) {
+                                if ("commitments".equals(id)) {
 
                                     AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                                     boolean commitmentsRequired = FMUtil.isFmVisible(findComponentById(form, "requireCommitments"));
                                     logger.info("Commitments required: " + commitmentsRequired);
-                                setErrorWHenItemMissing(component, funding, commitmentsRequired,Constants.COMMITMENT, hasErrors, target);
+                                    setErrorWHenItemMissing(component, funding, commitmentsRequired, Constants.COMMITMENT, hasErrors, target);
 
-                            }
-                            if ("disbursements".equals(id)) {
+                                }
+                                if ("disbursements".equals(id)) {
                                     AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                                     boolean disbursementsRequired = FMUtil.isFmVisible(findComponentById(form, "requireDisbursements"));
                                     logger.info("Disbursements required: " + disbursementsRequired);
-                                setErrorWHenItemMissing(component, funding, disbursementsRequired,Constants.DISBURSEMENT, hasErrors, target);
+                                    setErrorWHenItemMissing(component, funding, disbursementsRequired, Constants.DISBURSEMENT, hasErrors, target);
 
+                                }
+                                if (hasErrors.value) {
+                                    logger.info("Found errors");
+                                    ampFundingItemFeaturePanel.error(TranslatorUtil.getTranslation("Error you must have at least one funding item added and field."));
+                                    target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
+                                } else {
+                                    logger.info("No errors");
+                                    ampFundingItemFeaturePanel.getFeedbackMessages().clear();
+                                }
+                                target.add(ampFundingItemFeaturePanel);
+                                visit.dontGoDeeper();
                             }
-                            if (hasErrors.value) {
-                                logger.info("Found errors");
-                                ampFundingItemFeaturePanel.error(TranslatorUtil.getTranslation("Error you must have at least one funding item added and field."));
-                                target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
-                            }
-                            else
-                            {
-                                logger.info("No errors");
-                                ampFundingItemFeaturePanel.getFeedbackMessages().clear();
-                            }
-                            target.add(ampFundingItemFeaturePanel);
-//                            visit.dontGoDeeper();
                         }
 
 

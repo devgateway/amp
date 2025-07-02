@@ -1431,7 +1431,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         Component fundingItemsContainer;
                         if ("commitments".equals(id))
                         {
-                             fundingItemsContainer = component.getParent().get("fundingItemsContainer");
+                             fundingItemsContainer = component.get("fundingItemsContainer");
                             logger.info("Funding items container :"+fundingItemsContainer.getId());
 
                             AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
@@ -1457,7 +1457,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         }
                         if ("disbursements".equals(id))
                         {
-                            fundingItemsContainer = component.getParent().get("fundingItemsContainer");
+                            fundingItemsContainer = component.get("fundingItemsContainer");
                             logger.info("Funding items container :"+fundingItemsContainer.getId());
                             AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                             boolean disbursementsRequired = findComponentById(form,"requireDisbursements").getMarkupId().contains("Disbursements");

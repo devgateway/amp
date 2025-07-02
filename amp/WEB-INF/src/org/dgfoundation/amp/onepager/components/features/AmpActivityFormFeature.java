@@ -1481,9 +1481,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     ampFundingItemFeaturePanel.error(TranslatorUtil.getTranslation("Error you must have at least one funding item added and field."));
                     target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
 //                    target.appendJavaScript("$(window).scrollTop($('#" + ampFundingItemFeaturePanel.getMarkupId() + "').position().top)");
-                    target.add(ampFundingItemFeaturePanel);
-                    visit.dontGoDeeper();
                 }
+                target.add(ampFundingItemFeaturePanel);
+                visit.dontGoDeeper();
+
 
             }
 

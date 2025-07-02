@@ -1441,6 +1441,18 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                 setErrorWHenItemMissing(component, funding, disbursementsRequired,Constants.DISBURSEMENT, hasErrors, target);
 
                             }
+                            if (hasErrors.value) {
+                                logger.info("Found errors");
+                                ampFundingItemFeaturePanel.error(TranslatorUtil.getTranslation("Error you must have at least one funding item added and field."));
+                                target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
+                                target.add(ampFundingItemFeaturePanel);
+                                visit.dontGoDeeper();
+                            }
+                            else
+                            {
+                                logger.info("No errors");
+                                ampFundingItemFeaturePanel.getFeedbackMessages().clear();
+                            }
                         }
 
 
@@ -1450,19 +1462,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 });
                 target.appendJavaScript("subSectionsSliderEnable();");
 
-                if (hasErrors.value) {
-                    logger.info("Found errors");
-                    ampFundingItemFeaturePanel.error(TranslatorUtil.getTranslation("Error you must have at least one funding item added and field."));
-                    target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
-//                    target.appendJavaScript("$(window).scrollTop($('#" + ampFundingItemFeaturePanel.getMarkupId() + "').position().top)");
-                }
-                else
-                {
-                    logger.info("No errors");
-                    ampFundingItemFeaturePanel.getFeedbackMessages().clear();
-                }
-                target.add(ampFundingItemFeaturePanel);
-                visit.dontGoDeeper();
+
+
 
 
             }

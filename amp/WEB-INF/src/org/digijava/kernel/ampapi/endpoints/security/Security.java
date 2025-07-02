@@ -73,7 +73,7 @@ public class Security {
                     "- **username**: The user's login name\n" +
                     "- **password**: SHA-1 hash of the user's password (not the plain text password)\n\n" +
                     "**Optional parameters:**\n" +
-                    "- **workspaceId**: ID of the workspace to activate after login. If not provided, the user's default workspace will be used.\n\n" +
+                    "- **workspaceId**: ID of the workspace to activate after login.\n\n" +
                     "Upon successful authentication, the response includes a session token and detailed user information " +
                     "similar to the /user/ endpoint. This information includes user details, permissions, and active workspace data.\n\n" +
                     "If authentication fails, an appropriate error message will be returned.")

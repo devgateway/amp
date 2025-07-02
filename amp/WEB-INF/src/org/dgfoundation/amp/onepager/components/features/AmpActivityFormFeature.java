@@ -100,11 +100,7 @@ import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
-import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
-import org.dgfoundation.amp.onepager.util.ActivityUtil;
-import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.dgfoundation.amp.onepager.util.AttributePrepender;
-import org.dgfoundation.amp.onepager.util.ChangeType;
+import org.dgfoundation.amp.onepager.util.*;
 import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
 import org.dgfoundation.amp.onepager.validators.StringRequiredValidator;
 import org.dgfoundation.amp.onepager.validators.TranslatableValidators;
@@ -1435,8 +1431,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                             logger.info("Funding items container :"+fundingItemsContainer.getId());
 
                             AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
-                            boolean commitmentsRequired = findComponentById(form,"requireCommitments").getMarkupId().contains("Commitments");
-                            logger.info("Commitments markup: " + findComponentById(form,"requireCommitments").getMarkupId());
+                            boolean commitmentsRequired = FMUtil.isFmVisible(findComponentById(form,"requireCommitments"));
                             logger.info("Commitments required: " + commitmentsRequired);
                             if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
                                 logger.info("Funding items not found");
@@ -1460,8 +1455,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                             fundingItemsContainer = component.get("fundingItemsContainer");
                             logger.info("Funding items container :"+fundingItemsContainer.getId());
                             AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
-                            boolean disbursementsRequired = findComponentById(form,"requireDisbursements").getMarkupId().contains("Disbursements");
-                            logger.info("Commitments markup: " + findComponentById(form,"requireDisbursements").getMarkupId());
+                            boolean disbursementsRequired = FMUtil.isFmVisible(findComponentById(form,"requireDisbursements"));
 
                             logger.info("Disbursements required: " + disbursementsRequired);
                             if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {

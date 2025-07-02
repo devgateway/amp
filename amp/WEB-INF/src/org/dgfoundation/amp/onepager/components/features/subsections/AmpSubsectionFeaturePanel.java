@@ -13,6 +13,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -96,11 +97,8 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
             protected void onConfigure() {
                 super.onConfigure();
                 boolean shouldShow = this.isVisible();
-                logger.info("Visible :"+this.isVisible());
-                this.setMarkupId("dummy");
-                if (shouldShow) {
-                    this.setMarkupId(fmName);
-                }
+                logger.info("Visible :"+FMUtil.isFmVisible(this));
+
                 requiredAsterisk.setVisible(shouldShow);
                 requiredAsterisk.add(AttributeModifier.replace("style",
                         "color:red; font-weight:bold; margin-left:5px;" +

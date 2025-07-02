@@ -1427,6 +1427,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     @Override
                     public void component(Component component, IVisit<Void> visit) {
                         String id = component.getId();
+                        Component fundingItemsContainer = component.get("fundingItemsContainer");
+                        logger.info("Funding items container :"+fundingItemsContainer.getId());
+
                         if ("commitments".equals(id))
                         {
 
@@ -1439,15 +1442,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
                                 if ((commitmentsRequired)) {
                                     hasErrors.value = true;
-                                    component.add(new AttributeModifier("class", "funding-has-error"));
-                                    target.add(component);
+                                    fundingItemsContainer.add(new AttributeModifier("class", "funding-has-error"));
+                                    target.add(fundingItemsContainer);
                                     logger.info("Setting funding item error");
                                 }
                                 else
                                 {
                                     hasErrors.value = false;
-                                    component.add(new AttributeModifier("class", ""));
-                                    target.add(component);
+                                    fundingItemsContainer.add(new AttributeModifier("class", ""));
+                                    target.add(fundingItemsContainer);
                                 }
                             }
                         }
@@ -1463,15 +1466,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
                                 if ((disbursementsRequired)) {
                                     hasErrors.value = true;
-                                    component.add(new AttributeModifier("class", "funding-has-error"));
-                                    target.add(component);
+                                    fundingItemsContainer.add(new AttributeModifier("class", "funding-has-error"));
+                                    target.add(fundingItemsContainer);
                                     logger.info("Setting funding item error");
                                 }
                                 else
                                 {
                                     hasErrors.value = false;
-                                    component.add(new AttributeModifier("class", ""));
-                                    target.add(component);
+                                    fundingItemsContainer.add(new AttributeModifier("class", ""));
+                                    target.add(fundingItemsContainer);
                                 }
                             }
                         }

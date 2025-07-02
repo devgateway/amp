@@ -1449,10 +1449,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                     logger.info("No errors");
                                     ampFundingItemFeaturePanel.getFeedbackMessages().clear();
                                 }
+                                    target.add(ampFundingItemFeaturePanel);
+                                    visit.dontGoDeeper();
 
-                            }
-                                target.add(ampFundingItemFeaturePanel);
-                                visit.dontGoDeeper();
+                                }
+
                         }
 
 

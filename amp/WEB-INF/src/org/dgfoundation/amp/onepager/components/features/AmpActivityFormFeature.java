@@ -1422,51 +1422,50 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     @Override
                     public void component(Component component, IVisit<Void> visit) {
                         String id = component.getId();
-
-                        if ("commitments".equals(id))
+                        if (component.getDefaultModel()!=null)
                         {
 
-                            if (component.getDefaultModel()!=null) {
+                            if ("commitments".equals(id)) {
 
-                                AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
-                                boolean commitmentsRequired = FMUtil.isFmVisible(findComponentById(form, "requireCommitments"));
-                                logger.info("Commitments required: " + commitmentsRequired);
-                                if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
-                                    logger.info("Funding items not found");
 
-                                    if ((commitmentsRequired)) {
-                                        hasErrors.value = true;
-                                        component.add(new AttributeModifier("class", "funding-has-error"));
-                                        target.add(component);
-                                        logger.info("Setting funding item error");
-                                    } else {
-                                        hasErrors.value = false;
-                                        component.add(new AttributeModifier("class", ""));
-                                        target.add(component);
+                                    AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+                                    boolean commitmentsRequired = FMUtil.isFmVisible(findComponentById(form, "requireCommitments"));
+                                    logger.info("Commitments required: " + commitmentsRequired);
+                                    if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
+                                        logger.info("Funding items not found");
+
+                                        if ((commitmentsRequired)) {
+                                            hasErrors.value = true;
+                                            component.add(new AttributeModifier("class", "funding-has-error"));
+                                            target.add(component);
+                                            logger.info("Setting funding item error");
+                                        } else {
+                                            hasErrors.value = false;
+                                            component.add(new AttributeModifier("class", ""));
+                                            target.add(component);
+                                        }
                                     }
-                                }
+
                             }
-                        }
-                        if ("disbursements".equals(id)) {
-                            if (component.getDefaultModel() != null) {
-//                            logger.info("Funding items container :"+fundingItemsContainer.getId());
-                                AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
-                                boolean disbursementsRequired = FMUtil.isFmVisible(findComponentById(form, "requireDisbursements"));
+                            if ("disbursements".equals(id)) {
+                                    AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+                                    boolean disbursementsRequired = FMUtil.isFmVisible(findComponentById(form, "requireDisbursements"));
 
-                                logger.info("Disbursements required: " + disbursementsRequired);
-                                if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
-                                    logger.info("Funding items not found");
+                                    logger.info("Disbursements required: " + disbursementsRequired);
+                                    if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
+                                        logger.info("Funding items not found");
 
-                                    if ((disbursementsRequired)) {
-                                        hasErrors.value = true;
-                                        component.add(new AttributeModifier("class", "funding-has-error"));
-                                        target.add(component);
-                                        logger.info("Setting funding item error");
-                                    } else {
-                                        hasErrors.value = false;
-                                        component.add(new AttributeModifier("class", ""));
-                                        target.add(component);
-                                    }
+                                        if ((disbursementsRequired)) {
+                                            hasErrors.value = true;
+                                            component.add(new AttributeModifier("class", "funding-has-error"));
+                                            target.add(component);
+                                            logger.info("Setting funding item error");
+                                        } else {
+                                            hasErrors.value = false;
+                                            component.add(new AttributeModifier("class", ""));
+                                            target.add(component);
+                                        }
+
                                 }
                             }
                         }
@@ -1474,8 +1473,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
                     }
                 });
-
-
 
 
             }

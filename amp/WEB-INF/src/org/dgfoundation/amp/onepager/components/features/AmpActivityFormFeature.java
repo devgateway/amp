@@ -1480,6 +1480,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
             }
         });
+        String js = "$(\"a[href='#tab0']\").parent()";
+        if (hasErrors.value) {
+            js += ".addClass('error');";
+        } else {
+            js += ".removeClass('error');";
+        }
+        target.appendJavaScript(js);
         target.appendJavaScript("subSectionsSliderEnable();");
 
 

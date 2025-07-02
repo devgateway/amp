@@ -1436,7 +1436,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                             if ("disbursements".equals(id)) {
                                     AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                                     boolean disbursementsRequired = FMUtil.isFmVisible(findComponentById(form, "requireDisbursements"));
-
                                     logger.info("Disbursements required: " + disbursementsRequired);
                                 setErrorWHenItemMissing(component, funding, disbursementsRequired, hasErrors, target);
 
@@ -1456,6 +1455,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
 //                    target.appendJavaScript("$(window).scrollTop($('#" + ampFundingItemFeaturePanel.getMarkupId() + "').position().top)");
                 }
+                else
+                {
+                    logger.info("No errors");
+                    ampFundingItemFeaturePanel.getFeedbackMessages().clear();
+                }
                 target.add(ampFundingItemFeaturePanel);
                 visit.dontGoDeeper();
 
@@ -1469,8 +1473,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
     }
 
-    private void setErrorWHenItemMissing(Component component, AmpFunding funding, boolean disbursementsRequired, ValueWrapper<Boolean> hasErrors, AjaxRequestTarget target) {
-        if ((disbursementsRequired)) {
+    private void setErrorWHenItemMissing(Component component, AmpFunding funding, boolean itemsRequired, ValueWrapper<Boolean> hasErrors, AjaxRequestTarget target) {
+        if ((itemsRequired)) {
             if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
                 logger.info("Funding items not found");
                     hasErrors.value = true;

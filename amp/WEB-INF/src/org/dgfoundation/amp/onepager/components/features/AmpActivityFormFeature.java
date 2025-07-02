@@ -1430,20 +1430,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                     AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                                     boolean commitmentsRequired = FMUtil.isFmVisible(findComponentById(form, "requireCommitments"));
                                     logger.info("Commitments required: " + commitmentsRequired);
-                                    if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
-                                        logger.info("Funding items not found");
-
-                                        if ((commitmentsRequired)) {
-                                            hasErrors.value = true;
-                                            component.add(new AttributeModifier("class", "funding-has-error"));
-                                            target.add(component);
-                                            logger.info("Setting funding item error");
-                                        } else {
-                                            hasErrors.value = false;
-                                            component.add(new AttributeModifier("class", ""));
-                                            target.add(component);
-                                        }
-                                    }
+                                setErrorWHenItemMissing(component, funding, commitmentsRequired, hasErrors, target);
 
                             }
                             if ("disbursements".equals(id)) {
@@ -1451,21 +1438,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                     boolean disbursementsRequired = FMUtil.isFmVisible(findComponentById(form, "requireDisbursements"));
 
                                     logger.info("Disbursements required: " + disbursementsRequired);
-                                    if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
-                                        logger.info("Funding items not found");
+                                setErrorWHenItemMissing(component, funding, disbursementsRequired, hasErrors, target);
 
-                                        if ((disbursementsRequired)) {
-                                            hasErrors.value = true;
-                                            component.add(new AttributeModifier("class", "funding-has-error"));
-                                            target.add(component);
-                                            logger.info("Setting funding item error");
-                                        } else {
-                                            hasErrors.value = false;
-                                            component.add(new AttributeModifier("class", ""));
-                                            target.add(component);
-                                        }
-
-                                }
                             }
                         }
 
@@ -1494,6 +1468,22 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 
     }
+
+    private void setErrorWHenItemMissing(Component component, AmpFunding funding, boolean disbursementsRequired, ValueWrapper<Boolean> hasErrors, AjaxRequestTarget target) {
+        if ((disbursementsRequired)) {
+            if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
+                logger.info("Funding items not found");
+                    hasErrors.value = true;
+                    component.add(new AttributeModifier("class", "funding-has-error"));
+                    logger.info("Setting funding item error");
+                } else {
+                    hasErrors.value = false;
+                    component.add(new AttributeModifier("class", ""));
+                }
+        }
+        target.add(component);
+    }
+
     public static Component findComponentById(MarkupContainer root, String id) {
         return root.visitChildren(Component.class, new IVisitor<Component, Component>() {
             @Override

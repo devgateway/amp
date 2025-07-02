@@ -85,12 +85,15 @@ public class InterchangeEndpoints {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
     @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getValues", ui = false)
     @ApiOperation(
-            value = "Returns a list of JSON objects, each describing a possible value that might be specified "
-                    + "in an activity field",
-            notes = "If Accept: application/vnd.possible-values-v2+json is used then possible values will be "
-                    + "represented in a tree structure.\nIf value can be translated then each possible value "
-                    + "will contain value-translations element, a map where key is language code and value is "
-                    + "translated value.")
+            value = "Get possible values for a specific activity field",
+            notes = "Returns a list of all possible values that can be used for the specified activity field.\n\n"
+                    + "**Response Format Options:**\n"
+                    + "- **Default format**: Flat list of values\n"
+                    + "- **Tree structure**: Use Accept header: `application/vnd.possible-values-v2+json`\n\n"
+                    + "**Translations:**\n"
+                    + "- If a value can be translated, it will include a `value-translations` object\n"
+                    + "- The `value-translations` object maps language codes to translated values\n\n"
+                    + "**Example usage:** Get possible values for the 'locations~location' field")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "list of possible values",
             response = PossibleValue.class, responseContainer = "List"))
     public Response getPossibleValuesFlat(
@@ -134,12 +137,18 @@ public class InterchangeEndpoints {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getMultiValues", ui = false)
     @ApiOperation(
-            value = "Returns a list of possible values for each requested field.",
-            notes = "If Accept: application/vnd.possible-values-v2+json is used then possible values will be "
-                    + "represented in a tree structure.\n\n"
-                    + "If value can be translated then each possible value will contain value-translations element, "
-                    + "a map where key is language code and value is translated value.\n\n"
-                    + "Example body: `[\"fundings~donor_organization_id\", \"approval_status\", \"activity_budget\"]`")
+            value = "Get possible values for multiple activity fields at once",
+            notes = "This endpoint allows you to retrieve possible values for multiple fields in a single request.\n\n"
+                    + "**Request Body:**\n"
+                    + "- Send an array of field names as JSON\n"
+                    + "- Example: `[\"fundings~donor_organization_id\", \"approval_status\", \"activity_budget\"]`\n\n"
+                    + "**Response Format Options:**\n"
+                    + "- **Default format**: Flat list of values for each field\n"
+                    + "- **Tree structure**: Use Accept header: `application/vnd.possible-values-v2+json`\n\n"
+                    + "**Response Structure:**\n"
+                    + "- Returns an object where keys are the requested field names\n"
+                    + "- Each key contains an array of possible values for that field\n"
+                    + "- Translated values include a `value-translations` object mapping language codes to translations")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "list of possible values grouped by field"))
     public Response getValues(
             @ApiParam(value = "List of fully qualified activity fields.")
@@ -175,12 +184,19 @@ public class InterchangeEndpoints {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
     @ApiMethod(id = "getMultiValues", ui = false)
     @ApiOperation(
-            value = "Returns a list of possible values allowed to be showed publicly for each requested field.",
-            notes = "If Accept: application/vnd.possible-values-v2+json is used then possible values will be "
-                    + "represented in a tree structure.\n\n"
-                    + "If value can be translated then each possible value will contain value-translations element, "
-                    + "a map where key is language code and value is translated value.\n\n"
-                    + "Example body: `[\"fundings~donor_organization_id\", \"approval_status\", \"activity_budget\"]`")
+            value = "Get publicly available values for multiple activity fields",
+            notes = "This endpoint works like `/field/values` but is restricted to fields that are allowed to be shown publicly.\n\n"
+                    + "**Important:** Only fields defined in `PUBLIC_ACTIVITY_FIELDS` are allowed. Other fields will result in an error.\n\n"
+                    + "**Request Body:**\n"
+                    + "- Send an array of field names as JSON\n"
+                    + "- Example: `[\"fundings~donor_organization_id\", \"approval_status\", \"activity_budget\"]`\n\n"
+                    + "**Response Format Options:**\n"
+                    + "- **Default format**: Flat list of values for each field\n"
+                    + "- **Tree structure**: Use Accept header: `application/vnd.possible-values-v2+json`\n\n"
+                    + "**Response Structure:**\n"
+                    + "- Returns an object where keys are the requested field names\n"
+                    + "- Each key contains an array of possible values for that field\n"
+                    + "- Translated values include a `value-translations` object mapping language codes to translations")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "list of possible values "
             + "allowed to be showed publicly grouped by field"))
     public Response getValuesPublic(
@@ -198,8 +214,17 @@ public class InterchangeEndpoints {
     @Path("field/id-values")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getIdValues", ui = false)
-    @ApiOperation(value = "Returns a list of values for all id of requested fields.",
-            notes = "For fields like locations, sectors, programs the object contains the ancestor values.")
+    @ApiOperation(
+            value = "Get field values by their IDs",
+            notes = "This endpoint allows you to retrieve specific field values when you know their IDs.\n\n"
+                    + "**Request Body:**\n"
+                    + "- Send a JSON object where keys are field names and values are arrays of IDs\n"
+                    + "- Example: `{\"locations~location\": [1, 2], \"sectors~sector\": [5, 6]}`\n\n"
+                    + "**Response Features:**\n"
+                    + "- For hierarchical fields (locations, sectors, programs), the response includes ancestor values\n"
+                    + "- Each value includes its ID, name, and any hierarchical information\n\n"
+                    + "**Common Use Case:**\n"
+                    + "- Use this endpoint when you have IDs from another source and need to get their full information")
     public Map<String, List<FieldIdValue>> getFieldValuesById(
             @ApiParam("List of fully qualified activity fields with list of ids.") Map<String, List<Long>> fieldIds) {
         return getFieldValues(null, fieldIds);

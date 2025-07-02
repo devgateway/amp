@@ -55,7 +55,8 @@ public class SwaggerConfigurer {
                 "## Authentication and Authorization\n\n" +
                 "### How to Authenticate\n\n" +
                 "To use the API from Swagger UI(hti browser you can rely on the authentication that the browser has established from the [AMP Login Page](/showLayout.do/?layout=login).\n" +
-                "To use the AMP API in another API client like **postman**, you need to authenticate using the `/security/user/` endpoint:\n\n" +
+                        "\n\n"+
+                "Alternatively, to use the AMP API in another API client like **postman**, you need to authenticate using the `/security/user/` endpoint:\n\n" +
                 "- **Method**: POST\n" +
                 "- **Required parameters**:\n" +
                 "  - `username`: Your login name\n" +

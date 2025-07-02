@@ -1424,11 +1424,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     public void component(Component component, IVisit<Void> visit) {
                         String id = component.getId();
 
-                        Component fundingItemsContainer;
                         if ("commitments".equals(id))
                         {
-                             fundingItemsContainer = component.get("fundingItemsContainer");
-                            logger.info("Funding items container :"+fundingItemsContainer.getId());
+//                             fundingItemsContainer = component.get("fundingItemsContainer");
+//                            logger.info("Funding items container :"+fundingItemsContainer.getId());
 
                             AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                             boolean commitmentsRequired = FMUtil.isFmVisible(findComponentById(form,"requireCommitments"));
@@ -1438,22 +1437,21 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
                                 if ((commitmentsRequired)) {
                                     hasErrors.value = true;
-                                    fundingItemsContainer.add(new AttributeModifier("class", "funding-has-error"));
-                                    target.add(fundingItemsContainer);
+                                    component.add(new AttributeModifier("class", "funding-has-error"));
+                                    target.add(component);
                                     logger.info("Setting funding item error");
                                 }
                                 else
                                 {
                                     hasErrors.value = false;
-                                    fundingItemsContainer.add(new AttributeModifier("class", ""));
-                                    target.add(fundingItemsContainer);
+                                    component.add(new AttributeModifier("class", ""));
+                                    target.add(component);
                                 }
                             }
                         }
                         if ("disbursements".equals(id))
                         {
-                            fundingItemsContainer = component.get("fundingItemsContainer");
-                            logger.info("Funding items container :"+fundingItemsContainer.getId());
+//                            logger.info("Funding items container :"+fundingItemsContainer.getId());
                             AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                             boolean disbursementsRequired = FMUtil.isFmVisible(findComponentById(form,"requireDisbursements"));
 
@@ -1463,15 +1461,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
                                 if ((disbursementsRequired)) {
                                     hasErrors.value = true;
-                                    fundingItemsContainer.add(new AttributeModifier("class", "funding-has-error"));
-                                    target.add(fundingItemsContainer);
+                                    component.add(new AttributeModifier("class", "funding-has-error"));
+                                    target.add(component);
                                     logger.info("Setting funding item error");
                                 }
                                 else
                                 {
                                     hasErrors.value = false;
-                                    fundingItemsContainer.add(new AttributeModifier("class", ""));
-                                    target.add(fundingItemsContainer);
+                                    component.add(new AttributeModifier("class", ""));
+                                    target.add(component);
                                 }
                             }
                         }

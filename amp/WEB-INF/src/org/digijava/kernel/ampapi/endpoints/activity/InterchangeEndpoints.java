@@ -264,22 +264,28 @@ public class InterchangeEndpoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getProjectList", ui = false)
     @ApiOperation(
-            value = "Returns a list of all activities summary on the system, including their view and edit rights "
-                    + "based on the status for the currently logged in user.",
-            notes = "If the user can view the project, the 'view' property of the project is set to true. "
-                    + "False otherwise. If the user can edit the project, the 'edit' property of the project "
-                    + "on the JSON is set to true. False otherwise. Pagination can be used if the parameters "
-                    + "are sent on the request.\nIf not parameters are sent, the full list of projects is "
-                    + "returned.")
+            value = "Returns a list of all activities/projects in the system with their permission information",
+            notes = "This endpoint provides a summary of all activities in the system along with permission information for the current user:\n\n"
+                    + "- The 'view' property is set to true if the user can view the project, false otherwise\n"
+                    + "- The 'edit' property is set to true if the user can edit the project, false otherwise\n\n"
+                    + "Pagination is supported through the offset and count parameters. If these parameters are not provided, "
+                    + "the full list of projects is returned.\n\n"
+                    + "For better performance with large datasets, use the pagination parameters.")
+    @ApiResponses({
+            @ApiResponse(code = HttpServletResponse.SC_OK,
+                    message = "Returns a collection of activity summaries with permission information"),
+            @ApiResponse(code = HttpServletResponse.SC_FORBIDDEN,
+                    message = "User does not have permission to access the workspace")
+    })
     @JsonView(ActivityView.List.class)
     public Collection<ActivitySummary> getProjects(
-            @ApiParam("Current pagination request reference (random id). It acts as a key for a LRU caching "
-                    + "mechanism that holds the full list of projects for the current user. If it is not "
-                    + "provided no caching is used")
-            @QueryParam("pid")
-                    String pid,
-            @ApiParam("Number of projects to skip") @QueryParam("offset") Integer offset,
-            @ApiParam("Number of projects to return") @QueryParam("count") Integer count) {
+            @ApiParam(value = "Pagination request reference ID - used as a key for caching the full list of projects. "
+                    + "If not provided, no caching is used", example = "page1")
+            @QueryParam("pid") String pid,
+            @ApiParam(value = "Number of projects to skip for pagination", example = "0")
+            @QueryParam("offset") Integer offset,
+            @ApiParam(value = "Maximum number of projects to return", example = "20")
+            @QueryParam("count") Integer count) {
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
         Collection<ActivitySummary> activityCollection = ProjectList.getActivityList(pid, tm);
         int start = 0;
@@ -297,10 +303,19 @@ public class InterchangeEndpoints {
     @Path("/projects/{projectId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getProject", ui = false)
-    @ApiOperation("Provides full activity information.")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
-            message = "activity with full set of configured fields and their values"))
-    public SwaggerActivity getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
+    @ApiOperation(
+                value = "Retrieves complete information for a specific activity/project",
+                notes = "Returns a comprehensive JSON object containing all available fields and their values for the specified project. " +
+                        "This endpoint is useful when you need to access the complete details of an activity.")
+    @ApiResponses({
+            @ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
+                    message = "Returns a complete activity object containing all fields and their values configured in the system"),
+            @ApiResponse(code = HttpServletResponse.SC_NOT_FOUND,
+                    message = "Activity with the specified ID was not found"),
+            @ApiResponse(code = HttpServletResponse.SC_FORBIDDEN,
+                    message = "User does not have permission to view this activity")
+    })
+    public SwaggerActivity getProject(@ApiParam(value = "The unique identifier of the project/activity to retrieve", example = "12345") @PathParam("projectId") Long projectId) {
         Map<String, Object> activity = ActivityInterchangeUtils.getActivity(projectId,
                 AmpClientModeHolder.isOfflineClient());
         return new SwaggerActivity(activity);
@@ -333,10 +348,19 @@ public class InterchangeEndpoints {
     @Path("/project")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getProjectByAmpId", ui = false)
-    @ApiOperation("Retrieve activity by AMP Id.")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
-            message = "activity with full set of configured fields and their values"))
-    public SwaggerActivity getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
+    @ApiOperation(
+                value = "Retrieves an activity using its AMP ID",
+                notes = "Returns a complete activity object when provided with a valid AMP ID. " +
+                        "This endpoint is particularly useful when you know the AMP ID but not the internal system ID of an activity.")
+    @ApiResponses({
+            @ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
+                    message = "Returns a complete activity object containing all fields and their values configured in the system"),
+            @ApiResponse(code = HttpServletResponse.SC_NOT_FOUND,
+                    message = "Activity with the specified AMP ID was not found"),
+            @ApiResponse(code = HttpServletResponse.SC_FORBIDDEN,
+                    message = "User does not have permission to view this activity")
+    })
+    public SwaggerActivity getProjectByAmpId(@ApiParam(value = "The AMP ID of the activity to retrieve - this is a business identifier, not the system ID", example = "872329912") @QueryParam("amp-id") String ampId) {
         Map<String, Object> activity = ActivityInterchangeUtils.getActivityByAmpId(ampId,
                 AmpClientModeHolder.isOfflineClient());
         return new SwaggerActivity(activity);
@@ -467,9 +491,20 @@ public class InterchangeEndpoints {
     @Path("/{projectId}/preview/workspaces")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getPreviewWorkspaces", ui = false)
-    @ApiOperation(value = "Retrieve workspaces where the activity is visible.")
+    @ApiOperation(
+                value = "Retrieves all workspaces where the specified activity is visible",
+                notes = "Returns a list of workspaces that have access to view the specified activity. " +
+                        "This is useful for understanding the visibility scope of an activity across different workspaces.")
+    @ApiResponses({
+            @ApiResponse(code = HttpServletResponse.SC_OK,
+                    message = "Returns a list of workspace objects that have visibility to the specified activity"),
+            @ApiResponse(code = HttpServletResponse.SC_NOT_FOUND,
+                    message = "Activity with the specified ID was not found"),
+            @ApiResponse(code = HttpServletResponse.SC_FORBIDDEN,
+                    message = "User does not have permission to view this information")
+    })
     public List<PreviewWorkspace> getPreviewWorkspaces(
-            @ApiParam("the id of the activity")
+            @ApiParam(value = "The unique identifier of the activity for which to retrieve workspace visibility information", example = "12345")
             @PathParam("projectId") Long projectId) {
         return PreviewActivityService.getInstance().getWorkspaces(projectId);
     }

@@ -98,6 +98,11 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
             protected void onConfigure() {
                 super.onConfigure();
                 boolean shouldShow = this.isVisible();
+                if (shouldShow) {
+                    this.setMarkupId(fmName);
+                }else {
+                    this.setMarkupId("dummy");
+                }
                 requiredAsterisk.setVisible(shouldShow);
                 requiredAsterisk.add(AttributeModifier.replace("style",
                         "color:red; font-weight:bold; margin-left:5px;" +

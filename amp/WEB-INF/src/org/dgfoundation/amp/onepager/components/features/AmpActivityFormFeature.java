@@ -1431,7 +1431,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         {
 
                             AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
-                            boolean commitmentsRequired = findComponentById(form,"requireCommitments").isVisible();
+                            boolean commitmentsRequired = findComponentById(form,"requireCommitments").getMarkupId().equals("Commitments");
+                            logger.info("Commitments markup: " + findComponentById(form,"requireCommitments").getMarkupId());
                             logger.info("Commitments required: " + commitmentsRequired);
                             if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
                                 logger.info("Funding items not found");
@@ -1453,7 +1454,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         if ("disbursements".equals(id))
                         {
                             AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
-                            boolean disbursementsRequired = findComponentById(form,"requireCommitments").isVisible();
+                            boolean disbursementsRequired = findComponentById(form,"requireDisbursements").getMarkupId().equals("Disbursements");
                             logger.info("Disbursements required: " + disbursementsRequired);
                             if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
                                 logger.info("Funding items not found");

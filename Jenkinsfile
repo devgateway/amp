@@ -63,15 +63,20 @@ stage('Build') {
 
     println "Using environment: ${environment}"
 
-    node {
+    node('ansible') {
         checkout scm
 
         // Find AMP version
         codeVersion = readMavenPom(file: 'amp/pom.xml').version
         println "AMP Version: ${codeVersion}"
-
+ //Used in the initial generation of keys when working with a new jenkins instance
+        //****************************************************************
+//        sh "yes | ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N ''"
+        sh "ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts"
+//        sh "cat /root/.ssh/id_rsa.pub"
+        //******************************************************
         countries = sh(returnStdout: true,
-                script: "ssh ${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                script: "ssh ${env.jenkinsUser}@${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
                 .trim()
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"
@@ -97,7 +102,7 @@ stage('Build') {
 
     println "amp url is ${ampUrl}"
 
-    node {
+    node('docker') {
         checkout scm
 
         def image = "${dockerRepo}amp/webapp:${tag}"
@@ -139,13 +144,13 @@ def deployed = false
 
 // If this stage fails then next stage will retry deployment. Otherwise next stage will be skipped.
 stage('Deploy') {
-    node {
+    node('ansible') {
         try {
             // Find latest database version compatible with ${codeVersion}
-            dbVersion = sh(returnStdout: true, script: "ssh ${environment} 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
+            dbVersion = sh(returnStdout: true, script: "ssh ${env.jenkinsUser}@${environment} 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
 
             // Deploy AMP
-            sh "ssh ${environment} 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
+            sh "ssh ${env.jenkinsUser}@${environment} 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
 
             slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 
@@ -168,9 +173,9 @@ stage('Deploy again') {
             input message: "Proceed with repeated deploy for ${country}?"
             milestone()
         }
-        node {
+        node('ansible') {
             try {
-                sh "ssh ${environment} 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
+                sh "ssh ${env.jenkinsUser}@${environment} 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
 
                 slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 

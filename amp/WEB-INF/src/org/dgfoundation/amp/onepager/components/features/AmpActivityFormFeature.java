@@ -1446,8 +1446,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                     target.add(component);
                                 }
                             }
-                            target.appendJavaScript("subSectionsSliderEnable();");
-
                         }
                         if ("disbursements".equals(id))
                         {
@@ -1472,8 +1470,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                     target.add(component);
                                 }
                             }
-                            target.appendJavaScript("subSectionsSliderEnable();");
-
                         }
 
 
@@ -1485,6 +1481,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
             }
         });
+        target.appendJavaScript("subSectionsSliderEnable();");
 
 
         // If errors were found, add an error to the form to prevent submission

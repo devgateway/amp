@@ -56,12 +56,9 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
     public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model, boolean hideLabel, boolean hideAmountsInThousandsWarning,boolean showSummary) {
         super(id, model,fmName, hideLabel);
         Model<String> labelText = new Model<String>();
-        TransparentWebMarkupContainer fundingItemsContainer = new TransparentWebMarkupContainer("fundingItemsContainer");
-        fundingItemsContainer.setOutputMarkupId(true);
-        add(fundingItemsContainer);
         Label amountsInThousandsLabel = new Label("amountsInThousands", labelText);
         amountsInThousandsLabel.setVisibilityAllowed(false);
-        fundingItemsContainer.add(amountsInThousandsLabel);
+        add(amountsInThousandsLabel);
 
         String amountsInThousandsStr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS);
         if (amountsInThousandsStr != null){
@@ -81,13 +78,13 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
 
         slider = new TransparentWebMarkupContainer("slider");
         slider.setOutputMarkupId(true);
-        fundingItemsContainer.add(slider);
+        add(slider);
         requiredAsterisk = getRequiredAsterisk("requiredAsterisk");
         requiredAsterisk.add(new AttributeModifier("style", "display:none;"));
-        fundingItemsContainer.add(requiredAsterisk);
+        add(requiredAsterisk);
         if (showSummary) {
             TransparentWebMarkupContainer summary = new TransparentWebMarkupContainer("featureSummary");
-            fundingItemsContainer.add(summary);
+            add(summary);
         }
     }
     public AmpComponentPanel getRequiredItemValidator(String wicketId, String fmName) {

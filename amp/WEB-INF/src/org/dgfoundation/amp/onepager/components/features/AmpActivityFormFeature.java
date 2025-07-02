@@ -1477,9 +1477,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 target.appendJavaScript("subSectionsSliderEnable();");
 
                 if (hasErrors.value) {
+                    logger.info("Found errors");
                     form.error(TranslatorUtil.getTranslation("Error you must have at least one funding item added and field."));
-                    target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
-                    target.appendJavaScript("$(window).scrollTop($('#" + ampFundingItemFeaturePanel.getMarkupId() + "').position().top)");
+//                    target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
+//                    target.appendJavaScript("$(window).scrollTop($('#" + ampFundingItemFeaturePanel.getMarkupId() + "').position().top)");
                     target.add(form);
                 }
 

@@ -157,6 +157,7 @@ function translationsEnable(){
 }
 function subSectionsSliderEnable(){
 	$("a.slider").click(function(){
+		alert("Sliding")
 		$(this).siblings("div:first").slideToggle();
 		return false;
 	});

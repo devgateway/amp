@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.AttributeModifier;
@@ -1430,14 +1431,14 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                     AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                                     boolean commitmentsRequired = FMUtil.isFmVisible(findComponentById(form, "requireCommitments"));
                                     logger.info("Commitments required: " + commitmentsRequired);
-                                setErrorWHenItemMissing(component, funding, commitmentsRequired, hasErrors, target);
+                                setErrorWHenItemMissing(component, funding, commitmentsRequired,Constants.COMMITMENT, hasErrors, target);
 
                             }
                             if ("disbursements".equals(id)) {
                                     AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                                     boolean disbursementsRequired = FMUtil.isFmVisible(findComponentById(form, "requireDisbursements"));
                                     logger.info("Disbursements required: " + disbursementsRequired);
-                                setErrorWHenItemMissing(component, funding, disbursementsRequired, hasErrors, target);
+                                setErrorWHenItemMissing(component, funding, disbursementsRequired,Constants.DISBURSEMENT, hasErrors, target);
 
                             }
                         }
@@ -1473,9 +1474,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
     }
 
-    private void setErrorWHenItemMissing(Component component, AmpFunding funding, boolean itemsRequired, ValueWrapper<Boolean> hasErrors, AjaxRequestTarget target) {
+    private void setErrorWHenItemMissing(Component component, AmpFunding funding, boolean itemsRequired,int transactionType, ValueWrapper<Boolean> hasErrors, AjaxRequestTarget target) {
         if ((itemsRequired)) {
-            if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
+            if (funding.getFundingDetails() == null || funding.getFundingDetails().stream().noneMatch(x -> x.getTransactionType() == transactionType)) {
                 logger.info("Funding items not found");
                 hasErrors.value = true;
                 component.add(new AttributeModifier("class", "funding-has-error"));

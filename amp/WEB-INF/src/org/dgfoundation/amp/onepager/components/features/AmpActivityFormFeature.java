@@ -1423,9 +1423,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     @Override
                     public void component(Component component, IVisit<Void> visit) {
                         String id = component.getId();
-                        if (component.getDefaultModel()!=null) {
-                            if ("commitments".equals(id) || "disbursements".equals(id)) {
 
+                            if ("commitments".equals(id) || "disbursements".equals(id)) {
+                                if (component.getDefaultModel()!=null) {
                                 if ("commitments".equals(id)) {
 
                                     AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
@@ -1449,9 +1449,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                     logger.info("No errors");
                                     ampFundingItemFeaturePanel.getFeedbackMessages().clear();
                                 }
+
+                            }
                                 target.add(ampFundingItemFeaturePanel);
                                 visit.dontGoDeeper();
-                            }
                         }
 
 

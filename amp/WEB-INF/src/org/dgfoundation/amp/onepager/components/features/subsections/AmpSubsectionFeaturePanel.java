@@ -90,18 +90,12 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
         AmpComponentPanel panel = new AmpComponentPanel(wicketId, fmName +" validator") {
 
             @Override
-            protected void onInitialize() {
-                super.onInitialize();
-            }
-
-            @Override
             protected void onConfigure() {
                 super.onConfigure();
                 boolean shouldShow = this.isVisible();
+                this.setMarkupId("dummy");
                 if (shouldShow) {
                     this.setMarkupId(fmName);
-                }else {
-                    this.setMarkupId("dummy");
                 }
                 requiredAsterisk.setVisible(shouldShow);
                 requiredAsterisk.add(AttributeModifier.replace("style",

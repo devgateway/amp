@@ -1455,6 +1455,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         {
                             AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                             boolean disbursementsRequired = findComponentById(form,"requireDisbursements").getMarkupId().contains("Disbursements");
+                            logger.info("Commitments markup: " + findComponentById(form,"requireDisbursements").getMarkupId());
+
                             logger.info("Disbursements required: " + disbursementsRequired);
                             if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
                                 logger.info("Funding items not found");

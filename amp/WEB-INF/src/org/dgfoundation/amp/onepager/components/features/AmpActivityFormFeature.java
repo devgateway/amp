@@ -1427,11 +1427,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     @Override
                     public void component(Component component, IVisit<Void> visit) {
                         String id = component.getId();
-                        Component fundingItemsContainer = component.get("fundingItemsContainer");
-                        logger.info("Funding items container :"+fundingItemsContainer.getId());
 
+                        Component fundingItemsContainer;
                         if ("commitments".equals(id))
                         {
+                             fundingItemsContainer = component.getParent().get("fundingItemsContainer");
+                            logger.info("Funding items container :"+fundingItemsContainer.getId());
 
                             AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                             boolean commitmentsRequired = findComponentById(form,"requireCommitments").getMarkupId().contains("Commitments");
@@ -1456,6 +1457,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         }
                         if ("disbursements".equals(id))
                         {
+                            fundingItemsContainer = component.getParent().get("fundingItemsContainer");
+                            logger.info("Funding items container :"+fundingItemsContainer.getId());
                             AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                             boolean disbursementsRequired = findComponentById(form,"requireDisbursements").getMarkupId().contains("Disbursements");
                             logger.info("Commitments markup: " + findComponentById(form,"requireDisbursements").getMarkupId());

@@ -1415,53 +1415,54 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
         form.visitChildren(AmpFundingItemFeaturePanel.class,new IVisitor<AmpFundingItemFeaturePanel, Void>() {
 
+
             @Override
             public void component(AmpFundingItemFeaturePanel ampFundingItemFeaturePanel, IVisit<Void> visit) {
+                Set<Boolean> errors = new HashSet<>();
                 ampFundingItemFeaturePanel.visitChildren(Component.class,new IVisitor<Component, Void>() {
-
 
                     @Override
                     public void component(Component component, IVisit<Void> visit) {
                         String id = component.getId();
+                        if ("commitments".equals(id) || "disbursements".equals(id)) {
+                            if (component.getDefaultModel() != null) {
 
-                            if ("commitments".equals(id) || "disbursements".equals(id)) {
-                                if (component.getDefaultModel()!=null) {
                                 if ("commitments".equals(id)) {
 
                                     AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                                     boolean commitmentsRequired = FMUtil.isFmVisible(findComponentById(form, "requireCommitments"));
                                     logger.info("Commitments required: " + commitmentsRequired);
-                                    setErrorWHenItemMissing(component, funding, commitmentsRequired, Constants.COMMITMENT, hasErrors, target);
+                                    setErrorWHenItemMissing(component, funding, commitmentsRequired, Constants.COMMITMENT, errors, target);
 
                                 }
                                 if ("disbursements".equals(id)) {
                                     AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                                     boolean disbursementsRequired = FMUtil.isFmVisible(findComponentById(form, "requireDisbursements"));
                                     logger.info("Disbursements required: " + disbursementsRequired);
-                                    setErrorWHenItemMissing(component, funding, disbursementsRequired, Constants.DISBURSEMENT, hasErrors, target);
+                                    setErrorWHenItemMissing(component, funding, disbursementsRequired, Constants.DISBURSEMENT, errors, target);
 
                                 }
-                                if (hasErrors.value) {
-                                    logger.info("Found errors");
-                                    ampFundingItemFeaturePanel.error(TranslatorUtil.getTranslation("Error you must have at least one funding item added and field."));
-                                    target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
-                                } else {
-                                    logger.info("No errors");
-                                    ampFundingItemFeaturePanel.getFeedbackMessages().clear();
-                                }
-                                    target.add(ampFundingItemFeaturePanel);
-                                    visit.dontGoDeeper();
+                            }
 
-                                }
 
                         }
-
-
-
-
                     }
                 });
                 target.appendJavaScript("subSectionsSliderEnable();");
+
+                if (errors.contains(true)) {
+                    logger.info("Found errors");
+                    ampFundingItemFeaturePanel.error(TranslatorUtil.getTranslation("Error you must have at least one funding item added and field."));
+                    target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
+//                    target.appendJavaScript("$(window).scrollTop($('#" + ampFundingItemFeaturePanel.getMarkupId() + "').position().top)");
+                }
+                else
+                {
+                    logger.info("No errors");
+                    ampFundingItemFeaturePanel.getFeedbackMessages().clear();
+                }
+                target.add(ampFundingItemFeaturePanel);
+                visit.dontGoDeeper();
 
 
             }
@@ -1473,17 +1474,16 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
     }
 
-    private void setErrorWHenItemMissing(Component component, AmpFunding funding, boolean itemsRequired,int transactionType, ValueWrapper<Boolean> hasErrors, AjaxRequestTarget target) {
+    private void setErrorWHenItemMissing(Component component, AmpFunding funding, boolean itemsRequired,int transactionType, Set<Boolean> errors, AjaxRequestTarget target) {
         if ((itemsRequired)) {
             if (funding.getFundingDetails() == null || funding.getFundingDetails().stream().noneMatch(x -> x.getTransactionType() == transactionType)) {
                 logger.info("Funding items not found");
-                hasErrors.value = true;
+                errors.add(true);
                 component.add(new AttributeModifier("class", "funding-has-error"));
                 logger.info("Setting funding item error");
             } else {
                 logger.info("Funding items found"+funding.getFundingDetails().size() );
                 logger.info("Funding items found"+funding.getFundingDetails());
-                hasErrors.value = false;
                 component.add(new AttributeModifier("class", ""));
             }
         }

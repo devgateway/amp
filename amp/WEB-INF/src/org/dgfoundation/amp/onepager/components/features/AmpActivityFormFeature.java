@@ -1474,19 +1474,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
                     }
                 });
-
-                if (hasErrors.value) {
-                    error(TranslatorUtil.getTranslation("Error you must have at least one funding item added and field."));
-                    target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
-                    target.appendJavaScript("$(window).scrollTop($('#" + ampFundingItemFeaturePanel.getMarkupId() + "').position().top)");
-                }
                 target.appendJavaScript("subSectionsSliderEnable();");
 
-
-                // If errors were found, add an error to the form to prevent submission
                 if (hasErrors.value) {
-                    error("Please fix errors in commitments or disbursements panels before submitting.");
+                    form.error(TranslatorUtil.getTranslation("Error you must have at least one funding item added and field."));
+                    target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
+                    target.appendJavaScript("$(window).scrollTop($('#" + ampFundingItemFeaturePanel.getMarkupId() + "').position().top)");
+                    target.add(form);
                 }
+
             }
 
 

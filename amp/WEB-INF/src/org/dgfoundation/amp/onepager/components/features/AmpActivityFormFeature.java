@@ -1477,13 +1477,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         if ((itemsRequired)) {
             if (funding.getFundingDetails() == null || funding.getFundingDetails().isEmpty()) {
                 logger.info("Funding items not found");
-                    hasErrors.value = true;
-                    component.add(new AttributeModifier("class", "funding-has-error"));
-                    logger.info("Setting funding item error");
-                } else {
-                    hasErrors.value = false;
-                    component.add(new AttributeModifier("class", ""));
-                }
+                hasErrors.value = true;
+                component.add(new AttributeModifier("class", "funding-has-error"));
+                logger.info("Setting funding item error");
+            } else {
+                logger.info("Funding items found"+funding.getFundingDetails().size() );
+                logger.info("Funding items found"+funding.getFundingDetails());
+                hasErrors.value = false;
+                component.add(new AttributeModifier("class", ""));
+            }
         }
         target.add(component);
     }

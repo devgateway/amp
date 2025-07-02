@@ -1411,7 +1411,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
     private void checkFundingPanelsForErrors(Form<?> form, final AjaxRequestTarget target) {
         logger.info("Checking for funding panel errors");
         final ValueWrapper<Boolean> hasErrors = new ValueWrapper<>(false);
-        String errorCss = ".has-error { border: 2px solid red !important; }";
 
         form.visitChildren(AmpFundingItemFeaturePanel.class,new IVisitor<AmpFundingItemFeaturePanel, Void>() {
 
@@ -1426,8 +1425,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
                         if ("commitments".equals(id))
                         {
-//                             fundingItemsContainer = component.get("fundingItemsContainer");
-//                            logger.info("Funding items container :"+fundingItemsContainer.getId());
+
 
                             AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
                             boolean commitmentsRequired = FMUtil.isFmVisible(findComponentById(form,"requireCommitments"));
@@ -1448,6 +1446,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                     target.add(component);
                                 }
                             }
+                            target.appendJavaScript("subSectionsSliderEnable();");
+
                         }
                         if ("disbursements".equals(id))
                         {
@@ -1472,6 +1472,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                     target.add(component);
                                 }
                             }
+                            target.appendJavaScript("subSectionsSliderEnable();");
+
                         }
 
 
@@ -1483,7 +1485,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
             }
         });
-        target.appendJavaScript("subSectionsSliderEnable();");
 
 
         // If errors were found, add an error to the form to prevent submission

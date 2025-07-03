@@ -107,7 +107,6 @@ stage('Build') {
         docker.withRegistry("https://798366298150.dkr.ecr.us-east-1.amazonaws.com", "ecr:us-east-1:aws-ecr-credentials-id") {
             try {
                 updateGitHubCommitStatus('jenkins/build', 'Build in progress', 'PENDING')
-                sh "docker system prune -f"
                 sshagent(credentials: ['GitHubDgReadOnlyKey']) {
                     withEnv(['DOCKER_BUILDKIT=1']) {
                         sh "ssh-add -L"

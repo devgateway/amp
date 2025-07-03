@@ -1449,18 +1449,21 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     }
                 });
                 target.appendJavaScript("subSectionsSliderEnable();");
-
+                String js = "$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parent()";
                 if (errors.contains(true)) {
                     logger.info("Found errors");
                     ampFundingItemFeaturePanel.error(TranslatorUtil.getTranslation("Error you must have at least one funding item added and field."));
                     target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
                     target.appendJavaScript("$(window).scrollTop($('#" + ampFundingItemFeaturePanel.getMarkupId() + "').position().top)");
+                    js += ".addClass('error');";
                 }
                 else
                 {
                     logger.info("No errors");
                     ampFundingItemFeaturePanel.getFeedbackMessages().clear();
+                    js += ".removeClass('error');";
                 }
+                target.appendJavaScript(js);
                 target.add(ampFundingItemFeaturePanel);
                 visit.dontGoDeeper();
 

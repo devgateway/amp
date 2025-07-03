@@ -1414,68 +1414,65 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         final ValueWrapper<Boolean> hasErrors = new ValueWrapper<>(false);
 
 
-        form.visitChildren(AmpFundingGroupFeaturePanel.class,new IVisitor<AmpFundingGroupFeaturePanel, Void>() {
+        form.visitChildren(AmpFundingItemFeaturePanel.class,new IVisitor<AmpFundingItemFeaturePanel, Void>() {
+
 
             @Override
-            public void component(AmpFundingGroupFeaturePanel ampFundingGroupFeaturePanel, IVisit<Void> visit) {
-                ampFundingGroupFeaturePanel.visitChildren(AmpFundingItemFeaturePanel.class,new IVisitor<AmpFundingItemFeaturePanel, Void>() {
+            public void component(AmpFundingItemFeaturePanel ampFundingItemFeaturePanel, IVisit<Void> visit) {
+                Set<Boolean> errors = new HashSet<>();
+                ampFundingItemFeaturePanel.visitChildren(Component.class,new IVisitor<Component, Void>() {
 
                     @Override
-                    public void component(AmpFundingItemFeaturePanel ampFundingItemFeaturePanel, IVisit<Void> visit) {
-                        Set<Boolean> errors = new HashSet<>();
-                        ampFundingItemFeaturePanel.visitChildren(Component.class,new IVisitor<Component, Void>() {
+                    public void component(Component component, IVisit<Void> visit) {
+                        String id = component.getId();
+                        if ("commitments".equals(id) || "disbursements".equals(id)) {
+                            if (component.getDefaultModel() != null) {
 
-                            @Override
-                            public void component(Component component, IVisit<Void> visit) {
-                                String id = component.getId();
-                                if ("commitments".equals(id) || "disbursements".equals(id)) {
-                                    if (component.getDefaultModel() != null) {
+                                if ("commitments".equals(id)) {
 
-                                        if ("commitments".equals(id)) {
+                                    AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+                                    boolean commitmentsRequired = FMUtil.isFmVisible(findComponentById(form, "requireCommitments"));
+                                    logger.info("Commitments required: " + commitmentsRequired);
+                                    setErrorWHenItemMissing(component, funding, commitmentsRequired, Constants.COMMITMENT, errors, target);
 
-                                            AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
-                                            boolean commitmentsRequired = FMUtil.isFmVisible(findComponentById(form, "requireCommitments"));
-                                            logger.info("Commitments required: " + commitmentsRequired);
-                                            setErrorWHenItemMissing(component, funding, commitmentsRequired, Constants.COMMITMENT, errors, target);
-
-                                        }
-                                        if ("disbursements".equals(id)) {
-                                            AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
-                                            boolean disbursementsRequired = FMUtil.isFmVisible(findComponentById(form, "requireDisbursements"));
-                                            logger.info("Disbursements required: " + disbursementsRequired);
-                                            setErrorWHenItemMissing(component, funding, disbursementsRequired, Constants.DISBURSEMENT, errors, target);
-
-                                        }
-                                    }
-
+                                }
+                                if ("disbursements".equals(id)) {
+                                    AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+                                    boolean disbursementsRequired = FMUtil.isFmVisible(findComponentById(form, "requireDisbursements"));
+                                    logger.info("Disbursements required: " + disbursementsRequired);
+                                    setErrorWHenItemMissing(component, funding, disbursementsRequired, Constants.DISBURSEMENT, errors, target);
 
                                 }
                             }
-                        });
-                        target.appendJavaScript("subSectionsSliderEnable();");
-                        String js = String.format("$(\"a[href='#tab%s']\").parent()", ampFundingGroupFeaturePanel.getTabIndex() + 1);
-                        if (errors.contains(true)) {
-                            logger.info("Found errors");
-                            target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
-                            target.appendJavaScript("$(window).scrollTop($('#" + ampFundingItemFeaturePanel.getMarkupId() + "').position().top)");
-                            js += ".addClass('error');";
-                        }
-                        else
-                        {
-                            logger.info("No errors");
-                            js += ".removeClass('error');";
-                        }
-                        target.appendJavaScript(js);
-                        target.add(ampFundingItemFeaturePanel);
-                        visit.dontGoDeeper();
 
 
+                        }
                     }
-
-
-
                 });
+                target.appendJavaScript("subSectionsSliderEnable();");
+                String js = String.format("$(\"a[href='#tab%s']\").parent()", ampFundingItemFeaturePanel.findParent(AmpFundingGroupFeaturePanel.class).getTabIndex() + 1);
+
+                if (errors.contains(true)) {
+                    logger.info("Found errors");
+                    ampFundingItemFeaturePanel.error(TranslatorUtil.getTranslation("Error you must have at least one funding item added and field."));
+//                    target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
+                    target.appendJavaScript("$(window).scrollTop($('#" + ampFundingItemFeaturePanel.getMarkupId() + "').position().top)");
+                    js += ".addClass('error');";
+                }
+                else
+                {
+                    logger.info("No errors");
+                    ampFundingItemFeaturePanel.getFeedbackMessages().clear();
+                    js += ".removeClass('error');";
+                }
+                target.appendJavaScript(js);
+                target.add(ampFundingItemFeaturePanel);
+                visit.dontGoDeeper();
+
+
             }
+
+
 
         });
 

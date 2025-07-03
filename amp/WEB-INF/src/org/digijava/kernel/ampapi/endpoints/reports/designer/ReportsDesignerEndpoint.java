@@ -112,6 +112,7 @@ public class ReportsDesignerEndpoint {
                         "- Columns to include\n" +
                         "- Measures (like actual disbursements, actual commitments e.t.c)\n" +
                         "- Filters to apply\n" +
+                        "- Hierachies to apply\n" +
                         "- Sorting preferences\n\n" +
                         "### Parameters\n" +
                         "- **reportRequest**: Your complete report configuration (JSON)\n" +
@@ -131,13 +132,9 @@ public class ReportsDesignerEndpoint {
                         "Content-Type: application/json\n\n" +
                         "{\n" +
                         "  \"name\": \"My New Report\",\n" +
-                        "  \"columns\": [\n" +
-                        "    { \"name\": \"Project Title\", \"columnId\": \"project_title\" },\n" +
-                        "    { \"name\": \"Funding\", \"columnId\": \"funding\" }\n" +
-                        "  ],\n" +
-                        "  \"measures\": [\n" +
-                        "    { \"name\": \"Total\", \"measureId\": \"total\" }\n" +
-                        "  ],\n" +
+                        "  \"columns\": [1,2,3],\n" +
+                        "  \"measures\": [1,2,3],\n" +
+                        "  \"hierarchies\": [1,2,3],\n" +
                         "  \"filters\": [...],\n" +
                         "  \"sorting\": [...]\n" +
                         "}\n" +
@@ -186,14 +183,9 @@ public class ReportsDesignerEndpoint {
                         "Content-Type: application/json\n\n" +
                         "{\n" +
                         "  \"name\": \"Updated Report Name\",\n" +
-                        "  \"columns\": [\n" +
-                        "    { \"name\": \"Project Title\", \"columnId\": \"project_title\" },\n" +
-                        "    { \"name\": \"Funding\", \"columnId\": \"funding\" },\n" +
-                        "    { \"name\": \"Status\", \"columnId\": \"status\" }\n" +
-                        "  ],\n" +
-                        "  \"measures\": [\n" +
-                        "    { \"name\": \"Total\", \"measureId\": \"total\" }\n" +
-                        "  ],\n" +
+                        "  \"columns\": [1,2,3],\n" +
+                        "  \"measures\": [1,2,3],\n" +
+                        "  \"hierarchies\": [1,2,3],\n" +
                         "  \"filters\": [...],\n" +
                         "  \"sorting\": [...]\n" +
                         "}\n" +

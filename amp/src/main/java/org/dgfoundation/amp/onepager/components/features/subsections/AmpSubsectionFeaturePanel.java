@@ -4,13 +4,16 @@
 */
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -21,6 +24,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
 public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
 
     private TransparentWebMarkupContainer slider;
+    private Label requiredAsterisk;
+
 
     /**
      * @param id
@@ -74,10 +79,37 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
         slider = new TransparentWebMarkupContainer("slider");
         slider.setOutputMarkupId(true);
         add(slider);
+        requiredAsterisk = getRequiredAsterisk("requiredAsterisk");
+        requiredAsterisk.add(new AttributeModifier("style", "display:none;"));
+        add(requiredAsterisk);
         if (showSummary) {
             TransparentWebMarkupContainer summary = new TransparentWebMarkupContainer("featureSummary");
             add(summary);
         }
+    }
+    public AmpComponentPanel getRequiredItemValidator(String wicketId, String fmName) {
+        AmpComponentPanel panel = new AmpComponentPanel(wicketId, fmName +" validator") {
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                boolean shouldShow = FMUtil.isFmVisible(this);
+                logger.info("Visible :"+shouldShow);
+
+                requiredAsterisk.setVisible(shouldShow);
+                requiredAsterisk.add(AttributeModifier.replace("style",
+                        "color:red; font-weight:bold; margin-left:5px;" +
+                                "display:" + (shouldShow ? "inline-block" : "none") + ";"));
+            }
+
+        };
+        panel.setOutputMarkupId(true);
+        return panel;
+    }
+    private Label getRequiredAsterisk(String wicketId) {
+        Label requiredStar = new Label(wicketId, "*");
+        requiredStar.setOutputMarkupId(true);
+        return requiredStar;
     }
 
     public TransparentWebMarkupContainer getSlider() {

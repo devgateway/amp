@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.components.features;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -51,6 +52,7 @@ import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAgreementItemPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.*;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorFundingInfoSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.*;
@@ -826,6 +828,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         }
         am.setObject(am.getObject());
         toggleSemanticValidation(notDraft, form, target);
+        checkFundingPanelsForErrors(form, target);
+
 
         form.process(button);
 
@@ -1354,6 +1358,101 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         message.addMessageReceiver(tmTo);
         AmpMessageUtil.saveOrUpdateMessage(message);
 
+    }
+    /**
+     * Checks for errors in AmpSubsectionFeatureFundingPanel components with id "commitments" or "disbursements"
+     * and adds a red border if errors are found
+     * @param form The form to check
+     * @param target The AjaxRequestTarget
+     */
+    private void checkFundingPanelsForErrors(Form<?> form, final AjaxRequestTarget target) {
+
+        form.visitChildren(AmpFundingItemFeaturePanel.class,new IVisitor<AmpFundingItemFeaturePanel, Void>() {
+
+
+            @Override
+            public void component(AmpFundingItemFeaturePanel ampFundingItemFeaturePanel, IVisit<Void> visit) {
+                Set<Boolean> errors = new HashSet<>();
+                ampFundingItemFeaturePanel.visitChildren(Component.class,new IVisitor<Component, Void>() {
+
+                    @Override
+                    public void component(Component component, IVisit<Void> visit) {
+                        String id = component.getId();
+                        if ("commitments".equals(id) || "disbursements".equals(id)) {
+                            if (component.getDefaultModel() != null) {
+
+                                if ("commitments".equals(id)) {
+
+                                    AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+                                    boolean commitmentsRequired = FMUtil.isFmVisible(findComponentById(form, "requireCommitments"));
+                                    logger.info("Commitments required: " + commitmentsRequired);
+                                    setErrorWHenItemMissing(component, funding, commitmentsRequired, Constants.COMMITMENT, errors, target);
+
+                                }
+                                if ("disbursements".equals(id)) {
+                                    AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+                                    boolean disbursementsRequired = FMUtil.isFmVisible(findComponentById(form, "requireDisbursements"));
+                                    logger.info("Disbursements required: " + disbursementsRequired);
+                                    setErrorWHenItemMissing(component, funding, disbursementsRequired, Constants.DISBURSEMENT, errors, target);
+
+                                }
+                            }
+
+
+                        }
+                    }
+                });
+                target.appendJavaScript("subSectionsSliderEnable();");
+
+                if (errors.contains(true)) {
+                    logger.info("Found errors");
+                    ampFundingItemFeaturePanel.error(TranslatorUtil.getTranslation("Error you must have at least one funding item added and field."));
+                    target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
+                    target.appendJavaScript("$(window).scrollTop($('#" + ampFundingItemFeaturePanel.getMarkupId() + "').position().top)");
+                }
+                else
+                {
+                    logger.info("No errors");
+                    ampFundingItemFeaturePanel.getFeedbackMessages().clear();
+                }
+                target.add(ampFundingItemFeaturePanel);
+                visit.dontGoDeeper();
+
+
+            }
+
+
+
+        });
+
+
+    }
+
+    private void setErrorWHenItemMissing(Component component, AmpFunding funding, boolean itemsRequired,int transactionType, Set<Boolean> errors, AjaxRequestTarget target) {
+        if ((itemsRequired)) {
+            if (funding.getFundingDetails() == null || funding.getFundingDetails().stream().noneMatch(x -> x.getTransactionType() == transactionType)) {
+                logger.info("Funding items not found");
+                errors.add(true);
+                component.add(new AttributeModifier("class", "funding-has-error"));
+                logger.info("Setting funding item error");
+            } else {
+                logger.info("Funding items found"+funding.getFundingDetails().size() );
+                logger.info("Funding items found"+funding.getFundingDetails());
+                component.add(new AttributeModifier("class", ""));
+            }
+        }
+        target.add(component);
+    }
+
+    public static Component findComponentById(MarkupContainer root, String id) {
+        return root.visitChildren(Component.class, new IVisitor<Component, Component>() {
+            @Override
+            public void component(Component component, IVisit<Component> visit) {
+                if (id.equals(component.getId())) {
+                    visit.stop(component);  // Found the component, return it
+                }
+            }
+        });
     }
 
     public void showFundingTabsErrors(Form<?> form, final AjaxRequestTarget target) {

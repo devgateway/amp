@@ -305,7 +305,6 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
         wmc.add(arrears);
 
 
-
         AmpDonorDisbOrdersSubsectionFeature disbOrders = new AmpDonorDisbOrdersSubsectionFeature(
                 "disbOrders", fundingModel, Constants.DISBURSEMENT_ORDER);
         disbOrders.setDisbursements(disbursements);

@@ -110,7 +110,7 @@ public class ReportsDesignerEndpoint {
                         "### Required information\n" +
                         "- Report name\n" +
                         "- Columns to include\n" +
-                        "- Measures (calculations like sum, count, average)\n" +
+                        "- Measures (like actual disbursements, actual commitments e.t.c)\n" +
                         "- Filters to apply\n" +
                         "- Sorting preferences\n\n" +
                         "### Parameters\n" +

@@ -566,27 +566,144 @@ Response:
 [source,json]
 ----
 {
+  "mdx": "",
+  "errorMessage": "",
   "reportMetadata": {
-    "name": "Education Projects Report",
+    "name": "AfDB - 1July2012-Present",
     "reportSpec": {
-      "columns": ["Project Title", "Donor Agency", "Status"],
-      "measures": ["Actual Commitments", "Actual Disbursements"],
-      "hierarchies": ["Project Title"],
-      "filters": {
-        "date": {
-          "start": "2020-01-01",
-          "end": "2023-12-31"
+      "reportType": 1,
+      "reportName": "AfDB - 1July2012-Present",
+      "columns": [
+        {
+          "entityName": "Government Agreement Number",
+          "columnName": "Government Agreement Number"
         },
-        "sectors": [
-          {"id": 107, "name": "Education"}
-        ]
-      }
+        {
+          "entityName": "Project Title",
+          "columnName": "Project Title"
+        },
+        {
+          "entityName": "Status",
+          "columnName": "Status"
+        },
+        {
+          "entityName": "Executing Agency",
+          "columnName": "Executing Agency"
+        },
+        {
+          "entityName": "Implementing Agency",
+          "columnName": "Implementing Agency"
+        }
+      ],
+      "hierarchies": [],
+      "invisibleHierarchies": [],
+      "measures": [
+        {
+          "entityName": "Actual Disbursements",
+          "measureName": "Actual Disbursements"
+        }
+      ],
+      "filters": {
+        "donor-agency": [
+          70
+        ],
+        "date": {
+          "start": "2012-07-01"
+        }
+      },
+      "settings": {
+        "currencyCode": "SDR",
+        "currencyFormat": {
+          "groupingUsed": true,
+          "parseIntegerOnly": false,
+          "maximumIntegerDigits": 2147483647,
+          "minimumIntegerDigits": 1,
+          "maximumFractionDigits": 0,
+          "minimumFractionDigits": 0,
+          "positivePrefix": "",
+          "positiveSuffix": "",
+          "negativePrefix": "-",
+          "negativeSuffix": "",
+          "multiplier": 1,
+          "groupingSize": 3,
+          "decimalSeparatorAlwaysShown": false,
+          "parseBigDecimal": false,
+          "roundingMode": "HALF_EVEN",
+          "decimalFormatSymbols": {
+            "zeroDigit": "0",
+            "groupingSeparator": ",",
+            "decimalSeparator": ".",
+            "perMill": "‰",
+            "percent": "%",
+            "digit": "#",
+            "patternSeparator": ";",
+            "infinity": "∞",
+            "minusSign": "-",
+            "currencySymbol": "¤",
+            "currency": "XXX",
+            "internationalCurrencySymbol": "XXX",
+            "naN": "�",
+            "monetaryDecimalSeparator": ".",
+            "exponentSeparator": "E"
+          },
+          "currency": "XXX"
+        },
+        "unitsOption": "AMOUNTS_OPTION_UNITS",
+        "calendar": {
+          "name": "Government Fiscal Calendar",
+          "description": "Malawi Government Fiscal Year",
+          "id": 1,
+          "start-month-num": 7,
+          "year-offset": 0,
+          "start-day-num": 1,
+          "base-cal": "GREG-CAL",
+          "is-fiscal": true
+        },
+        "oldCalendar": null,
+        "yearRangeFilter": {}
+      },
+      "sorters": null,
+      "groupingCriteria": "GROUPING_YEARLY",
+      "displayEmptyFundingColumns": false,
+      "displayEmptyFundingRows": false,
+      "displayEmptyFundingRowsWhenFilteringByTransactionHierarchy": true,
+      "emptyOutputForUnspecifiedData": true,
+      "alsoShowPledges": false,
+      "summaryReport": false,
+      "showOriginalCurrency": false,
+      "includeLocationChildren": true,
+      "populateReportHeadersIfEmpty": false,
+      "subreportsCollapsing": "UNKNOWNS",
+      "displayTimeRangeSubTotals": true
     },
     "settings": {
-      "currency-code": "USD",
+      "currency-code": "SDR",
       "calendar-id": "1",
-      "number-format": "#,###.##"
-    }
+      "year-range": {
+        "type": "INT_VALUE",
+        "from": "1950",
+        "to": "2150",
+        "rangeFrom": "2000",
+        "rangeTo": "2050"
+      },
+      "amount-format": {
+        "number-divider": 1,
+        "max-frac-digits": 0,
+        "decimal-symbol": ".",
+        "use-grouping": true,
+        "group-separator": ",",
+        "group-size": 3
+      }
+    },
+    "recordsPerPage": 300,
+    "connection": "",
+    "cube": "",
+    "uniqueName": "",
+    "catalog": "",
+    "schema": "",
+    "queryName": "",
+    "reportType": "SAVED",
+    "reportIdentifier": "2695"
   }
 }
 ----

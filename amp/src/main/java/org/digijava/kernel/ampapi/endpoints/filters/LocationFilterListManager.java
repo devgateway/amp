@@ -29,6 +29,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class generates the filter list (tree) object for locations
@@ -39,6 +41,7 @@ public class LocationFilterListManager implements FilterListManager {
 
     public static final String LOCATION_NAME = "Locations";
     private static final String LOCATIONS_ITEMS_NAME = "locations";
+    private static final Logger logger = LoggerFactory.getLogger(LocationFilterListManager.class);
 
     private static final Map<String, String> FILTER_COLUMN_BY_IMPL_LOC_KEY = new ImmutableMap.Builder<String, String>()
             .put(IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey(), FiltersConstants.ADMINISTRATIVE_LEVEL_0)
@@ -103,10 +106,12 @@ public class LocationFilterListManager implements FilterListManager {
         List<FilterListTreeNode> locationItems = new ArrayList<>();
 
         Map<Long, LocationSkeleton> locations = LocationSkeleton.populateSkeletonLocationsList();
+        logger.info("locations size: " + locations.size());
 
         List<Long> countriesWithChildrenIds = getCountriesWithChildrenIds(showAllCountries);
 
         for (Long countryId : countriesWithChildrenIds) {
+            logger.info("countryId: " + countryId);
             LocationSkeleton countryLocation = locations.get(countryId);
             locationItems.add(getLocations(countryLocation, firstLevelOnly));
         }
@@ -131,21 +136,26 @@ public class LocationFilterListManager implements FilterListManager {
             queryString += " AND (loc.id IN (SELECT DISTINCT parentLocation FROM "
                     + AmpCategoryValueLocations.class.getName() + "))";
         }
+        logger.info("queryString: " + queryString);
 
         Query qry = session.createQuery(queryString);
         qry.setCacheable(true);
         Collection<AmpCategoryValueLocations> countryCollection = qry.list();
+        logger.info("countryCollection size: " + countryCollection.size());
 
         AmpApplicationSettings appSettings = EndpointUtils.getAppSettings();
         final boolean showAllCountries = appSettings == null ? true : appSettings.getShowAllCountries();
+        logger.info("showAllCountries: " + showAllCountries);
 
         String defaultCountryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
+        logger.info("defaultCountryIso: " + defaultCountryIso);
 
         List<Long> countryIds = countryCollection
                 .stream()
                 .filter(country -> showAllCountries || pShowAllCountries || country.getIso().equals(defaultCountryIso))
                 .map(country -> country.getId())
                 .collect(Collectors.toList());
+        logger.info("countryIds size: " + countryIds);
 
         return countryIds;
     }

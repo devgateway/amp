@@ -73,7 +73,7 @@ The Activity API is the primary interface for working with activities in AMP. It
 Request:
 [source,http]
 ----
-GET /rest/activity/fields HTTP/1.1
+GET /rest/activity/fields?fmId=2 HTTP/1.1
 Host: amp.example.org
 Accept: application/json
 ----
@@ -83,20 +83,33 @@ Response (truncated):
 ----
 [
   {
-    "field-name": "project_title",
-    "field-label": "Project Title",
-    "field-type": "STRING",
-    "required": true,
+    "field_name": "string",
+    "field_type": "STRING",
+    "item-type": "STRING",
+    "field_label": {
+      "en": "English label",
+      "fr": "French label"
+    },
+    "required": "string",
     "importable": true,
-    "multiple-values": false
-  },
-  {
-    "field-name": "activity_status",
-    "field-label": "Status",
-    "field-type": "LIST",
-    "required": true,
-    "importable": true,
-    "multiple-values": false
+    "dependencies": [
+      "string"
+    ],
+    "id_only": true,
+    "multiple_values": true,
+    "percentage_constraint": "string",
+    "unique_constraint": "string",
+    "tree_collection": true,
+    "translatable": true,
+    "field_length": 0,
+    "common-possible-values": "string",
+    "id": true,
+    "children": [
+      null
+    ],
+    "regex-pattern": "string",
+    "percentage": true,
+    "size-limit": 0
   }
 ]
 ----
@@ -120,16 +133,16 @@ Response (truncated):
 {
   "fundings~donor_organization_id": [
     {
-      "id": 123,
-      "value": "Ministry of Finance",
-      "value-translations": {
-        "en": "Ministry of Finance",
-        "fr": "Ministère des Finances"
+      "id": 70,
+      "value": "African Development Bank",
+      "translated-value": {
+        "en": "African Development Bank"
+      },
+      "extra_info": {
+        "acronym": "AfDB",
+        "organization_group": "African Development Bank",
+        "organization_code": "ADB"
       }
-    },
-    {
-      "id": 124,
-      "value": "World Bank"
     }
   ],
   "approval_status": [
@@ -141,13 +154,37 @@ Response (truncated):
       "id": 2,
       "value": "Started Approval"
     }
+  ],
+"activity_budget": [
+    {
+      "id": 152,
+      "value": "Off Budget",
+      "translated-value": {
+        "en": "Off Budget"
+      },
+      "extra_info": {
+        "index": 0,
+        "workspace-prefix": ""
+      }
+    },
+    {
+      "id": 153,
+      "value": "On Budget",
+      "translated-value": {
+        "en": "On Budget"
+      },
+      "extra_info": {
+        "index": 1,
+        "workspace-prefix": ""
+      }
+    }
   ]
 }
 ----
 
 ===== Create a New Activity
 
-Request:
+Sample Request:
 [source,http]
 ----
 POST /rest/activity/ HTTP/1.1
@@ -157,51 +194,136 @@ Accept: application/json
 
 {
   "project_title": "New Education Project",
-  "activity_status": {"id": 1},
+  "activity_status": 64,
   "is_draft": false,
   "locations": [
     {
-      "location": {"id": 223}
+      "id": 35194,
+      "location": 149,
+      "location_percentage": 100
     }
   ],
-  "sectors": [
+  "primary_sectors": [
     {
-      "sector": {"id": 107},
-      "percentage": 100
+      "id": 65099,
+      "sector": 7610,
+      "sector_percentage": 100
     }
   ],
   "fundings": [
     {
-      "donor_organization_id": {"id": 123},
-      "funding_details": [
+      "funding_id": 50027,
+      "donor_organization_id": 70,
+      "financing_id": null,
+      "actual_start_date": null,
+      "actual_completion_date": null,
+      "reporting_date": null,
+      "conditions": null,
+      "commitments": [
         {
-          "transaction_type": {"id": 1},
-          "adjustment_type": {"id": 1},
-          "transaction_date": "2023-01-15",
-          "transaction_amount": 1000000,
-          "currency": {"id": 840}
+          "transaction_id": 457362,
+          "adjustment_type": 239,
+          "transaction_date": "2012-01-18",
+          "reporting_date": "2018-10-26T09:23:23.366+0000",
+          "updated_date": "2025-06-24T10:13:02.089+0000",
+          "transaction_amount": 3000000,
+          "currency": 42,
+          "recipient_organization": null,
+          "recipient_role": null
         }
-      ]
+      ],
+      "disbursements": [
+        {
+          "transaction_id": 457369,
+          "adjustment_type": 239,
+          "transaction_date": "2012-06-01",
+          "reporting_date": "2018-10-26T09:23:24.366+0000",
+          "updated_date": "2025-06-24T10:13:02.089+0000",
+          "transaction_amount": 616953,
+          "currency": 42,
+          "fixed_exchange_rate": null,
+          "recipient_organization": 6954,
+          "recipient_role": 2
+        },
+        {
+          "transaction_id": 457366,
+          "adjustment_type": 239,
+          "transaction_date": "2014-06-01",
+          "reporting_date": "2015-10-14T09:59:38.616+0000",
+          "updated_date": "2025-06-24T10:13:02.089+0000",
+          "transaction_amount": 905094,
+          "currency": 42,
+          "fixed_exchange_rate": null,
+          "recipient_organization": 6954,
+          "recipient_role": 2
+        }
+      ],
+      "mtef_projections": [],
+      "type_of_assistance": 80,
+      "financing_instrument": 87,
+      "group_versioned_funding": 1390200468523,
+      "source_role": 1
+    }
+  ],
+  "implementation_level": 70,
+  "implementation_location": 76,
+  "activity_budget": 153,
+  "national_plan_objective": [
+    {
+      "id": 13686,
+      "program_percentage": 100,
+      "program": 21,
+      "indirect_programs": []
+  }
+],
+  "humanitarian_aid": false,
+"implementing_agency": [
+    {
+      "id": 94762,
+      "organization": 6954
+    }
+  ],
+"donor_organization": [
+    {
+      "id": 94763,
+      "organization": 70
     }
   ]
 }
 ----
 
-Response:
+Sample Response:
 [source,json]
 ----
 {
-  "id": 12345,
+  "internal_id": 23709,
+  "amp_id": "872263723709",
   "project_title": "New Education Project",
-  "amp_id": "87654321",
+  "iati_identifier": null,
+  "creation_date": "2025-07-07T08:12:42.108+0000",
+  "update_date": "2025-07-07T08:12:42.108+0000",
+  "activity_group": {
+    "version": 1
+  },
   "edit": true,
-  "view": true
+  "view": true,
+  "warnings": {
+    "0105": [
+      {
+        "Invalid field": [
+          "fundings~commitments~recipient_role",
+          "fundings~commitments~recipient_organization",
+          "fundings~disbursements~fixed_exchange_rate"
+        ]
+      }
+    ]
+  }
 }
 ----
 
-===== Get Activity Funding Preview
+===== Get Activity Funding Preview for an activity with amounts converted to a specified currency
 
-Request:
+Sample Request:
 [source,http]
 ----
 GET /rest/activity/12345/preview/fundings?currency-id=840 HTTP/1.1
@@ -209,43 +331,69 @@ Host: amp.example.org
 Accept: application/json
 ----
 
-Response:
+Sample Response:
 [source,json]
 ----
 {
-  "currency": "USD",
-  "funding-totals": {
-    "actual-commitments": 1000000,
-    "actual-disbursements": 250000,
-    "planned-commitments": 0,
-    "planned-disbursements": 750000
+  "currency": "SDR",
+  "funding_information": {
+    "fundings": [
+      {
+        "donor_organization_id": 70,
+        "funding_id": 50025,
+        "funding_details": {
+          "commitments": [
+            {
+              "transaction_id": 457358,
+              "transaction_amount": 3000000,
+              "transaction_date": "2012-01-18T00:00:00.000+0000",
+              "reporting_date": "2018-10-26T09:23:23.366+0000",
+              "adjustment_type": 239,
+              "transaction_type": 0
+            }
+          ],
+          "disbursements": [
+            {
+              "transaction_id": 457360,
+              "transaction_amount": 905094,
+              "transaction_date": "2014-06-01T00:00:00.000+0000",
+              "reporting_date": "2015-10-14T09:59:38.616+0000",
+              "adjustment_type": 239,
+              "transaction_type": 1
+            },
+            {
+              "transaction_id": 457359,
+              "transaction_amount": 616953,
+              "transaction_date": "2012-06-01T00:00:00.000+0000",
+              "reporting_date": "2018-10-26T09:23:24.366+0000",
+              "adjustment_type": 239,
+              "transaction_type": 1
+            }
+          ]
+        },
+        "undisbursed_balance": 1477953
+      }
+    ],
+    "totals": [
+      {
+        "amount": 3000000,
+        "transaction_type": "commitments",
+        "adjustment_type": 239
+      },
+      {
+        "amount": 1522047,
+        "transaction_type": "disbursements",
+        "adjustment_type": 239
+      }
+    ],
+    "undisbursed_balance": 1477953,
+    "delivery_rate": 51
   },
-  "funding-details": [
-    {
-      "transaction-type": "Actual Commitments",
-      "total-amount": 1000000,
-      "adjustments": [
-        {
-          "adjustment-type": "Actual",
-          "amount": 1000000,
-          "donor-organization": "Ministry of Finance",
-          "transaction-date": "2023-01-15"
-        }
-      ]
-    },
-    {
-      "transaction-type": "Actual Disbursements",
-      "total-amount": 250000,
-      "adjustments": [
-        {
-          "adjustment-type": "Actual",
-          "amount": 250000,
-          "donor-organization": "Ministry of Finance",
-          "transaction-date": "2023-03-20"
-        }
-      ]
-    }
-  ]
+  "ppc_amount": null,
+  "rpc_amount": null,
+  "regional_commitments": [],
+  "regional_disbursements": [],
+  "regional_expenditures": []
 }
 ----
 
@@ -264,7 +412,7 @@ The AMP API allows you to retrieve various configuration settings and system inf
 
 ==== Sample Requests
 
-===== Get AMP Global Settings
+===== Get AMP General Settings
 
 Request:
 [source,http]
@@ -274,49 +422,188 @@ Host: amp.example.org
 Accept: application/json
 ----
 
-Response:
+Sample Response:
 [source,json]
 ----
 {
-  "currency-code": "USD",
-  "default-date-format": "dd/MM/yyyy",
-  "number-format": {
-    "decimal-separator": ".",
-    "grouping-separator": ",",
-    "number-grouping-size": 3
-  },
+  "use-icons-for-sectors-in-project-list": false,
+  "project-sites": true,
+  "max-locations-icons": 0,
+  "number-format": "#,###",
+  "gs-number-format": "###,###,###,###",
+  "number-group-separator": ",",
+  "number-decimal-separator": ".",
+  "number-divider": 1,
+  "amount-in-thousands": 0,
+  "language": "en",
   "default-language": "en",
-  "available-languages": ["en", "fr", "es", "pt"],
-  "calendar-type": "gregorian",
-  "fiscal-calendar": {
-    "start-month": 1,
-    "start-day": 1
-  }
+  "rtl-direction": false,
+  "multilingual": false,
+  "default-date-format": "dd/MM/yyyy",
+  "hide-editable-export-formats-public-view": false,
+  "hide-contacts-public-view": false,
+  "download-map-selector": true,
+  "gap-analysis-map": false,
+  "has-ssc-workspaces": false,
+  "public-version-history": true,
+  "public-change-summary": false,
+  "effective-currency": {
+    "id": 21,
+    "code": "USD"
+  },
+  "reorder-funding-item": 4,
+  "team-id": null,
+  "team-lead": null,
+  "team-validator": null,
+  "show-activity-workspaces": null,
+  "cross_team_validation": null,
+  "workspace-type": null,
+  "workspace-prefix": null,
+  "workspace-default-records-per-page": null,
+  "ndd-mapping-indirect-level": 0,
+  "ndd-mapping-program-level": 0,
+  "calendar-id": 1,
+  "calendar-is-fiscal": true,
+  "dashboard-default-max-date": "2021-06-30",
+  "dashboard-default-max-year-range": "2020",
+  "dashboard-default-min-date": "2012-06-30",
+  "dashboard-default-min-year-range": "2012",
+  "gis-default-max-date": "2021-06-30",
+  "gis-default-max-year-range": "2020",
+  "gis-default-min-date": "2000-06-30",
+  "gis-default-min-year-range": "2000",
+  "report-default-max-date": null,
+  "report-default-min-date": null,
+  "report-default-max-year-range": null,
+  "report-default-min-year-range": null
 }
 ----
 
-===== Get AMP Version Information
+===== Get All Amp Global Settings
 
 Request:
 [source,http]
 ----
-GET /rest/amp/version HTTP/1.1
+GET /rest/amp/global-settings HTTP/1.1
 Host: amp.example.org
 Accept: application/json
 ----
 
-Response:
+Sample Response:
 [source,json]
 ----
 {
-  "version": "3.5.0",
-  "build-date": "2023-06-15T14:30:45Z",
-  "branch": "main",
-  "commit-id": "a1b2c3d4e5f6",
-  "compatibility": {
-    "min-client-version": "3.4.0",
-    "recommended-client-version": "3.5.0"
-  }
+  "Base Currency": "USD",
+  "Default Date Format": "dd/MM/yyyy",
+  "NDD Mapping Indirect Level": "0",
+  "Use new activity preview": "false",
+  "ECS Enabled": "true",
+  "Machine Translation Enabled": "false",
+  "Strong password": "false",
+  "User registration by email": "true",
+  "Year Range Start": "2000",
+  "Daily Currency Rates Update Enabled": "Off",
+  "Automatic Audit Logger Cleanup": "-1",
+  "Change activity status once the Actual End Date has passed": "false",
+  "Show all countries": "false",
+  "Show annual MTEF entry date format": "true",
+  "Number of Years in Range": "50",
+  "Mixed Implementation Location": "true",
+  "Allow percentages for all countries": "false",
+  "Amounts in Thousands": "0",
+  "Site ID for tracking": "9",
+  "Current Fiscal Year": "2009",
+  "Default Decimal Separator": ".",
+  "Activity Form - One Pager": "false",
+  "AMP Offline Enabled": "true",
+  "Default Country": "mw",
+  "Reorder funding items": "4",
+  "Currency exchange rate webservice username": "x",
+  "AMP Registry URL": "https://amp-registry.stg.ampsite.net/",
+  "Change Range Default Start Value": "-1",
+  "Currency exchange rate webservice implementation": "org.digijava.module.currencyrates.FxtopWSCurrencyClientImpl",
+  "Default Grouping Separator": ",",
+  "Limit upload of file types": "false",
+  "Seconds to Auto-Save Activity": "0",
+  "Days to notify activity submitted for validation": "3",
+  "Measure A for Funding gap notification": "Actual Disbursements",
+  "Decimals in Location percentage": "0",
+  "Number of days before automatic validation": "7",
+  "Projects Validation": "On",
+  "Show funding group id": "true",
+  "Enabled Split by Mode of Payment": "false",
+  "Public View Budget Filter": "All",
+  "Report wizard visibility source": "2",
+  "Show Most Recent Activities on Top": "true",
+  "Workspace prefix for SSC Workspaces": "SSC_",
+  "Daily Currency Rates Update Hour": "07:00 PM",
+  "Project Title Hierarchy": "true",
+  "Computed Teams Add Activity Default Off Budget": "false",
+  "Filter reports by month": "On",
+  "Country Latitude": "-13.30",
+  "Public Portal": "false",
+  "Machine Translation Monthly Max Characters": "0",
+  "Support Email": "support-malawi@developmentgateway.org",
+  "Do you want to allow Activity overwriting ?": "false",
+  "Default Calendar": "1",
+  "Unlinked commitments and disburesements in pledges reports": "false",
+  "Organisation type for Beneficiary Agency": "-1",
+  "AMP Server ID": "mw-2025-07-02 18:34:18",
+  "Show empty values as zero in Reports export to XLS": "false",
+  "Dashboards Default Max Year Filter Range": "2020",
+  "Rich Excel Export Enabled by Default": "false",
+  "Change Range Default End Value": "-1",
+  "Public View": "On",
+  "Visibility Template": "1",
+  "Responsible Organization Default Organization Group": "-1",
+  "Alert if sum of expenditures is bigger than sum of disbursments": "true",
+  "Default Exchange Rate Separator": ",",
+  "Remove empty rows from Reports": "true",
+  "Dashboards Default Min Year Filter Range": "2012",
+  "Show workspace filter": "false",
+  "Default Number Format": "###,###,###,###",
+  "Link Mode of Payment to Funding Status": "false",
+  "Activity Versions Queue Size": "5",
+  "Currency exchange rate webservice password": "x",
+  "Resource list sort column": "date_DESC",
+  "Daily Currency Rates Update Timeout": "10",
+  "Activity Title Similarity Sensitivity": "6",
+  "Closed activity status": "66",
+  "Activate Auto Login": "false",
+  "NPD Default Program": "2",
+  "Display time range sub totals": "false",
+  "Enable AMP usage tracking": "true",
+  "Public Portal URL": "",
+  "Show icons for Project Sites for locations up to": "0",
+  "Activity version life time in days": "100",
+  "Multilingual": "false",
+  "Enabled Split by Type Of Assistance": "false",
+  "Default Component Type": "1",
+  "Components Sort Order": "default",
+  "GIS Default Min Year Filter Range": "2000",
+  "Import processor endpoint URL": "http://localhost/integration/import",
+  "NDD Mapping Program Level": "0",
+  "Funding gap notification threshold": "1",
+  "Show Component Funding by Year": "Off",
+  "Country Longitude": "34.00",
+  "Alert if sum of disbursements is bigger than sum of commitments": "false",
+  "Make Activity dates read only": "false",
+  "Fuzzy search distance": "0.5",
+  "Geo coder URL": "http://localhost:5000/",
+  "Max Inactive Session Interval": "900",
+  "Make the funding item list expandable": "false",
+  "Measure B for Funding gap notification": "Planned Disbursements",
+  "Maximum file size (MB)": "5",
+  "Tracker URL": "http://stats.ampsite.net/",
+  "GIS Default Max Year Filter Range": "2020",
+  "Reminder email period in days": "100",
+  "Computed management workspaces": "false",
+  "Allow same organization in different roles": "true",
+  "AMP Server Name": "defaultName",
+  "Totals include planned": "Off",
+  "Activity Form - Funding Section - Tab View": "true",
+  "Recreate the views on the next server restart": "false",
+  "New fields Visibility": "off"
 }
 ----
 
@@ -362,12 +649,18 @@ Response (truncated):
 ----
 [
   {
-    "field-name": "name",
-    "field-label": "Name",
-    "field-type": "STRING",
+    "field_name": "name",
+    "field_label": {
+      "default": {
+        "en": "Name",
+        "es": "Name",
+        "fr": "Nom",
+        "sw": "Name"
+      }
+    },
+    "field_type": "STRING",
     "required": true,
-    "importable": true,
-    "multiple-values": false
+    "importable": true
   },
   {
     "field-name": "title",
@@ -415,44 +708,42 @@ Response (truncated):
 [source,json]
 ----
 {
-  "title": [
-    {
-      "id": 1,
-      "value": "Mr.",
-      "value-translations": {
-        "en": "Mr.",
-        "fr": "M."
-      }
-    },
-    {
-      "id": 2,
-      "value": "Ms.",
-      "value-translations": {
-        "en": "Ms.",
-        "fr": "Mme."
-      }
-    }
-  ],
-  "organisation_contacts~organisation": [
-    {
-      "id": 123,
-      "value": "Ministry of Finance"
-    },
-    {
-      "id": 124,
-      "value": "World Bank"
-    }
-  ],
   "phone~type": [
     {
-      "id": 1,
-      "value": "Mobile"
+      "id": 149,
+      "value": "Home",
+      "translated-value": {
+        "en": "Home"
+      },
+      "extra_info": {
+        "index": 1,
+        "workspace-prefix": ""
+      }
     },
     {
-      "id": 2,
-      "value": "Office"
+      "id": 150,
+      "value": "Cell",
+      "translated-value": {
+        "en": "Cell"
+      },
+      "extra_info": {
+        "index": 0,
+        "workspace-prefix": ""
+      }
+    },
+    {
+      "id": 151,
+      "value": "Work",
+      "translated-value": {
+        "en": "Work"
+      },
+      "extra_info": {
+        "index": 2,
+        "workspace-prefix": ""
+      }
     }
-  ]
+  ],
+  "title": []
 }
 ----
 
@@ -467,20 +758,11 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "name": "John Smith",
-  "title": {"id": 1},
-  "email": "john.smith@example.org",
-  "organisation_contacts": [
-    {
-      "organisation": {"id": 123}
-    }
-  ],
-  "phone": [
-    {
-      "type": {"id": 1},
-      "number": "+1234567890"
-    }
-  ]
+  "id": 15,
+  "name": "John",
+  "last-name": "Smith",
+  "email": "john.smith@amp.org",
+  "...": {}
 }
 ----
 
@@ -803,14 +1085,66 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "page": 1,
-  "recordsPerPage": 10,
+  "page": 0,
+  "recordsPerPage": 0,
+  "sidx": "Project Title desc, Donor Agency",
+  "sord": "asc",
+  "raw_values": [
+    "string"
+  ],
+  "MD5": "string",
+  "custom": true,
+  "name": "string",
+  "reportType": "D",
+  "projectType": [
+    "string"
+  ],
+  "add_columns": [
+    "string"
+  ],
+  "add_hierarchies": [
+    "string"
+  ],
+  "add_measures": [
+    "string"
+  ],
+  "settings": {
+    "calendar-id": "4",
+    "currency-code": "USD"
+  },
+  "filters": {
+    "date": {
+      "start": "2016-07-01",
+      "end": "2018-07-01"
+    },
+    "status": [
+      2172,
+      2186,
+      2123
+    ]
+  },
   "sorting": [
     {
-      "columns": ["Project Title"],
+      "id": "string",
+      "columns": [
+        "string"
+      ],
       "asc": true
     }
-  ]
+  ],
+  "show_empty_rows": true,
+  "show_empty_cols": true,
+  "forceHeaders": true,
+  "groupingOption": "A",
+  "summary": true,
+  "show_original_currency": true,
+  "columns_with_ids": [
+    "string"
+  ],
+  "info": [
+    "string"
+  ],
+  "include-location-children": true
 }
 ----
 
@@ -818,29 +1152,120 @@ Response:
 [source,json]
 ----
 {
-  "page": 1,
-  "recordsPerPage": 10,
-  "totalRecords": 45,
-  "headers": [
-    {"name": "Project Title", "originalColumnName": "Project Title", "hierarchical": true},
-    {"name": "Donor Agency", "originalColumnName": "Donor Agency"},
-    {"name": "Status", "originalColumnName": "Status"},
-    {"name": "Actual Commitments", "originalColumnName": "Actual Commitments", "measure": true}
-  ],
-  "values": [
-    [
-      {"v": "Education Support Program", "h": true, "l": 1},
-      {"v": "World Bank"},
-      {"v": "Ongoing"},
-      {"v": 11500000, "m": true}
+  "page": {
+    "pageArea": {
+      "contents": {
+        "cell": [
+          {
+            "columnName": "string",
+            "value": "string"
+          }
+        ]
+      },
+      "children": {
+        "reportArea": [
+          null
+        ]
+      }
+    },
+    "recordsPerPage": 0,
+    "currentPageNumber": 0,
+    "totalPageCount": 0,
+    "totalRecords": 0
+  },
+  "settings": {
+    "currency-code": "string",
+    "calendar-id": "string",
+    "year-range": {
+      "type": "INT_VALUE",
+      "from": "string",
+      "to": "string",
+      "rangeFrom": "string",
+      "rangeTo": "string"
+    },
+    "amount-format": {
+      "number-divider": 0,
+      "max-frac-digits": 0,
+      "decimal-symbol": "string",
+      "use-grouping": true,
+      "group-separator": "string",
+      "group-size": 0
+    }
+  },
+  "reportWarnings": {
+    "additionalProp1": [
+      {
+        "entityId": 0,
+        "message": "string"
+      }
     ],
-    [
-      {"v": "Health System Strengthening", "h": true, "l": 1},
-      {"v": "USAID"},
-      {"v": "Ongoing"},
-      {"v": 8750000, "m": true}
+    "additionalProp2": [
+      {
+        "entityId": 0,
+        "message": "string"
+      }
+    ],
+    "additionalProp3": [
+      {
+        "entityId": 0,
+        "message": "string"
+      }
     ]
-    // Additional rows would appear here
-  ]
+  },
+  "headers": [
+    {
+      "columnName": "string",
+      "originalColumnName": "string",
+      "description": "string",
+      "emptyCell": {
+        "displayedValue": "string"
+      },
+      "hierarchicalName": "string",
+      "formatType": "string"
+    }
+  ],
+  "rowTotals": true,
+  "isEmpty": true,
+  "generatedHeaders": [
+    [
+      {
+        "startRow": 0,
+        "rowSpan": 0,
+        "totalRowSpan": 0,
+        "startColumn": 0,
+        "colSpan": 0,
+        "name": "string",
+        "originalName": "string",
+        "fullOriginalName": "string",
+        "description": "string"
+      }
+    ]
+  ],
+  "warnings": {
+    "additionalProp1": [
+      {
+        "entityId": 0,
+        "message": "string"
+      }
+    ],
+    "additionalProp2": [
+      {
+        "entityId": 0,
+        "message": "string"
+      }
+    ],
+    "additionalProp3": [
+      {
+        "entityId": 0,
+        "message": "string"
+      }
+    ]
+  },
+  "stats": {
+    "additionalProp1": {},
+    "additionalProp2": {},
+    "additionalProp3": {}
+  },
+  "id": 0
 }
 ----

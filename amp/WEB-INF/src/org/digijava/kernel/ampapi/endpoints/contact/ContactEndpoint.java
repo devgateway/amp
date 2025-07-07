@@ -165,7 +165,7 @@ public class ContactEndpoint {
         return ContactUtil.getContacts(ids);
     }
 
-    @PUT
+    @POST
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "createContact", ui = false)
     @ApiOperation("Create new contact")

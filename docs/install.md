@@ -73,14 +73,14 @@ host all          all          127.0.0.1/32         trust
     ```
 
     - Check the username and pass for creating the database backup on the corresponding country installation page, if this doesn't work.
-  
+
   - Execute the script: `~/bin/amp_pg_backup.sh`
   - (optional, but highly recommended) Validate the database backup (download it to your local machine, unpack it, and restore to a new database). If it managed to restore properly, which can be checked with a ```select count(*) from amp_activity_version``` returning some number, the backup is OK.
 
 - Clone the repository from Github
-  
+
 - Build the application with Maven
-  
+
     ```bash
     mvn clean package -Dapidocs=true -DserverName=local -Djdbc.db=<amp_dbname_version> -Djdbc.user=<db_user> -Djdbc.password=<db_password> -Djdbc.port=5432
     ```
@@ -114,12 +114,32 @@ host all          all          127.0.0.1/32         trust
     - Fill in the latitude and longitude for the country
     - Save the settings
 
+
+- Open a setenv.sh file in the Tomcat bin directory:
+
+    ```bash
+    nano /var/lib/tomcat/bin/setenv.sh
+    ```
+
+- Add the following content to the setenv.sh file:
+
+    ```bash
+    #!/bin/bash
+    export JAVA_OPTS="-Xmx2048m -Djava.awt.headless=true -Dorg.apache.jasper.compiler.Parser.STRICT_WHITESPACE=false -Dorg.apache.jasper.compiler.Parser.STRICT_QUOTE_ESCAPING=false -Dsun.net.client.defaultConnectTimeout=30000 -Dsun.net.client.defaultReadTimeout=30000"
+
+
+    export CATALINA_OPTS="-Xmx2048m -Djava.awt.headless=true -Dorg.apache.jasper.compiler.Parser.STRICT_WHITESPACE=false -Dorg.apache.jasper.compiler.Parser.STRICT_QUOTE_ESCAPING=false -DAMP_DEVELOPMENT=true -Djavamelody.datasources=java:comp/env/ampDS,java:comp/env/jcrDS -Djersey.client.connectTimeout=60000 -Djersey.client.readTimeout=600000 -server"
+    ```
+  Save and close the file.
+
+
+
 - Start the application server (Tomcat)
 - Verify that the application is running:
   - Go to the external address this server is visible at (check the country installation page for that)
   - Attempt to use AMP a bit: log in, see that tabs are loading, run a report, create an activity, add a document, open GIS, open dashboards.
   - Check Tomcat logs (usually under the tomcat directory / logs): check whether there any patches that failed to apply, or any exceptions having been thrown.
-  
+
 #### **Here are the steps to install the application on a Windows server**
 
 - Create a database backup (go to pgadmin 4, right-click on your database->backup)
@@ -133,7 +153,7 @@ mvn clean generate-resources process-resources -Dapidocs=true -DserverName=local
 ```
 
 - Open a console and create a symlink on c:\amp\tomcat\webapps to the AMP version your upgrading to:
-  
+
     ```bash
     mklink /J <path_to_tomcat>\webapps\ROOT <path_to_AMP>
     ```
@@ -148,6 +168,14 @@ Make sure you have file extensions being shown ("hide file extensions for known 
     - Login as Administrator (the country installation page can help you with getting the credentials, or the AMP online URLs page), go to Global Settings
     - Fill in the latitude and longitude for the country
     - Save the settings
+
+- Create a setenv.bat file in the Tomcat bin directory with the following content:
+
+    ```batch
+    set JAVA_OPTS=-Xmx2048m -Djava.awt.headless=true -Dorg.apache.jasper.compiler.Parser.STRICT_WHITESPACE=false -Dorg.apache.jasper.compiler.Parser.STRICT_QUOTE_ESCAPING=false -Dsun.net.client.defaultConnectTimeout=30000 -Dsun.net.client.defaultReadTimeout=30000
+
+    set CATALINA_OPTS=-Xmx2048m -Djava.awt.headless=true -Dorg.apache.jasper.compiler.Parser.STRICT_WHITESPACE=false -Dorg.apache.jasper.compiler.Parser.STRICT_QUOTE_ESCAPING=false -DAMP_DEVELOPMENT=true -Djavamelody.datasources=java:comp/env/ampDS,java:comp/env/jcrDS -Djersey.client.connectTimeout=60000 -Djersey.client.readTimeout=600000 -server
+    ```
 
 - Start the tomcat service (from the Administration tools -> Services app)
 - Verify that the application is running:
@@ -195,13 +223,13 @@ The Apache 2.4 webserver is configured to redirect any plain text (HTTP) request
 
   - Restart Tomcat
   - Reconfigure Apache by enabling proxy_ajp module. Usually can be done via a symlink (may depend on apache version):
-  
+
     ```bash
       ln -s /etc/apache2/mods-available/proxy_ajp.load /etc/apache2/mods-enabled/proxy_ajp.load
       ```
 
   - Configure VirtualHost and replace http proxy with ajp proxy:
-  
+
     ```bash
       # before
      ProxyPass / http://localhost:8080/
@@ -273,14 +301,14 @@ The Apache 2.4 webserver is configured to redirect any plain text (HTTP) request
 
   - Certbot during setup copies the config of VirtualHost *:80 to VirtualHost*:443. Thus we can simplify http config by removing everything except the redirect rule:
 
-    ```xml
+    ```
       <VirtualHost *:80>
         RewriteEngine on
         RewriteCond %{SERVER_NAME} =amp.domain1.org [OR]
         RewriteCond %{SERVER_NAME} =amp.domain2.net
         RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
       </VirtualHost>
-      ```
+    ```
 
 **These are the steps to setup Apache 2.4 on a Windows Server:**
 
@@ -298,13 +326,13 @@ The Apache 2.4 webserver is configured to redirect any plain text (HTTP) request
 
   - Restart Tomcat
   - Reconfigure Apache by enabling proxy_ajp module. Usually can be done via a symlink (may depend on apache version):
-  
+
     ```powershell
       mklink /d "C:\Program Files\Apache Software Foundation\Apache2.4\modules\proxy_ajp.load" "C:\Program Files\Apache Software Foundation\Apache2.4\modules\proxy_ajp.load"
       ```
 
   - Configure VirtualHost and replace http proxy with ajp proxy:
-  
+
     ```bash
       # before
      ProxyPass / http://localhost:8080/
@@ -325,19 +353,19 @@ The Apache 2.4 webserver is configured to redirect any plain text (HTTP) request
   - To start a shell for Certbot, select the Start menu, enter cmd (to run CMD.EXE) or powershell (to run PowerShell), and click on `Run as administrator` in the contextual menu that shows up above.
   - Run Certbot as a shell command.
   - To run a command on Certbot, enter the name certbot in the shell, followed by the command and its parameters. For instance, to display the inline help, run:
-  
+
     ```powershell
     C:\WINDOWS\system32> certbot --help
     ```
 
   - To create a certificate, run:
-  
+
     ```powershell
     C:\WINDOWS\system32> certbot certonly --webroot -w "C:\inetpub\wwwroot" -d <domain>
     ```
 
   - Test the renewal process by running:
-  
+
     ```powershell
     C:\WINDOWS\system32> certbot renew --dry-run
     ```

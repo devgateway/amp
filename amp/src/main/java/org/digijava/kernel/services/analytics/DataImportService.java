@@ -74,9 +74,8 @@ public class DataImportService {
             DatabaseViewFetcher.fetchView(connection, TLSUtils.getEffectiveLangCode(), viewName, null,
                     columns, rs -> {
                 try {
-                    while (rs.next()) {
-                        records.add(resultSetRowToMap(rs));
-                    }
+                    // No need to call rs.next() here as it's already called in RsInfo.forEach
+                    records.add(resultSetRowToMap(rs));
                 } catch (SQLException e) {
                     throw new RuntimeException("Error processing result set for view: " + viewName, e);
                 }

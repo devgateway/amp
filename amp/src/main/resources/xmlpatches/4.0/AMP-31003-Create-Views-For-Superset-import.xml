@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-31003</jira>
+    <author>bmokandu</author>
+    <description>Add sample views for superset data import</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+				-- Create a view for primary sector classification
+CREATE OR REPLACE VIEW primary_sector_classification AS
+SELECT classification_id
+FROM amp_classification_config
+WHERE name = 'Primary';
+
+-- View 1: Activity Count by Status
+CREATE OR REPLACE VIEW view_activity_count_by_status AS
+SELECT
+    approval_status AS "Activity Status",
+    COUNT(*) AS "Number of Activities"
+FROM
+    amp_activity_version
+GROUP BY
+    approval_status
+ORDER BY
+    COUNT(*) DESC;
+
+-- View 2: Total Funding by Year
+CREATE OR REPLACE VIEW view_total_funding_by_year AS
+SELECT
+    EXTRACT(YEAR FROM fd.transaction_date) AS "Year",
+    SUM(fd.transaction_amount) AS "Total Funding Amount"
+FROM
+    amp_funding f
+        JOIN
+    amp_funding_detail fd ON f.amp_funding_id = fd.amp_funding_id
+GROUP BY
+    EXTRACT(YEAR FROM fd.transaction_date)
+ORDER BY
+    "Year";
+
+-- View 3: Funding by Donor Organization
+CREATE OR REPLACE VIEW view_funding_by_donor_organization AS
+SELECT
+    o.name AS "Donor Organization",
+    SUM(fd.transaction_amount) AS "Total Funding Amount"
+FROM
+    amp_funding f
+        JOIN
+    amp_funding_detail fd ON f.amp_funding_id = fd.amp_funding_id
+        JOIN
+    amp_organisation o ON f.amp_donor_org_id = o.amp_org_id
+GROUP BY
+    o.name
+ORDER BY
+    "Total Funding Amount" DESC;
+
+-- View 4: Funding by Primary Sector
+CREATE OR REPLACE VIEW view_funding_by_primary_sector AS
+SELECT
+    s.name AS "Primary Sector",
+    SUM(fd.transaction_amount * (acs.sector_percentage / 100)) AS "Total Funding Amount"
+FROM
+    amp_activity_version av
+        JOIN
+    amp_activity_sector acs ON av.amp_activity_id = acs.amp_activity_id
+        JOIN
+    amp_sector s ON acs.amp_sector_id = s.amp_sector_id
+        JOIN
+    amp_funding f ON av.amp_activity_id = f.amp_activity_id
+        JOIN
+    amp_funding_detail fd ON f.amp_funding_id = fd.amp_funding_id
+        JOIN
+    primary_sector_classification psc ON acs.classification_config_id = psc.classification_id
+GROUP BY
+    s.name
+ORDER BY
+    "Total Funding Amount" DESC;
+
+-- View 5: Funding by Program
+CREATE OR REPLACE VIEW view_funding_by_program AS
+SELECT
+    t.name AS "Program",
+    SUM(fd.transaction_amount * (ap.program_percentage / 100)) AS "Total Funding Amount"
+FROM
+    amp_activity_version av
+        JOIN
+    amp_activity_program ap ON av.amp_activity_id = ap.amp_activity_id
+        JOIN
+    amp_theme t ON ap.amp_program_id = t.amp_theme_id
+        JOIN
+    amp_funding f ON av.amp_activity_id = f.amp_activity_id
+        JOIN
+    amp_funding_detail fd ON f.amp_funding_id = fd.amp_funding_id
+GROUP BY
+    t.name
+ORDER BY
+    "Total Funding Amount" DESC;
+
+-- View 6: Activity Count by Program
+CREATE OR REPLACE VIEW view_activity_count_by_program AS
+SELECT
+    t.name AS "Program",
+    COUNT(DISTINCT av.amp_activity_id) AS "Number of Activities"
+FROM
+    amp_activity_version av
+        JOIN
+    amp_activity_program ap ON av.amp_activity_id = ap.amp_activity_id
+        JOIN
+    amp_theme t ON ap.amp_program_id = t.amp_theme_id
+GROUP BY
+    t.name
+ORDER BY
+    "Number of Activities" DESC;
+
+-- View 7: Funding by Location
+CREATE OR REPLACE VIEW view_funding_by_location AS
+SELECT
+    l.name AS "Location",
+    SUM(fd.transaction_amount * (al.location_percentage / 100)) AS "Total Funding Amount"
+FROM
+    amp_activity_version av
+        JOIN
+    amp_activity_location al ON av.amp_activity_id = al.amp_activity_id
+        JOIN
+    amp_location l ON al.location_id = l.amp_location_id
+        JOIN
+    amp_funding f ON av.amp_activity_id = f.amp_activity_id
+        JOIN
+    amp_funding_detail fd ON f.amp_funding_id = fd.amp_funding_id
+GROUP BY
+    l.name
+ORDER BY
+    "Total Funding Amount" DESC;
+
+-- View 8: Funding Trends by Sector Over Time
+CREATE OR REPLACE VIEW view_funding_trends_by_sector_over_time AS
+SELECT
+    EXTRACT(YEAR FROM fd.transaction_date) AS "Year",
+    s.name AS "Sector",
+    SUM(fd.transaction_amount * (acs.sector_percentage / 100)) AS "Funding Amount"
+FROM
+    amp_activity_version av
+        JOIN
+    amp_activity_sector acs ON av.amp_activity_id = acs.amp_activity_id
+        JOIN
+    amp_sector s ON acs.amp_sector_id = s.amp_sector_id
+        JOIN
+    amp_funding f ON av.amp_activity_id = f.amp_activity_id
+        JOIN
+    amp_funding_detail fd ON f.amp_funding_id = fd.amp_funding_id
+        JOIN
+    primary_sector_classification psc ON acs.classification_config_id = psc.classification_id
+GROUP BY
+    "Year", "Sector"
+ORDER BY
+    "Year", "Funding Amount" DESC;
+
+-- View 9: Funding by Donor and Sector
+CREATE OR REPLACE VIEW view_funding_by_donor_and_sector AS
+SELECT
+    o.name AS "Donor Organization",
+    s.name AS "Sector",
+    SUM(fd.transaction_amount * (acs.sector_percentage / 100)) AS "Funding Amount"
+FROM
+    amp_activity_version av
+        JOIN
+    amp_activity_sector acs ON av.amp_activity_id = acs.amp_activity_id
+        JOIN
+    amp_sector s ON acs.amp_sector_id = s.amp_sector_id
+        JOIN
+    amp_funding f ON av.amp_activity_id = f.amp_activity_id
+        JOIN
+    amp_funding_detail fd ON f.amp_funding_id = fd.amp_funding_id
+        JOIN
+    amp_organisation o ON f.amp_donor_org_id = o.amp_org_id
+        JOIN
+    primary_sector_classification psc ON acs.classification_config_id = psc.classification_id
+GROUP BY
+    "Donor Organization", "Sector"
+ORDER BY
+    "Donor Organization", "Funding Amount" DESC;
+
+-- View 10: Activity Implementation Progress
+CREATE OR REPLACE VIEW view_activity_implementation_progress AS
+SELECT
+    av.name AS "Activity Title",
+    av.actual_completion_date,
+    av.actual_start_date,
+    av.proposed_completion_date,
+    av.proposed_start_date,
+    CASE
+        WHEN av.actual_completion_date IS NOT NULL THEN 100
+        WHEN av.actual_start_date IS NOT NULL AND av.proposed_completion_date IS NOT NULL THEN
+            EXTRACT(EPOCH FROM (CURRENT_DATE - av.actual_start_date)) /
+            EXTRACT(EPOCH FROM (av.proposed_completion_date - av.actual_start_date)) * 100
+        ELSE 0
+        END AS "Implementation Progress (%)"
+FROM
+    amp_activity_version av
+WHERE
+    av.proposed_completion_date IS NOT NULL
+ORDER BY
+    "Implementation Progress (%)" DESC;
+
+-- View 11: Funding Gap Analysis
+CREATE OR REPLACE VIEW view_funding_gap_analysis AS
+SELECT
+    av.name AS "Activity Title",
+    SUM(CASE WHEN fd.transaction_type = 0 THEN fd.transaction_amount ELSE 0 END) AS "Commitments",
+    SUM(CASE WHEN fd.transaction_type = 1 THEN fd.transaction_amount ELSE 0 END) AS "Disbursements",
+    SUM(CASE WHEN fd.transaction_type = 1 THEN fd.transaction_amount ELSE 0 END) -
+    SUM(CASE WHEN fd.transaction_type = 0 THEN fd.transaction_amount ELSE 0 END) AS "Funding Gap"
+FROM
+    amp_activity_version av
+        JOIN
+    amp_funding f ON av.amp_activity_id = f.amp_activity_id
+        JOIN
+    amp_funding_detail fd ON f.amp_funding_id = fd.amp_funding_id
+GROUP BY
+    av.name
+HAVING
+    SUM(CASE WHEN fd.transaction_type = 0 THEN fd.transaction_amount ELSE 0 END) > 0
+ORDER BY
+    "Funding Gap" DESC;
+
+-- View 12: Cross-Sector Analysis
+CREATE OR REPLACE VIEW view_cross_sector_analysis AS
+SELECT
+    av.name AS "Activity Title",
+    STRING_AGG(DISTINCT s.name, ', ') AS "Sectors",
+    COUNT(DISTINCT s.amp_sector_id) AS "Number of Sectors",
+    SUM(fd.transaction_amount) AS "Total Funding Amount"
+FROM
+    amp_activity_version av
+        JOIN
+    amp_activity_sector acs ON av.amp_activity_id = acs.amp_activity_id
+        JOIN
+    amp_sector s ON acs.amp_sector_id = s.amp_sector_id
+        JOIN
+    amp_funding f ON av.amp_activity_id = f.amp_activity_id
+        JOIN
+    amp_funding_detail fd ON f.amp_funding_id = fd.amp_funding_id
+GROUP BY
+    av.name
+HAVING
+    COUNT(DISTINCT s.amp_sector_id) > 1
+ORDER BY
+    "Number of Sectors" DESC, "Total Funding Amount" DESC;
+			]]></lang>
+        </script>
+    </apply>
+</tns:patch>

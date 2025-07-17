@@ -12,6 +12,8 @@
               alter table amp_indicator_layer drop constraint if exists fk_jv9veurrierqhvb1rq6n1e9un;
             -- or Drop created_by amp_team_member foreign key manually
             ALTER TABLE amp_indicator_layer DROP CONSTRAINT IF EXISTS fk_created_by_user;
+            UPDATE amp_indicator_layer set created_by = (select id from dg_user where email = 'admin@amp.org');
+            UPDATE amp_indicator_layer set created_by = NULL where access_type=0;
             ALTER TABLE amp_indicator_layer ADD CONSTRAINT fk_created_by_user FOREIGN KEY (created_by) REFERENCES dg_user(id);
     ]]></lang>
         </script>

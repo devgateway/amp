@@ -33,7 +33,7 @@ public class DataImportEndpoints {
      * @return map of view name to list of records
      */
     @POST
-    @Path("/import-data")
+    @Path("/views-data")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiMethod(id = "importViewsData")

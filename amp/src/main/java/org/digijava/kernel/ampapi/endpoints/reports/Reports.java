@@ -109,8 +109,17 @@ public class Reports {
     @GET
     @Path("/report/{report_id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiOperation("Get report specification")
-    public final JSONResult getReport(@PathParam("report_id") Long reportId) {
+    @ApiOperation(
+            value = "Get report specification by ID",
+            notes = "Retrieves a saved report specification by its unique ID. This endpoint returns the complete configuration of a report, including columns, measures, filters, and settings.",
+            response = JSONResult.class)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Report specification retrieved successfully"),
+            @ApiResponse(code = 400, message = "Report not found")
+    })
+    public final JSONResult getReport(
+            @ApiParam(value = "Unique identifier of the report", required = true)
+            @PathParam("report_id") Long reportId) {
         AmpReports ampReport = DbUtil.getAmpReport(reportId);
         if (ampReport == null) {
             ApiErrorResponseService.reportError(BAD_REQUEST, ReportErrors.REPORT_NOT_FOUND);
@@ -166,8 +175,19 @@ public class Reports {
     @GET
     @Path("/nireport/{report_id}")
     @Produces(MediaType.TEXT_HTML + ";charset=utf-8")
-    @ApiOperation("Generate a html report for diagnostic purposes")
-    public String generateRenderedReport(@PathParam("report_id") Long reportId) {
+    @ApiOperation(
+            value = "Generate an HTML report for diagnostic purposes",
+            notes = "This endpoint generates a detailed HTML report for the specified report ID. " +
+                    "It's primarily used for diagnostic and debugging purposes to inspect the report structure and data.",
+            response = String.class)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "HTML report generated successfully"),
+            @ApiResponse(code = 400, message = "Invalid report ID or report not found"),
+            @ApiResponse(code = 500, message = "Error generating report")
+    })
+    public String generateRenderedReport(
+            @ApiParam(value = "Unique identifier of the report to generate", required = true)
+            @PathParam("report_id") Long reportId) {
         ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
         return AmpReportsSchema.getRenderedReport(spec);
     }
@@ -261,9 +281,16 @@ public class Reports {
     @POST
     @Path("/report/preview")
     @Produces(MediaType.TEXT_HTML)
-    @ApiOperation("Render a report preview in HTML format.")
+    @ApiOperation(
+            value = "Render a report preview in HTML format",
+            notes = "Generates an HTML preview of a report based on the provided parameters. This endpoint allows you to " +
+                    "visualize how a report will look without saving it. The preview includes columns, hierarchies, measures, " +
+                    "and applies the specified filters and settings.",
+            response = String.class)
     public final String getReportResult(
-            @ApiParam("a JSON object with the report's parameters") ReportFormParameters formParams) {
+            @ApiParam(value = "A JSON object containing report configuration parameters including groupingOption, columns, " +
+                    "hierarchies, measures, filters, and settings. See the method documentation for examples.", required = true)
+            ReportFormParameters formParams) {
         int reportType = ArConstants.DONOR_TYPE;
         if (formParams.getReportType() != null) {
             reportType = REPORT_TYPE_ID_MAP.get(formParams.getReportType());
@@ -287,9 +314,14 @@ public class Reports {
     @POST
     @Path("/report/custom/paginate")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiOperation("Generates a custom report.")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "successful operation",
-            response = PagedReportResult.class))
+    @ApiOperation(
+            value = "Generate a custom report with pagination",
+            notes = "Creates and returns a custom report based on the provided parameters. The report data is paginated for better performance and usability.",
+            response = PagedReportResult.class)
+    @ApiResponses({
+            @ApiResponse(code = HttpServletResponse.SC_OK, message = "Custom report generated successfully"),
+            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, message = "Invalid report configuration")
+    })
     public final Response getCustomReport(ReportFormParameters formParams) {
         ApiErrorResponse result = ReportsUtil.validateReportConfig(formParams, true);
         if (result != null) {
@@ -307,9 +339,14 @@ public class Reports {
     @POST
     @Path("/report/custom/xls")
     @Produces({"application/vnd.ms-excel"})
-    @ApiOperation("Generates a custom report.")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "successful operation",
-            response = PagedReportResult.class))
+    @ApiOperation(
+            value = "Generate a custom Excel report",
+            notes = "Creates and returns a custom report in Excel format based on the provided parameters. This endpoint is useful for exporting report data for offline analysis.",
+            response = PagedReportResult.class)
+    @ApiResponses({
+            @ApiResponse(code = HttpServletResponse.SC_OK, message = "Excel report generated successfully"),
+            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, message = "Invalid report configuration")
+    })
     public final Response getCustomXlsReport(ReportFormParameters formParams) {
         ApiErrorResponse result = ReportsUtil.validateReportConfig(formParams, true);
         if (result != null) {

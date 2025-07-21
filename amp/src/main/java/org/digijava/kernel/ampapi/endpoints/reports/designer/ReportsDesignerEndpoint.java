@@ -25,7 +25,7 @@ public class ReportsDesignerEndpoint {
             notes = "This endpoint provides all configuration settings needed for the Report Designer.\n\n" +
                     "### What you'll get\n" +
                     "- Available columns you can add to reports\n" +
-                    "- Measures (like actual disbursements, actual commitments e.t.c)\n" +
+                    "- Measures (like actual disbursements, actual commitments etc.)\n" +
                     "- Hierarchies for organizing data\n" +
                     "- Filter options\n" +
                     "- Other settings for building reports\n\n" +

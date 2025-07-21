@@ -85,12 +85,15 @@ public class InterchangeEndpoints {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
     @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getValues", ui = false)
     @ApiOperation(
-            value = "Returns a list of JSON objects, each describing a possible value that might be specified "
-                    + "in an activity field",
-            notes = "If Accept: application/vnd.possible-values-v2+json is used then possible values will be "
-                    + "represented in a tree structure.\nIf value can be translated then each possible value "
-                    + "will contain value-translations element, a map where key is language code and value is "
-                    + "translated value.")
+            value = "Get possible values for a specific activity field",
+            notes = "Returns a list of all possible values that can be used for the specified activity field.\n\n"
+                    + "**Response Format Options:**\n"
+                    + "- **Default format**: Flat list of values\n"
+                    + "- **Tree structure**: Use Accept header: `application/vnd.possible-values-v2+json`\n\n"
+                    + "**Translations:**\n"
+                    + "- If a value can be translated, it will include a `value-translations` object\n"
+                    + "- The `value-translations` object maps language codes to translated values\n\n"
+                    + "**Example usage:** Get possible values for the 'locations~location' field")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "list of possible values",
             response = PossibleValue.class, responseContainer = "List"))
     public Response getPossibleValuesFlat(
@@ -134,12 +137,18 @@ public class InterchangeEndpoints {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getMultiValues", ui = false)
     @ApiOperation(
-            value = "Returns a list of possible values for each requested field.",
-            notes = "If Accept: application/vnd.possible-values-v2+json is used then possible values will be "
-                    + "represented in a tree structure.\n\n"
-                    + "If value can be translated then each possible value will contain value-translations element, "
-                    + "a map where key is language code and value is translated value.\n\n"
-                    + "Example body: `[\"fundings~donor_organization_id\", \"approval_status\", \"activity_budget\"]`")
+            value = "Get possible values for multiple activity fields at once",
+            notes = "This endpoint allows you to retrieve possible values for multiple fields in a single request.\n\n"
+                    + "**Request Body:**\n"
+                    + "- Send an array of field names as JSON\n"
+                    + "- Example: `[\"fundings~donor_organization_id\", \"approval_status\", \"activity_budget\"]`\n\n"
+                    + "**Response Format Options:**\n"
+                    + "- **Default format**: Flat list of values for each field\n"
+                    + "- **Tree structure**: Use Accept header: `application/vnd.possible-values-v2+json`\n\n"
+                    + "**Response Structure:**\n"
+                    + "- Returns an object where keys are the requested field names\n"
+                    + "- Each key contains an array of possible values for that field\n"
+                    + "- Translated values include a `value-translations` object mapping language codes to translations")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "list of possible values grouped by field"))
     public Response getValues(
             @ApiParam(value = "List of fully qualified activity fields.")
@@ -175,12 +184,19 @@ public class InterchangeEndpoints {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
     @ApiMethod(id = "getMultiValues", ui = false)
     @ApiOperation(
-            value = "Returns a list of possible values allowed to be showed publicly for each requested field.",
-            notes = "If Accept: application/vnd.possible-values-v2+json is used then possible values will be "
-                    + "represented in a tree structure.\n\n"
-                    + "If value can be translated then each possible value will contain value-translations element, "
-                    + "a map where key is language code and value is translated value.\n\n"
-                    + "Example body: `[\"fundings~donor_organization_id\", \"approval_status\", \"activity_budget\"]`")
+            value = "Get publicly available values for multiple activity fields",
+            notes = "This endpoint works like `/field/values` but is restricted to fields that are allowed to be shown publicly.\n\n"
+                    + "**Important:** Only fields defined in `PUBLIC_ACTIVITY_FIELDS` are allowed. Other fields will result in an error.\n\n"
+                    + "**Request Body:**\n"
+                    + "- Send an array of field names as JSON\n"
+                    + "- Example: `[\"fundings~donor_organization_id\", \"approval_status\", \"activity_budget\"]`\n\n"
+                    + "**Response Format Options:**\n"
+                    + "- **Default format**: Flat list of values for each field\n"
+                    + "- **Tree structure**: Use Accept header: `application/vnd.possible-values-v2+json`\n\n"
+                    + "**Response Structure:**\n"
+                    + "- Returns an object where keys are the requested field names\n"
+                    + "- Each key contains an array of possible values for that field\n"
+                    + "- Translated values include a `value-translations` object mapping language codes to translations")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "list of possible values "
             + "allowed to be showed publicly grouped by field"))
     public Response getValuesPublic(
@@ -198,8 +214,17 @@ public class InterchangeEndpoints {
     @Path("field/id-values")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getIdValues", ui = false)
-    @ApiOperation(value = "Returns a list of values for all id of requested fields.",
-            notes = "For fields like locations, sectors, programs the object contains the ancestor values.")
+    @ApiOperation(
+            value = "Get field values by their IDs",
+            notes = "This endpoint allows you to retrieve specific field values when you know their IDs.\n\n"
+                    + "**Request Body:**\n"
+                    + "- Send a JSON object where keys are field names and values are arrays of IDs\n"
+                    + "- Example: `{\"locations~location\": [1, 2], \"sectors~sector\": [5, 6]}`\n\n"
+                    + "**Response Features:**\n"
+                    + "- For hierarchical fields (locations, sectors, programs), the response includes ancestor values\n"
+                    + "- Each value includes its ID, name, and any hierarchical information\n\n"
+                    + "**Common Use Case:**\n"
+                    + "- Use this endpoint when you have IDs from another source and need to get their full information")
     public Map<String, List<FieldIdValue>> getFieldValuesById(
             @ApiParam("List of fully qualified activity fields with list of ids.") Map<String, List<Long>> fieldIds) {
         return getFieldValues(null, fieldIds);
@@ -209,8 +234,19 @@ public class InterchangeEndpoints {
     @Path("field/id-values/{fmId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getIdValues", ui = false)
-    @ApiOperation(value = "Returns a list of values for all id of requested fields.",
-            notes = "For fields like locations, sectors, programs the object contains the ancestor values.")
+    @ApiOperation(
+            value = "Get field values by their IDs using a specific FM template",
+            notes = "This endpoint works like `/field/id-values` but allows you to specify a Feature Manager (FM) template ID.\n\n"
+                    + "**Path Parameter:**\n"
+                    + "- `fmId`: The ID of the Feature Manager template to use for field definitions\n\n"
+                    + "**Request Body:**\n"
+                    + "- Send a JSON object where keys are field names and values are arrays of IDs\n"
+                    + "- Example: `{\"locations~location\": [1, 2], \"sectors~sector\": [5, 6]}`\n\n"
+                    + "**Response Features:**\n"
+                    + "- For hierarchical fields (locations, sectors, programs), the response includes ancestor values\n"
+                    + "- Each value includes its ID, name, and any hierarchical information\n\n"
+                    + "**When to Use:**\n"
+                    + "- Use this endpoint when you need field values according to a specific FM template configuration")
     public Map<String, List<FieldIdValue>> getFieldValuesByIdWithFM(
             @ApiParam(value = "FM id", required = true) @PathParam("fmId") Long id,
             @ApiParam("List of fully qualified activity fields with list of ids.") Map<String, List<Long>> fieldIds) {
@@ -232,9 +268,20 @@ public class InterchangeEndpoints {
     @Path("fields")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getFields", ui = false)
-    @ApiOperation(value = "Returns the full list of activity fields.",
-            notes = "Provides full set of available fields and their settings/rules in a hierarchical structure.\n\n"
-                    + "See [Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration)")
+    @ApiOperation(
+            value = "Get complete list of activity fields and their configuration",
+            notes = "This endpoint provides a comprehensive list of all available activity fields with their settings and validation rules.\n\n"
+                    + "**Query Parameters:**\n"
+                    + "- `fmId` (optional): Feature Manager template ID to get fields specific to that template\n\n"
+                    + "**Response Structure:**\n"
+                    + "- Returns a hierarchical structure of all fields\n"
+                    + "- Each field includes its properties, validation rules, and dependencies\n"
+                    + "- Parent-child relationships between fields are preserved\n\n"
+                    + "**Common Use Cases:**\n"
+                    + "- Building dynamic forms based on the field configuration\n"
+                    + "- Understanding field requirements before submitting data\n"
+                    + "- Discovering available fields and their relationships\n\n"
+                    + "For more details, see the [Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration)")
     public List<APIField> getAvailableFields(@ApiParam(value = "FM id") @QueryParam("fmId") Long fmId) {
         if (fmId != null) {
             return AmpFieldsEnumerator.getEnumerator(fmId).getActivityFields();
@@ -264,22 +311,37 @@ public class InterchangeEndpoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getProjectList", ui = false)
     @ApiOperation(
-            value = "Returns a list of all activities summary on the system, including their view and edit rights "
-                    + "based on the status for the currently logged in user.",
-            notes = "If the user can view the project, the 'view' property of the project is set to true. "
-                    + "False otherwise. If the user can edit the project, the 'edit' property of the project "
-                    + "on the JSON is set to true. False otherwise. Pagination can be used if the parameters "
-                    + "are sent on the request.\nIf not parameters are sent, the full list of projects is "
-                    + "returned.")
+            value = "Get a list of all activities with permission information",
+            notes = "This endpoint retrieves a summary of all activities in the system along with the current user's permissions for each activity.\n\n"
+                    + "**Permission Information:**\n"
+                    + "- `view`: `true` if the user can view the activity, `false` otherwise\n"
+                    + "- `edit`: `true` if the user can edit the activity, `false` otherwise\n\n"
+                    + "**Pagination:**\n"
+                    + "- Use `offset` and `count` parameters to paginate through large result sets\n"
+                    + "- Example: `offset=0&count=20` returns the first 20 activities\n"
+                    + "- If pagination parameters are omitted, all activities are returned (not recommended for large datasets)\n\n"
+                    + "**Caching:**\n"
+                    + "- The `pid` parameter enables caching of the full activity list\n"
+                    + "- Use a consistent `pid` value across requests to benefit from caching\n"
+                    + "- Example: `pid=page1` for the first page, `pid=page2` for the second page, etc.\n\n"
+                    + "**Performance Tips:**\n"
+                    + "- Always use pagination for better performance with large datasets\n"
+                    + "- Use the `pid` parameter to take advantage of caching")
+    @ApiResponses({
+            @ApiResponse(code = HttpServletResponse.SC_OK,
+                    message = "Returns a collection of activity summaries with permission information"),
+            @ApiResponse(code = HttpServletResponse.SC_FORBIDDEN,
+                    message = "User does not have permission to access the workspace")
+    })
     @JsonView(ActivityView.List.class)
     public Collection<ActivitySummary> getProjects(
-            @ApiParam("Current pagination request reference (random id). It acts as a key for a LRU caching "
-                    + "mechanism that holds the full list of projects for the current user. If it is not "
-                    + "provided no caching is used")
-            @QueryParam("pid")
-                    String pid,
-            @ApiParam("Number of projects to skip") @QueryParam("offset") Integer offset,
-            @ApiParam("Number of projects to return") @QueryParam("count") Integer count) {
+            @ApiParam(value = "Pagination request reference ID - used as a key for caching the full list of projects. "
+                    + "If not provided, no caching is used", example = "page1")
+            @QueryParam("pid") String pid,
+            @ApiParam(value = "Number of projects to skip for pagination", example = "0")
+            @QueryParam("offset") Integer offset,
+            @ApiParam(value = "Maximum number of projects to return", example = "20")
+            @QueryParam("count") Integer count) {
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
         Collection<ActivitySummary> activityCollection = ProjectList.getActivityList(pid, tm);
         int start = 0;
@@ -297,10 +359,29 @@ public class InterchangeEndpoints {
     @Path("/projects/{projectId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getProject", ui = false)
-    @ApiOperation("Provides full activity information.")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
-            message = "activity with full set of configured fields and their values"))
-    public SwaggerActivity getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
+    @ApiOperation(
+                value = "Get complete details of a specific activity by ID",
+                notes = "This endpoint retrieves all information about a single activity identified by its internal ID.\n\n"
+                        + "**Path Parameter:**\n"
+                        + "- `projectId`: The internal system ID of the activity to retrieve\n\n"
+                        + "**Response Content:**\n"
+                        + "- Returns a complete JSON object with all available fields and their values\n"
+                        + "- Includes all configured fields for the activity based on the current Feature Manager settings\n"
+                        + "- Hierarchical data (like funding information) is properly nested in the response\n\n"
+                        + "**Common Use Cases:**\n"
+                        + "- Viewing all details of a specific activity\n"
+                        + "- Retrieving an activity for editing\n"
+                        + "- Getting a complete snapshot of an activity's current state\n\n"
+                        + "**Note:** If you only need specific fields, consider using the POST version of this endpoint with a field filter.")
+    @ApiResponses({
+            @ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
+                    message = "Returns a complete activity object containing all fields and their values configured in the system"),
+            @ApiResponse(code = HttpServletResponse.SC_NOT_FOUND,
+                    message = "Activity with the specified ID was not found"),
+            @ApiResponse(code = HttpServletResponse.SC_FORBIDDEN,
+                    message = "User does not have permission to view this activity")
+    })
+    public SwaggerActivity getProject(@ApiParam(value = "The unique identifier of the project/activity to retrieve", example = "12345") @PathParam("projectId") Long projectId) {
         Map<String, Object> activity = ActivityInterchangeUtils.getActivity(projectId,
                 AmpClientModeHolder.isOfflineClient());
         return new SwaggerActivity(activity);
@@ -333,10 +414,29 @@ public class InterchangeEndpoints {
     @Path("/project")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getProjectByAmpId", ui = false)
-    @ApiOperation("Retrieve activity by AMP Id.")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
-            message = "activity with full set of configured fields and their values"))
-    public SwaggerActivity getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
+    @ApiOperation(
+                value = "Get activity details using AMP ID instead of system ID",
+                notes = "This endpoint works like `GET /projects/{projectId}` but uses the AMP ID (business identifier) instead of the internal system ID.\n\n"
+                        + "**Query Parameter:**\n"
+                        + "- `amp-id`: The AMP ID (business identifier) of the activity to retrieve\n\n"
+                        + "**Response Content:**\n"
+                        + "- Returns a complete JSON object with all available fields and their values\n"
+                        + "- Identical to the response from `GET /projects/{projectId}`\n\n"
+                        + "**When to Use This Endpoint:**\n"
+                        + "- When you have the AMP ID from reports or external references\n"
+                        + "- When working with business identifiers rather than system IDs\n"
+                        + "- When integrating with systems that reference activities by their AMP ID\n\n"
+                        + "**Example Request:**\n"
+                        + "- `GET /rest/activity/project?amp-id=872329912`")
+    @ApiResponses({
+            @ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
+                    message = "Returns a complete activity object containing all fields and their values configured in the system"),
+            @ApiResponse(code = HttpServletResponse.SC_NOT_FOUND,
+                    message = "Activity with the specified AMP ID was not found"),
+            @ApiResponse(code = HttpServletResponse.SC_FORBIDDEN,
+                    message = "User does not have permission to view this activity")
+    })
+    public SwaggerActivity getProjectByAmpId(@ApiParam(value = "The AMP ID of the activity to retrieve - this is a business identifier, not the system ID", example = "872329912") @QueryParam("amp-id") String ampId) {
         Map<String, Object> activity = ActivityInterchangeUtils.getActivityByAmpId(ampId,
                 AmpClientModeHolder.isOfflineClient());
         return new SwaggerActivity(activity);
@@ -371,11 +471,24 @@ public class InterchangeEndpoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "addProject", ui = false)
     @ApiOperation(
-            value = "Imports an activity.",
-            notes = "Saving as draft will be allowed only if this is also possible in AMP Activity Form.\n"
-                    + "When is_draft is false, but some required fields for submit are invalid/missing, then activity "
-                    + "will be saved as draft if can-downgrade-to-draft is true. Otherwise will be rejected.\n\n"
-                    + "Request to process approval fields only if you know how to properly handle them.")
+            value = "Create a new activity by importing its data",
+            notes = "This endpoint allows you to create a new activity by providing its complete data structure.\n\n"
+                    + "**Request Body:**\n"
+                    + "- Send a complete activity object with all required fields\n"
+                    + "- The structure should match what's returned by the GET endpoints\n"
+                    + "- Include the `is_draft` field to indicate if this is a draft activity\n\n"
+                    + "**Query Parameters:**\n"
+                    + "- `can-downgrade-to-draft` (boolean): If `true`, allows saving as draft when validation fails for submission\n"
+                    + "- `process-approval-fields` (boolean): If `true`, processes approval fields (use with caution)\n"
+                    + "- `track-editors` (boolean): If `true`, uses the provided created_by/modified_by values instead of current user\n\n"
+                    + "**Draft Handling:**\n"
+                    + "- Draft saving is only allowed if it's also possible in the AMP Activity Form\n"
+                    + "- When `is_draft=false` but required fields are missing, the activity will be:\n"
+                    + "  - Saved as draft if `can-downgrade-to-draft=true`\n"
+                    + "  - Rejected if `can-downgrade-to-draft=false`\n\n"
+                    + "**Important Notes:**\n"
+                    + "- Only process approval fields if you know how to properly handle them\n"
+                    + "- All required fields must be provided according to the current Feature Manager configuration")
     @ApiResponses({
             @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary_Import",
                     message = "the latest project short overview"),
@@ -402,14 +515,30 @@ public class InterchangeEndpoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "updateProject", ui = false)
     @ApiOperation(
-            value = "Updates an activity.",
-            notes = "Saving as draft will be allowed only if this is also possible in AMP Activity Form. "
-                    + "When is_draft is false, but some required fields for submit are invalid/missing, then activity "
-                    + "will be saved as draft if can-downgrade-to-draft is true. Otherwise will be rejected.\n\n"
-                    + "Request to process approval fields only if you know how to properly handle them.\n"
-                    + "Only the latest activity version is allowed to be updated. A stale activity is detected based "
-                    + "on activity id and activity_group.version.\n"
-                    + "The activity will be optimistically locked during the update process.")
+            value = "Update an existing activity by ID",
+            notes = "This endpoint allows you to update an existing activity by providing its complete data structure.\n\n"
+                    + "**Path Parameter:**\n"
+                    + "- `projectId`: The internal system ID of the activity to update\n\n"
+                    + "**Request Body:**\n"
+                    + "- Send a complete activity object with all required fields\n"
+                    + "- Must include the same `internal_id` as the `projectId` in the path\n"
+                    + "- Include the `is_draft` field to indicate if this is a draft activity\n\n"
+                    + "**Query Parameters:**\n"
+                    + "- `can-downgrade-to-draft` (boolean): If `true`, allows saving as draft when validation fails for submission\n"
+                    + "- `process-approval-fields` (boolean): If `true`, processes approval fields (use with caution)\n"
+                    + "- `track-editors` (boolean): If `true`, uses the provided created_by/modified_by values instead of current user\n\n"
+                    + "**Draft Handling:**\n"
+                    + "- Draft saving is only allowed if it's also possible in the AMP Activity Form\n"
+                    + "- When `is_draft=false` but required fields are missing, the activity will be:\n"
+                    + "  - Saved as draft if `can-downgrade-to-draft=true`\n"
+                    + "  - Rejected if `can-downgrade-to-draft=false`\n\n"
+                    + "**Versioning and Locking:**\n"
+                    + "- Only the latest activity version can be updated\n"
+                    + "- Stale activities are detected based on activity ID and activity_group.version\n"
+                    + "- The activity is optimistically locked during the update process to prevent conflicts\n\n"
+                    + "**Important Notes:**\n"
+                    + "- Only process approval fields if you know how to properly handle them\n"
+                    + "- All required fields must be provided according to the current Feature Manager configuration")
     @ApiResponses({
             @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary_Import",
                     message = "latest project overview"),
@@ -450,11 +579,22 @@ public class InterchangeEndpoints {
     @Path("/{projectId}/preview/fundings")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getPreviewFundings", ui = false)
-    @ApiOperation(value = "Retrieve activity fundings with converted amounts and totals.",
-            notes = "This endpoint is used for fetching information about activity funding.\n"
-                    + "The transactions are grouped by transaction type and adjustment type.\n"
-                    + "All the transactions amounts are converted in the specified currency.\n"
-                    + "The response includes subtotals and totals.")
+    @ApiOperation(
+            value = "Get activity funding information with currency conversion",
+            notes = "This endpoint provides detailed funding information for an activity with amounts converted to a specified currency.\n\n"
+                    + "**Path Parameter:**\n"
+                    + "- `projectId`: The internal system ID of the activity\n\n"
+                    + "**Query Parameter:**\n"
+                    + "- `currency-id`: The ID of the currency to convert all amounts to\n\n"
+                    + "**Response Features:**\n"
+                    + "- Transactions are grouped by transaction type (commitments, disbursements, etc.)\n"
+                    + "- Within each type, transactions are further grouped by adjustment type\n"
+                    + "- All transaction amounts are converted to the specified currency\n"
+                    + "- Response includes subtotals for each group and grand totals\n\n"
+                    + "**Common Use Cases:**\n"
+                    + "- Generating financial reports in a specific currency\n"
+                    + "- Analyzing funding data with consistent currency values\n"
+                    + "- Previewing how funding data will appear in reports")
     public PreviewActivityFunding getPreviewFundingInformation(
             @ApiParam("the id of the activity")
             @PathParam("projectId") Long projectId,
@@ -467,9 +607,30 @@ public class InterchangeEndpoints {
     @Path("/{projectId}/preview/workspaces")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getPreviewWorkspaces", ui = false)
-    @ApiOperation(value = "Retrieve workspaces where the activity is visible.")
+    @ApiOperation(
+                value = "Get all workspaces that can view a specific activity",
+                notes = "This endpoint returns a list of all workspaces that have visibility access to the specified activity.\n\n"
+                        + "**Path Parameter:**\n"
+                        + "- `projectId`: The internal system ID of the activity\n\n"
+                        + "**Response Content:**\n"
+                        + "- Returns an array of workspace objects\n"
+                        + "- Each workspace object includes its ID, name, and other relevant details\n"
+                        + "- Only includes workspaces that have permission to view the activity\n\n"
+                        + "**Common Use Cases:**\n"
+                        + "- Understanding the visibility scope of an activity\n"
+                        + "- Determining which teams have access to a particular activity\n"
+                        + "- Troubleshooting visibility issues across workspaces\n\n"
+                        + "**Note:** This endpoint requires authentication and appropriate permissions to access the activity information.")
+    @ApiResponses({
+            @ApiResponse(code = HttpServletResponse.SC_OK,
+                    message = "Returns a list of workspace objects that have visibility to the specified activity"),
+            @ApiResponse(code = HttpServletResponse.SC_NOT_FOUND,
+                    message = "Activity with the specified ID was not found"),
+            @ApiResponse(code = HttpServletResponse.SC_FORBIDDEN,
+                    message = "User does not have permission to view this information")
+    })
     public List<PreviewWorkspace> getPreviewWorkspaces(
-            @ApiParam("the id of the activity")
+            @ApiParam(value = "The unique identifier of the activity for which to retrieve workspace visibility information", example = "12345")
             @PathParam("projectId") Long projectId) {
         return PreviewActivityService.getInstance().getWorkspaces(projectId);
     }
@@ -480,14 +641,26 @@ public class InterchangeEndpoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "importProjects")
     @ApiOperation(
-            value = "Imports asynchronous a list of activities.",
-            notes = "The input body is an array of activity objects."
-                    + "The format of activity object matches the existing format used by post / and POST /{projectId}."
-                    + "If the header Prefer: respond-async is not present, "
-                    + "then the endpoint will respond with a list of import/update result."
-                    + "If the header Prefer: respond-async is present then an immediate response will be returned."
-                    + "The response will contain in headers (location) the url where the results can be retrieved"
-                    + "If the size is bigger than 20, the request will be rejected.")
+            value = "Import multiple activities in a single request (bulk import)",
+            notes = "This endpoint allows you to create or update multiple activities at once, with optional asynchronous processing.\n\n"
+                    + "**Request Body:**\n"
+                    + "- Send an array of activity objects\n"
+                    + "- Each activity object follows the same format as used in `POST /` and `POST /{projectId}`\n"
+                    + "- Maximum 20 activities per request (requests with more will be rejected)\n\n"
+                    + "**Query Parameters:**\n"
+                    + "- `can-downgrade-to-draft` (boolean): If `true`, allows saving as draft when validation fails\n"
+                    + "- `process-approval-fields` (boolean): If `true`, processes approval fields (use with caution)\n"
+                    + "- `track-editors` (boolean): If `true`, uses the provided created_by/modified_by values\n\n"
+                    + "**Synchronous vs. Asynchronous Processing:**\n"
+                    + "- **Synchronous** (default): Returns a list of import/update results immediately\n"
+                    + "- **Asynchronous**: Add header `Prefer: respond-async` to process in background\n"
+                    + "  - Returns immediately with a `location` header containing the URL to check results\n"
+                    + "  - Use the returned URL to poll for completion status\n\n"
+                    + "**When to Use Asynchronous Mode:**\n"
+                    + "- For larger batches (approaching the 20 activity limit)\n"
+                    + "- When immediate response is not required\n"
+                    + "- To avoid timeouts with complex activities\n\n"
+                    + "**Note:** Each activity is validated individually. Some may succeed while others fail.")
     public Response importProjects(@QueryParam("can-downgrade-to-draft") @DefaultValue("false")
                                            boolean canDowngradeToDraft,
                                    @QueryParam("process-approval-fields") @DefaultValue("false")
@@ -529,7 +702,21 @@ public class InterchangeEndpoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "getAsyncResult")
     @ApiOperation(
-            value = "Return the results generated by /async/bulk endpoint.")
+            value = "Get results of an asynchronous bulk import operation",
+            notes = "This endpoint allows you to check the status and results of a previously initiated asynchronous bulk import.\n\n"
+                    + "**Path Parameter:**\n"
+                    + "- `result-id`: The unique identifier returned in the location header of the async bulk import request\n\n"
+                    + "**Response Headers:**\n"
+                    + "- `X-Async-Status`: Indicates the current status of the operation (`RUNNING` or `COMPLETED`)\n\n"
+                    + "**Response Content:**\n"
+                    + "- When processing is complete: Returns an array of import results, one for each activity\n"
+                    + "- Each result includes success/failure status and any validation errors\n"
+                    + "- When still processing: Returns partial results of activities processed so far\n\n"
+                    + "**Common Use Cases:**\n"
+                    + "- Polling for completion of a bulk import operation\n"
+                    + "- Retrieving results after an asynchronous import\n"
+                    + "- Checking which activities succeeded or failed in a bulk operation\n\n"
+                    + "**Note:** It's recommended to poll this endpoint at reasonable intervals (e.g., every few seconds) until processing is complete.")
     public Response getAsyncResult(@PathParam("result-id") String resultId) {
 
         return buildResultId(resultId);

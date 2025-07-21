@@ -100,7 +100,7 @@ public class ReportsDesignerEndpoint {
                     "### Required information\n" +
                     "- Report name\n" +
                     "- Columns to include\n" +
-                    "- Measures (like actual disbursements, actual commitments e.t.c)\n" +
+                    "- Measures (like actual disbursements, actual commitments etc.)\n" +
                     "- Filters to apply\n" +
                     "- Hierachies to apply\n" +
                     "- Sorting preferences\n\n" +

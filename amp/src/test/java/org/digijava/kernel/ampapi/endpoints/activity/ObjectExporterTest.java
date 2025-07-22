@@ -15,19 +15,17 @@ import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.hamcrest.Matcher;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
-import javax.validation.ConstraintViolationException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Octavian Ciubotaru
@@ -36,7 +34,7 @@ public class ObjectExporterTest {
 
     private ObjectExporter<Dummy> exporter;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         TestTranslatorService translatorService = new TestTranslatorService();
 
@@ -279,16 +277,14 @@ public class ObjectExporterTest {
                         hasEntry(is("category_c"), (Matcher) containsInAnyOrder(7L, 8L))));
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testDiscriminatedPickIdOnlyMultiple() {
-        assertThrows(RuntimeException.class,()-> {
-            Dummy dummy = new Dummy();
-            dummy.categories = ImmutableList.of(
-                    new DummyCategory(1L, "A"),
-                    new DummyCategory(2L, "A"));
+        Dummy dummy = new Dummy();
+        dummy.categories = ImmutableList.of(
+                new DummyCategory(1L, "A"),
+                new DummyCategory(2L, "A"));
 
-            exporter.export(dummy);
-        });
+        exporter.export(dummy);
     }
 
     @Test
@@ -317,17 +313,15 @@ public class ObjectExporterTest {
         assertThat(jsonObj, (Matcher) hasEntry(equalTo("sub_b"), contains(hasEntry("sub_name", "Second Sub"))));
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testDiscriminatedObjMultiple() {
-        assertThrows(RuntimeException.class,()-> {
-            Dummy dummy = new Dummy();
-            dummy.discriminatedSubs = ImmutableList.of(
-                    new DummySub("A", "First Sub"),
-                    new DummySub("A", "Second Sub"),
-                    new DummySub("B", "Third Sub"));
+        Dummy dummy = new Dummy();
+        dummy.discriminatedSubs = ImmutableList.of(
+                new DummySub("A", "First Sub"),
+                new DummySub("A", "Second Sub"),
+                new DummySub("B", "Third Sub"));
 
-            exporter.export(dummy);
-        });
+        exporter.export(dummy);
     }
 
     @Test

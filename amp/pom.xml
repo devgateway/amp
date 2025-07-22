@@ -12,51 +12,12 @@
         <springSecurityVersion>5.6.11</springSecurityVersion>
         <springVersion>5.3.28</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jackrabbit.version>2.19.6</jackrabbit.version>
+        <jackrabbit.version>2.16.2</jackrabbit.version>
         <lucene.version>3.6.2</lucene.version>
         <jersey.version>1.19</jersey.version>
         <jackson.version>2.14.2</jackson.version>
         <swagger.version>1.5.20</swagger.version>
         <powermock.version>1.6.6</powermock.version>
-        <compat.file>compat.properties</compat.file>
-        <debug>true</debug>
-
-        <!-- Project settings -->
-        <project.title>DiGiJava</project.title>
-        <project.distname>amp</project.distname>
-        <project.version>4.0</project.version>
-
-        <lib>${project.basedir}/src/main/webapp/WEB-INF/lib</lib>
-        <webinf>${project.basedir}/src/main/webapp/WEB-INF</webinf>
-        <metainf>${project.basedir}/META-INF</metainf>
-        <classes>${project.basedir}/src/main/webapp/WEB-INF/classes</classes>
-        <src>${project.basedir}/src</src>
-        <test>${project.basedir}/src/test</test>
-        <etc>${project.basedir}/etc</etc>
-        <deployConfigs>deployConfigs</deployConfigs>
-        <repository>${project.basedir}/src/main/webapp/WEB-INF/jsp</repository>
-        <jackrabbit>${project.basedir}/src/main/webapp/WEB-INF/jackrabbit</jackrabbit>
-        <ampTest>${project.basedir}/src/test</ampTest>
-        <ampSelenium>${project.basedir}/src/main/webapp/WEB-INF/amp-selenium-test</ampSelenium>
-
-        <!-- Uncomment and update the following line if needed -->
-
-        <dbName>postgresql</dbName>
-
-        <!-- JDBC Settings -->
-        <jdbc.url>jdbc:postgresql://localhost</jdbc.url>
-        <jdbc.params>useUnicode=true&amp;characterEncoding=UTF-8</jdbc.params>
-        <jdbc.paramsClean>useUnicode=true&amp;characterEncoding=UTF-8</jdbc.paramsClean>
-        <jdbc.driverClassName>org.postgresql.Driver</jdbc.driverClassName>
-
-        <clean.db>amp_clean</clean.db>
-
-
-        <!-- Path Settings -->
-        <doc.path>./doc/api</doc.path>
-        <doc.src>./src/java</doc.src>
-        <gen-src>./gen-src</gen-src>
-
         <buildSource/>
         <buildDate/>
     </properties>
@@ -81,126 +42,24 @@
         </pluginRepository>
     </pluginRepositories>
 
-    <profiles>
-        <!-- Set external-lib if jboss-lib is defined -->
-        <profile>
-            <id>externalLibProfile</id>
-            <activation>
-                <property>
-                    <name>jboss-lib</name>
-                </property>
-            </activation>
-            <properties>
-                <external-lib>${jboss-lib}</external-lib>
-            </properties>
-        </profile>
-
-        <!-- Set jdbc.password to "1234" if not defined -->
-        <profile>
-            <id>jdbcPasswordProfile</id>
-            <activation>
-                <property>
-                    <name>!jdbc.password</name>
-                </property>
-            </activation>
-            <properties>
-                <jdbc.password>1234</jdbc.password>
-            </properties>
-        </profile>
-
-        <!-- Set serverName to "generic" if not defined -->
-        <profile>
-            <id>serverNameProfile</id>
-            <activation>
-                <property>
-                    <name>!serverName</name>
-                </property>
-            </activation>
-            <properties>
-                <serverName>generic</serverName>
-            </properties>
-        </profile>
-
-        <!-- Set jdbc.user to "postgres" if not defined -->
-        <profile>
-            <id>jdbcUserProfile</id>
-            <activation>
-                <property>
-                    <name>!jdbc.user</name>
-                </property>
-            </activation>
-            <properties>
-                <jdbc.user>postgres</jdbc.user>
-            </properties>
-        </profile>
-
-        <!-- Set jdbc.db to "amp" if not defined -->
-        <profile>
-            <id>jdbcDbProfile</id>
-            <activation>
-                <property>
-                    <name>!jdbc.db</name>
-                </property>
-            </activation>
-            <properties>
-                <jdbc.db>amp</jdbc.db>
-            </properties>
-        </profile>
-
-        <!-- Set jdbc.port to "5432" if not defined -->
-        <profile>
-            <id>jdbcPortProfile</id>
-            <activation>
-                <property>
-                    <name>!jdbc.port</name>
-                </property>
-            </activation>
-            <properties>
-                <jdbc.port>5432</jdbc.port>
-            </properties>
-        </profile>
-
-        <!-- Set jdbc.host to "localhost" if not defined -->
-        <profile>
-            <id>jdbcHostProfile</id>
-            <activation>
-                <property>
-                    <name>!jdbc.host</name>
-                </property>
-            </activation>
-            <properties>
-                <jdbc.host>localhost</jdbc.host>
-            </properties>
-        </profile>
-
-        <!-- Set antilock to "false" if not defined -->
-        <profile>
-            <id>antilockProfile</id>
-            <activation>
-                <property>
-                    <name>!antilock</name>
-                </property>
-            </activation>
-            <properties>
-                <antilock>false</antilock>
-            </properties>
-        </profile>
-    </profiles>
-
-
     <dependencies>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.5.15</version>
+            <version>1.10.19</version>
         </dependency>
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-inline</artifactId>
-            <version>3.5.15</version>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>antlr</groupId>
             <artifactId>antlr</artifactId>
@@ -226,11 +85,11 @@
             <artifactId>axis</artifactId>
             <version>1.4</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>batik</groupId>-->
-<!--            <artifactId>batik</artifactId>-->
-<!--            <version>1.5</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik</artifactId>
+            <version>1.5</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache-extras.beanshell</groupId>
@@ -372,12 +231,6 @@
             <artifactId>dom4j</artifactId>
             <version>2.1.3</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.opencsv</groupId>
-            <artifactId>opencsv</artifactId>
-            <version>5.5.2</version>
-        </dependency>
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-core</artifactId>
@@ -486,8 +339,8 @@
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
-            <artifactId>oak-jackrabbit-api</artifactId>
-            <version>1.20.0</version>
+            <artifactId>jackrabbit-api</artifactId>
+            <version>${jackrabbit.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
@@ -547,7 +400,7 @@
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
+            <version>2.1</version>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
@@ -659,7 +512,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+<!--        <dependency>-->
+<!--            <groupId>org.glassfish.jersey</groupId>-->
+<!--            <artifactId>jax-rs-ri</artifactId>-->
+<!--            <version>2.0-rc1</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
@@ -686,27 +543,10 @@
             <version>1.1</version>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.7.0</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.7.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>2.42.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.testng</groupId>
-                    <artifactId>testng</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -718,6 +558,12 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
             <version>1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.unitils</groupId>
+            <artifactId>unitils-core</artifactId>
+            <version>3.4.2</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
@@ -932,7 +778,10 @@
             <artifactId>wcf</artifactId>
             <version>1.8.0-070305</version>
         </dependency>
-
+        <!-- <dependency> <groupId>org.wicketstuff</groupId> <artifactId>tinymce</artifactId>
+            <version>${wicketVersion}</version> </dependency> -->
+        <!-- <dependency> <groupId>org.projectlombok</groupId> <artifactId>lombok</artifactId>
+            <version>1.12.6</version> <scope>provided</scope> </dependency> -->
         <dependency>
             <groupId>com.mockrunner</groupId>
             <artifactId>mockrunner</artifactId>
@@ -1192,13 +1041,22 @@
             <version>2.2.9</version>
         </dependency>
 
-
+<!--        <dependency>-->
+<!--            <groupId>io.swagger</groupId>-->
+<!--            <artifactId>swagger-annotations</artifactId>-->
+<!--            <version>${swagger.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
             <version>2.2.9</version>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>io.swagger</groupId>-->
+<!--            <artifactId>swagger-jersey-jaxrs</artifactId>-->
+<!--            <version>${swagger.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-jersey2-jaxrs</artifactId>
@@ -1228,54 +1086,6 @@
             <artifactId>commons-text</artifactId>
             <version>1.9</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-            <version>1.3</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-suite-engine</artifactId>
-            <version>1.8.2</version>
-            <scope>test</scope>
-        </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>org.junit.platform</groupId>-->
-<!--            <artifactId>junit-platform-suite-api</artifactId>-->
-<!--            <version>1.8.2</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
-            <version>3.5.15</version> <!-- or latest stable -->
-            <scope>test</scope>
-        </dependency>
-        <!-- Selenium -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>2.37.0</version> <!-- Or the latest version -->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.testng</groupId>
-                    <artifactId>testng</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- WebDriver -->
-        <dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>webdrivermanager</artifactId>
-            <version>4.3.1</version> <!-- Or the latest version -->
-        </dependency>
-
-
     </dependencies>
 
     <dependencyManagement>
@@ -1287,214 +1097,37 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>5.10.1</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <build>
-        <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
-        <testResources>
-            <testResource>
-                <directory>${project.basedir}/src/test/resources</directory>
-            </testResource>
-        </testResources>
-        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-<!--        <outputDirectory>${project.basedir}/target</outputDirectory>-->
+        <sourceDirectory>${project.basedir}/WEB-INF/src</sourceDirectory>
 
         <finalName>${project.artifactId}</finalName>
 
         <resources>
             <resource>
-                <filtering>false</filtering>
-                <directory>${project.basedir}/src/main/java</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-
+                <directory>WEB-INF/src</directory>
                 <excludes>
                     <exclude>**/*.java</exclude>
                 </excludes>
             </resource>
             <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </resource>
-
-            <resource>
-                <directory>${project.basedir}/src/main/webapp</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
+                <directory>src/main/resources</directory>
             </resource>
         </resources>
 
         <plugins>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>copy-digi-config</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/moduleConfig</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${deployConfigs}/${serverName}</directory>
-                                    <includes>
-                                        <include>digi.xml</include>
-                                    </includes>
-                                </resource>
-                                <!-- Add more resources as needed -->
-                            </resources>
-
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>copy-repository-xml</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${jackrabbit}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${webinf}</directory>
-                                    <includes>
-                                        <include>repository.xml</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>create-metainf</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${metainf}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${metainf}</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jaxb2-maven-plugin</artifactId>
-                <version>2.5.0</version>
-                <executions>
-                    <!-- JAXB generation for translation.xsd -->
-                    <execution>
-                        <id>generate-translation</id>
-                        <goals>
-                            <goal>xjc</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-
-                                <source>
-                                    ./src/main/webapp/WEB-INF/schemas/translation.xsd
-                                </source>
-                            </sources>
-                            <packageName>org.digijava.module.translation.jaxb</packageName>
-                            <clearOutputDir>false</clearOutputDir>
-                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
-                        </configuration>
-                    </execution>
-
-                    <!-- JAXB generation for help.xsd -->
-                    <execution>
-                        <id>generate-help</id>
-                        <goals>
-                            <goal>xjc</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>
-                                    ./src/main/webapp/WEB-INF/schemas/help.xsd
-                                </source>
-                            </sources>
-                            <packageName>org.digijava.module.help.jaxbi</packageName>
-                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
-                            <clearOutputDir>false</clearOutputDir>
-                        </configuration>
-                    </execution>
-
-
-                    <!-- JAXB generation for report.xsd -->
-                    <execution>
-                        <id>generate-report</id>
-                        <goals>
-                            <goal>xjc</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>
-                                    ./src/main/webapp/WEB-INF/schemas/report.xsd
-                                </source>
-                            </sources>
-                            <packageName>org.dgfoundation.amp.reports.xml</packageName>
-                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
-                            <clearOutputDir>false</clearOutputDir>
-                        </configuration>
-                    </execution>
-
-                    <!-- JAXB generation for xmlpatcher.xsd -->
-                    <execution>
-                        <id>generate-xmlpatcher</id>
-                        <goals>
-                            <goal>xjc</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>
-                                    ./src/main/webapp/WEB-INF/schemas/xmlpatcher.xsd
-                                </source>
-                            </sources>
-                            <packageName>org.digijava.module.xmlpatcher.jaxb</packageName>
-                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
-                            <clearOutputDir>false</clearOutputDir>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.developmentgateway</groupId>
                 <artifactId>inccheckstyle-maven-plugin</artifactId>
                 <version>0.2</version>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.3</version>
-
                 <configuration>
-
                     <recompressZippedFiles>false</recompressZippedFiles>
                     <archive>
                         <manifestEntries>
@@ -1503,8 +1136,6 @@
                             <Implementation-Vendor>Development Gateway</Implementation-Vendor>
                         </manifestEntries>
                     </archive>
-
-
                     <webResources>
                         <!-- Intellij Idea cannot handle correctly two resources with the same source directory. -->
                         <resource>
@@ -1513,146 +1144,47 @@
                                 <include>site-config.xml</include>
                             </includes>
                             <filtering>true</filtering>
-                            <targetPath>/TEMPLATE/ampTemplate</targetPath>
+                            <targetPath>TEMPLATE/ampTemplate</targetPath>
                         </resource>
-
                         <resource>
-                            <directory>src/main/webapp</directory>
-                            <filtering>true</filtering>
+                            <directory>${project.basedir}</directory>
                             <includes>
                                 <include>**/*</include>
                             </includes>
-                        </resource>
-
-                        <resource>
-                            <directory>src/main/resources</directory>
-                            <filtering>true</filtering>
-                            <includes>
-                                <include>**/*</include>
-                            </includes>
-                        </resource>
-                        <resource>
-                        <directory>${project.basedir}</directory>
-                        <includes>
-                            <include>**/*</include>
-                        </includes>
-                        <excludes>
-<!--                            <exclude>WEB-INF/src/**</exclude>-->
-                            <exclude>.idea/**</exclude>
-                            <exclude>.settings/**</exclude>
-                            <exclude>.externalToolBuilders/**</exclude>
-<!--                            <exclude>TEMPLATE/ampTemplate/site-config.xml</exclude>-->
-                            <exclude>TEMPLATE/ampTemplate/gisModule/dev/node/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/gisModule/dev/node_modules/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/dashboard/dev/node/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/dashboard/dev/node_modules/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/node_modules/amp-settings/node/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/node_modules/amp-filter/node/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/node_modules/amp-filter/node_modules/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/node_modules/amp-translate/node/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/node_modules/amp-translate/node_modules/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/node_modules/amp-state/node/**</exclude>
-                            <exclude>TEMPLATE/ampTemplate/node_modules/amp-state/node_modules/**</exclude>
-                            <exclude>TEMPLATE/reamp/node/**</exclude>
-                            <exclude>TEMPLATE/reamp/node_modules/**</exclude>
-                            <exclude>TEMPLATE/reampv2/node/**</exclude>
-                            <exclude>TEMPLATE/reampv2/node_modules/**</exclude>
-                            <exclude>src/**</exclude>
-                            <exclude>target/**</exclude>
-                        </excludes>
+                            <excludes>
+                                <exclude>WEB-INF/src/**</exclude>
+                                <exclude>.idea/**</exclude>
+                                <exclude>.settings/**</exclude>
+                                <exclude>.externalToolBuilders/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/site-config.xml</exclude>
+                                <exclude>TEMPLATE/ampTemplate/gisModule/dev/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/gisModule/dev/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/dashboard/dev/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/dashboard/dev/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-settings/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-filter/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-filter/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-translate/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-translate/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-state/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-state/node_modules/**</exclude>
+                                <exclude>TEMPLATE/reamp/node/**</exclude>
+                                <exclude>TEMPLATE/reamp/node_modules/**</exclude>
+                                <exclude>TEMPLATE/reampv2/node/**</exclude>
+                                <exclude>TEMPLATE/reampv2/node_modules/**</exclude>
+                                <exclude>src/**</exclude>
+                                <exclude>target/**</exclude>
+                            </excludes>
                         </resource>
                     </webResources>
-                    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
-                    <warName>${project.distname}</warName>
+                    <webXml>WEB-INF/web.xml</webXml>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>war</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>war</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
-
-
-
-
-            <!-- Maven XML Plugin to perform XSLT transformations -->
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>xml-maven-plugin</artifactId>
-                <version>1.0.2</version>
-                <executions>
-                    <execution>
-                        <id>xslt-transformation</id>
-                        <goals>
-                            <goal>transform</goal>
-                        </goals>
-                        <configuration>
-                            <transformationSets>
-                                <transformationSet>
-                                    <dir>${project.basedir}</dir>
-                                    <includes>
-                                        <include>context.xml</include>
-                                    </includes>
-                                    <stylesheet>${project.basedir}/context.xsl</stylesheet>
-                                    <outputDir>${metainf}</outputDir>
-                                    <parameters>
-                                        <parameter>
-                                            <name>jdbc.user</name>
-                                            <value>${jdbc.user}</value>
-                                        </parameter>
-                                        <parameter>
-                                            <name>jdbc.password</name>
-                                            <value>${jdbc.password}</value>
-                                        </parameter>
-
-                                        <parameter>
-                                            <name>jdbc.db</name>
-                                            <value>${jdbc.db}</value>
-                                        </parameter>
-                                        <parameter>
-                                            <name>jdbc.host</name>
-                                            <value>${jdbc.host}</value>
-                                        </parameter>
-                                        <parameter>
-                                            <name>serverName</name>
-                                            <value>${serverName}</value>
-                                        </parameter>
-                                        <parameter>
-                                            <name>jdbc.port</name>
-                                            <value>${jdbc.port}</value>
-                                        </parameter>
-                                        <parameter>
-                                            <name>dbName</name>
-                                            <value>${dbName}</value>
-                                        </parameter>
-                                        <parameter>
-                                            <name>jdbc.driverClassName</name>
-                                            <value>${jdbc.driverClassName}</value>
-                                        </parameter>
-                                        <parameter>
-                                            <name>antilock</name>
-                                            <value>${antilock}</value>
-                                        </parameter>
-
-                                    </parameters>
-                                </transformationSet>
-                            </transformationSets>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -1667,107 +1199,56 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>${gen-src}</source>
+                                <source>${project.basedir}/gen-src</source>
                             </sources>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
-
-            <!-- Maven Properties Plugin to create selected.properties file -->
-
-            <plugin>
-                <groupId>com.google.code.maven-replacer-plugin</groupId>
-                <artifactId>maven-replacer-plugin</artifactId>
-                <version>1.3.5</version>
-                <executions>
-                    <execution>
-                        <id>replaceTokens</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>replace</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <file>${deployConfigs}/selected.properties</file>
-                    <replacements>
-                        <replacement>
-                            <token>@serverName@</token>
-                            <value>${serverName}</value>
-                        </replacement>
-                    </replacements>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.1</version> <!-- or latest version -->
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <!-- Add your manifest entries here if needed -->
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <finalName>ecs-client</finalName> <!-- Adjust as needed -->
-                    <appendAssemblyId>false</appendAssemblyId>
-                </configuration>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.6</version>
                 <executions>
                     <execution>
-                        <id>ecs-jar</id>
-                        <phase>package</phase> <!-- Or specify another appropriate phase -->
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <target>
+                                <property name="compile_classpath" refid="maven.compile.classpath" />
+                                <property name="runtime_classpath" refid="maven.runtime.classpath" />
+                                <property name="test_classpath" refid="maven.test.classpath" />
+                                <property name="plugin_classpath" refid="maven.plugin.classpath" />
+                                <property name="jdbc.db" value="amp_drc" />
+
+                                <ant antfile="${basedir}/build.xml">
+                                    <target name="deployForServer" />
+                                    <target name="jaxb" />
+                                </ant>
+                            </target>
+                        </configuration>
                         <goals>
-                            <goal>single</goal>
+                            <goal>run</goal>
                         </goals>
                     </execution>
-                </executions>
-            </plugin>
 
-            <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-clean-plugin</artifactId>
-            <version>3.1.0</version>
-            <executions>
-                <execution>
-                    <id>clean-metainf</id>
-                    <phase>clean</phase>
-                    <goals>
-                        <goal>clean</goal>
-                    </goals>
-                    <configuration>
-                        <filesets>
-                            <fileset>
-                                <directory>${metainf}</directory>
-                                <directory>${gen-src}</directory>
-                                <directory>${doc.path}</directory>
-                                <directory>${classes}</directory>
-
-                            </fileset>
-                        </filesets>
-                    </configuration>
-                </execution>
-
-            </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.2.2</version>
-                <configuration>
-                    <outputDirectory>${metainf}</outputDirectory>
-                </configuration>
-                <executions>
                     <execution>
-                        <id>flatten</id>
-                        <phase>process-resources</phase>
+                        <id>clean</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <target>
+                                <property name="compile_classpath" refid="maven.compile.classpath" />
+                                <property name="runtime_classpath" refid="maven.runtime.classpath" />
+                                <property name="test_classpath" refid="maven.test.classpath" />
+                                <property name="plugin_classpath" refid="maven.plugin.classpath" />
+
+                                <ant antfile="${basedir}/build.xml">
+                                    <target name="clean" />
+                                </ant>
+                            </target>
+                        </configuration>
                         <goals>
-                            <goal>flatten</goal>
+                            <goal>run</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -2097,30 +1578,23 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
-
+                <version>3.0.0-M2</version>
                 <configuration>
-<!--                    <skip>true</skip>-->
-                    <testFailureIgnore>true</testFailureIgnore>
-                    <test>*Test*.java,*Test.java,*Testcases.java,
-                    !AbstractIntegrationTest,!PersistenceManagerTest,!WorkspaceFilterTest,!AmpSchemaFilteringTests,
-                        !DateTimeTests,!SQLUtilsTests,!ReportsTestCase
-                    </test>
                     <includes>
                         <include>**/Test*.java</include>
                         <include>**/*Test.java</include>
                         <include>**/*Testcases.java</include>
-                        <include>**/*</include>
-
+                        <include>**/*Tests*.java</include>
                     </includes>
                     <excludes>
                         <!--suites are running tests twice-->
                         <exclude>**/*TestSuite.java</exclude>
                     </excludes>
                     <excludedGroups>
-                        databasetests,slowtests,ignoretests
+                        org.dgfoundation.amp.test.categories.DatabaseTests,
+                        org.dgfoundation.amp.test.categories.SlowTests,
+                        org.dgfoundation.amp.test.categories.IgnoreTests
                     </excludedGroups>
-
                 </configuration>
             </plugin>
             <plugin>
@@ -2154,11 +1628,10 @@
                 </executions>
             </plugin>
 
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>1.1.1</version>
                 <executions>
                     <execution>
                         <id>Generate API Errors documentation</id>
@@ -2173,118 +1646,6 @@
                                 <argument>apierrors.adoc</argument>
                             </arguments>
                         </configuration>
-                    </execution>
-<!--                    <execution>-->
-<!--                        <id>create-db-model</id>-->
-<!--                        <phase>compile</phase> &lt;!&ndash; Or specify another appropriate phase &ndash;&gt;-->
-<!--                        <goals>-->
-<!--                            <goal>java</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <mainClass>org.digijava.kernel.util.DigiSchemaExport</mainClass>-->
-<!--                            <classpathScope>compile</classpathScope>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-
-                    <execution>
-                        <id>create-permissions</id>
-                        <phase>install</phase> <!-- Or specify another appropriate phase -->
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>org.digijava.kernel.security.util.PermissionConverter</mainClass>
-                            <classpathScope>compile</classpathScope>
-                        </configuration>
-                    </execution>
-
-<!--                    <execution>-->
-<!--                        <id>export-table-names</id>-->
-<!--                        <phase>compile</phase> &lt;!&ndash; Or specify another appropriate phase &ndash;&gt;-->
-<!--                        <goals>-->
-<!--                            <goal>java</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <mainClass>org.digijava.kernel.util.DigiSchemaExport</mainClass>-->
-<!--                            <arguments>-->
-<!--                                <argument>-names</argument>-->
-<!--                            </arguments>-->
-<!--                            <classpathScope>compile</classpathScope>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-
-
-                    <execution>
-                        <id>populate-initial-data</id>
-                        <phase>install</phase> <!-- Or specify another appropriate phase -->
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>org.digijava.kernel.util.DigiSchemaPopulate</mainClass>
-                            <classpathScope>compile</classpathScope>
-                        </configuration>
-                    </execution>
-
-
-                    <execution>
-                        <id>execute-standalone</id>
-                        <phase>package</phase> <!-- Or specify another appropriate phase -->
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>org.dgfoundation.amp.StandaloneAMPStartup</mainClass>
-                            <classpathScope>runtime</classpathScope>
-                        </configuration>
-                    </execution>
-
-<!--                    <execution>-->
-<!--                        <id>compile-selenium</id>-->
-<!--                        <phase>compile</phase> &lt;!&ndash; Or specify another appropriate phase &ndash;&gt;-->
-<!--                        <goals>-->
-<!--                            <goal>java</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <source>1.8</source> &lt;!&ndash; Adjust as needed &ndash;&gt;-->
-<!--                            <target>1.8</target> &lt;!&ndash; Adjust as needed &ndash;&gt;-->
-<!--                            <debug>true</debug>-->
-<!--                            <deprecation>false</deprecation>-->
-<!--                            <includes>-->
-<!--                                <include>/src/main/webapp/WEB-INF/amp-selenium-test/*.java</include>-->
-<!--                            </includes>-->
-<!--                            <classpathScope>compile</classpathScope>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.1</version>
-                <configuration>
-                    <sourcepath>${project.build.sourceDirectory}</sourcepath>
-                    <destDir>${project.reporting.outputDirectory}/javadoc</destDir>
-                    <author>true</author>
-                    <version>true</version>
-                    <windowtitle>${project.name} API Documentation</windowtitle>
-                    <doctitle><![CDATA[<h1>${project.name} Documentation (Version ${project.version})</h1>]]></doctitle>
-
-                    <additionalJOptions>
-                        <additionalJOption>-Xdoclint:none</additionalJOption>
-                    </additionalJOptions>
-
-                    <failOnError>false</failOnError>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>generate-javadoc</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>javadoc</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -2316,10 +1677,6 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>
-                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.0</version>
@@ -2328,12 +1685,9 @@
                         <target>1.8</target>
                         <compilerArgument>-XDignore.symbol.file</compilerArgument>
                         <maxmem>1024m</maxmem>
-                        <fork>true</fork>
                         <useIncrementalCompilation>false</useIncrementalCompilation>
                     </configuration>
                 </plugin>
-
-
 
                 <!--This plugin's configuration is used to store Eclipse m2e settings
                     only. It has no influence on the Maven build itself. -->

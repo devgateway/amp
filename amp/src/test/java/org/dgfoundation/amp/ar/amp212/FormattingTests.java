@@ -4,7 +4,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -12,9 +12,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- *
+ * 
  * testcases for the fetching states of AMP + the AMP schema
- *
+ * 
  * @author Constantin Dolghier
  *
  */
@@ -25,7 +25,9 @@ public class FormattingTests extends ReportingTestCase {
             "crazy funding 1", "date-filters-activity", "Eth Water",
             "TAC_activity_1", "TAC_activity_2");
 
-
+    public FormattingTests() {
+        inTransactionRule = null;
+    }
 
     @Test
     public void testAmountUnits() {
@@ -46,13 +48,13 @@ public class FormattingTests extends ReportingTestCase {
                     new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333"),
                     new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Funding-2013-Actual Commitments", "570,000", "Totals-Actual Commitments", "570,000"),
                     new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Funding-2013-Actual Commitments", "890,000", "Totals-Actual Commitments", "890,000")      ));
-
+        
         ReportSpecificationImpl spec = buildSpecification("amountUnits", Arrays.asList(ColumnConstants.PROJECT_TITLE), Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), null, GroupingCriteria.GROUPING_YEARLY);
         spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 
         runNiTestCase(cor, spec, acts);
     }
-
+    
     @Test
     public void testAmountThousands() {
         NiReportModel cor = new NiReportModel("amountThousands")
@@ -73,13 +75,13 @@ public class FormattingTests extends ReportingTestCase {
                     new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Funding-2013-Actual Commitments", "570", "Totals-Actual Commitments", "570"),
                     new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Funding-2013-Actual Commitments", "890", "Totals-Actual Commitments", "890")      ));
 
-
+        
         ReportSpecificationImpl spec = buildSpecification("amountThousands", Arrays.asList(ColumnConstants.PROJECT_TITLE), Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), null, GroupingCriteria.GROUPING_YEARLY);
         spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_THOUSANDS);
 
         runNiTestCase(cor, spec, acts);
     }
-
+    
     @Test
     public void testAmountMillions() {
         NiReportModel cor = new NiReportModel("amountMillions")
@@ -100,13 +102,13 @@ public class FormattingTests extends ReportingTestCase {
                     new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Funding-2013-Actual Commitments", "0,57", "Totals-Actual Commitments", "0,57"),
                     new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Funding-2013-Actual Commitments", "0,89", "Totals-Actual Commitments", "0,89")      ));
 
-
+        
         ReportSpecificationImpl spec = buildSpecification("amountMillions", Arrays.asList(ColumnConstants.PROJECT_TITLE), Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), null, GroupingCriteria.GROUPING_YEARLY);
         spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_MILLIONS);
 
         runNiTestCase(cor, spec, acts);
     }
-
+    
     @Test
     public void testAmountBillions() {
         NiReportModel cor = new NiReportModel("amountBillions")
@@ -127,18 +129,18 @@ public class FormattingTests extends ReportingTestCase {
                     new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Funding-2013-Actual Commitments", "0,00057", "Totals-Actual Commitments", "0,00057"),
                     new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Funding-2013-Actual Commitments", "0,00089", "Totals-Actual Commitments", "0,00089")      ));
 
-
+        
         ReportSpecificationImpl spec = buildSpecification("amountBillions", Arrays.asList(ColumnConstants.PROJECT_TITLE), Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), null, GroupingCriteria.GROUPING_YEARLY);
         spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_BILLIONS);
-
+        
         DecimalFormat currencyFormat = (DecimalFormat) DecimalFormat.getNumberInstance();
         currencyFormat.setMaximumFractionDigits(5);
         currencyFormat.setMinimumFractionDigits(0);
-
+        
         DecimalFormatSymbols custom = new DecimalFormatSymbols();
         custom.setDecimalSeparator(',');
         currencyFormat.setDecimalFormatSymbols(custom);
-
+        
         spec.getOrCreateSettings().setCurrencyFormat(currencyFormat);
 
         runNiTestCase(cor, spec, acts);

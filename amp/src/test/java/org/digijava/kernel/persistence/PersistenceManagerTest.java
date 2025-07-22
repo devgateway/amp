@@ -7,27 +7,23 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Tag;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
-import javax.validation.ConstraintViolationException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import org.junit.jupiter.api.BeforeAll;
+import static org.junit.Assert.*;
 
 /**
  * @author Octavian Ciubotaru
  */
-@Tag("databasetests")
+@Category(DatabaseTests.class)
 public class PersistenceManagerTest {
 
     private static final String TEST_REPORT_NAME = "test report name 1234567890";
 
-    @BeforeAll
+    @BeforeClass
     public static void setUp() {
         StandaloneAMPInitializer.initialize();
 
@@ -42,7 +38,7 @@ public class PersistenceManagerTest {
     public void testSuccessfulTransaction() {
         try {
             PersistenceManager.inTransaction(this::saveTestReport);
-            PersistenceManager.inTransaction(() -> Assertions.assertTrue(testReportExists()));
+            PersistenceManager.inTransaction(() -> assertTrue(testReportExists()));
         } finally {
             PersistenceManager.inTransaction(this::deleteTestReport);
         }
@@ -58,15 +54,15 @@ public class PersistenceManagerTest {
 
             fail("Exception was swallowed!");
         } catch (RuntimeException e) {
-            Assertions.assertEquals("trigger rollback", e.getMessage());
+            assertEquals("trigger rollback", e.getMessage());
         }
 
-        PersistenceManager.inTransaction(() -> Assertions.assertFalse(testReportExists()));
+        PersistenceManager.inTransaction(() -> assertFalse(testReportExists()));
     }
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void testGetSessionNotAllowedOutsideInTransactionMethod() {
-        assertThrows(IllegalStateException.class, PersistenceManager::getSession);
+        PersistenceManager.getSession();
     }
 
     @Test
@@ -75,12 +71,12 @@ public class PersistenceManagerTest {
             PersistenceManager.inTransaction(() -> {
                 saveTestReport();
                 PersistenceManager.inTransaction(() -> {
-                    Assertions.assertTrue(testReportExists());
+                    assertTrue(testReportExists());
                 });
-                Assertions.assertTrue(testReportExists());
+                assertTrue(testReportExists());
             });
 
-            PersistenceManager.inTransaction(() -> Assertions.assertTrue(testReportExists()));
+            PersistenceManager.inTransaction(() -> assertTrue(testReportExists()));
         } finally {
             PersistenceManager.inTransaction(this::deleteTestReport);
         }
@@ -97,14 +93,14 @@ public class PersistenceManagerTest {
                 Session session = PersistenceManager.getSession();
                 sessionRef.set(session);
 
-                Assertions.assertTrue(session.isOpen());
-                Assertions.assertTrue(session.isConnected());
-                Assertions.assertTrue(session.isDirty());
+                assertTrue(session.isOpen());
+                assertTrue(session.isConnected());
+                assertTrue(session.isDirty());
             });
 
             Session session = sessionRef.get();
-            Assertions.assertFalse(session.isOpen());
-            Assertions.assertFalse(session.isConnected());
+            assertFalse(session.isOpen());
+            assertFalse(session.isConnected());
         } finally {
             PersistenceManager.inTransaction(this::deleteTestReport);
         }
@@ -116,7 +112,7 @@ public class PersistenceManagerTest {
         AtomicReference<Session> sessionRef2 = new AtomicReference<>();
         PersistenceManager.inTransaction(() -> sessionRef1.set(PersistenceManager.getSession()));
         PersistenceManager.inTransaction(() -> sessionRef2.set(PersistenceManager.getSession()));
-        Assertions.assertNotEquals(sessionRef1.get(), sessionRef2.get());
+        assertNotEquals(sessionRef1.get(), sessionRef2.get());
     }
 
     private boolean testReportExists() {

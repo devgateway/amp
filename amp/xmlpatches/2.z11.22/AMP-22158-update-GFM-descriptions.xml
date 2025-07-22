@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-22158</jira>
+	<keyword>Fix the FM description for computed measures</keyword>
+	<author>esoliani</author>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				update amp_features_visibility set description = tmp.description from (select measurename, description from amp_measures where expression is not null and description is not null) tmp where tmp.measurename = amp_features_visibility.name and amp_features_visibility.description is null;
+				update amp_features_visibility set description = tmp.description from (select columnname, description from amp_columns where tokenexpression is not null and description is not null) tmp where tmp.columnname = amp_features_visibility.name and amp_features_visibility.description is null;
+				update amp_fields_visibility set description = tmp.description from (select measurename, description from amp_measures where expression is not null and description is not null) tmp where tmp.measurename = amp_fields_visibility.name and amp_fields_visibility.description is null;
+				update amp_fields_visibility set description = tmp.description from (select columnname, description from amp_columns where tokenexpression is not null and description is not null) tmp where tmp.columnname = amp_fields_visibility.name and amp_fields_visibility.description is null;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>
+

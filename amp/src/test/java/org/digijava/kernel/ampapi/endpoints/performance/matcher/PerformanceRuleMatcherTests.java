@@ -7,7 +7,7 @@ import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.Perfo
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
 
 /**
  * @author Viorel Chihai
@@ -16,7 +16,7 @@ public class PerformanceRuleMatcherTests {
     
     PerformanceRuleMatcherDefinition definition;
     
-    @BeforeEach
+    @Before
     public void setUp() {
         PerformanceRuleMatcherPossibleValuesSupplier supplierInstance = 
                 PerformanceRuleMatcherPossibleValuesSupplier.getInstance();

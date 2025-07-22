@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-28420</jira>
+    <keyword>fm path internal id</keyword>
+    <author>vchihai</author>
+    <description>update parent for internal id fm path</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+            
+                UPDATE amp_modules_visibility SET parent=(SELECT id FROM amp_modules_visibility where NAME = '/Activity Form/Activity Internal IDs/Internal IDs') WHERE name = '/Activity Form/Activity Internal IDs/Internal IDs/internalId';
+                
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

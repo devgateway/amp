@@ -1,0 +1,36 @@
+<wicket:extend>
+	<tr wicket:id="tableHeading">
+	    <td width="100" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+	    	<b class="ins_title"><wicket:trn>Field Name</wicket:trn></b>
+	    </td>
+	   	<td width="100" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+	    	<b class="ins_title"><wicket:trn>Field Path</wicket:trn></b>
+	    </td>
+	    <td width="100" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+	    	<b class="ins_title"><wicket:trn>Permission Strategy</wicket:trn></b>
+	    </td>
+	    <td width="300" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>
+	    	<b class="ins_title"><wicket:trn>Assigned Fields Permissions</wicket:trn></b>
+	    </td>
+	    
+	</tr>
+	<tr wicket:id="permList">
+		<td class="inside" align="left">
+			<!-- 	<img src="/TEMPLATE/ampTemplate/img_2/ico_info.gif"  class="marginal-five" />
+			 -->
+				<span wicket:id="name"/>
+		</td>
+		<td class="inside" align="left">
+				<span wicket:id="path"/>
+		</td>
+		<td class="inside" align="left">
+				<span wicket:id="strategy"/>
+		</td>
+		<td class="inside" align="left">
+				<span wicket:id="description"/>
+		</td>
+		
+		
+	</tr>
+	<tr><td colspan="5"><div wicket:id="navigatorList"/></td></tr>
+</wicket:extend>

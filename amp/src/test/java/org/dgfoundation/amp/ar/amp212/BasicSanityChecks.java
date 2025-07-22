@@ -11,14 +11,11 @@ import org.dgfoundation.amp.nireports.TrailCellsDigest;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.dgfoundation.amp.test.categories.SlowTests;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Tag;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * basic sanity checks common between both the offdb schema and the AmpReportsSchema-using one.
@@ -27,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  */
 public abstract class BasicSanityChecks extends ReportingTestCase {
-
+            
     final List<String> acts = Arrays.asList(
             "activity 1 with agreement",
             "Activity 2 with multiple agreements",
@@ -89,7 +86,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
             "Unvalidated activity",
             "Proposed Project Cost 1 - USD"
         );
-
+    
     final List<String> executionRateActs = Arrays.asList(
             "activity with capital spending",
             "Activity with planned disbursements",
@@ -139,95 +136,95 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 //  protected ReportSpecificationImpl buildSpecification(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
 //      return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria);
 //  }
-
+        
     @Test
     public void testPlainReportTotals() {
-        ReportSpecification spec = buildSpecification("plain",
-                Arrays.asList(ColumnConstants.PROJECT_TITLE),
-                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
-                null,
+        ReportSpecification spec = buildSpecification("plain", 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+                null, 
                 GroupingCriteria.GROUPING_YEARLY);
-
+        
         assertEquals("{(root)=19408691.186388}", buildDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString());
         assertEquals("{(root)=8159813.768451}", buildDigest(spec, acts, new TrailCellsDigest("RAW / Funding / 2014 / Actual Commitments")).toString());
-
-        spec = buildSpecification("plain",
-                Arrays.asList(ColumnConstants.PROJECT_TITLE),
-                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
-                null,
+        
+        spec = buildSpecification("plain", 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+                null, 
                 GroupingCriteria.GROUPING_TOTALS_ONLY);
-
+                
         assertEquals("{(root)=19408691.186388}", buildDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString());
     }
-
+    
     @Test
     public void testByRegionReportTotals() { //CHECKED
-        ReportSpecification spec = buildSpecification("ByRegion",
+        ReportSpecification spec = buildSpecification("ByRegion", 
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
             Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
             GroupingCriteria.GROUPING_YEARLY);
-
-        assertEquals("{(root) -> Anenii Noi County=1611832, (root) -> Balti County=2144284.31691055, (root) -> Cahul County=7070000, (root) -> Chisinau City=296912, (root) -> Chisinau County=5066960.631302, (root) -> Drochia County=621600, (root) -> Dubasari County=213231, (root) -> Edinet County=567421, (root) -> Falesti County=999888, (root) -> Transnistrian Region=166899.25929045, (root) -> =649662.978885, (root)=19408691.186388}",
+        
+        assertEquals("{(root) -> Anenii Noi County=1611832, (root) -> Balti County=2144284.31691055, (root) -> Cahul County=7070000, (root) -> Chisinau City=296912, (root) -> Chisinau County=5066960.631302, (root) -> Drochia County=621600, (root) -> Dubasari County=213231, (root) -> Edinet County=567421, (root) -> Falesti County=999888, (root) -> Transnistrian Region=166899.25929045, (root) -> =649662.978885, (root)=19408691.186388}", 
                 buildDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString());
 
-        assertEquals("{(root) -> Anenii Noi County=37500, (root) -> Balti County=37500, (root) -> Cahul County=4400000, (root) -> Chisinau City=50000, (root) -> Chisinau County=3365760.631302, (root) -> Drochia County=0, (root) -> Dubasari County=0, (root) -> Edinet County=0, (root) -> Falesti County=0, (root) -> Transnistrian Region=123321, (root) -> =145732.137149, (root)=8159813.768451}",
+        assertEquals("{(root) -> Anenii Noi County=37500, (root) -> Balti County=37500, (root) -> Cahul County=4400000, (root) -> Chisinau City=50000, (root) -> Chisinau County=3365760.631302, (root) -> Drochia County=0, (root) -> Dubasari County=0, (root) -> Edinet County=0, (root) -> Falesti County=0, (root) -> Transnistrian Region=123321, (root) -> =145732.137149, (root)=8159813.768451}", 
                 buildDigest(spec, acts, new TrailCellsDigest("RAW / Funding / 2014 / Actual Commitments")).toString());
 
         assertEquals("{(root) -> Anenii Noi County=1100111, (root) -> Balti County=0, (root) -> Cahul County=0, (root) -> Chisinau City=0, (root) -> Chisinau County=35000, (root) -> Drochia County=0, (root) -> Dubasari County=0, (root) -> Edinet County=131845, (root) -> Falesti County=0, (root) -> Transnistrian Region=0, (root) -> =0, (root)=1266956}",
                 buildDigest(spec, acts, new TrailCellsDigest("RAW / Funding / 2013 / Actual Disbursements")).toString());
     }
-
+    
     @Test
     public void testByRegionByZoneReportTotals() { //CHECKED
-        ReportSpecification spec = buildSpecification("ByRegionByZone",
+        ReportSpecification spec = buildSpecification("ByRegionByZone", 
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.LOCATION_ADM_LEVEL_2),
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
             Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.LOCATION_ADM_LEVEL_2),
             GroupingCriteria.GROUPING_YEARLY);
 
         assertEquals(
-            "{(root) -> Anenii Noi County -> Bulboaca=285000, (root) -> Anenii Noi County -> Dolboaca=178000, (root) -> Anenii Noi County -> =1148832, (root) -> Anenii Noi County=1611832, (root) -> Balti County -> Apareni=53262.31691055, (root) -> Balti County -> Glodeni=1491289, (root) -> Balti County -> =599733, (root) -> Balti County=2144284.31691055, (root) -> Cahul County -> =7070000, (root) -> Cahul County=7070000, (root) -> Chisinau City -> =296912, (root) -> Chisinau City=296912, (root) -> Chisinau County -> =5066960.631302, (root) -> Chisinau County=5066960.631302, " +
-            "(root) -> Drochia County -> =621600, (root) -> Drochia County=621600, (root) -> Dubasari County -> =213231, (root) -> Dubasari County=213231, (root) -> Edinet County -> =567421, (root) -> Edinet County=567421, (root) -> Falesti County -> =999888, (root) -> Falesti County=999888, (root) -> Transnistrian Region -> Slobozia=43578.25929045, (root) -> Transnistrian Region -> Tiraspol=123321, (root) -> Transnistrian Region=166899.25929045, (root) ->  -> =649662.978885, (root) -> =649662.978885, (root)=19408691.186388}",
+            "{(root) -> Anenii Noi County -> Bulboaca=285000, (root) -> Anenii Noi County -> Dolboaca=178000, (root) -> Anenii Noi County -> =1148832, (root) -> Anenii Noi County=1611832, (root) -> Balti County -> Apareni=53262.31691055, (root) -> Balti County -> Glodeni=1491289, (root) -> Balti County -> =599733, (root) -> Balti County=2144284.31691055, (root) -> Cahul County -> =7070000, (root) -> Cahul County=7070000, (root) -> Chisinau City -> =296912, (root) -> Chisinau City=296912, (root) -> Chisinau County -> =5066960.631302, (root) -> Chisinau County=5066960.631302, " + 
+            "(root) -> Drochia County -> =621600, (root) -> Drochia County=621600, (root) -> Dubasari County -> =213231, (root) -> Dubasari County=213231, (root) -> Edinet County -> =567421, (root) -> Edinet County=567421, (root) -> Falesti County -> =999888, (root) -> Falesti County=999888, (root) -> Transnistrian Region -> Slobozia=43578.25929045, (root) -> Transnistrian Region -> Tiraspol=123321, (root) -> Transnistrian Region=166899.25929045, (root) ->  -> =649662.978885, (root) -> =649662.978885, (root)=19408691.186388}", 
             buildDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString());
-
+        
         assertEquals(
             "{(root) -> Anenii Noi County -> Bulboaca=0, (root) -> Anenii Noi County -> Dolboaca=0, (root) -> Anenii Noi County -> =37500, (root) -> Anenii Noi County=37500, (root) -> Balti County -> Apareni=0, (root) -> Balti County -> Glodeni=37500, (root) -> Balti County -> =0, (root) -> Balti County=37500, (root) -> Cahul County -> =4400000, (root) -> Cahul County=4400000, (root) -> Chisinau City -> =50000, (root) -> Chisinau City=50000, (root) -> Chisinau County -> =3365760.631302, (root) -> Chisinau County=3365760.631302, " +
             "(root) -> Drochia County -> =0, (root) -> Drochia County=0, (root) -> Dubasari County -> =0, (root) -> Dubasari County=0, (root) -> Edinet County -> =0, (root) -> Edinet County=0, (root) -> Falesti County -> =0, (root) -> Falesti County=0, (root) -> Transnistrian Region -> Slobozia=0, (root) -> Transnistrian Region -> Tiraspol=123321, (root) -> Transnistrian Region=123321, (root) ->  -> =145732.137149, (root) -> =145732.137149, (root)=8159813.768451}",
             buildDigest(spec, acts, new TrailCellsDigest("RAW / Funding / 2014 / Actual Commitments")).toString());
-
-
+        
+        
         assertEquals(
-            "{(root) -> Anenii Noi County -> Bulboaca=0, (root) -> Anenii Noi County -> Dolboaca=0, (root) -> Anenii Noi County -> =1100111, (root) -> Anenii Noi County=1100111, (root) -> Balti County -> Apareni=0, (root) -> Balti County -> Glodeni=0, (root) -> Balti County -> =0, (root) -> Balti County=0, (root) -> Cahul County -> =0, (root) -> Cahul County=0, (root) -> Chisinau City -> =0, (root) -> Chisinau City=0, (root) -> Chisinau County -> =35000, (root) -> Chisinau County=35000, " +
+            "{(root) -> Anenii Noi County -> Bulboaca=0, (root) -> Anenii Noi County -> Dolboaca=0, (root) -> Anenii Noi County -> =1100111, (root) -> Anenii Noi County=1100111, (root) -> Balti County -> Apareni=0, (root) -> Balti County -> Glodeni=0, (root) -> Balti County -> =0, (root) -> Balti County=0, (root) -> Cahul County -> =0, (root) -> Cahul County=0, (root) -> Chisinau City -> =0, (root) -> Chisinau City=0, (root) -> Chisinau County -> =35000, (root) -> Chisinau County=35000, " + 
             "(root) -> Drochia County -> =0, (root) -> Drochia County=0, (root) -> Dubasari County -> =0, (root) -> Dubasari County=0, (root) -> Edinet County -> =131845, (root) -> Edinet County=131845, (root) -> Falesti County -> =0, (root) -> Falesti County=0, (root) -> Transnistrian Region -> Slobozia=0, (root) -> Transnistrian Region -> Tiraspol=0, (root) -> Transnistrian Region=0, (root) ->  -> =0, (root) -> =0, (root)=1266956}",
             buildDigest(spec, acts, new TrailCellsDigest("RAW / Funding / 2013 / Actual Disbursements")).toString());
     }
 
     @Test
     public void testByZoneReportTotals() { //CHECKED
-        ReportSpecification spec = buildSpecification("ByZone",
+        ReportSpecification spec = buildSpecification("ByZone", 
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_2),
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
             Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_2),
             GroupingCriteria.GROUPING_YEARLY);
-
-        assertEquals("{(root) -> Apareni=53262.31691055, (root) -> Bulboaca=285000, (root) -> Dolboaca=178000, (root) -> Glodeni=1491289, (root) -> Slobozia=43578.25929045, (root) -> Tiraspol=123321, (root) -> =17234240.610187, (root)=19408691.186388}",
+                
+        assertEquals("{(root) -> Apareni=53262.31691055, (root) -> Bulboaca=285000, (root) -> Dolboaca=178000, (root) -> Glodeni=1491289, (root) -> Slobozia=43578.25929045, (root) -> Tiraspol=123321, (root) -> =17234240.610187, (root)=19408691.186388}", 
                 buildDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString());
-
-        assertEquals("{(root) -> Apareni=27500, (root) -> Bulboaca=0, (root) -> Dolboaca=0, (root) -> Glodeni=0, (root) -> Slobozia=22500, (root) -> Tiraspol=0, (root) -> =660200, (root)=710200}",
+        
+        assertEquals("{(root) -> Apareni=27500, (root) -> Bulboaca=0, (root) -> Dolboaca=0, (root) -> Glodeni=0, (root) -> Slobozia=22500, (root) -> Tiraspol=0, (root) -> =660200, (root)=710200}", 
                 buildDigest(spec, acts, new TrailCellsDigest("RAW / Funding / 2014 / Actual Disbursements")).toString());
     }
-
+    
     @Test
     public void testByZoneByRegionReportTotals() { //CHECKED
-        ReportSpecification spec = buildSpecification("ByZoneByRegion",
+        ReportSpecification spec = buildSpecification("ByZoneByRegion", 
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_2, ColumnConstants.LOCATION_ADM_LEVEL_1),
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
             Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_2, ColumnConstants.LOCATION_ADM_LEVEL_1),
             GroupingCriteria.GROUPING_YEARLY);
 
         assertEquals(
-            "{(root) -> Apareni -> Balti County=53262.31691055, (root) -> Apareni=53262.31691055, (root) -> Bulboaca -> Anenii Noi County=285000, (root) -> Bulboaca=285000, (root) -> Dolboaca -> Anenii Noi County=178000, (root) -> Dolboaca=178000, (root) -> Glodeni -> Balti County=1491289, (root) -> Glodeni=1491289, (root) -> Slobozia -> Transnistrian Region=43578.25929045, (root) -> Slobozia=43578.25929045, " +
+            "{(root) -> Apareni -> Balti County=53262.31691055, (root) -> Apareni=53262.31691055, (root) -> Bulboaca -> Anenii Noi County=285000, (root) -> Bulboaca=285000, (root) -> Dolboaca -> Anenii Noi County=178000, (root) -> Dolboaca=178000, (root) -> Glodeni -> Balti County=1491289, (root) -> Glodeni=1491289, (root) -> Slobozia -> Transnistrian Region=43578.25929045, (root) -> Slobozia=43578.25929045, " + 
             "(root) -> Tiraspol -> Transnistrian Region=123321, (root) -> Tiraspol=123321, (root) ->  -> Anenii Noi County=1148832, (root) ->  -> Balti County=599733, (root) ->  -> Cahul County=7070000, (root) ->  -> Chisinau City=296912, (root) ->  -> Chisinau County=5066960.631302, (root) ->  -> Drochia County=621600, (root) ->  -> Dubasari County=213231, (root) ->  -> Edinet County=567421, (root) ->  -> Falesti County=999888, (root) ->  -> =649662.978885, (root) -> =17234240.610187, (root)=19408691.186388}",
             buildDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString());
 
@@ -237,85 +234,85 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
             buildDigest(spec, acts, new TrailCellsDigest("RAW / Funding / 2014 / Actual Disbursements")).toString());
 
         assertEquals(
-            "{(root) -> Apareni -> Balti County=0, (root) -> Apareni=0, (root) -> Bulboaca -> Anenii Noi County=285000, (root) -> Bulboaca=285000, (root) -> Dolboaca -> Anenii Noi County=178000, (root) -> Dolboaca=178000, (root) -> Glodeni -> Balti County=997000, (root) -> Glodeni=997000, (root) -> Slobozia -> Transnistrian Region=0, (root) -> Slobozia=0, " +
+            "{(root) -> Apareni -> Balti County=0, (root) -> Apareni=0, (root) -> Bulboaca -> Anenii Noi County=285000, (root) -> Bulboaca=285000, (root) -> Dolboaca -> Anenii Noi County=178000, (root) -> Dolboaca=178000, (root) -> Glodeni -> Balti County=997000, (root) -> Glodeni=997000, (root) -> Slobozia -> Transnistrian Region=0, (root) -> Slobozia=0, " + 
             "(root) -> Tiraspol -> Transnistrian Region=0, (root) -> Tiraspol=0, (root) ->  -> Anenii Noi County=1111332, (root) ->  -> Balti County=333333, (root) ->  -> Cahul County=2670000, (root) ->  -> Chisinau City=0, (root) ->  -> Chisinau County=1700000, (root) ->  -> Drochia County=0, (root) ->  -> Dubasari County=0, (root) ->  -> Edinet County=567421, (root) ->  -> Falesti County=0, (root) ->  -> =0, (root) -> =6382086, (root)=7842086}",
             buildDigest(spec, acts, new TrailCellsDigest("RAW / Funding / 2013 / Actual Commitments")).toString());
     }
 
     @Test
     public void testByTypeOfAssistance() { //CHECKED
-        ReportSpecification spec = buildSpecification("ByTypeOfAssistance_",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.TYPE_OF_ASSISTANCE),
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-            Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE),
+        ReportSpecification spec = buildSpecification("ByTypeOfAssistance_", 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.TYPE_OF_ASSISTANCE), 
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+            Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE), 
             GroupingCriteria.GROUPING_YEARLY);
 
         assertEquals(
             "{(root) -> default type of assistance=11927387.555086, (root) -> second type of assistance=7481303.631302, (root)=19408691.186388}",
             buildDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString());
-
+        
         assertEquals(
             "{(root) -> default type of assistance=2676802, (root) -> second type of assistance=530000, (root)=3206802}",
             buildDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Disbursements")).toString());
     }
-
+    
     @Test
     public void testByZoneByPrimarySector() {
-        ReportSpecification spec = buildSpecification("ByZoneByPrimarySector",
+        ReportSpecification spec = buildSpecification("ByZoneByPrimarySector", 
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_2, ColumnConstants.PRIMARY_SECTOR),
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
             Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_2, ColumnConstants.PRIMARY_SECTOR),
             GroupingCriteria.GROUPING_YEARLY);
-
+        
         assertEquals(
-            "{(root) -> Apareni -> 110 - EDUCATION=31957.39014633, (root) -> Apareni -> 112 - BASIC EDUCATION=5326.231691055, (root) -> Apareni -> 120 - HEALTH=15978.695073165, (root) -> Apareni=53262.31691055, (root) -> Bulboaca -> 110 - EDUCATION=285000, (root) -> Bulboaca=285000, (root) -> Dolboaca -> 110 - EDUCATION=53400, (root) -> Dolboaca -> 120 - HEALTH=124600, (root) -> Dolboaca=178000, (root) -> Glodeni -> 110 - EDUCATION=764494.5, (root) -> Glodeni -> 112 - BASIC EDUCATION=228394.5, (root) -> Glodeni -> 120 - HEALTH=498400, (root) -> Glodeni=1491289, (root) -> Slobozia -> 110 - EDUCATION=26146.95557427, (root) -> Slobozia -> 112 - BASIC EDUCATION=4357.825929045, (root) -> Slobozia -> 120 - HEALTH=13073.477787135, (root) -> Slobozia=43578.25929045, " +
+            "{(root) -> Apareni -> 110 - EDUCATION=31957.39014633, (root) -> Apareni -> 112 - BASIC EDUCATION=5326.231691055, (root) -> Apareni -> 120 - HEALTH=15978.695073165, (root) -> Apareni=53262.31691055, (root) -> Bulboaca -> 110 - EDUCATION=285000, (root) -> Bulboaca=285000, (root) -> Dolboaca -> 110 - EDUCATION=53400, (root) -> Dolboaca -> 120 - HEALTH=124600, (root) -> Dolboaca=178000, (root) -> Glodeni -> 110 - EDUCATION=764494.5, (root) -> Glodeni -> 112 - BASIC EDUCATION=228394.5, (root) -> Glodeni -> 120 - HEALTH=498400, (root) -> Glodeni=1491289, (root) -> Slobozia -> 110 - EDUCATION=26146.95557427, (root) -> Slobozia -> 112 - BASIC EDUCATION=4357.825929045, (root) -> Slobozia -> 120 - HEALTH=13073.477787135, (root) -> Slobozia=43578.25929045, " + 
             "(root) -> Tiraspol -> 110 - EDUCATION=123321, (root) -> Tiraspol=123321, (root) ->  -> 110 - EDUCATION=7946744.3122985, (root) ->  -> 112 - BASIC EDUCATION=1145608.2978885, (root) ->  -> 113 - SECONDARY EDUCATION=7130000, (root) ->  -> 130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH=999888, (root) ->  -> =12000, (root) -> =17234240.610187, (root)=19408691.186388}",
             buildDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString());
-
+        
         assertEquals(
-            "{(root) -> Apareni -> 110 - EDUCATION=16500, (root) -> Apareni -> 112 - BASIC EDUCATION=2750, (root) -> Apareni -> 120 - HEALTH=8250, (root) -> Apareni=27500, (root) -> Bulboaca -> 110 - EDUCATION=0, (root) -> Bulboaca=0, (root) -> Dolboaca -> 110 - EDUCATION=0, (root) -> Dolboaca -> 120 - HEALTH=0, (root) -> Dolboaca=0, (root) -> Glodeni -> 110 - EDUCATION=160882.5, (root) -> Glodeni -> 112 - BASIC EDUCATION=160882.5, (root) -> Glodeni -> 120 - HEALTH=0, (root) -> Glodeni=321765, (root) -> Slobozia -> 110 - EDUCATION=13500, (root) -> Slobozia -> 112 - BASIC EDUCATION=2250, (root) -> Slobozia -> 120 - HEALTH=6750, (root) -> Slobozia=22500, " +
+            "{(root) -> Apareni -> 110 - EDUCATION=16500, (root) -> Apareni -> 112 - BASIC EDUCATION=2750, (root) -> Apareni -> 120 - HEALTH=8250, (root) -> Apareni=27500, (root) -> Bulboaca -> 110 - EDUCATION=0, (root) -> Bulboaca=0, (root) -> Dolboaca -> 110 - EDUCATION=0, (root) -> Dolboaca -> 120 - HEALTH=0, (root) -> Dolboaca=0, (root) -> Glodeni -> 110 - EDUCATION=160882.5, (root) -> Glodeni -> 112 - BASIC EDUCATION=160882.5, (root) -> Glodeni -> 120 - HEALTH=0, (root) -> Glodeni=321765, (root) -> Slobozia -> 110 - EDUCATION=13500, (root) -> Slobozia -> 112 - BASIC EDUCATION=2250, (root) -> Slobozia -> 120 - HEALTH=6750, (root) -> Slobozia=22500, " + 
             "(root) -> Tiraspol -> 110 - EDUCATION=0, (root) -> Tiraspol=0, (root) ->  -> 110 - EDUCATION=1675888, (root) ->  -> 112 - BASIC EDUCATION=255936, (root) ->  -> 113 - SECONDARY EDUCATION=450000, (root) ->  -> 130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH=453213, (root) ->  -> =0, (root) -> =2835037, (root)=3206802}",
             buildDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Disbursements")).toString());
     }
 
     /**
-     * checks that several activities output amounts and dates
+     * checks that several activities output amounts and dates  
      */
 //  @Test
 //  public void testWithDates() {
-//      ReportSpecification spec = buildSpecification("ByActivityUpdateOnByActivityCreatedOn",
-//          Arrays.asList(ColumnConstants.ACTIVITY_UPDATED_ON, ColumnConstants.ACTIVITY_CREATED_ON),
-//          Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-//          null,
+//      ReportSpecification spec = buildSpecification("ByActivityUpdateOnByActivityCreatedOn", 
+//          Arrays.asList(ColumnConstants.ACTIVITY_UPDATED_ON, ColumnConstants.ACTIVITY_CREATED_ON), 
+//          Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+//          null, 
 //          GroupingCriteria.GROUPING_YEARLY);
 //      assertEquals(
 //          "{0=1200, 1=123456, 2=97562.978885, 3=[2015-03-22], 4=[2015-03-22], 5=[2015-12-15], 6=1200, 7=123456, 8=93930.841736, 9=[2015-03-22], 10=[2015-03-22], 11=[2015-12-15], 12=3632.137149}",
 //          buildDigest(spec, acts, new RawDataDigest(new HashSet<>(Arrays.asList(79l, 67L, 66L)))).toString());
-//  }
-
+//  }   
+    
     @Test
     public void testByRegionByPrimarySectorByZone() {
-        ReportSpecification spec = buildSpecification("ByRegionByPrimarySectorByZone",
+        ReportSpecification spec = buildSpecification("ByRegionByPrimarySectorByZone", 
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.LOCATION_ADM_LEVEL_2),
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
             Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.LOCATION_ADM_LEVEL_2),
             GroupingCriteria.GROUPING_YEARLY);
-
+        
         assertEquals(
             "{(root) -> Anenii Noi County -> 110 - EDUCATION -> Bulboaca=285000, (root) -> Anenii Noi County -> 110 - EDUCATION -> Dolboaca=53400, (root) -> Anenii Noi County -> 110 - EDUCATION -> =1148832, (root) -> Anenii Noi County -> 110 - EDUCATION=1487232, (root) -> Anenii Noi County -> 120 - HEALTH -> Dolboaca=124600, (root) -> Anenii Noi County -> 120 - HEALTH=124600, (root) -> Anenii Noi County=1611832, (root) -> Balti County -> 110 - EDUCATION -> Apareni=31957.39014633, (root) -> Balti County -> 110 - EDUCATION -> Glodeni=764494.5, (root) -> Balti County -> 110 - EDUCATION -> =493173, (root) -> Balti County -> 110 - EDUCATION=1289624.89014633, (root) -> Balti County -> 112 - BASIC EDUCATION -> Apareni=5326.231691055, (root) -> Balti County -> 112 - BASIC EDUCATION -> Glodeni=228394.5, (root) -> Balti County -> 112 - BASIC EDUCATION -> =106560, (root) -> Balti County -> 112 - BASIC EDUCATION=340280.731691055, (root) -> Balti County -> 120 - HEALTH -> Apareni=15978.695073165, (root) -> Balti County -> 120 - HEALTH -> Glodeni=498400, (root) -> Balti County -> 120 - HEALTH=514378.695073165, (root) -> Balti County=2144284.31691055, (root) -> Cahul County -> 113 - SECONDARY EDUCATION -> =7070000, (root) -> Cahul County -> 113 - SECONDARY EDUCATION=7070000, (root) -> Cahul County=7070000, (root) -> Chisinau City -> 110 - EDUCATION -> =296912, (root) -> Chisinau City -> 110 - EDUCATION=296912, (root) -> Chisinau City=296912, (root) -> Chisinau County -> 110 - EDUCATION -> =5066960.631302, (root) -> Chisinau County -> 110 - EDUCATION=5066960.631302, (root) -> Chisinau County=5066960.631302, (root) -> Drochia County -> 110 - EDUCATION -> =372960, (root) -> Drochia County -> 110 - EDUCATION=372960, (root) -> Drochia County -> 112 - BASIC EDUCATION -> =248640, (root) -> Drochia County -> 112 - BASIC EDUCATION=248640, (root) -> Drochia County=621600, (root) -> Dubasari County -> 110 - EDUCATION -> =0, (root) -> Dubasari County -> 110 - EDUCATION=0, (root) -> Dubasari County -> 112 - BASIC EDUCATION -> =213231, (root) -> Dubasari County -> 112 - BASIC EDUCATION=213231, (root) -> Dubasari County=213231, (root) -> Edinet County -> 112 - BASIC EDUCATION -> =567421, (root) -> Edinet County -> 112 - BASIC EDUCATION=567421, (root) -> Edinet County=567421, (root) -> Falesti County -> 130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH -> =999888, (root) -> Falesti County -> 130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH=999888, (root) -> Falesti County=999888, (root) -> Transnistrian Region -> 110 - EDUCATION -> Slobozia=26146.95557427, (root) -> Transnistrian Region -> 110 - EDUCATION -> Tiraspol=123321, (root) -> Transnistrian Region -> 110 - EDUCATION=149467.95557427, (root) -> Transnistrian Region -> 112 - BASIC EDUCATION -> Slobozia=4357.825929045, (root) -> Transnistrian Region -> 112 - BASIC EDUCATION=4357.825929045, (root) -> Transnistrian Region -> 120 - HEALTH -> Slobozia=13073.477787135, (root) -> Transnistrian Region -> 120 - HEALTH=13073.477787135, (root) -> Transnistrian Region=166899.25929045, (root) ->  -> 110 - EDUCATION -> =567906.6809965, (root) ->  -> 110 - EDUCATION=567906.6809965, (root) ->  -> 112 - BASIC EDUCATION -> =9756.2978885, (root) ->  -> 112 - BASIC EDUCATION=9756.2978885, (root) ->  -> 113 - SECONDARY EDUCATION -> =60000, (root) ->  -> 113 - SECONDARY EDUCATION=60000, (root) ->  ->  -> =12000, (root) ->  -> =12000, (root) -> =649662.978885, (root)=19408691.186388}",
             buildDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString());
-
+        
         assertEquals(
             "{(root) -> Anenii Noi County -> 110 - EDUCATION -> Bulboaca=0, (root) -> Anenii Noi County -> 110 - EDUCATION -> Dolboaca=0, (root) -> Anenii Noi County -> 110 - EDUCATION -> =1243888, (root) -> Anenii Noi County -> 110 - EDUCATION=1243888, (root) -> Anenii Noi County -> 120 - HEALTH -> Dolboaca=0, (root) -> Anenii Noi County -> 120 - HEALTH=0, (root) -> Anenii Noi County=1243888, (root) -> Balti County -> 110 - EDUCATION -> Apareni=16500, (root) -> Balti County -> 110 - EDUCATION -> Glodeni=160882.5, (root) -> Balti County -> 110 - EDUCATION -> =0, (root) -> Balti County -> 110 - EDUCATION=177382.5, (root) -> Balti County -> 112 - BASIC EDUCATION -> Apareni=2750, (root) -> Balti County -> 112 - BASIC EDUCATION -> Glodeni=160882.5, (root) -> Balti County -> 112 - BASIC EDUCATION -> =0, (root) -> Balti County -> 112 - BASIC EDUCATION=163632.5, (root) -> Balti County -> 120 - HEALTH -> Apareni=8250, (root) -> Balti County -> 120 - HEALTH -> Glodeni=0, (root) -> Balti County -> 120 - HEALTH=8250, (root) -> Balti County=349265, (root) -> Cahul County -> 113 - SECONDARY EDUCATION -> =450000, (root) -> Cahul County -> 113 - SECONDARY EDUCATION=450000, (root) -> Cahul County=450000, (root) -> Chisinau City -> 110 - EDUCATION -> =45000, (root) -> Chisinau City -> 110 - EDUCATION=45000, (root) -> Chisinau City=45000, (root) -> Chisinau County -> 110 - EDUCATION -> =190000, (root) -> Chisinau County -> 110 - EDUCATION=190000, (root) -> Chisinau County=190000, (root) -> Drochia County -> 110 - EDUCATION -> =80000, (root) -> Drochia County -> 110 - EDUCATION=80000, (root) -> Drochia County -> 112 - BASIC EDUCATION -> =0, (root) -> Drochia County -> 112 - BASIC EDUCATION=0, (root) -> Drochia County=80000, (root) -> Dubasari County -> 110 - EDUCATION -> =45000, (root) -> Dubasari County -> 110 - EDUCATION=45000, (root) -> Dubasari County -> 112 - BASIC EDUCATION -> =123321, (root) -> Dubasari County -> 112 - BASIC EDUCATION=123321, (root) -> Dubasari County=168321, (root) -> Edinet County -> 112 - BASIC EDUCATION -> =131845, (root) -> Edinet County -> 112 - BASIC EDUCATION=131845, (root) -> Edinet County=131845, (root) -> Falesti County -> 130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH -> =453213, (root) -> Falesti County -> 130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH=453213, (root) -> Falesti County=453213, (root) -> Transnistrian Region -> 110 - EDUCATION -> Slobozia=13500, (root) -> Transnistrian Region -> 110 - EDUCATION -> Tiraspol=0, (root) -> Transnistrian Region -> 110 - EDUCATION=13500, (root) -> Transnistrian Region -> 112 - BASIC EDUCATION -> Slobozia=2250, (root) -> Transnistrian Region -> 112 - BASIC EDUCATION=2250, (root) -> Transnistrian Region -> 120 - HEALTH -> Slobozia=6750, (root) -> Transnistrian Region -> 120 - HEALTH=6750, (root) -> Transnistrian Region=22500, (root) ->  -> 110 - EDUCATION -> =72000, (root) ->  -> 110 - EDUCATION=72000, (root) ->  -> 112 - BASIC EDUCATION -> =770, (root) ->  -> 112 - BASIC EDUCATION=770, (root) ->  -> 113 - SECONDARY EDUCATION -> =0, (root) ->  -> 113 - SECONDARY EDUCATION=0, (root) ->  ->  -> =0, (root) ->  -> =0, (root) -> =72770, (root)=3206802}",
             buildDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Disbursements")).toString());
     }
-
+    
     @Test
     public void testYearRangeSettings() throws Exception {
-        ReportSpecificationImpl spec = buildSpecification("byImplementingAgency",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.IMPLEMENTING_AGENCY),
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-            Arrays.asList(ColumnConstants.IMPLEMENTING_AGENCY),
+        ReportSpecificationImpl spec = buildSpecification("byImplementingAgency", 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.IMPLEMENTING_AGENCY), 
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+            Arrays.asList(ColumnConstants.IMPLEMENTING_AGENCY), 
             GroupingCriteria.GROUPING_YEARLY);
         setLocale("en");
         List<ExceptionRunnable<Exception>> actions = Arrays.asList(
@@ -325,34 +322,34 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         actions.forEach(act -> {
             try{act.run();}
             catch(Exception e){throw AlgoUtils.translateException(e);}
-
+        
             assertEquals(
                     "{(root) -> 72 Local Public Administrations from RM=96840.576201, (root) -> Finland=165740.48, (root) -> Ministry of Economy=0, (root) -> Ministry of Finance=0, (root) -> UNDP=82715.52, (root) -> USAID=0, (root) -> =19063394.610187, (root)=19408691.186388}",
                     buildDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString()); // totals shouldn't change through YRS
-
+        
             assertEquals(
                     "{(root) -> 72 Local Public Administrations from RM=0, (root) -> Finland=25000, (root) -> Ministry of Economy=0, (root) -> Ministry of Finance=0, (root) -> UNDP=0, (root) -> USAID=0, (root) -> =0, (root)=25000}",
                     buildDigest(spec, acts, new TrailCellsDigest("RAW / Funding / 2012 / Actual Commitments")).toString());
-
+        
             shouldFail(() -> buildDigest(spec, acts, new TrailCellsDigest("RAW / Funding / 2013 / Actual Commitments"))); // should not find column
         });
     }
 
     final String correctTotals = "{RAW / Funding / 2006 / Actual Commitments=96840.576201, RAW / Funding / 2006 / Actual Disbursements=0, RAW / Funding / 2009 / Actual Commitments=100000, RAW / Funding / 2009 / Actual Disbursements=0, RAW / Funding / 2010 / Actual Commitments=0, RAW / Funding / 2010 / Actual Disbursements=780311, RAW / Funding / 2011 / Actual Commitments=1213119, RAW / Funding / 2011 / Actual Disbursements=0, RAW / Funding / 2012 / Actual Commitments=25000, RAW / Funding / 2012 / Actual Disbursements=12000, RAW / Funding / 2013 / Actual Commitments=7842086, RAW / Funding / 2013 / Actual Disbursements=1266956, RAW / Funding / 2014 / Actual Commitments=8159813.768451, RAW / Funding / 2014 / Actual Disbursements=710200, RAW / Funding / 2015 / Actual Commitments=1971831.841736, RAW / Funding / 2015 / Actual Disbursements=437335, RAW / Totals / Actual Commitments=19408691.186388, RAW / Totals / Actual Disbursements=3206802}";
     final static GrandTotalsDigest fundingGrandTotalsDigester = new GrandTotalsDigest(z -> z.startsWith("RAW / Funding /") || z.startsWith("RAW / Totals"));
-
+    
     @Test
     public void testActivityFilteringInTests() {
         String hier1Name = ColumnConstants.IMPLEMENTING_AGENCY_GROUPS;
         String hier2Name = ColumnConstants.IMPLEMENTING_AGENCY;
-
-        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s summary: %b", hier1Name, hier2Name, false),
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name),
-                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                Arrays.asList(hier1Name, hier2Name),
+        
+        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s summary: %b", hier1Name, hier2Name, false), 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name), 
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                Arrays.asList(hier1Name, hier2Name), 
                 GroupingCriteria.GROUPING_YEARLY);
         spec.setSummaryReport(true);
-
+        
         String localTotalsTotals = "{RAW / Funding / 2006 / Actual Commitments=96840.576201, RAW / Funding / 2006 / Actual Disbursements=0, RAW / Funding / 2014 / Actual Commitments=0, RAW / Funding / 2014 / Actual Disbursements=50000, RAW / Totals / Actual Commitments=96840.576201, RAW / Totals / Actual Disbursements=50000}";
         assertEquals(localTotalsTotals, buildDigest(spec, Arrays.asList("activity with contracting agency"), fundingGrandTotalsDigester).toString());
     }
@@ -361,39 +358,39 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     public void testProgramsBracing() {
         String hier1Name = ColumnConstants.PRIMARY_PROGRAM_LEVEL_1;
         String hier2Name = ColumnConstants.PRIMARY_PROGRAM_LEVEL_2;
-
-        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s summary: %b", hier1Name, hier2Name, false),
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name),
-                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                Arrays.asList(hier1Name, hier2Name),
+        
+        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s summary: %b", hier1Name, hier2Name, false), 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name), 
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                Arrays.asList(hier1Name, hier2Name), 
                 GroupingCriteria.GROUPING_YEARLY);
-
+        
         final String localTotals = "{RAW / Funding / 2013 / Actual Commitments=0, RAW / Funding / 2013 / Actual Disbursements=35000, RAW / Funding / 2014 / Actual Commitments=0, RAW / Funding / 2014 / Actual Disbursements=75000, RAW / Totals / Actual Commitments=0, RAW / Totals / Actual Disbursements=110000}";
         assertEquals(spec.getReportName(), localTotals, buildDigest(spec, Arrays.asList("activity with pipeline MTEFs and act. disb"), fundingGrandTotalsDigester).toString());
     }
-
+    
     /**
      * generates reports with many hierarchies and checks that, for any of them, the totals do not change
      * @throws Exception
      */
     @Test
     public void testSingleHierarchiesDoNotChangeTotals() throws Exception {
-
-        ReportSpecificationImpl initSpec = buildSpecification("initSpec",
-                Arrays.asList(ColumnConstants.PROJECT_TITLE),
-                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                null,
+        
+        ReportSpecificationImpl initSpec = buildSpecification("initSpec", 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                null, 
                 GroupingCriteria.GROUPING_YEARLY);
-
+                
         assertEquals(correctTotals, buildDigest(initSpec, acts, fundingGrandTotalsDigester).toString());
-
+                
         // single-hierarchy reports
         for(boolean isSummary:Arrays.asList(true, false)) {
             for (String hierName : DONOR_HIERARCHIES_TO_TRY) {
-                ReportSpecificationImpl spec = buildSpecification(String.format("%s summary: %b", hierName, isSummary),
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName),
-                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                        Arrays.asList(hierName),
+                ReportSpecificationImpl spec = buildSpecification(String.format("%s summary: %b", hierName, isSummary), 
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName), 
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                        Arrays.asList(hierName), 
                         GroupingCriteria.GROUPING_YEARLY);
                 spec.setSummaryReport(isSummary);
                 assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, fundingGrandTotalsDigester).toString());
@@ -412,10 +409,10 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                 for (String hier2Name : DONOR_HIERARCHIES_TO_TRY)
                     if (hier1Name != hier2Name) {
                         reps ++;
-                        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s summary: %b", hier1Name, hier2Name, isSummary),
-                                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name),
-                                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                                Arrays.asList(hier1Name, hier2Name),
+                        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s summary: %b", hier1Name, hier2Name, isSummary), 
+                                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name), 
+                                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                                Arrays.asList(hier1Name, hier2Name), 
                                 GroupingCriteria.GROUPING_YEARLY);
                         spec.setSummaryReport(isSummary);
 //                      if (!buildDigest(spec, acts, fundingGrandTotalsDigester).toString().equals(correctTotals)) {
@@ -432,10 +429,10 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         double relativeSpeed = speed / 349.0;
         System.err.format("I ran %d double-hier reports in %d millies (%d per second, relativeSpeed: %.2f)\n", reps, delta, speed, relativeSpeed);
     }
-
-
+    
+    
     @Test
-    @Tag("slowtests")
+    @Category(SlowTests.class)
     public void testTripleHierarchiesDoNotChangeTotals() {
         if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
             return; // these are too slow if backed by DB
@@ -449,10 +446,10 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                     for (String hier3Name : DONOR_HIERARCHIES_TO_TRY)
                     if (hier1Name != hier2Name && hier2Name != hier3Name && hier1Name != hier3Name) {
                         reps ++;
-                        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s, %s summary: %b", hier1Name, hier2Name, hier3Name, isSummary),
-                                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name, hier3Name),
-                                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                                Arrays.asList(hier1Name, hier2Name, hier3Name),
+                        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s, %s summary: %b", hier1Name, hier2Name, hier3Name, isSummary), 
+                                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name, hier3Name), 
+                                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                                Arrays.asList(hier1Name, hier2Name, hier3Name), 
                                 GroupingCriteria.GROUPING_YEARLY);
                         spec.setSummaryReport(isSummary);
 //                      if (!buildDigest(spec, acts, fundingGrandTotalsDigester).toString().equals(correctTotals)) {
@@ -469,25 +466,25 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         double relativeSpeed = speed / 516.0;
         System.err.format("I ran %d triple-hier reports in %d millies (%d per second, relativeSpeed: %.2f)\n", reps, delta, speed, relativeSpeed);
     }
-
+    
     @Test
     public void testSingleHierarchiesWithEmptyRowsDoNotChangeTotals() throws Exception {
-
-        ReportSpecificationImpl initSpec = buildSpecification("initSpec",
-                Arrays.asList(ColumnConstants.PROJECT_TITLE),
-                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                null,
+        
+        ReportSpecificationImpl initSpec = buildSpecification("initSpec", 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                null, 
                 GroupingCriteria.GROUPING_YEARLY);
-
+                
         assertEquals(correctTotals, buildDigest(initSpec, acts, fundingGrandTotalsDigester).toString());
-
+                
         // single-hierarchy reports
         for(boolean isSummary:Arrays.asList(true, false)) {
             for (String hierName : DONOR_HIERARCHIES_TO_TRY) {
-                ReportSpecificationImpl spec = buildSpecification(String.format("%s summary: %b", hierName, isSummary),
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName),
-                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                        Arrays.asList(hierName),
+                ReportSpecificationImpl spec = buildSpecification(String.format("%s summary: %b", hierName, isSummary), 
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName), 
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                        Arrays.asList(hierName), 
                         GroupingCriteria.GROUPING_YEARLY);
                 spec.setSummaryReport(isSummary);
                 spec.setDisplayEmptyFundingRows(true);
@@ -500,17 +497,17 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
     public void testDoubleHierarchiesWithEmptyRowsDoNotChangeTotals() {
         long start = System.currentTimeMillis();
         long reps = 0;
-
+       
         // double-hierarchy reports
         for(boolean isSummary:Arrays.asList(true, false)) {
             for (String hier1Name : DONOR_HIERARCHIES_TO_TRY)
                 for (String hier2Name : DONOR_HIERARCHIES_TO_TRY)
                     if (hier1Name != hier2Name) {
                         reps ++;
-                        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s summary: %b", hier1Name, hier2Name, isSummary),
-                                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name),
-                                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                                Arrays.asList(hier1Name, hier2Name),
+                        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s summary: %b", hier1Name, hier2Name, isSummary), 
+                                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name), 
+                                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                                Arrays.asList(hier1Name, hier2Name), 
                                 GroupingCriteria.GROUPING_YEARLY);
                         spec.setSummaryReport(isSummary);
                         spec.setDisplayEmptyFundingRows(true);
@@ -524,16 +521,16 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         double relativeSpeed = speed / 349.0;
         System.err.format("I ran %d double-hier reports in %d millies (%d per second, relativeSpeed: %.2f)\n", reps, delta, speed, relativeSpeed);
     }
-
-
+    
+    
     @Test
-    @Tag("slowtests")
+    @Category(SlowTests.class)
     public void testTripleHierarchiesWithEmptyRowsDoNotChangeTotals() {
         if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
             return; // these are too slow if backed by DB
         long start = System.currentTimeMillis();
         long reps = 0;
-
+        
         // triple-hierarchy reports
         for(boolean isSummary:Arrays.asList(true, false)) {
             for (String hier1Name : DONOR_HIERARCHIES_TO_TRY)
@@ -541,10 +538,10 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                     for (String hier3Name : DONOR_HIERARCHIES_TO_TRY)
                     if (hier1Name != hier2Name && hier2Name != hier3Name && hier1Name != hier3Name) {
                         reps ++;
-                        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s, %s summary: %b", hier1Name, hier2Name, hier3Name, isSummary),
-                                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name, hier3Name),
-                                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                                Arrays.asList(hier1Name, hier2Name, hier3Name),
+                        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s, %s summary: %b", hier1Name, hier2Name, hier3Name, isSummary), 
+                                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name, hier3Name), 
+                                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                                Arrays.asList(hier1Name, hier2Name, hier3Name), 
                                 GroupingCriteria.GROUPING_YEARLY);
                         spec.setSummaryReport(isSummary);
                         spec.setDisplayEmptyFundingRows(true);
@@ -558,28 +555,28 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         double relativeSpeed = speed / 516.0;
         System.err.format("I ran %d triple-hier reports in %d millies (%d per second, relativeSpeed: %.2f)\n", reps, delta, speed, relativeSpeed);
     }
-
-
+    
+    
     @Test
     public void testSummaryReportWithoutHierarchies() {
-        ReportSpecificationImpl initSpec = buildSpecification("initSpec",
-                Arrays.asList(ColumnConstants.PROJECT_TITLE),
-                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                null,
+        ReportSpecificationImpl initSpec = buildSpecification("initSpec", 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                null, 
                 GroupingCriteria.GROUPING_YEARLY);
         initSpec.setSummaryReport(true);
         assertEquals(correctTotals, buildDigest(initSpec, acts, fundingGrandTotalsDigester).toString());
     }
-
-
+    
+    
     @Test
     public void testByRegionBySector() {
-        ReportSpecification spec = buildSpecification("testByRegionBySector",
+        ReportSpecification spec = buildSpecification("testByRegionBySector", 
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_SECTOR),
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
             Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_SECTOR),
             GroupingCriteria.GROUPING_YEARLY);
-
+        
         NiReportModel cor = new NiReportModel("testByRegionBySector")
             .withHeaders(Arrays.asList(
                     "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 21))",
@@ -727,15 +724,15 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 
         runNiTestCase(cor, spec, acts);
     }
-
+    
     @Test
     public void testRegionUndefinedHierarchyOutput() {
-        ReportSpecification spec = buildSpecification("regionUndefinedHierarchy",
+        ReportSpecification spec = buildSpecification("regionUndefinedHierarchy", 
                 Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_SECTOR),
-                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
                 Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
                 GroupingCriteria.GROUPING_YEARLY);
-
+        
         NiReportModel cor = new NiReportModel("regionUndefinedHierarchy")
         .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 11))",
@@ -752,18 +749,18 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                 new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Administrative Level 1: Undefined")).withContents("Project Title", "", "Primary Sector", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "33,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "117,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "150,000", "Totals-Actual Disbursements", "0", "Administrative Level 1", "Administrative Level 1: Undefined")
                 .withChildren(
                   new ReportAreaForTests(null, "Project Title", "activity_with_disaster_response", "Primary Sector", "110 - EDUCATION, 113 - SECONDARY EDUCATION", "Funding-2014-Actual Commitments", "33,000", "Funding-2015-Actual Commitments", "117,000", "Totals-Actual Commitments", "150,000")        )      ));
-
+        
         runNiTestCase(cor, spec, Arrays.asList("crazy funding 1", "activity_with_disaster_response"));
     }
-
+    
     @Test
     public void testRegionUndefinedColumn() {
-        ReportSpecification spec = buildSpecification("regionUndefinedColumn",
+        ReportSpecification spec = buildSpecification("regionUndefinedColumn", 
                 Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_SECTOR),
-                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
                 null,
                 GroupingCriteria.GROUPING_YEARLY);
-
+        
         NiReportModel cor = new NiReportModel("regionUndefinedColumn")
         .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 11))",
@@ -776,10 +773,10 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
               .withChildren(
                 new ReportAreaForTests(null, "Project Title", "crazy funding 1", "Administrative Level 1", "Balti County", "Primary Sector", "110 - EDUCATION", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333"),
                 new ReportAreaForTests(null, "Project Title", "activity_with_disaster_response", "Administrative Level 1", "", "Primary Sector", "110 - EDUCATION, 113 - SECONDARY EDUCATION", "Funding-2014-Actual Commitments", "33,000", "Funding-2015-Actual Commitments", "117,000", "Totals-Actual Commitments", "150,000")      ));
-
+        
         runNiTestCase(cor, spec, Arrays.asList("crazy funding 1", "activity_with_disaster_response"));
     }
-
+    
     @Test
     public void testAllowEmptyFundingColumnsDoesNotInfluenceYearlyReports() {
         List<String> acts = Arrays.asList("crazy funding 1", "activity_with_disaster_response");
@@ -788,7 +785,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_COMMITMENTS),
             null,
             GroupingCriteria.GROUPING_YEARLY);
-
+        
         NiReportModel cor = new NiReportModel("allowEmptyFundingColumns")
         .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 13))",
@@ -803,10 +800,10 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                 new ReportAreaForTests(null, "Project Title", "activity_with_disaster_response", "Funding-2014-Actual Commitments", "33,000", "Funding-2015-Actual Commitments", "117,000", "Totals-Actual Commitments", "150,000")      ));
 
         runNiTestCase(cor, spec, acts);
-
+        
         spec.setDisplayEmptyFundingColumns(true);
         runNiTestCase(cor, spec, acts);
-
+        
         NiReportModel totalsCor = new NiReportModel("allowEmptyFundingColumns")
         .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
@@ -818,20 +815,20 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
               .withChildren(
                 new ReportAreaForTests(null, "Project Title", "crazy funding 1", "Totals-Actual Commitments", "333,333"),
                 new ReportAreaForTests(null, "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "150,000")));
-
+        
         spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
         spec.setDisplayEmptyFundingColumns(false);
         runNiTestCase(totalsCor, spec, acts);
-
+        
         spec.setDisplayEmptyFundingColumns(true);
         runNiTestCase(totalsCor, spec, acts);
     }
-
-
+    
+    
     @Test
     public void test_AMP_18497() {
         // for running manually: open http://localhost:8080/TEMPLATE/ampTemplate/saikuui_reports/index.html#report/open/32 on the AMP 2.10 testcases database
-
+        
         NiReportModel cor = new NiReportModel("AMP-18497")
                 .withHeaders(Arrays.asList(
                         "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
@@ -846,15 +843,15 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                                 new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Donor Group", "American, Default Group, European", "Totals-Actual Disbursements", "545,000")      ));
 
         runNiTestCase(
-                buildSpecification("AMP-18497",
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_GROUP),
-                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+                buildSpecification("AMP-18497", 
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_GROUP), 
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
                         null, GroupingCriteria.GROUPING_TOTALS_ONLY),
                 "en",
                 Arrays.asList("Eth Water", "Test MTEF directed", "TAC_activity_2"),
                 cor);
     }
-
+    
     @Test
     public void test_AMP_18530_no_hier() {
         // report with "Administrative Level 1" as a column, an activity without locations + one with locations
@@ -870,9 +867,9 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Administrative Level 1", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
                         new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Administrative Level 1", "Balti County", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")      ));
-
+        
         runNiTestCase(
-                buildSpecification("AMP-18530-no-hier",
+                buildSpecification("AMP-18530-no-hier",                     
                         Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
                         Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
                         null,
@@ -882,7 +879,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                 cor);
 
     }
-
+    
     @Test
     public void test_AMP_18530_hier() {
         // report with "Administrative Level 1" as a hier, an activity without locations + one with locations
@@ -902,28 +899,28 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                 new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Administrative Level 1: Undefined")).withContents("Project Title", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000", "Administrative Level 1", "Administrative Level 1: Undefined")
                 .withChildren(
                   new ReportAreaForTests(null, "Project Title", "date-filters-activity", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000")        )      ));
-
+        
         runNiTestCase(
-                buildSpecification("AMP-18530-hier",
+                buildSpecification("AMP-18530-hier", 
                         Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PROJECT_TITLE),
-                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
                         Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
                         GroupingCriteria.GROUPING_YEARLY),
                 "en",
                 Arrays.asList("date-filters-activity", "crazy funding 1"),
                 cor);
-
+        
         runNiTestCase(
-                buildSpecification("AMP-18541-columns-not-ordered",
+                buildSpecification("AMP-18541-columns-not-ordered", 
                         Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
-                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
                         Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
                         GroupingCriteria.GROUPING_YEARLY),
                 "en",
                 Arrays.asList("date-filters-activity", "crazy funding 1"),
                 cor);
     }
-
+    
     @Test
     public void test_AMP_18542() {
         // report with "Administrative Level 1" as a column, an activity without locations + one with locations
@@ -943,28 +940,28 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                 new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Administrative Level 1: Undefined")).withContents("Project Title", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000", "Administrative Level 1", "Administrative Level 1: Undefined")
                 .withChildren(
                   new ReportAreaForTests(null, "Project Title", "date-filters-activity", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000")        )      ));
-
+        
         runNiTestCase(
-                buildSpecification("AMP-18542-ordered-columns",
+                buildSpecification("AMP-18542-ordered-columns", 
                     Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PROJECT_TITLE),
-                    Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+                    Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
                     Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
                     GroupingCriteria.GROUPING_YEARLY),
                 "en",
                 Arrays.asList("date-filters-activity", "crazy funding 1"),
                 cor);
-
+        
         runNiTestCase(
-                buildSpecification("AMP-18542-unordered-columns",
+                buildSpecification("AMP-18542-unordered-columns", 
                     Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
-                    Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+                    Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
                     Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
                     GroupingCriteria.GROUPING_YEARLY),
                 "en",
                 Arrays.asList("date-filters-activity", "crazy funding 1"),
                 cor);
     }
-
+    
     @Test
     public void testAllowEmptyColumnsWithQuarterReport() {
         NiReportModel correctResult = new NiReportModel("something 1")
@@ -981,22 +978,22 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                         new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Funding-2010-Q1-Actual Disbursements", "453,213", "Funding-2011-Q4-Actual Commitments", "999,888", "Totals-Actual Commitments", "999,888", "Totals-Actual Disbursements", "453,213"),
                         new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Funding-2009-Q1-Actual Commitments", "100,000", "Funding-2010-Q2-Actual Disbursements", "60,000", "Funding-2012-Q3-Actual Commitments", "25,000", "Funding-2012-Q4-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
                         new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Funding-2013-Q4-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")      ));
-
+        
         ReportSpecificationImpl spec = buildSpecification("something 1",
                 Arrays.asList(ColumnConstants.PROJECT_TITLE),
                 Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                null,
+                null, 
                 GroupingCriteria.GROUPING_QUARTERLY);
         spec.setDisplayEmptyFundingColumns(true);
         spec.setDisplayTimeRangeSubtotals(false);
         runNiTestCase(
                 spec,
-                "en",
-                Arrays.asList("TAC_activity_2", "date-filters-activity", "crazy funding 1"),
+                "en", 
+                Arrays.asList("TAC_activity_2", "date-filters-activity", "crazy funding 1"), 
                 correctResult
                 );
     }
-
+    
     @Test
     public void testAllowEmptyColumnsWithMonthlyReport() {
         NiReportModel correctResult = new NiReportModel("something 2")
@@ -1010,23 +1007,23 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
             .withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "Funding-2010-January-Actual Commitments", "0", "Funding-2010-January-Actual Disbursements", "453,213", "Funding-2011-November-Actual Commitments", "999,888", "Funding-2011-November-Actual Disbursements", "0", "Totals-Actual Commitments", "999,888", "Totals-Actual Disbursements", "453,213")
               .withChildren(
                 new ReportAreaForTests(null, "Project Title", "TAC_activity_2", "Funding-2010-January-Actual Disbursements", "453,213", "Funding-2011-November-Actual Commitments", "999,888", "Totals-Actual Commitments", "999,888", "Totals-Actual Disbursements", "453,213")      ));
-
+        
         ReportSpecificationImpl spec = buildSpecification("something 2",
                 Arrays.asList(ColumnConstants.PROJECT_TITLE),
                 Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                null,
+                null, 
                 GroupingCriteria.GROUPING_MONTHLY);
         spec.setDisplayTimeRangeSubtotals(false);
 
         spec.setDisplayEmptyFundingColumns(true);
         runNiTestCase(
                 spec,
-                "en",
-                Arrays.asList("TAC_activity_2"),
+                "en", 
+                Arrays.asList("TAC_activity_2"), 
                 correctResult
                 );
     }
-
+    
     @Test
     public void testEmptyMeasuresFlat() {
         NiReportModel corYearly = new NiReportModel("emptyMeasuresFlat")
@@ -1043,15 +1040,15 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                         new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Administrative Level 1", "Dubasari County", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231"),
                         new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Administrative Level 1", "Anenii Noi County", "Funding-2013-Actual Commitments", "666,777", "Totals-Actual Commitments", "666,777"),
                         new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Administrative Level 1", "Anenii Noi County, Balti County", "Funding-2013-Actual Commitments", "570,000", "Totals-Actual Commitments", "570,000")      ));
-
-        ReportSpecificationImpl spec = buildSpecification("emptyMeasuresFlat",
+        
+        ReportSpecificationImpl spec = buildSpecification("emptyMeasuresFlat", 
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.PIPELINE_COMMITMENTS, MeasureConstants.PIPELINE_ESTIMATED_DISBURSEMENTS),
             null,
             GroupingCriteria.GROUPING_YEARLY);
-
+        
         runNiTestCase(spec, "en", Arrays.asList("TAC_activity_1", "ptc activity 1", "Activity with Zones"), corYearly);
-
+        
         NiReportModel corTotalsOnly = new NiReportModel("emptyMeasuresFlat")
                 .withHeaders(Arrays.asList(
                         "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
@@ -1065,12 +1062,12 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                         new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Administrative Level 1", "Dubasari County", "Totals-Actual Commitments", "213,231"),
                         new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Administrative Level 1", "Anenii Noi County", "Totals-Actual Commitments", "666,777"),
                         new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Administrative Level 1", "Anenii Noi County, Balti County", "Totals-Actual Commitments", "570,000")      ));
-
+        
         spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
-
+        
         runNiTestCase(spec, "en", Arrays.asList("TAC_activity_1", "ptc activity 1", "Activity with Zones"), corTotalsOnly);
     }
-
+    
     @Test
     public void testEmptyMeasuresWithHier() {
         NiReportModel corYearly = new NiReportModel("emptyMeasuresWithHier")
@@ -1095,15 +1092,15 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                     new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Dubasari County")).withContents("Project Title", "", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Pipeline Commitments", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Pipeline Commitments", "0", "Totals-Actual Commitments", "213,231", "Totals-Pipeline Commitments", "0", "Administrative Level 1", "Dubasari County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231")        )      ));
-
-        ReportSpecificationImpl spec = buildSpecification("emptyMeasuresWithHier",
+        
+        ReportSpecificationImpl spec = buildSpecification("emptyMeasuresWithHier", 
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.PIPELINE_COMMITMENTS, MeasureConstants.PIPELINE_ESTIMATED_DISBURSEMENTS),
             Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
             GroupingCriteria.GROUPING_YEARLY);
-
+        
         runNiTestCase(spec, "en", Arrays.asList("TAC_activity_1", "ptc activity 1", "Activity with Zones"), corYearly);
-
+        
         NiReportModel corTotalsOnly = new NiReportModel("emptyMeasuresWithHier")
             .withHeaders(Arrays.asList(
                     "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
@@ -1125,12 +1122,12 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                     new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Dubasari County")).withContents("Project Title", "", "Totals-Actual Commitments", "213,231", "Totals-Pipeline Commitments", "0", "Administrative Level 1", "Dubasari County")
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Totals-Actual Commitments", "213,231")        )      ));
-
+        
         spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
-
+        
         runNiTestCase(spec, "en", Arrays.asList("TAC_activity_1", "ptc activity 1", "Activity with Zones"), corTotalsOnly);
     }
-
+    
     @Test
     public void testDateColumns() {
         NiReportModel cor = new NiReportModel("test_date_columns")
@@ -1146,13 +1143,13 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                 new ReportAreaForTests(null, "Project Title", "mtef activity 2", "Activity Created On", "05/08/2013", "Activity Updated On", "20/12/2013"),
                 new ReportAreaForTests(null, "Project Title", "ptc activity 1", "Activity Created On", "19/08/2013", "Activity Updated On", "20/12/2013", "Totals-Actual Commitments", "666,777"),
                 new ReportAreaForTests(null, "Project Title", "ptc activity 2", "Activity Created On", "19/08/2013", "Activity Updated On", "20/12/2013", "Totals-Actual Commitments", "333,222")      ));
-
+        
         ReportSpecificationImpl spec = buildSpecification("test_date_columns",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.ACTIVITY_CREATED_ON, ColumnConstants.ACTIVITY_UPDATED_ON),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
             null,
             GroupingCriteria.GROUPING_TOTALS_ONLY);
-
+        
         runNiTestCase(spec, "en", Arrays.asList("ptc activity 1", "mtef activity 1", "mtef activity 2", "ptc activity 2"), cor);
     }
 
@@ -1228,7 +1225,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 
         runNiTestCase(spec, "en", acts, cor);
     }
-
+    
     @Test
     public void testHierByTypeOfAssistance() {
         NiReportModel cor = new NiReportModel("test_by_type_of_assistance")
@@ -1285,7 +1282,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                           new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Administrative Level 1", "Cahul County", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000"),
                           new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Administrative Level 1", "Chisinau County", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000"),
                           new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Administrative Level 1", "Transnistrian Region", "Funding-2014-Actual Commitments", "123,321", "Totals-Actual Commitments", "123,321"))));
-
+        
         ReportSpecificationImpl spec = buildSpecification("test_by_type_of_assistance",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.TYPE_OF_ASSISTANCE),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
@@ -1294,7 +1291,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 
         runNiTestCase(spec, "en", acts, cor);
     }
-
+    
     @Test
     public void testActivityCountSpecFlat() {
         NiReportModel cor = new NiReportModel("testActivityCountFlat")
@@ -1351,16 +1348,16 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                     new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Administrative Level 1", "Drochia County"),
                     new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Administrative Level 1", "", "Totals-Actual Commitments", "97,562,98")      ));
 
-
+        
         ReportSpecificationImpl spec = buildSpecification("testActivityCountFlat",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.ACTIVITY_COUNT),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
             null,
             GroupingCriteria.GROUPING_TOTALS_ONLY);
-
+        
         runNiTestCase(spec, "en", acts, cor);
     }
-
+    
     @Test
     public void testActivityCountSpecHier() {
         NiReportModel cor = new NiReportModel("testActivityCountSpecHier")
@@ -1437,13 +1434,13 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                       new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "150,000"),
                       new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Totals-Actual Commitments", "97,562,98")        )      ));
 
-
+        
         ReportSpecificationImpl spec = buildSpecification("testActivityCountSpecHier",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.ACTIVITY_COUNT),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
             Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
             GroupingCriteria.GROUPING_TOTALS_ONLY);
-
+        
         runNiTestCase(spec, "en", acts, cor);
     }
 
@@ -1469,18 +1466,18 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                     new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Falesti County", 9093), "Activity Count", "1", "Totals-Actual Commitments", "999,888", "Administrative Level 1", "Falesti County"),
                     new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Transnistrian Region", 9105), "Activity Count", "2", "Totals-Actual Commitments", "166,899,26", "Administrative Level 1", "Transnistrian Region"),
                     new ReportAreaForTests(new AreaOwner("Administrative Level 1", "Administrative Level 1: Undefined", -8977), "Activity Count", "10", "Totals-Actual Commitments", "649,662,98", "Administrative Level 1", "Administrative Level 1: Undefined")      ));
-
+        
         ReportSpecificationImpl spec = buildSpecification("testActivityCountSpecHierSummary",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.ACTIVITY_COUNT),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
             Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
             GroupingCriteria.GROUPING_TOTALS_ONLY);
-
+        
         spec.setSummaryReport(true);
-
+        
         runNiTestCase(spec, "en", acts, cor);
     }
-
+    
     @Test
     public void testExecutionRateFlatReport() {
         NiReportModel cor = new NiReportModel("testExecutionRateFlat")
@@ -1538,14 +1535,14 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                                 new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Donor Agency", "Finland, Norway, USAID", "Primary Sector", "110 - EDUCATION", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Disbursements", "80,000"),
                                 new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Donor Agency", "Finland, Ministry of Finance, Norway", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION")      ));
 
-
+        
         ReportSpecificationImpl spec = buildSpecification("testExecutionRateFlat",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY, ColumnConstants.PRIMARY_SECTOR),
             Arrays.asList(MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.EXECUTION_RATE),
             null,
             GroupingCriteria.GROUPING_YEARLY
         );
-
+        
         runNiTestCase(spec, "en", acts, cor);
     }
 
@@ -1671,17 +1668,17 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                 new ReportAreaForTests(new AreaOwner("Donor Agency", "World Bank", 21697)).withContents("Project Title", "", "Primary Sector", "", "Funding-2010-Planned Disbursements", "0", "Funding-2010-Actual Disbursements", "123,321", "Funding-2012-Planned Disbursements", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Planned Disbursements", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Planned Disbursements", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Planned Disbursements", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Planned Disbursements", "0", "Totals-Actual Disbursements", "123,321", "Donor Agency", "World Bank")
                 .withChildren(
                   new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Primary Sector", "112 - BASIC EDUCATION", "Funding-2010-Actual Disbursements", "123,321", "Totals-Actual Disbursements", "123,321")        )      ));
-
+        
         ReportSpecificationImpl spec = buildSpecification("testExecutionRateByDonor",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY, ColumnConstants.PRIMARY_SECTOR),
             Arrays.asList(MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.EXECUTION_RATE),
             Arrays.asList(ColumnConstants.DONOR_AGENCY),
             GroupingCriteria.GROUPING_YEARLY
         );
-
+        
         runNiTestCase(spec, "en", acts, cor);
     }
-
+    
     @Test
     public void testExecutionRateByDonorByPrimarySector() {
         NiReportModel cor = new NiReportModel("testExecutionRateByDonorByPS")
@@ -1769,14 +1766,14 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                   .withChildren(
                     new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2010-Actual Disbursements", "123,321", "Totals-Actual Disbursements", "123,321")          )        )      ));
 
-
+        
         ReportSpecificationImpl spec = buildSpecification("testExecutionRateByDonorByPS",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY, ColumnConstants.PRIMARY_SECTOR),
             Arrays.asList(MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.EXECUTION_RATE),
             Arrays.asList(ColumnConstants.DONOR_AGENCY, ColumnConstants.PRIMARY_SECTOR),
             GroupingCriteria.GROUPING_YEARLY
         );
-
+        
         runNiTestCase(spec, "en", acts, cor);
     }
 
@@ -1804,16 +1801,16 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                 new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Commitments", "96,840,58", "Totals-Actual Disbursements", "50,000", "Totals-Cumulative Commitment", "96,840,58", "Totals-Cumulative Disbursement", "50,000", "Totals-Cumulative Execution Rate", "51,63"),
                 new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000", "Totals-Cumulative Commitment", "45,000"),
                 new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "456,789", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "456,789", "Totals-Actual Disbursements", "321,765", "Totals-Cumulative Commitment", "456,789", "Totals-Cumulative Disbursement", "321,765", "Totals-Cumulative Execution Rate", "70,44")      ));
-
+        
         ReportSpecificationImpl spec = buildSpecification("testUnfilteredMeasuresInUnfilteredReport",
             Arrays.asList(ColumnConstants.PROJECT_TITLE),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.CUMULATIVE_COMMITMENT, MeasureConstants.CUMULATIVE_DISBURSEMENT, MeasureConstants.CUMULATIVE_EXECUTION_RATE),
             null,
             GroupingCriteria.GROUPING_YEARLY);
-
+        
         runNiTestCase(spec, "en", actsUnfilteredMeasures, cor);
     }
-
+    
     @Test
     public void testUnfilteredMeasuresInDateFilteredReport() throws Exception {
         NiReportModel cor = new NiReportModel("testUnfilteredMeasuresInDateFilteredReport")
@@ -1837,17 +1834,17 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                     new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Totals-Cumulative Commitment", "96,840,58", "Totals-Cumulative Disbursement", "50,000", "Totals-Cumulative Execution Rate", "51,63"),
                     new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Totals-Cumulative Commitment", "45,000"),
                     new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Totals-Cumulative Commitment", "456,789", "Totals-Cumulative Disbursement", "321,765", "Totals-Cumulative Execution Rate", "70,44")      ));
-
+        
         ReportSpecificationImpl spec = buildSpecification("testUnfilteredMeasuresInDateFilteredReport",
             Arrays.asList(ColumnConstants.PROJECT_TITLE),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.CUMULATIVE_COMMITMENT, MeasureConstants.CUMULATIVE_DISBURSEMENT, MeasureConstants.CUMULATIVE_EXECUTION_RATE),
             null,
             GroupingCriteria.GROUPING_YEARLY);
-
+        
         ReportFiltersImpl arf = new ReportFiltersImpl();
         arf.addFilterRule(new ReportElement(ReportElement.ElementType.DATE), DateFilterUtils.getDatesRangeFilterRule(ReportElement.ElementType.DATE, 2456353, 2456897, "2456353", "2456897", true));
         spec.setFilters(arf);
-
+        
         runNiTestCase(spec, "en", actsUnfilteredMeasures, cor);
     }
 
@@ -1870,17 +1867,17 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                 new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Funding-2006-Actual Commitments", "58,104,35", "Funding-2014-Actual Disbursements", "30,000", "Totals-Actual Commitments", "58,104,35", "Totals-Actual Disbursements", "30,000", "Totals-Cumulative Commitment", "58,104,35", "Totals-Cumulative Disbursement", "30,000", "Totals-Cumulative Execution Rate", "51,63"),
                 new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000", "Totals-Cumulative Commitment", "45,000"),
                 new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "228,394,5", "Funding-2015-Actual Disbursements", "160,882,5", "Totals-Actual Commitments", "228,394,5", "Totals-Actual Disbursements", "160,882,5", "Totals-Cumulative Commitment", "228,394,5", "Totals-Cumulative Disbursement", "160,882,5", "Totals-Cumulative Execution Rate", "70,44")      ));
-
+        
         ReportSpecificationImpl spec = buildSpecification("testUnfilteredMeasuresInSectorFilteredReport",
             Arrays.asList(ColumnConstants.PROJECT_TITLE),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.CUMULATIVE_COMMITMENT, MeasureConstants.CUMULATIVE_DISBURSEMENT, MeasureConstants.CUMULATIVE_EXECUTION_RATE),
             null,
             GroupingCriteria.GROUPING_YEARLY);
-
+        
         ReportFiltersImpl arf = new ReportFiltersImpl();
         arf.addFilterRule(new ReportElement(new ReportColumn(ColumnConstants.PRIMARY_SECTOR)), new FilterRule(Arrays.asList("6236"), true));
         spec.setFilters(arf);
-
+        
         runNiTestCase(spec, "en", actsUnfilteredMeasures, cor);
     }
 
@@ -1901,21 +1898,21 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                                 new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Primary Sector", "110 - EDUCATION", "Donor Agency", "Finland", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000", "Totals-Execution Rate", "88,89", "Totals-Average Disbursement Rate", "88,89"),
                                 new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Primary Sector", "110 - EDUCATION", "Donor Agency", "Finland, Ministry of Finance", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
                                 new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Primary Sector", "110 - EDUCATION", "Donor Agency", "Ministry of Finance, UNDP", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000", "Totals-Execution Rate", "97,83", "Totals-Average Disbursement Rate", "97,83")      ));
-
-
+    
+        
         ReportSpecificationImpl spec = buildSpecification("testAverageMeasureFlat",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.DONOR_AGENCY),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.EXECUTION_RATE, MeasureConstants.AVERAGE_DISBURSEMENT_RATE),
             null,
             GroupingCriteria.GROUPING_YEARLY);
-
+        
         ReportFiltersImpl arf = new ReportFiltersImpl();
         arf.addFilterRule(new ReportElement(new ReportColumn(ColumnConstants.PRIMARY_SECTOR)), new FilterRule(Arrays.asList("6236"), true));
         spec.setFilters(arf);
-
+        
         runNiTestCase(spec, "en", executionRateActs, cor);
-    }
-
+    }   
+    
     @Test
     public void testAverageMeasureSingleHier() {
         NiReportModel cor = new NiReportModel("testAverageMeasureSingleHier")
@@ -1935,20 +1932,20 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                                                 new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Donor Agency", "Finland", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000", "Totals-Execution Rate", "88,89", "Totals-Average Disbursement Rate", "88,89"),
                                                 new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Donor Agency", "Finland, Ministry of Finance", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
                                                 new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Donor Agency", "Ministry of Finance, UNDP", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000", "Totals-Execution Rate", "97,83", "Totals-Average Disbursement Rate", "97,83")        )      ));
-
+        
         ReportSpecificationImpl spec = buildSpecification("testAverageMeasureSingleHier",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.DONOR_AGENCY),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.EXECUTION_RATE, MeasureConstants.AVERAGE_DISBURSEMENT_RATE),
             Arrays.asList(ColumnConstants.PRIMARY_SECTOR),
             GroupingCriteria.GROUPING_YEARLY);
-
+        
         ReportFiltersImpl arf = new ReportFiltersImpl();
         arf.addFilterRule(new ReportElement(new ReportColumn(ColumnConstants.PRIMARY_SECTOR)), new FilterRule(Arrays.asList("6236"), true));
         spec.setFilters(arf);
-
+        
         runNiTestCase(spec, "en", executionRateActs, cor);
     }
-
+    
     @Test
     public void testAverageMeasureDualHier() {
         NiReportModel cor = new NiReportModel("testAverageMeasureDualHier")
@@ -1976,20 +1973,20 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
                         new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000", "Totals-Execution Rate", "97,83", "Totals-Average Disbursement Rate", "97,83")          )        )      ));
-
+        
         ReportSpecificationImpl spec = buildSpecification("testAverageMeasureDualHier",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.DONOR_AGENCY),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.EXECUTION_RATE, MeasureConstants.AVERAGE_DISBURSEMENT_RATE),
             Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.DONOR_AGENCY),
             GroupingCriteria.GROUPING_YEARLY);
-
+        
         ReportFiltersImpl arf = new ReportFiltersImpl();
         arf.addFilterRule(new ReportElement(new ReportColumn(ColumnConstants.PRIMARY_SECTOR)), new FilterRule(Arrays.asList("6236"), true));
         spec.setFilters(arf);
-
+        
         runNiTestCase(spec, "en", executionRateActs, cor);
     }
-
+    
     @Test
     public void testFetchedMeasureTotal() {
         NiReportModel cor = new NiReportModel("testFetchedMeasureTotal")
@@ -2009,13 +2006,13 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                     new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Primary Sector", "112 - BASIC EDUCATION", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Actual Disbursements", "570", "Totals-Actual Disbursements", "770", "Totals-Percentage Of Total Disbursements", "0,45"),
                     new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Primary Sector", "110 - EDUCATION", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000", "Totals-Percentage Of Total Disbursements", "52,7")      ));
 
-
+        
         ReportSpecificationImpl spec = buildSpecification("testFetchedMeasureTotal",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS),
             null,
             GroupingCriteria.GROUPING_YEARLY);
-
+        
         runNiTestCase(spec, "en", executionRateActs, cor);
     }
 
@@ -2069,16 +2066,16 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                     new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Primary Sector", "112 - BASIC EDUCATION", "Totals-Percentage Of Total Disbursements", "0,45"),
                     new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Primary Sector", "110 - EDUCATION", "Totals-Percentage Of Total Disbursements", "52,7")      ));
 
-
+        
         ReportSpecificationImpl spec = buildSpecification("testFetchedMeasureTotalMissingPrecursor",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR),
             Arrays.asList(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS),
             null,
             GroupingCriteria.GROUPING_YEARLY);
-
+        
         runNiTestCase(spec, "en", executionRateActs, cor);
     }
-
+    
     @Test
     public void testFetchedMeasureTotalMissingPrecursorHier() {
         NiReportModel cor = new NiReportModel("testFetchedMeasureTotalMissingPrecursorHier")
@@ -2111,13 +2108,13 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                       new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Totals-Percentage of Total Commitments", "2,79"),
                       new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Totals-Percentage Of Total Disbursements", "0,45")        )      ));
 
-
+        
         ReportSpecificationImpl spec = buildSpecification("testFetchedMeasureTotalMissingPrecursorHier",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.LOCATION_ADM_LEVEL_1),
             Arrays.asList(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS),
             Arrays.asList(ColumnConstants.LOCATION_ADM_LEVEL_1),
             GroupingCriteria.GROUPING_YEARLY);
-
+        
         runNiTestCase(spec, "en", executionRateActs, cor);
     }
 
@@ -2556,7 +2553,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                         "(2006: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 1));(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 1));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 5, colSpan: 1));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 6, colSpan: 3));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 9, colSpan: 6));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 15, colSpan: 7))",
                         "(April: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 1));(February: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1));(August: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1));(November: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1));(September: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 1));(August: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 1));(November: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 1));(December: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 1));(February: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 1));(March: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 10, colSpan: 1));(April: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 1));(July: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 12, colSpan: 1));(November: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 13, colSpan: 1));(December: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 14, colSpan: 1));(January: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 15, colSpan: 1));(March: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 16, colSpan: 1));(April: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 17, colSpan: 1));(June: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 18, colSpan: 1));(August: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 19, colSpan: 1));(September: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 20, colSpan: 1));(October: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 21, colSpan: 1))",
                         "(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 21, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 22, colSpan: 1))"))
-                .withWarnings(Collections.emptyList())
+                .withWarnings(Arrays.asList())
                 .withBody(      new ReportAreaForTests(null)
                         .withContents("Financing Instrument", "", "Funding-2006-April-Actual Commitments", "96,840,58", "Funding-2009-February-Actual Commitments", "100,000", "Funding-2011-August-Actual Commitments", "213,231", "Funding-2011-November-Actual Commitments", "999,888", "Funding-2012-September-Actual Commitments", "25,000", "Funding-2013-August-Actual Commitments", "1,678,753", "Funding-2013-November-Actual Commitments", "2,670,000", "Funding-2013-December-Actual Commitments", "3,493,333", "Funding-2014-February-Actual Commitments", "75,000", "Funding-2014-March-Actual Commitments", "147,000", "Funding-2014-April-Actual Commitments", "7,700,000", "Funding-2014-July-Actual Commitments", "33,000", "Funding-2014-November-Actual Commitments", "77,760,63", "Funding-2014-December-Actual Commitments", "127,053,14", "Funding-2015-January-Actual Commitments", "45,000", "Funding-2015-March-Actual Commitments", "704,445", "Funding-2015-April-Actual Commitments", "383,000", "Funding-2015-June-Actual Commitments", "67,000", "Funding-2015-August-Actual Commitments", "555,000", "Funding-2015-September-Actual Commitments", "123,456", "Funding-2015-October-Actual Commitments", "93,930,84", "Totals-Actual Commitments", "19,408,691,19")
                         .withChildren(

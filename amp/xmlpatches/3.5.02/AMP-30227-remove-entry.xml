@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-30227</jira>
+    <keyword>remove unused gs</keyword>
+    <author>ginchauspe</author>
+    <description>remove one pager report generator gs</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                DELETE FROM amp_global_settings WHERE settingsname = 'Report Generator - One Pager';
+                DELETE FROM dg_message WHERE message_key = '-137950819';
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -1,0 +1,330 @@
+/************************************************************************************************************
+
+	DHTML Suite for Applications
+	(C) www.dhtmlgoodies.com, November 2006
+
+	CSS for the DHTMLSuite.paneSplitter class.
+	
+	
+	www.dhtmlgoodies.com
+	Alf Magne Kalleland
+
+************************************************************************************************************/
+
+/* Set the <html> and <body> element to full size and overflow to hidden
+This is important for the script
+*/
+html{	
+	width:100%;
+	height:100%;
+	margin:0px;
+	padding:0px;
+	overflow:hidden;
+}
+body{
+	width:100%;
+	height:100%;
+	margin:0px;
+	padding:0px;
+	background-color:#F00;
+}
+
+
+.DHTMLSuite_pane{	/* Main div for a pane */
+	background-color:#FFF;
+	overflow:hidden;
+	border-left:1px solid #BBB;	/* Gray border */
+	border-right:1px solid #BBB;	/* Gray border */
+}
+.DHTMLSuite_paneHeader{	/* Pane header div */
+	height:23px;
+	line-height:22px;
+	background-image:url(../images_dhtmlsuite/pane-splitter-header-bg.png);
+	background-repeat:repeat-x;
+	overflow:hidden;
+
+}
+.DHTMLSuite_paneContent{	/* Pane content div */
+	overflow:auto;			/* IMPORTANT */
+	position:relative;		/* IMPORTANT */
+	width:100%;
+	height:100%;
+	padding:0px;
+	margin:0px;
+}
+.DHTMLSuite_paneContent .DHTMLSuite_paneContentInner{	/* A div inside .DHTMLSuite_paneContent. This is where the content is located. If you want to add some styling to the content of panes, this could be the place */
+	padding:4px;	/* "Air" */
+}
+
+/* End custom css for each pane */
+.DHTMLSuite_paneContent .paneContentInner{	/* A div inside .DHTMLSuite_paneContent. Add styling to it in case you want some padding */
+	padding:14px;
+}
+
+.DHTMLSuite_paneTabs{	/* Div for the tabs */
+	background-color:#d0d0d0;
+	height:24px;
+	line-height:24px;
+	border-top:1px solid #8F8F8F;
+	padding-left:3px;
+}
+
+.DHTMLSuite_paneTabs div{	/* General rules for a tab */
+	display:block;					/* Block level element - important */
+
+	position:relative;				/* Relative positioning since we have -1px on top */
+	margin-left:2px;				/* 5 pixel space at the right side of each tab */
+	font-size:0.9em;				/* Font size: 12 pixels */
+	line-height:120%;				/* Font size * 1.2 */
+	padding-left:10px;				/* Left space inside tab - ps! Right space is added to the "a" tags below. */
+	
+	top:-1px;						/* -1px in order to cover the border above the tab */
+	overflow:hidden;				/* Hide overflowing content - eventual */
+	font-weight:bold;				/* Bold font */
+}
+
+.DHTMLSuite_paneTabs .paneSplitterActiveTab{	/* Custom rules for active tabs */
+	height:22px;
+	padding-top:0px;					/* Padding-top - 1 pixel extra padding since we don't have border-top on active items */
+	background-image:url(../images_dhtmlsuite/pane-splitter-tab-active-bg.png);
+	background-repeat:no-repeat;
+}
+
+.DHTMLSuite_paneTabs .paneSplitterActiveTab a{
+	background-image:url(../images_dhtmlsuite/pane-splitter-tab-active-b2.png);
+	background-repeat:no-repeat;
+	background-position:top right;
+	display:block;
+	height:22px;
+	padding-right:10px;				/* Right space inside tab */
+	padding-top:4px;
+}
+
+.DHTMLSuite_paneTabs .paneSplitterInactiveTab{	/* Custom rule for inactive tabs */
+	border-top:1px solid #8F8F8F;	
+	background-image:url(../images_dhtmlsuite/pane-splitter-tab-inact-bg.png);
+	background-repeat:no-repeat;
+	height:21px;
+}
+.DHTMLSuite_paneTabs div a{	/* Text links inside a tab  - general css*/
+	display:block;
+	clear:both;
+	text-decoration:none;			/* no underline */
+	white-space:nowrap;
+}
+
+.DHTMLSuite_paneTabs .paneSplitterActiveTab a{	/* Tab links - active tabs */
+	color:#006;							/* Dark Gray color */
+}
+.DHTMLSuite_paneTabs .paneSplitterInactiveTab a{	/* Tab links - inactive tabs */
+	color:#444;
+	background-image:url(../images_dhtmlsuite/pane-splitter-tab-inact-bg2.png);
+	background-repeat:no-repeat;
+	background-position:top right;	
+	height:22px;
+	padding-right:10px;				/* Right space inside tab */
+	padding-top:3px;	
+}
+
+.DHTMLSuite_paneHeader .DHTMLSuite_paneHeader_buttonDiv{	/* Button container inside the header of a pane */
+	padding:3px;
+}
+
+.DHTMLSuite_paneHeader .paneTitle{	/* Title of pane - at the left of the header bar */
+	padding-left:4px; /* Text indentation */
+}
+
+
+.DHTMLSuite_paneHeader .DHTMLSuite_paneHeader_buttonDiv div,	/* General rules for the small buttons inside a pane header */
+.DHTMLSuite_pane_collapsed_west .buttonDiv div,	/* Also small buttons inside the box for collapsed panes */
+.DHTMLSuite_pane_collapsed_south .buttonDiv div,
+.DHTMLSuite_pane_collapsed_east .buttonDiv div,
+.DHTMLSuite_pane_collapsed_north .buttonDiv div
+{	
+	background-repeat:no-repeat;
+	width:15px;
+	height:15px;
+	background-position: center center;		
+	cursor:pointer;	/* "Hand" as cursor */
+}
+
+.DHTMLSuite_paneHeader .DHTMLSuite_paneHeader_buttonDiv div{
+	float:right;	/* Float items to the right */
+}
+
+.DHTMLSuite_paneHeader .DHTMLSuite_paneHeader_buttonDiv .closeButton,.DHTMLSuite_paneHeader .DHTMLSuite_paneHeader_buttonDiv .closeButtonOver{	/* Close button */
+	background-image: url(../images_dhtmlsuite/pane-splitter-close.gif); 
+	padding:1px;	/* Same size as border for the over state */
+}
+
+.collapseButtonHorizontal, .collapseButtonHorizontalOver{	/* collapse button (west and east pane) */
+	background-image: url(../images_dhtmlsuite/pane-splitter-collapse.gif); 
+	padding:1px;	/* Same size as border for the over state */
+}
+
+.expandButtonHorizontal, .expandButtonHorizontalOver{	/* expand button (west and east pane) */
+	background-image: url(../images_dhtmlsuite/pane-splitter-expand.gif); 
+	padding:1px;	/* Same size as border for the over state */
+}
+
+.collapseButtonVertical,.collapseButtonVerticalOver{	/* collapse button (north and south pane) */
+	background-image: url(../images_dhtmlsuite/pane-splitter-collapse-v.gif); 
+	padding:1px;	/* Same size as border for the over state */
+}
+
+.expandButtonVertical,.expandButtonVerticalOver{	/* expand button (north and south pane)  */
+	background-image: url(../images_dhtmlsuite/pane-splitter-expand-v.gif); 
+	padding:1px;	/* Same size as border for the over state */
+}
+.DHTMLSuite_paneHeader .DHTMLSuite_paneHeader_buttonDiv .closeButtonOver,	
+.collapseButtonHorizontalOver,
+.expandButtonHorizontalOver,
+.collapseButtonVerticalOver,
+.expandButtonVerticalOver{	/* Mouse over states - buttons */
+	background-color:#FFF;
+	border:1px solid #BBB;
+	padding:0px;	/* No padding since we have a border */
+}
+	
+.DHTMLSuite_paneSplitter_horizontal{	/* Horizontal splitter resize handle */
+	background-image:url('../images_dhtmlsuite/pane-splitter-resize-hor.png');
+	background-repeat:no-repeat;
+	background-position: top center;
+	border-top:1px solid #BBB;
+	cursor:n-resize;
+
+}
+.DHTMLSuite_paneSplitter_vertical{	/* Vertical splitter resize handle */
+	background-image:url('../images_dhtmlsuite/pane-splitter-resize-ver.png');
+	background-repeat:no-repeat;
+	background-position: left center;
+	cursor:w-resize;
+}
+
+.DHTMLSuite_paneSplitter_onResize{	/* Resize handle - resize in progress */
+	background-color:#AAA;	/* Just a gray background color - size is set automatically */
+}
+
+/* PANES IN COLLAPSED STATE */
+.DHTMLSuite_pane_collapsed_west,.DHTMLSuite_pane_collapsed_east{	/* Pane in collapsed state */
+	background-color:#d6d6d6;
+	z-index:15000;
+	padding-right:3px;
+	padding-left:3px;
+	width:23px;
+}
+.DHTMLSuite_pane_collapsed_south,.DHTMLSuite_pane_collapsed_north{	/* Pane in collapsed state */
+	background-color:#d6d6d6;
+	z-index:16000;
+	padding-top:2px;
+	padding-left:1px;
+	padding-right:1px;
+	height:23px;
+
+}
+
+
+.DHTMLSuite_pane_collapsed_west{
+}
+.DHTMLSuite_pane_collapsed_south{
+	border-top:1px solid #BBB;
+}
+.DHTMLSuite_pane_collapsed_east{
+}
+.DHTMLSuite_pane_collapsed_north{
+	border-bottom:1px solid #BBB;	/* Gray border */
+}
+
+/* General rules for the square displayed for collapsed panes */
+.DHTMLSuite_pane_collapsed_west .DHTMLSuite_pane_collapsedInner,
+.DHTMLSuite_pane_collapsed_east .DHTMLSuite_pane_collapsedInner,
+.DHTMLSuite_pane_collapsed_south .DHTMLSuite_pane_collapsedInner,
+.DHTMLSuite_pane_collapsed_north .DHTMLSuite_pane_collapsedInner,
+.DHTMLSuite_pane_collapsed_west .DHTMLSuite_pane_collapsedInnerOver,
+.DHTMLSuite_pane_collapsed_east .DHTMLSuite_pane_collapsedInnerOver,
+.DHTMLSuite_pane_collapsed_south .DHTMLSuite_pane_collapsedInnerOver,
+.DHTMLSuite_pane_collapsed_north .DHTMLSuite_pane_collapsedInnerOver
+{
+	border:1px solid #BBB;
+	padding-bottom:1px;
+	
+}
+/* West and east collapsed panes */
+.DHTMLSuite_pane_collapsed_west .DHTMLSuite_pane_collapsedInner, 
+.DHTMLSuite_pane_collapsed_east .DHTMLSuite_pane_collapsedInner,
+.DHTMLSuite_pane_collapsed_west .DHTMLSuite_pane_collapsedInnerOver, 
+.DHTMLSuite_pane_collapsed_east .DHTMLSuite_pane_collapsedInnerOver
+{
+	width:19px;
+	padding-left:2px;
+	padding-top:1px;
+	float:none;
+
+} 
+
+
+/* north and south collapsed panes */
+.DHTMLSuite_pane_collapsed_north .DHTMLSuite_pane_collapsedInner, 
+.DHTMLSuite_pane_collapsed_south .DHTMLSuite_pane_collapsedInner,
+.DHTMLSuite_pane_collapsed_north .DHTMLSuite_pane_collapsedInnerOver, 
+.DHTMLSuite_pane_collapsed_south .DHTMLSuite_pane_collapsedInnerOver
+{
+	height:19px;	
+
+} 
+/* Button div inside collapsed "west" and "east" panes */
+.DHTMLSuite_pane_collapsed_west .DHTMLSuite_pane_collapsedInner .buttonDiv,
+.DHTMLSuite_pane_collapsed_east .DHTMLSuite_pane_collapsedInner .buttonDiv,
+.DHTMLSuite_pane_collapsed_west .DHTMLSuite_pane_collapsedInnerOver .buttonDiv,
+.DHTMLSuite_pane_collapsed_east .DHTMLSuite_pane_collapsedInnerOver .buttonDiv	/* Small button div for collapsed panes (Expand icon) */
+{
+	padding-top:1px;
+
+}
+.DHTMLSuite_pane_collapsedInnerOver{
+
+
+}
+
+.DHTMLSuite_pane_collapsed_south .DHTMLSuite_pane_collapsedInner .buttonDiv,
+.DHTMLSuite_pane_collapsed_north .DHTMLSuite_pane_collapsedInner .buttonDiv,
+.DHTMLSuite_pane_collapsed_south .DHTMLSuite_pane_collapsedInnerOver .buttonDiv,
+.DHTMLSuite_pane_collapsed_north .DHTMLSuite_pane_collapsedInnerOver .buttonDiv{ /* Small button div for collapsed panes (Expand icon) */
+	padding-top:1px;
+	padding-bottom:2px;
+	padding-right:3px;
+	float:right;
+	clear:both;
+}
+
+
+.DHTMLSuite_pane_collapsedInnerOver{
+	background-color:#d9e8fb;
+	cursor:pointer;
+}
+
+/**** CUSTOM CSS FOR THE PANES - USER SPECIFIC */
+
+
+
+/** Custom css for each pane */
+#DHTMLSuite_pane_north{	/* Custom css for the north pane */
+	background-color:#d6d6d6;	/* Light Gray background color */
+}
+#DHTMLSuite_pane_west{	/* Custom css for the west pane */
+
+}
+#DHTMLSuite_pane_east{	/* Custom css for the east pane */
+
+}
+#DHTMLSuite_pane_south{	/* Custom css for the south pane */
+	
+}
+#DHTMLSuite_pane_center{	/* Custom css for the center pane */
+
+}
+
+#DHTMLSuite_pane_south .DHTMLSuite_paneContent{	/* Css for pane content - the inner div where the content of a pane is located */
+	font-size:0.9em;	/* I want a smaller font for the CONTENT in the "south" pane */
+}
+

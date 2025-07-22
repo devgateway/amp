@@ -3,24 +3,23 @@ package org.dgfoundation.amp.ar.amp212;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
 import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.dgfoundation.amp.nireports.formulas.NiFormula.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**
- *
+ * 
  * testcases for expression trees
  * @author Constantin Dolghier
  *
  */
 public class ExpressionTreeTestcases extends AmpTestCase {
-
+    
     Map<String, BigDecimal> vars = new HashMap<String, BigDecimal>() {{
         put("one", BigDecimal.ONE);
         put("zero", BigDecimal.ZERO);
@@ -28,21 +27,21 @@ public class ExpressionTreeTestcases extends AmpTestCase {
         put("undefined", NiFormulaicAmountCell.UNDEFINED);
         put("infinity", NiFormulaicAmountCell.PLUS_INFINITY);
     }};
-
+    
     void testDep(String cor, NiFormula formula) {
         assertEquals(cor, sortedString(formula.getDependencies()));
     }
-
+    
     static class MyPair<K, V> {
         final K key;
         final V value;
-
+        
         public MyPair(K k, V v) {
             this.key = k;
             this.value = v;
         }
     }
-
+    
     /**
      * returns MyPair<decimal, should-compare-by-identity>
      * @param str
@@ -55,7 +54,7 @@ public class ExpressionTreeTestcases extends AmpTestCase {
 
             case "null":
                 return new MyPair<>(null, true);
-
+        
             case "infinity":
                 return new MyPair<>(NiFormulaicAmountCell.PLUS_INFINITY, true);
 
@@ -63,7 +62,7 @@ public class ExpressionTreeTestcases extends AmpTestCase {
                 return new MyPair<>(new BigDecimal(str), false);
         }
     }
-
+    
     void testVal(String cors, NiFormula formula) {
         BigDecimal value = formula.evaluate(vars);
         MyPair<BigDecimal, Boolean> cor = str2bd(cors);
@@ -73,13 +72,13 @@ public class ExpressionTreeTestcases extends AmpTestCase {
             assertBigDecimalEquals(cor.key, value);
         }
     }
-
+    
     @Test
     public void testDependenciesLeaves() {
         testDep("[]", CONSTANT(2));
         testDep("[var1]", VARIABLE("var1"));
     }
-
+    
     @Test
     public void testDependenciesBinaryExpressions() {
         testDep("[]", ADD(CONSTANT(2), CONSTANT(3)));
@@ -87,7 +86,7 @@ public class ExpressionTreeTestcases extends AmpTestCase {
         testDep("[aaa, var1]", MULTIPLY(VARIABLE("var1"), VARIABLE("aaa")));
         testDep("[aaa, bbb]", PERCENTAGE("bbb", "aaa"));
     }
-
+    
     @Test
     public void testEvalUnitaries() {
         testVal("1", CONSTANT(1));
@@ -105,21 +104,21 @@ public class ExpressionTreeTestcases extends AmpTestCase {
         testVal("0", SUBTRACTIFGREATER(CONSTANT(1), CONSTANT(3)));
         testVal("0", SUBTRACTIFGREATER(CONSTANT(0), CONSTANT(0)));
     }
-
+    
     @Test
     public void testUnknownVars() {
         testVal("undefined", VARIABLE("unexistant"));
         testVal("undefined", ADD(CONSTANT(2), VARIABLE("unexistant")));
         testVal("undefined", ADD(MULTIPLY(CONSTANT(2), CONSTANT(3)), MULTIPLY(CONSTANT(2), VARIABLE("dada"))));
     }
-
+    
     @Test
     public void testPropagation() {
         NiFormula twoByZero = DIVIDE(CONSTANT(2), CONSTANT(0));
         testVal("undefined", twoByZero);
         testVal("undefined", ADD(twoByZero, CONSTANT(15)));
     }
-
+    
     @Test
     public void testDivision() {
         NiFormula oneByThree = DIVIDE(VARIABLE("one"), CONSTANT(3));
@@ -131,7 +130,7 @@ public class ExpressionTreeTestcases extends AmpTestCase {
         testVal("0", DIVIDEIFLOWER(CONSTANT(0), CONSTANT(5)));
         testVal("0", DIVIDEIFLOWER(CONSTANT(5), CONSTANT(0)));
     }
-
+    
     @Test
     public void testPercentage() {
         testVal("200", PERCENTAGE(SUBTRACTIFGREATER(CONSTANT(9), CONSTANT(3)), CONSTANT(3)));
@@ -144,5 +143,5 @@ public class ExpressionTreeTestcases extends AmpTestCase {
         testVal("0", PERCENTAGEIFLOWER(CONSTANT(1), CONSTANT(0)));
         testVal("100", PERCENTAGEIFLOWER(CONSTANT(0), CONSTANT(0)));
     }
-
+    
 }

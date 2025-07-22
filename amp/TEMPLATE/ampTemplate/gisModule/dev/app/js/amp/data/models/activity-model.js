@@ -35,30 +35,21 @@ module.exports = Backbone.Model.extend({
     var filter = this.appData ? this.appData.filter : this.collection.appData.filter;
 
     filter.getAllFilters().then(function(allFilters) {
-    	var matchesFilters = self.attributes.matchesFilters;
+    	var matchesFilters = self.attributes.matchesFilters;       
     	if (allFilters.filters && matchesFilters) {
     		_.each(matchesFilters, function(v, k) {
     			if (k === Constants.PRIMARY_SECTOR) {
-    				_.each(matchesFilters[k], function(sector, index) {
-    				   if (!(sector instanceof Backbone.Model)) {
-    					   matchesFilters[k][index] = new Backbone.Model(sector);
+    				_.each(matchesFilters[k], function(sector, index) {    					
+    				   if (!(sector instanceof Backbone.Model)) {    					
+    					   matchesFilters[k][index] = new Backbone.Model(sector);  
     				   }
-
-    				});
-    			}
-                else if (k === Constants.PROGRAMS) {
-                    _.each(matchesFilters[k], function(program, index) {
-                        if (!(program instanceof Backbone.Model)) {
-                            matchesFilters[k][index] = new Backbone.Model(program);
-                        }
-                    });
-                }
-
-                else {
+    					                   
+    				});        	   
+    			} else {
     				//make sure it's a valid filter
-    				var filterId  = k.toLowerCase().replace(' ', '-');
+    				var filterId  = k.toLowerCase().replace(' ', '-');          
     				if (allFilters.filters[filterId]) {
-    					//iterate over ids.
+    					//iterate over ids.        	        			  
     					_.each(matchesFilters[k], function(id, index) {
     						var matched = _(allFilters.filters[filterId]).findWhere({id: id});
     						if (matched) {
@@ -66,7 +57,7 @@ module.exports = Backbone.Model.extend({
     						}
     					});
     				}
-    			}
+    			}          
     		});
 
     		self.set('matchesFilters', matchesFilters);
@@ -79,7 +70,7 @@ module.exports = Backbone.Model.extend({
 
   parse: function(data) {
     // make our id an int
-    data['Activity Id'] = parseInt(data['Activity Id'], 10);
+    data['Activity Id'] = parseInt(data['Activity Id'], 10);    
     return data;
   },
 
@@ -89,7 +80,6 @@ module.exports = Backbone.Model.extend({
     json.donorNames = this._getNames(Constants.DONOR_AGENCY);
     json.executingNames = this._getNames(Constants.EXECUTING_AGENCY);
     json.sectorNames = this._getNames(Constants.PRIMARY_SECTOR);
-    json.programNames = this._getNames(Constants.PROGRAMS);
     return json;
   },
 
@@ -97,22 +87,10 @@ module.exports = Backbone.Model.extend({
 	var matchesFilters = this.attributes.matchesFilters;
     if (matchesFilters && matchesFilters[name]) {
       if (matchesFilters[name].length > 1) {
-          // let joinedValues = "";
-          // for (let i = 0; i < matchesFilters[name].length; i++) {
-          //     // Add the current item to the joined string
-          //     joinedValues += matchesFilters[name][i]['name'];
-          //
-          //     // Add a comma if it's not the last element
-          //     if (i < matchesFilters[name].length - 1) {
-          //         joinedValues += ", ";
-          //     }
-          // }
-          //We could use the joined values but it might be confusing for individual values that have commas in them
-        return "Multiple";
-      } else if (matchesFilters[name][0] && matchesFilters[name][0].attributes) {
+        return 'Multiple';
+      } else if (matchesFilters[name][0] && matchesFilters[name][0].attributes) {    	 
         return matchesFilters[name][0].get('name');
       }
-
     }
     return '';
   }

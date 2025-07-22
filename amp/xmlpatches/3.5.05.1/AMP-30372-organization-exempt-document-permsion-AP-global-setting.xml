@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30372</jira>
+    <keyword>organization excempt display document AP</keyword>
+    <author>drychter</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                CREATE OR REPLACE VIEW v_g_settings_amp_organization AS
+                select amp_org_id as id, name as value from amp_organisation order by name asc;
+                insert into amp_global_settings(id, settingsName, possiblevalues, description,section)
+                values(nextval('amp_global_settings_seq'), 'Exempt organization to see documents', 'v_g_settings_amp_organization','Organization allowed to see documents in AP and AF','general');
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

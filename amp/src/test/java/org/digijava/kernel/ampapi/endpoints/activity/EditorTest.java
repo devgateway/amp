@@ -1,7 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Julian de Anquin

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-28105</jira>
+    <keyword>amp structures</keyword>
+    <author>vchihai</author>
+    <description>update activity for structures</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+            
+                UPDATE amp_structure SET amp_activity_id = (SELECT amp_activity_id FROM amp_activity_structures WHERE amp_structure.amp_structure_id = amp_activity_structures.amp_structure_id);
+
+                DROP TABLE amp_activity_structures CASCADE;
+
+                DELETE FROM amp_structure_coordinate where amp_structure_id IS NULL;
+
+                ALTER TABLE amp_structure_coordinate ALTER COLUMN amp_structure_id SET NOT NULL;
+
+                UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname = 'Recreate the views on the next server restart';
+                
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

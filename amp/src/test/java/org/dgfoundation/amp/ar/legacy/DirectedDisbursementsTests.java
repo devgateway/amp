@@ -8,7 +8,7 @@ import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.hibernate.query.Query;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.List;
 

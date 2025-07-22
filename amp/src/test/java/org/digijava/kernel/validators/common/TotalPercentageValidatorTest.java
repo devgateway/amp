@@ -12,20 +12,20 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Octavian Ciubotaru
  */
-class TotalPercentageValidatorTest {
+public class TotalPercentageValidatorTest {
 
     public static class Obj {
 
@@ -54,7 +54,7 @@ class TotalPercentageValidatorTest {
 
     private static APIField objField;
 
-    @BeforeAll
+    @BeforeClass
     public static void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         objField = ValidatorUtil.getMetaData(Obj.class);
@@ -66,7 +66,7 @@ class TotalPercentageValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(objField, obj);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -78,7 +78,7 @@ class TotalPercentageValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(objField, obj);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -88,7 +88,7 @@ class TotalPercentageValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(objField, obj);
 
-        MatcherAssert.assertThat(violations, contains(violation()));
+        assertThat(violations, contains(violation()));
     }
 
     @Test
@@ -101,7 +101,7 @@ class TotalPercentageValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(objField, obj);
 
-        MatcherAssert.assertThat(violations, contains(violation()));
+        assertThat(violations, contains(violation()));
     }
 
     @Test
@@ -114,7 +114,7 @@ class TotalPercentageValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(objField, obj);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -135,7 +135,7 @@ class TotalPercentageValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(objField, obj);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     private Matcher<ConstraintViolation> violation() {

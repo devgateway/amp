@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30316</jira>
+    <keyword>Remove amp analitycal report table</keyword>
+    <author>drychter</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                DROP TABLE IF EXISTS AMP_ANALYTICAL_REPORT;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

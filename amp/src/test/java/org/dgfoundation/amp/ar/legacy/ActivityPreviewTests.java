@@ -7,12 +7,11 @@ import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingOrganization;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class ActivityPreviewTests extends ReportsTestCase {
 
@@ -22,7 +21,7 @@ public class ActivityPreviewTests extends ReportsTestCase {
         AmpActivityVersion act = ReportTestingUtils.loadActivityByName("mtef activity 1");
         ActivityFundingDigest afd = new ActivityFundingDigest();
         afd.populateFromFundings(act, "USD", null, false);
-
+        
         List<FundingOrganization> fundOrgs = afd.getFundingOrganizations();
         assertEquals(1, fundOrgs.size());
         FundingOrganization fo = fundOrgs.get(0);
@@ -41,7 +40,7 @@ public class ActivityPreviewTests extends ReportsTestCase {
         AmpActivityVersion act = ReportTestingUtils.loadActivityByName("Eth Water");
         ActivityFundingDigest afd = new ActivityFundingDigest();
         afd.populateFromFundings(act, "USD", null, false);
-
+        
         List<FundingOrganization> fundOrgs = afd.getFundingOrganizations();
         assertEquals(7, fundOrgs.size());
         Set<String> allOrgNames = new HashSet<String>();
@@ -55,7 +54,7 @@ public class ActivityPreviewTests extends ReportsTestCase {
         assertTrue(allOrgNames.contains("USAID"));
         assertTrue(allOrgNames.contains("World Bank"));
         assertEquals("545 000", afd.getTotalDisbursements());
-
+        
     }
 
     @Test
@@ -64,7 +63,7 @@ public class ActivityPreviewTests extends ReportsTestCase {
         AmpActivityVersion act = ReportTestingUtils.loadActivityByName("Test MTEF directed");
         ActivityFundingDigest afd = new ActivityFundingDigest();
         afd.populateFromFundings(act, "USD", null, false);
-
+        
         List<FundingOrganization> fundOrgs = afd.getFundingOrganizations();
         assertEquals(2, fundOrgs.size());
         Set<String> allOrgNames = new HashSet<String>();
@@ -74,20 +73,20 @@ public class ActivityPreviewTests extends ReportsTestCase {
         assertTrue(allOrgNames.contains("USAID"));
         assertEquals("143 777", afd.getTotalDisbursements());
         assertEquals("215 000", afd.getTotalMtefProjections());
-
+        
         FundingOrganization usaid = null, moe = null;
         for(FundingOrganization forg:fundOrgs)
         {
             if (forg.getOrgName().equals("USAID"))
                 usaid = forg;
-
+            
             if (forg.getOrgName().equals("Ministry of Economy"))
                 moe = forg;
         }
         assertEquals(1, moe.getFundings().size());
         assertEquals("143 777", moe.getFundings().get(0).getSubtotalDisbursements());
         assertEquals("215 000", moe.getFundings().get(0).getSubtotalMTEFs());
-
+        
         assertEquals(1, usaid.getFundings().size());
         assertEquals("44 333", usaid.getFundings().get(0).getSubtotalDisbursements());
         assertEquals("87 900", usaid.getFundings().get(0).getSubtotalMTEFs());

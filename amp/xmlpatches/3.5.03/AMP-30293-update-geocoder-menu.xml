@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30293</jira>
+    <author>vchihai</author>
+    <description>Update menu entry for AMP GeoCoder</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+
+				INSERT INTO amp_features_visibility (id, name, haslevel, parent)
+				VALUES (nextval('amp_features_visibility_seq'),
+						'AutoGeocoder',
+						TRUE,
+						(SELECT id
+						 FROM amp_modules_visibility
+						 WHERE name = '/GIS' AND parent IS NULL));
+						 
+				INSERT INTO amp_visibility_rule_amp_features_visibility(rule_id, feature_id)
+					VALUES(
+						   (SELECT rule_id from amp_menu_entry_view WHERE menu_id in (SELECT id from amp_menu_entry where name = 'AutoGeocoder')),
+						   (SELECT id FROM amp_features_visibility WHERE name = 'AutoGeocoder')
+					);
+
+				DELETE FROM amp_visibility_rule_amp_modules_visibility
+					WHERE rule_id IN (SELECT rule_id from amp_menu_entry_view where menu_id in (SELECT id from amp_menu_entry where name = 'AutoGeocoder'));
+
+				DELETE FROM amp_modules_templates WHERE module in (SELECT id FROM amp_modules_visibility WHERE name = 'AMP GeoCoder');
+				DELETE FROM amp_modules_visibility WHERE name = 'AMP GeoCoder';
+
+				DELETE FROM amp_modules_templates WHERE module in (select id FROM amp_modules_visibility WHERE name = 'AutoGeocoder');
+				DELETE FROM amp_modules_visibility WHERE name = 'AutoGeocoder';
+
+			]]></lang>
+        </script>
+    </apply>
+</tns:patch>

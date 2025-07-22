@@ -14,32 +14,36 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
 import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Octavian Ciubotaru
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({FeaturesUtil.class})
 public class ImplementationLevelValidatorTest {
 
     private static APIField activityField;
     private static InMemoryCategoryValuesManager categoryValueManager;
     private static InMemoryLocationManager locationManager;
-    private AutoCloseable featuresUtilMock;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
-//        featuresUtilMock = Mockito.mockStatic(FeaturesUtil.class);
+        PowerMockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
         categoryValueManager = InMemoryCategoryValuesManager.getInstance();
         locationManager = InMemoryLocationManager.getInstance();
@@ -58,7 +62,7 @@ public class ImplementationLevelValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -72,7 +76,7 @@ public class ImplementationLevelValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        MatcherAssert.assertThat(violations, contains(implLocViolation(ValidationErrors.DOESNT_MATCH_IMPLEMENTATION_LEVEL)));
+        assertThat(violations, contains(implLocViolation(ValidationErrors.DOESNT_MATCH_IMPLEMENTATION_LEVEL)));
     }
 
     @Test
@@ -85,7 +89,7 @@ public class ImplementationLevelValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -98,7 +102,7 @@ public class ImplementationLevelValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        MatcherAssert.assertThat(violations, contains(implLocViolation(ValidationErrors.IMPLEMENTATION_LEVEL_NOT_SPECIFIED)));
+        assertThat(violations, contains(implLocViolation(ValidationErrors.IMPLEMENTATION_LEVEL_NOT_SPECIFIED)));
     }
 
     @Test
@@ -107,7 +111,7 @@ public class ImplementationLevelValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     //--- loc tests
@@ -124,7 +128,7 @@ public class ImplementationLevelValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        MatcherAssert.assertThat(violations, contains(locViolation(96L)));
+        assertThat(violations, contains(locViolation(96L)));
     }
 
     @Test
@@ -139,7 +143,7 @@ public class ImplementationLevelValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -153,7 +157,7 @@ public class ImplementationLevelValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -168,7 +172,7 @@ public class ImplementationLevelValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -179,7 +183,7 @@ public class ImplementationLevelValidatorTest {
         mockValidation();
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        MatcherAssert.assertThat(violations, contains(locsViolation()));
+        assertThat(violations, contains(locsViolation()));
     }
 
     private void mockValidation() {
@@ -200,7 +204,7 @@ public class ImplementationLevelValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        MatcherAssert.assertThat(violations, containsInAnyOrder(locViolation(1901L), locViolation(1903L)));
+        assertThat(violations, containsInAnyOrder(locViolation(1901L), locViolation(1903L)));
     }
 
     @Test
@@ -215,7 +219,7 @@ public class ImplementationLevelValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        MatcherAssert.assertThat(violations, containsInAnyOrder(
+        assertThat(violations, containsInAnyOrder(
                 implLocViolation(ValidationErrors.DOESNT_MATCH_IMPLEMENTATION_LEVEL),
                 locViolation(1901L)));
     }
@@ -241,12 +245,5 @@ public class ImplementationLevelValidatorTest {
 
     private Matcher<ConstraintViolation> violation(String path, ApiErrorMessage message) {
         return ValidatorMatchers.violationFor(ImplementationLevelValidator.class, path, anything(), message);
-    }
-
-    @org.junit.jupiter.api.AfterEach
-    public void tearDown() throws Exception {
-        if (featuresUtilMock != null) {
-            featuresUtilMock.close();
-        }
     }
 }

@@ -5,7 +5,6 @@ var RadioListCollection = require('../collections/radio-list-collection');
 
 var BaseControlView = require('../../base-control/base-control-view');
 var OptionView = require('./option-view');
-var ADMClusterModel = require('../../../data/models/adm-cluster-model');
 
 var Template = fs.readFileSync(__dirname + '/../templates/layers-template.html', 'utf8');
 var RadioOptionTemplate = fs.readFileSync(__dirname + '/../templates/radio-option-template.html', 'utf8');
@@ -24,41 +23,7 @@ module.exports = BaseControlView.extend({
     var self = this;
 
     BaseControlView.prototype.initialize.apply(this, arguments);  // sets this.app
-
-
-      this._loaded = this.app.data.admClusters.load().then(function() {
-          // console.log("Settings,", JSON.stringify(this.app.data.generalSettings))
-              $.when(self.app.data.generalSettings.loaded, this._loaded).then(function() {
-                  var wocatEnabled = self.app.data.generalSettings.get('gis-show-wocat');
-                  // console.log("Wocat enabled",wocatEnabled)
-                  if (wocatEnabled === true) {
-                      var originalModel = self.app.data.admClusters.get('adm-0');
-                      console.log("Found adm-0", originalModel);
-
-                      if (originalModel) {
-                          var clonedModel = originalModel.clone();
-
-                          clonedModel.set({
-                              id: 'wocat',
-                              title: 'Wocat'
-                          });
-
-                          // Save the cloned model (if needed to persist on the server)
-                          clonedModel.save();
-
-                          // Add the cloned model to the collection
-                          self.app.data.admClusters.add(clonedModel);
-
-                          // Manually trigger an event to notify the collection about the update
-                          self.app.data.admClusters.trigger('update', self.app.data.admClusters);
-
-                          console.log("Added cloned model to collection:", clonedModel);
-
-                      } else {
-                          console.error("Model with id 'adm-0' not found");
-                      }
-                  }
-              });
+    this._loaded = this.app.data.admClusters.load().then(function() {
       self.projectLayerCollection = new RadioListCollection(_.union(
         self.app.data.admClusters.models,
         [self.app.data.structuresMenu]
@@ -81,7 +46,7 @@ module.exports = BaseControlView.extend({
             self.projectLayerCollection.select(selectedModel);
           }
         },
-        empty: 'Administrative Level 0'
+        empty: 'Administrative Level 1'
       });
     });
   },
@@ -89,11 +54,11 @@ module.exports = BaseControlView.extend({
   render: function() {
 	  var self = this;
 	  BaseControlView.prototype.render.apply(this);
-	  // add content
+	  // add content	  
 	  $.when(self.app.data.generalSettings.loaded, this._loaded).then(function() {
 		//check if we need to show Project Sites
-		  var foundPS = self.app.data.generalSettings.get('project-sites');
-		  if (foundPS !== true) {
+		  var foundPS = self.app.data.generalSettings.get('project-sites'); 		  
+		  if (foundPS !== true) {			  
 			  //need to remove project-sites
 			  //find the index of project-sites in projectLayerCollection
 			  var index = undefined;
@@ -102,8 +67,8 @@ module.exports = BaseControlView.extend({
 					  index = i;
 				  }
 			  }
-			  self.projectLayerCollection.models.splice(index, 1);
-		  }
+			  self.projectLayerCollection.models.splice(index, 1);  
+		  } 
 		  self.$('.content', self.el).html(self.template({title: self.title}));
 		  self.$('.layer-selector', self.el).html(self.projectLayerCollection.map(function(cluster) {
 			  return (new OptionView({
@@ -112,7 +77,7 @@ module.exports = BaseControlView.extend({
 			  })).render().el;
 		  }));
 	  });
-
+	  
 	  return this;
   }
 

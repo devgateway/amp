@@ -10,16 +10,15 @@ import org.digijava.kernel.validation.Validator;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.kernel.validators.activity.ValidatorMatchers;
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
 import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Octavian Ciubotaru
@@ -28,7 +27,7 @@ public class ResourceRequiredValidatorTest {
 
     private static APIField resourceField;
 
-    @BeforeAll
+    @BeforeClass
     public static void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         resourceField = ValidatorUtil.getMetaData(AmpResource.class);
@@ -40,7 +39,7 @@ public class ResourceRequiredValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(resource);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -50,7 +49,7 @@ public class ResourceRequiredValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(resource);
 
-        MatcherAssert.assertThat(violations, contains(constraint("web_link")));
+        assertThat(violations, contains(constraint("web_link")));
     }
 
     @Test
@@ -61,7 +60,7 @@ public class ResourceRequiredValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(resource);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -71,7 +70,7 @@ public class ResourceRequiredValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(resource);
 
-        MatcherAssert.assertThat(violations, contains(constraint("file_name")));
+        assertThat(violations, contains(constraint("file_name")));
     }
 
     @Test
@@ -82,7 +81,7 @@ public class ResourceRequiredValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(resource);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     private Matcher<ConstraintViolation> constraint(String path) {

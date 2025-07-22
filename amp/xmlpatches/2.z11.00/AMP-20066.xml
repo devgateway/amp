@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-20066</jira>
+    <keyword>Views</keyword>
+    <author>cdolghier</author>
+    <description>make the pledges-documents UNIQUE constraint deferrable in order to allow pledges to be updated using normal Hibernate semantics</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                ALTER TABLE amp_funding_pledges_document DROP CONSTRAINT pledgedocumentunique;
+                ALTER TABLE amp_funding_pledges_document ADD CONSTRAINT pledgedocumentunique UNIQUE(pledge_id, title, uuid) DEFERRABLE INITIALLY DEFERRED;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-15036, AMPOPS-712</jira>
+	<keyword>migration</keyword>
+	<author>mpostelnicu</author>
+	<trigger type="any">
+		<condition type="dbName">amp_ethiopia_production</condition>
+		<condition type="dbName">amp_ethiopia_staging</condition>
+	</trigger>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+			update amp_activity_location s SET location_percentage=100::float/j.cnt FROM 
+			(select amp_activity_id, count(*) as cnt from amp_Activity_location group by amp_activity_id) j 
+			WHERE j.amp_activity_id=s.amp_activity_id;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

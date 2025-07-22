@@ -7,9 +7,9 @@ import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.kernel.request.TLSUtils;
-import org.junit.jupiter.api.BeforeEach;
-
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
 
@@ -68,7 +68,7 @@ public class ProgramsTests extends ReportsTestCase {
     }
 
     @Test
-    
+    @Ignore
     public void testProgramsDetails()
     {
         GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-17190-all-details",
@@ -179,7 +179,7 @@ public class ProgramsTests extends ReportsTestCase {
         runReportTest("Hier report with all the Program default columns, by Secondary Program", "AMP-17190-all-programs-by-secondary", new String[] {"Activity Linked With Pledge", "Activity with primary_tertiary_program", "activity with primary_program", "activity with tertiary_program"}, fddr_correct);                
     }
     
-    @BeforeEach
+    @Before
     public void setUp() {
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
     }

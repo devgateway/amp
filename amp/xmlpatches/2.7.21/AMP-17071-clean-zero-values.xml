@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-17071</jira>
+	<keyword>currency</keyword>
+	<author>jdeanquin</author>
+	<description>Delete invalid values for currency rate table</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				<!-- delete invalid entries from amp_currency_rate table -->
+				DELETE  from amp_currency_rate WHERE from_currency_code IS NULL OR to_currency_code IS NULL OR exchange_rate IS NULL OR exchange_rate_date IS NULL OR exchange_rate &lt;=0; 
+				DELETE FROM amp_currency_rate WHERE from_currency_code=to_currency_code;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>
+	
+
+                                

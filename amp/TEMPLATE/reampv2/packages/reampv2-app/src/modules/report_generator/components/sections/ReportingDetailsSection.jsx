@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button,
   Form,
-  Grid, GridColumn, Item, TextArea
+  Grid, GridColumn, TextArea
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import OptionsList from './OptionsList';
 import { ReportGeneratorContext } from '../StartUp';
 import {
-  FM_IS_PUBLIC_REPORT_ENABLED,
-  FUNDING_GROUPING_RADIO_OPTIONS, OPTIONS_CHECKBOX_OPTIONS, PROFILE_TAB, PUBLIC_VIEW, PUBLIC_VIEW_OPTIONS,
+  FUNDING_GROUPING_RADIO_OPTIONS, OPTIONS_CHECKBOX_OPTIONS,
   TOTAL_GROUPING_CHECKBOX_OPTIONS,
   TOTAL_GROUPING_RADIO_OPTIONS
 } from '../../utils/constants';
@@ -20,13 +18,11 @@ import {
   updateReportDetailsTotalGrouping, updateReportDetailsTotalsOnly,
   updateReportDetailsFundingGrouping, updateReportDetailsAllowEmptyFundingColumns,
   updateReportDetailsSplitByFunding,
-    updatePublicView,
-    updateWorkspaceLinked,
   updateReportDetailsShowOriginalCurrencies,
   updateReportDetailsDescription,
   updateReportDetailsAlsoShowPledges, updateReportDetailsUseAboveFilters
 } from '../../actions/stateUIActions';
-import {areEnoughDataForPreview, hasFilters, translate} from '../../utils/Utils';
+import { hasFilters, translate } from '../../utils/Utils';
 
 class ReportingDetailSection extends Component {
   constructor(props) {
@@ -77,16 +73,6 @@ class ReportingDetailSection extends Component {
   selectSplitByFunding = () => {
     const { _updateReportDetailsSplitByFunding, selectedSplitByFunding } = this.props;
     _updateReportDetailsSplitByFunding(!selectedSplitByFunding);
-  }
-
-  setIsPublicView = () => {
-    const { _updatePublicView, publicView } = this.props;
-    _updatePublicView(!publicView);
-  }
-
-  setIsWorkspaceLinked = () => {
-    const { _updateWorkspaceLinked, workspaceLinked } = this.props;
-    _updateWorkspaceLinked(!workspaceLinked);
   }
 
   selectShowOriginalCurrencies = () => {
@@ -146,25 +132,6 @@ class ReportingDetailSection extends Component {
           </Form>
         </OptionsList>
       </GridColumn>
-    );
-  }
-
-  renderPublicViewOptions=()=>{
-    const {
-      translations, publicView, workspaceLinked, profile, loading
-    } = this.props;
-    return (
-        <GridColumn computer="8" tablet="16">
-          <OptionsList
-              title={translate('publicView', profile, translations)}
-              tooltip={translate('publicViewTooltip', profile, translations)} >
-            <OptionsContent
-                checkList={this.getOptions(PUBLIC_VIEW_OPTIONS)}
-                selectedCheckboxes={[publicView, workspaceLinked]}
-                changeCheckList={[this.setIsPublicView, this.setIsWorkspaceLinked]}
-                loading={loading} />
-          </OptionsList>
-        </GridColumn>
     );
   }
 
@@ -235,7 +202,7 @@ class ReportingDetailSection extends Component {
   }
 
   render() {
-    const { visible,options } = this.props;
+    const { visible } = this.props;
     const showGroupingSection = this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS).length !== 1
       || this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS).length !== 0;
     return (
@@ -254,10 +221,6 @@ class ReportingDetailSection extends Component {
           {this.getOptions(OPTIONS_CHECKBOX_OPTIONS).length !== 0 ? (
             this.renderOptionsSection()
           ) : null}
-          {this.getOptions(PUBLIC_VIEW_OPTIONS).length !== 0 ? (
-              this.renderPublicViewOptions()
-          ) : null}
-
         </Grid>
       </div>
     );
@@ -272,8 +235,6 @@ const mapStateToProps = (state) => ({
   selectedFundingGrouping: state.uiReducer.reportDetails.selectedFundingGrouping,
   selectedAllowEmptyFundingColumns: state.uiReducer.reportDetails.selectedAllowEmptyFundingColumns,
   selectedSplitByFunding: state.uiReducer.reportDetails.selectedSplitByFunding,
-  publicView: state.uiReducer.reportDetails.publicView,
-  workspaceLinked: state.uiReducer.reportDetails.workspaceLinked,
   selectedShowOriginalCurrencies: state.uiReducer.reportDetails.selectedShowOriginalCurrencies,
   selectedAlsoShowPledges: state.uiReducer.reportDetails.selectedAlsoShowPledges,
   selectedUseAboveFilters: state.uiReducer.reportDetails.selectedUseAboveFilters,
@@ -290,8 +251,6 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _updateReportDetailsFundingGrouping: (data) => updateReportDetailsFundingGrouping(data),
   _updateReportDetailsAllowEmptyFundingColumns: (data) => updateReportDetailsAllowEmptyFundingColumns(data),
   _updateReportDetailsSplitByFunding: (data) => updateReportDetailsSplitByFunding(data),
-  _updatePublicView: (data) => updatePublicView(data),
-  _updateWorkspaceLinked: (data) => updateWorkspaceLinked(data),
   _updateReportDetailsShowOriginalCurrencies: (data) => updateReportDetailsShowOriginalCurrencies(data),
   _updateReportDetailsDescription: (data) => updateReportDetailsDescription(data),
   _updateReportDetailsAlsoShowPledges: (data) => updateReportDetailsAlsoShowPledges(data),
@@ -311,12 +270,8 @@ ReportingDetailSection.propTypes = {
   selectedFundingGrouping: PropTypes.string,
   _updateReportDetailsAllowEmptyFundingColumns: PropTypes.func.isRequired,
   _updateReportDetailsSplitByFunding: PropTypes.func.isRequired,
-  _updatePublicView: PropTypes.func.isRequired,
-  _updateWorkspaceLinked: PropTypes.func.isRequired,
   _updateReportDetailsShowOriginalCurrencies: PropTypes.func.isRequired,
   selectedAllowEmptyFundingColumns: PropTypes.bool,
-  publicView: PropTypes.bool,
-  workspaceLinked: PropTypes.bool,
   selectedSplitByFunding: PropTypes.bool,
   selectedShowOriginalCurrencies: PropTypes.bool,
   selectedAlsoShowPledges: PropTypes.bool,
@@ -337,8 +292,6 @@ ReportingDetailSection.defaultProps = {
   selectedFundingGrouping: undefined,
   selectedAllowEmptyFundingColumns: false,
   selectedSplitByFunding: false,
-  publicView: false,
-  workspaceLinked: false,
   selectedShowOriginalCurrencies: false,
   selectedAlsoShowPledges: false,
   selectedUseAboveFilters: false,

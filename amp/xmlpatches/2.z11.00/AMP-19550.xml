@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-19550</jira>
+	<keyword>translation</keyword>
+	<author>jdeanquin</author>
+	<description>Update dg_messages were we have specific translations per workspace prefix, specifically for SSC in Honduras.</description>
+	<apply>
+		<script>
+			<lang type="bsh">
+				import org.hibernate.SQLQuery;
+				import org.hibernate.Criteria;
+				import org.digijava.kernel.entity.Message;
+				import org.hibernate.criterion.Restrictions;
+				
+				deleteDuplicateKeyIfExists( String newKey, String locale, String siteId) {
+					critDuplicateKey = session.createCriteria(Message.class);
+					critDuplicateKey.add(Restrictions.like("key", newKey));
+					critDuplicateKey.add(Restrictions.like("locale", locale));
+					critDuplicateKey.add(Restrictions.like("siteId", siteId));
+				    listDuplicateKey = critDuplicateKey.list();
+				    if (listDuplicateKey.size() > 0) {
+				        
+					    qry = "delete from dg_message where message_key='" + newKey;
+					    qry += "' and lang_iso='" + locale + "' and site_id='" + siteId + "'";
+						    	        
+					    session.createNativeQuery(qry).executeUpdate();
+				    } 
+				}
+					
+				updateKey( String oldKey, String newKey, String prefix, String locale, String siteId) {
+					    qry = "update dg_message set message_key='" + newKey + "',prefix='" + prefix + "_";
+					    qry += "' where message_key='" + oldKey;
+					    qry += "' and lang_iso='" + locale + "' and site_id='" + siteId + "'";
+					        
+					    session.createNativeQuery(qry).executeUpdate();
+				}
+				
+				Criteria crit = session.createCriteria(Message.class);
+				crit.add(Restrictions.like("key", "SSC_%"));
+				countMessagesUpdated = 0;
+				List msgs = crit.list();
+
+				for (msg: msgs) {
+				    m = msg.getKey().split("_");
+				    if (msg.getOriginalMessage() != null &amp;&amp; msg.getOriginalMessage().trim().length() > 0) {
+				        newKey = Integer.toString((m[0] + "_" + msg.getOriginalMessage()).trim().toLowerCase().hashCode());
+				        
+				        deleteDuplicateKeyIfExists(newKey,msg.getLocale(),msg.getSiteId());
+						
+						updateKey(msg.getKey(), newKey, m[0], msg.getLocale(),msg.getSiteId());
+					        
+				        countMessagesUpdated++;
+				    } else {
+				        critOrig = session.createCriteria(Message.class);
+				        critOrig.add(Restrictions.like("key", m[1]));
+				        critOrig.add(Restrictions.isNotNull("originalMessage"));
+
+				        list = critOrig.list();
+				        if (list.size() > 0) {
+				            orig = list.get(0);
+				            if (orig.getOriginalMessage() != null &amp;&amp; orig.getOriginalMessage().trim().length() > 0) {
+				                newKey = Integer.toString((m[0] + "_" + orig.getOriginalMessage()).trim().toLowerCase().hashCode());
+				                
+						        deleteDuplicateKeyIfExists(newKey,msg.getLocale(),msg.getSiteId());
+				    	        
+				    	        updateKey(msg.getKey(), newKey, m[0], msg.getLocale(),msg.getSiteId());
+					              					    	        				                
+				                countMessagesUpdated++;
+				            }
+				        } else {
+				            if (msg.getMessage() != null &amp;&amp; msg.getMessage().trim().length() > 0) {
+				                newKey = Integer.toString((m[0] + "_" + msg.getMessage()).trim().toLowerCase().hashCode());
+				                
+								deleteDuplicateKeyIfExists(newKey,msg.getLocale(),msg.getSiteId());
+								
+								updateKey(msg.getKey(), newKey, m[0], msg.getLocale(),msg.getSiteId());			                
+
+				                countMessagesUpdated++;
+				            }
+				        }
+				    }
+				}
+				print(countMessagesUpdated + " Messages updated by patch AMP-19950.xml");
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-15923</jira>
+	<keyword>translate</keyword>
+	<author>mihai</author>
+	<description>Translator view not working for Ethiopia server.The old Digi permissions tables were empty. I took the permissions from an old 2009 MySQL backup.</description>
+	<trigger type="any">
+		<condition type="dbName">amp_ethiopia_production</condition>
+		<condition type="dbName">amp_ethiopia_staging</condition>
+	</trigger>	
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (1,1,1,'org.digijava.kernel.security.SitePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (2,1,2,'org.digijava.kernel.security.SitePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (3,1,3,'org.digijava.kernel.security.SitePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (4,1,4,'org.digijava.kernel.security.SitePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (5,1,5,'org.digijava.kernel.security.SitePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (6,1,6,'org.digijava.kernel.security.SitePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (7,1,7,'org.digijava.kernel.security.SitePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (8,1,8,'org.digijava.kernel.security.SitePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (9,1,9,'org.digijava.kernel.security.SitePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (10,1,10,'org.digijava.kernel.security.SitePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (11,1,11,'org.digijava.kernel.security.SitePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (12,1,12,'org.digijava.kernel.security.SitePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (13,1,9,'org.digijava.kernel.security.ModuleInstancePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (24,1,13,'org.digijava.kernel.security.ModuleInstancePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (25,1,13,'org.digijava.kernel.security.ModuleInstancePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (26,1,13,'org.digijava.kernel.security.ModuleInstancePermission');
+INSERT INTO dg_principal_permission (PRINCIPAL_PERMISSION_ID,PRINCIPAL_TYPE,TARGET_ID,PERMISSION_CLASS) VALUES (27,1,13,'org.digijava.kernel.security.ModuleInstancePermission');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (1,0,'long','1');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (1,1,'int','8');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (2,0,'long','1');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (2,1,'int','1');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (3,0,'long','1');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (3,1,'int','3');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (4,0,'long','1');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (4,1,'int','7');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (5,0,'long','2');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (5,1,'int','1');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (6,0,'long','2');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (6,1,'int','7');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (7,0,'long','2');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (7,1,'int','8');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (8,0,'long','2');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (8,1,'int','3');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (9,0,'long','3');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (9,1,'int','3');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (10,0,'long','3');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (10,1,'int','8');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (11,0,'long','3');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (11,1,'int','7');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (12,0,'long','3');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (12,1,'int','1');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (13,0,'long','30');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (13,1,'int','7');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (24,0,'long','40');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (24,1,'int','65523');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (25,0,'long','43');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (25,1,'int','65523');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (26,0,'long','30');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (26,1,'int','65523');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (27,0,'long','35');
+INSERT INTO dg_principal_permission_param (PRINCIPAL_PERMISSION_ID,PARAM_INDEX,PARAM_CLASS,PARAM_VALUE) VALUES (27,1,'int','65523');				
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

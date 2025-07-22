@@ -7,10 +7,13 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.validator.approval.AllowedApprovalStatus;
 import org.digijava.module.aim.validator.approval.ApprovalStatusConstraint;
 import org.hamcrest.Matcher;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Matchers;
-import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import javax.validation.ConstraintViolation;
 import java.util.Set;
@@ -18,23 +21,26 @@ import java.util.Set;
 import static org.digijava.module.aim.dbentity.ApprovalStatus.*;
 import static org.digijava.module.aim.helper.Constants.*;
 import static org.digijava.module.aim.validator.ConstraintMatchers.hasViolation;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Nadejda Mandrescu
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ FeaturesUtil.class, DbUtil.class })
 public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<ApprovalStatusConstraint> {
 
     @Override
-    @BeforeEach
+    @Before
     public void setUp() {
         super.setUp();
-//        Mockito.mockStatic(FeaturesUtil.class);
-//        Mockito.mockStatic(DbUtil.class);
+        PowerMockito.mockStatic(FeaturesUtil.class);
+        PowerMockito.mockStatic(DbUtil.class);
     }
+
     @Test
     public void testNotAppliedInHibernate() {
         AmpActivity activity = new AmpActivity();
@@ -111,7 +117,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
         oldActivity.setAmpActivityId(1L);
         oldActivity.setDraft(false);
         ActivityValidationContext.getOrThrow().setOldActivity(oldActivity);
-
+        
         AmpActivity activity = (AmpActivity) oldActivity.clone();
         activity.setApprovalStatus(rejected);
         activity.setDraft(true);
@@ -122,17 +128,17 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
 
         assertThat(violations, emptyIterable());
     }
-
+    
     @Test
     public void testRejectedNewDraftActivityByApprover() {
         AmpActivity activity = new AmpActivity();
         activity.setApprovalStatus(rejected);
         activity.setDraft(true);
-
+        
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
-
+        
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
-
+        
         assertThat(violations, contains(approvalStatusViolation()));
     }
 

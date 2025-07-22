@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-15337</jira>
+	<keyword>Activity Form</keyword>
+	<author>mihai</author>
+	<description>Create a new type of funding information in AMP (for Budget Integration, but not only)</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+			update amp_modules_visibility  set name=replace(name,'/Donor Funding/','/Funding/');
+			update amp_modules_visibility  set name=replace(name,'/Related Organizations/','/Organizations/');
+			update amp_funding SET source_role_id = (select amp_role_id from amp_role where role_code='DN');
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

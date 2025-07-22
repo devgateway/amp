@@ -25,22 +25,17 @@ import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
 import org.hibernate.type.StringType;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Rule;
 
 import java.util.*;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.springframework.test.util.AssertionErrors.assertFalse;
-import static org.springframework.test.util.AssertionErrors.assertNotNull;
-
-@ExtendWith(InTransactionRule.class)
 public abstract class ReportingTestCase extends AmpTestCase {
-
+    
     static protected int nrRunReports = 0;
 
-
-//    public InTransactionRule inTransactionRule = new InTransactionRule();
+    @Rule
+    public InTransactionRule inTransactionRule = new InTransactionRule();
 
     public static<K extends Cell> List<K> nicelySorted(Collection<K> in) {
         return AmpCollections.sorted(in, (a, b) -> {
@@ -52,7 +47,7 @@ public abstract class ReportingTestCase extends AmpTestCase {
             return delta;
         });
     }
-
+    
     public ReportSpecification getReportSpecification(String reportName) {
         MockHttpServletRequest mockRequest = StandaloneAMPInitializer.populateMockRequest();
 
@@ -65,35 +60,35 @@ public abstract class ReportingTestCase extends AmpTestCase {
         input.getOrCreateSettings().setCurrencyCode(currencyCode);
         return input;
     }
-
+    
     public ReportSpecificationImpl buildSpecification(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
         return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria);
     }
 
     protected ReportSpecificationImpl buildActivityListingReportSpec(String name) {
-        ReportSpecificationImpl spec = buildSpecification(name,
-                Collections.singletonList(ColumnConstants.PROJECT_TITLE),
-                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                null,
+        ReportSpecificationImpl spec = buildSpecification(name, 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                null, 
                 GroupingCriteria.GROUPING_TOTALS_ONLY);
         spec.setDisplayEmptyFundingColumns(true);
         spec.setDisplayEmptyFundingRows(true);
         return spec;
     }
-
+    
     protected ReportFiltersImpl buildSimpleFilter(String column, List<String> ids, boolean inclusive) {
         ReportFiltersImpl mrf = new ReportFiltersImpl();
         mrf.addFilterRule(new ReportColumn(column), new FilterRule(ids, inclusive));
         return mrf;
 
     }
-
+    
     protected ReportFiltersImpl buildSimpleFilter(String column, String value, boolean inclusive) {
         ReportFiltersImpl mrf = new ReportFiltersImpl();
         mrf.addFilterRule(new ReportColumn(column), new FilterRule(value, inclusive));
         return mrf;
     }
-
+    
     /**
      * runs a given lambda in the context of a fully initialized NiReports engine, which will have its activity filters overridden to generate ids corresponding to a given list of names in English
      * @param activityNames
@@ -104,7 +99,7 @@ public abstract class ReportingTestCase extends AmpTestCase {
         NiReportsEngineForTesting engine = new NiReportsEngineForTesting(TestcasesReportsSchema.instance, runnable);
         engine.execute(); // will run runnable in the engine's context
     }
-
+    
     /**
      * runs a given lambda in the context of a fully initialized NiReports engine, which will have its activity filters overridden to generate ids corresponding to a given list of names in English
      * @param activityNames
@@ -112,7 +107,7 @@ public abstract class ReportingTestCase extends AmpTestCase {
      */
     public void runInEngineContext(List<String> activityNames, Function<ReportSpecificationImpl, ReportSpecification> reportSpecSupplier, ExceptionConsumer<NiReportsEngine> runnable) {
         TestcasesReportsSchema.workspaceFilter = new ActivityIdsFetcher(activityNames);
-        NiReportsEngineForTesting engine = new NiReportsEngineForTesting(TestcasesReportsSchema.instance,
+        NiReportsEngineForTesting engine = new NiReportsEngineForTesting(TestcasesReportsSchema.instance, 
             reportSpecSupplier,
             runnable);
         engine.execute(); // will run runnable in the engine's context
@@ -141,11 +136,11 @@ public abstract class ReportingTestCase extends AmpTestCase {
             assertNotNull("Column '" + outputColumn + "' Does not exist in the headers", rep);
         }
     }
-
+    
     public static String describeReportOutputInCode(ReportArea gr) {
         return new ReportAreaDescriber(null).describeInCode(gr);
     }
-
+    
     /**
      * returns the prefix of a string shifted right
      * @param depth
@@ -158,22 +153,22 @@ public abstract class ReportingTestCase extends AmpTestCase {
             res = res + "  ";
         return res;
     }
-
+    
     public static AmpReportColumn ampReportColumnForColName(String colName, long order) {
         AmpColumns col = (AmpColumns) PersistenceManager.getSession().createQuery("FROM " + AmpColumns.class.getName() + " c WHERE c.columnName=:colName").setParameter("colName", colName, StringType.INSTANCE).uniqueResult();
         if (col == null)
             throw new RuntimeException("column with name <" + colName + "> not found!");
-
+        
         AmpReportColumn res = new AmpReportColumn();
         res.setColumn(col);
         res.setOrderId(order);
         return res;
     }
-
+    
     public String digestTransactionAmounts(CategAmountCell cell) {
         return String.format("(actId: %d, %s, adjustment_type: %s, transaction_type: %s)", cell.activityId, cell.amount, cell.metaInfo.getMetaInfo(MetaCategory.ADJUSTMENT_TYPE.category).v, cell.metaInfo.getMetaInfo(MetaCategory.TRANSACTION_TYPE.category).v);
     }
-
+    
     public static NiReportExecutor getDbExecutor(List<String> activityNames) {
         NiReportExecutor res = new NiReportExecutor(TestcasesReportsSchema.instance);
         TestcasesReportsSchema.workspaceFilter = new ActivityIdsFetcher(activityNames);
@@ -194,29 +189,29 @@ public abstract class ReportingTestCase extends AmpTestCase {
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
         return getOfflineExecutor(activityNames);
     }
-
+    
     protected <K> K buildNiReportDigest(ReportSpecification spec, List<String> activityNames, NiReportOutputBuilder<K> outputBuilder) {
         return getNiExecutor(activityNames).executeReport(spec, outputBuilder);
     }
-
+    
     protected ReportSpecification spec(String reportName) {
         ReportSpecification spec = AmpReportsToReportSpecification.convert(ReportTestingUtils.loadReportByName(reportName));
         return spec;
     }
-
+    
     protected<K> K buildDigest(ReportSpecification spec, List<String> activityNames, NiReportOutputBuilder<K> outputBuilder) {
         nrRunReports ++;
         return buildNiReportDigest(spec, activityNames, outputBuilder);
     }
-
+    
     protected void runNiTestCase(ReportSpecification spec, String locale, List<String> activityNames, NiReportModel cor) {
         runNiTestCase(cor, spec, locale, activityNames);
     }
-
+    
     protected void runNiTestCase(NiReportModel cor, ReportSpecification spec, List<String> activityNames) {
         runNiTestCase(cor, spec, "en", activityNames);
     }
-
+        
     protected void runNiTestCase(NiReportModel cor, ReportSpecification spec, String locale, List<String> activityNames) {
         setLocale(locale);
         NiReportModel out = buildDigest(spec, activityNames, new ReportModelGenerator());
@@ -241,7 +236,7 @@ public abstract class ReportingTestCase extends AmpTestCase {
         if (assertionError != null)
             throw assertionError;
     }
-
+    
     protected void compareBodies(String name, PaginatedReportAreaForTests cor, ReportArea out) {
         String delta = null;
         AssertionError assertionError = null;
@@ -263,16 +258,16 @@ public abstract class ReportingTestCase extends AmpTestCase {
         if (assertionError != null)
             throw assertionError;
     }
-
+    
     protected ReportSpecificationImpl withUnits(ReportSpecificationImpl spec, AmountsUnits unitsOption) {
         spec.getOrCreateSettings().setUnitsOption(unitsOption);
         return spec;
     }
-
+    
 //  public<K> K buildNiReportDigest(ReportSpecification spec, NiReportExecutor executor, NiReportOutputBuilder<K> outputBuilder) {
 //      return executor.executeReport(spec, outputBuilder);
 //  }
-
+    
 //  public static <K> K buildNiReportDigest(ReportSpecification spec, List<String> activityNames, NiReportOutputBuilder<K> outputBuilder) {
 //      NiReportExecutor executor = getExecutor(activityNames);
 //      return executor.executeReport(spec, outputBuilder);

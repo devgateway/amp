@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+	<jira>AMP-29535</jira>
+	<author>Octavian Ciubotaru</author>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres"><![CDATA[
+
+DELETE
+FROM dg_message
+WHERE lang_iso = 'en'
+  AND site_id = '3'
+  AND message_key IN ('1738947495', '-1385133415', '-818481233', '5870299', '438585816', '-1297448053', '1596358030');
+
+INSERT INTO dg_message (message_key, lang_iso, site_id, message_utf8, created, orig_message)
+VALUES
+       ('1738947495', 'en', '3', 'Which vulnerable groups does this project/action work with?', '2020-05-11 00:00:00', 'Vulnerable Group'),
+       ('-1385133415', 'en', '3', 'How is joint decision making made in this project/action?', '2020-05-11 00:00:00', 'Project Joint Decision'),
+       ('-818481233', 'en', '3', 'How do you monitor and evaluate this project/action?', '2020-05-11 00:00:00', 'Project Monitoring'),
+       ('5870299', 'en', '3', 'What problems were encountered in this project?', '2020-05-11 00:00:00', 'Project Problems'),
+       ('438585816', 'en', '3', 'Are the project results available to the public?', '2020-05-11 00:00:00', 'Project Results Available'),
+       ('-1297448053', 'en', '3', 'Please provide link if available', '2020-05-11 00:00:00', 'Project Results Link'),
+       ('1596358030', 'en', '3', 'Sustainability: what happens when the project/action ends?', '2020-05-11 00:00:00', 'Project Sustainability');
+
+			]]></lang>
+		</script>
+	</apply>
+</tns:patch>

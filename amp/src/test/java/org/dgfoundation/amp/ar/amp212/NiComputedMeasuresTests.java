@@ -5,9 +5,9 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -285,12 +285,12 @@ public class NiComputedMeasuresTests extends AmpReportingTestCase {
         
     }
 
-    @BeforeEach
+    @Before
     public void setup() {
         AmpReportsScratchpad.forcedNowDate = LocalDate.of(2016, 5, 3);
     }
     
-    @AfterEach
+    @After
     public void tearDown() {
         AmpReportsScratchpad.forcedNowDate = null;
     }

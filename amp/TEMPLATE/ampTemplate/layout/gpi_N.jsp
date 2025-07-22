@@ -1,18 +1,18 @@
 <%@ page pageEncoding="UTF-8"%>
 
-<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
-<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic"%>
-<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles"%>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
-<%@ taglib uri="http://struts.apache.org/tags-nested" prefix="nested"%>
-<%@ taglib uri="http://digijava.org/digi" prefix="digi"%>
-<%@ taglib uri="http://digijava.org/aim" prefix="aim" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/struts-nested" prefix="nested"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
+<%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<link rel="stylesheet" href="<digi:file src="/static/gpi/view/css/gpi_styles.css"/>">
+<link rel="stylesheet" href="<digi:file src="/repository/gpi/view/css/gpi_styles.css"/>">
 
-<jsp:include page="/WEB-INF/jsp/aim/view/teamPagesHeader.jsp"  />
+<jsp:include page="/repository/aim/view/teamPagesHeader.jsp"  />
 
 <%
 String auxReportId = request.getParameter("reportId");
@@ -49,16 +49,16 @@ request.getParameter("print");
 		            <tr>
 		                <td class="td_right_left1">
                             <logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="1">
-                                <jsp:include page="/WEB-INF/jsp/gpi/view/gpi_1.jsp"></jsp:include>
+                                <jsp:include page="/repository/gpi/view/gpi_1.jsp"></jsp:include>
                             </logic:equal>
                             <logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="5a">
-                                <jsp:include page="/WEB-INF/jsp/gpi/view/gpi_5a.jsp"></jsp:include>
+                                <jsp:include page="/repository/gpi/view/gpi_5a.jsp"></jsp:include>
                             </logic:equal>
                             <logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="6">
-                                <jsp:include page="/WEB-INF/jsp/gpi/view/gpi_6.jsp"></jsp:include>
+                                <jsp:include page="/repository/gpi/view/gpi_6.jsp"></jsp:include>
                             </logic:equal>
                             <logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="9b">
-                                <jsp:include page="/WEB-INF/jsp/gpi/view/gpi_9b.jsp"></jsp:include>
+                                <jsp:include page="/repository/gpi/view/gpi_9b.jsp"></jsp:include>
                             </logic:equal>
 	                    </td>
 	                </tr>

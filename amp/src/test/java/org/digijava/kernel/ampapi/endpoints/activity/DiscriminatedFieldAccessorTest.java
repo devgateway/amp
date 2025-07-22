@@ -4,28 +4,26 @@ import com.google.common.collect.ImmutableList;
 import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.request.TLSUtils;
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.util.*;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.WORKSPACE_PREFIX;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Octavian Ciubotaru
  */
-
-class DiscriminatedFieldAccessorTest {
+public class DiscriminatedFieldAccessorTest {
 
 
     private static class Obj {
 
         private List<Category> categories = new ArrayList<>();
-
+    
         private Set<Category> attributes = new HashSet<>();
     }
 
@@ -51,38 +49,34 @@ class DiscriminatedFieldAccessorTest {
     private static Field attributes;
     private static Field categories;
 
-    @BeforeAll
+    @BeforeClass
     public static void setUp() throws Exception {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX, "");
-
+        
         attributes = Obj.class.getDeclaredField("attributes");
         categories = Obj.class.getDeclaredField("categories");
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testCollectionReadFromNull() {
-        assertThrows(RuntimeException.class,()-> {
-            Obj obj = new Obj();
-            obj.categories = null;
+        Obj obj = new Obj();
+        obj.categories = null;
 
-            FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor(categories), "kind",
-                    "A", true);
-            accessor.get(obj);
-        });
+        FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor(categories),"kind",
+                "A", true);
+        accessor.get(obj);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testCollectionWriteWriteToNull() {
-        assertThrows(RuntimeException.class,()-> {
-            Obj obj = new Obj();
-            obj.categories = null;
+        Obj obj = new Obj();
+        obj.categories = null;
 
-            FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor(categories), "kind",
-                    "A", true);
-            accessor.set(obj, ImmutableList.of(new Category("A", "1")));
-        });
-    }
+        FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor(categories),"kind",
+                "A", true);
+        accessor.set(obj, ImmutableList.of(new Category("A", "1")));
+    }	
 
     @Test
     public void testDiscriminatedRead() {
@@ -95,7 +89,7 @@ class DiscriminatedFieldAccessorTest {
         FieldAccessor accessor = newMultipleValuesCategoryAccessor("A");
         Collection<Category> o = accessor.get(obj);
 
-        MatcherAssert.assertThat(o, containsInAnyOrder(cat("A", "1"), cat("A", "3")));
+        assertThat(o, containsInAnyOrder(cat("A", "1"), cat("A", "3")));
     }
 
     @Test
@@ -107,33 +101,29 @@ class DiscriminatedFieldAccessorTest {
         FieldAccessor accessor = newSingleValueCategoryAccessor("A");
         Category o = accessor.get(obj);
 
-        MatcherAssert.assertThat(o, cat("A", "1"));
+        assertThat(o, cat("A", "1"));
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testSingleValueReadInvalid() {
-        assertThrows(RuntimeException.class,()-> {
-            Obj obj = new Obj();
-            obj.categories.add(new Category("A", "1"));
-            obj.categories.add(new Category("A", "2"));
+        Obj obj = new Obj();
+        obj.categories.add(new Category("A", "1"));
+        obj.categories.add(new Category("A", "2"));
 
-            FieldAccessor accessor = newSingleValueCategoryAccessor("A");
-            accessor.get(obj);
-        });
+        FieldAccessor accessor = newSingleValueCategoryAccessor("A");
+        accessor.get(obj);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testSingleValueWriteInvalid() {
-        assertThrows(RuntimeException.class,()-> {
-            Obj obj = new Obj();
-            obj.categories.add(new Category("A", "1"));
-            obj.categories.add(new Category("A", "2"));
+        Obj obj = new Obj();
+        obj.categories.add(new Category("A", "1"));
+        obj.categories.add(new Category("A", "2"));
 
-            FieldAccessor accessor = newSingleValueCategoryAccessor("A");
-            accessor.set(obj, null);
-        });
+        FieldAccessor accessor = newSingleValueCategoryAccessor("A");
+        accessor.set(obj, null);
     }
-
+    
     @Test
     public void testDiscriminatedReadSet() {
         Obj obj = new Obj();
@@ -144,8 +134,8 @@ class DiscriminatedFieldAccessorTest {
 
         FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor(attributes), "kind", "A", true);
         Collection<Category> o = accessor.get(obj);
-
-        MatcherAssert.assertThat(o, containsInAnyOrder(cat("A", "1"), cat("A", "3")));
+        
+        assertThat(o, containsInAnyOrder(cat("A", "1"), cat("A", "3")));
     }
 
     @Test
@@ -160,7 +150,8 @@ class DiscriminatedFieldAccessorTest {
         List<Category> newCats = ImmutableList.of(new Category("B", "5"), new Category("B", "6"));
         accessor.set(obj, newCats);
 
-        MatcherAssert.assertThat(obj.categories, containsInAnyOrder(cat("A", "1"), cat("C", "3"), cat("B", "5"), cat("B", "6")));
+        assertThat(obj.categories,
+                containsInAnyOrder(cat("A", "1"), cat("C", "3"), cat("B", "5"), cat("B", "6")));
     }
 
     @Test
@@ -171,9 +162,10 @@ class DiscriminatedFieldAccessorTest {
         FieldAccessor accessor = newSingleValueCategoryAccessor("A");
         accessor.set(obj, new Category("A", "1"));
 
-        MatcherAssert.assertThat(obj.categories, containsInAnyOrder(cat("A", "1"), cat("B", "2")));
+        assertThat(obj.categories,
+                containsInAnyOrder(cat("A", "1"), cat("B", "2")));
     }
-
+    
     @Test
     public void testDiscriminatedUpdate() {
         Obj obj = new Obj();
@@ -181,18 +173,19 @@ class DiscriminatedFieldAccessorTest {
         obj.categories.add(new Category("B", "2"));
         obj.categories.add(new Category("C", "3"));
         obj.categories.add(new Category("B", "4"));
-
+    
         List<Category> newCatsA = ImmutableList.of(new Category("A", "7"));
         FieldAccessor accessorA = new DiscriminatedFieldAccessor(new SimpleFieldAccessor(categories), "kind",
                 "A",true);
         accessorA.set(obj, newCatsA);
-
+        
         List<Category> newCatsB = ImmutableList.of(new Category("B", "5"), new Category("B", "6"));
         FieldAccessor accessorB = newMultipleValuesCategoryAccessor("B");
         accessorB.set(obj, newCatsB);
-
-
-        MatcherAssert.assertThat(obj.categories, containsInAnyOrder(cat("A", "7"), cat("C", "3"), cat("B", "5"), cat("B", "6")));
+        
+        
+        assertThat(obj.categories,
+                containsInAnyOrder(cat("A", "7"), cat("C", "3"), cat("B", "5"), cat("B", "6")));
     }
 
     @Test
@@ -204,7 +197,8 @@ class DiscriminatedFieldAccessorTest {
         FieldAccessor accessor = newSingleValueCategoryAccessor("A");
         accessor.set(obj, new Category("A", "1"));
 
-        MatcherAssert.assertThat(obj.categories, containsInAnyOrder(cat("A", "1"), cat("B", "2")));
+        assertThat(obj.categories,
+                containsInAnyOrder(cat("A", "1"), cat("B", "2")));
     }
 
     @Test
@@ -216,7 +210,7 @@ class DiscriminatedFieldAccessorTest {
         FieldAccessor accessor = newSingleValueCategoryAccessor("A");
         accessor.set(obj, null);
 
-        MatcherAssert.assertThat(obj.categories, contains(cat("B", "2")));
+        assertThat(obj.categories, contains(cat("B", "2")));
     }
 
     private FieldAccessor newSingleValueCategoryAccessor(String discriminatorValue) {
@@ -236,54 +230,46 @@ class DiscriminatedFieldAccessorTest {
         return allOf(hasProperty("kind", is(kind)), hasProperty("value", is(value)));
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testObjectReadFromNull() {
-        assertThrows(RuntimeException.class,()-> {
-            Obj obj = new Obj();
-            obj.categories = null;
+        Obj obj = new Obj();
+        obj.categories = null;
 
-            FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor(categories),
-                    "kind", "A", false);
-            accessor.get(obj);
-        });
+        FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor(categories),
+                "kind", "A", false);
+        accessor.get(obj);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testObjectWriteToNull() {
-        assertThrows(RuntimeException.class,()-> {
-            Obj obj = new Obj();
-            obj.categories = null;
+        Obj obj = new Obj();
+        obj.categories = null;
 
-            FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor(categories),
-                    "kind", "A", false);
-            accessor.set(obj, new Category("A", "1"));
-        });
+        FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor(categories),
+                "kind", "A", false);
+        accessor.set(obj, new Category("A", "1"));
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testObjectReadUncertain() {
-        assertThrows(RuntimeException.class,()-> {
-            Obj obj = new Obj();
-            obj.categories.add(new Category("A", "1"));
-            obj.categories.add(new Category("A", "3"));
+        Obj obj = new Obj();
+        obj.categories.add(new Category("A", "1"));
+        obj.categories.add(new Category("A", "3"));
 
-            FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor(categories),
-                    "kind", "A", false);
-            accessor.get(obj);
-        });
+        FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor(categories),
+                "kind", "A", false);
+        accessor.get(obj);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testObjectWriteUncertain() {
-        assertThrows(RuntimeException.class,()-> {
-            Obj obj = new Obj();
-            obj.categories.add(new Category("A", "1"));
-            obj.categories.add(new Category("A", "3"));
+        Obj obj = new Obj();
+        obj.categories.add(new Category("A", "1"));
+        obj.categories.add(new Category("A", "3"));
 
-            FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor(categories),
-                    "kind", "A", false);
-            accessor.set(obj, new Category("A", "1"));
-        });
+        FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor(categories),
+                "kind", "A", false);
+        accessor.set(obj, new Category("A", "1"));
     }
 
     @Test
@@ -295,7 +281,7 @@ class DiscriminatedFieldAccessorTest {
         FieldAccessor accessor = new DiscriminatedFieldAccessor(new SimpleFieldAccessor(categories),
                 "kind", "B", false);
 
-        MatcherAssert.assertThat(accessor.get(obj), is(cat("B", "3")));
+        assertThat(accessor.get(obj), is(cat("B", "3")));
     }
 
     @Test
@@ -309,6 +295,6 @@ class DiscriminatedFieldAccessorTest {
 
         accessor.set(obj, new Category("B", "4"));
 
-        MatcherAssert.assertThat(obj.categories, containsInAnyOrder(cat("A", "1"), cat("B", "4")));
+        assertThat(obj.categories, containsInAnyOrder(cat("A", "1"), cat("B", "4")));
     }
 }

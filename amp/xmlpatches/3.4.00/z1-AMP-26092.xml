@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-26092</jira>
+    <author>Octavian Ciubotaru</author>
+    <description>
+        Drop unused column.
+    </description>
+    <apply>
+        <script>
+            <lang type="postgres"><![CDATA[
+                DROP VIEW IF EXISTS v_ni_component_funding CASCADE;
+                ALTER TABLE AMP_COMPONENT_FUNDING DROP COLUMN exchange_rate;
+                UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

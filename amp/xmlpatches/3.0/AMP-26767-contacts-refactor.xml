@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+	<jira>AMP-26767</jira>
+	<author>ociubotaru</author>
+	<description>Extract phone type from value column for phone contact properties.</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres"><![CDATA[
+
+				UPDATE amp_contact_properties
+				SET value = substr(value, strpos(value, ' ') + 1), type = substr(value, 0, strpos(value, ' ')) :: BIGINT
+				WHERE name = 'contact phone'
+					  AND type IS NULL
+					  AND value LIKE (SELECT v.id
+									  FROM amp_category_value v
+										JOIN amp_category_class c ON v.amp_category_class_id = c.id
+									  WHERE c.keyname = 'contact_phone_type' AND v.category_value = 'Cell') || ' %';
+
+				UPDATE amp_contact_properties
+				SET value = substr(value, strpos(value, ' ') + 1), type = substr(value, 0, strpos(value, ' ')) :: BIGINT
+				WHERE name = 'contact phone'
+					  AND type IS NULL
+					  AND value LIKE (SELECT v.id
+									  FROM amp_category_value v
+										JOIN amp_category_class c ON v.amp_category_class_id = c.id
+									  WHERE c.keyname = 'contact_phone_type' AND v.category_value = 'Home') || ' %';
+
+				UPDATE amp_contact_properties
+				SET value = substr(value, strpos(value, ' ') + 1), type = substr(value, 0, strpos(value, ' ')) :: BIGINT
+				WHERE name = 'contact phone'
+					  AND type IS NULL
+					  AND value LIKE (SELECT v.id
+									  FROM amp_category_value v
+										JOIN amp_category_class c ON v.amp_category_class_id = c.id
+									  WHERE c.keyname = 'contact_phone_type' AND v.category_value = 'Work') || ' %';
+
+				UPDATE amp_contact_properties
+				SET value = substr(value, strpos(value, ' ') + 1)
+				WHERE name = 'contact phone'
+					  AND type IS NULL
+					  AND value LIKE '0 %';
+
+			]]></lang>
+		</script>
+	</apply>
+</tns:patch>

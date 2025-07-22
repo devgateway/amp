@@ -1,7 +1,7 @@
 package org.digijava.kernel.services;
 
 import org.digijava.kernel.AbstractIntegrationTest;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 /**
  * TODO this test can be uncommented after AmpVersionService is no longer dependent on WebApplicationContext

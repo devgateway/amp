@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-29535</jira>
+	<keyword>Views</keyword>
+	<author>Octavian Ciubotaru</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger> 
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_vulnerable_group;
+				CREATE OR REPLACE VIEW v_vulnerable_group AS
+				SELECT
+				fund.amp_activity_id,
+				val.category_value,
+				COALESCE(val.id, -999999999) AS vulnerable_group_id,
+				fund.amp_donor_org_id,
+				fund.type_of_assistance_category_va as terms_assist_id,
+				fund.financing_instr_category_value as financing_instrument_id,
+				fund.amp_donor_org_id as donor_org_id,
+				fund.mode_of_payment_category_va as mode_of_payment_id,
+				fund.funding_status_category_va as funding_status_id,
+				fund.agreement as agreement_id,
+				fund.amp_funding_id as funding_id,
+				CASE WHEN fund.project_results_available THEN 1 ELSE 2 END AS project_results_available_id,
+				o.amp_country_id AS donor_org_country_id
+				FROM amp_funding fund
+				LEFT JOIN amp_category_value val ON fund.vulnerable_group_va = val.id
+				JOIN amp_organisation o ON fund.amp_donor_org_id = o.amp_org_id;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

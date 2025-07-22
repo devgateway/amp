@@ -8,24 +8,24 @@ import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Octavian Ciubotaru
  */
-class PrivateResourceValidatorTest {
+public class PrivateResourceValidatorTest {
 
     private static APIField docField;
     private static PrivateResourceValidator.InMemoryResourceDAO dao;
 
-    @BeforeAll
+    @BeforeClass
     public static void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         docField = ValidatorUtil.getMetaData(AmpActivityDocument.class);
@@ -39,7 +39,7 @@ class PrivateResourceValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(doc);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -49,7 +49,7 @@ class PrivateResourceValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(doc);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -59,7 +59,7 @@ class PrivateResourceValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(doc);
 
-        MatcherAssert.assertThat(violations, contains(violation()));
+        assertThat(violations, contains(violation()));
     }
 
     @Test
@@ -69,7 +69,7 @@ class PrivateResourceValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(doc);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     private Matcher<ConstraintViolation> violation() {

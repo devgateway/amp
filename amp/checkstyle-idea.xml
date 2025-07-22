@@ -45,7 +45,7 @@
     <module name="TypeName"/>
     <module name="AvoidStarImport"/>
     <module name="IllegalImport"/>
-    <module name="RedundantImport"/>
+    <module name="RedundantImport"/>    
     <module name="MethodLength"/>
     <module name="ParameterNumber"/>
     <module name="EmptyForIteratorPad"/>
@@ -116,7 +116,7 @@
     <property name="severity" value="ignore"/>
     <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
   </module>
-  <module name="Translation"/>
+  <module name="Translation"/>  
   <module name="FileTabCharacter">
        <property name="fileExtensions" value="java,xml,html,md"/>
   </module>

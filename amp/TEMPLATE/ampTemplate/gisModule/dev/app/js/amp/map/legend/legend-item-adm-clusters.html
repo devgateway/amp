@@ -1,26 +1,17 @@
-<div>
-  <h3 data-i18n="amp.gis:title-<%= obj.title.replace(/ /g,'') %>"><%= obj.title %></h3>
-</div>
+<div><h3 data-i18n="amp.gis:title-<%= obj.title.replace(/ /g,'') %>"><%= obj.title %></h3></div>
+
 
 <div>
   <div class="map-adm-icon legend-sample">
-    <%
-    const feature = obj.features[0];
-    const activityIdCount = feature && feature.properties.activityid ? feature.properties.activityid.length : 0;
-    const wocatCount = feature && feature.properties.wocatActivities ? feature.properties.wocatActivities.length : 0;
-
-    const useLargeCircle = activityIdCount > 9999 || wocatCount > 9999;
-    %>
-
-    <div class="map-circle <%= useLargeCircle ? 'large' : '' %>">
+    <% if(obj.features[0] && features[0].properties.activityid.length <= 9999) { %>
+      <div class="map-circle">
+    <% } else { %>
+      <div class="map-circle large">
+    <% } %>
       #
     </div>
-
-    <div class="map-circle-label">
-      <%= feature ? feature.properties.admName : '' %>
-    </div>
+    <div class="map-circle-label"><%= (obj.features[0] ? features[0].properties.admName : '' )%></div>
   </div>
-
   <span data-i18n="amp.gis:legend-desc">Straight out <%= obj.value %></span>&nbsp;
   <span data-i18n="amp.gis:title-<%= obj.title.replace(/ /g,'') %>"><%= obj.title %></span>
 </div>

@@ -1,0 +1,102 @@
+	<site-config>repository</site-config>
+	<!-- Indicates if resource lookup is cached.
+	Set to true on production boxes. Set to false on
+	dev machines -->
+	<res-cache>false</res-cache>
+
+	<!-- Search-engine optimization separator in URLs -->
+	<param-separator>~</param-separator>
+
+    <param-safeHTML>b,u,i,pre</param-safeHTML>
+	<param-bbTag>b,u,i,quote,code,list,list=,img,url,color,li,size</param-bbTag>
+
+    <!-- Enable/disable AccessLogger -->
+	<enable-logging>true</enable-logging>
+
+	<!-- Configure HTTP and HTTPS port -->
+ 	<http-port>80</http-port>
+ 	<https-port>443</https-port>
+ 		
+	<!-- Hibernate class -->
+	<hibernate-classes required="false">              
+		<!-- kernel classes -->
+		<hibernate-class>org.digijava.kernel.request.SiteDomain</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.Address</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.GeoRegion</hibernate-class>
+		<hibernate-class>org.digijava.kernel.user.User</hibernate-class>
+		<hibernate-class>org.digijava.kernel.user.UserLoginInfo</hibernate-class>
+        <hibernate-class>org.digijava.kernel.user.UserContactInfo</hibernate-class>
+		<hibernate-class>org.digijava.kernel.request.Site</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.Image</hibernate-class>
+		<hibernate-class>org.digijava.kernel.user.Group</hibernate-class>
+		<hibernate-class>org.digijava.kernel.user.GroupPermission</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.Locale</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.UserPreferences</hibernate-class>
+		<hibernate-class>org.digijava.kernel.dbentity.Country</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.OrganizationType</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.HowDidYouHear</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.ModuleInstance</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.UserLangPreferences</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.Interests</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.ContentAlert</hibernate-class>
+		<!-- <hibernate-class>org.digijava.kernel.dbentity.SignOn</hibernate-class>  -->
+		<hibernate-class>org.digijava.kernel.entity.OracleLocale</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.PrincipalPermission</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.PrincipalPermissionParameter</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.Message</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.AccessLog</hibernate-class>
+		<hibernate-class>org.digijava.module.common.dbentity.ItemStatus</hibernate-class>
+		<hibernate-class>org.digijava.module.common.dbentity.ModuleTeaser</hibernate-class>
+        <hibernate-class>org.digijava.kernel.entity.MailSpool</hibernate-class>
+    </hibernate-classes>
+
+	
+<!-- 
+	 <service id="digiFeedService" class="org.digijava.module.digifeed.core.DigifeedService">
+            <description>Digi's feed publishing service</description>
+     </service>
+
+	 -->
+
+
+	 <service id="XmlPatcherService" class="org.digijava.module.xmlpatcher.core.XmlPatcherService">
+            <description>XML Patcher Module</description>
+            <property name="schedulerName">NaturalLocationOrderXmlPatcherScheduler</property>
+            <!--
+			By adding those two properties, the patcher will read first any patch from any folder that contains
+			..AMP113a.. first and then ... AMP113b... etc...
+			-->
+			
+			<!-- 
+            <property name="schedulerProperties(locationPriority)">AMP113a,AMP113b,AMP113c.....</property> 
+            <property name="schedulerName">LocationPriorityXmlPatcherScheduler</property>
+             -->
+   	 </service>
+
+
+    <service id="ignoredAgentsService" class="org.digijava.kernel.request.service.IgnoredAgentsService">
+        <description>Service to determine which agents will use SSO</description> 
+        <!-- What to do if user-agent header does not exist --> 
+        <property name="ignoreUndefined">true</property> 
+        <!-- Default Behavior --> 
+        <property name="ignoreByDefault">true</property> 
+        <!-- Checking Order --> 
+        <property name="checkAllowedFirst">false</property> 
+        <!-- Allow and Ignore directives. Can contain Java expressions. 
+              There are 2 constants available: agent and agentWithCase
+          --> 
+        <property name="allowedAgents">(agent.indexOf("mozilla") != -1)||(agent.indexOf("opera") != -1)</property> 
+        <property name="ignoredAgents">agent.indexOf("googlebot") != -1</property>
+    </service>
+
+	<service id="digiCurrencyRatesService" class="org.digijava.module.currencyrates.CurrencyRatesService">
+            <description>Daily Currency Rates Service</description>
+    </service>
+  
+	<service id="digiAuditClenaerService" class="org.digijava.module.aim.services.auditcleaner.AuditCleanerService">
+            <description>This service will delete the audit log</description>
+    </service>
+
+     <config-bean id="proxyHelperConfig" class="org.digijava.kernel.util.ProxyHelperConfig">
+          <property name="initializeUser">false</property>
+     </config-bean>

@@ -8,7 +8,7 @@ import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.AmpReportModifier;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;

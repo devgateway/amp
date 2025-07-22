@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMPOPS-112</jira>
+  <keyword>computed teams default off budget</keyword>
+  <author>mihai</author> 
+  <description>Computed Teams Add Activity Default Off Budget</description>
+  
+   <trigger type="all">
+      <condition  type="entryInTableExists" tablename="amp_global_settings" columnname="settingsName" columnvalue="Computed Teams Add Activity Default Off Budget" inverted="true" />
+ 	</trigger>
+ 	
+  <apply>
+    <script>
+      <lang delimiter=";" type="sql">
+		insert into amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) values(nextval('amp_global_settings_seq'), 'Computed Teams Add Activity Default Off Budget','false','t_Boolean','When adding new activities inside a computed team, the Budget drop-down is set by default to Off Budget','funding');
+      </lang>
+    </script>
+  </apply>
+</tns:patch>

@@ -14,30 +14,34 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.validator.groups.Submit;
 import org.hamcrest.Matcher;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Octavian Ciubotaru
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({FeaturesUtil.class})
 public class OnBudgetValidatorTest {
 
     private static APIField activityField;
     private static InMemoryCategoryValuesManager categoryValues;
-    private AutoCloseable mockedStatic;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
-//        mockedStatic = Mockito.mockStatic(FeaturesUtil.class);
+        PowerMockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
         categoryValues = InMemoryCategoryValuesManager.getInstance();
     }
@@ -163,12 +167,5 @@ public class OnBudgetValidatorTest {
     private Set<ConstraintViolation> getConstraintViolations(APIField type, Object object, Class<?>... groups) {
         Set<ConstraintViolation> violations = ActivityValidatorUtil.validate(type, object, groups);
         return filter(violations, OnBudgetValidator.class);
-    }
-
-    @org.junit.jupiter.api.AfterEach
-    public void tearDown() throws Exception {
-        if (mockedStatic != null) {
-            mockedStatic.close();
-        }
     }
 }

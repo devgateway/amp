@@ -10,9 +10,8 @@ import org.digijava.kernel.validators.activity.ValidatorMatchers;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +20,16 @@ import java.util.stream.IntStream;
 
 import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Octavian Ciubotaru
  */
-class SizeValidatorTest {
+public class SizeValidatorTest {
 
     private static APIField objField;
 
-    public static class TestObject {
+    public class TestObject {
 
         @Interchangeable(
                 fieldTitle = "max1",
@@ -46,7 +46,7 @@ class SizeValidatorTest {
         private List<Integer> max3 = new ArrayList<>();
     }
 
-    @BeforeAll
+    @BeforeClass
     public static void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         objField = ValidatorUtil.getMetaData(TestObject.class);
@@ -58,7 +58,7 @@ class SizeValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(testObject);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -68,7 +68,7 @@ class SizeValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(testObject);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -78,7 +78,7 @@ class SizeValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(testObject);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -88,7 +88,7 @@ class SizeValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(testObject);
 
-        MatcherAssert.assertThat(violations, contains(violation("max1")));
+        assertThat(violations, contains(violation("max1")));
     }
 
     @Test
@@ -98,7 +98,7 @@ class SizeValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(testObject);
 
-        MatcherAssert.assertThat(violations, contains(violation("max3")));
+        assertThat(violations, contains(violation("max3")));
     }
 
     private Matcher<ConstraintViolation> violation(String path) {

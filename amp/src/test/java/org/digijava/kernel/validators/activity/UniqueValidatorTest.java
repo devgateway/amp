@@ -13,9 +13,8 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.util.Identifiable;
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,12 +23,12 @@ import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Octavian Ciubotaru
  */
-class UniqueValidatorTest {
+public class UniqueValidatorTest {
 
     private static APIField dummyIntField;
     private static APIField dummyObjField;
@@ -71,7 +70,7 @@ class UniqueValidatorTest {
         }
     }
 
-    @BeforeAll
+    @BeforeClass
     public static void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         dummyIntField = ValidatorUtil.getMetaData(DummyInt.class);
@@ -85,7 +84,7 @@ class UniqueValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(dummyIntField, dummy);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -95,8 +94,7 @@ class UniqueValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(dummyIntField, dummy);
 
-
-        MatcherAssert.assertThat(violations, contains(violation("list_of_ints")));
+        assertThat(violations, contains(violation("list_of_ints")));
     }
 
     @Test
@@ -105,7 +103,7 @@ class UniqueValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(dummyIntField, dummy);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -114,7 +112,7 @@ class UniqueValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(dummyObjField, dummy);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -136,7 +134,7 @@ class UniqueValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(dummyObjField, dummy);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -155,7 +153,7 @@ class UniqueValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(dummyObjField, dummy);
 
-        MatcherAssert.assertThat(violations, contains(violation("list_of_objs")));
+        assertThat(violations, contains(violation("list_of_objs")));
     }
 
     @Test
@@ -166,7 +164,7 @@ class UniqueValidatorTest {
         APIField dummyIntField = ValidatorUtil.getMetaData(DummyInt.class, ImmutableSet.of("/IntegersUniqueValidator"));
         Set<ConstraintViolation> violations = getConstraintViolations(dummyIntField, dummy);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     private Matcher<ConstraintViolation> violation(String path) {

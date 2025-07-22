@@ -9,13 +9,12 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.hamcrest.MatcherAssert;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.Collection;
 import java.util.List;
@@ -23,6 +22,7 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.Assert.assertThat;
 
 /**
  * Activity name format: ~wsf~ {$workspace_nr} {description}
@@ -116,17 +116,16 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
  *
  * @author Octavian Ciubotaru
  */
-@Tag("databasetests")
-@ExtendWith(InTransactionRule.class)
-class WorkspaceFilterTest {
+@Category(DatabaseTests.class)
+public class WorkspaceFilterTest {
 
-
-//    public InTransactionRule inTransactionRule = new InTransactionRule();
+    @Rule
+    public InTransactionRule inTransactionRule = new InTransactionRule();
 
     /**
      * Redoing public view caches to be able to properly test the anonymous case. See {@link #testAnonymous()}.
      */
-    @BeforeAll
+    @BeforeClass
     public static void setUp() {
         StandaloneAMPInitializer.initialize();
         PublicViewColumnsUtil.redoCaches();
@@ -136,7 +135,7 @@ class WorkspaceFilterTest {
     public void testNormalWorkspace1() {
         TeamMember tm = teamMemberFor("Normal workspace 1");
         List<String> acts = findActivities(tm);
-        MatcherAssert.assertThat(acts, containsInAnyOrder(
+        assertThat(acts, containsInAnyOrder(
                 "~wsf~ 1 Approved with DN Norway",
                 "~wsf~ 1 Draft with DN Norway",
                 "~wsf~ 1 Approved with BN Norway",
@@ -147,7 +146,7 @@ class WorkspaceFilterTest {
     public void testNormalWorkspace2() {
         TeamMember tm = teamMemberFor("Normal workspace 2");
         List<String> acts = findActivities(tm);
-        MatcherAssert.assertThat(acts, containsInAnyOrder(
+        assertThat(acts, containsInAnyOrder(
                 "~wsf~ 2 Approved",
                 "~wsf~ 2 Draft"));
     }
@@ -156,7 +155,7 @@ class WorkspaceFilterTest {
     public void testNormalWorkspace3() {
         TeamMember tm = teamMemberFor("Normal workspace 3");
         List<String> acts = findActivities(tm);
-        MatcherAssert.assertThat(acts, containsInAnyOrder(
+        assertThat(acts, containsInAnyOrder(
                 "~wsf~ 3 Approved",
                 "~wsf~ 3 Edited",
                 "~wsf~ 3 Started approved",
@@ -168,7 +167,7 @@ class WorkspaceFilterTest {
     public void testPrivateWorkspace() {
         TeamMember tm = teamMemberFor("Private workspace 4");
         List<String> acts = findActivities(tm);
-        MatcherAssert.assertThat(acts, containsInAnyOrder(
+        assertThat(acts, containsInAnyOrder(
                 "~wsf~ 4 Submitted with DN Norway",
                 "~wsf~ 4 Draft with DN Norway",
                 "~wsf~ 4 Submitted with BN norway",
@@ -179,7 +178,7 @@ class WorkspaceFilterTest {
     public void testComputedWs5NorwayAsDonor() {
         TeamMember tm = teamMemberFor("Computed ws 5 with DN Norway");
         List<String> acts = excludeUnknownActivities(findActivities(tm));
-        MatcherAssert.assertThat(acts, containsInAnyOrder(
+        assertThat(acts, containsInAnyOrder(
                 "~wsf~ 5 Draft",
                 "~wsf~ 5 Approved",
                 "~wsf~ 1 Approved with DN Norway",
@@ -190,7 +189,7 @@ class WorkspaceFilterTest {
     public void testComputedWs6NorwayAsDonorNoDraft() {
         TeamMember tm = teamMemberFor("Computed ws 6 with DN Norway, no draft");
         List<String> acts = excludeUnknownActivities(findActivities(tm));
-        MatcherAssert.assertThat(acts, containsInAnyOrder(
+        assertThat(acts, containsInAnyOrder(
                 "~wsf~ 6 Draft",
                 "~wsf~ 1 Approved with DN Norway"));
     }
@@ -199,7 +198,7 @@ class WorkspaceFilterTest {
     public void testComputedWs7NorwayAsOrg() {
         TeamMember tm = teamMemberFor("Computed ws 7 with org Norway");
         List<String> acts = excludeUnknownActivities(findActivities(tm));
-        MatcherAssert.assertThat(acts, containsInAnyOrder(
+        assertThat(acts, containsInAnyOrder(
                 "~wsf~ 7 Draft",
                 "~wsf~ 7 Approved",
                 "~wsf~ 1 Approved with DN Norway",
@@ -212,7 +211,7 @@ class WorkspaceFilterTest {
     public void testComputedWs8NorwayAsOrgNoDraft() {
         TeamMember tm = teamMemberFor("Computed ws 8 with org Norway, no draft");
         List<String> acts = excludeUnknownActivities(findActivities(tm));
-        MatcherAssert.assertThat(acts, containsInAnyOrder(
+        assertThat(acts, containsInAnyOrder(
                 "~wsf~ 8 Draft",
                 "~wsf~ 1 Approved with DN Norway",
                 "~wsf~ 1 Approved with BN Norway"));
@@ -222,7 +221,7 @@ class WorkspaceFilterTest {
     public void testManagementWs1() {
         TeamMember tm = teamMemberFor("Management workspace 1");
         List<String> acts = findActivities(tm);
-        MatcherAssert.assertThat(acts, containsInAnyOrder(
+        assertThat(acts, containsInAnyOrder(
                 "~wsf~ 1 Approved with DN Norway",
                 "~wsf~ 1 Approved with BN Norway",
                 "~wsf~ 2 Approved"));
@@ -232,7 +231,7 @@ class WorkspaceFilterTest {
     public void testManagementWs2() {
         TeamMember tm = teamMemberFor("Management workspace 2");
         List<String> acts = findActivities(tm);
-        MatcherAssert.assertThat(acts, containsInAnyOrder(
+        assertThat(acts, containsInAnyOrder(
                 "~wsf~ 3 Approved",
                 "~wsf~ 3 Started approved"));
     }
@@ -241,7 +240,7 @@ class WorkspaceFilterTest {
     public void testManagementWs3() {
         TeamMember tm = teamMemberFor("Management workspace 3");
         List<String> acts = findActivities(tm);
-        MatcherAssert.assertThat(acts, containsInAnyOrder(
+        assertThat(acts, containsInAnyOrder(
                 "~wsf~ 5 Approved",
                 "~wsf~ 7 Approved"));
     }
@@ -250,7 +249,7 @@ class WorkspaceFilterTest {
     public void testManagementWs4() {
         TeamMember tm = teamMemberFor("Management workspace 4");
         List<String> acts = findActivities(tm);
-        MatcherAssert.assertThat(acts, containsInAnyOrder(
+        assertThat(acts, containsInAnyOrder(
                 "~wsf~ 5 Approved"));
     }
 
@@ -258,7 +257,7 @@ class WorkspaceFilterTest {
     public void testManagementWs5() {
         TeamMember tm = teamMemberFor("Management workspace 5");
         List<String> acts = findActivities(tm);
-        MatcherAssert.assertThat(acts, containsInAnyOrder(
+        assertThat(acts, containsInAnyOrder(
                 "~wsf~ 7 Approved"));
     }
 
@@ -266,7 +265,7 @@ class WorkspaceFilterTest {
     public void testAnonymous() {
         // maintain
         List<String> acts = findActivities(null);
-        MatcherAssert.assertThat(acts, containsInAnyOrder(
+        assertThat(acts, containsInAnyOrder(
                 "~wsf~ 1 Approved with DN Norway",
                 "~wsf~ 1 Approved with BN Norway",
                 "~wsf~ 2 Approved",

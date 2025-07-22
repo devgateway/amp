@@ -14,18 +14,16 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.persistence.InMemoryValueConverter;
 import org.digijava.module.aim.annotations.interchange.*;
 import org.hamcrest.Matcher;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 /**
  * Important cases to test.
@@ -685,7 +683,7 @@ public class ObjectImporterTest {
      */
     private Map examples;
 
-    @BeforeEach
+    @Before
     public void setUp() throws IOException {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
 
@@ -836,17 +834,15 @@ public class ObjectImporterTest {
                         grandChild(null, "Five", null))))));
     }
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void testTwoDuplicateIds() {
-        assertThrows(IllegalStateException.class,()-> {
-            Map<String, Object> json = (Map<String, Object>) examples.get("back-references-example");
+        Map<String, Object> json = (Map<String, Object>) examples.get("back-references-example");
 
-            Parent parent = new Parent();
-            parent.addChild(new Child(1L, "A", "A"));
-            parent.addChild(new Child(1L, "A", "A"));
+        Parent parent = new Parent();
+        parent.addChild(new Child(1L, "A", "A"));
+        parent.addChild(new Child(1L, "A", "A"));
 
-            importer.validateAndImport(parent, json);
-        });
+        importer.validateAndImport(parent, json);
     }
 
     @Test
@@ -932,17 +928,15 @@ public class ObjectImporterTest {
     /**
      * Object import must fail because there must just one home phone in the original object.
      */
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testDiscriminatedNotRepeatableInvalidOriginalObject() {
-        assertThrows(RuntimeException.class,()-> {
-            Map<String, Object> json = (Map<String, Object>) examples.get("match-discriminated-but-not-repeatable");
+        Map<String, Object> json = (Map<String, Object>) examples.get("match-discriminated-but-not-repeatable");
 
-            Parent parent = new Parent();
-            parent.addPhone(new Phone("H", "123", null));
-            parent.addPhone(new Phone("H", "124", null));
+        Parent parent = new Parent();
+        parent.addPhone(new Phone("H", "123", null));
+        parent.addPhone(new Phone("H", "124", null));
 
-            importer.validateAndImport(parent, json);
-        });
+        importer.validateAndImport(parent, json);
     }
 
     @Test

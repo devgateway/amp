@@ -16,45 +16,39 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hamcrest.Matcher;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.List;
 import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
 import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.mockStatic;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Octavian Ciubotaru
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({FeaturesUtil.class})
 public class UniqueActivityTitleValidatorTest {
 
     private static APIField activityField;
     private static APIField activityFieldML;
-    private MockedStatic<FeaturesUtil> featuresUtilMock;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
-//        featuresUtilMock = Mockito.mockStatic(FeaturesUtil.class);
+        PowerMockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
         activityFieldML = ValidatorUtil.getMetaData(AmpActivityFields.class, ImmutableSet.of(),
                 new TestFieldInfoProvider(true));
-    }
-
-    @AfterEach
-    public void tearDown() {
-        if (featuresUtilMock != null) {
-            featuresUtilMock.close();
-        }
     }
 
     @Test
@@ -77,10 +71,7 @@ public class UniqueActivityTitleValidatorTest {
     }
 
     private void mockValidation() {
-        try(MockedStatic<FeaturesUtil> mockedStatic= mockStatic(FeaturesUtil.class)) {
-           mockedStatic.when(()->FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM)).thenReturn(null);
-
-        }
+        when(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM)).thenReturn(null);
     }
 
     @Test

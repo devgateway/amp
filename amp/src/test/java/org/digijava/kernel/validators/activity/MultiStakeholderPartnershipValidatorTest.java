@@ -12,27 +12,34 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.validator.groups.Submit;
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.mockStatic;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Viorel Chihai
  */
+
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({FeaturesUtil.class})
 public class MultiStakeholderPartnershipValidatorTest {
 
     private static APIField activityField;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
+        PowerMockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
     }
 
@@ -42,16 +49,17 @@ public class MultiStakeholderPartnershipValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity, Submit.class);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
     public void testMultiStakeholderPartnershipFalse() {
-        AmpActivityVersion activity = new ActivityBuilder().getActivity();
+        AmpActivityVersion activity = new ActivityBuilder()
+                .getActivity();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity, Submit.class);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -62,24 +70,24 @@ public class MultiStakeholderPartnershipValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
     public void testMultiStakeholderPartnershipTrueMissingField() {
-        try (MockedStatic<FeaturesUtil> mocked = mockStatic(FeaturesUtil.class)) {
-            mocked.when(() -> FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM))
-                    .thenReturn(null);
+        AmpActivityVersion activity = new ActivityBuilder()
+                .withMultiStakeholderPartnership(true)
+                .getActivity();
 
-            AmpActivityVersion activity = new ActivityBuilder()
-                    .withMultiStakeholderPartnership(true)
-                    .getActivity();
+        mockValidation();
+        Set<ConstraintViolation> violations = getConstraintViolations(activity, Submit.class);
 
-            Set<ConstraintViolation> violations = getConstraintViolations(activity, Submit.class);
+        assertThat(violations, containsInAnyOrder(ImmutableList.of(
+                violation("multi_stakeholder_partners"))));
+    }
 
-            MatcherAssert.assertThat(violations, containsInAnyOrder(ImmutableList.of(
-                    violation("multi_stakeholder_partners"))));
-        }
+    private void mockValidation() {
+        when(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM)).thenReturn(null);
     }
 
     @Test
@@ -90,7 +98,7 @@ public class MultiStakeholderPartnershipValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity, Submit.class);
 
-        MatcherAssert.assertThat(violations, containsInAnyOrder(ImmutableList.of(
+        assertThat(violations, containsInAnyOrder(ImmutableList.of(
                 violation("multi_stakeholder_partners"))));
     }
 
@@ -104,7 +112,7 @@ public class MultiStakeholderPartnershipValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity, Submit.class);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     private Matcher<ConstraintViolation> violation(String path) {

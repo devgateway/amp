@@ -1,14 +1,15 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import org.junit.platform.suite.api.SelectClasses;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 /**
  * entry point for offline NiReports tests
  *
  * @author Dolghier Constantin
  */
-@org.junit.platform.suite.api.Suite
-@SelectClasses({
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
         GraphAlgorithmsTests.class,
         InclusiveRunnerTests.class,
         MetaInfoTests.class,

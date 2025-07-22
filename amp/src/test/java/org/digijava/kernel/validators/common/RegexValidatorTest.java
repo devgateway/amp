@@ -9,19 +9,19 @@ import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.kernel.validators.activity.ValidatorMatchers;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Octavian Ciubotaru
  */
-class RegexValidatorTest {
+public class RegexValidatorTest {
 
     private static APIField objField;
 
@@ -33,7 +33,7 @@ class RegexValidatorTest {
         private String field;
     }
 
-    @BeforeAll
+    @BeforeClass
     public static void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         objField = ValidatorUtil.getMetaData(Obj.class);
@@ -45,7 +45,7 @@ class RegexValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(obj);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -55,7 +55,7 @@ class RegexValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(obj);
 
-        MatcherAssert.assertThat(violations, contains(ValidatorMatchers.violationFor(
+        assertThat(violations, contains(ValidatorMatchers.violationFor(
                 RegexValidator.class, "field", anything(), ValidationErrors.FIELD_INVALID_VALUE)));
     }
 
@@ -66,7 +66,7 @@ class RegexValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(obj);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     private Set<ConstraintViolation> getConstraintViolations(Object object) {

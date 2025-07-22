@@ -7,23 +7,23 @@ import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Octavian Ciubotaru
  */
-class AgreementCodeValidatorTest {
+public class AgreementCodeValidatorTest {
 
     private static APIField agreementField;
 
-    @BeforeAll
+    @BeforeClass
     public static void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         agreementField = ValidatorUtil.getMetaData(AmpAgreement.class);
@@ -36,7 +36,7 @@ class AgreementCodeValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(agreement);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -46,7 +46,7 @@ class AgreementCodeValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(agreement);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -56,7 +56,7 @@ class AgreementCodeValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(agreement);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -66,7 +66,7 @@ class AgreementCodeValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(agreement);
 
-        MatcherAssert.assertThat(violations, emptyIterable());
+        assertThat(violations, emptyIterable());
     }
 
     @Test
@@ -76,7 +76,7 @@ class AgreementCodeValidatorTest {
 
         Set<ConstraintViolation> violations = getConstraintViolations(agreement);
 
-        MatcherAssert.assertThat(violations, contains(violation()));
+        assertThat(violations, contains(violation()));
     }
 
     private Matcher<ConstraintViolation> violation() {

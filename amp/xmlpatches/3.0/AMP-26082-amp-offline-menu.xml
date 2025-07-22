@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+	<jira>AMP-26082</jira>
+	<author>ociubotaru</author>
+	<description>Adding menu entries for AMP Offline</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres"><![CDATA[
+
+				INSERT INTO amp_modules_visibility (id, name, haslevel, parent)
+				VALUES (nextval('amp_modules_visibility_seq'),
+						'AMP Offline',
+						TRUE,
+						(SELECT id
+						 FROM amp_modules_visibility
+						 WHERE name = 'PROJECT MANAGEMENT' AND parent IS NULL));
+
+				INSERT INTO amp_modules_visibility (id, name, haslevel, parent)
+				VALUES (nextval('amp_modules_visibility_seq'),
+						'Public AMP Offline',
+						TRUE,
+						(SELECT id
+						 FROM amp_modules_visibility
+						 WHERE
+						   name = 'PUBLIC VIEW' AND parent IS NULL));
+
+				INSERT INTO amp_menu_entry(SELECT nextval('amp_menu_entry_seq'), (select id from amp_menu_entry where name='Tools' and parent_id is null), 'AMP Offline', 'AMP Offline', null, null, null, (SELECT max(m.position)+1 FROM amp_menu_entry m JOIN amp_menu_entry pm ON m.parent_id = pm.id WHERE pm.name = 'Tools' AND pm.parent_id IS NULL), null);
+
+				INSERT INTO amp_visibility_rule(SELECT nextval('amp_visibility_rule_seq'), null, 1);
+				INSERT INTO amp_visibility_rule_amp_modules_visibility(SELECT currval('amp_visibility_rule_seq'), (SELECT id FROM amp_modules_visibility WHERE name = 'Public AMP Offline' AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'PUBLIC VIEW')));
+				INSERT INTO amp_menu_entry_view(select currval('amp_menu_entry_seq'), (SELECT currval('amp_visibility_rule_seq')), 0, '/TEMPLATE/reamp/modules/ampoffline/download/index.html');
+
+				INSERT INTO amp_visibility_rule(SELECT nextval('amp_visibility_rule_seq'), null, 1);
+				INSERT INTO amp_visibility_rule_amp_modules_visibility(SELECT currval('amp_visibility_rule_seq'), (SELECT id FROM amp_modules_visibility WHERE name = 'AMP Offline' AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'PROJECT MANAGEMENT')));
+				INSERT INTO amp_menu_entry_view(select currval('amp_menu_entry_seq'), (SELECT currval('amp_visibility_rule_seq')), 1, '/TEMPLATE/reamp/modules/ampoffline/download/index.html');
+
+				INSERT INTO amp_visibility_rule(SELECT nextval('amp_visibility_rule_seq'), null, 1);
+				INSERT INTO amp_visibility_rule_amp_modules_visibility(SELECT currval('amp_visibility_rule_seq'), (SELECT id FROM amp_modules_visibility WHERE name = 'AMP Offline' AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'PROJECT MANAGEMENT')));
+				INSERT INTO amp_menu_entry_view(select currval('amp_menu_entry_seq'), (SELECT currval('amp_visibility_rule_seq')), 2, '/TEMPLATE/reamp/modules/ampoffline/download/index.html');
+
+				INSERT INTO amp_menu_entry_view SELECT id, null, 0, null FROM amp_menu_entry WHERE name='Tools' and parent_id is null;
+
+			]]></lang>
+		</script>
+	</apply>
+</tns:patch>

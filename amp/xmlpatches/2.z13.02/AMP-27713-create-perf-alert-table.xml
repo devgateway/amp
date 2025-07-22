@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-27713</jira>
+    <keyword>activity performance table</keyword>
+    <author>vchihai</author>
+    <description>create amp activity performance rule table</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+            
+                DROP TABLE IF EXISTS amp_activity_performance_rule CASCADE;
+
+                CREATE TABLE public.amp_activity_performance_rule (
+					amp_activity_id bigint NOT NULL,
+					performance_rule_id bigint NOT NULL,
+					CONSTRAINT amp_activity_performance_rule_pkey PRIMARY KEY (amp_activity_id, performance_rule_id)
+				);
+                
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

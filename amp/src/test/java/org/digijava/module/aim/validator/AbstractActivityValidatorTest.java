@@ -4,7 +4,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
 
 import javax.validation.ConstraintValidator;
 
@@ -30,7 +30,7 @@ public abstract class AbstractActivityValidatorTest<T extends ConstraintValidato
     }
 
     @Override
-    @BeforeEach
+    @Before
     public void setUp() {
         super.setUp();
         ampTeamMember = mock(AmpTeamMember.class);

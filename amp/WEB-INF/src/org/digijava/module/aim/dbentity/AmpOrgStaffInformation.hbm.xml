@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.module.aim.dbentity.AmpOrgStaffInformation" table="AMP_STAFF_INFO">
+        <cache usage="read-write" />
+        <id name="id" column="amp_staff_info_id" type="java.lang.Long" unsaved-value="null">
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_STAFF_INFO_seq</param>
+            </generator>
+        </id>
+
+        <property name="year" column="year" type="java.lang.Long" />
+        <many-to-one name="type" column="staff_type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
+        <property name="staffNumber" column="number_of_staff" type="java.lang.Long" />
+        <many-to-one name="organization" column="amp_org_id" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
+        
+    </class>
+</hibernate-mapping>

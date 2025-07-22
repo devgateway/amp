@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+	<jira>AMP-25945</jira>
+	<author>ociubotaru</author>
+	<description>Track changes for workspace filters</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres"><![CDATA[
+
+				CREATE TRIGGER update_offline_changelog_trg
+                AFTER INSERT OR UPDATE OR DELETE ON amp_team_filter_data
+                FOR EACH ROW EXECUTE PROCEDURE update_offline_changelog('workspace filter data');
+
+			]]></lang>
+		</script>
+	</apply>
+</tns:patch>

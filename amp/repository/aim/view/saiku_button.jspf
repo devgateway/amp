@@ -1,0 +1,22 @@
+<%-- 
+	renders a Saiku button linking to a report
+	you should put "report" in context before calling
+--%>
+
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<c:choose>
+	<c:when test="${!report.hasAvailableMeasures()}">
+		<c:set var="measurestooltip"><digi:trn>The requested report only includes unimplemented measures</digi:trn></c:set>
+		<a href="javascript: void(0)" style="padding-right: 5px;" title="${measurestooltip}"><img src="/TEMPLATE/ampTemplate/saikuui_reports/images/saiku_disabled.png" border="0" /></a>
+	</c:when>
+	<c:when test="${!report.hasAvailableColumns()}">
+		<c:set var="columnstooltip"><digi:trn>The requested report only includes unimplemented columns</digi:trn></c:set>
+		<a href="javascript: void(0)" style="padding-right: 5px;" title="${columnstooltip}"><img src="saikuui_reports" border="0" /></a>
+	</c:when>
+</c:choose>
+
+
+
+
+
+

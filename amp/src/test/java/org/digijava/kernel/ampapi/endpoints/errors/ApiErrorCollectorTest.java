@@ -1,14 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.errors;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Collections.singletonList;
 import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_TEST_ID;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Octavian Ciubotaru

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-29996</jira>
+    <author>ginchauspe</author>
+    <description>Add new GS to define NDD mapping level, hide from UI. Default is 3.</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+                UPDATE amp_global_settings SET settingsvalue = 3 WHERE settingsname = 'NDD Mapping Indirect-Direct Level' AND settingsvalue = '0';
+                UPDATE amp_global_settings SET settingsvalue = 3 WHERE settingsname = 'NDD Mapping Indirect-Indirect Level' AND settingsvalue = '0';
+                UPDATE amp_global_settings SET settingsvalue = 3 WHERE settingsname = 'NDD Mapping Program-Source Level' AND settingsvalue = '0';
+                UPDATE amp_global_settings SET settingsvalue = 3 WHERE settingsname = 'NDD Mapping Program-Destination Level' AND settingsvalue = '0';
+			]]></lang>
+        </script>
+    </apply>
+</tns:patch>

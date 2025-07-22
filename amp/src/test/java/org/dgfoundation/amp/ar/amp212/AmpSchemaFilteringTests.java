@@ -8,21 +8,22 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Tag;
+import org.dgfoundation.amp.test.categories.DatabaseTests;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.Arrays;
 import java.util.List;
-import org.junit.jupiter.api.BeforeAll;
 
 /**
- *
+ * 
  * testcases for the fetching states of AMP + the AMP schema
- *
+ * 
  * @author Constantin Dolghier
  *
  */
-@Tag("databasetests")
+@Category(DatabaseTests.class)
 public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 
     final List<String> flowsActs = Arrays.asList(
@@ -39,26 +40,26 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
         "Activity with Zones",
         "TAC_activity_2"
     );
-
+    
     final List<String> humanitarianAidActs = Arrays.asList(
-            "TAC_activity_1",
-            "crazy funding 1",
-            "date-filters-activity",
-            "Activity with planned disbursements",
-            "TAC_activity_2",
+            "TAC_activity_1", 
+            "crazy funding 1", 
+            "date-filters-activity", 
+            "Activity with planned disbursements", 
+            "TAC_activity_2", 
             "pledged 2"
         );
-
+    
     @Override
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
         return getDbExecutor(activityNames);
     }
 
-    @BeforeAll
+    @BeforeClass
     public static void setUp() {
         StandaloneAMPInitializer.initialize();
     }
-
+    
     @Test
     public void testSavedModeOfPaymentFilter() {
         NiReportModel cor = new NiReportModel("simple-filtered-by-mode-of-payment")
@@ -76,7 +77,7 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 
         runNiTestCase(cor, spec("simple-filtered-by-mode-of-payment"), acts);
     }
-
+    
     @Test
     public void testSavedModeOfPaymentFilterByRegion() {
         NiReportModel cor = new NiReportModel("simple-filtered-by-mode-of-payment-by-region")
@@ -121,7 +122,7 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 
         runNiTestCase(cor, spec("simple-filtered-by-mode-of-payment-by-region"), acts);
     }
-
+    
     @Test
     public void testSavedDonorGroupFilter() {
         NiReportModel cor = new NiReportModel("filtered-by-donor-group")
@@ -151,7 +152,7 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 
         runNiTestCase(cor, spec("filtered-by-donor-group"), acts);
     }
-
+    
     @Test
     public void testFundingFlowFilterByBENF() {
         NiReportModel cor = new NiReportModel("flat filter flow by BENF")
@@ -169,15 +170,15 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                     new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
                     new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Real MTEF 2011-EXEC-BENF", "50,000", "Real MTEF 2012-IMPL-BENF", "43,000", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456", "Totals-Real MTEF-EXEC-BENF", "50,000", "Totals-Real MTEF-IMPL-BENF", "43,000")      ));
 
-
-        ReportSpecificationImpl spec = buildSpecForFiltering("flat filter flow by BENF",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, "MTEF 2011", "MTEF 2012", "Real MTEF 2011", "Real MTEF 2012"),
-            null,
+        
+        ReportSpecificationImpl spec = buildSpecForFiltering("flat filter flow by BENF", 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, "MTEF 2011", "MTEF 2012", "Real MTEF 2011", "Real MTEF 2012"), 
+            null, 
             ColumnConstants.BENEFICIARY_AGENCY, Arrays.asList(21696l, 21702l), true); // USAID, Water Foundation
-
+        
         runNiTestCase(cor, spec, acts);
     }
-
+    
     @Test
     public void testFundingFlowFilterByNotBENF() {
         NiReportModel cor = new NiReportModel("flat filter flow by not BENF")
@@ -190,15 +191,15 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                 .withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "MTEF 2011", "0", "MTEF 2012", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "272,500", "Totals-Actual Commitments", "0", "Totals-Actual Disbursements", "272,500", "Totals-MTEF", "0")
                   .withChildren(
                     new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Funding-2013-Actual Disbursements", "272,500", "Totals-Actual Disbursements", "272,500")      ));
-
-        ReportSpecificationImpl spec = buildSpecForFiltering("flat filter flow by not BENF",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE, "MTEF 2011", "MTEF 2012", "Real MTEF 2011", "Real MTEF 2012"),
-            null,
+        
+        ReportSpecificationImpl spec = buildSpecForFiltering("flat filter flow by not BENF", 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, "MTEF 2011", "MTEF 2012", "Real MTEF 2011", "Real MTEF 2012"), 
+            null, 
             ColumnConstants.BENEFICIARY_AGENCY, Arrays.asList(ColumnReportData.UNALLOCATED_ID, 21696l, 21702l), false); // USAID, Water Foundation
-
+        
         runNiTestCase(cor, spec, acts);
     }
-
+    
     @Test
     public void testFundingFlowFilterByPrimarySectorStored() {
         NiReportModel cor = new NiReportModel("AMP-22322-directed-mtefs-filter-by-110-education")
@@ -223,7 +224,7 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                     new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Real MTEF 2011-EXEC-BENF", "50 000", "Real MTEF 2011-IMPL-EXEC", "110 500", "Real MTEF 2012-EXEC-EXEC", "22 000", "Real MTEF 2012-IMPL-BENF", "43 000", "Funding-2015-Actual Commitments", "123 456", "Totals-Actual Commitments", "123 456", "Totals-Real MTEF-EXEC-BENF", "50 000", "Totals-Real MTEF-EXEC-EXEC", "22 000", "Totals-Real MTEF-IMPL-BENF", "43 000", "Totals-Real MTEF-IMPL-EXEC", "110 500"),
                     new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Funding-2013-Actual Disbursements", "35 000", "Funding-2014-Actual Disbursements", "75 000", "Totals-Actual Disbursements", "110 000"),
                     new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "MTEF 2011", "45 000", "MTEF 2012", "56 000", "Funding-2015-Actual Disbursements", "80 000", "Totals-Actual Disbursements", "80 000", "Totals-MTEF", "101 000")      ));
-
+        
         runNiTestCase(cor, spec("AMP-22322-directed-mtefs-filter-by-110-education"), flowsActs);
     }
 
@@ -256,7 +257,7 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 
         runNiTestCase(cor, spec("double-hierarchy-by-sector-by-subsector"), Arrays.asList("activity 1 with agreement"));
     }
-
+    
     @Test
     public void testSimpleDoubleHierBySectorAndSubsectorFilteredBySector() {
         NiReportModel cor = new NiReportModel("double-hierarchy-by-sector-by-subsector-filtered-by-sector")
@@ -359,7 +360,7 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 
         runNiTestCase(cor, spec("AMP-22322-all-directed-entities-by-ia"), Arrays.asList("Eth Water", "activity with directed MTEFs", "Test MTEF directed"));
     }
-
+    
     @Test
     public void testFundingFlowFilteredByIaFinlandMinEcon() {
         NiReportModel cor = new NiReportModel("AMP-22322-all-directed-entities-filtered-by-ia-finland-minecon")
@@ -414,7 +415,7 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 
         runNiTestCase(cor, spec("AMP-22322-all-directed-entities-filtered-by-ia-minfin-usaid"), Arrays.asList("Eth Water", "activity with directed MTEFs", "Test MTEF directed"));
     }
-
+    
     @Test
     public void testPositiveByApprovalStatusNewUnvalidated() {
         NiReportModel cor = new NiReportModel("testPositiveByApprovalStatusNewUnvalidated")
@@ -427,15 +428,15 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                     .withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "Approval Status", "", "Draft", "", "Filtered Approval Status", "", "Funding-2015-Actual Commitments", "45,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "45,000", "Totals-Actual Disbursements", "0")
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Approval Status", "4", "Draft", "false", "Filtered Approval Status", "2", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000")      ));
-
-        ReportSpecificationImpl spec = buildSpecForFiltering("testPositiveByApprovalStatusNewUnvalidated",
+        
+        ReportSpecificationImpl spec = buildSpecForFiltering("testPositiveByApprovalStatusNewUnvalidated", 
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.VALIDATION_STATUS),
-            null,
+            null, 
             ColumnConstants.APPROVAL_STATUS, Arrays.asList(2l), true); // All New Unvalidated. See AmpARFilter.VALIDATION_STATUS
-
+        
         runNiTestCase(cor, spec, acts);
     }
-
+    
     @Test
     public void testNegativeByApprovalStatusNewUnvalidated() {
         NiReportModel cor = new NiReportModel("testNegativeByApprovalStatusNewUnvalidated")
@@ -491,15 +492,15 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                     new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Approval Status", "3", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000"),
                     new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Approval Status", "3", "Draft", "false", "Filtered Approval Status", "4", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Disbursements", "80,000"),
                     new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Approval Status", "3", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Commitments", "3,632,14", "Funding-2015-Actual Commitments", "93,930,84", "Totals-Actual Commitments", "97,562,98")      ));;
-
-        ReportSpecificationImpl spec = buildSpecForFiltering("testNegativeByApprovalStatusNewUnvalidated",
+    
+        ReportSpecificationImpl spec = buildSpecForFiltering("testNegativeByApprovalStatusNewUnvalidated", 
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.VALIDATION_STATUS),
-            null,
+            null, 
             ColumnConstants.APPROVAL_STATUS, Arrays.asList(2l), false); // All but "New Unvalidated"
-
+        
         runNiTestCase(cor, spec, acts);
     }
-
+    
     @Test
     public void testNegativeByApprovalStatusValidated() {
         NiReportModel cor = new NiReportModel("testNegativeByApprovalStatusValidated")
@@ -515,14 +516,14 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                         new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Approval Status", "3", "Draft", "true", "Filtered Approval Status", "1", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000"),
                         new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Approval Status", "4", "Draft", "false", "Filtered Approval Status", "2", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000")      ));
 
-        ReportSpecificationImpl spec = buildSpecForFiltering("testNegativeByApprovalStatusValidated",
+        ReportSpecificationImpl spec = buildSpecForFiltering("testNegativeByApprovalStatusValidated", 
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.VALIDATION_STATUS),
-            null,
+            null, 
             ColumnConstants.APPROVAL_STATUS, Arrays.asList(4l), false); // All but Validated
-
+        
         runNiTestCase(cor, spec, acts);
     }
-
+    
     @Test
     public void testFilterFlatByHumanitarianAid() {
         NiReportModel cor = new NiReportModel("testFilterFlatByHumanitarianAid")
@@ -538,15 +539,15 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                     new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Humanitarian Aid", "Yes", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "123,321"),
                     new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Humanitarian Aid", "Yes", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")      ));
 
-
-        ReportSpecificationImpl spec = buildSpecForFiltering("testFilterFlatByHumanitarianAid",
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.HUMANITARIAN_AID),
-                null,
+        
+        ReportSpecificationImpl spec = buildSpecForFiltering("testFilterFlatByHumanitarianAid", 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.HUMANITARIAN_AID), 
+                null, 
                 ColumnConstants.HUMANITARIAN_AID, Arrays.asList(1l), true); // yes
-
+            
         runNiTestCase(cor, spec, acts);
     }
-
+    
     @Test
     public void testFilterHierByHumanitarianAid() {
         NiReportModel cor = new NiReportModel("testFilterHierByHumanitarianAidYes")
@@ -563,15 +564,15 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "123,321"),
                       new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")        )      ));
-
-        ReportSpecificationImpl spec = buildSpecForFiltering("testFilterHierByHumanitarianAidYes",
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.HUMANITARIAN_AID),
-                Arrays.asList(ColumnConstants.HUMANITARIAN_AID),
+        
+        ReportSpecificationImpl spec = buildSpecForFiltering("testFilterHierByHumanitarianAidYes", 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.HUMANITARIAN_AID), 
+                Arrays.asList(ColumnConstants.HUMANITARIAN_AID), 
                 ColumnConstants.HUMANITARIAN_AID, Arrays.asList(1l), true); // yes
-
+            
         runNiTestCase(cor, spec, acts);
     }
-
+    
     @Test
     public void testFilterHierByDisasterResponseFilterYes() {
         NiReportModel cor = new NiReportModel("testFilterHierByDisasterResponseFilterYes")
@@ -587,14 +588,14 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                     .withChildren(
                       new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Funding-2015-Actual Commitments", "67,000", "Totals-Actual Commitments", "67,000")        )      ));
 
-        ReportSpecificationImpl spec = buildSpecForFiltering("testFilterHierByDisasterResponseFilterYes",
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DISASTER_RESPONSE_MARKER),
-                Arrays.asList(ColumnConstants.DISASTER_RESPONSE_MARKER),
+        ReportSpecificationImpl spec = buildSpecForFiltering("testFilterHierByDisasterResponseFilterYes", 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DISASTER_RESPONSE_MARKER), 
+                Arrays.asList(ColumnConstants.DISASTER_RESPONSE_MARKER), 
                 ColumnConstants.DISASTER_RESPONSE_MARKER, Arrays.asList(1l), true); // yes
-
+            
         runNiTestCase(cor, spec, acts);
     }
-
+    
     @Test
     public void testFilterFlatByDisasterResponseNo() {
         NiReportModel cor = new NiReportModel("testFilterFlatByDisasterResponseNo")
@@ -609,14 +610,14 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                     new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Disaster Response Marker", "No", "Funding-2014-Actual Commitments", "33,000", "Totals-Actual Commitments", "33,000")      ));
 
 
-        ReportSpecificationImpl spec = buildSpecForFiltering("testFilterFlatByDisasterResponseNo",
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DISASTER_RESPONSE_MARKER),
-                null,
+        ReportSpecificationImpl spec = buildSpecForFiltering("testFilterFlatByDisasterResponseNo", 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DISASTER_RESPONSE_MARKER), 
+                null, 
                 ColumnConstants.DISASTER_RESPONSE_MARKER, Arrays.asList(2l), true); // no
-
+            
         runNiTestCase(cor, spec, acts);
     }
-
+    
     @Test
     public void testUndefinedFilterByModeOfPayment() {
         NiReportModel cor = new NiReportModel("testUndefinedFilterByPrimarySector")
@@ -652,12 +653,12 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                     new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Mode of Payment", "", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Actual Disbursements", "570", "Totals-Actual Disbursements", "770"),
                     new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Mode of Payment", "", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000"),
                     new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Mode of Payment", "", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Disbursements", "80,000")      ));
-
-        ReportSpecificationImpl spec = buildSpecForFiltering("testUndefinedFilterByPrimarySector",
-                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.MODE_OF_PAYMENT),
-                null,
+        
+        ReportSpecificationImpl spec = buildSpecForFiltering("testUndefinedFilterByPrimarySector", 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.MODE_OF_PAYMENT), 
+                null, 
                 ColumnConstants.MODE_OF_PAYMENT, Arrays.asList(ColumnReportData.UNALLOCATED_ID), true);
-
+        
         runNiTestCase(cor, spec, acts);
     }
 }

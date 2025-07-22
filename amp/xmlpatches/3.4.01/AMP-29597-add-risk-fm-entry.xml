@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-29597</jira>
+    <keyword>FM ME</keyword>
+    <author>Jdeanquin</author>
+    <description>Add risk FM entry</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+                INSERT INTO amp_modules_visibility
+                            (id,
+                             NAME,
+                             description,
+                             haslevel,
+                             parent)
+                SELECT Nextval('amp_modules_visibility_seq'),
+                       '/Activity Form/M&E/ME Item/Risk',
+                       NULL,
+                       true,
+                       (SELECT id
+                        FROM   amp_modules_visibility
+                        WHERE  NAME = '/Activity Form/M&E/ME Item')
+                WHERE  EXISTS (SELECT 1
+                               FROM   amp_modules_visibility
+                               WHERE  NAME = '/Activity Form/M&E/ME Item')
+                       AND NOT EXISTS (SELECT 1
+                                       FROM   amp_modules_visibility
+                                       WHERE  NAME = '/Activity Form/M&E/ME Item/Risk') ;
+
+                INSERT INTO amp_modules_templates
+                            (module,
+                             template)
+                SELECT (SELECT id
+                        FROM   amp_modules_visibility
+                        WHERE  name = '/Activity Form/M&E/ME Item/Risk'),
+                       id
+                FROM   amp_templates_visibility tv
+                WHERE  EXISTS (SELECT 1
+                               FROM   amp_modules_templates mt
+                               WHERE  mt.template = tv.id
+                                      AND mt.module = (SELECT id
+                                                       FROM   amp_modules_visibility
+                                                       WHERE  name =
+                                                      '/Activity Form/M&E/ME Item'))
+                       AND NOT EXISTS (SELECT 1
+                                       FROM   amp_modules_templates mt
+                                       WHERE  mt.template = tv.id
+                                              AND mt.module = (SELECT id
+                                                               FROM   amp_modules_visibility
+                                                               WHERE  name =
+                                                              '/Activity Form/M&E/ME Item/Risk')
+                                              );
+
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -6,22 +6,20 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 /**
- *
+ * 
  * testcases for the components part of the AMP schema
- *
+ * 
  * @author Constantin Dolghier
  *
  */
 public class AmpSchemaComponentsTests extends AmpReportingTestCase {
-
+    
     private static final String correctTotals = "{RAW / Funding / 2014 / Actual Commitments=2150, RAW / Funding / 2014 / Actual Disbursements=850, RAW / Funding / 2017 / Actual Commitments=1100, RAW / Funding / 2017 / Actual Disbursements=0, RAW / Totals / Actual Commitments=3250, RAW / Totals / Actual Disbursements=850}";
 
     final List<String> acts = Arrays.asList(
@@ -82,21 +80,21 @@ public class AmpSchemaComponentsTests extends AmpReportingTestCase {
 
     protected ReportSpecificationImpl buildComponentReport(String reportName, List<String> columns, List<String> measures,
             List<String> hierarchies, GroupingCriteria groupingCriteria) {
-        return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria,
+        return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria, 
                 ArConstants.COMPONENT_TYPE);
     }
-
-    protected ReportSpecificationImpl buildComponentReportFilter(String reportName, List<String> columns, List<String> measures,
+    
+    protected ReportSpecificationImpl buildComponentReportFilter(String reportName, List<String> columns, List<String> measures, 
             List<String> hierarchies, GroupingCriteria groupingCriteria, ReportElement elem, FilterRule rule) {
-        ReportSpecificationImpl spec = ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria,
+        ReportSpecificationImpl spec = ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria, 
                 ArConstants.COMPONENT_TYPE);
-
+        
         ReportFiltersImpl filters = new ReportFiltersImpl();
         filters.addFilterRule(elem, rule);
         spec.setFilters(filters);
         return spec;
     }
-
+    
     @Test
     public void testComponentReportFlat() {
         NiReportModel cor = new NiReportModel("AMP-18720-no-hier")
@@ -113,10 +111,10 @@ public class AmpSchemaComponentsTests extends AmpReportingTestCase {
                                 new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Component Name", "Monkey Business Component, Unfunded C-EN", "Component Type", "Component Type 2", "Component description", "MB Comp Desc, Unfunded C Desc - EN"),
                                 new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Component Name", "Funded Component Title En, Funded EN", "Component Type", "some component type", "Component description", "Funded Component Description, Funded Desc en", "Funding-2014-Actual Commitments", "2 150", "Funding-2014-Actual Disbursements", "850", "Totals-Actual Commitments", "2 150", "Totals-Actual Disbursements", "850"),
                                 new ReportAreaForTests(new AreaOwner(99), "Project Title", "activity with funded components 2", "Component Name", "Funded Component 1, Funded Component 2", "Component Type", "Component Type 1, Component Type 2", "Component description", "Desc 1, Desc 2", "Funding-2017-Actual Commitments", "1 100", "Totals-Actual Commitments", "1 100")      ));
-
+        
         runNiTestCase(spec("AMP-18720-no-hier"), "en", acts, cor);
     }
-
+    
     @Test
     public void testComponentReportByComponentName() {
         NiReportModel cor = new NiReportModel("AMP-18720-hier")
@@ -142,10 +140,10 @@ public class AmpSchemaComponentsTests extends AmpReportingTestCase {
                                         .withChildren(
                                                 new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Component Type", "some component type", "Component description", "Funded Desc en", "Funding-2014-Actual Commitments", "1 350", "Funding-2014-Actual Disbursements", "850", "Totals-Actual Commitments", "1 350", "Totals-Actual Disbursements", "850")        )      ));
 
-
+        
         runNiTestCase(spec("AMP-18720-hier"), "en", acts, cor);
     }
-
+    
     @Test
     public void testComponentReportByComponentType() {
         NiReportModel cor = new NiReportModel("testComponentReportByComponentType")
@@ -167,34 +165,34 @@ public class AmpSchemaComponentsTests extends AmpReportingTestCase {
                                 new ReportAreaForTests(new AreaOwner("Component Type", "some component type", 3)).withContents("Project Title", "", "Funding-2014-Actual Commitments", "2,150", "Funding-2014-Actual Disbursements", "850", "Funding-2017-Actual Commitments", "0", "Funding-2017-Actual Disbursements", "0", "Totals-Actual Commitments", "2,150", "Totals-Actual Disbursements", "850", "Component Type", "some component type")
                                         .withChildren(
                                                 new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Funding-2014-Actual Commitments", "2,150", "Funding-2014-Actual Disbursements", "850", "Totals-Actual Commitments", "2,150", "Totals-Actual Disbursements", "850")        )      ));
-
-        ReportSpecificationImpl spec = buildComponentReport("testComponentReportByComponentType",
+        
+        ReportSpecificationImpl spec = buildComponentReport("testComponentReportByComponentType", 
                 Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.COMPONENT_TYPE),
                 Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
                 Arrays.asList(ColumnConstants.COMPONENT_TYPE),
                 GroupingCriteria.GROUPING_YEARLY);
-
+        
         runNiTestCase(spec, "en", acts, cor);
     }
-
+    
     @Test
     public void testHierarchiesDoNotChangeTotals() throws Exception {
-
-        ReportSpecificationImpl initSpec = buildComponentReport("initSpec",
+        
+        ReportSpecificationImpl initSpec = buildComponentReport("initSpec", 
                 Arrays.asList(ColumnConstants.PROJECT_TITLE),
-                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                null,
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                null, 
                 GroupingCriteria.GROUPING_YEARLY);
-
+                
         assertEquals(correctTotals, buildDigest(initSpec, acts, BasicSanityChecks.fundingGrandTotalsDigester).toString());
-
+                
         // single-hierarchy reports
         for (boolean isSummary : Arrays.asList(true, false)) {
             for (String hierName : HIERARCHIES_TO_TRY) {
-                ReportSpecificationImpl spec = buildComponentReport(String.format("%s summary: %b", hierName, isSummary),
+                ReportSpecificationImpl spec = buildComponentReport(String.format("%s summary: %b", hierName, isSummary), 
                         Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName),
-                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                        Arrays.asList(hierName),
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                        Arrays.asList(hierName), 
                         GroupingCriteria.GROUPING_YEARLY);
                 spec.setSummaryReport(isSummary);
                 assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, BasicSanityChecks.fundingGrandTotalsDigester).toString());

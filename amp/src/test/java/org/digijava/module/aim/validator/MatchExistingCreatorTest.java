@@ -6,16 +6,16 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.validator.user.MatchExistingCreator;
 import org.digijava.module.aim.validator.user.MatchExistingCreatorConstraint;
 import org.hamcrest.Matcher;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import javax.validation.ConstraintViolation;
 import java.util.Set;
 
 import static org.digijava.module.aim.validator.ConstraintMatchers.hasViolation;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,7 +30,7 @@ public class MatchExistingCreatorTest extends AbstractActivityValidatorTest<Matc
     private AmpActivityVersion oldActivity;
 
     @Override
-    @BeforeEach
+    @Before
     public void setUp() {
         super.setUp();
 

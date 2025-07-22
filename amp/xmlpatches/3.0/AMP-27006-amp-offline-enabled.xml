@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+	<jira>AMP-27006</jira>
+	<author>ociubotaru</author>
+	<description>Global settings for AMP Offline Enabled and AMP Registry URL</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres"><![CDATA[
+
+				UPDATE amp_global_settings
+				SET settingsname = 'AMP Registry URL', settingsvalue = 'https://amp-registry.ampsite.net/',
+					description = 'AMP Registry URL'
+				WHERE settingsname = 'AMP Offline releases URL';
+
+				INSERT INTO public.amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable)
+				VALUES (nextval('amp_global_settings_seq'), 'AMP Offline Enabled', 'false', 't_Boolean', 'Allow AMP Offline clients to connect', 'general', null);
+
+			]]></lang>
+		</script>
+	</apply>
+</tns:patch>

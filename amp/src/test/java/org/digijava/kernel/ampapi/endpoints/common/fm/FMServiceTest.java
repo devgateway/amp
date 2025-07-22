@@ -2,12 +2,11 @@ package org.digijava.kernel.ampapi.endpoints.common.fm;
 
 import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.visibility.data.FMTree;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Octavian Ciubotaru

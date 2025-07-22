@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-16376</jira>
+	<keyword>Pledge Reports, Agreement Reports</keyword>
+	<author>eperez</author>
+	<description>Moldova database has some amp_measures type P that are repeated. They should be deleted</description>
+	<trigger type="any">
+		<condition type="dbName">amp-moldova-stg-tc7</condition>
+	</trigger>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				DELETE FROM amp_report_measures where measureid in (26,27);
+				DELETE FROM amp_measures where type='P' and (measureid=26 or measureid=27);
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

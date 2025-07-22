@@ -1440,3 +1440,6 @@ div.footer {
     display:block;
     margin:auto;
 }
+.funding-has-error {
+    border: 2px solid red !important;
+}

@@ -69,10 +69,10 @@ public class QueryUtil {
     public static AmpActivity getActivity(Long ampActivityId) {
         return (AmpActivity) PersistenceManager.getSession().load(AmpActivity.class, ampActivityId);
     }
-    
+
     /**
      * return a list of saved api states.
-     * 
+     *
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -105,24 +105,24 @@ public class QueryUtil {
         try {
             int distance = ScoreCalculator.getMaxAllowedDistance(keyword);
             final String queryString = "select id, name, latitude,longitude, levenshtein(lower(SP_ASCII(?)), "
-                    + " lower(SP_ASCII(name)), 1, 1, 1) as distance, " 
+                    + " lower(SP_ASCII(name)), 1, 1, 1) as distance, "
                     + " thegeometry ,"
                     + " Sp_ascii(name) anglicizedName, "
-                    + " Sp_ascii(?) anglicizedKeyword " 
+                    + " Sp_ascii(?) anglicizedKeyword "
                     + "from amp_locator where levenshtein(lower(SP_ASCII(?)), lower(SP_ASCII(name)),1,1,1) <= " + distance
                     + " or SP_ASCII(name) like SP_ASCII(?)";
-            
+
             PersistenceManager.getSession().doWork(new Work() {
 
                 @Override
                 public void execute(Connection connection) throws SQLException {
-                    
+
                     ArrayList<FilterParam> params = new ArrayList<FilterParam>();
                     params.add(new FilterParam(keyword,  java.sql.Types.VARCHAR));
                     params.add(new FilterParam(keyword,  java.sql.Types.VARCHAR));
                     params.add(new FilterParam(keyword,  java.sql.Types.VARCHAR));
                     params.add(new FilterParam(keyword,  java.sql.Types.VARCHAR));
-                    
+
                     try(RsInfo rsi = SQLUtils.rawRunQuery(connection, queryString, params)) {
                         ResultSet rs = rsi.rs;
                         while (rs.next()) {
@@ -145,7 +145,7 @@ public class QueryUtil {
         }
         return locationList;
     }
-    
+
     private static Geometry wktToGeometry(String wktPoint) {
         WKTReader fromText = new WKTReader();
         Geometry geom = null;
@@ -156,19 +156,19 @@ public class QueryUtil {
         }
         return geom;
     }
-    
+
     public static List <Long> getIdsList (List <AmpLocator> locations) {
         List <Long> ids = new ArrayList <Long> ();
         for (AmpLocator locator:locations) {
             ids.add(locator.getId());
         }
         return ids;
-        
+
     }
 
     /**
      * Filter organization skeleton by orgGrpId
-     * 
+     *
      * @param orgGrpId
      * @return
      */
@@ -183,10 +183,10 @@ public class QueryUtil {
         final List<OrgType> orgTypes = new ArrayList<>();
         PersistenceManager.getSession().doWork(new Work(){
                 public void execute(Connection conn) throws SQLException {
-                    
+
                     Map<Long, String> orgTypesName=QueryUtil.getTranslatedName(conn, "amp_org_type", "amp_org_type_id", "org_type");
-                    
-                    String query="select  aot.amp_org_type_id orgTypeId,aog.amp_org_grp_id orgGrpId " + 
+
+                    String query="select  aot.amp_org_type_id orgTypeId,aog.amp_org_grp_id orgGrpId " +
                                 " ,aot.org_type orgTypeName, aot.org_type_code orgTypeCode " +
                                 " from amp_org_group aog,amp_org_type aot " +
                                 " where aot.amp_org_type_id=aog.org_type" +
@@ -228,7 +228,7 @@ public class QueryUtil {
                                  " aog.org_grp_code orgCode, "+
                                  " aog.org_type  orgType, "+
                                  " o.amp_org_id orgId  "+
-                                 " from amp_org_group aog "+ 
+                                 " from amp_org_group aog "+
                                  " left outer join amp_organisation o on aog.amp_org_grp_id=o.org_grp_id "+
                                  " order by orgGrpId,o.name";
                     try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
@@ -259,13 +259,13 @@ public class QueryUtil {
         });
         return orgGroups;
     }
-    
+
     /**
      * Get all organizations
-     * 
+     *
      * @return List<Org> organizations, each JSON contains information about organization:
      * {id : long}, {acronym : String}, {name : String}, {groupId : long}, {rolesIds : list}
-     * 
+     *
      */
     public static List<Org> getOrgs() {
         final List<String> roleCodes = OrganisationUtil.getVisibleRoleCodes();
@@ -322,18 +322,18 @@ public class QueryUtil {
                             Org org = new Org();
                             roles = new HashSet<Long>();
                             roles.add(rs.getLong("roleId"));
-                            
+
                             org.setId(currentOrgId);
                             org.setAcronym(rs.getString("acronym"));
                             org.setGroupId(rs.getLong("grpId"));
                             org.setRolesIds(roles);
-                            
+
                             if (ContentTranslationUtil.multilingualIsEnabled()) {
                                 org.setName(organisationsNames.get(currentOrgId));
                             } else {
                                 org.setName(rs.getString("name"));
                             }
-                            
+
                             orgs.put(currentOrgId, org);
                             lastOrgId = currentOrgId;
                         }
@@ -341,13 +341,13 @@ public class QueryUtil {
                 }
             }
         });
-        
+
         ArrayList<Org> orgBeans = new ArrayList<>();
         orgBeans.addAll(orgs.values());
-        
+
         return orgBeans;
     }
-    
+
     public static Map<Long, String> getTranslatedName(Connection conn,String tableName,String id,String name)
             throws SQLException {
         Map<Long, String> names = null;
@@ -380,10 +380,10 @@ public class QueryUtil {
                             Long orgRoleId = rs.getLong("amp_role_id");
                             String orgRoleName = rs.getString("name");
                             String displayName = TranslatorWorker.translateText(rs.getString("name"));
-                            
+
                             FilterValue orgRole = new FilterValue(orgRoleId, orgRoleName, null, displayName);
                             orgRole.setFilterId(FiltersConstants.ORG_ROLE_CODE_TO_FILTER_ID.get(orgRoleCode));
-                            
+
                             orgRoles.add(orgRole);
                         }
                     }
@@ -391,10 +391,10 @@ public class QueryUtil {
 
             }
         });
-        
+
         return orgRoles;
     }
-    
+
     public static List <AmpIndicatorLayer> getIndicatorLayers () {
         return getIndicatorByCategoryValue(null);
  }
@@ -412,7 +412,7 @@ public class QueryUtil {
             AmpTeamMember current = TeamUtil.getCurrentAmpTeamMember();
             if (current != null && current.getUser() != null){
                 queryString += " or (ind.accessType = " + IndicatorAccessType.SHARED + " and s.workspace.ampTeamId = " + current.getAmpTeam().getAmpTeamId() + " ) ";
-                queryString += " or (ind.accessType = " + IndicatorAccessType.PRIVATE + " and c.user.id = " + current.getUser().getId() + ") ";
+                queryString += " or (ind.accessType = " + IndicatorAccessType.PRIVATE + " and c.id = " + current.getUser().getId() + ") ";
             }
 
             queryString += " ) ";
@@ -425,9 +425,9 @@ public class QueryUtil {
             if (admLevel != null)
                 qry.setString("admLevel", admLevel.getLabel().toUpperCase());
             return qry.list();
-         
+
      }
-     
+
     @SuppressWarnings("unchecked")
     public static List<AmpCategoryValue> getClusterLevels() {
         List<AmpCategoryValue> al = null;
@@ -439,43 +439,43 @@ public class QueryUtil {
         al = q.list();
         return al;
     }
-     
+
     public static List<String>getImplementationLocationsInUse() {
         final List<String>list = new ArrayList<String>();
-                 
+
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
                 String query = "select * from amp_category_value cv,amp_category_class cc "
                         + " where cv.amp_category_class_id =cc.id "
                         + " and keyname ='"+ CategoryConstants.IMPLEMENTATION_LOCATION_KEY +"'  "
                         + " and cv.id in(select distinct parent_category_value from amp_category_value_location )  "
-                        + " order by cv.index_column ";     
+                        + " order by cv.index_column ";
                 try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
                     while (rsi.rs.next()) {
                         list.add(rsi.rs.getString("category_value"));
                     }
                 }
             }});
-                
+
         return list;
     }
 
     public static Location getLocationsForFilter() {
-    
+
         Map<Long, LocationSkeleton> locations = LocationSkeleton.populateSkeletonLocationsList();
         long parentLocationId = PersistenceManager.getLong(PersistenceManager.getSession()
-                .createSQLQuery("SELECT acvl.id FROM amp_category_value_location acvl WHERE acvl.parent_location IS NULL AND location_name=(" + 
+                .createSQLQuery("SELECT acvl.id FROM amp_category_value_location acvl WHERE acvl.parent_location IS NULL AND location_name=(" +
                         "select country_name from DG_COUNTRIES WHERE iso='" + FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY) + "')")
                         .list().get(0));
-        
+
         LocationSkeleton rootLocation = locations.get(parentLocationId);
         return buildLocationsJsonBean(rootLocation, 1);
     }
-    
+
     private static final String[] LEVEL_TO_NAME = {"na", FiltersConstants.ADMINISTRATIVE_LEVEL_0,
             FiltersConstants.ADMINISTRATIVE_LEVEL_1, FiltersConstants.ADMINISTRATIVE_LEVEL_2,
             FiltersConstants.ADMINISTRATIVE_LEVEL_3, FiltersConstants.ADMINISTRATIVE_LEVEL_4, "na3", "na4"};
-    
+
     private static Location buildLocationsJsonBean(LocationSkeleton loc, int level) {
         Location res = new Location();
         res.setId(loc.getId());
@@ -488,8 +488,8 @@ public class QueryUtil {
         res.setChildren(children);
         return res;
     }
-    
-    
+
+
     public static List<Org> getDonors(final boolean toExcludeFilter) {
         final List<Org> donors = new ArrayList<>();
         PersistenceManager.getSession().doWork(new Work() {
@@ -500,18 +500,18 @@ public class QueryUtil {
                                 "WHERE (o.amp_org_id = aor.organisation AND aor.role = r.amp_role_id AND r.role_code = 'DN') " +
                                 "AND activity NOT IN (select amp_activity_id from amp_activity_version where amp_team_id IN (SELECT amp_team_id from amp_team where isolated = true))" +
                                 "UNION " +
-                                "SELECT distinct o.amp_org_id FROM  amp_organisation o, amp_funding af, amp_activity_version v, amp_role r   " +                
+                                "SELECT distinct o.amp_org_id FROM  amp_organisation o, amp_funding af, amp_activity_version v, amp_role r   " +
                                 "WHERE  o.amp_org_id = af.amp_donor_org_id  AND v.amp_activity_id = af.amp_activity_id  AND (v.deleted is false) " +
-                                "AND ((af.source_role_id IS NULL) OR af.source_role_id = r.amp_role_id and r.role_code = 'DN') "    + 
+                                "AND ((af.source_role_id IS NULL) OR af.source_role_id = r.amp_role_id and r.role_code = 'DN') "    +
                                 "AND v.amp_team_id NOT IN (SELECT amp_team_id from amp_team where isolated = true)) " +
                                 "AND (o.deleted IS NULL OR o.deleted = false) ";
-                         
+
                         if (toExcludeFilter) {
                             query += "AND o.amp_org_id NOT IN (SELECT amp_donor_id FROM amp_scorecard_organisation WHERE to_exclude = true) ";
                         }
-                        
+
                         query +="order by o.amp_org_id";
-                
+
                     try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
                     ResultSet rs = rsi.rs;
                     Long lastOrgId = 0L;

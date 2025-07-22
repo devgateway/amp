@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-14167</jira>
+    <keyword>Views</keyword>
+    <author>Alexandru Artimon</author>
+    <description>add the global setting that will control if all the views will be recreated on next start</description>
+
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+<!--                DELETE FROM amp_menu_entry-->
+<!--                WHERE name = 'Import Data';-->
+<!--                DELETE FROM amp_menu_entry-->
+<!--                WHERE name = 'View Progress';-->
+<!--                DELETE FROM amp_menu_entry-->
+<!--                WHERE name = 'Data Importer';-->
+                SELECT * FROM amp_menu_entry
+                WHERE name = 'Import Data';
+
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

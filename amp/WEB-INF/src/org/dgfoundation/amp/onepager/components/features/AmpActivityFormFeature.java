@@ -12,10 +12,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -29,6 +31,7 @@ import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectP
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.markup.WicketTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -53,6 +56,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.util.tester.TagTester;
+import org.apache.wicket.util.tester.WicketTester;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
@@ -69,6 +74,7 @@ import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAgreementItemPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpAidEffectivenessFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
@@ -77,6 +83,8 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpLineMinistr
 import org.dgfoundation.amp.onepager.components.features.sections.AmpPlanningFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalObservationsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorFundingInfoSubsectionFeature;
+import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeatureFundingPanel;
+import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
@@ -93,11 +101,7 @@ import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
-import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
-import org.dgfoundation.amp.onepager.util.ActivityUtil;
-import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.dgfoundation.amp.onepager.util.AttributePrepender;
-import org.dgfoundation.amp.onepager.util.ChangeType;
+import org.dgfoundation.amp.onepager.util.*;
 import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
 import org.dgfoundation.amp.onepager.validators.StringRequiredValidator;
 import org.dgfoundation.amp.onepager.validators.TranslatableValidators;
@@ -138,13 +142,13 @@ import org.digijava.module.message.util.AmpMessageUtil;
  * @since Jun 7, 2011
  */
 public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> {
-    
+
     private static final long serialVersionUID = 1L;
-    protected Form<AmpActivityVersion> activityForm;
+    protected  Form<AmpActivityVersion> activityForm;
     private static final Integer GO_TO_DESKTOP=1;
     private static final Integer STAY_ON_PAGE=2;
     private AbstractAjaxTimerBehavior autoSaveTimer;
-    public Form<AmpActivityVersion> getActivityForm() {
+    public  Form<AmpActivityVersion> getActivityForm() {
         return activityForm;
     }
 
@@ -160,13 +164,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             TranslatorUtil.getTranslatedText("The sum of disbursements is greater than the sum of commitments");
     private static final String EXPENDITURES_BIGGER_ERROR =
             TranslatorUtil.getTranslatedText("The sum of expenditures is greater than the sum of disbursements");
-    
+
 
     /**
-     * Toggles the validation of semantic validators. 
+     * Toggles the validation of semantic validators.
      * @param enabled whether these validators are enabled
      * @param form the form to set the validators
-     * @param target 
+     * @param target
      * @see AmpSemanticValidatorField
      * @see AmpSemanticValidator
      */
@@ -187,7 +191,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         //target.add(ifs);
                     }
                 });
-        
+
         // visit all the semantic validator fields and enable/disable them
         form.visitChildren(AmpSemanticValidatorField.class,
                 new IVisitor<AmpSemanticValidatorField<?>, Void>() {
@@ -211,8 +215,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     public void component(
                             AmpIdentificationFormSectionFeature ifs,
                             IVisit<Void> visit) {
-                        toggleFormComponent (enabled,target,ifs,visit);                 
-                        toggleFormRichTextComponent(enabled,target, ifs,visit); 
+                        toggleFormComponent (enabled,target,ifs,visit);
+                        toggleFormRichTextComponent(enabled,target, ifs,visit);
                     }
                     });
 
@@ -244,16 +248,16 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                             IVisit<Object> visit) {
                           /* Validator for date will make the date field mandatory only when there is an amount entered
                          *  in proposed project code field AMP-17234
-                         *  Review to make is more readable 
+                         *  Review to make is more readable
                          */
                         AmpDatePickerFieldPanel proposedDate= null;
-                        
+
                         //if it is saving as draft, disable required validator for proposed date
                         if (!enabled) {
                             proposedDate = (AmpDatePickerFieldPanel) component.get("funDate");
                         }
                         //if proposed amount is not entered then, disable required validator for proposed Date
-                        else if(component.getParent().getParent().getId().equalsIgnoreCase("funDate") && 
+                        else if(component.getParent().getParent().getId().equalsIgnoreCase("funDate") &&
                                 component.getParent().getParent().getParent().get("amount").getDefaultModel().getObject()==null){
                             proposedDate = (AmpDatePickerFieldPanel)component.getParent().getParent();
                         }
@@ -262,11 +266,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                             String js = String.format("$('#%s').change();",proposedDate.getDate().getMarkupId());
                             target.appendJavaScript(js);
                         }
-                    
+
                     }
                 });
-          
-        
+
+
     }
 
     private <T extends Component & AmpRequiredComponentContainer> void toggleFormComponent(
@@ -288,7 +292,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             AmpRequiredComponentContainer ifs, IVisit<Void> visit) {
         toggleFormComponent(enabled, target, ifs, visit, true);
     }
-    
+
     private void toggleFormComponent (boolean enabled, final AjaxRequestTarget target,
             AmpRequiredComponentContainer ifs, IVisit<Void> visit, boolean stopVisit) {
         List <FormComponent<?>> requiredComponents = ifs.getRequiredFormComponents();
@@ -311,41 +315,41 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
      * @param id
      * @param am
      * @param fmName
-     * @param newActivity 
-     * @param listModel 
+     * @param newActivity
+     * @param listModel
      * @throws Exception
      */
     public AmpActivityFormFeature(String id, final IModel<AmpActivityVersion> am,
             String fmName, final boolean newActivity, AbstractReadOnlyModel<List<AmpComponentPanel>> listModel) throws Exception {
         super(id, am, fmName, true);
-        
+
         this.enabledFmButton.setVisible(false);
         this.visibleFmButton.setVisible(false);
         this.ignoreFmVisibility = true;
         this.ignoreFmButtonsVisibility = true;
         this.setVisible(true);
-        
-        activityForm=new Form<AmpActivityVersion>("activityForm") { 
+
+        activityForm=new Form<AmpActivityVersion>("activityForm") {
             @Override
             protected void onError() {
                 super.onError();
             }
         };
         activityForm.setOutputMarkupId(true);
-        
+
         String actNameStr = am.getObject().getName();
         if (actNameStr != null && !actNameStr.trim().isEmpty()) {
             actNameStr = "(" + actNameStr + ")";
         }
         Label activityName = new Label("activityName", actNameStr);
         add(activityName);
-        
+
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedbackPanel");
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         feedbackPanel.setOutputMarkupId(true);
         //this will be use to decorate all submit buttons
         AttributePrepender isSubmit = new AttributePrepender("data-is_submit", new Model<String>("true"), "");
-        
+
         //do not show errors in this feedbacklabel (they will be shown for each component)
         int[] filteredErrorLevels = new int[]{FeedbackMessage.ERROR};
         feedbackPanel.setFilter(new ErrorLevelsFeedbackMessageFilter(filteredErrorLevels));
@@ -426,8 +430,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
         //add ajax submit button
         final AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit", AmpFMTypes.MODULE, true) {
-            
-            
+
+
             @Override
             protected void onSubmit(final AjaxRequestTarget target, Form<?> form) {
                     processAndUpdateForm(true, am, form, target, this.getButton());
@@ -479,7 +483,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     //we only remove disable on buttons tagged as submit ones
                 //target.appendJavaScript("enableButtons2();");
             }
-            
+
 
             @Override
             protected void onError(final AjaxRequestTarget target, Form<?> form) {
@@ -495,18 +499,18 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 generateEnableButtonsOnError(attributes);
             }
         };
-        
-        
-        
+
+
+
         AttributePrepender updateEditors = new AttributePrepender("onclick", new Model<String>("window.onbeforeunload = null;  for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();disableButton();"), "");
 
         saveAndSubmit.getButton().add(isSubmit);
-        
+
         AttributePrepender closeEditors = new AttributePrepender("onclick", new Model<String>("$('a[data-is_close=true]:visible').click();"), "");
         AttributePrepender clickMonEval = new AttributePrepender("onclick", new Model<String>("$('.mon_eval_button:visible').click();"), "");
         AttributePrepender closeDialogs = new AttributePrepender("onclick", new Model<String>(
                 "$('.ui-dialog-content').dialog('close');"), "");
-        
+
         saveAndSubmit.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
         saveAndSubmit.getButton().add(updateEditors);
         saveAndSubmit.getButton().add(closeEditors);
@@ -515,16 +519,16 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         saveAndSubmit.getButton().setDefaultFormProcessing(false);
         saveAndSubmit.setAffectedByFreezing(false);
         activityForm.add(saveAndSubmit);
-    
+
         AmpAjaxLinkField rejectActivityLink = new AmpAjaxLinkField("saveReject", "Reject Activity", "Reject activity") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
             }
-        
+
             @Override
             protected void onBeforeRender() {
                 super.onBeforeRender();
-                
+
                 AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
                 AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
                 this.setVisible(ActivityUtil.canReject(ampCurrentMember, am.getObject().getDraft(), newActivity));
@@ -539,15 +543,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         rejectActivityLink.getButton().add(new AttributeModifier("class",
                 new Model<>("sideMenuButtons rejectButton")));
         activityForm.add(rejectActivityLink);
-        
+
         AmpAjaxLinkField saveAsDraft = new AmpAjaxLinkField("saveAsDraft", "Save as Draft", "Save as Draft") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
             }
         };
-        
+
         saveAsDraft.getButton().add(isSubmit);
-        
+
 //      saveAsDraft.getButton().add(new AttributeModifier("onclick", "showDraftPanel();disableButton();"));
         saveAsDraft.getButton().add(new AttributePrepender("onclick", new Model<String>("showDraftPanel();disableButton();"), ""));
         saveAsDraft.getButton().add(closeEditors);
@@ -567,7 +571,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpActivityFormFeature.class, "enableDisableButtons.js")));
             }
         });
-        
+
 
         final RadioGroup<Integer> myDraftOpts = new RadioGroup<Integer>("draftRedirectedGroup", new Model<Integer>(GO_TO_DESKTOP));
         Radio<Integer> radioDesktop=new Radio<Integer>("draftRedirectedDesktop", new Model<Integer>(GO_TO_DESKTOP));
@@ -595,12 +599,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         myDraftOpts.add(radioStay);
         activityForm.add(myDraftOpts);
 
-        
+
         final AmpAjaxLinkField cancelLink = new AmpAjaxLinkField("saveAsDraftCanceld", "Cancel", "Cancel") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 // TODO Auto-generated method stub
-                
+
             }
         };
         cancelLink.getButton().add(new AttributeModifier("onclick", "hideDraftPanel();enableButtons2();"));
@@ -617,7 +621,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 onSaveAsDraft(am, feedbackPanel, redirected,
                         new ActionButtonCancelLink(this, cancelLink), target, form);
             }
-            
+
             @Override
             protected void onError(final AjaxRequestTarget target, Form<?> form) {
                 super.onError(target, form);
@@ -628,8 +632,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 generateEnableButtonsOnError(attributes);
             }
         };
-        
-    
+
+
 
         String onClickSaveAsDraft = "$(\"#"+ saveAsDraftAction.getButton().getMarkupId() +"\").prop('disabled', true);";
         onClickSaveAsDraft += "$(\"#" + cancelLink.getButton().getMarkupId() + "\").prop('disabled', true);";
@@ -641,13 +645,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         saveAsDraftAction.add(isSubmit);
         saveAsDraftAction.setAffectedByFreezing(false);
         activityForm.add(saveAsDraftAction);
-        
+
         //text area for the message
         AmpTextAreaFieldPanel rejectMessage = new AmpTextAreaFieldPanel("rejectMessage", new PropertyModel<String>(am,"rejectMessage"), "Reject Message", false);
         activityForm.add(rejectMessage);
         //buttons for the reject activity panel
         //cancelrejectActivity
-        
+
         AmpAjaxLinkField cancelRejectActivity=new AmpAjaxLinkField("cancelRejectActivity", "Cancel Reject activity", "Cancel") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
@@ -659,8 +663,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         cancelRejectActivity.setVisible(true);
         cancelRejectActivity.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
         activityForm.add(cancelRejectActivity);
-        
-        
+
+
         AmpButtonField rejectActivityAction = new AmpButtonField("rejectActivityAction", "Reject Activity", AmpFMTypes.MODULE, true) {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -672,14 +676,14 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 super.onError(target, form);
                 onErrorSaveAsDraftOrReject(feedbackPanel, target, form);
             }
-            
+
             @Override
             protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
                 generateEnableButtonsOnError(attributes);
             }
         };
-        
-    
+
+
 
 //        String onClickSaveAsDraft = "$(\"#"+ saveAsDraftAction.getButton().getMarkupId() +"\").prop('disabled', true);";
 //        onClickSaveAsDraft += "$(\"#"+ cancelSaveAsDraft.getButton().getMarkupId() +"\").prop('disabled', true);";
@@ -689,13 +693,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         rejectActivityAction.getButton().add(new AttributePrepender("onclick", new Model<String>("disableButton();"), ""));
         rejectActivityAction.getButton().add(updateEditors);
         rejectActivityAction.add(isSubmit);
-        activityForm.add(rejectActivityAction);        
-        
-        
-        
-        
-        
-        
+        activityForm.add(rejectActivityAction);
+
+
+
+
+
+
         // this div will be "submitted" by the autoSaveTimer
         final WebMarkupContainer autoSaveDiv = new WebMarkupContainer(
                 "autoSaveDiv");
@@ -713,8 +717,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 op.getEditLockRefresher().setEnabled(false);
                 if (op.getTimer() != null) {
                     op.getTimer().stop(target);
-                }               
-                
+                }
+
                 am.setObject(am.getObject());
                 toggleSemanticValidation(false, activityForm, target);
                 // process the form for this request
@@ -736,7 +740,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         autoSaveTimer.restart(target);
                     }
                 }
-                
+
 
             }
 
@@ -753,7 +757,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         // will fire
         int autoSaveSeconds = Integer.parseInt(FeaturesUtil
         .getGlobalSettingValue(GlobalSettingsConstants.ACTIVITY_AUTO_SAVE_SECONDS));
-        
+
          autoSaveTimer = null;
         if (autoSaveSeconds != 0) {
             autoSaveTimer = new AbstractAjaxTimerBehavior(
@@ -766,8 +770,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     op.getEditLockRefresher().setEnabled(false);
                     if (op.getTimer() != null) {
                         op.getTimer().stop(target);
-                    }                       
-                    //we disable the stop timer so it doesn't get called after its being processed 
+                    }
+                    //we disable the stop timer so it doesn't get called after its being processed
                     this.stop(target);
                     target.appendJavaScript(String.format("$('#%s').click()",
                             autoSaveDiv.getMarkupId()));
@@ -798,7 +802,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         logframe.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
         */
         //activityForm.add(logframe);
-        
+
         AmpButtonField preview = new AmpButtonField("preview", "Preview", AmpFMTypes.MODULE, true) {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -812,7 +816,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                         + am.getObject().getAmpActivityId() + "~isPreview=1\");");
                     }
             }
-            
+
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 super.onError(target, form);
@@ -834,7 +838,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         preview.getButton().add(isSubmit);
         preview.setAffectedByFreezing(false);
         activityForm.add(preview);
-        
+
         featureList = new ListView<AmpComponentPanel>("featureList", listModel) {
             private static final long serialVersionUID = 7218457979728871528L;
             @Override
@@ -846,7 +850,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     tmp.add(new AttributeModifier("style", "font-size: medium; font-style: bold; color: red; margin: 15px;"));
                     item.add(tmp);
                 }
-                
+
                 String activityFormOnePager = FeaturesUtil.getGlobalSettingValue(
                         GlobalSettingsConstants.ACTIVITY_FORM_ONE_PAGER);
                 if ("false".equals(activityFormOnePager)){
@@ -854,7 +858,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         item.add(new AttributeModifier("style", "display: none;"));
                     }
                 }
-                    
+
             }
         };
         featureList.setReuseItems(true);
@@ -876,9 +880,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         }
         am.setObject(am.getObject());
         toggleSemanticValidation(notDraft, form, target);
+        checkFundingPanelsForErrors(form, target);
 
         form.process(button);
-        
+
             form.visitChildren(AmpAgreementItemPanel.class,new IVisitor<AmpAgreementItemPanel, Void>() {
 
                 @Override
@@ -887,7 +892,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     object.validateIsNewAgreementFormClosed(target);
                     visit.dontGoDeeper();
                 }
-                
+
             });
 
         form.visitChildren(AbstractTextComponent.class,
@@ -896,7 +901,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     public void component(Component component, IVisit<Object> objectIVisit) {
                         IModel<?> model = component.getDefaultModel();
                         AbstractTextComponent atc = (AbstractTextComponent) component;
-                        //logger.error(component.getParent().getId());  
+                        //logger.error(component.getParent().getId());
                         boolean required = false;
                         List<IValidator> validators = atc.getValidators();
                         for (IValidator validator : validators) {
@@ -1076,7 +1081,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         return total;
     }
 
-    
+
     protected void formSubmitErrorHandle(Form<?> form, final AjaxRequestTarget target, FeedbackPanel feedbackPanel) {
         //once an error has happened if in tabsview we process the funding section to
         //highlight the tabs with errors
@@ -1084,8 +1089,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             showFundingTabsErrors(form, target);
         }
         // visit form children and add to the ajax request the invalid ones
-        
-        
+
+
         form.visitChildren(FormComponent.class, new IVisitor<FormComponent, Void>() {
             @Override
             public void component(FormComponent component, IVisit<Void> visit) {
@@ -1142,7 +1147,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
     protected void saveMethod(AjaxRequestTarget target,
                               IModel<AmpActivityVersion> am, FeedbackPanel feedbackPanel,
                               boolean draft, Model<Integer> redirected,boolean rejected) {
-        
+
         AmpActivityModel a = (AmpActivityModel) am;
         AmpActivityVersion activity = am.getObject();
         Long oldId = activity.getAmpActivityId();
@@ -1151,7 +1156,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AmpAuthWebSession wicketSession = (AmpAuthWebSession)org.apache.wicket.Session.get();
         long currentUserId = wicketSession.getCurrentMember().getMemberId();
         activity.setChangeType(ChangeType.MANUAL.toString());
-        
+
         AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
 
 
@@ -1160,13 +1165,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
               //Someone else has grabbed the lock ... maybe connection slow and lock refresh timed out
             throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId()), currentUserId));
         }
-        
+
         ActivityUtil.saveActivity((AmpActivityModel) am, draft, rejected);
 
         info(TranslatorUtil.getTranslatedText("Activity saved successfully"));
 
         /*
-         * if activity created or created as draft 
+         * if activity created or created as draft
          * and then saved the message should be sent to the list
          */
         AmpActivityVersion newActivity=am.getObject();
@@ -1177,7 +1182,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         //if validation is off in team setup no messages should be generated
 
         String validation = DbUtil.getValidationFromTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
-        
+
         if (activity.getDraft() != null && !activity.getDraft()
                 && !(Constants.PROJECT_VALIDATION_OFF.equals(validation))) {
             if (ActivityUtil.isApproved(newActivity)) {
@@ -1211,7 +1216,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 }
                 p.set(1,actId);
 
-                //The folllogin exception will provide a redirection 
+                //The folllogin exception will provide a redirection
                 throw new RestartResponseException(
                         new PageProvider(
                             OnePager.class,p),RedirectPolicy.ALWAYS_REDIRECT);
@@ -1263,29 +1268,29 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         };
         attributes.getAjaxCallListeners().add(listener);
     }
-    
+
     protected void onSaveAsDraft(final IModel<AmpActivityVersion> am, final FeedbackPanel feedbackPanel,
                                  final Model<Integer> redirected, final ActionButtonCancelLink actionButtonCancelLink,
                                  AjaxRequestTarget target, Form<?> form) {
-        
+
         target.appendJavaScript("hideDraftPanel();");
-        
+
         onSaveAsDraftOrReject(am, feedbackPanel, redirected, actionButtonCancelLink, target, form, false);
     }
-    
+
     protected void onReject(final IModel<AmpActivityVersion> am, final FeedbackPanel feedbackPanel,
                             final Model<Integer> redirected, final ActionButtonCancelLink actionButtonCancelLink,
                             AjaxRequestTarget target, Form<?> form) {
-        
+
         target.appendJavaScript("hideRejectActivityPanel();");
-        
+
         onSaveAsDraftOrReject(am, feedbackPanel, redirected, actionButtonCancelLink, target, form, true);
     }
-    
+
     /**
      * Method used from saveAsDraft and Reject activity(the only difference between them is that reject prior to saving
      * the activity changes the status of the activity and sends the messages if the user has chosen to
-     * 
+     *
      * @param am
      * @param feedbackPanel
      * @param redirected
@@ -1297,11 +1302,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                          final Model<Integer> redirected,
                                          final ActionButtonCancelLink actionButtonCancelLink, AjaxRequestTarget target,
                                          Form<?> form, boolean isRejected) {
-    
+
         final AmpButtonField actionButton = actionButtonCancelLink.getActionButton();
         final AmpAjaxLinkField cancelAction = actionButtonCancelLink.getCancelActionLink();
-    
+
         processAndUpdateForm(false, am, form, target, actionButton.getButton());
+
+        // Check for errors in funding panels with id "commitments" or "disbursements"
 
         // only in the eventuality that the title field is valid (is not empty) we proceed with the real save!
         if (form.hasError()) {
@@ -1311,12 +1318,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             if (op.getTimer() != null) {
                 op.getTimer().restart(target);
             }
-    
+
             target.add(actionButton);
             target.add(cancelAction);
-    
+
             onErrorSaveAsDraftOrReject(feedbackPanel, target, form);
-            
+
             if (autoSaveTimer != null && autoSaveTimer.isStopped()) {
                 autoSaveTimer.restart(target);
             }
@@ -1324,12 +1331,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             //if no error happend and we are rejecting we change the approval status to rejected
             // send a message to the creator of the activity
             saveMethod(target, am, feedbackPanel, true, redirected, isRejected);
-            
+
             if (isRejected) {
                 sendRejectMessage(am);
             }
         }
-        
+
         target.appendJavaScript("enableButtons2();");
     }
 
@@ -1342,10 +1349,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AmpActivityVersion activity = activityModel.getObject();
         String messageToSend = activity.getRejectMessage();
         AmpTeamMember tmTo = activity.getActivityCreator();
-        
+
         AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
         TeamMember tmFrom = wicketSession.getCurrentMember();
-        
+
         AmpMessage message = new AmpAlert();
         String senderName;
         Long activityId;
@@ -1355,24 +1362,24 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         message.setName(TranslatorWorker.translateText("Activity Rejected"));
         message.setSenderType(MessageConstants.SENDER_TYPE_USER);
         message.setSenderId(tmFrom.getMemberId());
-        
+
         senderName = user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmailUsedForNotification() + ">;"
                     + tmFrom.getTeamName();
         message.setSenderName(senderName);
-        
+
         message.setRelatedActivityId(activityId);
-        
+
         /*String fullModuleURL=RequestUtils.getFullModuleUrl(request);*/
         String objUrl = "/aim/viewActivityPreview.do~activityId=" + activityId;
         message.setObjectURL(objUrl);
-        
-        
+
+
         message.setPriorityLevel(MessageConstants.PRIORITY_LEVEL_CRITICAL);
         if(messageToSend==null){
             messageToSend="";
         }
             message.setDescription(messageToSend);
-        
+
         message.setCreationDate(new Date(System.currentTimeMillis()));
 
         message.setDraft(false);
@@ -1382,7 +1389,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AmpMessageState state = new AmpMessageState();
         state.setMessage(message);
         state.setSender(tmFrom.getMemberName() + ";" + tmFrom.getTeamName());
-        
+
         try {
             AmpMessageUtil.saveOrUpdateMessageState(state);
             AmpMessageUtil.createMessageState(message, tmTo);
@@ -1390,10 +1397,113 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             logger.error("Cannot create reject message", e);
             throw new RuntimeException(e);
         }
-        
+
         message.addMessageReceiver(tmTo);
         AmpMessageUtil.saveOrUpdateMessage(message);
 
+    }
+
+    /**
+     * Checks for errors in AmpSubsectionFeatureFundingPanel components with id "commitments" or "disbursements"
+     * and adds a red border if errors are found
+     * @param form The form to check
+     * @param target The AjaxRequestTarget
+     */
+    private void checkFundingPanelsForErrors(Form<?> form, final AjaxRequestTarget target) {
+        logger.info("Checking for funding panel errors");
+        final ValueWrapper<Boolean> hasErrors = new ValueWrapper<>(false);
+
+
+        form.visitChildren(AmpFundingItemFeaturePanel.class,new IVisitor<AmpFundingItemFeaturePanel, Void>() {
+
+
+            @Override
+            public void component(AmpFundingItemFeaturePanel ampFundingItemFeaturePanel, IVisit<Void> visit) {
+                Set<Boolean> errors = new HashSet<>();
+                ampFundingItemFeaturePanel.visitChildren(Component.class,new IVisitor<Component, Void>() {
+
+                    @Override
+                    public void component(Component component, IVisit<Void> visit) {
+                        String id = component.getId();
+                        if ("commitments".equals(id) || "disbursements".equals(id)) {
+                            if (component.getDefaultModel() != null) {
+
+                                if ("commitments".equals(id)) {
+
+                                    AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+                                    boolean commitmentsRequired = FMUtil.isFmVisible(findComponentById(form, "requireCommitments"));
+                                    logger.info("Commitments required: " + commitmentsRequired);
+                                    setErrorWHenItemMissing(component, funding, commitmentsRequired, Constants.COMMITMENT, errors, target);
+
+                                }
+                                if ("disbursements".equals(id)) {
+                                    AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+                                    boolean disbursementsRequired = FMUtil.isFmVisible(findComponentById(form, "requireDisbursements"));
+                                    logger.info("Disbursements required: " + disbursementsRequired);
+                                    setErrorWHenItemMissing(component, funding, disbursementsRequired, Constants.DISBURSEMENT, errors, target);
+
+                                }
+                            }
+
+
+                        }
+                    }
+                });
+                target.appendJavaScript("subSectionsSliderEnable();");
+                String js = String.format("$(\"a[href='#tab%s']\").parent()", ampFundingItemFeaturePanel.findParent(AmpFundingGroupFeaturePanel.class).getTabIndex() + 1);
+
+                if (errors.contains(true)) {
+                    logger.info("Found errors");
+                    ampFundingItemFeaturePanel.error(TranslatorUtil.getTranslation("Error you must have at least one funding item added and field."));
+                    target.appendJavaScript("$('#" + ampFundingItemFeaturePanel.getMarkupId() + "').parents().show();");
+                    target.appendJavaScript("$(window).scrollTop($('#" + ampFundingItemFeaturePanel.getMarkupId() + "').position().top)");
+                    js += ".addClass('error');";
+                }
+                else
+                {
+                    logger.info("No errors");
+                    ampFundingItemFeaturePanel.getFeedbackMessages().clear();
+                    js += ".removeClass('error');";
+                }
+                target.appendJavaScript(js);
+                target.add(ampFundingItemFeaturePanel);
+                visit.dontGoDeeper();
+
+
+            }
+
+
+
+        });
+
+
+    }
+
+    private void setErrorWHenItemMissing(Component component, AmpFunding funding, boolean itemsRequired,int transactionType, Set<Boolean> errors, AjaxRequestTarget target) {
+        if ((itemsRequired)) {
+            if (funding.getFundingDetails() == null || funding.getFundingDetails().stream().noneMatch(x -> x.getTransactionType() == transactionType)) {
+                logger.info("Funding items not found");
+                errors.add(true);
+                component.add(new AttributeModifier("class", "funding-has-error"));
+                logger.info("Setting funding item error");
+            } else {
+                logger.info("Funding items found"+funding.getFundingDetails().size() );
+                logger.info("Funding items found"+funding.getFundingDetails());
+                component.add(new AttributeModifier("class", ""));
+            }
+        }
+        target.add(component);
+    }
+
+    public static Component findComponentById(MarkupContainer root, String id) {
+        return root.visitChildren(Component.class, new IVisitor<Component, Component>() {
+            @Override
+            public void component(Component component, IVisit<Component> visit) {
+                if (id.equals(component.getId())) {
+                    visit.stop(component);  // Found the component, return it
+                }
+            }
+        });
     }
 
     public void showFundingTabsErrors(Form<?> form, final AjaxRequestTarget target) {
@@ -1426,6 +1536,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 target.appendJavaScript(js);
             }
         });
+
 
         // visit all funding groups for validation erros
         form.visitChildren(AmpFundingGroupFeaturePanel.class, new IVisitor<AmpFundingGroupFeaturePanel, Void>() {

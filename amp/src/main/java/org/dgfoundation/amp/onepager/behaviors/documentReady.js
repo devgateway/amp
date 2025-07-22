@@ -156,7 +156,7 @@ function translationsEnable(){
 	$("#switchFMMode").css("display", "block");
 }
 function subSectionsSliderEnable(){
-	$("a.slider").click(function(){
+	$("a.slider").off("click").on("click", function () {
 		$(this).siblings("div:first").slideToggle();
 		return false;
 	});

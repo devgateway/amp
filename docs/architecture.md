@@ -8,7 +8,7 @@ permalink: /architecture/
 
 The following diagram illustrates the high-level architecture of the Aid Management Platform (AMP), showing the key components and their relationships:
 
-![Core AMP Architecture](Core%20AMP%20Architecture.png)
+![Core AMP Architecture](Core_AMP_Architecture.png)
 
 ## Technologies
 AMP 4.0 is deployed using [Apache Tomcat 8.5](https://tomcat.apache.org/download-80.cgi#8.5.85), an open-source Web Server that implements several Java EE specifications. AMP is based on [Java 8](https://java.com/en/download/faq/java8.xml). The open-source [Nginx HTTP Server](https://www.nginx.com/) is used to deliver the application content to the country-specific domain, with the right pointers to the Public Portal and AMP itself. AMP benefits from its security, traffic control efficiency and its compliance with current HTTP standards. AMP developer setup additionally uses some tools like [Maven 3.8.1](https://maven.apache.org) and [GitHub](https://github.com/devgateway/amp). The AMP Public Portal is deployed as a separate application and can even run on a different server if necessary. The Public Portal uses WordPress.

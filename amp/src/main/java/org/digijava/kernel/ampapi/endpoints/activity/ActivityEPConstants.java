@@ -129,8 +129,7 @@ public class ActivityEPConstants {
             + "/Estimated Disbursements/Estimated Disbursements Table";
     public static final String RELEASE_FUNDS_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH
             + "/Release of Funds/Release of Funds Table";
-    public static final String EXPENDITURES_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH
-            + "/Expenditures/Expenditures Table";
+    public static final String EXPENDITURES_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH + "/Expenditures/Expenditures Table";
     public static final String FUNDING_ITEM_CLASSIFICATION_FM_PATH = FUNDING_ITEM_FM_PATH + "/Funding Classification";
 
     public static final String REGIONAL_FUNDING_FM_PATH = "/Activity Form/Regional Funding";

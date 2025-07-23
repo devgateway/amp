@@ -438,6 +438,7 @@ public final class FMUtil {
                     break;
                 }
             }
+            logger.info("Current component [" + fmPathString + "] has it's found status: " + found + " and  visible status "+isVisible);
             if (found != isVisible){
                 throw new Exception("Current component [" + fmPathString + "] has it's visibility status different from it's presence in the tree!");
             }

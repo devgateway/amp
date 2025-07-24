@@ -410,6 +410,8 @@ public class AmpARFilter extends PropertyListable {
 
     private Set<AmpCategoryValue> performanceAlertLevel = null;
 
+    private Set<AmpCategoryValue> procurementSystem = null;
+
     private Set<String> performanceAlertType = null;
 
     // private Long ampModalityId=null;
@@ -3019,6 +3021,14 @@ public class AmpARFilter extends PropertyListable {
         }
         ret.append(" )");
         return ret.toString();
+    }
+
+    public Set<AmpCategoryValue> getProcurementSystem() {
+        return procurementSystem;
+    }
+
+    public void setProcurementSystem(Set<AmpCategoryValue> procurementSystem) {
+        this.procurementSystem = procurementSystem;
     }
 
     public Set<Integer> getHumanitarianAid() {

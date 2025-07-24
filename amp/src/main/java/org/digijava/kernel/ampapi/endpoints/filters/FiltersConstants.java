@@ -217,6 +217,7 @@ public class FiltersConstants {
     // filter names
     public static final String ACTIVITY_BUDGET_NAME = "Activity Budget";
     public static final String ACTIVITY_STATUS_NAME = "Activity Status";
+    public static final String PROCUREMENT_SYSTEM_NAME = "Procurement System";
     
     /** filters IDs to main Group (Tab) mapping */
     public static final Map<String, String> ID_GROUP_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{

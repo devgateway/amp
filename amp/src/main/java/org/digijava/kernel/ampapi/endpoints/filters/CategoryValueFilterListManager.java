@@ -60,6 +60,9 @@ public final class CategoryValueFilterListManager implements FilterListManager {
                     .put(FiltersConstants.PLEDGES_TYPE_OF_ASSISTANCE,
                             new CategoryBean(ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE,
                                     CategoryConstants.TYPE_OF_ASSISTENCE_KEY))
+                    .put(FiltersConstants.PROCUREMENT_SYSTEM,
+                            new CategoryBean(ColumnConstants.PROCUREMENT_SYSTEM,
+                                    CategoryConstants.PROCUREMENT_SYSTEM_KEY))
                     .build();
 
     public static CategoryValueFilterListManager getInstance() {

@@ -368,6 +368,23 @@ public class FiltersEndpoint {
     }
 
     /**
+     * List the possible values of 'Procurement System' filter.
+     *
+     * @return filter definition and values of 'procurement-system' filter.
+     */
+    @GET
+    @Path("/procurementSystem/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.PROCUREMENT_SYSTEM, name = FiltersConstants.PROCUREMENT_SYSTEM_NAME)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Procurement System' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Procurement System' values.")
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROCUREMENT_SYSTEM)
+    public FilterList getProcurementSystem() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PROCUREMENT_SYSTEM);
+    }
+
+    /**
      * List the possible values of 'Funding Status' filter.
      *
      * @return filter definition and values of 'funding-status' filter.

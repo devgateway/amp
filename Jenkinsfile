@@ -63,7 +63,6 @@ stage('Build') {
     println "Using environment: ${environment}"
     node('ansible') {
         checkout scm
-
         // Find AMP version
         codeVersion = readMavenPom(file: 'amp/pom.xml').version
         println "AMP Version: ${codeVersion}"

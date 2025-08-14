@@ -1339,6 +1339,8 @@ public class TeamMemberUtil {
     }
 
     public static boolean isHeadRole(AmpTeamMemberRoles role) {
+        logger.info("Headrole"+headRole.getAmpTeamMemRoleId());
+        logger.info("Team memeber role"+role.getAmpTeamMemRoleId());
         return (headRole == null || role == null) ? false : headRole.getAmpTeamMemRoleId().equals(role
                 .getAmpTeamMemRoleId());
     }

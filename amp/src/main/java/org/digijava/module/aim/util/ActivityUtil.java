@@ -2101,6 +2101,9 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             String validationOption = appSettings != null ? appSettings.getValidation() : null;
 
             boolean isTeamMemberValidator = isTeamMemberValidator(teamMember, activity);
+            logger.info("Is validator"+isTeamMemberValidator);
+            logger.info("Validation option"+validationOption);
+            logger.info("Activity approval status"+activity.getApprovalStatus());
 
             if (isTeamMemberValidator) {
                 if (Constants.PROJECT_VALIDATION_FOR_ALL_EDITS.equalsIgnoreCase(validationOption)) {

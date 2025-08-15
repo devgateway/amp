@@ -13,6 +13,8 @@ import org.digijava.module.aim.util.OrganisationUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -24,7 +26,7 @@ import java.util.stream.Collectors;
  * @author Viorel Chihai
  */
 public final class OrganizationFilterListManager implements FilterListManager {
-
+    private static final Logger logger = LoggerFactory.getLogger(OrganizationFilterListManager.class);
     private static final int COL_ORG_ID_POS = 0;
     private static final int COL_ORG_NAME_POS = 1;
     private static final int COL_ORG_ACR_POS = 2;
@@ -161,12 +163,15 @@ public final class OrganizationFilterListManager implements FilterListManager {
      */
     public List<AmpRole> getVisibleRoles() {
         Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
+        logger.info("Visible columns: {}", visibleColumns);
+
 
         List<String> visibleRoleCodes = OrganisationUtil.ROLE_CODE_TO_COLUMN_MAP.entrySet().stream()
                 .filter(e -> visibleColumns.contains(e.getValue())).map(Entry::getKey).collect(Collectors.toList());
-
+        logger.info("Visible roles: {}", visibleRoleCodes);
         Session session = PersistenceManager.getSession();
         List<AmpRole> allRoles = session.createCriteria(AmpRole.class).list();
+        logger.info("All roles: {}", allRoles);
 
         List<AmpRole> visibleRoles = allRoles.stream().filter(r -> visibleRoleCodes.contains(r.getRoleCode()))
                 .collect(Collectors.toList());

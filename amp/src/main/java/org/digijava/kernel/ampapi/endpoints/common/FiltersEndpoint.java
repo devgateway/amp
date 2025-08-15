@@ -389,6 +389,14 @@ public class FiltersEndpoint {
      *
      * @return filter definition and values of 'funding-status' filter.
      */
+    @OPTIONS
+    @Path("/procurementSystem")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeProcurementSystem() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
     @GET
     @Path("/fundingStatus/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

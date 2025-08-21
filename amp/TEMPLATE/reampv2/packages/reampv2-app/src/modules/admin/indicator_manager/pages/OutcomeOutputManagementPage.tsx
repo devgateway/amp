@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Row, Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import styles from '../components/table/Table.module.css';
-import AddNewOutcomeModal from '../components/modals/AddNewOutcomeModal';
-import AddNewOutputModal from '../components/modals/AddNewOutputModal';
+import OutcomeModal from '../components/modals/OutcomeModal';
+import OutputModal from '../components/modals/OutputModal';
 
 interface Outcome {
   id: number;
@@ -19,27 +19,6 @@ interface Output {
   description?: string; // Optional description for Output
 }
 
-const dummyOutcomes: Outcome[] = [
-  {
-    id: 1,
-    name: 'Outcome 1',
-    description: 'Description for Outcome 1',
-    outputs: [
-      { id: 101, name: 'Output A', description: 'Description for Output A' },
-      { id: 102, name: 'Output B' }
-    ]
-  },
-  {
-    id: 2,
-    name: 'Outcome 2',
-    outputs: [
-      { id: 201, name: 'Output C' }
-    ]
-  }
-];
-
-
-
 const OutcomeOutputManagementPage: React.FC = () => {
   const [showAddNewOutcomeModal, setShowAddNewOutcomeModal] = useState(false);
   const [showEditOutcomeModal, setShowEditOutcomeModal] = useState(false);
@@ -47,7 +26,13 @@ const OutcomeOutputManagementPage: React.FC = () => {
   const [showEditOutputModal, setShowEditOutputModal] = useState(false);
   const [editingOutcome, setEditingOutcome] = useState<Outcome | null>(null);
   const [editingOutput, setEditingOutput] = useState<Output & { outcomeIds?: number[] } | null>(null);
+  const [outcomes, setOutcomes] = useState<Outcome[]>([]);
 
+  useEffect(() => {
+    fetch('/amp-outcome-output/outcomes')
+      .then(res => res.json())
+      .then(data => setOutcomes(data));
+  }, []);
 
   const columns = [
     {
@@ -81,20 +66,48 @@ const OutcomeOutputManagementPage: React.FC = () => {
     },
   ];
 
-  const handleAddOutcome = (outcome: { name: string; description?: string }) => {
-    // TODO: Add logic to save outcome
-    // For now, just log
-    console.log('New Outcome:', outcome);
+  const handleAddOutcome = async (outcome: { name: string; description?: string }) => {
+    try {
+      const res = await fetch('/amp-outcome-output/outcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(outcome)
+      });
+      if (res.ok) {
+        fetch('/amp-outcome-output/outcomes')
+          .then(res => res.json())
+          .then(data => setOutcomes(data));
+      } else {
+        alert('Failed to add outcome');
+      }
+    } catch (e) {
+      console.error('Error adding outcome', e);
+      alert('Error adding outcome');
+    }
   };
 
-  const handleAddOutput = (output: { name: string; description?: string; outcomeIds: number[] }) => {
+  const handleAddOutput = async (output: { name: string; description?: string; outcomeIds: number[] }) => {
     if (!output.outcomeIds || output.outcomeIds.length === 0) {
       alert('You must associate the output with at least one outcome.');
       return;
     }
-    // TODO: Add logic to save output
-    // For now, just log
-    console.log('New Output:', output);
+    try {
+      const res = await fetch('/amp-outcome-output/output', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(output)
+      });
+      if (res.ok) {
+        fetch('/amp-outcome-output/outcomes')
+          .then(res => res.json())
+          .then(data => setOutcomes(data));
+      } else {
+        alert('Failed to add output');
+      }
+    } catch (e) {
+      console.error('Error adding output', e);
+      alert('Error adding output');
+    }
   };
 
   const handleEditOutcome = (outcome: Outcome) => {
@@ -102,9 +115,25 @@ const OutcomeOutputManagementPage: React.FC = () => {
     setShowEditOutcomeModal(true);
   };
 
-  const handleSaveEditedOutcome = (updated: { name: string; description?: string }) => {
-    // TODO: Update outcome in state/backend
-    console.log('Edited Outcome:', { ...editingOutcome, ...updated });
+  const handleSaveEditedOutcome = async (updated: { name: string; description?: string }) => {
+    if (!editingOutcome) return;
+    try {
+      const res = await fetch(`/amp-outcome-output/outcome/${editingOutcome.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updated)
+      });
+      if (res.ok) {
+        fetch('/amp-outcome-output/outcomes')
+          .then(res => res.json())
+          .then(data => setOutcomes(data));
+      } else {
+        alert('Failed to update outcome');
+      }
+    } catch (e) {
+      console.error('Error updating outcome', e);
+      alert('Error updating outcome');
+    }
     setShowEditOutcomeModal(false);
     setEditingOutcome(null);
   };
@@ -114,13 +143,28 @@ const OutcomeOutputManagementPage: React.FC = () => {
     setShowEditOutputModal(true);
   };
 
-  const handleSaveEditedOutput = (updated: { name: string; description?: string; outcomeIds: number[] }) => {
+  const handleSaveEditedOutput = async (updated: { name: string; description?: string; outcomeIds: number[] }) => {
+    if (!editingOutput) return;
     if (!updated.outcomeIds || updated.outcomeIds.length === 0) {
       alert('You must associate the output with at least one outcome.');
       return;
     }
-    // TODO: Update output in state/backend
-    console.log('Edited Output:', { ...editingOutput, ...updated });
+    try {
+      const res = await fetch(`/amp-outcome-output/output/${editingOutput.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updated)
+      });
+      if (res.ok) {
+        fetch('/amp-outcome-output/outcomes')
+          .then(res => res.json())
+          .then(data => setOutcomes(data));
+      } else {
+        alert('Failed to update output');
+      }
+    } catch (e) {
+      alert('Error updating output');
+    }
     setShowEditOutputModal(false);
     setEditingOutput(null);
   };
@@ -134,7 +178,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
   };
 
   // For linking outputs, pass only id and name of outcomes
-  const outcomeOptions = dummyOutcomes.map(o => ({ id: o.id, name: o.name }));
+  const outcomeOptions = outcomes.map(o => ({ id: o.id, name: o.name }));
 
   const expandRow = {
     renderer: (row: Outcome) => (
@@ -194,25 +238,25 @@ const OutcomeOutputManagementPage: React.FC = () => {
 
   return (
     <Col sm={12}>
-      <AddNewOutcomeModal
+      <OutcomeModal
         show={showAddNewOutcomeModal}
         setShow={setShowAddNewOutcomeModal}
         onSubmit={handleAddOutcome}
       />
-      <AddNewOutcomeModal
+      <OutcomeModal
         show={showEditOutcomeModal}
         setShow={setShowEditOutcomeModal}
         onSubmit={handleSaveEditedOutcome}
         initialName={editingOutcome?.name || ''}
         initialDescription={editingOutcome?.description || ''}
       />
-      <AddNewOutputModal
+      <OutputModal
         show={showAddNewOutputModal}
         setShow={setShowAddNewOutputModal}
         outcomes={outcomeOptions}
         onSubmit={handleAddOutput}
       />
-      <AddNewOutputModal
+      <OutputModal
         show={showEditOutputModal}
         setShow={setShowEditOutputModal}
         outcomes={outcomeOptions}
@@ -249,7 +293,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
       <hr />
       <BootstrapTable
         keyField="id"
-        data={dummyOutcomes}
+        data={outcomes}
         columns={columns}
         expandRow={expandRow}
         bordered={false}

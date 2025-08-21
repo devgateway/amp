@@ -9,7 +9,7 @@ interface AddNewOutcomeModalProps {
   initialDescription?: string;
 }
 
-const AddNewOutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubmit, initialName = '', initialDescription = '' }) => {
+const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubmit, initialName = '', initialDescription = '' }) => {
   const [name, setName] = useState(initialName);
   const [description, setDescription] = useState(initialDescription);
 
@@ -69,4 +69,4 @@ const AddNewOutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, 
   );
 };
 
-export default AddNewOutcomeModal;
+export default OutcomeModal;

@@ -16,7 +16,7 @@ interface AddNewOutputModalProps {
   initialOutcomeIds?: number[];
 }
 
-const AddNewOutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes, onSubmit, initialName = '', initialDescription = '', initialOutcomeIds = [] }) => {
+const OutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes, onSubmit, initialName = '', initialDescription = '', initialOutcomeIds = [] }) => {
   const [name, setName] = useState(initialName);
   const [description, setDescription] = useState(initialDescription);
   const [selectedOutcomes, setSelectedOutcomes] = useState<number[]>(initialOutcomeIds);
@@ -103,4 +103,4 @@ const AddNewOutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, ou
   );
 };
 
-export default AddNewOutputModal;
+export default OutputModal;

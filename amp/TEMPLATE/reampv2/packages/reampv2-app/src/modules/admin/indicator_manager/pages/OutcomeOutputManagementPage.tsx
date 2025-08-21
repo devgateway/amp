@@ -5,6 +5,8 @@ import '@musicstory/react-bootstrap-table2-filter/dist/react-bootstrap-table2-fi
 import styles from '../components/table/Table.module.css';
 import OutcomeModal from '../components/modals/OutcomeModal';
 import OutputModal from '../components/modals/OutputModal';
+import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from '@murasoftware/react-bootstrap-table2-toolkit';
+import paginationFactory from '@musicstory/react-bootstrap-table2-paginator';
 
 interface Outcome {
   id: number;
@@ -236,71 +238,101 @@ const OutcomeOutputManagementPage: React.FC = () => {
     expandByColumnOnly: true,
   };
 
+  const { SearchBar } = Search;
+  const { ExportCSVButton } = CSVExport;
+
   return (
-    <Col sm={12}>
-      <OutcomeModal
-        show={showAddNewOutcomeModal}
-        setShow={setShowAddNewOutcomeModal}
-        onSubmit={handleAddOutcome}
-      />
-      <OutcomeModal
-        show={showEditOutcomeModal}
-        setShow={setShowEditOutcomeModal}
-        onSubmit={handleSaveEditedOutcome}
-        initialName={editingOutcome?.name || ''}
-        initialDescription={editingOutcome?.description || ''}
-      />
-      <OutputModal
-        show={showAddNewOutputModal}
-        setShow={setShowAddNewOutputModal}
-        outcomes={outcomeOptions}
-        onSubmit={handleAddOutput}
-      />
-      <OutputModal
-        show={showEditOutputModal}
-        setShow={setShowEditOutputModal}
-        outcomes={outcomeOptions}
-        onSubmit={handleSaveEditedOutput}
-        initialName={editingOutput?.name || ''}
-        initialDescription={editingOutput?.description || ''}
-        initialOutcomeIds={editingOutput?.outcomeIds || []}
-      />
-      <Row className={styles.table_header}>
-        <Col sm={6}>
-          <h3>Outcome and Output Management</h3>
-        </Col>
-        <Col sm={6}>
+    <ToolkitProvider
+      keyField="id"
+      data={outcomes}
+      columns={columns}
+      search
+      exportCSV
+    >
+      {(props: ToolkitContextType) => (
+        <div>
+          <OutcomeModal
+            show={showAddNewOutcomeModal}
+            setShow={setShowAddNewOutcomeModal}
+            onSubmit={handleAddOutcome}
+          />
+          <OutcomeModal
+            show={showEditOutcomeModal}
+            setShow={setShowEditOutcomeModal}
+            onSubmit={handleSaveEditedOutcome}
+            initialName={editingOutcome?.name || ''}
+            initialDescription={editingOutcome?.description || ''}
+          />
+          <OutputModal
+            show={showAddNewOutputModal}
+            setShow={setShowAddNewOutputModal}
+            outcomes={outcomeOptions}
+            onSubmit={handleAddOutput}
+          />
+          <OutputModal
+            show={showEditOutputModal}
+            setShow={setShowEditOutputModal}
+            outcomes={outcomeOptions}
+            onSubmit={handleSaveEditedOutput}
+            initialName={editingOutput?.name || ''}
+            initialDescription={editingOutput?.description || ''}
+            initialOutcomeIds={editingOutput?.outcomeIds || []}
+          />
+          <Row className={styles.table_header}>
+            <Col sm={6}>
+              <h3>Outcome and Output Management</h3>
+            </Col>
+            <Col sm={6}>
+              <hr />
+            </Col>
+          </Row>
+          <Row className={styles.table_header_bottom}>
+            <Col sm={4}>
+              <div className={styles.table_header_bottom_left}>
+                <Button type="primary" onClick={() => setShowAddNewOutcomeModal(true)}>
+                  <i className="fa fa-plus" /> Add New Outcome
+                </Button>
+                {' '}
+                <Button type="primary" onClick={() => setShowAddNewOutputModal(true)}>
+                  <i className="fa fa-plus" /> Add New Output
+                </Button>
+                {' '}
+                <ExportCSVButton {...props.csvProps} className={styles.export_button}>
+                  <i className="fa fa-download" /> Export CSV
+                </ExportCSVButton>
+              </div>
+            </Col>
+            <Col sm={8}>
+              <div className={styles.table_header_bottom_right}>
+                <div className={styles.search_container}>
+                  <SearchBar {...props.searchProps} placeholder="Search Outcomes" />
+                </div>
+              </div>
+            </Col>
+          </Row>
           <hr />
-        </Col>
-      </Row>
-      <Row className={styles.table_header_bottom}>
-        <Col sm={4}>
-          <div className={styles.table_header_bottom_left}>
-            <Button type="primary" onClick={() => setShowAddNewOutcomeModal(true)}>
-              <i className="fa fa-plus" /> Add New Outcome
-            </Button>
-            {' '}
-            <Button type="primary" onClick={() => setShowAddNewOutputModal(true)}>
-              <i className="fa fa-plus" /> Add New Output
-            </Button>
-            {' '}
-            <Button type="secondary" disabled>
-              <i className="fa fa-download" /> Export CSV
-            </Button>
-          </div>
-        </Col>
-      </Row>
-      <hr />
-      <BootstrapTable
-        keyField="id"
-        data={outcomes}
-        columns={columns}
-        expandRow={expandRow}
-        bordered={false}
-        headerClasses={styles.table_header_titles}
-        bodyClasses={styles.table_body}
-      />
-    </Col>
+          <BootstrapTable
+            {...props.baseProps}
+            expandRow={expandRow}
+            bordered={false}
+            headerClasses={styles.table_header_titles}
+            bodyClasses={styles.table_body}
+            pagination={paginationFactory({
+              paginationSize: 4,
+              pageStartIndex: 1,
+              alwaysShowAllBtns: true,
+              sizePerPageList: [
+                { text: '10', value: 10 },
+                { text: '25', value: 25 },
+                { text: '50', value: 50 },
+                { text: 'All', value: outcomes.length }
+              ],
+              sizePerPage: 10
+            })}
+          />
+        </div>
+      )}
+    </ToolkitProvider>
   );
 };
 

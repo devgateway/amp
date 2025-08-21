@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Row, Button } from 'react-bootstrap';
-import BootstrapTable from 'react-bootstrap-table-next';
+import BootstrapTable, { PaginationOptions } from '@musicstory/react-bootstrap-table-next';
 import '@musicstory/react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 import styles from '../components/table/Table.module.css';
 import OutcomeModal from '../components/modals/OutcomeModal';

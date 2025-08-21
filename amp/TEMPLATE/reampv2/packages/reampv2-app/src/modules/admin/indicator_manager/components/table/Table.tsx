@@ -25,6 +25,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setSizePerPage} from '../../reducers/fetchIndicatorsReducer';
 import Select from "react-select";
 import {formatProgramSchemeToSelect} from "../../utils/helpers";
+import { useNavigate } from 'react-router-dom';
 
 interface SkeletonTableProps extends DefaultComponentProps {
   columns: any;
@@ -206,6 +207,8 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
     }
   };
 
+  const navigate = useNavigate();
+
   return (
     <>
       <AddNewIndicatorModal
@@ -246,6 +249,12 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                           <i className="fa fa-plus" />
                           {' '}
                           <span>{translations['amp.dashboard:add-new']}</span>
+                        </Button>
+                        {' '}
+                        <Button type="secondary" onClick={() => navigate('/admin/outcome-output-management')}>
+                          <i className="fa fa-tasks" />
+                          {' '}
+                          <span>{translations['amp.dashboard:outcome-output-management'] || 'Outcome and Output Management'}</span>
                         </Button>
                         <ExportCSVButton
                           {...props.csvProps}

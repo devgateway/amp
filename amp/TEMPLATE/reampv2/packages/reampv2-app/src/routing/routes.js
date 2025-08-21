@@ -9,6 +9,7 @@ const NewReportApp = lazy(() => import('../modules/new_report'));
 const GeocoderApp = lazy(() => import('../modules/geocoder'));
 const AmpOfflineApp = lazy(() => import('../modules/ampoffline/Download'));
 const ReportGeneratorApp = lazy(() => import('../modules/report_generator'));
+const OutcomeOutputManagementPage = lazy(() => import('../modules/admin/indicator_manager/pages/OutcomeOutputManagementPage'));
 
 /** @type {import('react-router-dom').RouteObject[]} */
 const routes = [
@@ -74,6 +75,14 @@ const routes = [
                 element: (
                     <Suspense fallback={<div>Loading...</div>}>
                         <AdminApps />
+                    </Suspense>
+                )
+            },
+            {
+                path: "admin/outcome-output-management",
+                element: (
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <OutcomeOutputManagementPage />
                     </Suspense>
                 )
             }

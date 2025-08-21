@@ -27,6 +27,7 @@
   "amp.indicatormanager:no-data": "No Data Available",
   "amp.indicatormanager:all": "All",
   "amp.dashboard:add-new": "Add New Indicator",
+  "amp.dashboard:outcome-and-output-management": "Outcome and Output Management",
   "amp.indicatormanager:loading": "Loading",
   "amp.indicatormanager:indicator-name": "Indicator Name",
   "amp.indicatormanager:indicator-description": "Indicator Description",

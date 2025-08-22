@@ -114,6 +114,7 @@ public class AmpOutcomeOutputService {
         dto.setId(outcome.getId());
         dto.setName(outcome.getName());
         dto.setDescription(outcome.getDescription());
+        dto.setOutputs(outcome.getOutputs().stream().map(this::toOutputDTO).collect(Collectors.toList()));
         if (outcome.getOutputs() != null) {
             dto.setOutputIds(outcome.getOutputs().stream().map(AmpOutput::getId).collect(Collectors.toList()));
         }

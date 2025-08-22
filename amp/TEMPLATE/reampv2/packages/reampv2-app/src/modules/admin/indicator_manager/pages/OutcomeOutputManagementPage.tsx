@@ -289,11 +289,11 @@ const OutcomeOutputManagementPage: React.FC = () => {
           <Row className={styles.table_header_bottom}>
             <Col sm={4}>
               <div className={styles.table_header_bottom_left}>
-                <Button type="primary" onClick={() => setShowAddNewOutcomeModal(true)}>
+                <Button type="button" variant="primary" onClick={() => setShowAddNewOutcomeModal(true)}>
                   <i className="fa fa-plus" /> Add New Outcome
                 </Button>
                 {' '}
-                <Button type="primary" onClick={() => setShowAddNewOutputModal(true)}>
+                <Button type="button" variant="primary" onClick={() => setShowAddNewOutputModal(true)}>
                   <i className="fa fa-plus" /> Add New Output
                 </Button>
                 {' '}

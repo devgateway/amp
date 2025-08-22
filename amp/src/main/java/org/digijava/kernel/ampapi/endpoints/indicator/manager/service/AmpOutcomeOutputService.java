@@ -6,7 +6,6 @@ import org.digijava.kernel.ampapi.endpoints.indicator.manager.dto.AmpOutcomeDTO;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.dto.AmpOutputDTO;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,18 +24,16 @@ public class AmpOutcomeOutputService {
 
     public AmpOutcomeDTO createOutcome(AmpOutcomeDTO dto) {
         Session session = PersistenceManager.getSession();
-        Transaction tx = session.beginTransaction();
         AmpOutcome outcome = new AmpOutcome();
         outcome.setName(dto.getName());
         outcome.setDescription(dto.getDescription());
         session.save(outcome);
-        tx.commit();
+        session.flush();
         return toOutcomeDTO(outcome);
     }
 
     public AmpOutputDTO createOutput(AmpOutputDTO dto) {
         Session session = PersistenceManager.getSession();
-        Transaction tx = session.beginTransaction();
         AmpOutput output = new AmpOutput();
         output.setName(dto.getName());
         output.setDescription(dto.getDescription());
@@ -51,25 +48,23 @@ public class AmpOutcomeOutputService {
         }
         output.setOutcomes(outcomes);
         session.save(output);
-        tx.commit();
+        session.flush();
         return toOutputDTO(output);
     }
 
     public AmpOutcomeDTO updateOutcome(Long id, AmpOutcomeDTO dto) {
         Session session = PersistenceManager.getSession();
-        Transaction tx = session.beginTransaction();
         AmpOutcome outcome = session.get(AmpOutcome.class, id);
         if (outcome == null) return null;
         outcome.setName(dto.getName());
         outcome.setDescription(dto.getDescription());
         session.update(outcome);
-        tx.commit();
+        session.flush();
         return toOutcomeDTO(outcome);
     }
 
     public AmpOutputDTO updateOutput(Long id, AmpOutputDTO dto) {
         Session session = PersistenceManager.getSession();
-        Transaction tx = session.beginTransaction();
         AmpOutput output = session.get(AmpOutput.class, id);
         if (output == null) return null;
         output.setName(dto.getName());
@@ -85,27 +80,25 @@ public class AmpOutcomeOutputService {
         }
         output.setOutcomes(outcomes);
         session.update(output);
-        tx.commit();
+        session.flush();
         return toOutputDTO(output);
     }
 
     public boolean deleteOutcome(Long id) {
         Session session = PersistenceManager.getSession();
-        Transaction tx = session.beginTransaction();
         AmpOutcome outcome = session.get(AmpOutcome.class, id);
         if (outcome == null) return false;
         session.delete(outcome);
-        tx.commit();
+        session.flush();
         return true;
     }
 
     public boolean deleteOutput(Long id) {
         Session session = PersistenceManager.getSession();
-        Transaction tx = session.beginTransaction();
         AmpOutput output = session.get(AmpOutput.class, id);
         if (output == null) return false;
         session.delete(output);
-        tx.commit();
+        session.flush();
         return true;
     }
 

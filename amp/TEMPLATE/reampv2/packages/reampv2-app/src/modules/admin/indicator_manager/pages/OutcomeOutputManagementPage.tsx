@@ -242,6 +242,35 @@ const OutcomeOutputManagementPage: React.FC = () => {
   const { ExportCSVButton } = CSVExport;
 
   return (
+      <>
+        <OutcomeModal
+            show={showAddNewOutcomeModal}
+            setShow={setShowAddNewOutcomeModal}
+            onSubmit={handleAddOutcome}
+        />
+        <OutcomeModal
+            show={showEditOutcomeModal}
+            setShow={setShowEditOutcomeModal}
+            onSubmit={handleSaveEditedOutcome}
+            initialName={editingOutcome?.name || ''}
+            initialDescription={editingOutcome?.description || ''}
+        />
+        <OutputModal
+            show={showAddNewOutputModal}
+            setShow={setShowAddNewOutputModal}
+            outcomes={outcomeOptions}
+            onSubmit={handleAddOutput}
+        />
+        <OutputModal
+            show={showEditOutputModal}
+            setShow={setShowEditOutputModal}
+            outcomes={outcomeOptions}
+            onSubmit={handleSaveEditedOutput}
+            initialName={editingOutput?.name || ''}
+            initialDescription={editingOutput?.description || ''}
+            initialOutcomeIds={editingOutput?.outcomeIds || []}
+        />
+        <Col sm={12}>
     <ToolkitProvider
       keyField="id"
       data={outcomes}
@@ -251,33 +280,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
     >
       {(props: ToolkitContextType) => (
         <div>
-          <OutcomeModal
-            show={showAddNewOutcomeModal}
-            setShow={setShowAddNewOutcomeModal}
-            onSubmit={handleAddOutcome}
-          />
-          <OutcomeModal
-            show={showEditOutcomeModal}
-            setShow={setShowEditOutcomeModal}
-            onSubmit={handleSaveEditedOutcome}
-            initialName={editingOutcome?.name || ''}
-            initialDescription={editingOutcome?.description || ''}
-          />
-          <OutputModal
-            show={showAddNewOutputModal}
-            setShow={setShowAddNewOutputModal}
-            outcomes={outcomeOptions}
-            onSubmit={handleAddOutput}
-          />
-          <OutputModal
-            show={showEditOutputModal}
-            setShow={setShowEditOutputModal}
-            outcomes={outcomeOptions}
-            onSubmit={handleSaveEditedOutput}
-            initialName={editingOutput?.name || ''}
-            initialDescription={editingOutput?.description || ''}
-            initialOutcomeIds={editingOutput?.outcomeIds || []}
-          />
+
           <Row className={styles.table_header}>
             <Col sm={6}>
               <h3>Outcome and Output Management</h3>
@@ -333,6 +336,8 @@ const OutcomeOutputManagementPage: React.FC = () => {
         </div>
       )}
     </ToolkitProvider>
+        </Col >
+        </>
   );
 };
 

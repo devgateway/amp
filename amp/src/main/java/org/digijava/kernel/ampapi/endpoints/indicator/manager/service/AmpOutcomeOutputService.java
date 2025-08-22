@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class AmpOutcomeOutputService {
     public List<AmpOutcomeDTO> getAllOutcomes() {
         Session session = PersistenceManager.getSession();
-        List<AmpOutcome> outcomes = session.createQuery("from AmpOutcome", AmpOutcome.class).list();
+        List<AmpOutcome> outcomes = session.createQuery("select o from AmpOutcome o left join fetch o.outputs", AmpOutcome.class).list();
         return outcomes.stream().map(this::toOutcomeDTO).collect(Collectors.toList());
     }
 
@@ -125,4 +125,3 @@ public class AmpOutcomeOutputService {
         return dto;
     }
 }
-

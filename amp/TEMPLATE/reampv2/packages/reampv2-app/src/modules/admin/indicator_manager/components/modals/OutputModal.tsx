@@ -17,11 +17,12 @@ interface AddNewOutputModalProps {
   onSubmit?: (output: { name: string; description?: string; outcomeIds: number[] }) => void;
   initialName?: string;
   initialDescription?: string;
-  initialOutcomeIds?: number[];
+  initialOutcomes?: Outcome[];
   translations?: Record<string, string>;
+  loading?: boolean;
 }
 
-const OutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes, onSubmit, initialName = '', initialDescription = '', initialOutcomeIds = [], translations = {} }) => {
+const OutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes, onSubmit, initialName = '', initialDescription = '', initialOutcomes = [], translations = {}, loading = false }) => {
   const nodeRef = useRef(null);
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(translations['amp.outcomeoutput:errors-name-required'] || 'Name is required'),
@@ -32,7 +33,7 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes
   const initialValues = {
     name: initialName,
     description: initialDescription,
-    outcomeIds: initialOutcomeIds
+    outcomeIds: initialOutcomes.map(o => o.id)
   };
 
   const outcomeOptions = outcomes.map(o => ({ value: o.id, label: o.name }));
@@ -112,6 +113,7 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes
                       value={outcomeOptions.filter(opt => props.values.outcomeIds.includes(opt.value))}
                       onChange={selected => props.setFieldValue('outcomeIds', selected.map((opt: any) => opt.value))}
                       placeholder={translations['amp.outcomeoutput:linked-outcomes'] || 'Linked Outcomes'}
+                      isDisabled={loading}
                     />
                     {props.errors.outcomeIds && props.touched.outcomeIds && (
                       <div className="text-danger small mt-1">{props.errors.outcomeIds}</div>
@@ -121,10 +123,10 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
+              <Button variant="secondary" onClick={handleClose} disabled={loading}>
                 {translations['amp.outcomeoutput:cancel'] || 'Cancel'}
               </Button>
-              <Button type="submit" variant="success">
+              <Button type="submit" variant="success" disabled={loading}>
                 {translations['amp.outcomeoutput:save-output'] || 'Save Output'}
               </Button>
             </Modal.Footer>

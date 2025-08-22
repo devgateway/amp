@@ -31,7 +31,8 @@ const OutcomeOutputManagementPage: React.FC = () => {
   const [showAddNewOutputModal, setShowAddNewOutputModal] = useState(false);
   const [showEditOutputModal, setShowEditOutputModal] = useState(false);
   const [editingOutcome, setEditingOutcome] = useState<Outcome | null>(null);
-  const [editingOutput, setEditingOutput] = useState<Output & { outcomeIds?: number[] } | null>(null);
+  const [editingOutput, setEditingOutput] = useState<Output & { outcomes?: Outcome[] } | null>(null);
+  const [loadingEditOutput, setLoadingEditOutput] = useState(false);
   const [outcomes, setOutcomes] = useState<Outcome[]>([]);
 
   useEffect(() => {
@@ -151,9 +152,26 @@ const OutcomeOutputManagementPage: React.FC = () => {
     setEditingOutcome(null);
   };
 
-  const handleEditOutput = (output: Output, parentOutcomeIds: number[]) => {
-    setEditingOutput({ ...output, outcomeIds: parentOutcomeIds });
-    setShowEditOutputModal(true);
+  const handleEditOutput = async (output: Output, parentOutcomeIds: number[]) => {
+    setLoadingEditOutput(true);
+    try {
+      const res = await fetch(`/rest/amp-outcome-output/output/${output.id}`);
+      if (res.ok) {
+        const data = await res.json();
+        setEditingOutput({
+          id: data.id,
+          name: data.name,
+          description: data.description,
+          outcomes: data.outcomes || []
+        });
+        setShowEditOutputModal(true);
+      } else {
+        alert('Failed to fetch output details');
+      }
+    } catch (e) {
+      alert('Error fetching output details');
+    }
+    setLoadingEditOutput(false);
   };
 
   const handleSaveEditedOutput = async (updated: { name: string; description?: string; outcomeIds: number[] }) => {
@@ -295,8 +313,9 @@ const OutcomeOutputManagementPage: React.FC = () => {
         onSubmit={handleSaveEditedOutput}
         initialName={editingOutput?.name || ''}
         initialDescription={editingOutput?.description || ''}
-        initialOutcomeIds={editingOutput?.outcomeIds || []}
+        initialOutcomes={editingOutput?.outcomes || []}
         translations={translations}
+        loading={loadingEditOutput}
       />
       <Col sm={12}>
         <ToolkitProvider

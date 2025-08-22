@@ -113,4 +113,16 @@ public class AmpOutcomeOutputEndpoints {
         }
         return Response.ok().build();
     }
+
+    @GET
+    @Path("/output/{id}")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getOutputById")
+    @ApiOperation(value = "Get output by ID", notes = "Returns output details for editing")
+    public Response getOutputById(@PathParam("id") Long id) {
+        AmpOutputDTO output = service.getOutputById(id);
+        if (output == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(output).build();
+    }
 }

@@ -120,6 +120,16 @@ public class AmpOutcomeOutputService {
         return true;
     }
 
+    public AmpOutputDTO getOutputById(Long id) {
+        Session session = PersistenceManager.getSession();
+        AmpOutput output = session.get(AmpOutput.class, id);
+        if (output == null) return null;
+        AmpOutputDTO dto = toOutputDTO(output);
+        dto.setOutcomes(output.getOutcomes().stream().map(this::toOutcomeDTO).collect(Collectors.toList()));
+        return dto;
+    }
+
+
     private AmpOutcomeDTO toOutcomeDTO(AmpOutcome outcome) {
         AmpOutcomeDTO dto = new AmpOutcomeDTO();
         dto.setId(outcome.getId());

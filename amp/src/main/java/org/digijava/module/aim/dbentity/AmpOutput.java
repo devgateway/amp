@@ -1,13 +1,14 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 public class AmpOutput implements Serializable {
     private Long id;
     private String name;
     private String description;
-    private Set<AmpOutcome> outcomes;
+    private Set<AmpOutcome> outcomes=new HashSet<>();
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

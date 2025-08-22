@@ -20,7 +20,7 @@ const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubm
   });
 
   return (
-    <Modal show={show} onHide={() => setShow(false)} centered>
+    <Modal show={true} onHide={() => setShow(false)} centered>
       <Formik
         initialValues={{ name: initialName, description: initialDescription }}
         validationSchema={validationSchema}

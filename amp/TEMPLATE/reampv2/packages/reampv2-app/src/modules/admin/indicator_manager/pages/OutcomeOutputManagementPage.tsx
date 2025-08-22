@@ -35,6 +35,13 @@ const OutcomeOutputManagementPage: React.FC = () => {
   const [outcomes, setOutcomes] = useState<Outcome[]>([]);
 
   useEffect(() => {
+    console.log('Add Outcome Modal State:', showAddNewOutcomeModal);
+  }, [showAddNewOutcomeModal]);
+
+  useEffect(() => {
+    console.log('Edit Outcome Modal State:', showAddNewOutputModal);
+  }, [showAddNewOutputModal]);
+  useEffect(() => {
     fetch('/rest/amp-outcome-output/outcomes')
       .then(res => res.json())
       .then(data => setOutcomes(data));

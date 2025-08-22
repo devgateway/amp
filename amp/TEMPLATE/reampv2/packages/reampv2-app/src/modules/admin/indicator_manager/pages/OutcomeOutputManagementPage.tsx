@@ -8,6 +8,7 @@ import OutputModal from '../components/modals/OutputModal';
 import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from '@murasoftware/react-bootstrap-table2-toolkit';
 import paginationFactory from '@musicstory/react-bootstrap-table2-paginator';
 import initialTranslations from '../config/initialTranslations.json';
+import './css/ModalZIndexFix.css'; // Add z-index to modal and backdrop to ensure visibility
 
 interface Outcome {
   id: number;
@@ -21,6 +22,8 @@ interface Output {
   name: string;
   description?: string; // Optional description for Output
 }
+
+const translations = initialTranslations;
 
 const OutcomeOutputManagementPage: React.FC = () => {
   const [showAddNewOutcomeModal, setShowAddNewOutcomeModal] = useState(false);
@@ -242,7 +245,18 @@ const OutcomeOutputManagementPage: React.FC = () => {
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
 
-  const translations = initialTranslations;
+  const paginationOptions: PaginationOptions = {
+    paginationSize: 4,
+    pageStartIndex: 1,
+    alwaysShowAllBtns: true,
+    sizePerPageList: [
+      { text: '10', value: 10 },
+      { text: '25', value: 25 },
+      { text: '50', value: 50 },
+      { text: 'All', value: outcomes.length }
+    ],
+    sizePerPage: 10
+  };
 
   return (
     <>
@@ -289,7 +303,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
             <div>
               <Row className={styles.table_header}>
                 <Col sm={6}>
-                  <h3>{translations['amp.dashboard:outcome-and-output-management']}</h3>
+                  <h3>{translations['amp.outcomeoutput:management-title']}</h3>
                 </Col>
                 <Col sm={6}>
                   <hr />
@@ -298,23 +312,23 @@ const OutcomeOutputManagementPage: React.FC = () => {
               <Row sm={12} className={styles.table_header_bottom}>
                 <Col sm={4}>
                   <div className={styles.table_header_bottom_left}>
-                    <Button type="primary" onClick={() => setShowAddNewOutcomeModal(true)}>
-                      <i className="fa fa-plus" /> {translations['amp.dashboard:add-new']}
+                    <Button type="button" variant="primary" onClick={() => setShowAddNewOutcomeModal(true)}>
+                      <i className="fa fa-plus" /> {translations['amp.outcomeoutput:add-new-outcome']}
                     </Button>
                     {' '}
-                    <Button type="primary" onClick={() => setShowAddNewOutputModal(true)}>
-                      <i className="fa fa-plus" /> {translations['amp.dashboard:add-new']}
+                    <Button type="button" variant="primary" onClick={() => setShowAddNewOutputModal(true)}>
+                      <i className="fa fa-plus" /> {translations['amp.outcomeoutput:add-new-output']}
                     </Button>
                     {' '}
                     <ExportCSVButton {...props.csvProps} className={styles.export_button}>
-                      <i className="fa fa-download" /> {translations['amp.indicatormanager:export-csv']}
+                      <i className="fa fa-download" /> {translations['amp.outcomeoutput:export-csv']}
                     </ExportCSVButton>
                   </div>
                 </Col>
                 <Col sm={8}>
                   <div className={styles.table_header_bottom_right}>
                     <div className={styles.search_container}>
-                      <SearchBar {...props.searchProps} placeholder={translations['amp.indicatormanager:search']} />
+                      <SearchBar {...props.searchProps} placeholder={translations['amp.outcomeoutput:search-placeholder']} />
                     </div>
                   </div>
                 </Col>
@@ -326,18 +340,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
                 bordered={false}
                 headerClasses={styles.table_header_titles}
                 bodyClasses={styles.table_body}
-                pagination={paginationFactory({
-                  paginationSize: 4,
-                  pageStartIndex: 1,
-                  alwaysShowAllBtns: true,
-                  sizePerPageList: [
-                    { text: '10', value: 10 },
-                    { text: '25', value: 25 },
-                    { text: '50', value: 50 },
-                    { text: 'All', value: outcomes.length }
-                  ],
-                  sizePerPage: 10
-                })}
+                pagination={paginationFactory(paginationOptions)}
               />
             </div>
           )}

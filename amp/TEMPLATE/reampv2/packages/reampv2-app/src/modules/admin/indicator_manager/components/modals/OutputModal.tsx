@@ -23,9 +23,9 @@ interface AddNewOutputModalProps {
 
 const OutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes, onSubmit, initialName = '', initialDescription = '', initialOutcomeIds = [], translations = {} }) => {
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required(translations['amp.outcomeoutput:output-name'] + ' ' + translations['amp.indicatormanager:errors-name-required']),
+    name: Yup.string().required(translations['amp.outcomeoutput:errors-name-required'] || 'Name is required'),
     description: Yup.string(),
-    outcomeIds: Yup.array().min(1, translations['amp.outcomeoutput:linked-outcomes'] + ' ' + translations['amp.indicatormanager:errors-name-required'])
+    outcomeIds: Yup.array().min(1, translations['amp.outcomeoutput:errors-linked-outcomes-required'] || 'Select at least one outcome')
   });
 
   const outcomeOptions = outcomes.map(o => ({ value: o.id, label: o.name }));
@@ -45,17 +45,17 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes
         {({ errors, touched, handleSubmit, setFieldValue, values }) => (
           <FormikForm onSubmit={handleSubmit} className={styles.indicator_modal_form}>
             <Modal.Header closeButton>
-              <Modal.Title>{translations['amp.outcomeoutput:modal-title-output']}</Modal.Title>
+              <Modal.Title>{translations['amp.outcomeoutput:modal-title-output'] || 'Add New Output'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Form.Group as={Row} controlId="outputName">
-                <Form.Label column sm={3}>{translations['amp.outcomeoutput:output-name']}</Form.Label>
+                <Form.Label column sm={3}>{translations['amp.outcomeoutput:output-name'] || 'Output Name'}</Form.Label>
                 <Col sm={9}>
                   <Field
                     name="name"
                     as={Form.Control}
                     type="text"
-                    placeholder={translations['amp.outcomeoutput:output-name']}
+                    placeholder={translations['amp.outcomeoutput:output-name'] || 'Output Name'}
                     isInvalid={!!errors.name && touched.name}
                   />
                   {errors.name && touched.name && (
@@ -64,25 +64,25 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes
                 </Col>
               </Form.Group>
               <Form.Group as={Row} controlId="outputDescription" className="mt-3">
-                <Form.Label column sm={3}>{translations['amp.outcomeoutput:output-description']}</Form.Label>
+                <Form.Label column sm={3}>{translations['amp.outcomeoutput:output-description'] || 'Output Description'}</Form.Label>
                 <Col sm={9}>
                   <Field
                     name="description"
                     as={Form.Control}
                     rows={3}
-                    placeholder={translations['amp.outcomeoutput:output-description']}
+                    placeholder={translations['amp.outcomeoutput:output-description'] || 'Output Description'}
                   />
                 </Col>
               </Form.Group>
               <Form.Group as={Row} controlId="outputOutcomes" className="mt-3">
-                <Form.Label column sm={3}>{translations['amp.outcomeoutput:linked-outcomes']}</Form.Label>
+                <Form.Label column sm={3}>{translations['amp.outcomeoutput:linked-outcomes'] || 'Linked Outcomes'}</Form.Label>
                 <Col sm={9}>
                   <Select
                     isMulti
                     options={outcomeOptions}
                     value={outcomeOptions.filter(opt => values.outcomeIds.includes(opt.value))}
                     onChange={selected => setFieldValue('outcomeIds', selected.map((opt: any) => opt.value))}
-                    placeholder={translations['amp.outcomeoutput:linked-outcomes']}
+                    placeholder={translations['amp.outcomeoutput:linked-outcomes'] || 'Linked Outcomes'}
                   />
                   {errors.outcomeIds && touched.outcomeIds && (
                     <div className="text-danger small mt-1">{errors.outcomeIds}</div>
@@ -92,10 +92,10 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={() => setShow(false)}>
-                {translations['amp.outcomeoutput:cancel']}
+                {translations['amp.outcomeoutput:cancel'] || 'Cancel'}
               </Button>
               <Button variant="primary" type="submit">
-                {translations['amp.outcomeoutput:save-output']}
+                {translations['amp.outcomeoutput:save-output'] || 'Save Output'}
               </Button>
             </Modal.Footer>
           </FormikForm>

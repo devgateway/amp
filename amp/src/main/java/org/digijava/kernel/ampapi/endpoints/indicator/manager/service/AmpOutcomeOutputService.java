@@ -75,32 +75,27 @@ public class AmpOutcomeOutputService {
         if (output == null) return null;
         output.setName(dto.getName());
         output.setDescription(dto.getDescription());
-        // Get current outcomes
-        Set<AmpOutcome> currentOutcomes = new HashSet<>(output.getOutcomes());
-        // Build new outcomes set
-        Set<AmpOutcome> newOutcomes = new HashSet<>();
-        if (dto.getOutcomeIds() != null) {
-            for (Long oid : dto.getOutcomeIds()) {
-                AmpOutcome outcome = session.get(AmpOutcome.class, oid);
-                if (outcome != null) {
-                    newOutcomes.add(outcome);
-                }
-            }
-        }
+        // Prepare new outcomes set
+        Set<AmpOutcome> newOutcomes = Optional.ofNullable(dto.getOutcomeIds())
+            .orElse(Collections.emptyList())
+            .stream()
+            .map(oid -> session.get(AmpOutcome.class, oid))
+            .filter(Objects::nonNull)
+            .collect(Collectors.toSet());
         // Remove output from outcomes that are no longer linked
-        for (AmpOutcome oldOutcome : currentOutcomes) {
-            if (!newOutcomes.contains(oldOutcome)) {
-                oldOutcome.getOutputs().remove(output);
-                session.update(oldOutcome);
-            }
-        }
+        output.getOutcomes().stream()
+            .filter(o -> !newOutcomes.contains(o))
+            .forEach(o -> {
+                o.getOutputs().remove(output);
+                session.update(o);
+            });
         // Add output to new outcomes
-        for (AmpOutcome newOutcome : newOutcomes) {
-            if (!currentOutcomes.contains(newOutcome)) {
-                newOutcome.getOutputs().add(output);
-                session.update(newOutcome);
-            }
-        }
+        newOutcomes.stream()
+            .filter(o -> !output.getOutcomes().contains(o))
+            .forEach(o -> {
+                o.getOutputs().add(output);
+                session.update(o);
+            });
         output.setOutcomes(newOutcomes);
         session.update(output);
         session.flush();

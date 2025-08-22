@@ -31,7 +31,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
   const [outcomes, setOutcomes] = useState<Outcome[]>([]);
 
   useEffect(() => {
-    fetch('/amp-outcome-output/outcomes')
+    fetch('/rest/amp-outcome-output/outcomes')
       .then(res => res.json())
       .then(data => setOutcomes(data));
   }, []);
@@ -100,7 +100,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
         body: JSON.stringify(output)
       });
       if (res.ok) {
-        fetch('/amp-outcome-output/outcomes')
+        fetch('/rest/amp-outcome-output/outcomes')
           .then(res => res.json())
           .then(data => setOutcomes(data));
       } else {

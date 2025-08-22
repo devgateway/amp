@@ -17,7 +17,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Api("Amp Outcome Output")
-public class AmpOucComeEndpoints {
+public class AmpOutcomeOutputEndpoints {
     private final AmpOutcomeOutputService service = new AmpOutcomeOutputService();
 
     @GET

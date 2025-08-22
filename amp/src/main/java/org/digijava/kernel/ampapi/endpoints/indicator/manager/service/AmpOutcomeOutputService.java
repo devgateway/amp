@@ -48,6 +48,11 @@ public class AmpOutcomeOutputService {
         }
         output.setOutcomes(outcomes);
         session.save(output);
+        // Ensure bidirectional relationship
+        for (AmpOutcome outcome : outcomes) {
+            outcome.getOutputs().add(output);
+            session.update(outcome);
+        }
         session.flush();
         return toOutputDTO(output);
     }

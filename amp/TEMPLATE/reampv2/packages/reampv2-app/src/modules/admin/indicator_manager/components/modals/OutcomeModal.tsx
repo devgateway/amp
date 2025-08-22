@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import React from 'react';
+import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { Formik, Form as FormikForm, Field } from 'formik';
+import * as Yup from 'yup';
+import styles from './css/IndicatorModal.module.css';
 
 interface AddNewOutcomeModalProps {
   show: boolean;
@@ -10,61 +13,67 @@ interface AddNewOutcomeModalProps {
 }
 
 const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubmit, initialName = '', initialDescription = '' }) => {
-  const [name, setName] = useState(initialName);
-  const [description, setDescription] = useState(initialDescription);
-
-  React.useEffect(() => {
-    setName(initialName);
-    setDescription(initialDescription);
-  }, [initialName, initialDescription, show]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (onSubmit) {
-      onSubmit({ name, description });
-    }
-    setShow(false);
-    setName('');
-    setDescription('');
-  };
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required('Outcome name is required'),
+    description: Yup.string()
+  });
 
   return (
-    <Modal show={show} onHide={() => setShow(false)}>
-      <Modal.Header closeButton>
-        <Modal.Title>Add New Outcome</Modal.Title>
-      </Modal.Header>
-      <Form onSubmit={handleSubmit}>
-        <Modal.Body>
-          <Form.Group controlId="outcomeName">
-            <Form.Label>Outcome Name</Form.Label>
-            <Form.Control
-              type="text"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              required
-              placeholder="Enter outcome name"
-            />
-          </Form.Group>
-          <Form.Group controlId="outcomeDescription" className="mt-3">
-            <Form.Label>Outcome Description (Optional)</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              value={description}
-              onChange={e => setDescription(e.target.value)}
-              placeholder="Enter outcome description"
-            />
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShow(false)}>
-            Cancel
-          </Button>
-          <Button variant="primary" type="submit">
-            Save Outcome
-          </Button>
-        </Modal.Footer>
-      </Form>
+    <Modal show={show} onHide={() => setShow(false)} centered>
+      <Formik
+        initialValues={{ name: initialName, description: initialDescription }}
+        validationSchema={validationSchema}
+        enableReinitialize
+        onSubmit={(values, { resetForm }) => {
+          if (onSubmit) onSubmit(values);
+          setShow(false);
+          resetForm();
+        }}
+      >
+        {({ errors, touched, handleSubmit }) => (
+          <FormikForm onSubmit={handleSubmit} className={styles.indicator_modal_form}>
+            <Modal.Header closeButton>
+              <Modal.Title>Add New Outcome</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form.Group as={Row} controlId="outcomeName">
+                <Form.Label column sm={3}>Outcome Name</Form.Label>
+                <Col sm={9}>
+                  <Field
+                    name="name"
+                    as={Form.Control}
+                    type="text"
+                    placeholder="Enter outcome name"
+                    isInvalid={!!errors.name && touched.name}
+                  />
+                  {errors.name && touched.name && (
+                    <div className="text-danger small mt-1">{errors.name}</div>
+                  )}
+                </Col>
+              </Form.Group>
+              <Form.Group as={Row} controlId="outcomeDescription" className="mt-3">
+                <Form.Label column sm={3}>Description</Form.Label>
+                <Col sm={9}>
+                  <Field
+                    name="description"
+                    as={Form.Control}
+                    rows={3}
+                    placeholder="Enter outcome description"
+                  />
+                </Col>
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShow(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" type="submit">
+                Save Outcome
+              </Button>
+            </Modal.Footer>
+          </FormikForm>
+        )}
+      </Formik>
     </Modal>
   );
 };

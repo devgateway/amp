@@ -10,11 +10,12 @@ interface AddNewOutcomeModalProps {
   onSubmit?: (outcome: { name: string; description?: string }) => void;
   initialName?: string;
   initialDescription?: string;
+  translations: Record<string, string>;
 }
 
-const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubmit, initialName = '', initialDescription = '' }) => {
+const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubmit, initialName = '', initialDescription = '', translations }) => {
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required('Outcome name is required'),
+    name: Yup.string().required(translations['amp.outcomeoutput:outcome-name'] + ' ' + translations['amp.indicatormanager:errors-name-required']),
     description: Yup.string()
   });
 
@@ -33,17 +34,17 @@ const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubm
         {({ errors, touched, handleSubmit }) => (
           <FormikForm onSubmit={handleSubmit} className={styles.indicator_modal_form}>
             <Modal.Header closeButton>
-              <Modal.Title>Add New Outcome</Modal.Title>
+              <Modal.Title>{translations['amp.outcomeoutput:modal-title-outcome']}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Form.Group as={Row} controlId="outcomeName">
-                <Form.Label column sm={3}>Outcome Name</Form.Label>
+                <Form.Label column sm={3}>{translations['amp.outcomeoutput:outcome-name']}</Form.Label>
                 <Col sm={9}>
                   <Field
                     name="name"
                     as={Form.Control}
                     type="text"
-                    placeholder="Enter outcome name"
+                    placeholder={translations['amp.outcomeoutput:outcome-name']}
                     isInvalid={!!errors.name && touched.name}
                   />
                   {errors.name && touched.name && (
@@ -52,23 +53,23 @@ const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubm
                 </Col>
               </Form.Group>
               <Form.Group as={Row} controlId="outcomeDescription" className="mt-3">
-                <Form.Label column sm={3}>Description</Form.Label>
+                <Form.Label column sm={3}>{translations['amp.outcomeoutput:outcome-description']}</Form.Label>
                 <Col sm={9}>
                   <Field
                     name="description"
                     as={Form.Control}
                     rows={3}
-                    placeholder="Enter outcome description"
+                    placeholder={translations['amp.outcomeoutput:outcome-description']}
                   />
                 </Col>
               </Form.Group>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={() => setShow(false)}>
-                Cancel
+                {translations['amp.outcomeoutput:cancel']}
               </Button>
               <Button variant="primary" type="submit">
-                Save Outcome
+                {translations['amp.outcomeoutput:save-outcome']}
               </Button>
             </Modal.Footer>
           </FormikForm>

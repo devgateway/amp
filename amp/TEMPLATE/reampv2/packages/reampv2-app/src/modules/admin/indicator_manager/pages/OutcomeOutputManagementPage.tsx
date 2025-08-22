@@ -70,13 +70,13 @@ const OutcomeOutputManagementPage: React.FC = () => {
 
   const handleAddOutcome = async (outcome: { name: string; description?: string }) => {
     try {
-      const res = await fetch('/amp-outcome-output/outcome', {
+      const res = await fetch('/rest/amp-outcome-output/outcome', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(outcome)
       });
       if (res.ok) {
-        fetch('/amp-outcome-output/outcomes')
+        fetch('/rest/amp-outcome-output/outcomes')
           .then(res => res.json())
           .then(data => setOutcomes(data));
       } else {
@@ -94,7 +94,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch('/amp-outcome-output/output', {
+      const res = await fetch('/rest/amp-outcome-output/output', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(output)
@@ -120,13 +120,13 @@ const OutcomeOutputManagementPage: React.FC = () => {
   const handleSaveEditedOutcome = async (updated: { name: string; description?: string }) => {
     if (!editingOutcome) return;
     try {
-      const res = await fetch(`/amp-outcome-output/outcome/${editingOutcome.id}`, {
+      const res = await fetch(`/rest/amp-outcome-output/outcome/${editingOutcome.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updated)
       });
       if (res.ok) {
-        fetch('/amp-outcome-output/outcomes')
+        fetch('/rest/amp-outcome-output/outcomes')
           .then(res => res.json())
           .then(data => setOutcomes(data));
       } else {
@@ -152,13 +152,13 @@ const OutcomeOutputManagementPage: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch(`/amp-outcome-output/output/${editingOutput.id}`, {
+      const res = await fetch(`/rest/amp-outcome-output/output/${editingOutput.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updated)
       });
       if (res.ok) {
-        fetch('/amp-outcome-output/outcomes')
+        fetch('/rest/amp-outcome-output/outcomes')
           .then(res => res.json())
           .then(data => setOutcomes(data));
       } else {

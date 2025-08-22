@@ -34,16 +34,17 @@ public class AmpOutcomeOutputService {
 
     public AmpOutputDTO createOutput(AmpOutputDTO dto) {
         Session session = PersistenceManager.getSession();
+        if (dto.getOutcomeIds() == null || dto.getOutcomeIds().isEmpty()) {
+            throw new IllegalArgumentException("Output must be linked to at least one Outcome.");
+        }
         AmpOutput output = new AmpOutput();
         output.setName(dto.getName());
         output.setDescription(dto.getDescription());
         Set<AmpOutcome> outcomes = new HashSet<>();
-        if (dto.getOutcomeIds() != null) {
-            for (Long id : dto.getOutcomeIds()) {
-                AmpOutcome outcome = session.get(AmpOutcome.class, id);
-                if (outcome != null) {
-                    outcomes.add(outcome);
-                }
+        for (Long id : dto.getOutcomeIds()) {
+            AmpOutcome outcome = session.get(AmpOutcome.class, id);
+            if (outcome != null) {
+                outcomes.add(outcome);
             }
         }
         output.setOutcomes(outcomes);

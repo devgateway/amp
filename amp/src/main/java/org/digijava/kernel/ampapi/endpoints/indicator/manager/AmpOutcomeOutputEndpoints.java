@@ -50,11 +50,17 @@ public class AmpOutcomeOutputEndpoints {
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "createOutput")
     @ApiOperation(value = "Create output", notes = "Creates a new output")
     public Response createOutput(AmpOutputDTO dto) {
-        if (dto.getOutcomeIds() == null || dto.getOutcomeIds().isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Output must be linked to at least one Outcome.").build();
+        try {
+            if (dto.getOutcomeIds() == null || dto.getOutcomeIds().isEmpty()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Output must be linked to at least one Outcome.").build();
+            }
+            AmpOutputDTO created = service.createOutput(dto);
+            return Response.ok(created).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error creating output.").build();
         }
-        AmpOutputDTO created = service.createOutput(dto);
-        return Response.ok(created).build();
     }
 
     @PUT

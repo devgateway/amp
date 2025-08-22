@@ -48,7 +48,7 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes
       backdropClassName={styles.modal_backdrop}
       backdrop="static"
       keyboard={false}
-      size='md'
+      size='lg'
     >
       <Modal.Header closeButton>
         <Modal.Title>{translations['amp.outcomeoutput:modal-title-output'] || 'Add New Output'}</Modal.Title>

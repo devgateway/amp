@@ -10,10 +10,10 @@ interface AddNewOutcomeModalProps {
   onSubmit?: (outcome: { name: string; description?: string }) => void;
   initialName?: string;
   initialDescription?: string;
-  translations: Record<string, string>;
+  translations?: Record<string, string>;
 }
 
-const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubmit, initialName = '', initialDescription = '', translations }) => {
+const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubmit, initialName = '', initialDescription = '', translations = {} }) => {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(translations['amp.outcomeoutput:outcome-name'] + ' ' + translations['amp.indicatormanager:errors-name-required']),
     description: Yup.string()

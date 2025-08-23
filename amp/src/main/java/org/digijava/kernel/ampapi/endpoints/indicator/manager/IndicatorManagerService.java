@@ -528,7 +528,7 @@ public class IndicatorManagerService {
     public Set<ResponsibleOrgDTO> getResponsibleOrganizations() {
         Session session = PersistenceManager.getSession();
         String sql = "SELECT DISTINCT o.amp_org_id, o.name FROM amp_organisation o  JOIN amp_org_role org_role ON o.amp_org_id = org_role.organisation WHERE org_role.role =(SELECT amp_role_id FROM amp_role WHERE role_code = 'RO' LIMIT 1) ORDER BY o.name;";
-        List<Object[]> results = session.createSQLQuery(sql).list();
+        List<Object[]> results = session.createQuery(sql).list();
         Set<ResponsibleOrgDTO> orgs = new HashSet<>();
         for (Object[] row : results) {
             Long orgId = ((Number) row[0]).longValue();

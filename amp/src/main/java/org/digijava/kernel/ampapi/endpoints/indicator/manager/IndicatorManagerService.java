@@ -516,7 +516,10 @@ public class IndicatorManagerService {
     public List<AmpCategoryValueDTO> getCategoryValues () {
         Session session = PersistenceManager.getSession();
 
-        List <AmpCategoryValue> categoryValues = session.createQuery("select o from " + AmpCategoryValue.class.getName() + " o ").list();
+        List <AmpCategoryValue> categoryValues = session.createQuery("select o from " + AmpCategoryValue.class.getName() + " o "
+                        + "where o.ampCategoryClass.keyName like :keyName")
+                .setString("keyName", "%indicator%")
+                .list();
 
         return categoryValues.stream()
                 .map(AmpCategoryValueDTO::new)

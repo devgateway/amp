@@ -386,7 +386,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             <Modal.Body>
               <div className={styles.viewmodal_wrapper}>
                 {/* Core Indicator Information */}
-                <Row className={styles.view_row}><Col><h5>Core Indicator Information</h5></Col></Row>
+                <Row className={styles.view_row}><Col><h5>{translations["amp.indicatormanager:core-info"]}</h5></Col></Row>
                 <Row className={styles.view_row}>
                   <Form.Group as={Col} className={styles.view_item} controlId="formBasicName">
                     <Form.Label>{translations["amp.indicatormanager:indicator-name"]}</Form.Label>
@@ -405,8 +405,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       {props.errors.name}
                     </Form.Control.Feedback>
                   </Form.Group>
-
-                  <Form.Group className={styles.view_item} controlId="formIndicatorCode">
+                  <Form.Group as={Col} className={styles.view_item} controlId="formIndicatorCode">
                     <Form.Label>{translations["amp.indicatormanager:indicator-code"]}</Form.Label>
                     <Form.Control
                       defaultValue={props.values.code}
@@ -424,15 +423,17 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                   </Form.Group>
                 </Row>
                 <Row className={styles.view_row}>
-                  <Form.Group className={styles.view_one_item} controlId="formBasicDescription">
+                  <Form.Group as={Col} className={styles.view_one_item} controlId="formBasicDescription">
                     <Form.Label>{translations["amp.indicatormanager:indicator-description"]}</Form.Label>
                     <Form.Control
                       defaultValue={props.values.description}
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
                       name="description"
-                      type="text"
+                      as="textarea"
+                      rows={2}
                       className={`${styles.input_field} ${(props.errors.description && props.touched.description) && styles.text_is_invalid}`}
+                      isInvalid={!!props.errors.description}
                       placeholder={translations["amp.indicatormanager:enter-indicator-description"]}
                     />
                     <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
@@ -479,7 +480,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 
                 <Row className={styles.view_row}>
                   <Form.Group className={styles.view_one_item} controlId="formRelevanceForClimateChange">
-                    <Form.Label>Relevance for Climate Change Adaptation</Form.Label>
+                    <Form.Label>{translations["amp.indicatormanager:relevance-for-climate-change"]}</Form.Label>
                     <Form.Control
                       defaultValue={props.values.relevanceForClimateChange}
                       onChange={props.handleChange}
@@ -487,7 +488,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       name="relevanceForClimateChange"
                       type="text"
                       className={styles.input_field}
-                      placeholder="Describe relevance for climate change adaptation"
+                      placeholder={translations["amp.indicatormanager:relevance-for-climate-change"]}
                     />
                   </Form.Group>
                 </Row>
@@ -509,14 +510,14 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                   </Form.Group>
                 </Row>
                 {/* Categorization and Linkage */}
-                <Row className={styles.view_row}><Col><h5>Categorization and Linkage</h5></Col></Row>
+                <Row className={styles.view_row}><Col><h5>{translations["amp.indicatormanager:categorization-linkage-info"] || "Categorization and Linkage"}</h5></Col></Row>
                 <Row className={styles.view_row}>
                   <Form.Group className={styles.view_one_item} controlId="formIndicatorOutcomes">
-                    <Form.Label>Outcome</Form.Label>
+                    <Form.Label>{translations["amp.indicatormanager:outcome"]}</Form.Label>
                     <Select
                       name="outcomeId"
                       options={allOutcomes.map(outcome => ({ value: outcome.id, label: outcome.name }))}
-                      placeholder="Select outcome"
+                      placeholder={translations["amp.indicatormanager:select-outcome"]}
                       onChange={(selectedValue) => {
                         setSelectedOutcomeId(selectedValue ? (selectedValue as { value: number }).value : null);
                         props.setFieldValue('outcomeId', selectedValue ? (selectedValue as { value: number }).value : null);

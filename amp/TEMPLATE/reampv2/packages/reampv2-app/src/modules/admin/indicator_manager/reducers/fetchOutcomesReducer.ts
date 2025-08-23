@@ -45,3 +45,5 @@ export const getOutcomes = () => async (dispatch: Dispatch) => {
     dispatch({ type: FETCH_OUTCOMES_FAILURE, payload: error.message || 'Failed to fetch outcomes' });
   }
 };
+
+export default fetchOutcomesReducer;

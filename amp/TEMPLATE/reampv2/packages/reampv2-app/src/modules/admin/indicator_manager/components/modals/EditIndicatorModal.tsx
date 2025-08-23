@@ -469,7 +469,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
               <Modal.Body>
                 <div className={styles.viewmodal_wrapper}>
                   {/* Core Indicator Information */}
-                  <Row className={styles.view_row}><Col><h5>Core Indicator Information</h5></Col></Row>
+                  <Row className={styles.view_row}><Col><h5>{translations["amp.indicatormanager:core-info"]}</h5></Col></Row>
                   <Row className={styles.view_row}>
                     <Form.Group className={styles.view_item} controlId="formBasicName">
                       <Form.Label>{translations["amp.indicatormanager:indicator-name"]}</Form.Label>
@@ -524,7 +524,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                   </Row>
                   <Row className={styles.view_row}>
                     <Form.Group className={styles.view_one_item} controlId="formRelevanceForClimateChange">
-                      <Form.Label>Relevance for Climate Change Adaptation</Form.Label>
+                      <Form.Label>{translations["amp.indicatormanager:relevance-for-climate-change"]}</Form.Label>
                       <Form.Control
                         defaultValue={props.values.relevanceForClimateChange}
                         onChange={props.handleChange}
@@ -532,7 +532,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         name="relevanceForClimateChange"
                         type="text"
                         className={styles.input_field}
-                        placeholder="Describe relevance for climate change adaptation"
+                        placeholder={translations["amp.indicatormanager:relevance-for-climate-change"]}
                       />
                     </Form.Group>
                   </Row>
@@ -553,10 +553,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     </Form.Group>
                   </Row>
                   {/* Categorization and Linkage */}
-                  <Row className={styles.view_row}><Col><h5>Categorization and Linkage</h5></Col></Row>
+                  <Row className={styles.view_row}><Col><h5>{translations["amp.indicatormanager:categorization-linkage-info"] || "Categorization and Linkage"}</h5></Col></Row>
                   <Row className={styles.view_row}>
                     <Form.Group className={styles.view_item} controlId="formOutcome">
-                      <Form.Label>Outcome</Form.Label>
+                      <Form.Label>{translations["amp.indicatormanager:outcome"]}</Form.Label>
                       <Select
                         name="outcomeId"
                         options={allOutcomes.map(outcome => ({ value: outcome.id, label: outcome.name }))}
@@ -571,7 +571,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       />
                     </Form.Group>
                     <Form.Group className={styles.view_item} controlId="formOutput">
-                      <Form.Label>Output</Form.Label>
+                      <Form.Label>{translations["amp.indicatormanager:output"]}</Form.Label>
                       <Select
                         name="outputId"
                         options={filteredOutputs.map(output => ({ value: output.id, label: output.name }))}
@@ -645,10 +645,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     </Form.Group>
                   </Row>
                   {/* Data Definition and Sourcing */}
-                  <Row className={styles.view_row}><Col><h5>Data Definition and Sourcing</h5></Col></Row>
+                  <Row className={styles.view_row}><Col><h5>{translations["amp.indicatormanager:data-definition-sourcing-info"] || "Data Definition and Sourcing"}</h5></Col></Row>
                   <Row className={styles.view_row}>
                     <Form.Group className={styles.view_item} controlId="formData">
-                      <Form.Label>Data</Form.Label>
+                      <Form.Label>{translations["amp.indicatormanager:data"]}</Form.Label>
                       <Form.Control
                         defaultValue={props.values.data}
                         onChange={props.handleChange}
@@ -656,11 +656,11 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         name="data"
                         type="text"
                         className={styles.input_field}
-                        placeholder="Describe the nature of the data to be collected"
+                        placeholder={translations["amp.indicatormanager:enter-data"]}
                       />
                     </Form.Group>
                     <Form.Group className={styles.view_item} controlId="formDataSource">
-                      <Form.Label>Data Source</Form.Label>
+                      <Form.Label>{translations["amp.indicatormanager:data-source"]}</Form.Label>
                       <Form.Control
                         defaultValue={props.values.dataSource}
                         onChange={props.handleChange}
@@ -668,7 +668,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         name="dataSource"
                         type="text"
                         className={styles.input_field}
-                        placeholder="Specify where the data will be obtained"
+                        placeholder={translations["amp.indicatormanager:enter-data-source"]}
                       />
                     </Form.Group>
                   </Row>

@@ -46,3 +46,4 @@ export const getResponsibleOrgs = () => async (dispatch: Dispatch) => {
   }
 };
 
+export default fetchResponsibleOrgsReducer;

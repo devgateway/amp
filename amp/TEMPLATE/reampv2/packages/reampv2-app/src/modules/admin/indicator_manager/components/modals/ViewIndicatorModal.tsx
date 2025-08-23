@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import React, { useLayoutEffect } from 'react';
-import { Modal, Row, } from 'react-bootstrap';
+import { Modal, Row, Col, Badge } from 'react-bootstrap';
 import backdropStyles from './css/IndicatorModal.module.css';
 import styles from './css/ViewIndicatorModal.module.css';
 import { DefaultComponentProps, IndicatorObjectType, ProgramObjectType, SectorObjectType } from '../../types';
@@ -14,22 +14,26 @@ interface ViewIndicatorModalProps extends DefaultComponentProps {
 }
 
 const colorOptions = [
-  { value: 'ocean', label: 'Ocean', color: '#00B8D9' },
-  { value: 'blue', label: 'Blue', color: '#0052CC' },
-  { value: 'purple', label: 'Purple', color: '#5243AA' },
-  { value: 'red', label: 'Red', color: '#FF5630' },
-  { value: 'orange', label: 'Orange', color: '#FF8B00' },
-  { value: 'yellow', label: 'Yellow', color: '#FFC400' },
-  { value: 'green', label: 'Green', color: '#36B37E' },
-  { value: 'forest', label: 'Forest', color: '#00875A' },
-  { value: 'slate', label: 'Slate', color: '#fffff2' },
-  { value: 'silver', label: 'Silver', color: '#666666' },
+  { value: 'ocean', label: 'Ocean', color: '#00B8D9', textColor: '#ffffff' },
+  { value: 'blue', label: 'Blue', color: '#0052CC', textColor: '#ffffff' },
+  { value: 'purple', label: 'Purple', color: '#5243AA', textColor: '#ffffff' },
+  { value: 'red', label: 'Red', color: '#FF5630', textColor: '#ffffff' },
+  { value: 'orange', label: 'Orange', color: '#FF8B00', textColor: '#000000' },
+  { value: 'yellow', label: 'Yellow', color: '#FFC400', textColor: '#000000' },
+  { value: 'green', label: 'Green', color: '#36B37E', textColor: '#ffffff' },
+  { value: 'forest', label: 'Forest', color: '#00875A', textColor: '#ffffff' },
+  { value: 'slate', label: 'Slate', color: '#96A0A8', textColor: '#ffffff' },
+  { value: 'silver', label: 'Silver', color: '#666666', textColor: '#ffffff' },
 ];
 
 const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
   const { show, setShow, indicator, translations } = props;
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
   const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
+  const categoriesReducer = useSelector((state: any) => state.fetchAmpCategoryReducer);
+  const outcomesReducer = useSelector((state: any) => state.fetchOutcomesReducer);
+  const outputsReducer = useSelector((state: any) => state.fetchOutputsReducer);
+  const responsibleOrgsReducer = useSelector((state: any) => state.fetchResponsibleOrgsReducer);
 
   const handleClose = () => setShow(false);
 
@@ -57,137 +61,290 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [indicator]);
 
+  // Helper functions for lookups
+  const getCategoryLabel = (id: number | undefined) => {
+    if (!id) return translations["amp.indicatormanager:no-data"];
+    const found = categoriesReducer.categories.find((cat: any) => cat.id === id);
+    return found ? found.value : id;
+  };
+  const getOutcomeLabel = (id: number | undefined) => {
+    if (!id) return translations["amp.indicatormanager:no-data"];
+    const found = outcomesReducer.outcomes.find((o: any) => o.id === id);
+    return found ? found.name : id;
+  };
+  const getOutputLabel = (id: number | undefined) => {
+    if (!id) return translations["amp.indicatormanager:no-data"];
+    const found = outputsReducer.outputs.find((o: any) => o.id === id);
+    return found ? found.name : id;
+  };
+  const getResponsibleOrgLabels = (ids: number[] = []) => {
+    if (!ids.length) return [translations["amp.indicatormanager:no-data"]];
+    return ids.map(id => {
+      const found = responsibleOrgsReducer.options.find((org: any) => org.value === id);
+      return found ? found.label : id;
+    });
+  };
+  const getProgramLabel = (id: number | null) => {
+    if (!id) return translations["amp.indicatormanager:no-data"];
+    const found = programsReducer.programs.find((p: any) => p.id === id);
+    return found ? found.name : id;
+  };
+
   return (
-    // this modal wrapper should be a separate component that can be reused since the props are the same
-    <Modal
-      show={show}
-      onHide={handleClose}
-      centered
-      backdropClassName={backdropStyles.modal_backdrop}
-      animation={false}
-      size='lg'
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>{translations["amp.indicatormanager:view-indicator"]}</Modal.Title>
-      </Modal.Header>
-      {indicator ?
-        <Modal.Body>
-          <div className={styles.viewmodal_wrapper}>
-            <Row className={styles.view_row}>
-              <div className={styles.view_item}>
-                <h4>{translations["amp.indicatormanager:view-indicator-id"]}</h4>
-                <p className={styles.value}>{indicator.id}</p>
+      <Modal
+          show={show}
+          onHide={handleClose}
+          centered
+          backdropClassName={backdropStyles.modal_backdrop}
+          animation={false}
+          size='xl'
+          className={styles.view_modal}
+      >
+        <Modal.Header closeButton className={styles.modal_header}>
+          <Modal.Title className={styles.modal_title}>
+            <i className="fas fa-info-circle me-2"></i>
+            {translations["amp.indicatormanager:view-indicator"]}
+          </Modal.Title>
+        </Modal.Header>
+        {indicator ?
+            <Modal.Body className={styles.modal_body}>
+              <div className={styles.viewmodal_wrapper}>
+                {/* Core Indicator Information Section */}
+                <div className={styles.section} style={{borderBottom: '2px solid #e0e0e0', marginBottom: 24, paddingBottom: 16}}>
+                  <h4 className={styles.section_title} style={{color: '#0052CC', fontWeight: 'bold'}}>
+                    <i className="fas fa-info-circle me-2"></i>
+                    {translations["amp.indicatormanager:core-info"] || "Core Indicator Information"}
+                  </h4>
+                  <Row className={styles.view_row}>
+                    <Col md={6} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:indicator-name"]}</b></div>
+                      <div className={`${styles.value} ${styles.important}`}>{indicator.name}</div>
+                    </Col>
+                    <Col md={6} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:indicator-code"]}</b></div>
+                      <div className={styles.value}>{indicator.code}</div>
+                    </Col>
+                  </Row>
+                  <Row className={styles.view_row}>
+                    <Col md={12} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:indicator-description"]}</b></div>
+                      <div className={styles.value} style={{fontStyle: 'italic'}}>
+                        {indicator.description === "" || !indicator.description ?
+                            <span className={styles.no_data}>{translations["amp.indicatormanager:no-description-available"]}</span> :
+                            indicator.description
+                        }
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row className={styles.view_row}>
+                    <Col md={6} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:relevance-for-climate-change"]}</b></div>
+                      <div className={styles.value}>{indicator.relevanceForClimateChange || <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                    </Col>
+                    <Col md={6} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:type"] || "Type"}</b></div>
+                      <div className={styles.value}>{getCategoryLabel(indicator.indicatorType)}</div>
+                    </Col>
+                  </Row>
+                </div>
+
+                {/* Categorization and Linkage Section */}
+                <div className={styles.section} style={{borderBottom: '2px solid #e0e0e0', marginBottom: 24, paddingBottom: 16}}>
+                  <h4 className={styles.section_title} style={{color: '#FF5630', fontWeight: 'bold'}}>
+                    <i className="fas fa-link me-2"></i>
+                    {translations["amp.indicatormanager:categorization-linkage-info"] || "Categorization and Linkage"}
+                  </h4>
+                  <Row className={styles.view_row}>
+                    <Col md={6} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:outcome"]}</b></div>
+                      <div className={styles.value}>{getOutcomeLabel(indicator.outcomeId)}</div>
+                    </Col>
+                    <Col md={6} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:output"]}</b></div>
+                      <div className={styles.value}>{getOutputLabel(indicator.outputId)}</div>
+                    </Col>
+                  </Row>
+                  <Row className={styles.view_row}>
+                    <Col md={12} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:logframe-links"] || "Link to Logframe (Program)"}</b></div>
+                      <div className={styles.value}>{getProgramLabel(indicator.programId)}</div>
+                    </Col>
+                  </Row>
+                  <Row className={styles.view_row}>
+                    <Col md={12} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:sectors"]}</b></div>
+                      <div className={styles.value}>
+                        {sectorData.length > 0 ? (
+                          <ul style={{ paddingLeft: '1.2em', marginBottom: 0 }}>
+                            {sectorData.map((sector) => (
+                              <li key={sector.id}>{sector.name}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>
+                        )}
+                      </div>
+                    </Col>
+                  </Row>
+                </div>
+
+                {/* Data Definition and Sourcing Section */}
+                <div className={styles.section} style={{borderBottom: '2px solid #e0e0e0', marginBottom: 24, paddingBottom: 16}}>
+                  <h4 className={styles.section_title} style={{color: '#36B37E', fontWeight: 'bold'}}>
+                    <i className="fas fa-database me-2"></i>
+                    {translations["amp.indicatormanager:data"] || "Data Definition and Sourcing"}
+                  </h4>
+                  <Row className={styles.view_row}>
+                    <Col md={6} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:data"]}</b></div>
+                      <div className={styles.value}>{indicator.data || <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                    </Col>
+                    <Col md={6} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:data-source"]}</b></div>
+                      <div className={styles.value}>{indicator.dataSource || <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                    </Col>
+                  </Row>
+                  <Row className={styles.view_row}>
+                    <Col md={6} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:disaggregation"]}</b></div>
+                      <div className={styles.value}>
+                        {indicator.disaggregation && indicator.disaggregation.length > 0 ? (
+                          <ul style={{ paddingLeft: '1.2em', marginBottom: 0 }}>
+                            {indicator.disaggregation.map((item: any, idx: number) => (
+                              <li key={idx}>{getCategoryLabel(item)}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>
+                        )}
+                      </div>
+                    </Col>
+                    <Col md={6} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:unit-of-measure"]}</b></div>
+                      <div className={styles.value}>{getCategoryLabel(indicator.unitOfMeasure)}</div>
+                    </Col>
+                  </Row>
+                  <Row className={styles.view_row}>
+                    <Col md={12} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:calculation-method"]}</b></div>
+                      <div className={styles.value}>{indicator.calculationMethod || <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                    </Col>
+                  </Row>
+                </div>
+
+                {/* Responsibility and Frequency Section */}
+                <div className={styles.section} style={{borderBottom: '2px solid #e0e0e0', marginBottom: 24, paddingBottom: 16}}>
+                  <h4 className={styles.section_title} style={{color: '#5243AA', fontWeight: 'bold'}}>
+                    <i className="fas fa-users me-2"></i>
+                    {translations["amp.indicatormanager:responsibility-frequency-info"] || "Responsibility and Frequency"}
+                  </h4>
+                  <Row className={styles.view_row}>
+                    <Col md={6} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:responsible-organizations"]}</b></div>
+                      <div className={styles.value}>
+                        {indicator.responsibleOrganizations && indicator.responsibleOrganizations.length > 0 ? (
+                          <ul style={{ paddingLeft: '1.2em', marginBottom: 0 }}>
+                            {getResponsibleOrgLabels(indicator.responsibleOrganizations).map((org, idx) => (
+                              <li key={idx}>{org}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>
+                        )}
+                      </div>
+                    </Col>
+                    <Col md={6} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:frequency"]}</b></div>
+                      <div className={styles.value}>{getCategoryLabel(indicator.frequency)}</div>
+                    </Col>
+                  </Row>
+                </div>
+
+                {/* Value Tracking Section */}
+                <div className={styles.section} style={{borderBottom: '2px solid #e0e0e0', marginBottom: 24, paddingBottom: 16}}>
+                  <h4 className={styles.section_title} style={{color: '#36B37E', fontWeight: 'bold'}}>
+                    <i className="fas fa-chart-line me-2"></i>
+                    {translations["amp.indicatormanager:value-tracking"] || "Value Tracking"}
+                  </h4>
+                  <Row className={styles.view_row}>
+                    <Col md={6} className={styles.section} style={{borderRight: '1px solid #e0e0e0', paddingRight: 16}}>
+                      <h5 className={styles.section_title} style={{color: '#36B37E', fontWeight: 'bold'}}>
+                        <i className="fas fa-chart-line me-2"></i>
+                        {translations["amp.indicatormanager:base-values"]}
+                      </h5>
+                      <div className={styles.view_item}>
+                        <div className={styles.label}>{translations["amp.indicatormanager:original-base-value"]}</div>
+                        <div className={styles.value}>{indicator.base?.originalValue ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                      </div>
+                      <div className={styles.view_item}>
+                        <div className={styles.label}>{translations["amp.indicatormanager:original-value-date"]}</div>
+                        <div className={styles.value}>{indicator.base?.originalValueDate ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                      </div>
+                      <div className={styles.view_item}>
+                        <div className={styles.label}>{translations["amp.indicatormanager:revised-value"]}</div>
+                        <div className={styles.value}>{indicator.base?.revisedValue ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                      </div>
+                      <div className={styles.view_item}>
+                        <div className={styles.label}>{translations["amp.indicatormanager:revised-value-date"]}</div>
+                        <div className={styles.value}>{indicator.base?.revisedValueDate ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                      </div>
+                    </Col>
+                    <Col md={6} className={styles.section} style={{paddingLeft: 16}}>
+                      <h5 className={styles.section_title} style={{color: '#FF8B00', fontWeight: 'bold'}}>
+                        <i className="fas fa-bullseye me-2"></i>
+                        {translations["amp.indicatormanager:target-values"]}
+                      </h5>
+                      <div className={styles.view_item}>
+                        <div className={styles.label}>{translations["amp.indicatormanager:target-value"]}</div>
+                        <div className={styles.value}>{indicator.target?.originalValue ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                      </div>
+                      <div className={styles.view_item}>
+                        <div className={styles.label}>{translations["amp.indicatormanager:target-value-date"]}</div>
+                        <div className={styles.value}>{indicator.target?.originalValueDate ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                      </div>
+                      <div className={styles.view_item}>
+                        <div className={styles.label}>{translations["amp.indicatormanager:revised-value"]}</div>
+                        <div className={styles.value}>{indicator.target?.revisedValue ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                      </div>
+                      <div className={styles.view_item}>
+                        <div className={styles.label}>{translations["amp.indicatormanager:revised-value-date"]}</div>
+                        <div className={styles.value}>{indicator.target?.revisedValueDate ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                      </div>
+                    </Col>
+                  </Row>
+                </div>
+
+                {/* Other Considerations Section */}
+                <div className={styles.section} style={{marginTop: 24}}>
+                  <h4 className={styles.section_title} style={{color: '#FF5630', fontWeight: 'bold'}}>
+                    <i className="fas fa-ellipsis-h me-2"></i>
+                    {translations["amp.indicatormanager:other-considerations"] || "Other Considerations"}
+                  </h4>
+                  <Row className={styles.view_row}>
+                    <Col md={6} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:table-header-creation-date"]}</b></div>
+                      <div className={styles.value}>{indicator.creationDate}</div>
+                    </Col>
+                    <Col md={6} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:ascending"]}</b></div>
+                      <div className={styles.value}>
+                        <Badge content={indicator.ascending ? "success" : "secondary"} style={{fontWeight: 'bold'}}>
+                          {indicator.ascending ? translations["amp.indicatormanager:yes"] : translations["amp.indicatormanager:no"]}
+                        </Badge>
+                      </div>
+                    </Col>
+                  </Row>
+                </div>
               </div>
-              <div className={styles.view_item}>
-                <h4 className={styles.label}>{translations["amp.indicatormanager:indicator-name"]}</h4>
-                <p className={styles.value}>{indicator.name}</p>
+            </Modal.Body> :
+            <Modal.Body>
+              <div className={styles.error_state}>
+                <i className="fas fa-exclamation-triangle"></i>
+                <h3>{translations["amp.indicatormanager:view-error"]}</h3>
               </div>
-            </Row>
-            <Row className={styles.view_row}>
-              <div className={styles.view_item}>
-                <h4>{translations["amp.indicatormanager:indicator-code"]}</h4>
-                <p className={styles.value}>{indicator.code}</p>
-              </div>
-              <div className={styles.view_item}>
-                <h4 className={styles.label}>{translations["amp.indicatormanager:indicator-description"]}</h4>
-                <p className={styles.value}>{indicator.description  === "" || '' ? translations["amp.indicatormanager:no-description-available"]: indicator.description}</p>
-              </div>
-            </Row>
-
-            <Row className={styles.view_row}>
-              <div className={styles.view_item}>
-                <h4 className={styles.label}>{translations["amp.indicatormanager:ascending"]}</h4>
-                <p className={styles.value}>{indicator.ascending ? 'True' : 'False'}</p>
-              </div>
-
-              <div className={styles.view_item}>
-                <h4 className={styles.label}>{translations["amp.indicatormanager:table-header-creation-date"]}</h4>
-                <p className={styles.value}>{indicator.creationDate}</p>
-              </div>
-            </Row>
-
-            <Row className={styles.view_row_full}>
-              <h4 className={styles.label}>{translations["amp.indicatormanager:sectors"]}</h4>
-              <div className={styles.value}>
-                {sectorData.length > 0 ? sectorData.map((sector) => (
-                  <p style={{
-                    backgroundColor: colorOptions[sector.id % 10].color,
-                  }} className={styles.array_item} key={sector.id}>{sector.name}</p>
-                )) :
-                  <p>{translations["amp.indicatormanager:no-data"]}</p>
-                }
-              </div>
-
-            </Row>
-
-            <Row className={styles.view_row_full}>
-              <h4 className={styles.label}>{translations["amp.indicatormanager:programs"]}</h4>
-              {programData.length > 0 ? programData.map((program) => (
-                <p className={styles.array_item} key={program.id}>{program.name}</p>
-              )) :
-                <p>{translations["amp.indicatormanager:no-data"]}</p>
-              }
-            </Row>
-
-            <div>
-              <h4 className={styles.header_text}>{translations["amp.indicatormanager:base-values"]}</h4>
-              <Row className={styles.view_row}>
-                <div className={styles.view_item}>
-                  <h5>{translations["amp.indicatormanager:original-base-value"]}</h5>
-                  <p className={styles.value}>{indicator.base?.originalValue ?? translations["amp.indicatormanager:no-data"]}</p>
-                </div>
-                <div className={styles.view_item}>
-                  <h5>{translations["amp.indicatormanager:original-value-date"]}</h5>
-                  <p className={styles.value}>{indicator.base?.originalValueDate ?? translations["amp.indicatormanager:no-data"]}</p>
-                </div>
-              </Row>
-
-              <Row className={styles.view_row}>
-                <div className={styles.view_item}>
-                  <h5>{translations["amp.indicatormanager:revised-value"]}</h5>
-                  <p className={styles.value}>{indicator.base?.revisedValue ?? translations["amp.indicatormanager:no-data"]}</p>
-                </div>
-                <div className={styles.view_item}>
-                  <h5>{translations["amp.indicatormanager:revised-value-date"]}</h5>
-                  <p className={styles.value}>{indicator.base?.revisedValueDate ?? translations["amp.indicatormanager:no-data"]}</p>
-                </div>
-              </Row>
-            </div>
-
-            <div>
-              <h4 className={styles.header_text}>{translations["amp.indicatormanager:target-values"]}</h4>
-              <Row className={styles.view_row}>
-                <div className={styles.view_item}>
-                  <h5>{translations["amp.indicatormanager:target-value"]}</h5>
-                  <p className={styles.value}>{indicator.target?.originalValue ?? translations["amp.indicatormanager:no-data"]}</p>
-                </div>
-                <div className={styles.view_item}>
-                  <h5>{translations["amp.indicatormanager:target-value-date"]}</h5>
-                  <p className={styles.value}>{indicator.target?.originalValueDate ?? translations["amp.indicatormanager:no-data"]}</p>
-                </div>
-              </Row>
-
-              <Row className={styles.view_row}>
-                <div className={styles.view_item}>
-                  <h5>{translations["amp.indicatormanager:revised-value"]}</h5>
-                  <p className={styles.value}>{indicator.target?.revisedValue ?? translations["amp.indicatormanager:no-data"]}</p>
-                </div>
-                <div className={styles.view_item}>
-                  <h5>{translations["amp.indicatormanager:revised-value-date"]}</h5>
-                  <p className={styles.value}>{indicator.target?.revisedValueDate ?? translations["amp.indicatormanager:no-data"]}</p>
-                </div>
-              </Row>
-            </div>
-
-
-          </div>
-        </Modal.Body> :
-          <Modal.Body>
-            <h3>{translations["amp.indicatormanager:view-error"]}</h3>
-          </Modal.Body>
-      }
-
-    </Modal>
+            </Modal.Body>
+        }
+      </Modal>
   );
 };
 

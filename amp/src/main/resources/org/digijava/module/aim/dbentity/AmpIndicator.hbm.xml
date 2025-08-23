@@ -49,5 +49,24 @@
 				<one-to-many class="org.digijava.module.aim.dbentity.IndicatorConnection"/>
 		</set>
 
+		<many-to-one name="outcome" column="outcome_id" class="org.digijava.module.aim.dbentity.AmpOutcome" cascade="none" />
+		<many-to-one name="output" column="output_id" class="org.digijava.module.aim.dbentity.AmpOutput" cascade="none" />
+		<property name="relevanceForClimateChange" column="relevance_for_climate_change" type="java.lang.String" />
+		<many-to-one name="indicatorType" column="indicator_type_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+		<property name="data" column="data" type="java.lang.String" />
+		<property name="dataSource" column="data_source" type="java.lang.String" />
+		<set name="disaggregation" table="AMP_INDICATOR_DISAGGREGATION" lazy="true" cascade="none">
+            <cache usage="read-write" />
+            <key column="indicator_id" />
+            <many-to-many class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" column="category_value_id" />
+        </set>
+        <many-to-one name="unitOfMeasure" column="unit_of_measure_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+        <property name="calculationMethod" column="calculation_method" type="java.lang.String" />
+        <set name="responsibleOrganizations" table="AMP_INDICATOR_ORGANIZATION" lazy="true" cascade="none">
+            <cache usage="read-write" />
+            <key column="indicator_id" />
+            <many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="organization_id" />
+        </set>
+        <many-to-one name="frequency" column="frequency_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 	</class>
 </hibernate-mapping>

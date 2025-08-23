@@ -58,3 +58,236 @@
 .filter_select {
     width: 350px;
 }
+/* Table.module.css - Improved Styles */
+
+.actions_container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.action_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.action_button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.export_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.export_button:hover {
+    background-color: #5a6268;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.filters_container {
+    background-color: #d8e0e2; /* Changed to requested color */
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #c8d0d2;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.filters_header {
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #c0c8ca;
+}
+
+.filters_header h5 {
+    margin: 0;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.filter_item, .search_item {
+    margin-bottom: 12px;
+}
+
+.filter_label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #2c3e50;
+    font-size: 0.875rem;
+}
+
+.filter_select {
+    width: 100%;
+}
+
+.filter_select :global(.react-select__control) {
+    min-height: 38px;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    box-shadow: none;
+    background-color: white;
+}
+
+.filter_select :global(.react-select__control:hover) {
+    border-color: #80bdff;
+}
+
+.filter_select :global(.react-select__control--is-focused) {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.filter_select :global(.react-select__value-container) {
+    padding: 2px 8px;
+}
+
+.filter_select :global(.react-select__placeholder) {
+    color: #6c757d;
+}
+
+.filter_select :global(.react-select__menu) {
+    z-index: 10;
+}
+
+.search_wrapper {
+    position: relative;
+}
+
+.search_bar {
+    width: 100%;
+    padding: 8px 12px 8px 36px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    background-color: white;
+}
+
+.search_bar:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.search_icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .actions_container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .action_button, .export_button {
+        flex: 1;
+        min-width: 140px;
+        margin-right: 8px;
+        margin-bottom: 8px;
+    }
+
+    .filters_container {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .actions_container {
+        flex-direction: column;
+    }
+
+    .action_button, .export_button {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .filter_item, .search_item {
+        margin-bottom: 16px;
+    }
+
+    .filter_select :global(.react-select__control) {
+        min-height: 42px;
+    }
+}
+
+/* Dark mode support - adjusted for the new background */
+@media (prefers-color-scheme: dark) {
+    .filters_container {
+        background-color: #d8e0e2; /* Keep the same color in dark mode */
+        border-color: #b8c0c2;
+    }
+
+    .filters_header {
+        border-bottom-color: #b8c0c2;
+    }
+
+    .filters_header h5 {
+        color: #2c3e50;
+    }
+
+    .filter_label {
+        color: #2c3e50;
+    }
+
+    .filter_select :global(.react-select__control) {
+        background-color: white;
+        border-color: #ced4da;
+        color: #495057;
+    }
+
+    .filter_select :global(.react-select__single-value) {
+        color: #495057;
+    }
+
+    .filter_select :global(.react-select__menu) {
+        background-color: white;
+    }
+
+    .filter_select :global(.react-select__option) {
+        background-color: white;
+        color: #495057;
+    }
+
+    .filter_select :global(.react-select__option--is-focused) {
+        background-color: #f8f9fa;
+    }
+
+    .search_bar {
+        background-color: white;
+        border-color: #ced4da;
+        color: #495057;
+    }
+
+    .search_bar::placeholder {
+        color: #6c757d;
+    }
+
+    .search_icon {
+        color: #6c757d;
+    }
+}

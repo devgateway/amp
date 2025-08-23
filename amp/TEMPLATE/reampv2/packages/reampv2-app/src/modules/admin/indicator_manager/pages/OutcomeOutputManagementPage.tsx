@@ -4,11 +4,15 @@ import BootstrapTable, { PaginationOptions } from '@musicstory/react-bootstrap-t
 import '@musicstory/react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 import styles from '../components/table/Table.module.css';
 import OutcomeModal from '../components/modals/OutcomeModal';
-import OutputModal from '../components/modals/OutputModal';
+import action_style from '../components/table/IndicatorTable.module.css';
 import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from '@murasoftware/react-bootstrap-table2-toolkit';
 import paginationFactory from '@musicstory/react-bootstrap-table2-paginator';
 import initialTranslations from '../config/initialTranslations.json';
 import './css/ModalZIndexFix.css'; // Add z-index to modal and backdrop to ensure visibility
+import Swal from 'sweetalert2';
+import {useNavigate} from "react-router-dom";
+import {useSelector, useDispatch} from "react-redux";
+import {getOutcomes} from "../reducers/fetchOutcomesReducer";
 
 interface Outcome {
   id: number;
@@ -28,25 +32,13 @@ const translations = initialTranslations;
 const OutcomeOutputManagementPage: React.FC = () => {
   const [showAddNewOutcomeModal, setShowAddNewOutcomeModal] = useState(false);
   const [showEditOutcomeModal, setShowEditOutcomeModal] = useState(false);
-  const [showAddNewOutputModal, setShowAddNewOutputModal] = useState(false);
-  const [showEditOutputModal, setShowEditOutputModal] = useState(false);
   const [editingOutcome, setEditingOutcome] = useState<Outcome | null>(null);
-  const [editingOutput, setEditingOutput] = useState<Output & { outcomes?: Outcome[] } | null>(null);
-  const [loadingEditOutput, setLoadingEditOutput] = useState(false);
-  const [outcomes, setOutcomes] = useState<Outcome[]>([]);
+  const outcomes = useSelector((state: any) => state.fetchOutcomesReducer).outcomes;
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log('Add Outcome Modal State:', showAddNewOutcomeModal);
-  }, [showAddNewOutcomeModal]);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log('Edit Outcome Modal State:', showAddNewOutputModal);
-  }, [showAddNewOutputModal]);
-  useEffect(() => {
-    fetch('/rest/amp-outcome-output/outcomes')
-      .then(res => res.json())
-      .then(data => setOutcomes(data));
-  }, []);
+
 
   const columns = [
     {
@@ -58,27 +50,32 @@ const OutcomeOutputManagementPage: React.FC = () => {
       text: 'Actions',
       formatter: (_: any, row: Outcome) => (
         <>
-          <Button
-            size="sm"
-            variant="outline-primary"
-            onClick={() => handleEditOutcome(row)}
+          <div className={action_style.action_container}
           >
-            Edit
-          </Button>
-          {' '}
-          <Button
-            size="sm"
-            variant="outline-danger"
-            onClick={() => handleDeleteOutcome(row)}
+            <i
+               onClick={() => handleEditOutcome(row)}
+               style={{ fontSize: 20, color: '#198754' }}
+               className="fa fa-pencil"
+               aria-hidden="true"
+            />
+          </div>
+          <div className={action_style.action_container}
           >
-            Delete
-          </Button>
+            <i className="fa fa-trash"
+               style={{ fontSize: 20, color: '#dc3545' }}
+               aria-hidden="true"
+               onClick={() => handleDeleteOutcome(row)}
+
+            />
+          </div>
         </>
       ),
       headerStyle: { width: '160px' },
       align: 'center',
     },
   ];
+
+
 
   const handleAddOutcome = async (outcome: { name: string; description?: string }) => {
     try {
@@ -88,9 +85,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
         body: JSON.stringify(outcome)
       });
       if (res.ok) {
-        fetch('/rest/amp-outcome-output/outcomes')
-          .then(res => res.json())
-          .then(data => setOutcomes(data));
+        dispatch(getOutcomes());
       } else {
         alert('Failed to add outcome');
       }
@@ -100,29 +95,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
     }
   };
 
-  const handleAddOutput = async (output: { name: string; description?: string; outcomeIds: number[] }) => {
-    if (!output.outcomeIds || output.outcomeIds.length === 0) {
-      alert('You must associate the output with at least one outcome.');
-      return;
-    }
-    try {
-      const res = await fetch('/rest/amp-outcome-output/output', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(output)
-      });
-      if (res.ok) {
-        fetch('/rest/amp-outcome-output/outcomes')
-          .then(res => res.json())
-          .then(data => setOutcomes(data));
-      } else {
-        alert('Failed to add output');
-      }
-    } catch (e) {
-      console.error('Error adding output', e);
-      alert('Error adding output');
-    }
-  };
+
 
   const handleEditOutcome = (outcome: Outcome) => {
     setEditingOutcome(outcome);
@@ -138,9 +111,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
         body: JSON.stringify(updated)
       });
       if (res.ok) {
-        fetch('/rest/amp-outcome-output/outcomes')
-          .then(res => res.json())
-          .then(data => setOutcomes(data));
+        dispatch(getOutcomes());
       } else {
         alert('Failed to update outcome');
       }
@@ -152,78 +123,58 @@ const OutcomeOutputManagementPage: React.FC = () => {
     setEditingOutcome(null);
   };
 
-  const handleEditOutput = async (output: Output, parentOutcomeIds: number[]) => {
-    setLoadingEditOutput(true);
-    try {
-      const res = await fetch(`/rest/amp-outcome-output/output/${output.id}`);
-      if (res.ok) {
-        const data = await res.json();
-        setEditingOutput({
-          id: data.id,
-          name: data.name,
-          description: data.description,
-          outcomes: data.outcomes || []
+
+
+
+  const handleDeleteOutcome = async (outcome: Outcome) => {
+    // Call backend delete endpoint directly, and display any error/warning returned
+    const confirm = await Swal.fire({
+      icon: 'warning',
+      title: 'Delete Outcome?',
+      html: `<div>Are you sure you want to delete outcome: <b>${outcome.name}</b>?<br/>This action cannot be undone.</div>`,
+      showCancelButton: true,
+      confirmButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+    });
+    if (confirm.isConfirmed) {
+      try {
+        const res = await fetch(`/rest/amp-outcome-output/outcome/delete/${outcome.id}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' }
         });
-        setShowEditOutputModal(true);
-      } else {
-        alert('Failed to fetch output details');
+        if (res.ok) {
+          dispatch(getOutcomes());
+        } else {
+          // Show backend error message (alerts/warnings)
+          const error = await res.json();
+          let errorMsg = 'An error occurred while deleting the outcome.';
+          if (error && error.error) {
+            const firstKey = Object.keys(error.error)[0];
+            if (firstKey && error.error[firstKey] && error.error[firstKey][0]) {
+              errorMsg = error.error[firstKey][0];
+            }
+          }
+          await Swal.fire({
+            icon: 'error',
+            title: 'Cannot Delete Outcome',
+            html: errorMsg
+          });
+        }
+      } catch (e) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error deleting outcome',
+          text: 'An unexpected error occurred.'
+        });
       }
-    } catch (e) {
-      alert('Error fetching output details');
-    }
-    setLoadingEditOutput(false);
-  };
-
-  const handleSaveEditedOutput = async (updated: { name: string; description?: string; outcomeIds: number[] }) => {
-    if (!editingOutput) return;
-    if (!updated.outcomeIds || updated.outcomeIds.length === 0) {
-      alert('You must associate the output with at least one outcome.');
-      return;
-    }
-    try {
-      const res = await fetch(`/rest/amp-outcome-output/output/${editingOutput.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updated)
-      });
-      if (res.ok) {
-        fetch('/rest/amp-outcome-output/outcomes')
-          .then(res => res.json())
-          .then(data => setOutcomes(data));
-      } else {
-        alert('Failed to update output');
-      }
-    } catch (e) {
-      alert('Error updating output');
-    }
-    setShowEditOutputModal(false);
-    setEditingOutput(null);
-  };
-
-  const handleDeleteOutcome = (outcome: Outcome) => {
-    // TODO: Implement delete logic (e.g., update state or call backend)
-    if (window.confirm(`Are you sure you want to delete outcome: ${outcome.name}?`)) {
-      console.log('Delete Outcome:', outcome);
-      // Implement actual delete logic here
     }
   };
-
-  // For linking outputs, pass only id and name of outcomes
-  const outcomeOptions = outcomes.map(o => ({ id: o.id, name: o.name }));
 
   const expandRow = {
     renderer: (row: Outcome) => (
       <div style={{ marginLeft: '1rem' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <strong>{row.name}</strong>
-          <Button
-            size="sm"
-            variant="outline-primary"
-            style={{ marginLeft: '1rem' }}
-            onClick={() => handleEditOutcome(row)}
-          >
-            Edit
-          </Button>
         </div>
         {row.description && (
           <div style={{ fontStyle: 'italic', marginBottom: '0.5rem' }}>
@@ -236,22 +187,6 @@ const OutcomeOutputManagementPage: React.FC = () => {
             <li key={output.id} style={{ marginBottom: '0.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <strong>{output.name}</strong>
-                <Button
-                  size="sm"
-                  variant="outline-primary"
-                  style={{ marginLeft: '1rem' }}
-                  onClick={() => handleEditOutput(output, [row.id])}
-                >
-                  Edit
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline-danger"
-                  style={{ marginLeft: '0.5rem' }}
-                  onClick={() => {/* TODO: Implement delete output logic */}}
-                >
-                  Delete
-                </Button>
               </div>
               {output.description && (
                 <div style={{ fontStyle: 'italic', marginBottom: '0.5rem', marginLeft: '1rem' }}>
@@ -299,25 +234,16 @@ const OutcomeOutputManagementPage: React.FC = () => {
         initialDescription={editingOutcome?.description || ''}
         translations={translations}
       />
-      <OutputModal
-        show={showAddNewOutputModal}
-        setShow={setShowAddNewOutputModal}
-        outcomes={outcomeOptions}
-        onSubmit={handleAddOutput}
-        translations={translations}
-      />
-      <OutputModal
-        show={showEditOutputModal}
-        setShow={setShowEditOutputModal}
-        outcomes={outcomeOptions}
-        onSubmit={handleSaveEditedOutput}
-        initialName={editingOutput?.name || ''}
-        initialDescription={editingOutput?.description || ''}
-        initialOutcomes={editingOutput?.outcomes || []}
-        translations={translations}
-        loading={loadingEditOutput}
-      />
       <Col sm={12}>
+        <Row className={styles.table_header}>
+          <Col sm={6}>
+            <h3>Outcome Management</h3>
+          </Col>
+          <Col sm={6}>
+
+
+          </Col>
+        </Row>
         <ToolkitProvider
           keyField="id"
           data={outcomes}
@@ -327,23 +253,12 @@ const OutcomeOutputManagementPage: React.FC = () => {
         >
           {(props: ToolkitContextType) => (
             <div>
-              <Row className={styles.table_header}>
-                <Col sm={6}>
-                  <h3>{translations['amp.outcomeoutput:management-title']}</h3>
-                </Col>
-                <Col sm={6}>
-                  <hr />
-                </Col>
-              </Row>
               <Row sm={12} className={styles.table_header_bottom}>
                 <Col sm={4}>
                   <div className={styles.table_header_bottom_left}>
-                    <Button variant="primary" onClick={() => {console.log('Add Outcome Clicked'); setShowAddNewOutcomeModal(true);}}>
-                      <i className="fa fa-plus" /> {translations['amp.outcomeoutput:add-new-outcome']}
-                    </Button>
                     {' '}
-                    <Button variant="primary" onClick={() => {console.log('Add Output Clicked'); setShowAddNewOutputModal(true);}}>
-                      <i className="fa fa-plus" /> {translations['amp.outcomeoutput:add-new-output']}
+                    <Button variant="primary" onClick={() => setShowAddNewOutcomeModal(true)}>
+                      <i className="fa fa-plus" /> Add New Outcome
                     </Button>
                     {' '}
                     <ExportCSVButton {...props.csvProps} className={styles.export_button}>
@@ -352,11 +267,15 @@ const OutcomeOutputManagementPage: React.FC = () => {
                   </div>
                 </Col>
                 <Col sm={8}>
-                  <div className={styles.table_header_bottom_right}>
                     <div className={styles.search_container}>
                       <SearchBar {...props.searchProps} placeholder={translations['amp.outcomeoutput:search-placeholder']} />
                     </div>
-                  </div>
+                  <Button variant="info" onClick={() => navigate('/admin/indicator_manager/output-management')} style={{ float: 'right', marginLeft: '10px' }}>
+                    <i className="fa fa-share" /> Output Management
+                  </Button>
+                  <Button variant="secondary" onClick={() => navigate('/admin/indicator_manager')} style={{ float: 'right', marginLeft: '10px' }}>
+                    <i className="fa fa-arrow-left" /> Back
+                  </Button>
                 </Col>
               </Row>
               <hr />
@@ -367,11 +286,16 @@ const OutcomeOutputManagementPage: React.FC = () => {
                 headerClasses={styles.table_header_titles}
                 bodyClasses={styles.table_body}
                 pagination={paginationFactory(paginationOptions)}
+                noDataIndication={() => (
+                    <div className={styles.no_data}>
+                      <h5>{translations['amp.indicatormanager:no-data']}</h5>
+                    </div>
+                )}
               />
             </div>
           )}
         </ToolkitProvider>
-      </Col >
+      </Col>
     </>
   );
 };

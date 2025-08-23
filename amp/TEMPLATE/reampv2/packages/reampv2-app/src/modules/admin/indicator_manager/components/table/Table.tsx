@@ -35,6 +35,9 @@ interface SkeletonTableProps extends DefaultComponentProps {
   programs?: ProgramObjectType[];
   setSelectedSector: React.Dispatch<React.SetStateAction<number>>;
   setSelectedProgram: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedOutcome: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedOutput: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedIndicatorType: React.Dispatch<React.SetStateAction<number>>;
   filterBySector: boolean;
   filterByProgram: boolean;
 }
@@ -73,6 +76,9 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
     sectors,
     setSelectedSector,
     setSelectedProgram,
+    setSelectedOutcome,
+    setSelectedOutput,
+    setSelectedIndicatorType,
     translations,
     filterBySector,
     filterByProgram,
@@ -81,6 +87,9 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
   const dispatch = useDispatch();
   const programSchemeReducer = useSelector((state: any) => state.fetchProgramsReducer);
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
+  const outcomesReducer = useSelector((state: any) => state.fetchOutcomesReducer);
+  const categoriesReducer = useSelector((state: any) => state.fetchAmpCategoryReducer);
+  const outputsReducer = useSelector((state: any) => state.fetchOutputsReducer);
   const programConfiguration: ProgramSchemeType [] = programSchemeReducer.programSchemes;
 
   const sizePerPage: number = useSelector((state: any) => state.fetchIndicatorsReducer.sizePerPage);
@@ -108,6 +117,19 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
     label: translations['amp.indicatormanager:all-sectors']
   }]);
 
+  const [outcomeOptions, setOutcomeOptions] = useState<SelectValue[]>([{
+    value: 0,
+    label: translations['amp.indicatormanager:all-outcomes']
+  }]);
+  const [outputOptions, setOutputOptions] = useState<SelectValue[]>([{
+    value: 0,
+    label: translations['amp.indicatormanager:all-outputs']
+  }]);
+  const [indicatorTypeOptions, setIndicatorTypeOptions] = useState<SelectValue[]>([{
+    value: 0,
+    label: translations['amp.indicatormanager:all-indicator-types']
+  }]);
+
   const showAddNewIndicatorModalHandler = () => {
     setShowAddNewIndicatorModal(true);
   };
@@ -116,16 +138,40 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
     const formatPrograms = formatProgramSchemeToSelect(programConfiguration);
     setProgramOptions(prevState => [...prevState, ...formatPrograms]);
 
+    if (sectors) {
+      const formatSectors = sectors.map((sector) => ({
+        value: sector.id,
+        label: sector.name,
+      }));
+      setSectorOptions(prevState => [...prevState, ...formatSectors]);
+    }
 
-     if (sectors) {
-       const formatSectors = sectors.map((sector) => ({
-            value: sector.id,
-            label: sector.name,
-       }));
+    // Set outcome options from Redux
+    if (outcomesReducer && outcomesReducer.outcomes) {
+      const formattedOutcomes = outcomesReducer.outcomes.map((outcome: any) => ({
+        value: outcome.id,
+        label: outcome.name,
+      }));
+      setOutcomeOptions([{ value: 0, label: translations['amp.indicatormanager:all-outcomes'] }, ...formattedOutcomes]);
+    }
 
-       setSectorOptions(prevState => [...prevState, ...formatSectors]);
-     }
-  }, []);
+    if (outputsReducer && outputsReducer.outputs) {
+      const formattedOutputs = outputsReducer.outputs.map((output: any) => ({
+        value: output.id,
+        label: output.name,
+      }));
+      setOutputOptions([{ value: 0, label: translations['amp.indicatormanager:all-outputs'] }, ...formattedOutputs]);
+    }
+
+    // Set indicator type options from Redux
+    if (categoriesReducer && categoriesReducer.categories) {
+      const formattedIndicatorTypes = categoriesReducer.categories.filter((cat: any)=>cat.ampCategoryClass.keyName === 'indicator_type').map((indicatorType: any) => ({
+        value: indicatorType.id,
+        label: indicatorType.value,
+      }));
+      setIndicatorTypeOptions([{ value: 0, label: translations['amp.indicatormanager:all-indicator-types'] }, ...formattedIndicatorTypes]);
+    }
+  }, [sectors, programConfiguration, translations]);
 
   useEffect(() => {
     setSelectedSector(0);
@@ -170,33 +216,33 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
     sizePerPage: sizePerPage,
     hidePageListOnlyOnePage: true,
     sizePerPageRenderer: ({
-      options,
-      currSizePerPage,
-      onSizePerPageChange,
-    }: {
-        options: any;
-        currSizePerPage: number;
-        onSizePerPageChange: (value: number) => void;
+                            options,
+                            currSizePerPage,
+                            onSizePerPageChange,
+                          }: {
+      options: any;
+      currSizePerPage: number;
+      onSizePerPageChange: (value: number) => void;
     }) => (
-      <Row lg={4}>
-        <Form.Control
-          as="select"
-          value={currSizePerPage}
-          style={{
-            width: 180,
-            marginLeft: 20
-          }}
-          onChange={(e) => handleSizePerPageChange(onSizePerPageChange, parseInt(e.target.value))}
-        >
-          {
-            options.map((option: any) => (
-              <option key={option.text} value={option.page}>
-                {option.text}
-              </option>
-            ))
-          }
-        </Form.Control>
-      </Row>
+        <Row lg={4}>
+          <Form.Control
+              as="select"
+              value={currSizePerPage}
+              style={{
+                width: 180,
+                marginLeft: 20
+              }}
+              onChange={(e) => handleSizePerPageChange(onSizePerPageChange, parseInt(e.target.value))}
+          >
+            {
+              options.map((option: any) => (
+                  <option key={option.text} value={option.page}>
+                    {option.text}
+                  </option>
+              ))
+            }
+          </Form.Control>
+        </Row>
 
     )
   };
@@ -210,197 +256,218 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
   const navigate = useNavigate();
 
   return (
-    <>
-      <AddNewIndicatorModal
-          show={showAddNewIndicatorModal}
-          setShow={setShowAddNewIndicatorModal}
-          filterBySector={filterBySector}
-          filterByProgram={filterByProgram}
-          translations={translations} />
-      <Col sm={12}>
-        <ToolkitProvider
-          keyField="id"
-          data={data}
-          columns={columns}
-          search
-          exportCSV
-        >
-          {
-            (props: ToolkitContextType) => (
-              <div>
-                <Col
-                  sm={12}
-                  style={{
-                    paddingBottom: 15
-                  }}>
-                  <Row className={styles.table_header}>
-                    <Col sm={6}>
-                      <h3>{title}</h3>
-                    </Col>
-                    <Col sm={6}>
-                      <hr />
-                    </Col>
-                  </Row>
+      <>
+        <AddNewIndicatorModal
+            show={showAddNewIndicatorModal}
+            setShow={setShowAddNewIndicatorModal}
+            filterBySector={filterBySector}
+            filterByProgram={filterByProgram}
+            translations={translations} />
+        <Col sm={12}>
+          <ToolkitProvider
+              keyField="id"
+              data={data}
+              columns={columns}
+              search
+              exportCSV
+          >
+            {
+              (props: ToolkitContextType) => (
+                  <div>
+                    <Col
+                        sm={12}
+                        style={{
+                          paddingBottom: 15
+                        }}>
+                      <Row className={styles.table_header}>
+                        <Col sm={6}>
+                          <h3>{title}</h3>
+                        </Col>
+                        <Col sm={6}>
+                          <hr />
+                        </Col>
+                      </Row>
 
-                  <Row sm={12} className={styles.table_header_bottom}>
-                    <Col sm={4}>
-                      <div className={styles.table_header_bottom_left}>
-                        <Button type="primary" onClick={showAddNewIndicatorModalHandler}>
-                          <i className="fa fa-plus" />
-                          {' '}
-                          <span>{translations['amp.dashboard:add-new']}</span>
-                        </Button>
-                        {' '}
-                        <Button type="secondary" onClick={() => navigate('/admin/outcome-output-management')}>
-                          <i className="fa fa-tasks" />
-                          {' '}
-                          <span>{translations['amp.dashboard:outcome-output-management'] || 'Outcome and Output Management'}</span>
-                        </Button>
-                        <ExportCSVButton
-                          {...props.csvProps}
-                          className={styles.export_button}
-                        >
-                          <i className="fa fa-download" />
-                          {' '}
-                          <span>{translations['amp.indicatormanager:export-csv']}</span>
-                        </ExportCSVButton>
-                      </div>
+                      <Row sm={12} className={styles.table_header_bottom}>
+                        <Col md={4} xs={12} className="mb-3">
+                          <div className={styles.actions_container}>
+                            <Button
+                                variant="primary"
+                                onClick={showAddNewIndicatorModalHandler}
+                                className={styles.action_button}
+                            >
+                              <i className="fa fa-plus" />
+                              {' '}
+                              <span>{translations['amp.dashboard:add-new']}</span>
+                            </Button>
+                            <Button
+                                variant="outline-secondary"
+                                onClick={() => navigate('/admin/indicator_manager/outcome-output-management')}
+                                className={styles.action_button}
+                            >
+                              <i className="fa fa-tasks" />
+                              {' '}
+                              <span>{translations['amp.dashboard:outcome-output-management'] || 'Outcome and Output Management'}</span>
+                            </Button>
+                            <ExportCSVButton
+                                {...props.csvProps}
+                                className={styles.export_button}
+                            >
+                              <i className="fa fa-download" />
+                              {' '}
+                              <span>{translations['amp.indicatormanager:export-csv']}</span>
+                            </ExportCSVButton>
+                          </div>
+                        </Col>
 
-                    </Col>
-                    {/* searchbar should be far right on the col */}
-                    <Col sm={8}>
-                      <div className={styles.table_header_bottom_right}>
+                        <Col md={8} xs={12}>
+                          <div className={styles.filters_container}>
+                            <div className={styles.filters_header}>
+                              <h5>{translations['amp.indicatormanager:filters'] || 'Filters'}</h5>
+                            </div>
 
-                        {filterBySector && (
-                            <div className={styles.sector_filter_container}>
-                              <Form.Label
-                                  className={styles.filter_label}>{translations['amp.indicatormanager:sectors']}</Form.Label>
-                              {
-                                sectorsReducer.sectors.length > 0 ? (
-                                    <Select
-                                        options={sectorOptions as any}
-                                        defaultValue={{
-                                          value: 0,
-                                          label: translations['amp.indicatormanager:all-sectors']
-                                        }}
-                                        className={styles.filter_select}
-                                        onChange={(item: any) => {
-                                          setSelectedSector(item.value)
-                                        }}
-                                        components={{
-                                          IndicatorSeparator: () => null,
-                                        }}
-                                    />
-                                ) : (
-                                    <>
-                                    {
-                                      !sectorsReducer.loading && (
+                            <Row className="g-2">
+                              {filterBySector && (
+                                  <Col xs={12} sm={6} lg={4}>
+                                    <div className={styles.filter_item}>
+                                      <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:sectors']}</Form.Label>
+                                      {sectorsReducer.sectors.length > 0 ? (
+                                          <Select
+                                              options={sectorOptions as any}
+                                              defaultValue={{ value: 0, label: translations['amp.indicatormanager:all-sectors'] }}
+                                              className={styles.filter_select}
+                                              onChange={(item: any) => setSelectedSector(item.value)}
+                                              components={{ IndicatorSeparator: () => null }}
+                                              menuPlacement="auto"
+                                              classNamePrefix="react-select"
+                                          />
+                                      ) : (
                                           <Select
                                               options={[]}
-                                              defaultValue={{
-                                                value: 0,
-                                                label: translations['amp.indicatormanager:no-data']
-                                              }}
+                                              defaultValue={{ value: 0, label: translations['amp.indicatormanager:no-data'] }}
                                               isDisabled
-                                              components={{
-                                                IndicatorSeparator: () => null,
-                                              }}
+                                              components={{ IndicatorSeparator: () => null }}
                                               className={styles.filter_select}
+                                              classNamePrefix="react-select"
                                           />
-                                      )
+                                      )}
+                                    </div>
+                                  </Col>
+                              )}
 
-                                    }
-                                    </>
-                                )
-                              }
+                              {filterByProgram && (
+                                  <Col xs={12} sm={6} lg={4}>
+                                    <div className={styles.filter_item}>
+                                      <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:programs']}</Form.Label>
+                                      {programOptions.length > 0 ? (
+                                          <Select
+                                              options={programOptions}
+                                              formatGroupLabel={formatGroupLabel}
+                                              defaultValue={{ value: 0, label: translations['amp.indicatormanager:all-programs'] }}
+                                              className={styles.filter_select}
+                                              onChange={(item: any) => setSelectedProgram(item.value)}
+                                              components={{ IndicatorSeparator: () => null }}
+                                              menuPlacement="auto"
+                                              classNamePrefix="react-select"
+                                          />
+                                      ) : (
+                                          <Select
+                                              options={[]}
+                                              defaultValue={{ value: 0, label: translations['amp.indicatormanager:no-data'] }}
+                                              isDisabled
+                                              components={{ IndicatorSeparator: () => null }}
+                                              className={styles.filter_select}
+                                              classNamePrefix="react-select"
+                                          />
+                                      )}
+                                    </div>
+                                  </Col>
+                              )}
+
+                              <Col xs={12} sm={6} lg={4}>
+                                <div className={styles.filter_item}>
+                                  <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:outcome']}</Form.Label>
+                                  <Select
+                                      options={outcomeOptions}
+                                      onChange={(opt: any) => setSelectedOutcome(opt?.value || 0)}
+                                      className={styles.filter_select}
+                                      components={{ IndicatorSeparator: () => null }}
+                                      menuPlacement="auto"
+                                      classNamePrefix="react-select"
+                                  />
+                                </div>
+                              </Col>
+
+                              <Col xs={12} sm={6} lg={4}>
+                                <div className={styles.filter_item}>
+                                  <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:output']}</Form.Label>
+                                  <Select
+                                      options={outputOptions}
+                                      onChange={(opt: any) => setSelectedOutput(opt?.value || 0)}
+                                      className={styles.filter_select}
+                                      components={{ IndicatorSeparator: () => null }}
+                                      menuPlacement="auto"
+                                      classNamePrefix="react-select"
+                                  />
+                                </div>
+                              </Col>
+
+                              <Col xs={12} sm={6} lg={4}>
+                                <div className={styles.filter_item}>
+                                  <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:indicator-type']}</Form.Label>
+                                  <Select
+                                      options={indicatorTypeOptions}
+                                      onChange={(opt: any) => setSelectedIndicatorType(opt?.value || 0)}
+                                      className={styles.filter_select}
+                                      components={{ IndicatorSeparator: () => null }}
+                                      menuPlacement="auto"
+                                      classNamePrefix="react-select"
+                                  />
+                                </div>
+                              </Col>
+
+                              <Col xs={12} sm={6} lg={4}>
+                                <div className={styles.search_item}>
+                                  <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:search']}</Form.Label>
+                                  <div className={styles.search_wrapper}>
+                                    <SearchBar
+                                        {...props.searchProps}
+                                        placeholder={translations['amp.indicatormanager:search-placeholder'] || "Search by name or code"}
+                                        className={styles.search_bar}
+                                    />
+                                    <i className={`fa fa-search ${styles.search_icon}`} />
+                                  </div>
+                                </div>
+                              </Col>
+                            </Row>
+                          </div>
+                        </Col>
+                      </Row>
+                    </Col>
+                    <hr/>
+                    <BootstrapTable
+                        {...props.baseProps}
+                        headerClasses={styles.table_header_titles}
+                        bodyClasses={styles.table_body}
+                        pagination={paginationFactory(paginationOptions)}
+                        selectRow={{
+                          mode: 'checkbox',
+                          clickToSelect: false,
+                        }}
+                        filter={filterFactory(filterOptions)}
+                        noDataIndication={() => (
+                            <div className={styles.no_data}>
+                              <h5>{translations['amp.indicatormanager:no-data']}</h5>
                             </div>
                         )}
+                    />
+                  </div>
+              )
+            }
+          </ToolkitProvider >
 
-                        {
-                          filterByProgram && (
-                                <div className={styles.sector_filter_container}>
-                                    <Form.Label
-                                        className={styles.filter_label}>{translations['amp.indicatormanager:programs']}</Form.Label>
-                                  {
-                                    programOptions.length > 0 ? (
-                                        <Select
-                                            options={programOptions}
-                                            formatGroupLabel={formatGroupLabel}
-                                            defaultValue={{
-                                                value: 0,
-                                                label: translations['amp.indicatormanager:all-programs']
-                                            }}
-                                            className={styles.filter_select}
-                                            // Added this since it is using the optiongroup type rather than the option type
-                                            // @ts-ignore
-                                            onChange={(item: {value: number, label: string}) => {
-                                                setSelectedProgram(item.value)
-                                            }}
-                                            components={{
-                                              IndicatorSeparator: () => null,
-                                            }}
-                                        />
-                                    ) : (
-                                        <>
-                                        {
-                                          !programSchemeReducer.loading && (
-                                              <Select
-                                                  options={[]}
-                                                  defaultValue={{
-                                                    value: 0,
-                                                    label: translations['amp.indicatormanager:no-data']
-                                                  }}
-                                                  isDisabled
-                                                  components={{
-                                                    IndicatorSeparator: () => null,
-                                                  }}
-                                                  className={styles.filter_select}
-                                              />
-                                          )
-
-                                        }
-                                        </>
-                                  )}
-                                </div>
-                            )
-                        }
-
-
-                        <div className={styles.search_container}>
-                          <SearchBar
-                              {...props.searchProps}
-                              placeholder={translations['amp.indicatormanager:search']}
-                          />
-                        </div>
-                      </div>
-
-                    </Col>
-                  </Row>
-                </Col>
-                <hr/>
-                <BootstrapTable
-                    {...props.baseProps}
-                    headerClasses={styles.table_header_titles}
-                    bodyClasses={styles.table_body}
-                    pagination={paginationFactory(paginationOptions)}
-                    selectRow={{
-                      mode: 'checkbox',
-                      clickToSelect: false,
-                    }}
-                    filter={filterFactory(filterOptions)}
-                    noDataIndication={() => (
-                        <div className={styles.no_data}>
-                          <h5>{translations['amp.indicatormanager:no-data']}</h5>
-                        </div>
-                    )}
-                />
-              </div>
-            )
-          }
-        </ToolkitProvider >
-
-      </Col >
-    </>
+        </Col >
+      </>
 
   );
 };

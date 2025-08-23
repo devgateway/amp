@@ -10,7 +10,7 @@
         </id>
         <property name="name" column="name" not-null="true"/>
         <property name="description" column="description"/>
-        <set name="outcomes" table="amp_outcome_output" inverse="true" cascade="all">
+        <set name="outcomes" table="amp_outcome_output" inverse="true" cascade="none">
             <key column="output_id"/>
             <many-to-many column="outcome_id" class="AmpOutcome"/>
         </set>

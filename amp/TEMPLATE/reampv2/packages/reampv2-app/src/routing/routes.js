@@ -1,7 +1,8 @@
 import {lazy, Suspense} from "react";
 import NavigationManager from "../NavigationManager";
 import { Outlet } from "react-router-dom";
-
+import {Provider} from "react-redux";
+import {store} from "../modules/admin/indicator_manager/reducers/store";
 const SSCDashboardApp = lazy(() => import('../modules/sscdashboard'));
 const AdminApps = lazy(() => import('../modules/admin/Admin.routes'));
 const NDDDashboardApp = lazy(() => import('../modules/ndddashboard'));
@@ -74,15 +75,9 @@ const routes = [
                 path: "admin/*",
                 element: (
                     <Suspense fallback={<div>Loading...</div>}>
+                        <Provider store={store}>
                         <AdminApps />
-                    </Suspense>
-                )
-            },
-            {
-                path: "admin/outcome-output-management",
-                element: (
-                    <Suspense fallback={<div>Loading...</div>}>
-                        <OutcomeOutputManagementPage />
+                        </Provider>
                     </Suspense>
                 )
             }

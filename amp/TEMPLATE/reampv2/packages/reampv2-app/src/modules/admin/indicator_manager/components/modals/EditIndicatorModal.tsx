@@ -36,13 +36,24 @@ interface IndicatorFormValues {
   name: string;
   description?: string;
   code: string;
+  relevanceForClimateChange?: string;
+  indicatorType?: number;
   sectors: any[];
+  logframeLinks: string[];
+  data?: string;
+  dataSource?: string;
+  disaggregation: number[];
+  unitOfMeasure?: number;
+  calculationMethod?: string;
+  responsibleOrganizations: number[];
+  frequency?: number;
   ascending: boolean;
   creationDate?: string;
-  programId: string | any;
+  programId: number | any;
   base: BaseAndTargetValueType;
   target: BaseAndTargetValueType;
-  indicatorsCategory?: string;
+  outcomeId?: number;
+  outputId?: number;
 }
 
 const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
@@ -76,6 +87,11 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
   const updateIndicatorReducer = useSelector((state: any) => state.updateIndicatorReducer);
 
+  // Add selectors for responsible orgs and outcomes
+  const responsibleOrgOptions = useSelector((state: any) => state.fetchResponsibleOrgsReducer.options || []);
+  const outcomesState = useSelector((state: any) => state.fetchOutcomesReducer);
+  const allOutcomes = outcomesState.outcomes || [];
+
   const [programFieldVisible, setProgramFieldVisible] = useState(false);
   const [selectedProgramSchemeId, setSelectedProgramSchemeId] = useState<string | null>(null);
 
@@ -91,6 +107,11 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
   const [baseOriginalValueDateDisabled, setBaseOriginalValueDateDisabled] = useState(false);
   const [targetOriginalValueDateDisabled, setTargetOriginalValueDateDisabled] = useState(false);
+
+  // --- Outcome/Output dropdown logic ---
+  const [allOutcomesData, setAllOutcomes] = useState<{ id: number, name: string, outputs: { id: number, name: string }[] }[]>([]);
+  const [selectedOutcomeId, setSelectedOutcomeId] = useState<number | null>(indicator?.outcomeId ?? null);
+  const [filteredOutputs, setFilteredOutputs] = useState<{ id: number, name: string }[]>([]);
 
   const convertDateToISO = (date?: string) => {
     if (!date) {
@@ -261,6 +282,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   }, []);
 
 
+
+
   useEffect(() => {
     getDefaultSectors();
     getDefaultCategory();
@@ -302,8 +325,18 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     name: indicator?.name || '',
     description: indicator?.description || '',
     code: indicator?.code || '',
+    relevanceForClimateChange: indicator?.relevanceForClimateChange || '',
+    indicatorType: indicator?.indicatorType || undefined,
     sectors: indicator?.sectors || [],
-    programId: '',
+    logframeLinks: indicator?.logframeLinks || [],
+    data: indicator?.data || '',
+    dataSource: indicator?.dataSource || '',
+    disaggregation: indicator?.disaggregation || [],
+    unitOfMeasure: indicator?.unitOfMeasure || undefined,
+    calculationMethod: indicator?.calculationMethod || '',
+    responsibleOrganizations: indicator?.responsibleOrganizations || [],
+    frequency: indicator?.frequency || undefined,
+    programId:indicator?.programId || undefined,
     ascending: indicator?.ascending || false,
     creationDate: indicator?.creationDate ? convertDateToISO(indicator?.creationDate) : '',
     base: {
@@ -318,8 +351,48 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       revisedValue: indicator?.target?.revisedValue,
       revisedValueDate: indicator?.target?.revisedValueDate ? convertDateToISO(indicator?.target?.revisedValueDate) : '',
     },
-    indicatorsCategory: indicator?.indicatorsCategory?.toString() || ''
+    outcomeId: indicator?.outcomeId || undefined,
+    outputId: indicator?.outputId || undefined
   };
+
+  const getCategoryOptions = (keyName: string, isMulti = false) => {
+    // Filter only category values with the correct keyName
+    return categoriesReducer.categories
+      .filter((cat: any) => cat.ampCategoryClass && cat.ampCategoryClass.keyName === keyName)
+      .map((cat: any) => ({ value: cat.id, label: cat.value }));
+  };
+
+  const indicatorTypeOptions = getCategoryOptions('indicator_type');
+  const disaggregationOptions = getCategoryOptions('indicator_disaggregation', true);
+  const unitOfMeasureOptions = getCategoryOptions('indicator_unit_of_measure');
+  const frequencyOptions = getCategoryOptions('indicator_frequency');
+
+  useEffect(() => {
+    fetch('/rest/amp-outcome-output/outcomes')
+      .then(res => res.json())
+      .then (data => setAllOutcomes(data));
+  }, []);
+
+  useEffect(() => {
+    if (selectedOutcomeId) {
+      const found = allOutcomes.find(o => o.id === selectedOutcomeId);
+      setFilteredOutputs(found ? found.outputs : []);
+      // Set initial outputId if editing and outputId matches a filtered output
+      if (formikRef.current && indicator?.outputId) {
+        const match = found?.outputs.find(out => out.id === indicator.outputId);
+        if (match) {
+          formikRef.current.setFieldValue('outputId', indicator.outputId);
+        } else {
+          formikRef.current.setFieldValue('outputId', undefined);
+        }
+      }
+    } else {
+      setFilteredOutputs([]);
+      if (formikRef.current) {
+        formikRef.current.setFieldValue('outputId', undefined);
+      }
+    }
+  }, [selectedOutcomeId, allOutcomes]);
 
   return (
     // this modal wrapper should be a separate component that can be reused since the props are the same
@@ -342,53 +415,50 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         validationSchema={translatedIndicatorValidationSchema(translations)}
         innerRef={formikRef}
         onSubmit={(values) => {
-          const {
-            name,
-            description,
-            code,
-            sectors,
-            ascending,
-            programId,
-            creationDate,
-            base,
-            target,
-            indicatorsCategory
-          } = values;
+          const updatedIndicatorData = {
+            id: indicator.id,
+            name: values.name,
+            description: values.description,
+            code: values.code,
+            relevanceForClimateChange: values.relevanceForClimateChange,
+            indicatorType: values.indicatorType,
+            sectors: formatObjArrayToNumberArray(values.sectors),
+            logframeLinks: values.logframeLinks,
+            data: values.data,
+            dataSource: values.dataSource,
+            disaggregation: values.disaggregation,
+            unitOfMeasure: values.unitOfMeasure,
+            calculationMethod: values.calculationMethod,
+            responsibleOrganizations: values.responsibleOrganizations,
+            frequency: values.frequency,
+            programId: values.programId ? values.programId: null,
+            ascending: values.ascending,
+            creationDate: values.creationDate && formatDate(values.creationDate),
+            base: checkObjectIsNull(values.base) ? null : {
+              originalValue: values.base.originalValue ? lodash.toNumber(values.base.originalValue) : null,
+              originalValueDate: values.base.originalValueDate ? formatDate(values.base.originalValueDate) : null,
+              revisedValue: values.base.revisedValue ? lodash.toNumber(values.base.revisedValue) : null,
+              revisedValueDate: values.base.revisedValueDate ? formatDate(values.base.revisedValueDate) : null,
+            },
+            target: checkObjectIsNull(values.target) ? null : {
+              originalValue: values.target.originalValue ? lodash.toNumber(values.target.originalValue) : null,
+              originalValueDate: values.target.originalValueDate ? formatDate(values.target.originalValueDate) : null,
+              revisedValue: values.target.revisedValue ? lodash.toNumber(values.target.revisedValue) : null,
+              revisedValueDate: values.target.revisedValueDate ? formatDate(values.target.revisedValueDate) : null,
+            },
+            outcomeId: values.outcomeId,
+            outputId: values.outputId
+          };
 
-          if (selectedProgramSchemeId && !programId) {
+          if (selectedProgramSchemeId && !values.programId) {
             MySwal.fire({
               title: translations['amp.indicatormanager:error'],
               text: translations['amp.indicatormanager:errors-program-is-required'],
               icon: 'error',
               confirmButtonText: translations['amp.indicatormanager:ok'],
             })
-
             return;
           }
-
-          const updatedIndicatorData = {
-            id: indicator.id,
-            name,
-            description,
-            code,
-            sectors: formatObjArrayToNumberArray(sectors),
-            programId: programId ? parseInt(programId) : null,
-            ascending,
-            creationDate: creationDate && formatDate(creationDate),
-            base: checkObjectIsNull(base) ? null : {
-              originalValue: base.originalValue ? lodash.toNumber(base.originalValue) : null,
-              originalValueDate: base.originalValueDate ? formatDate(base.originalValueDate) : null,
-              revisedValue: base.revisedValue ? lodash.toNumber(base.revisedValue) : null,
-              revisedValueDate: base.revisedValueDate ? formatDate(base.revisedValueDate) : null,
-            },
-            target: checkObjectIsNull(target) ? null : {
-              originalValue: target.originalValue ? lodash.toNumber(target.originalValue) : null,
-              originalValueDate: target.originalValueDate ? formatDate(target.originalValueDate) : null,
-              revisedValue: target.revisedValue ? lodash.toNumber(target.revisedValue) : null,
-              revisedValueDate: target.revisedValueDate ? formatDate(target.revisedValueDate) : null,
-            },
-            indicatorsCategory : indicatorsCategory ? parseInt(indicatorsCategory) : null
-          };
 
           dispatch(updateIndicator(updatedIndicatorData as IndicatorObjectType));
         }}
@@ -398,407 +468,518 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
             <Form noValidate onSubmit={props.handleSubmit}>
               <Modal.Body>
                 <div className={styles.viewmodal_wrapper}>
-                  <Row className={styles.view_row}>
-                    <Form.Group as={Col} className={styles.view_item} controlId="formBasicName">
-                      <Form.Label>{translations["amp.indicatormanager:indicator-name"]}</Form.Label>
-                      <Form.Control
-                        defaultValue={props.values.name}
-                        onChange={props.handleChange}
-                        onBlur={props.handleBlur}
-                        name="name"
-                        className={`${styles.input_field} ${(props.errors.name && props.touched.name) && styles.text_is_invalid}`}
-                        isInvalid={!!props.errors.name}
-                        required
-                        aria-required type="text"
-                        placeholder={translations["amp.indicatormanager:enter-indicator-name"]}
-                      />
-                      <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                        {props.errors.name}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-
-                    <Form.Group className={styles.view_item} controlId="formIndicatorCode">
-                      <Form.Label>{translations["amp.indicatormanager:indicator-code"]}</Form.Label>
-                      <Form.Control
-                        defaultValue={props.values.code}
-                        onChange={props.handleChange}
-                        onBlur={props.handleBlur}
-                        name="code"
-                        required
-                        type="text"
-                        className={`${styles.input_field} ${(props.errors.code && props.touched.code) && styles.text_is_invalid}`}
-                        placeholder={translations["amp.indicatormanager:enter-indicator-code"]}
-                      />
-                      <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                        {props.errors.code}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Row>
-                  <Row className={styles.view_row}>
-                    <Form.Group className={styles.view_one_item} controlId="formBasicDescription">
-                      <Form.Label>{translations["amp.indicatormanager:indicator-description"]}</Form.Label>
-                      <Form.Control
-                        defaultValue={props.values.description}
-                        onChange={props.handleChange}
-                        onBlur={props.handleBlur}
-                        name="description"
-                        type="text"
-                        className={`${styles.input_field} ${(props.errors.description && props.touched.description) && styles.text_is_invalid}`}
-                        placeholder={translations["amp.indicatormanager:enter-indicator-description"]}
-                      />
-                      <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                        {props.errors.description}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Row>
-
-                  <Row className={styles.view_row}>
-                    <Form.Group className={styles.view_item} controlId="Ascending">
-                      <Form.Label>{translations["amp.indicatormanager:ascending"]}</Form.Label>
-                      <Select
-                        name="ascending"
-                        options={ascendingOptions}
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                        onBlur={props.handleBlur}
-                        onChange={(value) => {
-                          props.setFieldValue("ascending", value?.value);
-                        }}
-                        defaultValue={{ value: props.values.ascending, label: props.values.ascending ? translations["amp.indicatormanager:true"] : translations["amp.indicatormanager:false"] }}
-                      />
-                    </Form.Group>
-
-                    <Form.Group className={styles.view_item} controlId="formCreationDate">
-                      <Form.Label>{translations["amp.indicatormanager:table-header-creation-date"]}</Form.Label>
-                      <DateInput
-                          translations={translations}
-                        name="creationDate"
-                        value={props.values.creationDate}
-                        disabled
-                        defaultValue={new Date()}
-                        clearIcon={null}
-                        calendarIcon={null}
-                        className={styles.input_field}
-                        id="creationDate"
-                        disableCalendar={true}
-                        inputRef={creationDateRef}/>
-                    </Form.Group>
-                  </Row>
-
-                  {filterBySector && (
-                      <Row className={styles.view_row}>
-                        <Form.Group className={styles.view_one_item} controlId="formIndicatorSectors">
-                          <Form.Label>{translations["amp.indicatormanager:sectors"]}</Form.Label>
-                          {
-                            (sectors.length > 0 && defaultSectors !== undefined)? (
-                                <Select
-                                    isMulti
-                                    name="sectors"
-                                    options={sectors}
-                                    onChange={(values) => {
-                                      // set the formik value with the selected values and remove the label
-                                      const selectedValues = values.map((value: any) => parseInt(value.value))
-                                      setDefaultSectors(values as any);
-                                      props.setFieldValue('sectors', selectedValues);
-                                    }}
-                                    onBlur={props.handleBlur}
-                                    className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
-                                    classNamePrefix="select"
-                                    value={defaultSectors}
-                                />
-
-                            ) : (
-                                <Select
-                                    isDisabled={true}
-                                />
-                            )
-                          }
-                        </Form.Group>
-                      </Row>
-                  )}
-
-
-                  <Row className={styles.view_row}>
-                    <Form.Group className={styles.view_one_item} controlId="formIndicatorCategories">
-                      <Form.Label>{translations["amp.indicatormanager:indicators-category"]}</Form.Label>
-                      {
-                        categories.length > 0 ? (
-                            <Select
-                                name="indicatorsCategory"
-                                options={categories}
-                                placeholder={translations["amp.indicatormanager:select"]}
-                                onChange={(selectedValue) => {
-                                  // set the formik value with the selected values and remove the label
-                                    setDefaultCategory(selectedValue)
-                                    props.setFieldValue('indicatorsCategory', selectedValue?.value);
-                                }}
-                                isClearable
-                                getOptionValue={(option) => option.value}
-                                onBlur={props.handleBlur}
-                                className={`basic-multi-select ${(props.errors.indicatorsCategory && props.touched.indicatorsCategory) && styles.text_is_invalid}`}
-                                classNamePrefix="select"
-                                value={defaultCategory}
-                            />
-                        ) : (
-                            <Select
-                                name="categories"
-                                isDisabled={true}
-                                placeholder={translations["amp.indicatormanager:select"]}
-                                defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
-                            />
-                        )
-                      }
-                    </Form.Group>
-                  </Row>
-
-                  {filterByProgram && (
-                      <>
-                        <Row className={styles.view_row}>
-                          <Form.Group className={styles.view_one_item} controlId="programScheme">
-                            <Form.Label>{translations["amp.indicatormanager:program-scheme"]}</Form.Label>
-                            {
-                              programSchemes.length > 0 ? (
-                                  <Select
-                                      name="programScheme"
-                                      options={programSchemes}
-                                      onChange={(selectedValue) => {
-                                        // set the formik value with the selected values and remove the label
-                                        if (selectedValue) {
-                                          setDefaultProgramScheme(selectedValue);
-                                          handleProgramSchemeChange(selectedValue.value, props);
-                                        }
-                                      }}
-                                      isClearable
-                                      getOptionValue={(option) => option.value}
-                                      onBlur={props.handleBlur}
-                                      className={`basic-multi-select ${styles.input_field}`}
-                                      classNamePrefix="select"
-                                      value={defaultProgramScheme}
-                                  />
-                              ) : (
-                                  <Select
-                                      isDisabled={true}
-                                      defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
-                                  />
-                              )
-                            }
-                          </Form.Group>
-                        </Row>
-
-                        {programFieldVisible && (
-                            <Row className={styles.view_row}>
-                              <Form.Group className={styles.view_one_item} controlId="programs">
-                                <Form.Label>{translations["amp.indicatormanager:programs"]}</Form.Label>
-                                {
-                                  (programs.length > 0) ? (
-                                          <Select
-                                              name="programs"
-                                              options={programs}
-                                              onChange={(selectedValue) => {
-                                                // set the formik value with the selected values and remove the label
-                                                props.setFieldValue("programId", selectedValue?.value);
-                                              }}
-                                              isClearable
-                                              getOptionValue={(option) => option.value}
-                                              onBlur={props.handleBlur}
-                                              className={`basic-multi-select ${styles.input_field} ${(props.errors.programId && props.touched.programId) && styles.text_is_invalid}`}
-                                              classNamePrefix="select"
-                                              defaultValue={defaultProgram}
-                                          />
-                                      ) :
-                                      <Select
-                                          name="programs"
-                                          isDisabled={true}
-                                          defaultValue={{ value: 0, label: translations["amp.indicatormanager:no-data"] }}
-                                      />
-                                }
-                              </Form.Group>
-                            </Row>
-
-                        )}
-                      </>
-                  )}
-
-
-                  <Form.Group as={Col}>
+                  {/* Core Indicator Information */}
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{translations["amp.indicatormanager:core-info"]}</h5></Col></Row>
+                  <div className={styles.sectionContainer}>
                     <Row className={styles.view_row}>
+                      <Form.Group className={styles.view_item} controlId="formBasicName">
+                        <Form.Label>{translations["amp.indicatormanager:indicator-name"]}</Form.Label>
+                        <Form.Control
+                          defaultValue={props.values.name}
+                          onChange={props.handleChange}
+                          onBlur={props.handleBlur}
+                          name="name"
+                          className={`${styles.input_field} ${(props.errors.name && props.touched.name) && styles.text_is_invalid}`}
+                          isInvalid={!!props.errors.name}
+                          required
+                          aria-required type="text"
+                          placeholder={translations["amp.indicatormanager:enter-indicator-name"]}
+                        />
+                        <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                          {props.errors.name}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group className={styles.view_item} controlId="formIndicatorCode">
+                        <Form.Label>{translations["amp.indicatormanager:indicator-code"]}</Form.Label>
+                        <Form.Control
+                          defaultValue={props.values.code}
+                          onChange={props.handleChange}
+                          onBlur={props.handleBlur}
+                          name="code"
+                          required
+                          type="text"
+                          className={`${styles.input_field} ${(props.errors.code && props.touched.code) && styles.text_is_invalid}`}
+                          placeholder={translations["amp.indicatormanager:enter-indicator-code"]}
+                        />
+                        <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                          {props.errors.code}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Row>
+                    <Row className={styles.view_row}>
+                      <Form.Group as={Col} className={styles.view_one_item} controlId="formBasicDescription">
+                        <Form.Label>{translations["amp.indicatormanager:indicator-description"]}</Form.Label>
+                        <Form.Control
+                          defaultValue={props.values.description}
+                          onChange={props.handleChange}
+                          onBlur={props.handleBlur}
+                          name="description"
+                          as="textarea"
+                          rows={2}
+                          className={`${styles.input_field} ${(props.errors.description && props.touched.description) && styles.text_is_invalid}`}
+                          placeholder={translations["amp.indicatormanager:enter-indicator-description"]}
+                        />
+                        <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                          {props.errors.description}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Row>
+                    <Row className={styles.view_row}>
+                      <Form.Group as={Col} className={styles.view_one_item} controlId="formRelevanceForClimateChange">
+                        <Form.Label>{translations["amp.indicatormanager:relevance-for-climate-change"]}</Form.Label>
+                        <Form.Control
+                          defaultValue={props.values.relevanceForClimateChange}
+                          onChange={props.handleChange}
+                          onBlur={props.handleBlur}
+                          name="relevanceForClimateChange"
+                          as="textarea"
+                          rows={2}
+                          className={styles.input_field}
+                          placeholder={translations["amp.indicatormanager:relevance-for-climate-change"]}
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row className={styles.view_row}>
+                      <Form.Group className={styles.view_item} controlId="formIndicatorType">
+                        <Form.Label>Type</Form.Label>
+                        <Select
+                          name="indicatorType"
+                          options={indicatorTypeOptions}
+                          onChange={(selectedValue) => {
+                            props.setFieldValue('indicatorType', selectedValue?.value);
+                          }}
+                          onBlur={props.handleBlur}
+                          className={`basic-multi-select ${(props.errors.indicatorType && props.touched.indicatorType) && styles.text_is_invalid}`}
+                          classNamePrefix="select"
+                          value={indicatorTypeOptions.find(opt => opt.value === props.values.indicatorType) || null}
+                        />
+                      </Form.Group>
+                    </Row>
+                  </div>
+                  {/* Categorization and Linkage */}
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{translations["amp.indicatormanager:categorization-linkage-info"] || "Categorization and Linkage"}</h5></Col></Row>
+                  <div className={styles.sectionContainer}>
+                    <Row className={styles.view_row}>
+                      <Form.Group className={styles.view_item} controlId="formOutcome">
+                        <Form.Label>{translations["amp.indicatormanager:outcome"]}</Form.Label>
+                        <Select
+                          name="outcomeId"
+                          options={allOutcomes.map(outcome => ({ value: outcome.id, label: outcome.name }))}
+                          onChange={(selectedValue) => {
+                            setSelectedOutcomeId(selectedValue?.value ?? null);
+                            props.setFieldValue('outcomeId', selectedValue?.value);
+                          }}
+                          onBlur={props.handleBlur}
+                          className={`basic-multi-select ${(props.errors.outcomeId && props.touched.outcomeId) && styles.text_is_invalid}`}
+                          classNamePrefix="select"
+                          value={allOutcomes.find(outcome => outcome.id === selectedOutcomeId) ? { value: selectedOutcomeId, label: allOutcomes.find(outcome => outcome.id === selectedOutcomeId)?.name } : null}
+                        />
+                      </Form.Group>
+                      <Form.Group className={styles.view_item} controlId="formOutput">
+                        <Form.Label>{translations["amp.indicatormanager:output"]}</Form.Label>
+                        <Select
+                          name="outputId"
+                          options={filteredOutputs.map(output => ({ value: output.id, label: output.name }))}
+                          onChange={(selectedValue) => {
+                            props.setFieldValue('outputId', selectedValue?.value);
+                          }}
+                          onBlur={props.handleBlur}
+                          className={`basic-multi-select ${(props.errors.outputId && props.touched.outputId) && styles.text_is_invalid}`}
+                          classNamePrefix="select"
+                          value={filteredOutputs.find(output => output.id === props.values.outputId) ? { value: props.values.outputId, label: filteredOutputs.find(output => output.id === props.values.outputId)?.name } : null}
+                          isDisabled={!selectedOutcomeId}
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row className={styles.view_row}>
+                      <Form.Group className={styles.view_item} controlId="programScheme">
+                        <Form.Label>Link to Logframe (Program Scheme)</Form.Label>
+                        <Select
+                          name="programScheme"
+                          options={programSchemes}
+                          onChange={(selectedValue) => {
+                            if (selectedValue) {
+                              setDefaultProgramScheme(selectedValue);
+                              handleProgramSchemeChange(selectedValue.value, props);
+                            }
+                          }}
+                          isClearable
+                          getOptionValue={(option) => option.value}
+                          onBlur={props.handleBlur}
+                          className={`basic-multi-select ${styles.input_field}`}
+                          classNamePrefix="select"
+                          value={defaultProgramScheme}
+                        />
+                      </Form.Group>
+                      {programFieldVisible && (
+                        <Form.Group className={styles.view_item} controlId="programs">
+                          <Form.Label>Program</Form.Label>
+                          <Select
+                            name="programs"
+                            options={programs}
+                            onChange={(selectedValue) => {
+                              props.setFieldValue("programId", selectedValue?.value);
+                            }}
+                            isClearable
+                            getOptionValue={(option) => option.value}
+                            onBlur={props.handleBlur}
+                            className={`basic-multi-select ${styles.input_field} ${(props.errors.programId && props.touched.programId) && styles.text_is_invalid}`}
+                            classNamePrefix="select"
+                            defaultValue={defaultProgram}
+                          />
+                        </Form.Group>
+                      )}
+                    </Row>
+                    <Row className={styles.view_row}>
+                      <Form.Group className={styles.view_one_item} controlId="formIndicatorSectors">
+                        <Form.Label>Sector</Form.Label>
+                        <Select
+                          isMulti
+                          name="sectors"
+                          options={sectors}
+                          onChange={(values) => {
+                            const selectedValues = values.map((value: any) => parseInt(value.value))
+                            setDefaultSectors(values as any);
+                            props.setFieldValue('sectors', selectedValues);
+                          }}
+                          onBlur={props.handleBlur}
+                          className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
+                          classNamePrefix="select"
+                          value={defaultSectors}
+                        />
+                      </Form.Group>
+                    </Row>
+                  </div>
+                  {/* Data Definition and Sourcing */}
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{translations["amp.indicatormanager:data-definition-sourcing-info"] || "Data Definition and Sourcing"}</h5></Col></Row>
+                  <div className={styles.sectionContainer}>
+                    <Row className={styles.view_row}>
+                      <Form.Group className={styles.view_item} controlId="formData">
+                        <Form.Label>{translations["amp.indicatormanager:data"]}</Form.Label>
+                        <Form.Control
+                          defaultValue={props.values.data}
+                          onChange={props.handleChange}
+                          onBlur={props.handleBlur}
+                          name="data"
+                          type="text"
+                          className={styles.input_field}
+                          placeholder={translations["amp.indicatormanager:enter-data"]}
+                        />
+                      </Form.Group>
+                      <Form.Group className={styles.view_item} controlId="formDataSource">
+                        <Form.Label>{translations["amp.indicatormanager:data-source"]}</Form.Label>
+                        <Form.Control
+                          defaultValue={props.values.dataSource}
+                          onChange={props.handleChange}
+                          onBlur={props.handleBlur}
+                          name="dataSource"
+                          type="text"
+                          className={styles.input_field}
+                          placeholder={translations["amp.indicatormanager:enter-data-source"]}
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row className={styles.view_row}>
+                      <Form.Group className={styles.view_item} controlId="formDisaggregation">
+                        <Form.Label>Disaggregation</Form.Label>
+                        <Select
+                          isMulti
+                          name="disaggregation"
+                          options={disaggregationOptions}
+                          onChange={(selectedValues) => {
+                            props.setFieldValue('disaggregation', selectedValues.map((v: any) => v.value));
+                          }}
+                          onBlur={props.handleBlur}
+                          className={`basic-multi-select ${(props.errors.disaggregation && props.touched.disaggregation) && styles.text_is_invalid}`}
+                          classNamePrefix="select"
+                          value={disaggregationOptions.filter(opt => props.values.disaggregation?.includes(opt.value))}
+                        />
+                      </Form.Group>
+                      <Form.Group className={styles.view_item} controlId="formUnitOfMeasure">
+                        <Form.Label>Unit of Measure</Form.Label>
+                        <Select
+                          name="unitOfMeasure"
+                          options={unitOfMeasureOptions}
+                          onChange={(selectedValue) => {
+                            props.setFieldValue('unitOfMeasure', selectedValue?.value);
+                          }}
+                          onBlur={props.handleBlur}
+                          className={`basic-multi-select ${(props.errors.unitOfMeasure && props.touched.unitOfMeasure) && styles.text_is_invalid}`}
+                          classNamePrefix="select"
+                          value={unitOfMeasureOptions.find(opt => opt.value === props.values.unitOfMeasure) || null}
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row className={styles.view_row}>
+                      <Form.Group className={styles.view_one_item} controlId="formCalculationMethod">
+                        <Form.Label>Calculation Method</Form.Label>
+                        <Form.Control
+                          defaultValue={props.values.calculationMethod}
+                          onChange={props.handleChange}
+                          onBlur={props.handleBlur}
+                          name="calculationMethod"
+                          type="text"
+                          className={styles.input_field}
+                          placeholder="Describe how the indicator's value is calculated"
+                        />
+                      </Form.Group>
+                    </Row>
+                  </div>
+                  {/* Responsibility and Frequency */}
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>Responsibility and Frequency</h5></Col></Row>
+                  <div className={styles.sectionContainer}>
+                    <Row className={styles.view_row}>
+                      <Form.Group className={styles.view_item} controlId="formResponsibleOrganizations">
+                        <Form.Label>Responsible Organization(s)</Form.Label>
+                        <Select
+                          isMulti
+                          name="responsibleOrganizations"
+                          options={responsibleOrgOptions}
+                          onChange={(selectedValues) => {
+                            props.setFieldValue('responsibleOrganizations', selectedValues.map((v: any) => v.value));
+                          }}
+                          onBlur={props.handleBlur}
+                          className={`basic-multi-select ${(props.errors.responsibleOrganizations && props.touched.responsibleOrganizations) && styles.text_is_invalid}`}
+                          classNamePrefix="select"
+                          value={responsibleOrgOptions.filter(opt => props.values.responsibleOrganizations?.includes(opt.value))}
+                        />
+                      </Form.Group>
+                      <Form.Group className={styles.view_item} controlId="formFrequency">
+                        <Form.Label>Frequency</Form.Label>
+                        <Select
+                          name="frequency"
+                          options={frequencyOptions}
+                          onChange={(selectedValue) => {
+                            props.setFieldValue('frequency', selectedValue?.value);
+                          }}
+                          onBlur={props.handleBlur}
+                          className={`basic-multi-select ${(props.errors.frequency && props.touched.frequency) && styles.text_is_invalid}`}
+                          classNamePrefix="select"
+                          value={frequencyOptions.find(opt => opt.value === props.values.frequency) || null}
+                        />
+                      </Form.Group>
+                    </Row>
+                  </div>
+                  {/* Value Tracking */}
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>Value Tracking</h5></Col></Row>
+                  <div className={styles.sectionContainer}>
+                    <Form.Group as={Col}>
                       <Form.Label className={styles.view_one_item}>
                         <h4>{translations["amp.indicatormanager:base-values"]}</h4>
                       </Form.Label>
-                    </Row>
+                      {/* Original Value and Date in one row */}
+                      <Row className={styles.view_row}>
+                        <Form.Group className={styles.view_item}>
+                          <Form.Label>{translations['amp.indicatormanager:original-value']}</Form.Label>
+                          <Form.Control
+                              defaultValue={props.values.base?.originalValue}
+                              onChange={props.handleChange}
+                              onBlur={props.handleBlur}
+                              name="base.originalValue"
+                              type="number"
+                              className={`${styles.input_field} ${(props.errors.base?.originalValue && props.touched.base?.originalValue) && styles.text_is_invalid}`}
+                              placeholder={translations["amp.indicatormanager:enter-original-value"]} />
 
-                    <Row className={styles.view_row}>
-                      <Form.Group className={styles.view_item}>
-                        <Form.Label>{translations['amp.indicatormanager:original-value']}</Form.Label>
-                        <Form.Control
-                          defaultValue={props.values.base?.originalValue}
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          name="base.originalValue"
-                          type="number"
-                          className={`${styles.input_field} ${(props.errors.base?.originalValue && props.touched.base?.originalValue) && styles.text_is_invalid}`}
-                          placeholder={translations["amp.indicatormanager:enter-original-value"]} />
+                          <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                            {props.errors.base?.originalValue}
+                          </Form.Control.Feedback>
+                        </Form.Group>
 
-                        <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.base?.originalValue}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-
-                      <Form.Group className={styles.view_item}>
-                        <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
-                        <DateInput
-                            translations={translations}
-                          value={props.values.base?.originalValueDate}
-                          onChange={(value) => {
-                            if (value) {
-                              props.setFieldValue("base.originalValueDate", value);
-                            }
-                          }}
-                          onClear={() => {
-                            props.setFieldValue("base.originalValueDate", null);
-                          }}
-                          onBlur={props.handleBlur}
-                          name="base.originalValueDate"
-                          disabled={baseOriginalValueDateDisabled}
-                          className={`${styles.input_field} ${(props.errors.base?.originalValueDate && props.touched.base?.originalValueDate) && styles.text_is_invalid}`}
-                          id="baseOriginalValueDate"
-                          inputRef={baseOriginalValueDateRef}
+                        <Form.Group className={styles.view_item}>
+                          <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
+                          <DateInput
+                              translations={translations}
+                              value={props.values.base?.originalValueDate}
+                              onChange={(value) => {
+                                if (value) {
+                                  props.setFieldValue("base.originalValueDate", value);
+                                }
+                              }}
+                              onClear={() => {
+                                props.setFieldValue("base.originalValueDate", null);
+                            }}
+                            onBlur={props.handleBlur}
+                            name="base.originalValueDate"
+                            disabled={baseOriginalValueDateDisabled}
+                            className={`${styles.input_field} ${(props.errors.base?.originalValueDate && props.touched.base?.originalValueDate) && styles.text_is_invalid}`}
+                            id="baseOriginalValueDate"
+                            inputRef={baseOriginalValueDateRef}
                         />
 
-                        <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.base?.originalValueDate}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                    </Row>
+                          <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                            {props.errors.base?.originalValueDate}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                      </Row>
+                      {/* Revised Value and Date in one row */}
+                      <Row className={styles.view_row}>
+                        <Form.Group className={styles.view_item}>
+                          <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
+                          <Form.Control
+                              defaultValue={props.values.base.revisedValue}
+                              onChange={props.handleChange}
+                              onBlur={props.handleBlur}
+                              name="base.revisedValue"
+                              type="number"
+                              className={`${styles.input_field} ${(props.errors.base?.revisedValue && props.touched.base?.revisedValue) && styles.text_is_invalid}`}
+                              placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
 
-                    <Row className={styles.view_row}>
-                      <Form.Group className={styles.view_item}>
-                        <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
-                        <Form.Control
-                          defaultValue={props.values.base.revisedValue}
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          name="base.revisedValue"
-                          type="number"
-                          className={`${styles.input_field} ${(props.errors.base?.revisedValue && props.touched.base?.revisedValue) && styles.text_is_invalid}`}
-                          placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
+                          <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                            {props.errors.base?.revisedValue}
+                          </Form.Control.Feedback>
+                        </Form.Group>
 
-                        <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.base?.revisedValue}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-
-                      <Form.Group className={styles.view_item}>
-                        <Form.Label>{translations['amp.indicatormanager:revised-value-date']}</Form.Label>
-                        <DateInput
-                            translations={translations}
-                          value={props.values.base.revisedValueDate}
-                          onChange={(value) =>{
-                            if (value) {
-                              props.setFieldValue("base.revisedValueDate", value);
-                            }
-                          }}
-                          onClear={() => {
-                            props.setFieldValue("base.revisedValueDate", null);
-                          }}
-                          onBlur={props.handleBlur}
-                          name="base.revisedValueDate"
-                          className={`${styles.input_field} ${(props.errors.base?.revisedValueDate && props.touched.base?.revisedValueDate) && styles.text_is_invalid}`}
-                          id="baseRevisedValueDate"
-                          inputRef={baseRevisedValueDateRef}
+                        <Form.Group className={styles.view_item}>
+                          <Form.Label>{translations['amp.indicatormanager:revised-value-date']}</Form.Label>
+                          <DateInput
+                              translations={translations}
+                              value={props.values.base.revisedValueDate}
+                              onChange={(value) =>{
+                                if (value) {
+                                  props.setFieldValue("base.revisedValueDate", value);
+                                }
+                            }}
+                            onClear={() => {
+                              props.setFieldValue("base.revisedValueDate", null);
+                            }}
+                            onBlur={props.handleBlur}
+                            name="base.revisedValueDate"
+                            className={`${styles.input_field} ${(props.errors.base?.revisedValueDate && props.touched.base?.revisedValueDate) && styles.text_is_invalid}`}
+                            id="baseRevisedValueDate"
+                            inputRef={baseRevisedValueDateRef}
                         />
 
-                        <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.base?.revisedValueDate}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                    </Row>
-                  </Form.Group>
+                          <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                            {props.errors.base?.revisedValueDate}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                      </Row>
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                      <Form.Label><h4>{translations["amp.indicatormanager:target-values"]}</h4></Form.Label>
+                      {/* Original Value and Date in one row */}
+                      <Row className={styles.view_row}>
+                        <Form.Group className={styles.view_item}>
+                          <Form.Label>{translations["amp.indicatormanager:target-value"]}</Form.Label>
+                          <Form.Control
+                              defaultValue={props.values.target.originalValue}
+                              onChange={props.handleChange}
+                              onBlur={props.handleBlur}
+                              name="target.originalValue"
+                              type="number"
+                              className={`${styles.input_field} ${(props.errors.target?.originalValue && props.touched.target?.originalValue) && styles.text_is_invalid}`}
+                              placeholder={translations["amp.indicatormanager:enter-target-value"]} />
 
-                  <Form.Group as={Col}>
-                    <Form.Label><h4>{translations["amp.indicatormanager:target-values"]}</h4></Form.Label>
+                          <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                            {props.errors.target?.originalValue}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group className={styles.view_item}>
+                          <Form.Label>{translations["amp.indicatormanager:target-value-date"]}</Form.Label>
+                          <DateInput
+                              translations={translations}
+                              value={props.values.target.originalValueDate}
+                              onChange={(value) => {
+                                if (value) {
+                                  props.setFieldValue("target.originalValueDate", value);
+                                }
+                              }}
+                              onClear={() => {
+                                props.setFieldValue("target.originalValueDate", null);
+                            }}
+                            disabled={targetOriginalValueDateDisabled}
+                            onBlur={props.handleBlur}
+                            name="target.originalValueDate"
+                            className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`}
+                            id="targetOriginalValueDate"
+                            inputRef={targetOriginalValueDateRef}
+                        />
+                        </Form.Group>
+                      </Row>
+                      {/* Revised Value and Date in one row */}
+                      <Row className={styles.view_row}>
+                        <Form.Group className={styles.view_item}>
+                          <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
+                          <Form.Control
+                              defaultValue={props.values.target.revisedValue}
+                              onChange={props.handleChange}
+                              onBlur={props.handleBlur}
+                              name="target.revisedValue"
+                              type="number"
+                              className={`${styles.input_field} ${(props.errors.target?.revisedValue && props.touched.target?.revisedValue) && styles.text_is_invalid}`}
+                              placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
+
+                          <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                            {props.errors.target?.revisedValue}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+
+                        <Form.Group className={styles.view_item}>
+                          <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
+                          <DateInput
+                              translations={translations}
+                              value={props.values.target.revisedValueDate}
+                              onChange={(value) => {
+                                if (value) {
+                                  props.setFieldValue("target.revisedValueDate", value);
+                                }
+                              }}
+                              onClear={() => {
+                                props.setFieldValue("target.revisedValueDate", null);
+                            }}
+                            onBlur={props.handleBlur}
+                            name="target.revisedValueDate"
+                            className={`${styles.input_field} ${(props.errors.target?.revisedValueDate && props.touched.target?.revisedValueDate) && styles.text_is_invalid}`}
+                            id="targetRevisedValueDate"
+                            inputRef={targetRevisedValueDateRef}
+                        />
+
+                          <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                            {props.errors.target?.revisedValueDate}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                      </Row>
+                    </Form.Group>
+                  </div>
+                  {/* Other Considerations */}
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>Other Considerations</h5></Col></Row>
+                  <div className={styles.sectionContainer}>
                     <Row className={styles.view_row}>
-                      <Form.Group className={styles.view_item}>
-                        <Form.Label>{translations["amp.indicatormanager:target-value"]}</Form.Label>
-                        <Form.Control
-                          defaultValue={props.values.target.originalValue}
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          name="target.originalValue"
-                          type="number"
-                          className={`${styles.input_field} ${(props.errors.target?.originalValue && props.touched.target?.originalValue) && styles.text_is_invalid}`}
-                          placeholder={translations["amp.indicatormanager:enter-target-value"]} />
-
+                      <Form.Group className={styles.view_item} controlId="Ascending">
+                        <Form.Label>{translations["amp.indicatormanager:ascending"]}</Form.Label>
+                        <Select
+                            name="ascending"
+                            options={ascendingOptions}
+                            onBlur={props.handleBlur}
+                            className={`${styles.input_field} ${(props.errors.ascending && props.touched.ascending) && styles.text_is_invalid}`}
+                            classNamePrefix="select"
+                            onChange={(value) => {
+                              if (value) props.setFieldValue('ascending', value.value)
+                            }}
+                            defaultValue={{
+                              value: false,
+                              label: translations["amp.indicatormanager:true"]
+                            }}
+                        />
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.target?.originalValue}
+                          {props.errors.ascending}
                         </Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group className={styles.view_item}>
-                        <Form.Label>{translations["amp.indicatormanager:target-value-date"]}</Form.Label>
+
+                      <Form.Group className={styles.view_item} controlId="formCreationDate">
+                        <Form.Label>{translations["amp.indicatormanager:table-header-creation-date"]}</Form.Label>
                         <DateInput
                             translations={translations}
-                          value={props.values.target.originalValueDate}
-                          onChange={(value) => {
-                            if (value) {
-                              props.setFieldValue("target.originalValueDate", value);
-                            }
-                          }}
-                          onClear={() => {
-                            props.setFieldValue("target.originalValueDate", null);
-                          }}
-                          disabled={targetOriginalValueDateDisabled}
-                          onBlur={props.handleBlur}
-                          name="target.originalValueDate"
-                          className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`}
-                          id="targetOriginalValueDate"
-                          inputRef={targetOriginalValueDateRef}
-                        />
+                            name="creationDate"
+                            defaultValue={props.values.creationDate}
+                            disabled
+                            value={props.values.creationDate}
+                            clearIcon={null}
+                            calendarIcon={null}
+                            className={styles.input_field} />
                       </Form.Group>
                     </Row>
-
-                    <Row className={styles.view_row}>
-                      <Form.Group className={styles.view_item}>
-                        <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
-                        <Form.Control
-                          defaultValue={props.values.target.revisedValue}
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          name="target.revisedValue"
-                          type="number"
-                          className={`${styles.input_field} ${(props.errors.target?.revisedValue && props.touched.target?.revisedValue) && styles.text_is_invalid}`}
-                          placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
-
-                        <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.target?.revisedValue}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-
-                      <Form.Group className={styles.view_item}>
-                        <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
-                        <DateInput
-                            translations={translations}
-                          value={props.values.target.revisedValueDate}
-                          onChange={(value) => {
-                            if (value) {
-                              props.setFieldValue("target.revisedValueDate", value);
-                            }
-                          }}
-                          onClear={() => {
-                            props.setFieldValue("target.revisedValueDate", null);
-                          }}
-                          onBlur={props.handleBlur}
-                          name="target.revisedValueDate"
-                          className={`${styles.input_field} ${(props.errors.target?.revisedValueDate && props.touched.target?.revisedValueDate) && styles.text_is_invalid}`}
-                          id="targetRevisedValueDate"
-                          inputRef={targetRevisedValueDateRef}
-                        />
-
-                        <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.target?.revisedValueDate}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                    </Row>
-                  </Form.Group>
+                  </div>
                 </div>
 
               </Modal.Body>

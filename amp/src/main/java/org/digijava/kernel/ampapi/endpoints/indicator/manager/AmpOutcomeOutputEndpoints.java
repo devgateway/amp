@@ -51,9 +51,6 @@ public class AmpOutcomeOutputEndpoints {
     @ApiOperation(value = "Create output", notes = "Creates a new output")
     public Response createOutput(AmpOutputDTO dto) {
         try {
-            if (dto.getOutcomeIds() == null || dto.getOutcomeIds().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("Output must be linked to at least one Outcome.").build();
-            }
             AmpOutputDTO created = service.createOutput(dto);
             return Response.ok(created).build();
         } catch (IllegalArgumentException e) {
@@ -80,9 +77,6 @@ public class AmpOutcomeOutputEndpoints {
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateOutput")
     @ApiOperation(value = "Update output", notes = "Updates an existing output")
     public Response updateOutput(@PathParam("id") Long id, AmpOutputDTO dto) {
-        if (dto.getOutcomeIds() == null || dto.getOutcomeIds().isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Output must be linked to at least one Outcome.").build();
-        }
         AmpOutputDTO updated = service.updateOutput(id, dto);
         if (updated == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -91,26 +85,21 @@ public class AmpOutcomeOutputEndpoints {
     }
 
     @DELETE
-    @Path("/outcome/{id}")
+    @Path("/outcome/delete/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "deleteOutcome")
     @ApiOperation(value = "Delete outcome", notes = "Deletes an outcome by ID")
     public Response deleteOutcome(@PathParam("id") Long id) {
-        boolean deleted = service.deleteOutcome(id);
-        if (!deleted) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        service.deleteOutcome(id);
         return Response.ok().build();
     }
 
     @DELETE
-    @Path("/output/{id}")
+    @Path("/output/delete/{id}")
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "deleteOutput")
     @ApiOperation(value = "Delete output", notes = "Deletes an output by ID")
-    public Response deleteOutput(@PathParam("id") Long id) {
-        boolean deleted = service.deleteOutput(id);
-        if (!deleted) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+    public Response deleteOutput(@PathParam("id") Long id, @QueryParam("forceDelete") @DefaultValue("false") boolean forceDelete) {
+        service.deleteOutput(id, forceDelete);
         return Response.ok().build();
     }
 
@@ -125,4 +114,24 @@ public class AmpOutcomeOutputEndpoints {
         }
         return Response.ok(output).build();
     }
+
+    @GET
+    @Path("/outputs/{outputId}/indicators")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getIndicatorsByOutputId")
+    @ApiOperation(value = "Get indicators linked to a specific output.")
+    public List<MEIndicatorDTO> getIndicatorsByOutputId(@PathParam("outputId") Long outputId) {
+        return  service.getIndicatorsByOutputId(outputId);
+    }
+
+    @GET
+    @Path("/outcomes/{outcomeId}/outputs")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getOutputsByOutcomeId")
+    @ApiOperation(value = "Get outputs linked to a specific outcome.")
+    public List<AmpOutputDTO> getOutputsByOutcomeId(@PathParam("outcomeId") Long outcomeId) {
+        return  service.getOutputsByOutcomeId(outcomeId);
+    }
+
+
 }

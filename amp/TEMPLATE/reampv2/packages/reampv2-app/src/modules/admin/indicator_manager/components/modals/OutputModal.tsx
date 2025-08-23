@@ -27,7 +27,6 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(translations['amp.outcomeoutput:errors-name-required'] || 'Name is required'),
     description: Yup.string(),
-    outcomeIds: Yup.array().min(1, translations['amp.outcomeoutput:errors-linked-outcomes-required'] || 'Select at least one outcome')
   });
 
   const initialValues = {

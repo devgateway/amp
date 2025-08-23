@@ -88,3 +88,23 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.sectionTitle {
+  color: #1769aa;
+  background: #eaf4fb;
+  border-left: 5px solid #1769aa;
+  padding: 8px 16px;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-radius: 4px 4px 0 0;
+}
+
+.sectionContainer {
+  border: 1.5px solid #e0e0e0;
+  border-radius: 4px;
+  background: #fff;
+  padding: 18px 16px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(23, 105, 170, 0.04);
+}

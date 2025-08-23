@@ -22,6 +22,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -142,6 +143,14 @@ public class IndicatorManagerService {
         if (indicatorRequest.getIndicatorsCategory() != null) {
             AmpCategoryValue categoryValue = (AmpCategoryValue) session.get(AmpCategoryValue.class, indicatorRequest.getIndicatorsCategory());
             indicator.setIndicatorsCategory(categoryValue);
+        }
+        if (indicatorRequest.getOutcomeId() != null) {
+            AmpOutcome outcome = (AmpOutcome) session.get(AmpOutcome.class, indicatorRequest.getOutcomeId());
+            indicator.setOutcome(outcome);
+        }
+        if (indicatorRequest.getOutputId() != null) {
+            AmpOutput output = (AmpOutput) session.get(AmpOutput.class, indicatorRequest.getOutputId());
+            indicator.setOutput(output);
         }
 
         session.save(indicator);
@@ -338,6 +347,18 @@ public class IndicatorManagerService {
                 AmpCategoryValue categoryValue = (AmpCategoryValue) session.get(AmpCategoryValue.class, indRequest.getIndicatorsCategory());
                 indicator.setIndicatorsCategory(categoryValue);
             }
+            if (indRequest.getOutcomeId() != null) {
+                AmpOutcome outcome = (AmpOutcome) session.get(AmpOutcome.class, indRequest.getOutcomeId());
+                indicator.setOutcome(outcome);
+            } else {
+                indicator.setOutcome(null);
+            }
+            if (indRequest.getOutputId() != null) {
+                AmpOutput output = (AmpOutput) session.get(AmpOutput.class, indRequest.getOutputId());
+                indicator.setOutput(output);
+            } else {
+                indicator.setOutput(null);
+            }
 
             session.update(indicator);
             if (program != null) {
@@ -495,12 +516,25 @@ public class IndicatorManagerService {
     public List<AmpCategoryValueDTO> getCategoryValues () {
         Session session = PersistenceManager.getSession();
 
-        List <AmpCategoryValue> categoryValues = session.createQuery("select o from " + AmpCategoryValue.class.getName() + " o "
-                        + "where o.ampCategoryClass.keyName=:keyName")
-                .setString("keyName", INDICATOR_CATEGORY_KEY).list();
+        List <AmpCategoryValue> categoryValues = session.createQuery("select o from " + AmpCategoryValue.class.getName() + " o ").list();
 
         return categoryValues.stream()
                 .map(AmpCategoryValueDTO::new)
                 .collect(Collectors.toList());
+    }
+
+
+
+    public Set<ResponsibleOrgDTO> getResponsibleOrganizations() {
+        Session session = PersistenceManager.getSession();
+        String sql = "SELECT DISTINCT o.amp_org_id, o.name FROM amp_organisation o  JOIN amp_org_role org_role ON o.amp_org_id = org_role.organisation WHERE org_role.role =(SELECT amp_role_id FROM amp_role WHERE role_code = 'RO' LIMIT 1) ORDER BY o.name;";
+        List<Object[]> results = session.createSQLQuery(sql).list();
+        List<ResponsibleOrgDTO> orgs = new ArrayList<>();
+        for (Object[] row : results) {
+            Long orgId = ((Number) row[0]).longValue();
+            String orgName = (String) row[1];
+            orgs.add(new ResponsibleOrgDTO(orgId, orgName));
+        }
+        return orgs;
     }
 }

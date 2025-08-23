@@ -49,5 +49,7 @@
 				<one-to-many class="org.digijava.module.aim.dbentity.IndicatorConnection"/>
 		</set>
 
+		<many-to-one name="outcome" column="outcome_id" class="org.digijava.module.aim.dbentity.AmpOutcome" cascade="none" />
+		<many-to-one name="output" column="output_id" class="org.digijava.module.aim.dbentity.AmpOutput" cascade="none" />
 	</class>
 </hibernate-mapping>

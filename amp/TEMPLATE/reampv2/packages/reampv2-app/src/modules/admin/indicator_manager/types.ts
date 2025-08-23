@@ -21,6 +21,16 @@ export interface SectorObjectType {
 }
 
 export interface IndicatorObjectType {
+    frequency: undefined;
+    responsibleOrganizations: any[];
+    calculationMethod: string;
+    unitOfMeasure: undefined;
+    disaggregation: any[];
+    dataSource: string;
+    data: string;
+    logframeLinks: any[];
+    indicatorType: string;
+    relevanceForClimateChange: string;
     id:           number;
     name:         string;
     description:  string;
@@ -32,6 +42,8 @@ export interface IndicatorObjectType {
     target:       BaseAndTargetValueType | null;
     programId:       string | null;
     indicatorsCategory: number | null;
+    outcomeId?: number;
+    outputId?: number;
 }
 
 export interface ProgramObjectType {

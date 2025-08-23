@@ -14,7 +14,7 @@ import java.util.Set;
 @TranslatableClass (displayName = "Indicator")
 public class AmpIndicator implements Serializable, Identifiable
 {
-    
+
     //IATI-check: to be ignored
     private static final long serialVersionUID = 1L;
 //  @Interchangeable(fieldTitle="Indicator ID")
@@ -51,7 +51,7 @@ public class AmpIndicator implements Serializable, Identifiable
      * Please look carefully in IndicatorConnection.hbm.xml before changing anything, because {@link IndicatorActivity} is subclass of {@link IndicatorConnection}
      * @see IndicatorConnection
      */
-    
+
     private Set<IndicatorActivity> valuesActivity;
 
     /**
@@ -60,7 +60,7 @@ public class AmpIndicator implements Serializable, Identifiable
      * Please look carefully in IndicatorConnection.hbm.xml before changing anything, because {@link IndicatorTheme} is subclass of {@link IndicatorConnection}
      * @see IndicatorConnection
      */
-    
+
     private Set<IndicatorTheme> valuesTheme;
 
     private Set<AmpIndicatorGlobalValue> indicatorValues;
@@ -72,6 +72,20 @@ public class AmpIndicator implements Serializable, Identifiable
 
     @Interchangeable(fieldTitle="Risk")
     private AmpIndicatorRiskRatings risk;
+
+    private AmpOutcome outcome;
+    private AmpOutput output;
+
+    private String relevanceForClimateChange;
+    private Long indicatorType;
+    private Set<Long> logframeLinks;
+    private String data;
+    private String dataSource;
+    private Set<Long> disaggregation;
+    private Long unitOfMeasure;
+    private String calculationMethod;
+    private Set<Long> responsibleOrganizations;
+    private Long frequency;
 
     public Long getIndicatorId() {
         return indicatorId;
@@ -210,5 +224,82 @@ public class AmpIndicator implements Serializable, Identifiable
                 .filter(AmpIndicatorGlobalValue::isTargetValue)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public AmpOutcome getOutcome() {
+        return outcome;
+    }
+
+    public void setOutcome(AmpOutcome outcome) {
+        this.outcome = outcome;
+    }
+
+    public AmpOutput getOutput() {
+        return output;
+    }
+
+    public void setOutput(AmpOutput output) {
+        this.output = output;
+    }
+
+    public String getRelevanceForClimateChange() {
+        return relevanceForClimateChange;
+    }
+    public void setRelevanceForClimateChange(String relevanceForClimateChange) {
+        this.relevanceForClimateChange = relevanceForClimateChange;
+    }
+    public Long getIndicatorType() {
+        return indicatorType;
+    }
+    public void setIndicatorType(Long indicatorType) {
+        this.indicatorType = indicatorType;
+    }
+    public Set<Long> getLogframeLinks() {
+        return logframeLinks;
+    }
+    public void setLogframeLinks(Set<Long> logframeLinks) {
+        this.logframeLinks = logframeLinks;
+    }
+    public String getData() {
+        return data;
+    }
+    public void setData(String data) {
+        this.data = data;
+    }
+    public String getDataSource() {
+        return dataSource;
+    }
+    public void setDataSource(String dataSource) {
+        this.dataSource = dataSource;
+    }
+    public Set<Long> getDisaggregation() {
+        return disaggregation;
+    }
+    public void setDisaggregation(Set<Long> disaggregation) {
+        this.disaggregation = disaggregation;
+    }
+    public Long getUnitOfMeasure() {
+        return unitOfMeasure;
+    }
+    public void setUnitOfMeasure(Long unitOfMeasure) {
+        this.unitOfMeasure = unitOfMeasure;
+    }
+    public String getCalculationMethod() {
+        return calculationMethod;
+    }
+    public void setCalculationMethod(String calculationMethod) {
+        this.calculationMethod = calculationMethod;
+    }
+    public Set<Long> getResponsibleOrganizations() {
+        return responsibleOrganizations;
+    }
+    public void setResponsibleOrganizations(Set<Long> responsibleOrganizations) {
+        this.responsibleOrganizations = responsibleOrganizations;
+    }
+    public Long getFrequency() {
+        return frequency;
+    }
+    public void setFrequency(Long frequency) {
+        this.frequency = frequency;
     }
 }

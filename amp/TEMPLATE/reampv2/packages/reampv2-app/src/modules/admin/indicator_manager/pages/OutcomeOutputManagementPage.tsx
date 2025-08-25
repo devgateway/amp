@@ -11,6 +11,7 @@ import initialTranslations from '../config/initialTranslations.json';
 import './css/ModalZIndexFix.css'; // Add z-index to modal and backdrop to ensure visibility
 import Swal from 'sweetalert2';
 import OutputManagementPage from './OutputManagementPage';
+import {useNavigate} from "react-router-dom";
 
 interface Outcome {
   id: number;
@@ -230,6 +231,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
 
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
+  const navigate = useNavigate();
 
   const paginationOptions: PaginationOptions = {
     paginationSize: 4,
@@ -279,7 +281,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
                   <h3>{translations['amp.outcomeoutput:management-title']}</h3>
                 </Col>
                 <Col sm={6}>
-                  <Button variant="primary" onClick={handleGoToOutputManagement} style={{ float: 'right' }}>
+                  <Button variant="primary" onClick={()=>navigate('/admin/indicator_manager/output-management')} style={{ float: 'right' }}>
                     <i className="fa fa-cogs" /> Output Management
                   </Button>
                   <hr />
@@ -288,7 +290,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
               <Row sm={12} className={styles.table_header_bottom}>
                 <Col sm={4}>
                   <div className={styles.table_header_bottom_left}>
-                    <Button variant="primary" onClick={() => {console.log('Add Outcome Clicked'); setShowAddNewOutcomeModal(true);}}>
+                    <Button variant="primary" onClick={() => {setShowAddNewOutcomeModal(true);}}>
                       <i className="fa fa-plus" /> {translations['amp.outcomeoutput:add-new-outcome']}
                     </Button>
                     {' '}

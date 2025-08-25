@@ -439,7 +439,6 @@ public class IndicatorManagerService {
             }
 
             session.update(indicator);
-            session.flush();
             if (program != null) {
                 try {
                     IndicatorUtil.assignIndicatorToTheme(program, indicator);

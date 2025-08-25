@@ -9,6 +9,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @TranslatableClass (displayName = "Indicator")
@@ -77,15 +78,15 @@ public class AmpIndicator implements Serializable, Identifiable
     private AmpOutput output;
 
     private String relevanceForClimateChange;
-    private Long indicatorType;
+    private AmpCategoryValue indicatorType;
     private Set<Long> logframeLinks;
     private String data;
     private String dataSource;
-    private Set<Long> disaggregation;
-    private Long unitOfMeasure;
+    private Set<AmpCategoryValue> disaggregation;
+    private AmpCategoryValue unitOfMeasure;
     private String calculationMethod;
-    private Set<Long> responsibleOrganizations;
-    private Long frequency;
+    private List<AmpOrganisation> responsibleOrganizations;
+    private AmpCategoryValue frequency;
 
     public Long getIndicatorId() {
         return indicatorId;
@@ -248,10 +249,10 @@ public class AmpIndicator implements Serializable, Identifiable
     public void setRelevanceForClimateChange(String relevanceForClimateChange) {
         this.relevanceForClimateChange = relevanceForClimateChange;
     }
-    public Long getIndicatorType() {
+    public AmpCategoryValue getIndicatorType() {
         return indicatorType;
     }
-    public void setIndicatorType(Long indicatorType) {
+    public void setIndicatorType(AmpCategoryValue indicatorType) {
         this.indicatorType = indicatorType;
     }
     public Set<Long> getLogframeLinks() {
@@ -272,16 +273,16 @@ public class AmpIndicator implements Serializable, Identifiable
     public void setDataSource(String dataSource) {
         this.dataSource = dataSource;
     }
-    public Set<Long> getDisaggregation() {
+    public Set<AmpCategoryValue> getDisaggregation() {
         return disaggregation;
     }
-    public void setDisaggregation(Set<Long> disaggregation) {
+    public void setDisaggregation(Set<AmpCategoryValue> disaggregation) {
         this.disaggregation = disaggregation;
     }
-    public Long getUnitOfMeasure() {
+    public AmpCategoryValue getUnitOfMeasure() {
         return unitOfMeasure;
     }
-    public void setUnitOfMeasure(Long unitOfMeasure) {
+    public void setUnitOfMeasure(AmpCategoryValue unitOfMeasure) {
         this.unitOfMeasure = unitOfMeasure;
     }
     public String getCalculationMethod() {
@@ -290,16 +291,16 @@ public class AmpIndicator implements Serializable, Identifiable
     public void setCalculationMethod(String calculationMethod) {
         this.calculationMethod = calculationMethod;
     }
-    public Set<Long> getResponsibleOrganizations() {
+    public List<AmpOrganisation> getResponsibleOrganizations() {
         return responsibleOrganizations;
     }
-    public void setResponsibleOrganizations(Set<Long> responsibleOrganizations) {
+    public void setResponsibleOrganizations(List<AmpOrganisation> responsibleOrganizations) {
         this.responsibleOrganizations = responsibleOrganizations;
     }
-    public Long getFrequency() {
+    public AmpCategoryValue getFrequency() {
         return frequency;
     }
-    public void setFrequency(Long frequency) {
+    public void setFrequency(AmpCategoryValue frequency) {
         this.frequency = frequency;
     }
 }

@@ -11,7 +11,9 @@ import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateDeserialize
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateSerializer;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -122,15 +124,15 @@ public class MEIndicatorDTO {
         this.outputId = indicator.getOutput() != null ? indicator.getOutput().getId() : null;
         this.outcomeId = indicator.getOutcome() != null ? indicator.getOutcome().getId() : null;
         this.relevanceForClimateChange = indicator.getRelevanceForClimateChange();
-        this.indicatorType = indicator.getIndicatorType();
+        this.indicatorType = indicator.getIndicatorType()!=null ? indicator.getIndicatorType().getId() : null;
         this.logframeLinks = indicator.getLogframeLinks();
         this.data = indicator.getData();
         this.dataSource = indicator.getDataSource();
-        this.disaggregation = indicator.getDisaggregation();
-        this.unitOfMeasure = indicator.getUnitOfMeasure();
+        this.disaggregation = indicator.getDisaggregation()!=null ? indicator.getDisaggregation().stream().map(AmpCategoryValue::getId).collect(Collectors.toSet()) : null;
+        this.unitOfMeasure = indicator.getUnitOfMeasure()!=null ? indicator.getUnitOfMeasure().getId() : null;
         this.calculationMethod = indicator.getCalculationMethod();
-        this.responsibleOrganizations = indicator.getResponsibleOrganizations();
-        this.frequency = indicator.getFrequency();
+        this.responsibleOrganizations = indicator.getResponsibleOrganizations()!=null ? indicator.getResponsibleOrganizations().stream().map(AmpOrganisation::getAmpOrgId).collect(Collectors.toSet()) : null;
+        this.frequency = indicator.getFrequency()!=null ? indicator.getFrequency().getId() : null;
     }
 
     public Long getId() {

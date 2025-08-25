@@ -95,10 +95,7 @@ public class AmpOutcomeOutputEndpoints {
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "deleteOutcome")
     @ApiOperation(value = "Delete outcome", notes = "Deletes an outcome by ID")
     public Response deleteOutcome(@PathParam("id") Long id) {
-        boolean deleted = service.deleteOutcome(id);
-        if (!deleted) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        service.deleteOutcome(id);
         return Response.ok().build();
     }
 
@@ -125,4 +122,24 @@ public class AmpOutcomeOutputEndpoints {
         }
         return Response.ok(output).build();
     }
+
+    @GET
+    @Path("/outputs/{outputId}/indicators")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getIndicatorsByOutputId")
+    @ApiOperation(value = "Get indicators linked to a specific output.")
+    public List<MEIndicatorDTO> getIndicatorsByOutputId(@PathParam("outputId") Long outputId) {
+        return  service.getIndicatorsByOutputId(outputId);
+    }
+
+    @GET
+    @Path("/outcomes/{outcomeId}/outputs")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getOutputsByOutcomeId")
+    @ApiOperation(value = "Get outputs linked to a specific outcome.")
+    public List<AmpOutputDTO> getOutputsByOutcomeId(@PathParam("outcomeId") Long outcomeId) {
+        return  service.getOutputsByOutcomeId(outcomeId);
+    }
+
+
 }

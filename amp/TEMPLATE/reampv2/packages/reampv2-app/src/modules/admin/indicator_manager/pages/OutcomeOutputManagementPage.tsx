@@ -9,6 +9,7 @@ import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from '@murasof
 import paginationFactory from '@musicstory/react-bootstrap-table2-paginator';
 import initialTranslations from '../config/initialTranslations.json';
 import './css/ModalZIndexFix.css'; // Add z-index to modal and backdrop to ensure visibility
+import Swal from 'sweetalert2';
 
 interface Outcome {
   id: number;
@@ -63,7 +64,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
             variant="outline-primary"
             onClick={() => handleEditOutcome(row)}
           >
-            Edit
+            <i className="fa fa-edit" />
           </Button>
           {' '}
           <Button
@@ -71,7 +72,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
             variant="outline-danger"
             onClick={() => handleDeleteOutcome(row)}
           >
-            Delete
+            <i className="fa fa-trash" />
           </Button>
         </>
       ),
@@ -200,11 +201,42 @@ const OutcomeOutputManagementPage: React.FC = () => {
     setEditingOutput(null);
   };
 
-  const handleDeleteOutcome = (outcome: Outcome) => {
-    // TODO: Implement delete logic (e.g., update state or call backend)
-    if (window.confirm(`Are you sure you want to delete outcome: ${outcome.name}?`)) {
-      console.log('Delete Outcome:', outcome);
-      // Implement actual delete logic here
+  const handleDeleteOutcome = async (outcome: Outcome) => {
+    // Call backend delete endpoint directly, and display any error/warning returned
+    const confirm = await Swal.fire({
+      icon: 'warning',
+      title: 'Delete Outcome?',
+      html: `<div>Are you sure you want to delete outcome: <b>${outcome.name}</b>?<br/>This action cannot be undone.</div>`,
+      showCancelButton: true,
+      confirmButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+    });
+    if (confirm.isConfirmed) {
+      try {
+        const res = await fetch(`/rest/amp-outcome-output/outcome/${outcome.id}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (res.ok) {
+          fetch('/rest/amp-outcome-output/outcomes')
+            .then(res => res.json())
+            .then(data => setOutcomes(data));
+        } else {
+          // Show backend error message (alerts/warnings)
+          const error = await res.json();
+          await Swal.fire({
+            icon: 'error',
+            title: 'Cannot Delete Outcome',
+            html: error.message || 'An error occurred while deleting the outcome.'
+          });
+        }
+      } catch (e) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error deleting outcome',
+          text: 'An unexpected error occurred.'
+        });
+      }
     }
   };
 
@@ -367,6 +399,11 @@ const OutcomeOutputManagementPage: React.FC = () => {
                 headerClasses={styles.table_header_titles}
                 bodyClasses={styles.table_body}
                 pagination={paginationFactory(paginationOptions)}
+                noDataIndication={() => (
+                    <div className={styles.no_data}>
+                      <h5>{translations['amp.indicatormanager:no-data']}</h5>
+                    </div>
+                )}
               />
             </div>
           )}

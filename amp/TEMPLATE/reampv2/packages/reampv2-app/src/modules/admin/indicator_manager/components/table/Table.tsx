@@ -251,7 +251,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                           <span>{translations['amp.dashboard:add-new']}</span>
                         </Button>
                         {' '}
-                        <Button type="secondary" onClick={() => navigate('/outcome-output-management')}>
+                        <Button type="secondary" onClick={() => navigate('/admin/indicator_manager/outcome-output-management')}>
                           <i className="fa fa-tasks" />
                           {' '}
                           <span>{translations['amp.dashboard:outcome-output-management'] || 'Outcome and Output Management'}</span>

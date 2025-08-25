@@ -97,7 +97,8 @@ const OutputManagementPage: React.FC = () => {
         setEditingOutput({
           id: data.id,
           name: data.name,
-          description: data.description
+          description: data.description,
+          outcomes: data.outcomes
         });
         setShowEditOutputModal(true);
       } else {

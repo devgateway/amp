@@ -419,7 +419,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                         <div className={styles.sector_filter_container}>
                           <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:outcome']}</Form.Label>
                           <Select
-                            options={props.outcomeOptions}
+                            options={outcomeOptions}
                             onChange={(opt:any) =>setSelectedOutcome(opt?.value || 0)}
                             className={styles.filter_select}
                             components={{ IndicatorSeparator: () => null }}
@@ -429,7 +429,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                         <div className={styles.sector_filter_container}>
                           <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:output']}</Form.Label>
                           <Select
-                            options={props.outputOptions}
+                            options={outputOptions}
                             onChange={(opt : any) => setSelectedOutput(opt?.value || 0)}
                             className={styles.filter_select}
                             components={{ IndicatorSeparator: () => null }}
@@ -439,7 +439,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                         <div className={styles.sector_filter_container}>
                           <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:indicator-type']}</Form.Label>
                           <Select
-                            options={props.indicatorTypeOptions}
+                            options={indicatorTypeOptions}
                             onChange={(opt:any) => setSelectedIndicatorType(opt?.value || 0)}
                             className={styles.filter_select}
                             components={{ IndicatorSeparator: () => null }}

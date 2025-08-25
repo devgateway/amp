@@ -269,6 +269,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
     if (Number(selectedIndicatorType) !== 0) {
       filtered = filtered.filter((indicator: IndicatorObjectType) => indicator.indicatorType === Number(selectedIndicatorType));
     }
+
     if (indicatorCode) {
       filtered = filtered.filter((indicator: IndicatorObjectType) => indicator.code?.toLowerCase().includes(indicatorCode.toLowerCase()));
     }

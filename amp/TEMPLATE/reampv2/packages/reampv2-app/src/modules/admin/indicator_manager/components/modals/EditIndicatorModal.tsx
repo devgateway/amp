@@ -755,171 +755,183 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                   {/* Value Tracking */}
                   <Row className={styles.view_row}><Col><h5>Value Tracking</h5></Col></Row>
                   <Form.Group as={Col}>
-                    <Form.Label><h4>Base Values</h4></Form.Label>
+                    <Form.Label className={styles.view_one_item}>
+                      <h4>{translations["amp.indicatormanager:base-values"]}</h4>
+                    </Form.Label>
                     {/* Original Value and Date in one row */}
                     <Row className={styles.view_row}>
-                      <Col>
-                        <Form.Label>Original Base Value</Form.Label>
+                      <Form.Group className={styles.view_item}>
+                        <Form.Label>{translations['amp.indicatormanager:original-value']}</Form.Label>
                         <Form.Control
-                          defaultValue={props.values.base?.originalValue}
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          name="base.originalValue"
-                          type="number"
-                          className={`${styles.input_field} ${(props.errors.base?.originalValue && props.touched.base?.originalValue) && styles.text_is_invalid}`}
-                          placeholder="Enter original value" />
+                            defaultValue={props.values.base?.originalValue}
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            name="base.originalValue"
+                            type="number"
+                            className={`${styles.input_field} ${(props.errors.base?.originalValue && props.touched.base?.originalValue) && styles.text_is_invalid}`}
+                            placeholder={translations["amp.indicatormanager:enter-original-value"]} />
+
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.base?.originalValue}
                         </Form.Control.Feedback>
-                      </Col>
-                      <Col>
-                        <Form.Label>Original Value Date</Form.Label>
+                      </Form.Group>
+
+                      <Form.Group className={styles.view_item}>
+                        <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
                         <DateInput
-                          translations={translations}
-                          value={props.values.base?.originalValueDate}
-                          onChange={(value) => {
-                            if (value) {
-                              props.setFieldValue("base.originalValueDate", value);
-                            }
-                          }}
-                          onClear={() => {
-                            props.setFieldValue("base.originalValueDate", null);
-                          }}
-                          onBlur={props.handleBlur}
-                          name="base.originalValueDate"
-                          disabled={baseOriginalValueDateDisabled}
-                          className={`${styles.input_field} ${(props.errors.base?.originalValueDate && props.touched.base?.originalValueDate) && styles.text_is_invalid}`}
-                          id="baseOriginalValueDate"
-                          inputRef={baseOriginalValueDateRef}
+                            translations={translations}
+                            value={props.values.base?.originalValueDate}
+                            onChange={(value) => {
+                              if (value) {
+                                props.setFieldValue("base.originalValueDate", value);
+                              }
+                            }}
+                            onClear={() => {
+                              props.setFieldValue("base.originalValueDate", null);
+                            }}
+                            onBlur={props.handleBlur}
+                            name="base.originalValueDate"
+                            disabled={baseOriginalValueDateDisabled}
+                            className={`${styles.input_field} ${(props.errors.base?.originalValueDate && props.touched.base?.originalValueDate) && styles.text_is_invalid}`}
+                            id="baseOriginalValueDate"
+                            inputRef={baseOriginalValueDateRef}
                         />
+
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.base?.originalValueDate}
                         </Form.Control.Feedback>
-                      </Col>
+                      </Form.Group>
                     </Row>
                     {/* Revised Value and Date in one row */}
                     <Row className={styles.view_row}>
-                      <Col>
-                        <Form.Label>Revised Base Value</Form.Label>
+                      <Form.Group className={styles.view_item}>
+                        <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
                         <Form.Control
-                          defaultValue={props.values.base.revisedValue}
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          name="base.revisedValue"
-                          type="number"
-                          className={`${styles.input_field} ${(props.errors.base?.revisedValue && props.touched.base?.revisedValue) && styles.text_is_invalid}`}
-                          placeholder="Enter revised value" />
+                            defaultValue={props.values.base.revisedValue}
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            name="base.revisedValue"
+                            type="number"
+                            className={`${styles.input_field} ${(props.errors.base?.revisedValue && props.touched.base?.revisedValue) && styles.text_is_invalid}`}
+                            placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
+
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.base?.revisedValue}
                         </Form.Control.Feedback>
-                      </Col>
-                      <Col>
-                        <Form.Label>Revised Value Date</Form.Label>
+                      </Form.Group>
+
+                      <Form.Group className={styles.view_item}>
+                        <Form.Label>{translations['amp.indicatormanager:revised-value-date']}</Form.Label>
                         <DateInput
-                          translations={translations}
-                          value={props.values.base.revisedValueDate}
-                          onChange={(value) =>{
-                            if (value) {
-                              props.setFieldValue("base.revisedValueDate", value);
-                            }
-                          }}
-                          onClear={() => {
-                            props.setFieldValue("base.revisedValueDate", null);
-                          }}
-                          onBlur={props.handleBlur}
-                          name="base.revisedValueDate"
-                          className={`${styles.input_field} ${(props.errors.base?.revisedValueDate && props.touched.base?.revisedValueDate) && styles.text_is_invalid}`}
-                          id="baseRevisedValueDate"
-                          inputRef={baseRevisedValueDateRef}
+                            translations={translations}
+                            value={props.values.base.revisedValueDate}
+                            onChange={(value) =>{
+                              if (value) {
+                                props.setFieldValue("base.revisedValueDate", value);
+                              }
+                            }}
+                            onClear={() => {
+                              props.setFieldValue("base.revisedValueDate", null);
+                            }}
+                            onBlur={props.handleBlur}
+                            name="base.revisedValueDate"
+                            className={`${styles.input_field} ${(props.errors.base?.revisedValueDate && props.touched.base?.revisedValueDate) && styles.text_is_invalid}`}
+                            id="baseRevisedValueDate"
+                            inputRef={baseRevisedValueDateRef}
                         />
+
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.base?.revisedValueDate}
                         </Form.Control.Feedback>
-                      </Col>
+                      </Form.Group>
                     </Row>
                   </Form.Group>
                   <Form.Group as={Col}>
-                    <Form.Label><h4>Target Values</h4></Form.Label>
+                    <Form.Label><h4>{translations["amp.indicatormanager:target-values"]}</h4></Form.Label>
                     {/* Original Value and Date in one row */}
                     <Row className={styles.view_row}>
-                      <Col>
-                        <Form.Label>Original Target Value</Form.Label>
+                      <Form.Group className={styles.view_item}>
+                        <Form.Label>{translations["amp.indicatormanager:target-value"]}</Form.Label>
                         <Form.Control
-                          defaultValue={props.values.target.originalValue}
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          name="target.originalValue"
-                          type="number"
-                          className={`${styles.input_field} ${(props.errors.target?.originalValue && props.touched.target?.originalValue) && styles.text_is_invalid}`}
-                          placeholder="Enter target value" />
+                            defaultValue={props.values.target.originalValue}
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            name="target.originalValue"
+                            type="number"
+                            className={`${styles.input_field} ${(props.errors.target?.originalValue && props.touched.target?.originalValue) && styles.text_is_invalid}`}
+                            placeholder={translations["amp.indicatormanager:enter-target-value"]} />
+
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.target?.originalValue}
                         </Form.Control.Feedback>
-                      </Col>
-                      <Col>
-                        <Form.Label>Original Value Date</Form.Label>
+                      </Form.Group>
+                      <Form.Group className={styles.view_item}>
+                        <Form.Label>{translations["amp.indicatormanager:target-value-date"]}</Form.Label>
                         <DateInput
-                          translations={translations}
-                          value={props.values.target.originalValueDate}
-                          onChange={(value) => {
-                            if (value) {
-                              props.setFieldValue("target.originalValueDate", value);
-                            }
-                          }}
-                          onClear={() => {
-                            props.setFieldValue("target.originalValueDate", null);
-                          }}
-                          disabled={targetOriginalValueDateDisabled}
-                          onBlur={props.handleBlur}
-                          name="target.originalValueDate"
-                          className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`}
-                          id="targetOriginalValueDate"
-                          inputRef={targetOriginalValueDateRef}
+                            translations={translations}
+                            value={props.values.target.originalValueDate}
+                            onChange={(value) => {
+                              if (value) {
+                                props.setFieldValue("target.originalValueDate", value);
+                              }
+                            }}
+                            onClear={() => {
+                              props.setFieldValue("target.originalValueDate", null);
+                            }}
+                            disabled={targetOriginalValueDateDisabled}
+                            onBlur={props.handleBlur}
+                            name="target.originalValueDate"
+                            className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`}
+                            id="targetOriginalValueDate"
+                            inputRef={targetOriginalValueDateRef}
                         />
-                      </Col>
+                      </Form.Group>
                     </Row>
                     {/* Revised Value and Date in one row */}
                     <Row className={styles.view_row}>
-                      <Col>
-                        <Form.Label>Revised Target Value</Form.Label>
+                      <Form.Group className={styles.view_item}>
+                        <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
                         <Form.Control
-                          defaultValue={props.values.target.revisedValue}
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          name="target.revisedValue"
-                          type="number"
-                          className={`${styles.input_field} ${(props.errors.target?.revisedValue && props.touched.target?.revisedValue) && styles.text_is_invalid}`}
-                          placeholder="Enter revised value" />
+                            defaultValue={props.values.target.revisedValue}
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            name="target.revisedValue"
+                            type="number"
+                            className={`${styles.input_field} ${(props.errors.target?.revisedValue && props.touched.target?.revisedValue) && styles.text_is_invalid}`}
+                            placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
+
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.target?.revisedValue}
                         </Form.Control.Feedback>
-                      </Col>
-                      <Col>
-                        <Form.Label>Revised Value Date</Form.Label>
+                      </Form.Group>
+
+                      <Form.Group className={styles.view_item}>
+                        <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
                         <DateInput
-                          translations={translations}
-                          value={props.values.target.revisedValueDate}
-                          onChange={(value) => {
-                            if (value) {
-                              props.setFieldValue("target.revisedValueDate", value);
-                            }
-                          }}
-                          onClear={() => {
-                            props.setFieldValue("target.revisedValueDate", null);
-                          }}
-                          onBlur={props.handleBlur}
-                          name="target.revisedValueDate"
-                          className={`${styles.input_field} ${(props.errors.target?.revisedValueDate && props.touched.target?.revisedValueDate) && styles.text_is_invalid}`}
-                          id="targetRevisedValueDate"
-                          inputRef={targetRevisedValueDateRef}
+                            translations={translations}
+                            value={props.values.target.revisedValueDate}
+                            onChange={(value) => {
+                              if (value) {
+                                props.setFieldValue("target.revisedValueDate", value);
+                              }
+                            }}
+                            onClear={() => {
+                              props.setFieldValue("target.revisedValueDate", null);
+                            }}
+                            onBlur={props.handleBlur}
+                            name="target.revisedValueDate"
+                            className={`${styles.input_field} ${(props.errors.target?.revisedValueDate && props.touched.target?.revisedValueDate) && styles.text_is_invalid}`}
+                            id="targetRevisedValueDate"
+                            inputRef={targetRevisedValueDateRef}
                         />
+
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.target?.revisedValueDate}
                         </Form.Control.Feedback>
-                      </Col>
+                      </Form.Group>
                     </Row>
                   </Form.Group>
-                  {/* Other Considerations - Separate Group */}
+                  {/* Other Considerations */}
                   <Row className={styles.view_row}><Col><h5>Other Considerations</h5></Col></Row>
                   <Row className={styles.view_row}>
                     <Form.Group className={styles.view_item} controlId="Ascending">

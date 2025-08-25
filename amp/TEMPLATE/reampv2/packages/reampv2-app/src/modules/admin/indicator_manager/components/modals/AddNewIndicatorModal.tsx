@@ -46,7 +46,7 @@ interface IndicatorFormValues {
   frequency?: number;
   ascending: boolean;
   creationDate?: any;
-  programId: string;
+  programId?: number;
   base: BaseAndTargetValueType;
   target: BaseAndTargetValueType;
   outputId?: number;
@@ -268,9 +268,9 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     description: '',
     code: '',
     relevanceForClimateChange: '',
-    indicatorType: 0,
+    indicatorType: undefined,
     sectors: [],
-    programId: '',
+    programId: undefined,
     creationDate: DateUtil.getCurrentDate().toString(),
     ascending: false,
     base: {
@@ -348,7 +348,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             description,
             code,
             sectors,
-            programId: programId ? parseInt(programId) : null,
+            programId: programId ? programId : null,
             ascending,
             creationDate: creationDate ? formatDate(new Date(creationDate)) : null,
             base: checkObjectIsNull(base) ? null : {

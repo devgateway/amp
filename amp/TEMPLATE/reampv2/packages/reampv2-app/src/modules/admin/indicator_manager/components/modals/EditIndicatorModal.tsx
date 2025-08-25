@@ -49,7 +49,7 @@ interface IndicatorFormValues {
   frequency?: number;
   ascending: boolean;
   creationDate?: string;
-  programId: string | any;
+  programId: number | any;
   base: BaseAndTargetValueType;
   target: BaseAndTargetValueType;
   outcomeId?: number;
@@ -326,7 +326,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     description: indicator?.description || '',
     code: indicator?.code || '',
     relevanceForClimateChange: indicator?.relevanceForClimateChange || '',
-    indicatorType: indicator?.indicatorType || '',
+    indicatorType: indicator?.indicatorType || undefined,
     sectors: indicator?.sectors || [],
     logframeLinks: indicator?.logframeLinks || [],
     data: indicator?.data || '',
@@ -336,7 +336,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     calculationMethod: indicator?.calculationMethod || '',
     responsibleOrganizations: indicator?.responsibleOrganizations || [],
     frequency: indicator?.frequency || undefined,
-    programId: '',
+    programId:indicator?.programId || undefined,
     ascending: indicator?.ascending || false,
     creationDate: indicator?.creationDate ? convertDateToISO(indicator?.creationDate) : '',
     base: {
@@ -431,7 +431,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
             calculationMethod: values.calculationMethod,
             responsibleOrganizations: values.responsibleOrganizations,
             frequency: values.frequency,
-            programId: values.programId ? parseInt(values.programId) : null,
+            programId: values.programId ? values.programId: null,
             ascending: values.ascending,
             creationDate: values.creationDate && formatDate(values.creationDate),
             base: checkObjectIsNull(values.base) ? null : {

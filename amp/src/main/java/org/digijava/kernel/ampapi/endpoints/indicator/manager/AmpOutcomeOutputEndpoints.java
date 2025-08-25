@@ -92,6 +92,7 @@ public class AmpOutcomeOutputEndpoints {
 
     @DELETE
     @Path("/outcome/delete/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "deleteOutcome")
     @ApiOperation(value = "Delete outcome", notes = "Deletes an outcome by ID")
     public Response deleteOutcome(@PathParam("id") Long id) {

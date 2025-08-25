@@ -34,7 +34,7 @@ interface IndicatorFormValues {
   description?: string;
   code: string;
   relevanceForClimateChange?: string;
-  indicatorType?: string;
+  indicatorType?: number;
   sectors: number[];
   logframeLinks: string[];
   data?: string;
@@ -268,7 +268,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     description: '',
     code: '',
     relevanceForClimateChange: '',
-    indicatorType: '',
+    indicatorType: 0,
     sectors: [],
     programId: '',
     creationDate: DateUtil.getCurrentDate().toString(),

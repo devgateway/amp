@@ -37,7 +37,7 @@ interface IndicatorFormValues {
   description?: string;
   code: string;
   relevanceForClimateChange?: string;
-  indicatorType?: string;
+  indicatorType?: number;
   sectors: any[];
   logframeLinks: string[];
   data?: string;

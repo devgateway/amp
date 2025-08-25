@@ -10,6 +10,7 @@ import paginationFactory from '@musicstory/react-bootstrap-table2-paginator';
 import initialTranslations from '../config/initialTranslations.json';
 import './css/ModalZIndexFix.css'; // Add z-index to modal and backdrop to ensure visibility
 import Swal from 'sweetalert2';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 interface Outcome {
   id: number;

@@ -506,14 +506,15 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     </Form.Group>
                   </Row>
                   <Row className={styles.view_row}>
-                    <Form.Group className={styles.view_one_item} controlId="formBasicDescription">
+                    <Form.Group as={Col} className={styles.view_one_item} controlId="formBasicDescription">
                       <Form.Label>{translations["amp.indicatormanager:indicator-description"]}</Form.Label>
                       <Form.Control
                         defaultValue={props.values.description}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
                         name="description"
-                        type="text"
+                        as="textarea"
+                        rows={2}
                         className={`${styles.input_field} ${(props.errors.description && props.touched.description) && styles.text_is_invalid}`}
                         placeholder={translations["amp.indicatormanager:enter-indicator-description"]}
                       />
@@ -523,14 +524,15 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     </Form.Group>
                   </Row>
                   <Row className={styles.view_row}>
-                    <Form.Group className={styles.view_one_item} controlId="formRelevanceForClimateChange">
+                    <Form.Group as={Col} className={styles.view_one_item} controlId="formRelevanceForClimateChange">
                       <Form.Label>{translations["amp.indicatormanager:relevance-for-climate-change"]}</Form.Label>
                       <Form.Control
                         defaultValue={props.values.relevanceForClimateChange}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
                         name="relevanceForClimateChange"
-                        type="text"
+                        as="textarea"
+                        rows={2}
                         className={styles.input_field}
                         placeholder={translations["amp.indicatormanager:relevance-for-climate-change"]}
                       />
@@ -753,12 +755,11 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                   {/* Value Tracking */}
                   <Row className={styles.view_row}><Col><h5>Value Tracking</h5></Col></Row>
                   <Form.Group as={Col}>
+                    <Form.Label><h4>Base Values</h4></Form.Label>
+                    {/* Original Value and Date in one row */}
                     <Row className={styles.view_row}>
-                      <Form.Label className={styles.view_one_item}><h4>Base Value</h4></Form.Label>
-                    </Row>
-                    <Row className={styles.view_row}>
-                      <Form.Group className={styles.view_item}>
-                        <Form.Label>Original Value</Form.Label>
+                      <Col>
+                        <Form.Label>Original Base Value</Form.Label>
                         <Form.Control
                           defaultValue={props.values.base?.originalValue}
                           onChange={props.handleChange}
@@ -770,8 +771,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.base?.originalValue}
                         </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group className={styles.view_item}>
+                      </Col>
+                      <Col>
                         <Form.Label>Original Value Date</Form.Label>
                         <DateInput
                           translations={translations}
@@ -794,11 +795,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.base?.originalValueDate}
                         </Form.Control.Feedback>
-                      </Form.Group>
+                      </Col>
                     </Row>
+                    {/* Revised Value and Date in one row */}
                     <Row className={styles.view_row}>
-                      <Form.Group className={styles.view_item}>
-                        <Form.Label>Revised Value</Form.Label>
+                      <Col>
+                        <Form.Label>Revised Base Value</Form.Label>
                         <Form.Control
                           defaultValue={props.values.base.revisedValue}
                           onChange={props.handleChange}
@@ -810,8 +812,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.base?.revisedValue}
                         </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group className={styles.view_item}>
+                      </Col>
+                      <Col>
                         <Form.Label>Revised Value Date</Form.Label>
                         <DateInput
                           translations={translations}
@@ -833,14 +835,15 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.base?.revisedValueDate}
                         </Form.Control.Feedback>
-                      </Form.Group>
+                      </Col>
                     </Row>
                   </Form.Group>
                   <Form.Group as={Col}>
-                    <Form.Label><h4>Target Value</h4></Form.Label>
+                    <Form.Label><h4>Target Values</h4></Form.Label>
+                    {/* Original Value and Date in one row */}
                     <Row className={styles.view_row}>
-                      <Form.Group className={styles.view_item}>
-                        <Form.Label>Original Value</Form.Label>
+                      <Col>
+                        <Form.Label>Original Target Value</Form.Label>
                         <Form.Control
                           defaultValue={props.values.target.originalValue}
                           onChange={props.handleChange}
@@ -852,8 +855,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.target?.originalValue}
                         </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group className={styles.view_item}>
+                      </Col>
+                      <Col>
                         <Form.Label>Original Value Date</Form.Label>
                         <DateInput
                           translations={translations}
@@ -873,11 +876,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           id="targetOriginalValueDate"
                           inputRef={targetOriginalValueDateRef}
                         />
-                      </Form.Group>
+                      </Col>
                     </Row>
+                    {/* Revised Value and Date in one row */}
                     <Row className={styles.view_row}>
-                      <Form.Group className={styles.view_item}>
-                        <Form.Label>Revised Value</Form.Label>
+                      <Col>
+                        <Form.Label>Revised Target Value</Form.Label>
                         <Form.Control
                           defaultValue={props.values.target.revisedValue}
                           onChange={props.handleChange}
@@ -889,8 +893,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.target?.revisedValue}
                         </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group className={styles.view_item}>
+                      </Col>
+                      <Col>
                         <Form.Label>Revised Value Date</Form.Label>
                         <DateInput
                           translations={translations}
@@ -912,40 +916,44 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.target?.revisedValueDate}
                         </Form.Control.Feedback>
-                      </Form.Group>
+                      </Col>
                     </Row>
                   </Form.Group>
-                  {/* Other Considerations */}
+                  {/* Other Considerations - Separate Group */}
                   <Row className={styles.view_row}><Col><h5>Other Considerations</h5></Col></Row>
                   <Row className={styles.view_row}>
-                    <Form.Group className={styles.view_item} controlId="formCreationDate">
-                      <Form.Label>Creation Date</Form.Label>
-                      <DateInput
-                        translations={translations}
-                        name="creationDate"
-                        value={props.values.creationDate}
-                        disabled
-                        defaultValue={new Date()}
-                        clearIcon={null}
-                        calendarIcon={null}
-                        className={styles.input_field}
-                        id="creationDate"
-                        disableCalendar={true}
-                        inputRef={creationDateRef}/>
-                    </Form.Group>
                     <Form.Group className={styles.view_item} controlId="Ascending">
-                      <Form.Label>Ascending</Form.Label>
+                      <Form.Label>{translations["amp.indicatormanager:ascending"]}</Form.Label>
                       <Select
-                        name="ascending"
-                        options={ascendingOptions}
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                        onBlur={props.handleBlur}
-                        onChange={(value) => {
-                          props.setFieldValue("ascending", value?.value);
-                        }}
-                        defaultValue={{ value: props.values.ascending, label: props.values.ascending ? translations["amp.indicatormanager:true"] : translations["amp.indicatormanager:false"] }}
+                          name="ascending"
+                          options={ascendingOptions}
+                          onBlur={props.handleBlur}
+                          className={`${styles.input_field} ${(props.errors.ascending && props.touched.ascending) && styles.text_is_invalid}`}
+                          classNamePrefix="select"
+                          onChange={(value) => {
+                            if (value) props.setFieldValue('ascending', value.value)
+                          }}
+                          defaultValue={{
+                            value: false,
+                            label: translations["amp.indicatormanager:true"]
+                          }}
                       />
+                      <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                        {props.errors.ascending}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+
+                    <Form.Group className={styles.view_item} controlId="formCreationDate">
+                      <Form.Label>{translations["amp.indicatormanager:table-header-creation-date"]}</Form.Label>
+                      <DateInput
+                          translations={translations}
+                          name="creationDate"
+                          defaultValue={props.values.creationDate}
+                          disabled
+                          value={props.values.creationDate}
+                          clearIcon={null}
+                          calendarIcon={null}
+                          className={styles.input_field} />
                     </Form.Group>
                   </Row>
                 </div>

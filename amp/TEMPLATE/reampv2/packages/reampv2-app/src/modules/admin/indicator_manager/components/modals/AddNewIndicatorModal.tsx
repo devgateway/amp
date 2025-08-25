@@ -442,41 +442,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                   </Form.Group>
                 </Row>
 
-                <Row className={styles.view_row}>
-                  <Form.Group className={styles.view_item} controlId="Ascending">
-                    <Form.Label>{translations["amp.indicatormanager:ascending"]}</Form.Label>
-                    <Select
-                      name="ascending"
-                      options={ascendingOptions}
-                      onBlur={props.handleBlur}
-                      className={`${styles.input_field} ${(props.errors.ascending && props.touched.ascending) && styles.text_is_invalid}`}
-                      classNamePrefix="select"
-                      onChange={(value) => {
-                        if (value) props.setFieldValue('ascending', value.value)
-                      }}
-                      defaultValue={{
-                        value: false,
-                        label: translations["amp.indicatormanager:true"]
-                      }}
-                    />
-                    <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                      {props.errors.ascending}
-                    </Form.Control.Feedback>
-                  </Form.Group>
 
-                  <Form.Group className={styles.view_item} controlId="formCreationDate">
-                    <Form.Label>{translations["amp.indicatormanager:table-header-creation-date"]}</Form.Label>
-                    <DateInput
-                        translations={translations}
-                      name="creationDate"
-                      defaultValue={props.values.creationDate}
-                      disabled
-                      value={props.values.creationDate}
-                      clearIcon={null}
-                      calendarIcon={null}
-                      className={styles.input_field} />
-                  </Form.Group>
-                </Row>
 
                 <Row className={styles.view_row}>
                   <Form.Group className={styles.view_one_item} controlId="formRelevanceForClimateChange">
@@ -486,7 +452,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
                       name="relevanceForClimateChange"
-                      type="text"
+                      as="textarea"
+                      rows={2}
                       className={styles.input_field}
                       placeholder={translations["amp.indicatormanager:relevance-for-climate-change"]}
                     />
@@ -716,10 +683,11 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                   <Form.Group className={styles.view_item} controlId="valueTracking">
                     <Form.Label><b>Value Tracking</b></Form.Label>
                     <div style={{ marginLeft: '1rem' }}>
-                      <Form.Label><u>Base Value</u></Form.Label>
+                      <Form.Label><u>Base Values</u></Form.Label>
+                      {/* Original Value and Date in one row */}
                       <Row>
                         <Col>
-                          <Form.Label>Original Value (numeric)</Form.Label>
+                          <Form.Label>Original Base Value</Form.Label>
                           <Form.Control
                             type="number"
                             name="base.originalValue"
@@ -730,7 +698,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           />
                         </Col>
                         <Col>
-                          <Form.Label>Date</Form.Label>
+                          <Form.Label>Original ValueDate</Form.Label>
                           <DateInput
                               translations={translations}
                             name="base.originalValueDate"
@@ -739,8 +707,11 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                           />
                         </Col>
+                      </Row>
+                      {/* Revised Value and Date in one row */}
+                      <Row>
                         <Col>
-                          <Form.Label>Revised Value (numeric)</Form.Label>
+                          <Form.Label>Revised Base Value</Form.Label>
                           <Form.Control
                             type="number"
                             name="base.revisedValue"
@@ -751,7 +722,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           />
                         </Col>
                         <Col>
-                          <Form.Label>Date</Form.Label>
+                          <Form.Label>Revised Value Date</Form.Label>
                           <DateInput
                               translations={translations}
                             name="base.revisedValueDate"
@@ -762,9 +733,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                         </Col>
                       </Row>
                       <Form.Label style={{ marginTop: '1rem' }}><u>Target Value</u></Form.Label>
+                      {/* Original Value and Date in one row */}
                       <Row>
                         <Col>
-                          <Form.Label>Original Value (numeric)</Form.Label>
+                          <Form.Label>Original Target Value</Form.Label>
                           <Form.Control
                             type="number"
                             name="target.originalValue"
@@ -775,7 +747,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           />
                         </Col>
                         <Col>
-                          <Form.Label>Date</Form.Label>
+                          <Form.Label>Original Value Date</Form.Label>
                           <DateInput
                               translations={translations}
                             name="target.originalValueDate"
@@ -784,8 +756,11 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                           />
                         </Col>
+                      </Row>
+                      {/* Revised Value and Date in one row */}
+                      <Row>
                         <Col>
-                          <Form.Label>Revised Value (numeric)</Form.Label>
+                          <Form.Label>Revised Target Value</Form.Label>
                           <Form.Control
                             type="number"
                             name="target.revisedValue"
@@ -796,7 +771,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           />
                         </Col>
                         <Col>
-                          <Form.Label>Date</Form.Label>
+                          <Form.Label>Revised Value Date</Form.Label>
                           <DateInput
                               translations={translations}
                             name="target.revisedValueDate"
@@ -812,29 +787,38 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                 {/* Other Considerations - Separate Group */}
                 <Row className={styles.view_row}><Col><h5>Other Considerations</h5></Col></Row>
                 <Row className={styles.view_row}>
-                  <Form.Group className={styles.view_item} controlId="otherConsiderations">
-                    <Row>
-                      <Col>
-                        <Form.Label>Creation Date</Form.Label>
-                        <DateInput
-                            translations={translations}
-                          name="creationDate"
-                          value={props.values.creationDate || ''}
-                          onChange={val => props.setFieldValue('creationDate', val)}
-                          onBlur={props.handleBlur}
-                        />
-                      </Col>
-                      <Col>
-                        <Form.Label>Ascending <span style={{ fontStyle: 'italic', color: 'gray' }}>(review necessity)</span></Form.Label>
-                        <Form.Check
-                          type="checkbox"
-                          name="ascending"
-                          checked={!!props.values.ascending}
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                        />
-                      </Col>
-                    </Row>
+                  <Form.Group className={styles.view_item} controlId="Ascending">
+                    <Form.Label>{translations["amp.indicatormanager:ascending"]}</Form.Label>
+                    <Select
+                        name="ascending"
+                        options={ascendingOptions}
+                        onBlur={props.handleBlur}
+                        className={`${styles.input_field} ${(props.errors.ascending && props.touched.ascending) && styles.text_is_invalid}`}
+                        classNamePrefix="select"
+                        onChange={(value) => {
+                          if (value) props.setFieldValue('ascending', value.value)
+                        }}
+                        defaultValue={{
+                          value: false,
+                          label: translations["amp.indicatormanager:true"]
+                        }}
+                    />
+                    <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                      {props.errors.ascending}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
+                  <Form.Group className={styles.view_item} controlId="formCreationDate">
+                    <Form.Label>{translations["amp.indicatormanager:table-header-creation-date"]}</Form.Label>
+                    <DateInput
+                        translations={translations}
+                        name="creationDate"
+                        defaultValue={props.values.creationDate}
+                        disabled
+                        value={props.values.creationDate}
+                        clearIcon={null}
+                        calendarIcon={null}
+                        className={styles.input_field} />
                   </Form.Group>
                 </Row>
               </div>

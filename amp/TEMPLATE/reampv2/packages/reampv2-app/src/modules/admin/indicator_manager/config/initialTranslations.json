@@ -4,7 +4,7 @@
   "amp.indicatormanager:table-title": "Indicator Manager",
   "amp.indicatormanager:sectors": "Sectors",
   "amp.indicatormanager:all-sectors": "All Sectors",
-  "amp.indicatormanager:search": "Search",
+  "amp.indicatormanager:search": "Search by name or code",
   "amp.indicatormanager:export-csv": "Export CSV",
   "amp.indicatormanager:table-header-id": "ID",
   "amp.indicatormanager:table-header-code": "Code",
@@ -32,7 +32,6 @@
   "amp.indicatormanager:indicator-name": "Indicator Name",
   "amp.indicatormanager:indicator-description": "Indicator Description",
   "amp.indicatormanager:indicator-code": "Indicator Code",
-  "amp.indicatormanager:indicator-type": "Indicator Type",
   "amp.indicatormanager:enable-base": "Enable Base Values Input",
   "amp.indicatormanager:enable-target": "Enable Target Values Input",
   "amp.indicatormanager:base-values": "Base Values",
@@ -165,5 +164,11 @@
   "amp.indicatormanager:link-logframe": "Link to Logframe (Program Scheme)",
   "amp.indicatormanager:value-tracking": "Value Tracking",
   "amp.indicatormanager:other-considerations": "Other Considerations",
-  "amp.indicatormanager:categorization-linkage-info": "Categorization and Linkage"
+  "amp.indicatormanager:categorization-linkage-info": "Categorization and Linkage",
+  "amp.indicatormanager:output": "Output",
+  "amp.indicatormanager:outcome": "Outcome",
+  "amp.indicatormanager:search-code": "Search by Code",
+  "amp.indicatormanager:search-name": "Search by Name",
+  "amp.indicatormanager:all-outputs": "All Outputs",
+  "amp.indicatormanager:all-outcomes": "All Outcomes"
 }

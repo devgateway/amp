@@ -12,6 +12,9 @@ import styles from './IndicatorTable.module.css';
 import {DefaultComponentProps, IndicatorObjectType, ProgramObjectType, SettingsType} from '../../types';
 
 import {getIndicators} from '../../reducers/fetchIndicatorsReducer';
+import fetchOutcomesReducer from '../../reducers/fetchOutcomesReducer';
+import fetchAmpCategoryReducer from '../../reducers/fetchAmpCategoryReducer';
+import fetchOutputsReducer from '../../reducers/fetchOutputsReducer';
 
 // Modals
 import ViewIndicatorModal from '../modals/ViewIndicatorModal';
@@ -28,6 +31,9 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
   const globalSettings: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
   const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
+  const outcomesReducer = useSelector((state: any) => state.fetchOutcomesReducer);
+  const ampCategoryReducer = useSelector((state: any) => state.fetchAmpCategoryReducer);
+  const outputsReducer = useSelector((state: any) => state.fetchOutputsReducer);
 
   useLayoutEffect(() => {
     dispatch(getIndicators());
@@ -40,6 +46,11 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
   const [showDeleteIndicatorModal, setShowDeleteIndicatorModal] = useState<boolean>(false);
   const [selectedSector, setSelectedSector] = useState(0);
   const [selectedProgram, setSelectedProgram] = useState(0);
+  const [selectedOutcome, setSelectedOutcome] = useState(0);
+  const [selectedOutput, setSelectedOutput] = useState(0);
+  const [selectedIndicatorType, setSelectedIndicatorType] = useState(0);
+  const [indicatorCode, setIndicatorCode] = useState('');
+  const [indicatorName, setIndicatorName] = useState('');
   const [indicators, setIndicators] = useState<IndicatorObjectType[]>(fetchedIndicators);
 
   useEffect(() => {
@@ -92,7 +103,6 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
             return _cell.map((sectorId: any) => {
               if (sectorId) {
                 const foundSector = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: any) => sector.id === sectorId);
-
                 if (foundSector) {
                   return foundSector.name
                 } else {
@@ -108,21 +118,12 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
                 <div>
                   {
                     _cell.map((sectorId: any) => {
-
                       const foundSector = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: any) => sector.id === sectorId);
-
                       if (foundSector) {
-                        return <span key={sectorId}>{foundSector.name}
-                          <br />
-
-                  </span>
+                        return <span key={sectorId}>{foundSector.name}<br /></span>
                       }
-
                       return (
-                          <span key={sectorId}>
-                    {sectorId}
-                            <br />
-                  </span>
+                          <span key={sectorId}>{sectorId}<br /></span>
                       )
                     })
                   }
@@ -131,45 +132,51 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
           },
         }
       ]: []),
-
-        ...(globalSettings["indicator-filter-by-program"] ? [
-          {
-            dataField: 'programs',
-            text: translations['amp.indicatormanager:programs'],
-            sort: true,
-            headerStyle: {width: '40%'},
-            csvFormatter: (_cell: any, row: any) => {
-              const programId = row.programId;
-              if (programId) {
-                const foundProgram = !programsReducer.loading && programsReducer.programs.find((program: any) => program.id === programId);
-                if (foundProgram) {
-                  return foundProgram.name;
-                } else {
-                  return programId;
-                }
-
-              }else {
-                return '';
-              }
-            },
-            formatter: (_cell: any, row: any) => {
-              const programId = row.programId;
-              const foundProgram = !programsReducer.loading && programsReducer.programs.find((program: any) => program.id === programId);
-
-              if (foundProgram) {
-                return <span key={programId}>{foundProgram.name}
-                  <br />
-                  </span>
-              }
-              return (
-                  <span key={programId}>
-                    {programId}
-                    <br />
-                  </span>
-              )
-            }
-          }
-        ]: []),
+      // Output column
+      {
+        dataField: 'output',
+        text: translations['amp.indicatormanager:output'],
+        sort: true,
+        headerStyle: { width: '20%' },
+        formatter: (_cell: any, row: any) => {
+          const foundOutput = !outputsReducer.loading && outputsReducer.outputs.find((output: any) => output.id === row.output);
+          return foundOutput ? foundOutput.name : row.output || '';
+        },
+        csvFormatter: (_cell: any, row: any) => {
+          const foundOutput = !outputsReducer.loading && outputsReducer.outputs.find((output: any) => output.id === row.output);
+          return foundOutput ? foundOutput.name : row.output || '';
+        }
+      },
+      // Outcome column
+      {
+        dataField: 'outcome',
+        text: translations['amp.indicatormanager:outcome'],
+        sort: true,
+        headerStyle: { width: '20%' },
+        formatter: (_cell: any, row: any) => {
+          const foundOutcome = !outcomesReducer.loading && outcomesReducer.outcomes.find((outcome: any) => outcome.id === row.outcome);
+          return foundOutcome ? foundOutcome.name : row.outcome || '';
+        },
+        csvFormatter: (_cell: any, row: any) => {
+          const foundOutcome = !outcomesReducer.loading && outcomesReducer.outcomes.find((outcome: any) => outcome.id === row.outcome);
+          return foundOutcome ? foundOutcome.name : row.outcome || '';
+        }
+      },
+      // Indicator Type column
+      {
+        dataField: 'indicatorType',
+        text: translations['amp.indicatormanager:indicator-type'],
+        sort: true,
+        headerStyle: { width: '15%' },
+        formatter: (_cell: any, row: any) => {
+          const foundType = !ampCategoryReducer.loading && ampCategoryReducer.categories.find((cat: any) => cat.id === row.indicatorType);
+          return foundType ? foundType.value : row.indicatorType || '';
+        },
+        csvFormatter: (_cell: any, row: any) => {
+          const foundType = !ampCategoryReducer.loading && ampCategoryReducer.categories.find((cat: any) => cat.id === row.indicatorType);
+          return foundType ? foundType.value : row.indicatorType || '';
+        }
+      },
     {
       dataField: 'creationDate',
       text: translations['amp.indicatormanager:table-header-creation-date'],
@@ -210,40 +217,66 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
         </Row>
       ),
     },
+      // Program column
+      ...(globalSettings["indicator-filter-by-program"] ? [
+        {
+          dataField: 'programId',
+          text: translations['amp.indicatormanager:programs'],
+          sort: true,
+          headerStyle: {width: '40%'},
+          csvFormatter: (_cell: any, row: any) => {
+            const programId = row.programId;
+            if (programId) {
+              const foundProgram = !programsReducer.loading && programsReducer.programs.find((program: any) => program.id === programId);
+              if (foundProgram) {
+                return foundProgram.name;
+              } else {
+                return programId;
+              }
+            } else {
+              return '';
+            }
+          },
+          formatter: (_cell: any, row: any) => {
+            const programId = row.programId;
+            const foundProgram = !programsReducer.loading && programsReducer.programs.find((program: any) => program.id === programId);
+            if (foundProgram) {
+              return <span key={programId}>{foundProgram.name}<br /></span>
+            }
+            return (
+                <span key={programId}>{programId}<br /></span>
+            )
+          }
+        }
+      ]: []),
   ], []);
 
-  const handleFilterIndicators = () => {
-    if (Number(selectedSector) === 0) {
-      setIndicators(fetchedIndicators);
-      return;
-    }
-    const filteredIndicators = fetchedIndicators.filter((indicator: IndicatorObjectType) => {
-      return indicator.sectors.includes(Number(selectedSector));
-    });
-    setIndicators([]);
-    setIndicators(filteredIndicators);
-  }
-
-  const handleFilterIndicatorsByProgram = () => {
-    if (Number(selectedProgram) === 0) {
-      setIndicators(fetchedIndicators);
-      return;
-    }
-    const filteredIndicators = fetchedIndicators.filter((indicator: IndicatorObjectType) => {
-      // @ts-ignore
-      return indicator.programId === Number(selectedProgram);
-    });
-    setIndicators([]);
-    setIndicators(filteredIndicators);
-  }
-
+  // Filtering logic for all fields
   useEffect(() => {
-    handleFilterIndicators();
-  }, [selectedSector]);
-
-    useEffect(() => {
-        handleFilterIndicatorsByProgram();
-    }, [selectedProgram]);
+    let filtered = fetchedIndicators;
+    if (Number(selectedSector) !== 0) {
+      filtered = filtered.filter((indicator: IndicatorObjectType) => indicator.sectors.includes(Number(selectedSector)));
+    }
+    if (Number(selectedProgram) !== 0) {
+      filtered = filtered.filter((indicator: IndicatorObjectType) => indicator.programId === Number(selectedProgram));
+    }
+    if (Number(selectedOutcome) !== 0) {
+      filtered = filtered.filter((indicator: IndicatorObjectType) => indicator.outcomeId === Number(selectedOutcome));
+    }
+    if (Number(selectedOutput) !== 0) {
+      filtered = filtered.filter((indicator: IndicatorObjectType) => indicator.outputId === Number(selectedOutput));
+    }
+    if (Number(selectedIndicatorType) !== 0) {
+      filtered = filtered.filter((indicator: IndicatorObjectType) => indicator.indicatorType === Number(selectedIndicatorType));
+    }
+    if (indicatorCode) {
+      filtered = filtered.filter((indicator: IndicatorObjectType) => indicator.code?.toLowerCase().includes(indicatorCode.toLowerCase()));
+    }
+    if (indicatorName) {
+      filtered = filtered.filter((indicator: IndicatorObjectType) => indicator.name?.toLowerCase().includes(indicatorName.toLowerCase()));
+    }
+    setIndicators(filtered);
+  }, [fetchedIndicators, selectedSector, selectedProgram, selectedOutcome, selectedOutput, selectedIndicatorType]);
 
   return (
     <>
@@ -290,6 +323,9 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
             translations={translations}
             filterBySector={globalSettings["indicator-filter-by-sector"]}
             filterByProgram={globalSettings["indicator-filter-by-program"]}
+            setSelectedOutcome={setSelectedOutcome}
+            setSelectedOutput={setSelectedOutput}
+            setSelectedIndicatorType={setSelectedIndicatorType}
           />
       }
     </>

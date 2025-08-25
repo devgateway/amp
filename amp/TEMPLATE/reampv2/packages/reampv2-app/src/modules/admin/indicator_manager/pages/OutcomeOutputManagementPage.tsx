@@ -33,7 +33,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
   const [showEditOutcomeModal, setShowEditOutcomeModal] = useState(false);
   const [editingOutcome, setEditingOutcome] = useState<Outcome | null>(null);
   const [outcomes, setOutcomes] = useState<Outcome[]>([]);
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('/rest/amp-outcome-output/outcomes')
@@ -52,21 +52,26 @@ const OutcomeOutputManagementPage: React.FC = () => {
       text: 'Actions',
       formatter: (_: any, row: Outcome) => (
         <>
-          <Button
-            size="sm"
-            variant="outline-primary"
-            onClick={() => handleEditOutcome(row)}
+          <div className={styles.action_container}
           >
-            <i className="fa fa-edit" />
-          </Button>
+            <i
+               onClick={() => handleEditOutcome(row)}
+               style={{ fontSize: 20, color: '#198754' }}
+               className="fa fa-pencil"
+               aria-hidden="true"
+            />
+          </div>
           {' '}
-          <Button
-            size="sm"
-            variant="outline-danger"
-            onClick={() => handleDeleteOutcome(row)}
+          <div className={styles.action_container}
+
           >
-            <i className="fa fa-trash" />
-          </Button>
+            <i className="fa fa-trash"
+               style={{ fontSize: 20, color: '#dc3545' }}
+               aria-hidden="true"
+               onClick={() => handleDeleteOutcome(row)}
+
+            />
+          </div>
         </>
       ),
       headerStyle: { width: '160px' },
@@ -231,7 +236,6 @@ const OutcomeOutputManagementPage: React.FC = () => {
 
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
-  const navigate = useNavigate();
 
   const paginationOptions: PaginationOptions = {
     paginationSize: 4,
@@ -244,10 +248,6 @@ const OutcomeOutputManagementPage: React.FC = () => {
       { text: 'All', value: outcomes.length }
     ],
     sizePerPage: 10
-  };
-
-  const handleGoToOutputManagement = () => {
-    window.location.href = '/admin/indicator_manager/output-management';
   };
 
   return (
@@ -267,6 +267,26 @@ const OutcomeOutputManagementPage: React.FC = () => {
         translations={translations}
       />
       <Col sm={12}>
+        <Row className={styles.table_header}>
+          <Col sm={6}>
+            <h3>Outcome Management</h3>
+          </Col>
+          <Col sm={6}>
+            <Button variant="secondary" onClick={() => navigate('/admin/indicator_manager')} style={{ float: 'right', marginLeft: '10px' }}>
+              <i className="fa fa-arrow-left" /> Back
+            </Button>
+            <span style={{ float: 'right', marginLeft: '10px' }}>
+              <Button variant="primary" onClick={() => setShowAddNewOutcomeModal(true)}>
+                <i className="fa fa-plus" /> Add New Outcome
+              </Button>
+            </span>
+            <span style={{ float: 'right', marginLeft: '10px' }}>
+              <Button variant="info" onClick={() => navigate('/admin/indicator_manager/outcome-output-management')}>
+                <i className="fa fa-share" /> Output Management
+              </Button>
+            </span>
+          </Col>
+        </Row>
         <ToolkitProvider
           keyField="id"
           data={outcomes}
@@ -276,23 +296,9 @@ const OutcomeOutputManagementPage: React.FC = () => {
         >
           {(props: ToolkitContextType) => (
             <div>
-              <Row className={styles.table_header}>
-                <Col sm={6}>
-                  <h3>{translations['amp.outcomeoutput:management-title']}</h3>
-                </Col>
-                <Col sm={6}>
-                  <Button variant="primary" onClick={()=>navigate('/admin/indicator_manager/output-management')} style={{ float: 'right' }}>
-                    <i className="fa fa-cogs" /> Output Management
-                  </Button>
-                  <hr />
-                </Col>
-              </Row>
               <Row sm={12} className={styles.table_header_bottom}>
                 <Col sm={4}>
                   <div className={styles.table_header_bottom_left}>
-                    <Button variant="primary" onClick={() => {setShowAddNewOutcomeModal(true);}}>
-                      <i className="fa fa-plus" /> {translations['amp.outcomeoutput:add-new-outcome']}
-                    </Button>
                     {' '}
                     <ExportCSVButton {...props.csvProps} className={styles.export_button}>
                       <i className="fa fa-download" /> {translations['amp.outcomeoutput:export-csv']}

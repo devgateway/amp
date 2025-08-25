@@ -35,6 +35,9 @@ interface SkeletonTableProps extends DefaultComponentProps {
   programs?: ProgramObjectType[];
   setSelectedSector: React.Dispatch<React.SetStateAction<number>>;
   setSelectedProgram: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedOutcome: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedOutput: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedIndicatorType: React.Dispatch<React.SetStateAction<number>>;
   filterBySector: boolean;
   filterByProgram: boolean;
 }
@@ -73,6 +76,9 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
     sectors,
     setSelectedSector,
     setSelectedProgram,
+      setSelectedOutcome,
+      setSelectedOutput,
+      setSelectedIndicatorType,
     translations,
     filterBySector,
     filterByProgram,
@@ -108,6 +114,22 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
     label: translations['amp.indicatormanager:all-sectors']
   }]);
 
+  const [outcomeOptions, setOutcomeOptions] = useState<SelectValue[]>([{
+    value: 0,
+    label: translations['amp.indicatormanager:all-outcomes']
+  }]);
+  const [outputOptions, setOutputOptions] = useState<SelectValue[]>([{
+    value: 0,
+    label: translations['amp.indicatormanager:all-outputs']
+  }]);
+  const [indicatorTypeOptions, setIndicatorTypeOptions] = useState<SelectValue[]>([{
+    value: 0,
+    label: translations['amp.indicatormanager:all-indicator-types']
+  }]);
+
+
+
+
   const showAddNewIndicatorModalHandler = () => {
     setShowAddNewIndicatorModal(true);
   };
@@ -116,16 +138,44 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
     const formatPrograms = formatProgramSchemeToSelect(programConfiguration);
     setProgramOptions(prevState => [...prevState, ...formatPrograms]);
 
+    if (sectors) {
+      const formatSectors = sectors.map((sector) => ({
+        value: sector.id,
+        label: sector.name,
+      }));
+      setSectorOptions(prevState => [...prevState, ...formatSectors]);
+    }
 
-     if (sectors) {
-       const formatSectors = sectors.map((sector) => ({
-            value: sector.id,
-            label: sector.name,
-       }));
+    // Set outcome options from Redux
+    const outcomesReducer = useSelector((state: any) => state.fetchOutcomesReducer);
+    if (outcomesReducer && outcomesReducer.outcomes) {
+      const formattedOutcomes = outcomesReducer.outcomes.map((outcome: any) => ({
+        value: outcome.id,
+        label: outcome.name,
+      }));
+      setOutcomeOptions([{ value: 0, label: translations['amp.indicatormanager:all-outcomes'] }, ...formattedOutcomes]);
+    }
 
-       setSectorOptions(prevState => [...prevState, ...formatSectors]);
-     }
-  }, []);
+    // Set output options from Redux
+    const outputsReducer = useSelector((state: any) => state.fetchOutputsReducer);
+    if (outputsReducer && outputsReducer.outputs) {
+      const formattedOutputs = outputsReducer.outputs.map((output: any) => ({
+        value: output.id,
+        label: output.name,
+      }));
+      setOutputOptions([{ value: 0, label: translations['amp.indicatormanager:all-outputs'] }, ...formattedOutputs]);
+    }
+
+    // Set indicator type options from Redux
+    const indicatorTypesReducer = useSelector((state: any) => state.fetchIndicatorTypesReducer);
+    if (indicatorTypesReducer && indicatorTypesReducer.indicatorTypes) {
+      const formattedIndicatorTypes = indicatorTypesReducer.indicatorTypes.map((indicatorType: any) => ({
+        value: indicatorType.id,
+        label: indicatorType.name,
+      }));
+      setIndicatorTypeOptions([{ value: 0, label: translations['amp.indicatormanager:all-indicator-types'] }, ...formattedIndicatorTypes]);
+    }
+  }, [sectors, programConfiguration, translations]);
 
   useEffect(() => {
     setSelectedSector(0);
@@ -250,12 +300,13 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                           {' '}
                           <span>{translations['amp.dashboard:add-new']}</span>
                         </Button>
-                        {' '}
+                        <span style={{ float: 'right', marginLeft: '10px' }}>
                         <Button type="secondary" onClick={() => navigate('/admin/indicator_manager/outcome-output-management')}>
                           <i className="fa fa-tasks" />
                           {' '}
                           <span>{translations['amp.dashboard:outcome-output-management'] || 'Outcome and Output Management'}</span>
                         </Button>
+                        </span>
                         <ExportCSVButton
                           {...props.csvProps}
                           className={styles.export_button}
@@ -357,19 +408,52 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                                                   className={styles.filter_select}
                                               />
                                           )
-
                                         }
                                         </>
-                                  )}
+                                    )
+                                  }
                                 </div>
-                            )
+                          )
                         }
+
+                        {/* Outcome filter */}
+                        <div className={styles.sector_filter_container}>
+                          <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:outcome']}</Form.Label>
+                          <Select
+                            options={props.outcomeOptions}
+                            onChange={(opt:any) =>setSelectedOutcome(opt?.value || 0)}
+                            className={styles.filter_select}
+                            components={{ IndicatorSeparator: () => null }}
+                          />
+                        </div>
+                        {/* Output filter */}
+                        <div className={styles.sector_filter_container}>
+                          <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:output']}</Form.Label>
+                          <Select
+                            options={props.outputOptions}
+                            onChange={(opt : any) => setSelectedOutput(opt?.value || 0)}
+                            className={styles.filter_select}
+                            components={{ IndicatorSeparator: () => null }}
+                          />
+                        </div>
+                        {/* Indicator Type filter */}
+                        <div className={styles.sector_filter_container}>
+                          <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:indicator-type']}</Form.Label>
+                          <Select
+                            options={props.indicatorTypeOptions}
+                            onChange={(opt:any) => setSelectedIndicatorType(opt?.value || 0)}
+                            className={styles.filter_select}
+                            components={{ IndicatorSeparator: () => null }}
+                          />
+                        </div>
 
 
                         <div className={styles.search_container}>
                           <SearchBar
                               {...props.searchProps}
                               placeholder={translations['amp.indicatormanager:search']}
+                              // Only search by name and code
+                              columns={[{ dataField: 'name', text: 'Name' }, { dataField: 'code', text: 'Code' }]}
                           />
                         </div>
                       </div>

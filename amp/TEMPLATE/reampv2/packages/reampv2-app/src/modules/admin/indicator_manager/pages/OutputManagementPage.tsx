@@ -5,6 +5,7 @@ import '@musicstory/react-bootstrap-table2-filter/dist/react-bootstrap-table2-fi
 import styles from '../components/table/Table.module.css';
 import OutputModal from '../components/modals/OutputModal';
 import Swal from 'sweetalert2';
+import { useNavigate } from "react-router-dom";
 
 interface Outcome {
   // Define the properties of Outcome based on your API response
@@ -20,6 +21,7 @@ interface Output {
 }
 
 const OutputManagementPage: React.FC = () => {
+  const navigate = useNavigate();
   const [outputs, setOutputs] = useState<Output[]>([]);
   const [showAddNewOutputModal, setShowAddNewOutputModal] = useState(false);
   const [showEditOutputModal, setShowEditOutputModal] = useState(false);
@@ -46,21 +48,24 @@ const OutputManagementPage: React.FC = () => {
       text: 'Actions',
       formatter: (_: any, row: Output) => (
         <>
-          <Button
-            size="sm"
-            variant="outline-primary"
-            onClick={() => handleEditOutput(row)}
+          <div className={styles.action_container}
           >
-            <i className="fa fa-edit" />
-          </Button>
+            <i
+               style={{ fontSize: 20, color: '#198754' }}
+               className="fa fa-pencil"
+               aria-hidden="true"
+               onClick={() => handleEditOutput(row)}
+            />
+          </div>
           {' '}
-          <Button
-            size="sm"
-            variant="outline-danger"
-            onClick={() => handleDeleteOutput(row)}
+          <div className={styles.action_container}
           >
-            <i className="fa fa-trash" />
-          </Button>
+            <i className="fa fa-trash"
+               style={{ fontSize: 20, color: '#dc3545' }}
+               aria-hidden="true"
+               onClick={() => handleDeleteOutput(row)}
+            />
+          </div>
         </>
       ),
       headerStyle: { width: '160px' },
@@ -247,9 +252,15 @@ const OutputManagementPage: React.FC = () => {
             <h3>Output Management</h3>
           </Col>
           <Col sm={6}>
-            <Button variant="primary" onClick={() => setShowAddNewOutputModal(true)} style={{ float: 'right' }}>
+            <Button variant="secondary" onClick={() => navigate('/admin/indicator_manager/outcome-output-management')} style={{ float: 'right' }}>
+              <i className="fa fa-arrow-left" /> Back
+            </Button>
+            <span style={{ float: 'right', marginLeft: '10px' }}>
+            <Button variant="primary" onClick={() => setShowAddNewOutputModal(true)} style={{ float: 'right', marginLeft: '10px' }}>
               <i className="fa fa-plus" /> Add New Output
             </Button>
+            </span>
+
           </Col>
         </Row>
         <BootstrapTable

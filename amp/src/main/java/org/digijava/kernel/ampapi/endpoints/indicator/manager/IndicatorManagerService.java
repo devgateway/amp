@@ -125,12 +125,12 @@ public class IndicatorManagerService {
         }
         indicator.setCalculationMethod(indicatorRequest.getCalculationMethod());
         if (indicatorRequest.getResponsibleOrganizations() != null && !indicatorRequest.getResponsibleOrganizations().isEmpty()) {
-            List<AmpOrganisation> orgs = indicatorRequest.getResponsibleOrganizations().stream()
+            Set<AmpOrganisation> orgs = indicatorRequest.getResponsibleOrganizations().stream()
                 .map(id -> (AmpOrganisation) session.get(AmpOrganisation.class, id))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
             indicator.setResponsibleOrganizations(orgs);
         } else {
-            indicator.setResponsibleOrganizations(new java.util.ArrayList<>());
+            indicator.setResponsibleOrganizations(new java.util.HashSet<>());
         }
         if (indicatorRequest.getFrequency() != null) {
             AmpCategoryValue frequencyCat = (AmpCategoryValue) session.get(AmpCategoryValue.class, indicatorRequest.getFrequency());
@@ -373,12 +373,12 @@ public class IndicatorManagerService {
             }
             indicator.setCalculationMethod(indRequest.getCalculationMethod());
             if (indRequest.getResponsibleOrganizations() != null && !indRequest.getResponsibleOrganizations().isEmpty()) {
-                List<AmpOrganisation> orgs = indRequest.getResponsibleOrganizations().stream()
+                Set<AmpOrganisation> orgs = indRequest.getResponsibleOrganizations().stream()
                     .map(id -> (AmpOrganisation) session.get(AmpOrganisation.class, id))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
                 indicator.setResponsibleOrganizations(orgs);
             } else {
-                indicator.setResponsibleOrganizations(new java.util.ArrayList<>());
+                indicator.setResponsibleOrganizations(new java.util.HashSet<>());
             }
             if (indRequest.getFrequency() != null) {
                 AmpCategoryValue frequencyCat = (AmpCategoryValue) session.get(AmpCategoryValue.class, indRequest.getFrequency());

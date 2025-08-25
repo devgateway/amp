@@ -9,7 +9,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @TranslatableClass (displayName = "Indicator")
@@ -85,7 +84,7 @@ public class AmpIndicator implements Serializable, Identifiable
     private Set<AmpCategoryValue> disaggregation;
     private AmpCategoryValue unitOfMeasure;
     private String calculationMethod;
-    private List<AmpOrganisation> responsibleOrganizations;
+    private Set<AmpOrganisation> responsibleOrganizations;
     private AmpCategoryValue frequency;
 
     public Long getIndicatorId() {
@@ -291,10 +290,10 @@ public class AmpIndicator implements Serializable, Identifiable
     public void setCalculationMethod(String calculationMethod) {
         this.calculationMethod = calculationMethod;
     }
-    public List<AmpOrganisation> getResponsibleOrganizations() {
+    public Set<AmpOrganisation> getResponsibleOrganizations() {
         return responsibleOrganizations;
     }
-    public void setResponsibleOrganizations(List<AmpOrganisation> responsibleOrganizations) {
+    public void setResponsibleOrganizations(Set<AmpOrganisation> responsibleOrganizations) {
         this.responsibleOrganizations = responsibleOrganizations;
     }
     public AmpCategoryValue getFrequency() {

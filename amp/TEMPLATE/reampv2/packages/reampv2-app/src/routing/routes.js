@@ -77,14 +77,6 @@ const routes = [
                         <AdminApps />
                     </Suspense>
                 )
-            },
-            {
-                path: "admin/outcome-output-management",
-                element: (
-                    <Suspense fallback={<div>Loading...</div>}>
-                        <OutcomeOutputManagementPage />
-                    </Suspense>
-                )
             }
         ]
     }

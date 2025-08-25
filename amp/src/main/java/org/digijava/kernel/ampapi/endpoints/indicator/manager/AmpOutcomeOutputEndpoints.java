@@ -91,7 +91,7 @@ public class AmpOutcomeOutputEndpoints {
     }
 
     @DELETE
-    @Path("/outcome/{id}")
+    @Path("/outcome/delete/{id}")
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "deleteOutcome")
     @ApiOperation(value = "Delete outcome", notes = "Deletes an outcome by ID")
     public Response deleteOutcome(@PathParam("id") Long id) {
@@ -100,14 +100,11 @@ public class AmpOutcomeOutputEndpoints {
     }
 
     @DELETE
-    @Path("/output/{id}")
+    @Path("/output/delete/{id}")
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "deleteOutput")
     @ApiOperation(value = "Delete output", notes = "Deletes an output by ID")
-    public Response deleteOutput(@PathParam("id") Long id) {
-        boolean deleted = service.deleteOutput(id);
-        if (!deleted) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+    public Response deleteOutput(@PathParam("id") Long id, @QueryParam("forceDelete") @DefaultValue("false") boolean forceDelete) {
+        service.deleteOutput(id, forceDelete);
         return Response.ok().build();
     }
 

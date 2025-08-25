@@ -42,9 +42,6 @@ public class AmpOutcomeOutputService {
 
     public AmpOutputDTO createOutput(AmpOutputDTO dto) {
         Session session = PersistenceManager.getSession();
-        if (dto.getOutcomeIds() == null || dto.getOutcomeIds().isEmpty()) {
-            throw new IllegalArgumentException("Output must be linked to at least one Outcome.");
-        }
         AmpOutput output = new AmpOutput();
         output.setName(dto.getName());
         output.setDescription(dto.getDescription());
@@ -111,13 +108,30 @@ public class AmpOutcomeOutputService {
     }
 
 
-    public boolean deleteOutput(Long id) {
+    public void deleteOutput(Long id, boolean forceDelete) {
         Session session = PersistenceManager.getSession();
         AmpOutput output = session.get(AmpOutput.class, id);
-        if (output == null) return false;
+        if (output == null) {
+            throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError("Output not found"));
+        }
+        List<AmpIndicator> indicators = session.createQuery(
+                "FROM AmpIndicator ai WHERE ai.output.id = :outputId", AmpIndicator.class)
+                .setParameter("outputId", id)
+                .getResultList();
+        if (!indicators.isEmpty() && !forceDelete) {
+            StringBuilder msg = new StringBuilder("Cannot delete Output because it has linked Indicators. Please re-assign these Indicators to a different Output or confirm deletion to orphan them.");
+            msg.append("\n Warning: There are ").append(indicators.size()).append(" active indicators linked to this Output. Deleting this Output will orphan those indicators.");
+            throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(msg.toString()));
+        }
+        // Unlink indicators if forceDelete is true
+        if (!indicators.isEmpty() && forceDelete) {
+            for (AmpIndicator indicator : indicators) {
+                indicator.setOutput(null);
+                session.update(indicator);
+            }
+        }
         session.delete(output);
         session.flush();
-        return true;
     }
 
     public AmpOutputDTO getOutputById(Long id) {
@@ -189,7 +203,7 @@ public class AmpOutcomeOutputService {
                     .getResultList();
             StringBuilder msg = new StringBuilder("Cannot delete Outcome because it has linked Outputs. Please re-assign or delete these Outputs first.");
             if (!indicators.isEmpty()) {
-                msg.append(" Warning: There are ").append(indicators.size()).append(" active indicators linked to these Outputs. Deleting this Outcome will orphan those indicators.");
+                msg.append("\n Warning: There are ").append(indicators.size()).append(" active indicators linked to these Outputs. Deleting this Outcome will orphan those indicators.");
             }
             throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(msg.toString()));
         }

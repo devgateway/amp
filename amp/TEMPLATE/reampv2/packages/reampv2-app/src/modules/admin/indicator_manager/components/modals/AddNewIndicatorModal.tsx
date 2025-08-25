@@ -386,8 +386,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
               <Modal.Body>
                 <div className={styles.viewmodal_wrapper}>
                   {/* Core Indicator Information */}
-                  <Row className={styles.view_row}><Col><h5 className="border-bottom pb-2 mb-3 fw-bold bg-light">{translations["amp.indicatormanager:core-info"]}</h5></Col></Row>
-                  <div className="border rounded p-3 mb-4 bg-white">
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{translations["amp.indicatormanager:core-info"]}</h5></Col></Row>
+                  <div className={styles.sectionContainer}>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item} controlId="formBasicName">
                         <Form.Label>{translations["amp.indicatormanager:indicator-name"]}</Form.Label>
@@ -470,8 +470,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Row>
                   </div>
                   {/* Categorization and Linkage */}
-                  <Row className={styles.view_row}><Col><h5 className="border-bottom pb-2 mb-3 fw-bold bg-light">{translations["amp.indicatormanager:categorization-linkage-info"] || "Categorization and Linkage"}</h5></Col></Row>
-                  <div className="border rounded p-3 mb-4 bg-white">
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{translations["amp.indicatormanager:categorization-linkage-info"] || "Categorization and Linkage"}</h5></Col></Row>
+                  <div className={styles.sectionContainer}>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item} controlId="formOutcome">
                         <Form.Label>{translations["amp.indicatormanager:outcome"]}</Form.Label>
@@ -559,8 +559,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Row>
                   </div>
                   {/* Data Definition and Sourcing */}
-                  <Row className={styles.view_row}><Col><h5 className="border-bottom pb-2 mb-3 fw-bold bg-light">{translations["amp.indicatormanager:data-definition-sourcing-info"] || "Data Definition and Sourcing"}</h5></Col></Row>
-                  <div className="border rounded p-3 mb-4 bg-white">
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{translations["amp.indicatormanager:data-definition-sourcing-info"] || "Data Definition and Sourcing"}</h5></Col></Row>
+                  <div className={styles.sectionContainer}>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item} controlId="formData">
                         <Form.Label>{translations["amp.indicatormanager:data"]}</Form.Label>
@@ -631,8 +631,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Row>
                   </div>
                   {/* Responsibility and Frequency */}
-                  <Row className={styles.view_row}><Col><h5 className="border-bottom pb-2 mb-3 fw-bold bg-light">Responsibility and Frequency</h5></Col></Row>
-                  <div className="border rounded p-3 mb-4 bg-white">
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>Responsibility and Frequency</h5></Col></Row>
+                  <div className={styles.sectionContainer}>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item} controlId="formResponsibleOrganizations">
                         <Form.Label>Responsible Organization(s)</Form.Label>
@@ -666,8 +666,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Row>
                   </div>
                   {/* Value Tracking */}
-                  <Row className={styles.view_row}><Col><h5 className="border-bottom pb-2 mb-3 fw-bold bg-light">Value Tracking</h5></Col></Row>
-                  <div className="border rounded p-3 mb-4 bg-white">
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>Value Tracking</h5></Col></Row>
+                  <div className={styles.sectionContainer}>
                     <Form.Group as={Col}>
                       <Form.Label>
                         <h4>{translations["amp.indicatormanager:base-values"]}</h4>
@@ -839,8 +839,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Row>
                   </Form.Group>
                   {/* Other Considerations */}
-                  <Row className={styles.view_row}><Col><h5 className="border-bottom pb-2 mb-3 fw-bold bg-light">Other Considerations</h5></Col></Row>
-                  <div className="border rounded p-3 mb-4 bg-white">
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>Other Considerations</h5></Col></Row>
+                  <div className={styles.sectionContainer}>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item} controlId="Ascending">
                         <Form.Label>{translations["amp.indicatormanager:ascending"]}</Form.Label>

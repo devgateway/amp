@@ -245,7 +245,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
   };
 
   const handleGoToOutputManagement = () => {
-    window.location.href = '/admin/indicator_manager/output-management';
+    window.location.href = 'output-management';
   };
 
   return (

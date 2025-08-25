@@ -207,7 +207,18 @@ public class AmpOutcomeOutputService {
             }
             throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(msg.toString()));
         }
+        List<AmpIndicator> indicators = session.createQuery(
+                        "FROM AmpIndicator ai WHERE ai.outcome.id = :outcomeId", AmpIndicator.class)
+                .setParameter("outcomeId", outcomeId)
+                .getResultList();
+        if (!indicators.isEmpty()) {
+            indicators.forEach(indicator -> {
+                indicator.setOutcome(null);
+                session.update(indicator);
+            });
+        }
         session.delete(outcome);
+        session.flush();
     }
 
 }

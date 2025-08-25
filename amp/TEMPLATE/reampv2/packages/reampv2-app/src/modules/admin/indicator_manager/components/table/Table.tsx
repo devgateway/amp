@@ -87,6 +87,9 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
   const dispatch = useDispatch();
   const programSchemeReducer = useSelector((state: any) => state.fetchProgramsReducer);
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
+  const outcomesReducer = useSelector((state: any) => state.fetchOutcomesReducer);
+  const indicatorTypesReducer = useSelector((state: any) => state.fetchIndicatorTypesReducer);
+  const outputsReducer = useSelector((state: any) => state.fetchOutputsReducer);
   const programConfiguration: ProgramSchemeType [] = programSchemeReducer.programSchemes;
 
   const sizePerPage: number = useSelector((state: any) => state.fetchIndicatorsReducer.sizePerPage);
@@ -147,7 +150,6 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
     }
 
     // Set outcome options from Redux
-    const outcomesReducer = useSelector((state: any) => state.fetchOutcomesReducer);
     if (outcomesReducer && outcomesReducer.outcomes) {
       const formattedOutcomes = outcomesReducer.outcomes.map((outcome: any) => ({
         value: outcome.id,
@@ -156,8 +158,6 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
       setOutcomeOptions([{ value: 0, label: translations['amp.indicatormanager:all-outcomes'] }, ...formattedOutcomes]);
     }
 
-    // Set output options from Redux
-    const outputsReducer = useSelector((state: any) => state.fetchOutputsReducer);
     if (outputsReducer && outputsReducer.outputs) {
       const formattedOutputs = outputsReducer.outputs.map((output: any) => ({
         value: output.id,
@@ -167,7 +167,6 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
     }
 
     // Set indicator type options from Redux
-    const indicatorTypesReducer = useSelector((state: any) => state.fetchIndicatorTypesReducer);
     if (indicatorTypesReducer && indicatorTypesReducer.indicatorTypes) {
       const formattedIndicatorTypes = indicatorTypesReducer.indicatorTypes.map((indicatorType: any) => ({
         value: indicatorType.id,

@@ -20,28 +20,28 @@ import ViewIndicatorModal from '../modals/ViewIndicatorModal';
 import EditIndicatorModal from '../modals/EditIndicatorModal';
 import DeleteIndicatorModal from '../modals/DeleteIndicatorModal';
 import {Loading} from '../../../../../utils/components/Loading';
+import {getOutcomes} from "../../reducers/fetchOutcomesReducer";
 
 interface IndicatorTableProps extends DefaultComponentProps {
 }
 
 const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
   const dispatch = useDispatch();
-  const { indicators: fetchedIndicators, loading } = useSelector((state: any) => state.fetchIndicatorsReducer);
   const globalSettings: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
   const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
   const outcomesReducer = useSelector((state: any) => state.fetchOutcomesReducer);
   const ampCategoryReducer = useSelector((state: any) => state.fetchAmpCategoryReducer);
   const outputsReducer = useSelector((state: any) => state.fetchOutputsReducer);
+  const { indicators: fetchedIndicators, loading } = useSelector((state: any) => state.fetchIndicatorsReducer);
+
 
   useLayoutEffect(() => {
     dispatch(getIndicators());
+    dispatch(getOutputs());
+    dispatch(getOutcomes());
   }, []);
 
-
-  useEffect(() => {
-    dispatch(getOutputs());
-  }, [dispatch]);
 
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [showViewIndicatorModal, setShowViewIndicatorModal] = useState<boolean>(false);
@@ -135,6 +135,38 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
           },
         }
       ]: []),
+    // Program column
+    ...(globalSettings["indicator-filter-by-program"] ? [
+      {
+        dataField: 'programId',
+        text: translations['amp.indicatormanager:programs'],
+        sort: true,
+        headerStyle: {width: '40%'},
+        csvFormatter: (_cell: any, row: any) => {
+          const programId = row.programId;
+          if (programId) {
+            const foundProgram = !programsReducer.loading && programsReducer.programs.find((program: any) => program.id === programId);
+            if (foundProgram) {
+              return foundProgram.name;
+            } else {
+              return programId;
+            }
+          } else {
+            return '';
+          }
+        },
+        formatter: (_cell: any, row: any) => {
+          const programId = row.programId;
+          const foundProgram = !programsReducer.loading && programsReducer.programs.find((program: any) => program.id === programId);
+          if (foundProgram) {
+            return <span key={programId}>{foundProgram.name}<br /></span>
+          }
+          return (
+              <span key={programId}>{programId}<br /></span>
+          )
+        }
+      }
+    ]: []),
       // Outcome column
       {
         dataField: 'outcome',
@@ -143,13 +175,13 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
         headerStyle: { width: '20%' },
         formatter: (_cell: any, row: any) => {
           if (outcomesReducer.loading) return translations['amp.indicatormanager:loading'];
-          const foundOutcome = outcomesReducer.outcomes.find((outcome: any) => outcome.id === row.outcomeId);
-          return foundOutcome ? foundOutcome.name : row.outcomeId || translations['amp.indicatormanager:no-data'];
+          const foundOutcome = !outcomesReducer.loading && outcomesReducer.programs.find((outcome: any) => outcome.id === row.outcomeId);
+          return foundOutcome ? foundOutcome.name : '';
         },
         csvFormatter: (_cell: any, row: any) => {
           if (outcomesReducer.loading) return translations['amp.indicatormanager:loading'];
-          const foundOutcome = outcomesReducer.outcomes.find((outcome: any) => outcome.id === row.outcomeId);
-          return foundOutcome ? foundOutcome.name : row.outcomeId || translations['amp.indicatormanager:no-data'];
+          const foundOutcome = !outcomesReducer.loading && outcomesReducer.programs.find((outcome: any) => outcome.id === row.outcomeId);
+          return foundOutcome ? foundOutcome.name : '';
         }
       },
     // Output column
@@ -222,38 +254,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
         </Row>
       ),
     },
-      // Program column
-      ...(globalSettings["indicator-filter-by-program"] ? [
-        {
-          dataField: 'programId',
-          text: translations['amp.indicatormanager:programs'],
-          sort: true,
-          headerStyle: {width: '40%'},
-          csvFormatter: (_cell: any, row: any) => {
-            const programId = row.programId;
-            if (programId) {
-              const foundProgram = !programsReducer.loading && programsReducer.programs.find((program: any) => program.id === programId);
-              if (foundProgram) {
-                return foundProgram.name;
-              } else {
-                return programId;
-              }
-            } else {
-              return '';
-            }
-          },
-          formatter: (_cell: any, row: any) => {
-            const programId = row.programId;
-            const foundProgram = !programsReducer.loading && programsReducer.programs.find((program: any) => program.id === programId);
-            if (foundProgram) {
-              return <span key={programId}>{foundProgram.name}<br /></span>
-            }
-            return (
-                <span key={programId}>{programId}<br /></span>
-            )
-          }
-        }
-      ]: []),
+
   ], []);
 
   // Filtering logic for all fields

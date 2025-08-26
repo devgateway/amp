@@ -88,7 +88,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
   const programSchemeReducer = useSelector((state: any) => state.fetchProgramsReducer);
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
   const outcomesReducer = useSelector((state: any) => state.fetchOutcomesReducer);
-  const indicatorTypesReducer = useSelector((state: any) => state.fetchIndicatorTypesReducer);
+  const categoriesReducer = useSelector((state: any) => state.fetchAmpCategoryReducer);
   const outputsReducer = useSelector((state: any) => state.fetchOutputsReducer);
   const programConfiguration: ProgramSchemeType [] = programSchemeReducer.programSchemes;
 
@@ -167,10 +167,10 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
     }
 
     // Set indicator type options from Redux
-    if (indicatorTypesReducer && indicatorTypesReducer.indicatorTypes) {
-      const formattedIndicatorTypes = indicatorTypesReducer.indicatorTypes.map((indicatorType: any) => ({
+    if (categoriesReducer && categoriesReducer.categories) {
+      const formattedIndicatorTypes = categoriesReducer.categories.map((indicatorType: any) => ({
         value: indicatorType.id,
-        label: indicatorType.name,
+        label: indicatorType.value,
       }));
       setIndicatorTypeOptions([{ value: 0, label: translations['amp.indicatormanager:all-indicator-types'] }, ...formattedIndicatorTypes]);
     }

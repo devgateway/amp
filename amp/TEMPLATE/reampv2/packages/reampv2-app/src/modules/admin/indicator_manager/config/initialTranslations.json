@@ -170,5 +170,6 @@
   "amp.indicatormanager:search-code": "Search by Code",
   "amp.indicatormanager:search-name": "Search by Name",
   "amp.indicatormanager:all-outputs": "All Outputs",
-  "amp.indicatormanager:all-outcomes": "All Outcomes"
+  "amp.indicatormanager:all-outcomes": "All Outcomes",
+  "amp.indicatormanager:all-indicator-types": "All Indicator Types"
 }

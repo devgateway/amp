@@ -275,11 +275,9 @@ const OutcomeOutputManagementPage: React.FC = () => {
                   </div>
                 </Col>
                 <Col sm={8}>
-                  <div className={styles.table_header_bottom_right}>
                     <div className={styles.search_container}>
                       <SearchBar {...props.searchProps} placeholder={translations['amp.outcomeoutput:search-placeholder']} />
                     </div>
-                  </div>
                   <Button variant="info" onClick={() => navigate('/admin/indicator_manager/output-management')} style={{ float: 'right', marginLeft: '10px' }}>
                     <i className="fa fa-share" /> Output Management
                   </Button>

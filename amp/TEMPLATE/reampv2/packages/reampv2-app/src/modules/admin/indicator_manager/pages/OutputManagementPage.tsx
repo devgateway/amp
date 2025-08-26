@@ -252,14 +252,13 @@ const OutputManagementPage: React.FC = () => {
             <h3>Output Management</h3>
           </Col>
           <Col sm={6}>
-            <Button variant="secondary" onClick={() => navigate('/admin/indicator_manager/outcome-output-management')} style={{ float: 'right' }}>
-              <i className="fa fa-arrow-left" /> Back
-            </Button>
-            <span style={{ float: 'right', marginLeft: '10px' }}>
-            <Button variant="primary" onClick={() => setShowAddNewOutputModal(true)} style={{ float: 'right', marginLeft: '10px' }}>
+            <Button variant="primary" onClick={() => setShowAddNewOutputModal(true)} >
               <i className="fa fa-plus" /> Add New Output
             </Button>
-            </span>
+            <Button variant="secondary" onClick={() => navigate('/admin/indicator_manager/outcome-output-management')} style={{ float: 'right', marginLeft: '10px' }}>
+              <i className="fa fa-arrow-left" /> Back
+            </Button>
+
 
           </Col>
         </Row>

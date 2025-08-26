@@ -102,22 +102,22 @@
 }
 
 .filters_container {
-    background-color: #f8f9fa;
+    background-color: #d8e0e2; /* Changed to requested color */
     padding: 16px;
     border-radius: 8px;
-    border: 1px solid #e9ecef;
+    border: 1px solid #c8d0d2;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .filters_header {
     margin-bottom: 16px;
     padding-bottom: 8px;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid #c0c8ca;
 }
 
 .filters_header h5 {
     margin: 0;
-    color: #495057;
+    color: #2c3e50;
     font-weight: 600;
     font-size: 1.1rem;
 }
@@ -130,7 +130,7 @@
     display: block;
     font-weight: 600;
     margin-bottom: 6px;
-    color: #495057;
+    color: #2c3e50;
     font-size: 0.875rem;
 }
 
@@ -143,6 +143,7 @@
     border-radius: 4px;
     border: 1px solid #ced4da;
     box-shadow: none;
+    background-color: white;
 }
 
 .filter_select :global(.react-select__control:hover) {
@@ -177,6 +178,7 @@
     border-radius: 4px;
     font-size: 0.875rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    background-color: white;
 }
 
 .search_bar:focus {
@@ -233,59 +235,59 @@
     }
 }
 
-/* Dark mode support */
+/* Dark mode support - adjusted for the new background */
 @media (prefers-color-scheme: dark) {
     .filters_container {
-        background-color: #2d3748;
-        border-color: #4a5568;
+        background-color: #d8e0e2; /* Keep the same color in dark mode */
+        border-color: #b8c0c2;
     }
 
     .filters_header {
-        border-bottom-color: #4a5568;
+        border-bottom-color: #b8c0c2;
     }
 
     .filters_header h5 {
-        color: #e2e8f0;
+        color: #2c3e50;
     }
 
     .filter_label {
-        color: #e2e8f0;
+        color: #2c3e50;
     }
 
     .filter_select :global(.react-select__control) {
-        background-color: #2d3748;
-        border-color: #4a5568;
-        color: #e2e8f0;
+        background-color: white;
+        border-color: #ced4da;
+        color: #495057;
     }
 
     .filter_select :global(.react-select__single-value) {
-        color: #e2e8f0;
+        color: #495057;
     }
 
     .filter_select :global(.react-select__menu) {
-        background-color: #2d3748;
+        background-color: white;
     }
 
     .filter_select :global(.react-select__option) {
-        background-color: #2d3748;
-        color: #e2e8f0;
+        background-color: white;
+        color: #495057;
     }
 
     .filter_select :global(.react-select__option--is-focused) {
-        background-color: #4a5568;
+        background-color: #f8f9fa;
     }
 
     .search_bar {
-        background-color: #2d3748;
-        border-color: #4a5568;
-        color: #e2e8f0;
+        background-color: white;
+        border-color: #ced4da;
+        color: #495057;
     }
 
     .search_bar::placeholder {
-        color: #a0aec0;
+        color: #6c757d;
     }
 
     .search_icon {
-        color: #a0aec0;
+        color: #6c757d;
     }
 }

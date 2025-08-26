@@ -319,142 +319,94 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                     </Col>
                     {/* searchbar should be far right on the col */}
                     <Col sm={8}>
-                      <div className={styles.table_header_bottom_right}>
-
-                        {filterBySector && (
-                            <div className={styles.sector_filter_container}>
-                              <Form.Label
-                                  className={styles.filter_label}>{translations['amp.indicatormanager:sectors']}</Form.Label>
-                              {
-                                sectorsReducer.sectors.length > 0 ? (
-                                    <Select
-                                        options={sectorOptions as any}
-                                        defaultValue={{
-                                          value: 0,
-                                          label: translations['amp.indicatormanager:all-sectors']
-                                        }}
-                                        className={styles.filter_select}
-                                        onChange={(item: any) => {
-                                          setSelectedSector(item.value)
-                                        }}
-                                        components={{
-                                          IndicatorSeparator: () => null,
-                                        }}
-                                    />
+                      <div className={styles.filter_group_container}>
+                        <Row>
+                          <Col xs={12} md={6} lg={4} className={styles.sector_filter_container}>
+                            {filterBySector && (
+                              <>
+                                <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:sectors']}</Form.Label>
+                                {sectorsReducer.sectors.length > 0 ? (
+                                  <Select
+                                    options={sectorOptions as any}
+                                    defaultValue={{ value: 0, label: translations['amp.indicatormanager:all-sectors'] }}
+                                    className={styles.filter_select}
+                                    onChange={(item: any) => setSelectedSector(item.value)}
+                                    components={{ IndicatorSeparator: () => null }}
+                                  />
                                 ) : (
-                                    <>
-                                    {
-                                      !sectorsReducer.loading && (
-                                          <Select
-                                              options={[]}
-                                              defaultValue={{
-                                                value: 0,
-                                                label: translations['amp.indicatormanager:no-data']
-                                              }}
-                                              isDisabled
-                                              components={{
-                                                IndicatorSeparator: () => null,
-                                              }}
-                                              className={styles.filter_select}
-                                          />
-                                      )
-
-                                    }
-                                    </>
-                                )
-                              }
+                                  <Select
+                                    options={[]}
+                                    defaultValue={{ value: 0, label: translations['amp.indicatormanager:no-data'] }}
+                                    isDisabled
+                                    components={{ IndicatorSeparator: () => null }}
+                                    className={styles.filter_select}
+                                  />
+                                )}
+                              </>
+                            )}
+                          </Col>
+                          <Col xs={12} md={6} lg={4} className={styles.sector_filter_container}>
+                            {filterByProgram && (
+                              <>
+                                <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:programs']}</Form.Label>
+                                {programOptions.length > 0 ? (
+                                  <Select
+                                    options={programOptions}
+                                    formatGroupLabel={formatGroupLabel}
+                                    defaultValue={{ value: 0, label: translations['amp.indicatormanager:all-programs'] }}
+                                    className={styles.filter_select}
+                                    onChange={(item: any) => setSelectedProgram(item.value)}
+                                    components={{ IndicatorSeparator: () => null }}
+                                  />
+                                ) : (
+                                  <Select
+                                    options={[]}
+                                    defaultValue={{ value: 0, label: translations['amp.indicatormanager:no-data'] }}
+                                    isDisabled
+                                    components={{ IndicatorSeparator: () => null }}
+                                    className={styles.filter_select}
+                                  />
+                                )}
+                              </>
+                            )}
+                          </Col>
+                          <Col xs={12} md={6} lg={4} className={styles.sector_filter_container}>
+                            <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:outcome']}</Form.Label>
+                            <Select
+                              options={outcomeOptions}
+                              onChange={(opt: any) => setSelectedOutcome(opt?.value || 0)}
+                              className={styles.filter_select}
+                              components={{ IndicatorSeparator: () => null }}
+                            />
+                          </Col>
+                          <Col xs={12} md={6} lg={4} className={styles.sector_filter_container}>
+                            <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:output']}</Form.Label>
+                            <Select
+                              options={outputOptions}
+                              onChange={(opt: any) => setSelectedOutput(opt?.value || 0)}
+                              className={styles.filter_select}
+                              components={{ IndicatorSeparator: () => null }}
+                            />
+                          </Col>
+                          <Col xs={12} md={6} lg={4} className={styles.sector_filter_container}>
+                            <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:indicator-type']}</Form.Label>
+                            <Select
+                              options={indicatorTypeOptions}
+                              onChange={(opt: any) => setSelectedIndicatorType(opt?.value || 0)}
+                              className={styles.filter_select}
+                              components={{ IndicatorSeparator: () => null }}
+                            />
+                          </Col>
+                          <Col xs={12} md={6} lg={4} className={styles.sector_filter_container}>
+                            <div className={styles.search_container}>
+                              <SearchBar
+                                {...props.searchProps}
+                                placeholder={translations['amp.indicatormanager:search']}
+                                columns={[{ dataField: 'name', text: 'Name' }, { dataField: 'code', text: 'Code' }]}
+                              />
                             </div>
-                        )}
-
-                        {
-                          filterByProgram && (
-                                <div className={styles.sector_filter_container}>
-                                    <Form.Label
-                                        className={styles.filter_label}>{translations['amp.indicatormanager:programs']}</Form.Label>
-                                  {
-                                    programOptions.length > 0 ? (
-                                        <Select
-                                            options={programOptions}
-                                            formatGroupLabel={formatGroupLabel}
-                                            defaultValue={{
-                                                value: 0,
-                                                label: translations['amp.indicatormanager:all-programs']
-                                            }}
-                                            className={styles.filter_select}
-                                            // Added this since it is using the optiongroup type rather than the option type
-                                            // @ts-ignore
-                                            onChange={(item: {value: number, label: string}) => {
-                                                setSelectedProgram(item.value)
-                                            }}
-                                            components={{
-                                              IndicatorSeparator: () => null,
-                                            }}
-                                        />
-                                    ) : (
-                                        <>
-                                        {
-                                          !programSchemeReducer.loading && (
-                                              <Select
-                                                  options={[]}
-                                                  defaultValue={{
-                                                    value: 0,
-                                                    label: translations['amp.indicatormanager:no-data']
-                                                  }}
-                                                  isDisabled
-                                                  components={{
-                                                    IndicatorSeparator: () => null,
-                                                  }}
-                                                  className={styles.filter_select}
-                                              />
-                                          )
-                                        }
-                                        </>
-                                    )
-                                  }
-                                </div>
-                          )
-                        }
-
-                        {/* Outcome filter */}
-                        <div className={styles.sector_filter_container}>
-                          <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:outcome']}</Form.Label>
-                          <Select
-                            options={outcomeOptions}
-                            onChange={(opt:any) =>setSelectedOutcome(opt?.value || 0)}
-                            className={styles.filter_select}
-                            components={{ IndicatorSeparator: () => null }}
-                          />
-                        </div>
-                        {/* Output filter */}
-                        <div className={styles.sector_filter_container}>
-                          <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:output']}</Form.Label>
-                          <Select
-                            options={outputOptions}
-                            onChange={(opt : any) => setSelectedOutput(opt?.value || 0)}
-                            className={styles.filter_select}
-                            components={{ IndicatorSeparator: () => null }}
-                          />
-                        </div>
-                        {/* Indicator Type filter */}
-                        <div className={styles.sector_filter_container}>
-                          <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:indicator-type']}</Form.Label>
-                          <Select
-                            options={indicatorTypeOptions}
-                            onChange={(opt:any) => setSelectedIndicatorType(opt?.value || 0)}
-                            className={styles.filter_select}
-                            components={{ IndicatorSeparator: () => null }}
-                          />
-                        </div>
-
-
-                        <div className={styles.search_container}>
-                          <SearchBar
-                              {...props.searchProps}
-                              placeholder={translations['amp.indicatormanager:search']}
-                              // Only search by name and code
-                              columns={[{ dataField: 'name', text: 'Name' }, { dataField: 'code', text: 'Code' }]}
-                          />
-                        </div>
+                          </Col>
+                        </Row>
                       </div>
 
                     </Col>

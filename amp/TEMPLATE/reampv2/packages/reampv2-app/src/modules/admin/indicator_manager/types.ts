@@ -29,7 +29,7 @@ export interface IndicatorObjectType {
     dataSource: string;
     data: string;
     logframeLinks: any[];
-    indicatorType: number | null;
+    indicatorType: number | undefined;
     relevanceForClimateChange: string;
     id:           number;
     name:         string;

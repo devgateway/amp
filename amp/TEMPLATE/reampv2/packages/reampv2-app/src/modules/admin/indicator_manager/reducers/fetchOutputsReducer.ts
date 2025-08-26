@@ -18,36 +18,32 @@ const initialState: OutputsState = {
   error: null,
 };
 
-export const fetchOutputs = createAsyncThunk(
-  'outputs/fetchOutputs',
-  async (_, { rejectWithValue }) => {
-    const response = await fetch('/rest/amp-outcome-output/outputs');
-    const data = await response.json();
-    if (response.status !== 200) {
-      return rejectWithValue(data);
-    }
-    return data;
+export const FETCH_OUTPUTS_REQUEST = 'FETCH_OUTPUTS_REQUEST';
+export const FETCH_OUTPUTS_SUCCESS = 'FETCH_OUTPUTS_SUCCESS';
+export const FETCH_OUTPUTS_FAILURE = 'FETCH_OUTPUTS_FAILURE';
+
+export const fetchOutputsReducer = (state = initialState, action: any): OutputsState => {
+  switch (action.type) {
+    case FETCH_OUTPUTS_REQUEST:
+      return { ...state, loading: true, error: null };
+    case FETCH_OUTPUTS_SUCCESS:
+      return { ...state, loading: false, outputs: action.payload, error: null };
+    case FETCH_OUTPUTS_FAILURE:
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
   }
-);
+};
 
-const outputsSlice = createSlice({
-  name: 'outputs',
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(fetchOutputs.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(fetchOutputs.fulfilled, (state, action) => {
-      state.loading = false;
-      state.outputs = action.payload;
-    });
-    builder.addCase(fetchOutputs.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload as string;
-    });
-  },
-});
+export const getOutputs = () => async (dispatch: any) => {
+  dispatch({ type: FETCH_OUTPUTS_REQUEST });
+  try {
+    const res = await fetch('/rest/amp-outcome-output/outputs');
+    const data = await res.json();
+    dispatch({ type: FETCH_OUTPUTS_SUCCESS, payload: data });
+  } catch (error: any) {
+    dispatch({ type: FETCH_OUTPUTS_FAILURE, payload: error.message || 'Failed to fetch outputs' });
+  }
+};
 
-export default outputsSlice.reducer;
-
+export default fetchOutputsReducer;

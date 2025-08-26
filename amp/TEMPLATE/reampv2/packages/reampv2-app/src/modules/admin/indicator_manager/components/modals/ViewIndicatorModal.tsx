@@ -30,6 +30,10 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
   const { show, setShow, indicator, translations } = props;
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
   const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
+  const categoriesReducer = useSelector((state: any) => state.fetchAmpCategoryReducer);
+  const outcomesReducer = useSelector((state: any) => state.fetchOutcomesReducer);
+  const outputsReducer = useSelector((state: any) => state.fetchOutputsReducer);
+  const responsibleOrgsReducer = useSelector((state: any) => state.fetchResponsibleOrgsReducer);
 
   const handleClose = () => setShow(false);
 
@@ -56,6 +60,30 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
     getProgramData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [indicator]);
+
+  // Helper functions for lookups
+  const getCategoryLabel = (id: number | undefined) => {
+    if (!id) return translations["amp.indicatormanager:no-data"];
+    const found = categoriesReducer.categories.find((cat: any) => cat.id === id);
+    return found ? found.value : id;
+  };
+  const getOutcomeLabel = (id: number | undefined) => {
+    if (!id) return translations["amp.indicatormanager:no-data"];
+    const found = outcomesReducer.outcomes.find((o: any) => o.id === id);
+    return found ? found.name : id;
+  };
+  const getOutputLabel = (id: number | undefined) => {
+    if (!id) return translations["amp.indicatormanager:no-data"];
+    const found = outputsReducer.outputs.find((o: any) => o.id === id);
+    return found ? found.name : id;
+  };
+  const getResponsibleOrgLabels = (ids: number[] = []) => {
+    if (!ids.length) return [translations["amp.indicatormanager:no-data"]];
+    return ids.map(id => {
+      const found = responsibleOrgsReducer.options.find((org: any) => org.value === id);
+      return found ? found.label : id;
+    });
+  };
 
   return (
     // this modal wrapper should be a separate component that can be reused since the props are the same
@@ -178,6 +206,51 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                 </div>
               </Row>
             </div>
+
+            <Row className={styles.view_row_full}>
+              <h4 className={styles.label}>{translations["amp.indicatormanager:indicator-type"]}</h4>
+              <div className={styles.value}>{getCategoryLabel(indicator.indicatorType)}</div>
+            </Row>
+            <Row className={styles.view_row_full}>
+              <h4 className={styles.label}>{translations["amp.indicatormanager:outcome"]}</h4>
+              <div className={styles.value}>{getOutcomeLabel(indicator.outcomeId)}</div>
+            </Row>
+            <Row className={styles.view_row_full}>
+              <h4 className={styles.label}>{translations["amp.indicatormanager:output"]}</h4>
+              <div className={styles.value}>{getOutputLabel(indicator.outputId)}</div>
+            </Row>
+            <Row className={styles.view_row_full}>
+              <h4 className={styles.label}>{translations["amp.indicatormanager:responsible-organizations"]}</h4>
+              <div className={styles.value}>{getResponsibleOrgLabels(indicator.responsibleOrganizations).join(", ")}</div>
+            </Row>
+            <Row className={styles.view_row_full}>
+              <h4 className={styles.label}>{translations["amp.indicatormanager:unit-of-measure"]}</h4>
+              <div className={styles.value}>{getCategoryLabel(indicator.unitOfMeasure)}</div>
+            </Row>
+            <Row className={styles.view_row_full}>
+              <h4 className={styles.label}>{translations["amp.indicatormanager:frequency"]}</h4>
+              <div className={styles.value}>{getCategoryLabel(indicator.frequency)}</div>
+            </Row>
+            <Row className={styles.view_row_full}>
+              <h4 className={styles.label}>{translations["amp.indicatormanager:disaggregation"]}</h4>
+              <div className={styles.value}>{indicator.disaggregation && indicator.disaggregation.length > 0 ? indicator.disaggregation.map(getCategoryLabel).join(", ") : translations["amp.indicatormanager:no-data"]}</div>
+            </Row>
+            <Row className={styles.view_row_full}>
+              <h4 className={styles.label}>{translations["amp.indicatormanager:logframe-links"]}</h4>
+              <div className={styles.value}>{indicator.logframeLinks && indicator.logframeLinks.length > 0 ? indicator.logframeLinks.join(", ") : translations["amp.indicatormanager:no-data"]}</div>
+            </Row>
+            <Row className={styles.view_row_full}>
+              <h4 className={styles.label}>{translations["amp.indicatormanager:data-source"]}</h4>
+              <div className={styles.value}>{indicator.dataSource || translations["amp.indicatormanager:no-data"]}</div>
+            </Row>
+            <Row className={styles.view_row_full}>
+              <h4 className={styles.label}>{translations["amp.indicatormanager:calculation-method"]}</h4>
+              <div className={styles.value}>{indicator.calculationMethod || translations["amp.indicatormanager:no-data"]}</div>
+            </Row>
+            <Row className={styles.view_row_full}>
+              <h4 className={styles.label}>{translations["amp.indicatormanager:relevance-for-climate-change"]}</h4>
+              <div className={styles.value}>{indicator.relevanceForClimateChange || translations["amp.indicatormanager:no-data"]}</div>
+            </Row>
 
 
           </div>

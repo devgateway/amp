@@ -124,6 +124,10 @@ public class AmpOutcomeOutputService {
             throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(msg.toString()));
         }
         // Remove associations in join table before deleting output
+        for (AmpOutcome outcome : new HashSet<>(output.getOutcomes())) {
+            outcome.getOutputs().remove(output);
+            session.update(outcome);
+        }
         output.getOutcomes().clear();
         session.update(output);
         session.flush();

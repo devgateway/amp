@@ -129,6 +129,7 @@ public class AmpOutcomeOutputService {
                 indicator.setOutput(null);
                 session.update(indicator);
             }
+            session.flush(); // Ensure DB is updated before deleting output
         }
         session.delete(output);
         session.flush();

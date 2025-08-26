@@ -4,7 +4,7 @@ import BootstrapTable, { PaginationOptions } from '@musicstory/react-bootstrap-t
 import '@musicstory/react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 import styles from '../components/table/Table.module.css';
 import OutcomeModal from '../components/modals/OutcomeModal';
-import OutputModal from '../components/modals/OutputModal';
+import action_style from '../components/table/IndicatorTable.module.css';
 import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from '@murasoftware/react-bootstrap-table2-toolkit';
 import paginationFactory from '@musicstory/react-bootstrap-table2-paginator';
 import initialTranslations from '../config/initialTranslations.json';
@@ -51,7 +51,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
       text: 'Actions',
       formatter: (_: any, row: Outcome) => (
         <>
-          <div className={styles.action_container}
+          <div className={action_style.action_container}
           >
             <i
                onClick={() => handleEditOutcome(row)}
@@ -60,7 +60,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
                aria-hidden="true"
             />
           </div>
-          <div className={styles.action_container}
+          <div className={action_style.action_container}
           >
             <i className="fa fa-trash"
                style={{ fontSize: 20, color: '#dc3545' }}

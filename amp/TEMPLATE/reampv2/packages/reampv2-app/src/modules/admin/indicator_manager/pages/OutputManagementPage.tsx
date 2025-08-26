@@ -5,6 +5,7 @@ import paginationFactory from '@musicstory/react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from '@murasoftware/react-bootstrap-table2-toolkit';
 import '@musicstory/react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 import styles from '../components/table/Table.module.css';
+import action_style from '../components/table/IndicatorTable.module.css';
 import OutputModal from '../components/modals/OutputModal';
 import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
@@ -55,7 +56,7 @@ const OutputManagementPage: React.FC = () => {
       text: translations['amp.outcomeoutput:actions'],
       formatter: (_: any, row: Output) => (
         <>
-          <div className={styles.action_container}
+          <div className={action_style.action_container}
           >
             <i
                style={{ fontSize: 20, color: '#198754' }}
@@ -65,7 +66,7 @@ const OutputManagementPage: React.FC = () => {
             />
           </div>
           {' '}
-          <div className={styles.action_container}
+          <div className={action_style.action_container}
           >
             <i className="fa fa-trash"
                style={{ fontSize: 20, color: '#dc3545' }}

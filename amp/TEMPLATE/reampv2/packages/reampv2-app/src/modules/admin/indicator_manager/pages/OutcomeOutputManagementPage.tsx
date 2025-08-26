@@ -248,15 +248,8 @@ const OutcomeOutputManagementPage: React.FC = () => {
             <h3>Outcome Management</h3>
           </Col>
           <Col sm={6}>
-              <Button variant="primary" onClick={() => setShowAddNewOutcomeModal(true)}>
-                <i className="fa fa-plus" /> Add New Outcome
-              </Button>
-              <Button variant="info" onClick={() => navigate('/admin/indicator_manager/output-management')} style={{ float: 'right', marginLeft: '10px' }}>
-                <i className="fa fa-share" /> Output Management
-              </Button>
-            <Button variant="secondary" onClick={() => navigate('/admin/indicator_manager')} style={{ float: 'right', marginLeft: '10px' }}>
-              <i className="fa fa-arrow-left" /> Back
-            </Button>
+
+
           </Col>
         </Row>
         <ToolkitProvider
@@ -272,6 +265,10 @@ const OutcomeOutputManagementPage: React.FC = () => {
                 <Col sm={4}>
                   <div className={styles.table_header_bottom_left}>
                     {' '}
+                    <Button variant="primary" onClick={() => setShowAddNewOutcomeModal(true)}>
+                      <i className="fa fa-plus" /> Add New Outcome
+                    </Button>
+                    {' '}
                     <ExportCSVButton {...props.csvProps} className={styles.export_button}>
                       <i className="fa fa-download" /> {translations['amp.outcomeoutput:export-csv']}
                     </ExportCSVButton>
@@ -283,6 +280,12 @@ const OutcomeOutputManagementPage: React.FC = () => {
                       <SearchBar {...props.searchProps} placeholder={translations['amp.outcomeoutput:search-placeholder']} />
                     </div>
                   </div>
+                  <Button variant="info" onClick={() => navigate('/admin/indicator_manager/output-management')} style={{ float: 'right', marginLeft: '10px' }}>
+                    <i className="fa fa-share" /> Output Management
+                  </Button>
+                  <Button variant="secondary" onClick={() => navigate('/admin/indicator_manager')} style={{ float: 'right', marginLeft: '10px' }}>
+                    <i className="fa fa-arrow-left" /> Back
+                  </Button>
                 </Col>
               </Row>
               <hr />

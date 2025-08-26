@@ -31,6 +31,6 @@ export default combineReducers({
   fetchSettingsReducer,
   fetchAmpCategoryReducer,
   fetchResponsibleOrgsReducer,
-  fetchOutcomesReducer,
-  fetchOutputsReducer
+  fetchOutputsReducer,
+  fetchOutcomesReducer
 });

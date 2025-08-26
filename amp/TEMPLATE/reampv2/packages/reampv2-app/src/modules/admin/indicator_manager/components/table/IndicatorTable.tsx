@@ -12,9 +12,8 @@ import styles from './IndicatorTable.module.css';
 import {DefaultComponentProps, IndicatorObjectType, ProgramObjectType, SettingsType} from '../../types';
 
 import {getIndicators} from '../../reducers/fetchIndicatorsReducer';
-import fetchOutcomesReducer from '../../reducers/fetchOutcomesReducer';
-import fetchAmpCategoryReducer from '../../reducers/fetchAmpCategoryReducer';
-import fetchOutputsReducer from '../../reducers/fetchOutputsReducer';
+import {getOutputs} from '../../reducers/fetchOutputsReducer';
+
 
 // Modals
 import ViewIndicatorModal from '../modals/ViewIndicatorModal';
@@ -39,6 +38,10 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
     dispatch(getIndicators());
   }, []);
 
+
+  useEffect(() => {
+    dispatch(getOutputs());
+  }, [dispatch]);
 
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [showViewIndicatorModal, setShowViewIndicatorModal] = useState<boolean>(false);
@@ -132,21 +135,6 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
           },
         }
       ]: []),
-      // Output column
-      {
-        dataField: 'output',
-        text: translations['amp.indicatormanager:output'],
-        sort: true,
-        headerStyle: { width: '20%' },
-        formatter: (_cell: any, row: any) => {
-          const foundOutput = !outputsReducer.loading && outputsReducer.outputs.find((output: any) => output.id === row.output);
-          return foundOutput ? foundOutput.name : row.output || '';
-        },
-        csvFormatter: (_cell: any, row: any) => {
-          const foundOutput = !outputsReducer.loading && outputsReducer.outputs.find((output: any) => output.id === row.output);
-          return foundOutput ? foundOutput.name : row.output || '';
-        }
-      },
       // Outcome column
       {
         dataField: 'outcome',
@@ -154,14 +142,29 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
         sort: true,
         headerStyle: { width: '20%' },
         formatter: (_cell: any, row: any) => {
-          const foundOutcome = !outcomesReducer.loading && outcomesReducer.outcomes.find((outcome: any) => outcome.id === row.outcome);
+          const foundOutcome = !outcomesReducer.loading && outcomesReducer.outcomes.find((outcome: any) => outcome.id === row.outcomeId);
           return foundOutcome ? foundOutcome.name : row.outcome || '';
         },
         csvFormatter: (_cell: any, row: any) => {
-          const foundOutcome = !outcomesReducer.loading && outcomesReducer.outcomes.find((outcome: any) => outcome.id === row.outcome);
+          const foundOutcome = !outcomesReducer.loading && outcomesReducer.outcomes.find((outcome: any) => outcome.id === row.outcomeId);
           return foundOutcome ? foundOutcome.name : row.outcome || '';
         }
       },
+    // Output column
+    {
+      dataField: 'output',
+      text: translations['amp.indicatormanager:output'],
+      sort: true,
+      headerStyle: { width: '20%' },
+      formatter: (_cell: any, row: any) => {
+        const foundOutput = !outputsReducer.loading && outputsReducer.outputs.find((output: any) => output.id === row.outputId);
+        return foundOutput ? foundOutput.name : row.output || '';
+      },
+      csvFormatter: (_cell: any, row: any) => {
+        const foundOutput = !outputsReducer.loading && outputsReducer.outputs.find((output: any) => output.id === row.outputId);
+        return foundOutput ? foundOutput.name : row.output || '';
+      }
+    },
       // Indicator Type column
       {
         dataField: 'indicatorType',

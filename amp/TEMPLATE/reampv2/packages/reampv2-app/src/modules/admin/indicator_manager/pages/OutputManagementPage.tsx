@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Row, Button } from 'react-bootstrap';
-import BootstrapTable from '@musicstory/react-bootstrap-table-next';
+import BootstrapTable, {PaginationOptions} from '@musicstory/react-bootstrap-table-next';
+import paginationFactory from '@musicstory/react-bootstrap-table2-paginator';
+import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from '@murasoftware/react-bootstrap-table2-toolkit';
 import '@musicstory/react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 import styles from '../components/table/Table.module.css';
 import OutputModal from '../components/modals/OutputModal';
 import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
+import initialTranslations from '../config/initialTranslations.json';
 
 interface Outcome {
   // Define the properties of Outcome based on your API response
@@ -29,6 +32,8 @@ const OutputManagementPage: React.FC = () => {
   const [loadingEditOutput, setLoadingEditOutput] = useState(false);
   const [outcomes, setOutcomes] = useState<Outcome[]>([]);
 
+  const translations = initialTranslations;
+
   useEffect(() => {
     fetch('/rest/amp-outcome-output/outputs')
       .then(res => res.json())
@@ -37,15 +42,17 @@ const OutputManagementPage: React.FC = () => {
       .then(res => res.json())
       .then(data => setOutcomes(data));
   }, []);
+  const { SearchBar } = Search;
+  const { ExportCSVButton } = CSVExport;
 
   const outputColumns = [
     {
       dataField: 'name',
-      text: 'Output Name',
+      text: translations['amp.outcomeoutput:output-name'],
     },
     {
       dataField: 'actions',
-      text: 'Actions',
+      text: translations['amp.outcomeoutput:actions'],
       formatter: (_: any, row: Output) => (
         <>
           <div className={styles.action_container}
@@ -73,6 +80,18 @@ const OutputManagementPage: React.FC = () => {
     },
   ];
 
+  const paginationOptions: PaginationOptions = {
+    paginationSize: 4,
+    pageStartIndex: 1,
+    alwaysShowAllBtns: true,
+    sizePerPageList: [
+      { text: '10', value: 10 },
+      { text: '25', value: 25 },
+      { text: '50', value: 50 },
+      { text: 'All', value: outcomes.length }
+    ],
+    sizePerPage: 10
+  };
   const handleAddOutput = async (output: { name: string; description?: string; outcomeIds: number[] }) => {
 
     try {
@@ -86,10 +105,10 @@ const OutputManagementPage: React.FC = () => {
           .then(res => res.json())
           .then(data => setOutputs(data));
       } else {
-        alert('Failed to add output');
+        alert(translations['amp.outcomeoutput:add-output-failed']);
       }
     } catch (e) {
-      alert('Error adding output');
+      alert(translations['amp.outcomeoutput:error-adding-output']);
     }
   };
 
@@ -107,10 +126,10 @@ const OutputManagementPage: React.FC = () => {
         });
         setShowEditOutputModal(true);
       } else {
-        alert('Failed to fetch output details');
+        alert(translations['amp.outcomeoutput:fetch-output-details-failed']);
       }
     } catch (e) {
-      alert('Error fetching output details');
+      alert(translations['amp.outcomeoutput:error-fetching-output-details']);
     }
     setLoadingEditOutput(false);
   };
@@ -129,10 +148,10 @@ const OutputManagementPage: React.FC = () => {
           .then(res => res.json())
           .then(data => setOutputs(data));
       } else {
-        alert('Failed to update output');
+        alert(translations['amp.outcomeoutput:update-output-failed']);
       }
     } catch (e) {
-      alert('Error updating output');
+      alert(translations['amp.outcomeoutput:error-updating-output']);
     }
     setShowEditOutputModal(false);
     setEditingOutput(null);
@@ -141,11 +160,11 @@ const OutputManagementPage: React.FC = () => {
   const handleDeleteOutput = async (output: Output) => {
     const confirm = await Swal.fire({
       icon: 'warning',
-      title: 'Delete Output?',
-      html: `<div>Are you sure you want to delete output: <b>${output.name}</b>?<br/>This action cannot be undone.</div>`,
+      title: translations['amp.outcomeoutput:delete-output'],
+      html: `<div>${translations['amp.outcomeoutput:delete-output-confirm']} <b>${output.name}</b>?<br/>${translations['amp.outcomeoutput:delete-output-warning']}</div>`,
       showCancelButton: true,
-      confirmButtonText: 'Delete',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: translations['amp.outcomeoutput:delete'],
+      cancelButtonText: translations['amp.outcomeoutput:cancel'],
     });
     if (confirm.isConfirmed) {
       try {
@@ -159,7 +178,7 @@ const OutputManagementPage: React.FC = () => {
             .then(data => setOutputs(data));
         } else {
           const error = await res.json();
-          let errorMsg = 'An error occurred while deleting the output.';
+          let errorMsg = translations['amp.outcomeoutput:error-deleting-output'];
           if (error && error.error) {
             const firstKey = Object.keys(error.error)[0];
             if (firstKey && error.error[firstKey] && error.error[firstKey][0]) {
@@ -169,11 +188,11 @@ const OutputManagementPage: React.FC = () => {
           if (errorMsg.includes('orphan')) {
             const forceConfirm = await Swal.fire({
               icon: 'warning',
-              title: 'Indicators Linked',
-              html: `${errorMsg}<br/><br/>Do you want to proceed and orphan these indicators?`,
+              title: translations['amp.outcomeoutput:indicators-linked'],
+              html: `${errorMsg}<br/><br/>${translations['amp.outcomeoutput:proceed-orphan-indicators']}`,
               showCancelButton: true,
-              confirmButtonText: 'Yes, delete anyway',
-              cancelButtonText: 'Cancel',
+              confirmButtonText: translations['amp.outcomeoutput:yes-delete-anyway'],
+              cancelButtonText: translations['amp.outcomeoutput:cancel'],
             });
             if (forceConfirm.isConfirmed) {
               try {
@@ -187,7 +206,7 @@ const OutputManagementPage: React.FC = () => {
                     .then(data => setOutputs(data));
                 } else {
                   const forceError = await forceRes.json();
-                  let forceErrorMsg = 'An error occurred while deleting the output.';
+                  let forceErrorMsg = translations['amp.outcomeoutput:error-deleting-output'];
                   if (forceError && forceError.error) {
                     const firstKey = Object.keys(forceError.error)[0];
                     if (firstKey && forceError.error[firstKey] && forceError.error[firstKey][0]) {
@@ -196,22 +215,22 @@ const OutputManagementPage: React.FC = () => {
                   }
                   await Swal.fire({
                     icon: 'error',
-                    title: 'Cannot Delete Output',
+                    title: translations['amp.outcomeoutput:cannot-delete-output'],
                     html: forceErrorMsg
                   });
                 }
               } catch (e) {
                 await Swal.fire({
                   icon: 'error',
-                  title: 'Error deleting output',
-                  text: 'An unexpected error occurred.'
+                  title: translations['amp.outcomeoutput:error-deleting-output'],
+                  text: translations['amp.outcomeoutput:unexpected-error']
                 });
               }
             }
           } else {
             await Swal.fire({
               icon: 'error',
-              title: 'Cannot Delete Output',
+              title: translations['amp.outcomeoutput:cannot-delete-output'],
               html: errorMsg
             });
           }
@@ -219,8 +238,8 @@ const OutputManagementPage: React.FC = () => {
       } catch (e) {
         await Swal.fire({
           icon: 'error',
-          title: 'Error deleting output',
-          text: 'An unexpected error occurred.'
+          title: translations['amp.outcomeoutput:error-deleting-output'],
+          text: translations['amp.outcomeoutput:unexpected-error']
         });
       }
     }
@@ -248,33 +267,68 @@ const OutputManagementPage: React.FC = () => {
       />
       <Col sm={12}>
         <Row className={styles.table_header}>
-          <Col sm={6}>
-            <h3>Output Management</h3>
+          <Col sm={3}>
+            <h3>{translations['amp.outcomeoutput:output-management']}</h3>
           </Col>
+
           <Col sm={6}>
-            <Button variant="primary" onClick={() => setShowAddNewOutputModal(true)} >
-              <i className="fa fa-plus" /> Add New Output
-            </Button>
             <Button variant="secondary" onClick={() => navigate('/admin/indicator_manager/outcome-output-management')} style={{ float: 'right', marginLeft: '10px' }}>
-              <i className="fa fa-arrow-left" /> Back
+              <i className="fa fa-arrow-left" /> {translations['amp.outcomeoutput:back']}
             </Button>
 
 
           </Col>
         </Row>
-        <BootstrapTable
+        <ToolkitProvider
           keyField="id"
           data={outputs}
           columns={outputColumns}
-          bordered={false}
-          headerClasses={styles.table_header_titles}
-          bodyClasses={styles.table_body}
-          noDataIndication={() => (
-            <div className={styles.no_data}>
-              <h5>No outputs found</h5>
+          search
+          exportCSV
+        >
+          {(toolkitProps: ToolkitContextType) => (
+            <div>
+              <Row sm={12} className={styles.table_header_bottom}>
+                <Col sm={3}>
+                  <Button variant="primary" onClick={() => setShowAddNewOutputModal(true)} >
+                    <i className="fa fa-plus" /> {translations['amp.outcomeoutput:add-new-output']}
+                  </Button>
+                </Col>
+                <Col sm={4}>
+                  <div className={styles.table_header_bottom_left}>
+                    <ExportCSVButton {...toolkitProps.csvProps} className={styles.export_button}>
+                      <i className="fa fa-download" /> {translations['amp.outcomeoutput:export-csv']}
+                    </ExportCSVButton>
+                  </div>
+                </Col>
+                <Col sm={8}>
+                  <div className={styles.table_header_bottom_right}>
+                    <div className={styles.search_container}>
+                      <SearchBar
+                        {...toolkitProps.searchProps}
+                        placeholder={translations['amp.outcomeoutput:search-placeholder']}
+                        columns={[{ dataField: 'name', text: 'Name' }]}
+                      />
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+              <hr />
+              <BootstrapTable
+                {...toolkitProps.baseProps}
+                bordered={false}
+                headerClasses={styles.table_header_titles}
+                bodyClasses={styles.table_body}
+                pagination={paginationFactory(paginationOptions)}
+                noDataIndication={() => (
+                  <div className={styles.no_data}>
+                    <h5>{translations['amp.indicatormanager:no-data']}</h5>
+                  </div>
+                )}
+              />
             </div>
           )}
-        />
+        </ToolkitProvider>
       </Col>
     </>
   );

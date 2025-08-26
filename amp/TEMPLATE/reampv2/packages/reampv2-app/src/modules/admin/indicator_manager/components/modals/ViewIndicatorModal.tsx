@@ -221,7 +221,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
             </Row>
             <Row className={styles.view_row_full}>
               <h4 className={styles.label}>{translations["amp.indicatormanager:responsible-organizations"]}</h4>
-              <div className={styles.value}>{getResponsibleOrgLabels(indicator.responsibleOrganizations).join(", ")}</div>
+              <div className={styles.value}>{getResponsibleOrgLabels(indicator.responsibleOrganizations).join("\n")}</div>
             </Row>
             <Row className={styles.view_row_full}>
               <h4 className={styles.label}>{translations["amp.indicatormanager:unit-of-measure"]}</h4>

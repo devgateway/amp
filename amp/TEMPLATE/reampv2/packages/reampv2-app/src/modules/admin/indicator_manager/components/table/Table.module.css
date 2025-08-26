@@ -58,3 +58,94 @@
 .filter_select {
     width: 350px;
 }
+/* Add these styles to your existing Table.module.css */
+
+.filter_group_container {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+}
+
+.filter_label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #495057;
+    font-size: 0.875rem;
+}
+
+.filter_select {
+    width: 100%;
+}
+
+.search_container {
+    display: flex;
+    flex-direction: column;
+}
+
+.search_container :global(.search-bar) {
+    width: 100% !important;
+    margin-top: 5px;
+}
+
+.search_container :global(.search-bar input) {
+    width: 100% !important;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.table_header_bottom_left {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.export_button {
+    white-space: nowrap;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .filter_group_container {
+        padding: 10px;
+    }
+
+    .sector_filter_container {
+        margin-bottom: 15px;
+    }
+
+    .table_header_bottom_left {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+    .table_header_bottom_left button,
+    .table_header_bottom_left :global(.btn) {
+        flex: 1;
+        min-width: 120px;
+        margin: 0 5px 5px 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .table_header_bottom_left {
+        flex-direction: column;
+    }
+
+    .table_header_bottom_left button,
+    .table_header_bottom_left :global(.btn) {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .filter_select :global(.css-1s2u09g-control) {
+        min-height: 38px;
+    }
+
+    .filter_select :global(.css-1pahdxg-control) {
+        min-height: 38px;
+    }
+}

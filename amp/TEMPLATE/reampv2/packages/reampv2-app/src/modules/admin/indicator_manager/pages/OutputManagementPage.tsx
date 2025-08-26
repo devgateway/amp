@@ -270,12 +270,10 @@ const OutputManagementPage: React.FC = () => {
           <Col sm={3}>
             <h3>{translations['amp.outcomeoutput:output-management']}</h3>
           </Col>
-
           <Col sm={6}>
             <Button variant="secondary" onClick={() => navigate('/admin/indicator_manager/outcome-output-management')} style={{ float: 'right', marginLeft: '10px' }}>
               <i className="fa fa-arrow-left" /> {translations['amp.outcomeoutput:back']}
             </Button>
-
 
           </Col>
         </Row>

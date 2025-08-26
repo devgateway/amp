@@ -104,32 +104,32 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
         {indicator ?
             <Modal.Body className={styles.modal_body}>
               <div className={styles.viewmodal_wrapper}>
-                {/* Basic Information Section */}
-                <div className={styles.section}>
-                  <h5 className={styles.section_title}>
+                {/* Core Information Section */}
+                <div className={styles.section} style={{borderBottom: '2px solid #e0e0e0', marginBottom: 24, paddingBottom: 16}}>
+                  <h4 className={styles.section_title} style={{color: '#0052CC', fontWeight: 'bold'}}>
                     <i className="fas fa-info-circle me-2"></i>
-                    {translations["amp.indicatormanager:basic-information"] || "Basic Information"}
-                  </h5>
+                    {translations["amp.indicatormanager:core-info"] || "Core Information"}
+                  </h4>
                   <Row className={styles.view_row}>
                     <Col md={6} className={styles.view_item}>
-                      <div className={styles.label}>{translations["amp.indicatormanager:view-indicator-id"]}</div>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:view-indicator-id"]}</b></div>
                       <div className={styles.value}>{indicator.id}</div>
                     </Col>
                     <Col md={6} className={styles.view_item}>
-                      <div className={styles.label}>{translations["amp.indicatormanager:indicator-code"]}</div>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:indicator-code"]}</b></div>
                       <div className={styles.value}>{indicator.code}</div>
                     </Col>
                   </Row>
                   <Row className={styles.view_row}>
                     <Col md={12} className={styles.view_item}>
-                      <div className={styles.label}>{translations["amp.indicatormanager:indicator-name"]}</div>
-                      <div className={`${styles.value} ${styles.important}`}>{indicator.name}</div>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:indicator-name"]}</b></div>
+                      <div className={`${styles.value} ${styles.important}`} style={{fontWeight: 'bold', color: '#36B37E'}}>{indicator.name}</div>
                     </Col>
                   </Row>
                   <Row className={styles.view_row}>
                     <Col md={12} className={styles.view_item}>
-                      <div className={styles.label}>{translations["amp.indicatormanager:indicator-description"]}</div>
-                      <div className={styles.value}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:indicator-description"]}</b></div>
+                      <div className={styles.value} style={{fontStyle: 'italic'}}>
                         {indicator.description === "" || !indicator.description ?
                             <span className={styles.no_data}>{translations["amp.indicatormanager:no-description-available"]}</span> :
                             indicator.description
@@ -139,29 +139,29 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                   </Row>
                   <Row className={styles.view_row}>
                     <Col md={6} className={styles.view_item}>
-                      <div className={styles.label}>{translations["amp.indicatormanager:ascending"]}</div>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:ascending"]}</b></div>
                       <div className={styles.value}>
-                        <Badge variant={indicator.ascending ? "success" : "secondary"}>
+                        <Badge content={indicator.ascending ? "success" : "secondary"} style={{fontWeight: 'bold'}}>
                           {indicator.ascending ? translations["amp.indicatormanager:yes"] : translations["amp.indicatormanager:no"]}
                         </Badge>
                       </div>
                     </Col>
                     <Col md={6} className={styles.view_item}>
-                      <div className={styles.label}>{translations["amp.indicatormanager:table-header-creation-date"]}</div>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:table-header-creation-date"]}</b></div>
                       <div className={styles.value}>{indicator.creationDate}</div>
                     </Col>
                   </Row>
                 </div>
 
                 {/* Classification Section */}
-                <div className={styles.section}>
-                  <h5 className={styles.section_title}>
+                <div className={styles.section} style={{borderBottom: '2px solid #e0e0e0', marginBottom: 24, paddingBottom: 16}}>
+                  <h4 className={styles.section_title} style={{color: '#FF5630', fontWeight: 'bold'}}>
                     <i className="fas fa-tags me-2"></i>
                     {translations["amp.indicatormanager:classification"] || "Classification"}
-                  </h5>
+                  </h4>
                   <Row className={styles.view_row}>
                     <Col md={6} className={styles.view_item}>
-                      <div className={styles.label}>{translations["amp.indicatormanager:sectors"]}</div>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:sectors"]}</b></div>
                       <div className={styles.value}>
                         {sectorData.length > 0 ? (
                             <div className={styles.tags_container}>
@@ -171,13 +171,9 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                                     <span
                                         key={sector.id}
                                         className={styles.tag}
-                                        style={{
-                                          backgroundColor: colorOptions[colorIndex].color,
-                                          color: colorOptions[colorIndex].textColor
-                                        }}
-                                    >
-                              {sector.name}
-                            </span>
+                                        style={{backgroundColor: colorOptions[colorIndex].color, color: colorOptions[colorIndex].textColor, fontWeight: 'bold'}}>
+                                      {sector.name}
+                                    </span>
                                 );
                               })}
                             </div>
@@ -187,14 +183,14 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                       </div>
                     </Col>
                     <Col md={6} className={styles.view_item}>
-                      <div className={styles.label}>{translations["amp.indicatormanager:programs"]}</div>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:programs"]}</b></div>
                       <div className={styles.value}>
                         {programData.length > 0 ? (
                             <div className={styles.tags_container}>
                               {programData.map((program) => (
-                                  <span key={program.id} className={styles.tag}>
-                            {program.name}
-                          </span>
+                                  <span key={program.id} className={styles.tag} style={{backgroundColor: '#5243AA', color: '#fff', fontWeight: 'bold'}}>
+                                    {program.name}
+                                  </span>
                               ))}
                             </div>
                         ) : (
@@ -205,33 +201,42 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                   </Row>
                   <Row className={styles.view_row}>
                     <Col md={6} className={styles.view_item}>
-                      <div className={styles.label}>{translations["amp.indicatormanager:outcome"]}</div>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:outcome"]}</b></div>
                       <div className={styles.value}>{getOutcomeLabel(indicator.outcomeId)}</div>
                     </Col>
                     <Col md={6} className={styles.view_item}>
-                      <div className={styles.label}>{translations["amp.indicatormanager:output"]}</div>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:output"]}</b></div>
                       <div className={styles.value}>{getOutputLabel(indicator.outputId)}</div>
                     </Col>
                   </Row>
                   <Row className={styles.view_row}>
                     <Col md={6} className={styles.view_item}>
-                      <div className={styles.label}>{translations["amp.indicatormanager:indicator-type"]}</div>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:indicator-type"]}</b></div>
                       <div className={styles.value}>{getCategoryLabel(indicator.indicatorType)}</div>
                     </Col>
                     <Col md={6} className={styles.view_item}>
-                      <div className={styles.label}>{translations["amp.indicatormanager:frequency"]}</div>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:frequency"]}</b></div>
                       <div className={styles.value}>{getCategoryLabel(indicator.frequency)}</div>
+                    </Col>
+                  </Row>
+                  <Row className={styles.view_row}>
+                    <Col md={12} className={styles.view_item}>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:responsible-organizations"]}</b></div>
+                      <div className={styles.value}>
+                        {getResponsibleOrgLabels(indicator.responsibleOrganizations).join(", ") ||
+                            <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}
+                      </div>
                     </Col>
                   </Row>
                 </div>
 
                 {/* Values Section */}
                 <Row className={styles.view_row}>
-                  <Col md={6} className={styles.section}>
-                    <h5 className={styles.section_title}>
+                  <Col md={6} className={styles.section} style={{borderRight: '1px solid #e0e0e0', paddingRight: 16}}>
+                    <h4 className={styles.section_title} style={{color: '#36B37E', fontWeight: 'bold'}}>
                       <i className="fas fa-chart-line me-2"></i>
                       {translations["amp.indicatormanager:base-values"]}
-                    </h5>
+                    </h4>
                     <div className={styles.view_item}>
                       <div className={styles.label}>{translations["amp.indicatormanager:original-base-value"]}</div>
                       <div className={styles.value}>{indicator.base?.originalValue ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
@@ -249,11 +254,11 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                       <div className={styles.value}>{indicator.base?.revisedValueDate ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
                     </div>
                   </Col>
-                  <Col md={6} className={styles.section}>
-                    <h5 className={styles.section_title}>
+                  <Col md={6} className={styles.section} style={{paddingLeft: 16}}>
+                    <h4 className={styles.section_title} style={{color: '#FF8B00', fontWeight: 'bold'}}>
                       <i className="fas fa-bullseye me-2"></i>
                       {translations["amp.indicatormanager:target-values"]}
-                    </h5>
+                    </h4>
                     <div className={styles.view_item}>
                       <div className={styles.label}>{translations["amp.indicatormanager:target-value"]}</div>
                       <div className={styles.value}>{indicator.target?.originalValue ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
@@ -274,19 +279,12 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                 </Row>
 
                 {/* Additional Information Section */}
-                <div className={styles.section}>
-                  <h5 className={styles.section_title}>
+                <div className={styles.section} style={{marginTop: 24}}>
+                  <h4 className={styles.section_title} style={{color: '#5243AA', fontWeight: 'bold'}}>
                     <i className="fas fa-ellipsis-h me-2"></i>
                     {translations["amp.indicatormanager:additional-information"] || "Additional Information"}
-                  </h5>
+                  </h4>
                   <Row className={styles.view_row}>
-                    <Col md={6} className={styles.view_item}>
-                      <div className={styles.label}>{translations["amp.indicatormanager:responsible-organizations"]}</div>
-                      <div className={styles.value}>
-                        {getResponsibleOrgLabels(indicator.responsibleOrganizations).join(", ") ||
-                            <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}
-                      </div>
-                    </Col>
                     <Col md={6} className={styles.view_item}>
                       <div className={styles.label}>{translations["amp.indicatormanager:unit-of-measure"]}</div>
                       <div className={styles.value}>{getCategoryLabel(indicator.unitOfMeasure)}</div>

@@ -142,12 +142,14 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
         sort: true,
         headerStyle: { width: '20%' },
         formatter: (_cell: any, row: any) => {
-          const foundOutcome = !outcomesReducer.loading && outcomesReducer.outcomes.find((outcome: any) => outcome.id === row.outcomeId);
-          return foundOutcome ? foundOutcome.name : row.outcome || '';
+          if (outcomesReducer.loading) return translations['amp.indicatormanager:loading'];
+          const foundOutcome = outcomesReducer.outcomes.find((outcome: any) => outcome.id === row.outcomeId);
+          return foundOutcome ? foundOutcome.name : row.outcomeId || translations['amp.indicatormanager:no-data'];
         },
         csvFormatter: (_cell: any, row: any) => {
-          const foundOutcome = !outcomesReducer.loading && outcomesReducer.outcomes.find((outcome: any) => outcome.id === row.outcomeId);
-          return foundOutcome ? foundOutcome.name : row.outcome || '';
+          if (outcomesReducer.loading) return translations['amp.indicatormanager:loading'];
+          const foundOutcome = outcomesReducer.outcomes.find((outcome: any) => outcome.id === row.outcomeId);
+          return foundOutcome ? foundOutcome.name : row.outcomeId || translations['amp.indicatormanager:no-data'];
         }
       },
     // Output column

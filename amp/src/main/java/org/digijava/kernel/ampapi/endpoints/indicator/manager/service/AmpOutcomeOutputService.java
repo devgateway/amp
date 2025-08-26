@@ -217,6 +217,7 @@ public class AmpOutcomeOutputService {
                 indicator.setOutcome(null);
                 session.update(indicator);
             });
+            session.flush();
         }
         session.delete(outcome);
         session.flush();

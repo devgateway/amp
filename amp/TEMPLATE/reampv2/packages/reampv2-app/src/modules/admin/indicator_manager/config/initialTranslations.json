@@ -185,6 +185,7 @@
   "amp.outcomeoutput:delete-output-confirm": "Are you sure you want to delete output",
   "amp.outcomeoutput:delete-output-warning": "This action cannot be undone.",
   "amp.outcomeoutput:error-deleting-output": "Error deleting output.",
+  "amp.outcomeoutput:delete":"Delete",
   "amp.outcomeoutput:indicators-linked": "Indicators are linked to this output.",
   "amp.outcomeoutput:proceed-orphan-indicators": "Do you want to proceed and orphan the indicators?",
   "amp.outcomeoutput:yes-delete-anyway": "Yes, delete anyway",

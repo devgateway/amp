@@ -61,9 +61,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
                aria-hidden="true"
             />
           </div>
-          {' '}
           <div className={styles.action_container}
-
           >
             <i className="fa fa-trash"
                style={{ fontSize: 20, color: '#dc3545' }}
@@ -101,29 +99,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
     }
   };
 
-  const handleAddOutput = async (output: { name: string; description?: string; outcomeIds: number[] }) => {
-    if (!output.outcomeIds || output.outcomeIds.length === 0) {
-      alert('You must associate the output with at least one outcome.');
-      return;
-    }
-    try {
-      const res = await fetch('/rest/amp-outcome-output/output', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(output)
-      });
-      if (res.ok) {
-        fetch('/rest/amp-outcome-output/outcomes')
-          .then(res => res.json())
-          .then(data => setOutcomes(data));
-      } else {
-        alert('Failed to add output');
-      }
-    } catch (e) {
-      console.error('Error adding output', e);
-      alert('Error adding output');
-    }
-  };
+
 
   const handleEditOutcome = (outcome: Outcome) => {
     setEditingOutcome(outcome);
@@ -272,19 +248,15 @@ const OutcomeOutputManagementPage: React.FC = () => {
             <h3>Outcome Management</h3>
           </Col>
           <Col sm={6}>
-            <Button variant="secondary" onClick={() => navigate('/admin/indicator_manager')} style={{ float: 'right', marginLeft: '10px' }}>
-              <i className="fa fa-arrow-left" /> Back
-            </Button>
-            <span style={{ float: 'right', marginLeft: '10px' }}>
               <Button variant="primary" onClick={() => setShowAddNewOutcomeModal(true)}>
                 <i className="fa fa-plus" /> Add New Outcome
               </Button>
-            </span>
-            <span style={{ float: 'right', marginLeft: '10px' }}>
-              <Button variant="info" onClick={() => navigate('/admin/indicator_manager/outcome-output-management')}>
+              <Button variant="info" onClick={() => navigate('/admin/indicator_manager/output-management')} style={{ float: 'right', marginLeft: '10px' }}>
                 <i className="fa fa-share" /> Output Management
               </Button>
-            </span>
+            <Button variant="secondary" onClick={() => navigate('/admin/indicator_manager')} style={{ float: 'right', marginLeft: '10px' }}>
+              <i className="fa fa-arrow-left" /> Back
+            </Button>
           </Col>
         </Row>
         <ToolkitProvider

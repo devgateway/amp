@@ -51,9 +51,6 @@ public class AmpOutcomeOutputEndpoints {
     @ApiOperation(value = "Create output", notes = "Creates a new output")
     public Response createOutput(AmpOutputDTO dto) {
         try {
-            if (dto.getOutcomeIds() == null || dto.getOutcomeIds().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("Output must be linked to at least one Outcome.").build();
-            }
             AmpOutputDTO created = service.createOutput(dto);
             return Response.ok(created).build();
         } catch (IllegalArgumentException e) {
@@ -80,9 +77,6 @@ public class AmpOutcomeOutputEndpoints {
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateOutput")
     @ApiOperation(value = "Update output", notes = "Updates an existing output")
     public Response updateOutput(@PathParam("id") Long id, AmpOutputDTO dto) {
-        if (dto.getOutcomeIds() == null || dto.getOutcomeIds().isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Output must be linked to at least one Outcome.").build();
-        }
         AmpOutputDTO updated = service.updateOutput(id, dto);
         if (updated == null) {
             return Response.status(Response.Status.NOT_FOUND).build();

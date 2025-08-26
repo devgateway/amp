@@ -123,6 +123,10 @@ public class AmpOutcomeOutputService {
             msg.append("\n Warning: There are ").append(indicators.size()).append(" active indicators linked to this Output. Deleting this Output will orphan those indicators.");
             throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(msg.toString()));
         }
+        // Remove associations in join table before deleting output
+        output.getOutcomes().clear();
+        session.update(output);
+        session.flush();
         // Unlink indicators if forceDelete is true
         if (!indicators.isEmpty() && forceDelete) {
             for (AmpIndicator indicator : indicators) {

@@ -175,7 +175,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
         headerStyle: { width: '20%' },
         formatter: (_cell: any, row: any) => {
           if (outcomesReducer.loading) return translations['amp.indicatormanager:loading'];
-          const foundOutcome = !outcomesReducer.loading && outcomesReducer.programs.find((outcome: any) => outcome.id === row.outcomeId);
+          const foundOutcome = !outcomesReducer.loading && outcomesReducer.outcomes.find((outcome: any) => outcome.id === row.outcomeId);
           return foundOutcome ? foundOutcome.name : '';
         },
         csvFormatter: (_cell: any, row: any) => {

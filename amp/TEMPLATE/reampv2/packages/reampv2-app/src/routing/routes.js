@@ -1,6 +1,7 @@
 import {lazy, Suspense} from "react";
 import NavigationManager from "../NavigationManager";
 import { Outlet } from "react-router-dom";
+import {Provider} from "react-redux";
 
 const SSCDashboardApp = lazy(() => import('../modules/sscdashboard'));
 const AdminApps = lazy(() => import('../modules/admin/Admin.routes'));
@@ -74,7 +75,9 @@ const routes = [
                 path: "admin/*",
                 element: (
                     <Suspense fallback={<div>Loading...</div>}>
+                        <Provider store={store}>
                         <AdminApps />
+                        </Provider>
                     </Suspense>
                 )
             }

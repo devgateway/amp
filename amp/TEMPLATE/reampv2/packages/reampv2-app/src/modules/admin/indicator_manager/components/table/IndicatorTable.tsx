@@ -12,7 +12,6 @@ import styles from './IndicatorTable.module.css';
 import {DefaultComponentProps, IndicatorObjectType, ProgramObjectType, SettingsType} from '../../types';
 
 import {getIndicators} from '../../reducers/fetchIndicatorsReducer';
-import {getOutputs} from '../../reducers/fetchOutputsReducer';
 
 
 // Modals
@@ -337,7 +336,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
   );
 };
 
-const InidcatorTableMemo = React.memo(IndicatorTable);
+const IndicatorTableMemo = React.memo(IndicatorTable);
 
 const mapStateToProps = (state: any) => ({
   translations: state.translationsReducer.translations,
@@ -345,4 +344,4 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: any) => bindActionCreators({}, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(InidcatorTableMemo);
+export default connect(mapStateToProps, mapDispatchToProps)(IndicatorTableMemo);

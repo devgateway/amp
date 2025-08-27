@@ -11,6 +11,8 @@ import initialTranslations from '../config/initialTranslations.json';
 import './css/ModalZIndexFix.css'; // Add z-index to modal and backdrop to ensure visibility
 import Swal from 'sweetalert2';
 import {useNavigate} from "react-router-dom";
+import {useSelector, useDispatch} from "react-redux";
+import {getOutcomes} from "../reducers/fetchOutcomesReducer";
 
 interface Outcome {
   id: number;
@@ -31,14 +33,11 @@ const OutcomeOutputManagementPage: React.FC = () => {
   const [showAddNewOutcomeModal, setShowAddNewOutcomeModal] = useState(false);
   const [showEditOutcomeModal, setShowEditOutcomeModal] = useState(false);
   const [editingOutcome, setEditingOutcome] = useState<Outcome | null>(null);
-  const [outcomes, setOutcomes] = useState<Outcome[]>([]);
+  const outcomes = useSelector((state: any) => state.fetchOutcomesReducer).outcomes;
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch('/rest/amp-outcome-output/outcomes')
-      .then(res => res.json())
-      .then(data => setOutcomes(data));
-  }, []);
 
 
   const columns = [
@@ -86,9 +85,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
         body: JSON.stringify(outcome)
       });
       if (res.ok) {
-        fetch('/rest/amp-outcome-output/outcomes')
-          .then(res => res.json())
-          .then(data => setOutcomes(data));
+        dispatch(getOutcomes());
       } else {
         alert('Failed to add outcome');
       }
@@ -114,9 +111,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
         body: JSON.stringify(updated)
       });
       if (res.ok) {
-        fetch('/rest/amp-outcome-output/outcomes')
-          .then(res => res.json())
-          .then(data => setOutcomes(data));
+        dispatch(getOutcomes());
       } else {
         alert('Failed to update outcome');
       }
@@ -148,9 +143,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
           headers: { 'Content-Type': 'application/json' }
         });
         if (res.ok) {
-          fetch('/rest/amp-outcome-output/outcomes')
-            .then(res => res.json())
-            .then(data => setOutcomes(data));
+          dispatch(getOutcomes());
         } else {
           // Show backend error message (alerts/warnings)
           const error = await res.json();

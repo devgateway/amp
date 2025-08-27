@@ -10,6 +10,8 @@ import OutputModal from '../components/modals/OutputModal';
 import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
 import initialTranslations from '../config/initialTranslations.json';
+import {useDispatch, useSelector} from "react-redux";
+import {getOutputs} from "../reducers/fetchOutputsReducer";
 
 interface Outcome {
   // Define the properties of Outcome based on your API response
@@ -26,23 +28,16 @@ interface Output {
 
 const OutputManagementPage: React.FC = () => {
   const navigate = useNavigate();
-  const [outputs, setOutputs] = useState<Output[]>([]);
   const [showAddNewOutputModal, setShowAddNewOutputModal] = useState(false);
   const [showEditOutputModal, setShowEditOutputModal] = useState(false);
   const [editingOutput, setEditingOutput] = useState<Output | null>(null);
   const [loadingEditOutput, setLoadingEditOutput] = useState(false);
-  const [outcomes, setOutcomes] = useState<Outcome[]>([]);
+  const outputs = useSelector((state: any) => state.fetchOutputsReducer).outputs;
+  const outcomes = useSelector((state: any) => state.fetchOutcomesReducer).outcomes;
+  const dispatch = useDispatch();
 
   const translations = initialTranslations;
 
-  useEffect(() => {
-    fetch('/rest/amp-outcome-output/outputs')
-      .then(res => res.json())
-      .then(data => setOutputs(data));
-    fetch('/rest/amp-outcome-output/outcomes')
-      .then(res => res.json())
-      .then(data => setOutcomes(data));
-  }, []);
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
 
@@ -102,9 +97,7 @@ const OutputManagementPage: React.FC = () => {
         body: JSON.stringify(output)
       });
       if (res.ok) {
-        fetch('/rest/amp-outcome-output/outputs')
-          .then(res => res.json())
-          .then(data => setOutputs(data));
+        dispatch(getOutputs());
       } else {
         alert(translations['amp.outcomeoutput:add-output-failed']);
       }
@@ -145,9 +138,7 @@ const OutputManagementPage: React.FC = () => {
         body: JSON.stringify(updated)
       });
       if (res.ok) {
-        fetch('/rest/amp-outcome-output/outputs')
-          .then(res => res.json())
-          .then(data => setOutputs(data));
+        dispatch(getOutputs());
       } else {
         alert(translations['amp.outcomeoutput:update-output-failed']);
       }
@@ -174,9 +165,7 @@ const OutputManagementPage: React.FC = () => {
           headers: { 'Content-Type': 'application/json' }
         });
         if (res.ok) {
-          fetch('/rest/amp-outcome-output/outputs')
-            .then(res => res.json())
-            .then(data => setOutputs(data));
+          dispatch(getOutputs())
         } else {
           const error = await res.json();
           let errorMsg = translations['amp.outcomeoutput:error-deleting-output'];
@@ -202,9 +191,7 @@ const OutputManagementPage: React.FC = () => {
                   headers: { 'Content-Type': 'application/json' }
                 });
                 if (forceRes.ok) {
-                  fetch('/rest/amp-outcome-output/outputs')
-                    .then(res => res.json())
-                    .then(data => setOutputs(data));
+                  dispatch(getOutputs())
                 } else {
                   const forceError = await forceRes.json();
                   let forceErrorMsg = translations['amp.outcomeoutput:error-deleting-output'];

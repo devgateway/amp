@@ -38,8 +38,6 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
 
   useLayoutEffect(() => {
     dispatch(getIndicators());
-    dispatch(getOutputs());
-    dispatch(getOutcomes());
   }, []);
 
 

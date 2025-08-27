@@ -83,8 +83,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
   const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
   const categoriesReducer = useSelector((state: any) => state.fetchAmpCategoryReducer);
-  const outcomesState = useSelector((state: any) => state.fetchOutcomesReducer);
-  const allOutcomes = outcomesState.outcomes || [];
+  const outcomesReducer = useSelector((state: any) => state.fetchOutcomesReducer);
+  const allOutcomes = outcomesReducer.outcomes || [];
 
   const [programFieldVisible, setProgramFieldVisible] = useState(false);
   const [selectedProgramSchemeId, setSelectedProgramSchemeId] = useState<string | null>(null);
@@ -199,15 +199,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     getCategories();
     getProgramSchemes();
     getPrograms();
+    getOutcomes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sectorsReducer.sectors, programsReducer.programs, programsReducer.programSchemes])
+  }, [sectorsReducer.sectors, programsReducer.programs, programsReducer.programSchemes, outcomesReducer.outcomes])
 
-  useEffect(() => {
-    if (!allOutcomes.length) {
-      dispatch(getOutcomes());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, allOutcomes.length]);
 
   const [selectedOutcomeId, setSelectedOutcomeId] = useState<number | null>(null);
 

@@ -84,6 +84,11 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
       return found ? found.label : id;
     });
   };
+  const getProgramLabel = (id: number | null) => {
+    if (!id) return translations["amp.indicatormanager:no-data"];
+    const found = programsReducer.programs.find((p: any) => p.id === id);
+    return found ? found.name : id;
+  };
 
   return (
       <Modal
@@ -161,8 +166,8 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                   </Row>
                   <Row className={styles.view_row}>
                     <Col md={12} className={styles.view_item}>
-                      <div className={styles.label}><b>{translations["amp.indicatormanager:logframe-links"] || "Link to Logframe (Program Scheme)"}</b></div>
-                      <div className={styles.value}>{indicator.logframeLinks && indicator.logframeLinks.length > 0 ? indicator.logframeLinks.join(", ") : <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                      <div className={styles.label}><b>{translations["amp.indicatormanager:logframe-links"] || "Link to Logframe (Program)"}</b></div>
+                      <div className={styles.value}>{getProgramLabel(indicator.programId)}</div>
                     </Col>
                   </Row>
                   <Row className={styles.view_row}>
@@ -212,7 +217,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                       <div className={styles.label}><b>{translations["amp.indicatormanager:disaggregation"]}</b></div>
                       <div className={styles.value}>
                         {indicator.disaggregation && indicator.disaggregation.length > 0 ?
-                            indicator.disaggregation.map(getCategoryLabel).join(", ") :
+                            indicator.disaggregation.map(getCategoryLabel).join("\n") :
                             <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}
                       </div>
                     </Col>

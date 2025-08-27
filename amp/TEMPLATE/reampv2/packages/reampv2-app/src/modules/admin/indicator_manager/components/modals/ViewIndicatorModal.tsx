@@ -175,21 +175,13 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                       <div className={styles.label}><b>{translations["amp.indicatormanager:sectors"]}</b></div>
                       <div className={styles.value}>
                         {sectorData.length > 0 ? (
-                            <div className={styles.tags_container}>
-                              {sectorData.map((sector) => {
-                                const colorIndex = sector.id % 10;
-                                return (
-                                    <span
-                                        key={sector.id}
-                                        className={styles.tag}
-                                        style={{backgroundColor: colorOptions[colorIndex].color, color: colorOptions[colorIndex].textColor, fontWeight: 'bold'}}>
-                                      {sector.name}
-                                    </span>
-                                );
-                              })}
-                            </div>
+                          <ul style={{ paddingLeft: '1.2em', marginBottom: 0 }}>
+                            {sectorData.map((sector) => (
+                              <li key={sector.id}>{sector.name}</li>
+                            ))}
+                          </ul>
                         ) : (
-                            <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>
+                          <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>
                         )}
                       </div>
                     </Col>
@@ -216,9 +208,15 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                     <Col md={6} className={styles.view_item}>
                       <div className={styles.label}><b>{translations["amp.indicatormanager:disaggregation"]}</b></div>
                       <div className={styles.value}>
-                        {indicator.disaggregation && indicator.disaggregation.length > 0 ?
-                            indicator.disaggregation.map(getCategoryLabel).join("\n") :
-                            <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}
+                        {indicator.disaggregation && indicator.disaggregation.length > 0 ? (
+                          <ul style={{ paddingLeft: '1.2em', marginBottom: 0 }}>
+                            {indicator.disaggregation.map((item: any, idx: number) => (
+                              <li key={idx}>{getCategoryLabel(item)}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>
+                        )}
                       </div>
                     </Col>
                     <Col md={6} className={styles.view_item}>
@@ -244,8 +242,15 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                     <Col md={6} className={styles.view_item}>
                       <div className={styles.label}><b>{translations["amp.indicatormanager:responsible-organizations"]}</b></div>
                       <div className={styles.value}>
-                        {getResponsibleOrgLabels(indicator.responsibleOrganizations).join(", ") ||
-                            <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}
+                        {indicator.responsibleOrganizations && indicator.responsibleOrganizations.length > 0 ? (
+                          <ul style={{ paddingLeft: '1.2em', marginBottom: 0 }}>
+                            {getResponsibleOrgLabels(indicator.responsibleOrganizations).map((org, idx) => (
+                              <li key={idx}>{org}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>
+                        )}
                       </div>
                     </Col>
                     <Col md={6} className={styles.view_item}>

@@ -165,7 +165,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
 
     // Set indicator type options from Redux
     if (categoriesReducer && categoriesReducer.categories) {
-      const formattedIndicatorTypes = categoriesReducer.categories.map((indicatorType: any) => ({
+      const formattedIndicatorTypes = categoriesReducer.categories.filter((cat: any)=>cat.ampCategoryClass.keyName === 'indicator_type').map((indicatorType: any) => ({
         value: indicatorType.id,
         label: indicatorType.value,
       }));

@@ -19,7 +19,6 @@ import ViewIndicatorModal from '../modals/ViewIndicatorModal';
 import EditIndicatorModal from '../modals/EditIndicatorModal';
 import DeleteIndicatorModal from '../modals/DeleteIndicatorModal';
 import {Loading} from '../../../../../utils/components/Loading';
-import {getOutcomes} from "../../reducers/fetchOutcomesReducer";
 
 interface IndicatorTableProps extends DefaultComponentProps {
 }
@@ -171,12 +170,12 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
         sort: true,
         headerStyle: { width: '20%' },
         formatter: (_cell: any, row: any) => {
-          if (outcomesReducer.loading) return translations['amp.indicatormanager:loading'];
+          if (outcomesReducer.loading) return '';
           const foundOutcome = !outcomesReducer.loading && outcomesReducer.outcomes.find((outcome: any) => outcome.id === row.outcomeId);
           return foundOutcome ? foundOutcome.name : '';
         },
         csvFormatter: (_cell: any, row: any) => {
-          if (outcomesReducer.loading) return translations['amp.indicatormanager:loading'];
+          if (outcomesReducer.loading) return '';
           const foundOutcome = !outcomesReducer.loading && outcomesReducer.programs.find((outcome: any) => outcome.id === row.outcomeId);
           return foundOutcome ? foundOutcome.name : '';
         }

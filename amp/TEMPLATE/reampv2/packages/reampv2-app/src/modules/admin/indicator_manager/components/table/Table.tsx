@@ -331,25 +331,28 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
 
                         <Col md={8} xs={12}>
                           <div className={styles.filters_container}>
+                            <Row>
+                            <Col xs={12}>
+                              <div className={styles.search_item}>
+                                <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:search']}</Form.Label>
+                                <div className={styles.search_wrapper}>
+                                  <SearchBar xs={12}
+                                      {...props.searchProps}
+                                      placeholder={translations['amp.indicatormanager:search-placeholder'] || "Search by name or code"}
+                                      className={styles.search_bar}
+                                      style={{ width: '360px' }}
+                                  />
+                                  <i className={`fa fa-search ${styles.search_icon}`} />
+                                </div>
+                              </div>
+                            </Col>
+                            </Row>
+                            <Row xs={12}>
                             <div className={styles.filters_header}>
                               <h5>{translations['amp.indicatormanager:filters'] || 'Filters'}</h5>
                             </div>
+                            </Row>
                             <Row className="g-2">
-                              {/* Search field at the top, double width */}
-                              <Col xs={12}>
-                                <div className={styles.search_item}>
-                                  <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:search']}</Form.Label>
-                                  <div className={styles.search_wrapper}>
-                                    <SearchBar
-                                        {...props.searchProps}
-                                        placeholder={translations['amp.indicatormanager:search-placeholder'] || "Search by name or code"}
-                                        className={styles.search_bar}
-                                        style={{ width: '360px' }} // double the previous width (was 180px)
-                                    />
-                                    <i className={`fa fa-search ${styles.search_icon}`} />
-                                  </div>
-                                </div>
-                              </Col>
                               {/* Other filters below */}
                               {filterBySector && (
                                   <Col xs={12} sm={6} lg={4}>

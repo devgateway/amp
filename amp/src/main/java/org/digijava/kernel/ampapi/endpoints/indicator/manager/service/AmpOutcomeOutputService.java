@@ -23,7 +23,7 @@ public class AmpOutcomeOutputService {
         Session session = PersistenceManager.getSession();
         List<AmpOutcome> outcomes = session.createQuery(
             "select distinct o from AmpOutcome o left join fetch o.outputs", AmpOutcome.class
-        ).list();
+        ).getResultList();
         // Ensure outputs are initialized to avoid collection eviction
         for (AmpOutcome outcome : outcomes) {
             Hibernate.initialize(outcome.getOutputs());
@@ -114,13 +114,6 @@ public class AmpOutcomeOutputService {
             msg.append("\n Warning: There are ").append(indicators.size()).append(" active indicators linked to this Output. Deleting this Output will orphan those indicators.");
             throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(msg.toString()));
         }
-        // Remove associations before deleting output
-        AmpOutcome outcome = output.getOutcome();
-        if (outcome != null) {
-            outcome.getOutputs().remove(output);
-            session.update(outcome);
-        }
-
         // Unlink indicators if forceDelete is true
         if (!indicators.isEmpty() && forceDelete) {
             for (AmpIndicator indicator : indicators) {

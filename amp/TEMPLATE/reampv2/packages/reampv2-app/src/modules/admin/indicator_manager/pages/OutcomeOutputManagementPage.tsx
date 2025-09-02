@@ -42,7 +42,10 @@ const OutcomeOutputManagementPage: React.FC = () => {
 
   const navigate = useNavigate();
 
-
+  // Fetch outcomes on initial mount
+  useEffect(() => {
+    dispatch(getOutcomes());
+  }, [dispatch]);
 
   const columns = [
     {
@@ -292,8 +295,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
               e.currentTarget.setAttribute('data-bs-placement', 'top');
             }}
           >
-            <i className="fas fa-square fa-stack-2x"/>
-            <i className="far fa-plus fa-stack-1x fa-inverse" />
+            <i className="fa fa-plus" />
           </Button>
         </div>
         {row.description && (
@@ -313,27 +315,26 @@ const OutcomeOutputManagementPage: React.FC = () => {
           <tbody>
             {row.outputs && row.outputs.length > 0 ? row.outputs.map((output: Output) => (
               <tr key={output.id}>
-                <td>{output.name}</td>
+                <td><strong>{output.name}</strong></td>
                 <td>{output.description || ''}</td>
                 <td>
-                  <div className={action_style.action_container}
+                  <Button
+                    variant="outline-success"
+                    size="sm"
+                    style={{ marginRight: '6px' }}
+                    onClick={() => handleEditOutput(output, row)}
+                    title="Edit Output"
                   >
-                    <i
-                        onClick={() => handleEditOutput(output, row)}
-                        style={{ fontSize: 20, color: '#198754' }}
-                        className="fa fa-pencil"
-                        aria-hidden="true"
-                    />
-                  </div>
-                  <div className={action_style.action_container}
+                    <i className="fa fa-pencil" />
+                  </Button>
+                  <Button
+                    variant="outline-danger"
+                    size="sm"
+                    onClick={() => handleDeleteOutput(output)}
+                    title="Delete Output"
                   >
-                    <i className="fa fa-trash"
-                       style={{ fontSize: 20, color: '#dc3545' }}
-                       aria-hidden="true"
-                       onClick={() => handleDeleteOutput(output)}
-
-                    />
-                  </div>
+                    <i className="fa fa-trash" />
+                  </Button>
                 </td>
               </tr>
             )) : <tr><td colSpan={3}>No outputs</td></tr>}

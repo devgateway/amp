@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { Formik, FormikProps } from 'formik';
 import * as Yup from 'yup';
-import Select from 'react-select';
 import styles from './css/IndicatorModal.module.css';
 
 interface Outcome {
@@ -13,29 +12,41 @@ interface Outcome {
 interface AddNewOutputModalProps {
   show: boolean;
   setShow: (show: boolean) => void;
-  outcomes: Outcome[];
-  onSubmit?: (output: { name: string; description?: string; outcomeIds: number[] }) => void;
+  onSubmit?: (output: { name: string; description?: string; outcomeId: number }) => void;
   initialName?: string;
   initialDescription?: string;
-  initialOutcomes?: Outcome[];
+  selectedOutcome?: Outcome;
   translations?: Record<string, string>;
   loading?: boolean;
 }
 
-const OutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes, onSubmit, initialName = '', initialDescription = '', initialOutcomes = [], translations = {}, loading = false }) => {
+const OutputModal: React.FC<AddNewOutputModalProps> = ({
+  show,
+  setShow,
+  onSubmit,
+  initialName = '',
+  initialDescription = '',
+  selectedOutcome = undefined,
+  translations = {},
+  loading = false
+}) => {
   const nodeRef = useRef(null);
+
+  // Only render if selectedOutcome is provided
+  if (!selectedOutcome) return null;
+
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(translations['amp.outcomeoutput:errors-name-required'] || 'Name is required'),
     description: Yup.string(),
+    outcomeId: Yup.number().required('Outcome is required')
   });
 
   const initialValues = {
     name: initialName,
     description: initialDescription,
-    outcomeIds: initialOutcomes.map(o => o.id)
+    outcomeId: selectedOutcome.id
   };
 
-  const outcomeOptions = outcomes.map(o => ({ value: o.id, label: o.name }));
   const handleClose = () => setShow(false);
 
   return (
@@ -63,7 +74,7 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes
           resetForm();
         }}
       >
-        {(props: FormikProps<{ name: string; description?: string; outcomeIds: number[] }>) => (
+        {(props: FormikProps<{ name: string; description?: string; outcomeId: number }>) => (
           <Form noValidate onSubmit={props.handleSubmit}>
             <Modal.Body>
               <div className={styles.viewmodal_wrapper}>
@@ -104,19 +115,15 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({ show, setShow, outcomes
                   </Form.Group>
                 </Row>
                 <Row className={styles.view_row}>
-                  <Form.Group as={Col} className={styles.view_item} controlId="formOutputOutcomes">
-                    <Form.Label>{translations['amp.outcomeoutput:linked-outcomes'] || 'Linked Outcomes'}</Form.Label>
-                    <Select
-                      isMulti
-                      options={outcomeOptions}
-                      value={outcomeOptions.filter(opt => props.values.outcomeIds.includes(opt.value))}
-                      onChange={selected => props.setFieldValue('outcomeIds', selected.map((opt: any) => opt.value))}
-                      placeholder={translations['amp.outcomeoutput:linked-outcomes'] || 'Linked Outcomes'}
-                      isDisabled={loading}
+                  <Form.Group as={Col} className={styles.view_item} controlId="formOutputOutcome">
+                    <Form.Label>{translations['amp.outcomeoutput:linked-outcome'] || 'Linked Outcome'}</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={`${selectedOutcome.id}: ${selectedOutcome.name}`}
+                      disabled
+                      readOnly
+                      className={styles.input_field}
                     />
-                    {props.errors.outcomeIds && props.touched.outcomeIds && (
-                      <div className="text-danger small mt-1">{props.errors.outcomeIds}</div>
-                    )}
                   </Form.Group>
                 </Row>
               </div>

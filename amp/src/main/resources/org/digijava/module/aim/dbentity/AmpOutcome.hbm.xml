@@ -10,10 +10,9 @@
         </id>
         <property name="name" column="name" not-null="true"/>
         <property name="description" column="description"/>
-        <set name="outputs" table="amp_outcome_output" inverse="false" cascade="all">
+        <set name="outputs" cascade="all" inverse="false">
             <key column="outcome_id"/>
-            <many-to-many column="output_id" class="AmpOutput"/>
+            <one-to-many class="AmpOutput"/>
         </set>
     </class>
 </hibernate-mapping>
-

@@ -301,13 +301,22 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                               <span>{translations['amp.dashboard:add-new']}</span>
                             </Button>
                             <Button
-                                variant="outline-secondary"
+                                variant="info"
                                 onClick={() => navigate('/admin/indicator_manager/outcome-output-management')}
                                 className={styles.action_button}
                             >
                               <i className="fa fa-tasks" />
                               {' '}
                               <span>{translations['amp.dashboard:outcome-output-management'] || 'Outcome and Output Management'}</span>
+                            </Button>
+                            <Button
+                                variant="warning"
+                                onClick={() => navigate('/admin/indicator_manager/disaggregation-manager')}
+                                className={styles.action_button}
+                            >
+                              <i className="fa fa-list" />
+                              {' '}
+                              <span>{translations['amp.dashboard:disaggregation-management'] || 'Disaggregation Management'}</span>
                             </Button>
                             <ExportCSVButton
                                 {...props.csvProps}
@@ -325,8 +334,23 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                             <div className={styles.filters_header}>
                               <h5>{translations['amp.indicatormanager:filters'] || 'Filters'}</h5>
                             </div>
-
                             <Row className="g-2">
+                              {/* Search field at the top, double width */}
+                              <Col xs={12}>
+                                <div className={styles.search_item}>
+                                  <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:search']}</Form.Label>
+                                  <div className={styles.search_wrapper}>
+                                    <SearchBar
+                                        {...props.searchProps}
+                                        placeholder={translations['amp.indicatormanager:search-placeholder'] || "Search by name or code"}
+                                        className={styles.search_bar}
+                                        style={{ width: '360px' }} // double the previous width (was 180px)
+                                    />
+                                    <i className={`fa fa-search ${styles.search_icon}`} />
+                                  </div>
+                                </div>
+                              </Col>
+                              {/* Other filters below */}
                               {filterBySector && (
                                   <Col xs={12} sm={6} lg={4}>
                                     <div className={styles.filter_item}>
@@ -423,20 +447,6 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                                       menuPlacement="auto"
                                       classNamePrefix="react-select"
                                   />
-                                </div>
-                              </Col>
-
-                              <Col xs={12} sm={6} lg={4}>
-                                <div className={styles.search_item}>
-                                  <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:search']}</Form.Label>
-                                  <div className={styles.search_wrapper}>
-                                    <SearchBar
-                                        {...props.searchProps}
-                                        placeholder={translations['amp.indicatormanager:search-placeholder'] || "Search by name or code"}
-                                        className={styles.search_bar}
-                                    />
-                                    <i className={`fa fa-search ${styles.search_icon}`} />
-                                  </div>
                                 </div>
                               </Col>
                             </Row>

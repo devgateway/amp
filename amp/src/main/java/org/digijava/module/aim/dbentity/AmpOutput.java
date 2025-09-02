@@ -1,14 +1,12 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 public class AmpOutput implements Serializable {
     private Long id;
     private String name;
     private String description;
-    private Set<AmpOutcome> outcomes=new HashSet<>();
+    private AmpOutcome outcome;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -19,6 +17,6 @@ public class AmpOutput implements Serializable {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public Set<AmpOutcome> getOutcomes() { return outcomes; }
-    public void setOutcomes(Set<AmpOutcome> outcomes) { this.outcomes = outcomes; }
+    public AmpOutcome getOutcome() { return outcome; }
+    public void setOutcome(AmpOutcome outcome) { this.outcome = outcome; }
 }

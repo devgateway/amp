@@ -192,5 +192,19 @@
   "amp.outcomeoutput:cannot-delete-output": "Cannot delete output.",
   "amp.outcomeoutput:unexpected-error": "An unexpected error occurred.",
   "amp.outcomeoutput:output-management": "Output Management",
-  "amp.outcomeoutput:back": "Back"
+  "amp.outcomeoutput:back": "Back",
+  "amp.disaggregationmanager:title": "Disaggregation Manager",
+  "amp.disaggregationmanager:category": "Disaggregation Category",
+  "amp.disaggregationmanager:options": "Options",
+  "amp.disaggregationmanager:actions": "Actions",
+  "amp.disaggregationmanager:edit": "Edit",
+  "amp.disaggregationmanager:delete": "Delete",
+  "amp.disaggregationmanager:no-options": "No options",
+  "amp.disaggregationmanager:add-option": "Add Option",
+  "amp.disaggregationmanager:edit-option-title": "Edit Option",
+  "amp.disaggregationmanager:option-value": "Option Value",
+  "amp.disaggregationmanager:option-value-placeholder": "Enter option value",
+  "amp.disaggregationmanager:cancel": "Cancel",
+  "amp.disaggregationmanager:save": "Save",
+  "amp.dashboard:disaggregation-management": "Disaggregation Management"
 }

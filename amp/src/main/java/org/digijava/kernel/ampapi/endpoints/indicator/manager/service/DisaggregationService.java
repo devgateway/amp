@@ -20,7 +20,7 @@ public class DisaggregationService {
                 .setParameter("key", keyName)
                 .uniqueResult();
         if (optionClass == null) return new ArrayList<>();
-        List<AmpCategoryValue> values = session.createQuery("from AmpCategoryValue where ampCategoryClass.id = :classId order by indexColumn", AmpCategoryValue.class)
+        List<AmpCategoryValue> values = session.createQuery("from AmpCategoryValue where ampCategoryClass.id = :classId order by index", AmpCategoryValue.class)
                 .setParameter("classId", optionClass.getId())
                 .list();
         List<AmpCategoryValueDTO> dtos = new ArrayList<>();
@@ -49,11 +49,12 @@ public class DisaggregationService {
         AmpCategoryValue value = new AmpCategoryValue();
 
         value.setAmpCategoryClass(optionClass);
-        // Set indexColumn to next available
-        Query<Long> query = session.createQuery("select max(index) from AmpCategoryValue where ampCategoryClass.id = :classId", Long.class);
+        // Set index Column to next available
+        Query<Integer> query = session.createQuery("select max(index) from AmpCategoryValue where ampCategoryClass.id = :classId", Integer.class);
         query.setParameter("classId", optionClass.getId());
-        Long maxIndex = Optional.ofNullable(query.uniqueResult()).orElse(0L);
-        value.setIndex(maxIndex.intValue() + 1);
+        Integer maxIndex = Optional.ofNullable(query.uniqueResult()).orElse(0);
+        value.setIndex(maxIndex + 1);
+        value.setValue(option.getValue());
         value.setDeleted(false);
         session.save(value);
         session.flush();

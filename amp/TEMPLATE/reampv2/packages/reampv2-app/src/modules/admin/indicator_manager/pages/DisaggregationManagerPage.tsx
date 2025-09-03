@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Table, Modal, Form, Row, Col } from 'react-bootstrap';
+import React, {useEffect, useRef, useState} from 'react';
+import { Button, Table, Modal } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import {getAmpCategories} from "../reducers/fetchAmpCategoryReducer";
 import initialTranslations from "../config/initialTranslations.json";
 import axios from 'axios';
+import {useNavigate} from "react-router-dom";
+import { Formik, Form as FormikForm, Field } from 'formik';
+import styles from "../components/modals/css/IndicatorModal.module.css";
 
 interface CategoryValue {
   id: number;
@@ -18,7 +21,6 @@ const DisaggregationManagerPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<CategoryValue | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
-  const [childValue, setChildValue] = useState('');
   const [editingChild, setEditingChild] = useState<CategoryValue | null>(null);
   const [optionsMap, setOptionsMap] = useState<{ [key: number]: any[] }>({});
     const dispatch = useDispatch();
@@ -32,6 +34,7 @@ const DisaggregationManagerPage: React.FC = () => {
       setCategories(disaggregationCategories);
     }
   }, [categoriesReducer]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function fetchOptions() {
@@ -52,14 +55,12 @@ const DisaggregationManagerPage: React.FC = () => {
   const handleAddChild = (category: CategoryValue) => {
     setSelectedCategory(category);
     setModalMode('add');
-    setChildValue('');
     setShowModal(true);
   };
 
   const handleEditChild = (category: CategoryValue, child: CategoryValue) => {
     setSelectedCategory(category);
     setEditingChild(child);
-    setChildValue(child.value);
     setModalMode('edit');
     setShowModal(true);
   };
@@ -73,30 +74,16 @@ const DisaggregationManagerPage: React.FC = () => {
     refreshCategories();
   };
 
-  const handleModalSave = async () => {
-    if (!selectedCategory) return;
-    if (modalMode === 'add') {
-      await fetch(`/rest/indicator_disaggregation/options/${selectedCategory.id}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ value: childValue })
-      });
-    } else if (modalMode === 'edit' && editingChild) {
-      await fetch(`/rest/indicator_disaggregation/options/${editingChild.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ value: childValue })
-      });
-    }
-    setShowModal(false);
-    setEditingChild(null);
-    setChildValue('');
-    refreshCategories();
-  };
-
+  const handleClose = () => setShowModal(false);
+  const nodeRef = useRef(null);
   return (
     <div style={{ padding: '2rem' }}>
-      <h2>{translations['amp.disaggregationmanager:title'] || 'Disaggregation Manager'}</h2>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+        <h2 style={{ margin: 0 }}>{translations['amp.disaggregationmanager:title'] || 'Disaggregation Manager'}</h2>
+        <Button variant="secondary" onClick={() => navigate('/admin/indicator_manager')} style={{ marginLeft: '10px' }}>
+          <i className="fa fa-arrow-left" /> Back
+        </Button>
+      </div>
       <Table bordered hover>
         <thead>
           <tr>
@@ -114,11 +101,23 @@ const DisaggregationManagerPage: React.FC = () => {
                   {optionsMap[category.id] && optionsMap[category.id].length > 0 ? optionsMap[category.id].map(child => (
                     <li key={child.id}>
                       {child.value}
-                      <Button variant="outline-primary" size="sm" style={{ marginLeft: 8 }} onClick={() => handleEditChild(category, child)}>
-                        {translations['amp.disaggregationmanager:edit'] || 'Edit'}
+                      <Button
+                        variant="link"
+                        size="sm"
+                        style={{ marginLeft: 8, color: 'black', padding: '0 6px' }}
+                        onClick={() => handleEditChild(category, child)}
+                        title={translations['amp.disaggregationmanager:edit'] || 'Edit'}
+                      >
+                        <i className="fa fa-pencil" />
                       </Button>
-                      <Button variant="outline-danger" size="sm" style={{ marginLeft: 4 }} onClick={() => handleDeleteChild(category, child)}>
-                        {translations['amp.disaggregationmanager:delete'] || 'Delete'}
+                      <Button
+                        variant="link"
+                        size="sm"
+                        style={{ marginLeft: 4, color: 'red', padding: '0 6px' }}
+                        onClick={() => handleDeleteChild(category, child)}
+                        title={translations['amp.disaggregationmanager:delete'] || 'Delete'}
+                      >
+                        <i className="fa fa-trash" />
                       </Button>
                     </li>
                   )) : <span>{translations['amp.disaggregationmanager:no-options'] || 'No options'}</span>}
@@ -133,31 +132,72 @@ const DisaggregationManagerPage: React.FC = () => {
           ))}
         </tbody>
       </Table>
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+      <Modal
+          show={showModal}
+          onHide={handleClose}
+          centered
+          ref={nodeRef}
+          animation={false}
+          backdropClassName={styles.modal_backdrop}
+          backdrop="static"
+          keyboard={false}
+          size='lg'
+      >
         <Modal.Header closeButton>
-          <Modal.Title>{modalMode === 'add' ? (translations['amp.disaggregationmanager:add-option'] || 'Add Option') : (translations['amp.disaggregationmanager:edit-option-title'] || 'Edit Option')}</Modal.Title>
+          <Modal.Title>{modalMode === 'add' ? (translations['amp.disaggregationmanager:add-option'] || 'Add Option' +':' +selectedCategory?.value) : (translations['amp.disaggregationmanager:edit-option-title'] || 'Edit Option'+':' +selectedCategory?.value)}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="formChildValue">
-              <Form.Label>{translations['amp.disaggregationmanager:option-value'] || 'Option Value'}</Form.Label>
-              <Form.Control
-                type="text"
-                value={childValue}
-                onChange={e => setChildValue(e.target.value)}
-                placeholder={translations['amp.disaggregationmanager:option-value-placeholder'] || 'Enter option value'}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            {translations['amp.disaggregationmanager:cancel'] || 'Cancel'}
-          </Button>
-          <Button variant="primary" onClick={handleModalSave}>
-            {translations['amp.disaggregationmanager:save'] || 'Save'}
-          </Button>
-        </Modal.Footer>
+        <Formik
+          initialValues={{ childValue: '' }}
+          enableReinitialize
+          onSubmit={async (values, { setSubmitting }) => {
+            if (!selectedCategory) return;
+            if (modalMode === 'add') {
+              await fetch(`/rest/indicator_disaggregation/options/${selectedCategory.id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ value: values.childValue })
+              });
+            } else if (modalMode === 'edit' && editingChild) {
+              await fetch(`/rest/indicator_disaggregation/options/${editingChild.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ value: values.childValue })
+              });
+            }
+            setShowModal(false);
+            setEditingChild(null);
+            refreshCategories();
+            setSubmitting(false);
+          }}
+        >
+          {({ isSubmitting, values, setFieldValue }) => (
+            <FormikForm>
+              <Modal.Body>
+                <div className="mb-3">
+                  <label htmlFor="childValue" className="form-label">
+                    {translations['amp.disaggregationmanager:option-value'] || 'Option Value'}
+                  </label>
+                  <Field
+                    id="childValue"
+                    name="childValue"
+                    type="text"
+                    initialValue={editingChild ? editingChild.value : ''}
+                    className="form-control"
+                    placeholder={translations['amp.disaggregationmanager:option-value-placeholder'] || 'Enter option value'}
+                  />
+                </div>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={() => setShowModal(false)} disabled={isSubmitting}>
+                  {translations['amp.disaggregationmanager:cancel'] || 'Cancel'}
+                </Button>
+                <Button variant="primary" type="submit" disabled={isSubmitting}>
+                  {translations['amp.disaggregationmanager:save'] || 'Save'}
+                </Button>
+              </Modal.Footer>
+            </FormikForm>
+          )}
+        </Formik>
       </Modal>
     </div>
   );

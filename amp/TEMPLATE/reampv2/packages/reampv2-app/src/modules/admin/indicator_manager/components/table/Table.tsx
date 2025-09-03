@@ -331,21 +331,22 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
 
                         <Col md={8} xs={12}>
                           <div className={styles.filters_container}>
-                            <Row>
-                            <Col xs={12}>
-                              <div className={styles.search_item}>
-                                <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:search']}</Form.Label>
-                                <div className={styles.search_wrapper}>
-                                  <SearchBar xs={12}
+                            {/* Center the search bar horizontally */}
+                            <Row className="justify-content-center">
+                              <Col xs={12} md={6}>
+                                <div className={styles.search_item}>
+                                  <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:search']}</Form.Label>
+                                  <div className={styles.search_wrapper}>
+                                    <SearchBar
                                       {...props.searchProps}
                                       placeholder={translations['amp.indicatormanager:search-placeholder'] || "Search by name or code"}
                                       className={styles.search_bar}
                                       style={{ width: '360px' }}
-                                  />
-                                  <i className={`fa fa-search ${styles.search_icon}`} />
+                                    />
+                                    <i className={`fa fa-search ${styles.search_icon}`} />
+                                  </div>
                                 </div>
-                              </div>
-                            </Col>
+                              </Col>
                             </Row>
                             <Row xs={12}>
                             <div className={styles.filters_header}>

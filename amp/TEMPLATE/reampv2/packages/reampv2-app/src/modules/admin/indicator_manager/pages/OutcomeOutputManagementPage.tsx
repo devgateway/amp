@@ -237,47 +237,89 @@ const OutcomeOutputManagementPage: React.FC = () => {
     setSelectedOutcome(null);
   };
 
-  const handleDeleteOutput = async (output: Output) => {
-    const confirm = await Swal.fire({
-      icon: 'warning',
-      title: 'Delete Output?',
-      html: `<div>Are you sure you want to delete output: <b>${output.name}</b>?<br/>This action cannot be undone.</div>`,
-      showCancelButton: true,
-      confirmButtonText: 'Delete',
-      cancelButtonText: 'Cancel',
-    });
-    if (confirm.isConfirmed) {
-      try {
-        const res = await fetch(`/rest/amp-outcome-output/output/delete/${output.id}`, {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' }
+    const handleDeleteOutput = async (output: Output) => {
+        const confirm = await Swal.fire({
+            icon: 'warning',
+            title: translations['amp.outcomeoutput:delete-output'],
+            html: `<div>${translations['amp.outcomeoutput:delete-output-confirm']} <b>${output.name}</b>?<br/>${translations['amp.outcomeoutput:delete-output-warning']}</div>`,
+            showCancelButton: true,
+            confirmButtonText: translations['amp.outcomeoutput:delete'],
+            cancelButtonText: translations['amp.outcomeoutput:cancel'],
         });
-        if (res.ok) {
-          dispatch(getOutcomes());
-        } else {
-          const error = await res.json();
-          let errorMsg = 'An error occurred while deleting the output.';
-          if (error && error.error) {
-            const firstKey = Object.keys(error.error)[0];
-            if (firstKey && error.error[firstKey] && error.error[firstKey][0]) {
-              errorMsg = error.error[firstKey][0];
+        if (confirm.isConfirmed) {
+            try {
+                const res = await fetch(`/rest/amp-outcome-output/output/delete/${output.id}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (res.ok) {
+                    dispatch(getOutcomes())
+                } else {
+                    const error = await res.json();
+                    let errorMsg = translations['amp.outcomeoutput:error-deleting-output'];
+                    if (error && error.error) {
+                        const firstKey = Object.keys(error.error)[0];
+                        if (firstKey && error.error[firstKey] && error.error[firstKey][0]) {
+                            errorMsg = error.error[firstKey][0];
+                        }
+                    }
+                    if (errorMsg.includes('orphan')) {
+                        const forceConfirm = await Swal.fire({
+                            icon: 'warning',
+                            title: translations['amp.outcomeoutput:indicators-linked'],
+                            html: `${errorMsg}<br/><br/>${translations['amp.outcomeoutput:proceed-orphan-indicators']}`,
+                            showCancelButton: true,
+                            confirmButtonText: translations['amp.outcomeoutput:yes-delete-anyway'],
+                            cancelButtonText: translations['amp.outcomeoutput:cancel'],
+                        });
+                        if (forceConfirm.isConfirmed) {
+                            try {
+                                const forceRes = await fetch(`/rest/amp-outcome-output/output/delete/${output.id}?forceDelete=true`, {
+                                    method: 'DELETE',
+                                    headers: { 'Content-Type': 'application/json' }
+                                });
+                                if (forceRes.ok) {
+                                    dispatch(getOutcomes())
+                                } else {
+                                    const forceError = await forceRes.json();
+                                    let forceErrorMsg = translations['amp.outcomeoutput:error-deleting-output'];
+                                    if (forceError && forceError.error) {
+                                        const firstKey = Object.keys(forceError.error)[0];
+                                        if (firstKey && forceError.error[firstKey] && forceError.error[firstKey][0]) {
+                                            forceErrorMsg = forceError.error[firstKey][0];
+                                        }
+                                    }
+                                    await Swal.fire({
+                                        icon: 'error',
+                                        title: translations['amp.outcomeoutput:cannot-delete-output'],
+                                        html: forceErrorMsg
+                                    });
+                                }
+                            } catch (e) {
+                                await Swal.fire({
+                                    icon: 'error',
+                                    title: translations['amp.outcomeoutput:error-deleting-output'],
+                                    text: translations['amp.outcomeoutput:unexpected-error']
+                                });
+                            }
+                        }
+                    } else {
+                        await Swal.fire({
+                            icon: 'error',
+                            title: translations['amp.outcomeoutput:cannot-delete-output'],
+                            html: errorMsg
+                        });
+                    }
+                }
+            } catch (e) {
+                await Swal.fire({
+                    icon: 'error',
+                    title: translations['amp.outcomeoutput:error-deleting-output'],
+                    text: translations['amp.outcomeoutput:unexpected-error']
+                });
             }
-          }
-          await Swal.fire({
-            icon: 'error',
-            title: 'Cannot Delete Output',
-            html: errorMsg
-          });
         }
-      } catch (e) {
-        await Swal.fire({
-          icon: 'error',
-          title: 'Error deleting output',
-          text: 'An unexpected error occurred.'
-        });
-      }
-    }
-  };
+    };
 
   const expandRow = {
     renderer: (row: Outcome) => (
@@ -315,7 +357,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
           <tbody>
             {row.outputs && row.outputs.length > 0 ? row.outputs.map((output: Output) => (
               <tr key={output.id}>
-                <td><strong>{output.name}</strong></td>
+                <td>{output.name}</td>
                 <td>{output.description || ''}</td>
                 <td>
                   <Button

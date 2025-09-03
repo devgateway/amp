@@ -1,11 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { Button, Table, Modal } from 'react-bootstrap';
+import { Button, Table, Modal, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import {getAmpCategories} from "../reducers/fetchAmpCategoryReducer";
 import initialTranslations from "../config/initialTranslations.json";
 import axios from 'axios';
 import {useNavigate} from "react-router-dom";
-import { Formik, Form as FormikForm, Field } from 'formik';
 import styles from "../components/modals/css/IndicatorModal.module.css";
 
 interface CategoryValue {
@@ -23,11 +22,14 @@ const DisaggregationManagerPage: React.FC = () => {
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
   const [editingChild, setEditingChild] = useState<CategoryValue | null>(null);
   const [optionsMap, setOptionsMap] = useState<{ [key: number]: any[] }>({});
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const categoriesReducer = useSelector((state: any) => state.fetchAmpCategoryReducer);
+  const categoriesReducer = useSelector((state: any) => state.fetchAmpCategoryReducer);
 
-  // Fetch indicator_disaggregation categories and their children
+  useEffect(() => {
+    dispatch(getAmpCategories());
+  }, [dispatch]);
+
   useEffect(() => {
     if (categoriesReducer && categoriesReducer.categories) {
       const disaggregationCategories = categoriesReducer.categories.filter((cat: any) => cat.ampCategoryClass.keyName === 'indicator_disaggregation');
@@ -144,60 +146,57 @@ const DisaggregationManagerPage: React.FC = () => {
           size='lg'
       >
         <Modal.Header closeButton>
-          <Modal.Title>{modalMode === 'add' ? (translations['amp.disaggregationmanager:add-option'] || 'Add Option' +':' +selectedCategory?.value) : (translations['amp.disaggregationmanager:edit-option-title'] || 'Edit Option'+':' +selectedCategory?.value)}</Modal.Title>
+          <Modal.Title>{modalMode === 'add' ? (translations['amp.disaggregationmanager:add-option'] || 'Add Option' + ':' + selectedCategory?.value) : (translations['amp.disaggregationmanager:edit-option-title'] || 'Edit Option' + ':' + selectedCategory?.value)}</Modal.Title>
         </Modal.Header>
-        <Formik
-          initialValues={{ childValue: '' }}
-          enableReinitialize
-          onSubmit={async (values, { setSubmitting }) => {
-            if (!selectedCategory) return;
-            if (modalMode === 'add') {
-              await fetch(`/rest/indicator_disaggregation/options/${selectedCategory.id}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ value: values.childValue })
-              });
-            } else if (modalMode === 'edit' && editingChild) {
-              await fetch(`/rest/indicator_disaggregation/options/${editingChild.id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ value: values.childValue })
-              });
-            }
-            setShowModal(false);
-            setEditingChild(null);
-            refreshCategories();
-            setSubmitting(false);
-          }}
+        <Form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const form = e.currentTarget;
+              const formData = new FormData(form);
+              const childValue = formData.get('childValue') as string;
+
+              if (!selectedCategory) return;
+
+              if (modalMode === 'add') {
+                await fetch(`/rest/indicator_disaggregation/options/${selectedCategory.id}`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ value: childValue })
+                });
+              } else if (modalMode === 'edit' && editingChild) {
+                await fetch(`/rest/indicator_disaggregation/options/${editingChild.id}`, {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ value: childValue })
+                });
+              }
+              setShowModal(false);
+              setEditingChild(null);
+              refreshCategories();
+            }}
         >
-          {({ isSubmitting, values, setFieldValue }) => (
-            <FormikForm>
-              <Modal.Body>
-                <div className="mb-3">
-                  <label htmlFor="childValue" className="form-label">
-                    {translations['amp.disaggregationmanager:option-value'] || 'Option Value'}
-                  </label>
-                  <Field
-                    id="childValue"
-                    name="childValue"
-                    type="text"
-                    initialValue={editingChild ? editingChild.value : ''}
-                    className="form-control"
-                    placeholder={translations['amp.disaggregationmanager:option-value-placeholder'] || 'Enter option value'}
-                  />
-                </div>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={() => setShowModal(false)} disabled={isSubmitting}>
-                  {translations['amp.disaggregationmanager:cancel'] || 'Cancel'}
-                </Button>
-                <Button variant="primary" type="submit" disabled={isSubmitting}>
-                  {translations['amp.disaggregationmanager:save'] || 'Save'}
-                </Button>
-              </Modal.Footer>
-            </FormikForm>
-          )}
-        </Formik>
+          <Modal.Body>
+            <Form.Group className="mb-3">
+              <Form.Label>
+                {translations['amp.disaggregationmanager:option-value'] || 'Option Value'}
+              </Form.Label>
+              <Form.Control
+                  name="childValue"
+                  type="text"
+                  defaultValue={editingChild ? editingChild.value : ''}
+                  placeholder={translations['amp.disaggregationmanager:option-value-placeholder'] || 'Enter option value'}
+              />
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowModal(false)}>
+              {translations['amp.disaggregationmanager:cancel'] || 'Cancel'}
+            </Button>
+            <Button variant="primary" type="submit">
+              {translations['amp.disaggregationmanager:save'] || 'Save'}
+            </Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
     </div>
   );

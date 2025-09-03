@@ -109,18 +109,21 @@ public class AmpOutcomeOutputService {
                 "FROM AmpIndicator ai WHERE ai.output.id = :outputId", AmpIndicator.class)
                 .setParameter("outputId", id)
                 .getResultList();
-        if (!indicators.isEmpty() && !forceDelete) {
-            StringBuilder msg = new StringBuilder("Cannot delete Output because it has linked Indicators. Please re-assign these Indicators to a different Output or confirm deletion to orphan them.");
-            msg.append("\n Warning: There are ").append(indicators.size()).append(" active indicators linked to this Output. Deleting this Output will orphan those indicators.");
-            throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(msg.toString()));
-        }
-        // Unlink indicators if forceDelete is true
-        if (!indicators.isEmpty() && forceDelete) {
-            for (AmpIndicator indicator : indicators) {
-                indicator.setOutput(null);
-                session.update(indicator);
+        if (!indicators.isEmpty()) {
+            if(!forceDelete) {
+                StringBuilder msg = new StringBuilder("Cannot delete Output because it has linked Indicators. Please re-assign these Indicators to a different Output or confirm deletion to orphan them.");
+                msg.append("\n Warning: There are ").append(indicators.size()).append(" active indicators linked to this Output. Deleting this Output will orphan those indicators.");
+                throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(msg.toString()));
             }
-            session.flush();
+            else
+            {
+                //unlink indicators
+                for (AmpIndicator indicator : indicators) {
+                    indicator.setOutput(null);
+                    session.update(indicator);
+                }
+                session.flush();
+            }
         }
         session.delete(output);
         session.flush();

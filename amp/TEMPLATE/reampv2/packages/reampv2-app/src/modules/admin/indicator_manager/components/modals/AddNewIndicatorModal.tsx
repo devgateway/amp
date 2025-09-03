@@ -19,6 +19,7 @@ import useDidMountEffect from '../../utils/hooks';
 import DateInput from '../DateInput';
 import lodash from 'lodash';
 import { getResponsibleOrgs } from '../../reducers/fetchResponsibleOrgsReducer';
+import axios from 'axios';
 
 const MySwal = withReactContent(Swal);
 
@@ -52,6 +53,23 @@ interface IndicatorFormValues {
   outputId?: number;
   outcomeId?: number;
   indicatorsCategory?: number;
+  // Add editable disaggregation values
+  disaggregationValues?: Array<{
+    parentCategoryId: number;
+    childCategoryId: number;
+    base: {
+      originalValue: string | number;
+      originalValueDate: string;
+      revisedValue: string | number;
+      revisedValueDate: string;
+    };
+    target: {
+      originalValue: string | number;
+      originalValueDate: string;
+      revisedValue: string | number;
+      revisedValueDate: string;
+    };
+  }>;
 }
 
 const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
@@ -290,6 +308,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     calculationMethod: '',
     responsibleOrganizations: [],
     frequency: undefined,
+    disaggregationValues: [],
   };
 
   // --- Dynamic category options from fetchAmpCategoryReducer ---
@@ -304,6 +323,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const disaggregationOptions = getCategoryOptions('indicator_disaggregation', true);
   const unitOfMeasureOptions = getCategoryOptions('indicator_unit_of_measure');
   const frequencyOptions = getCategoryOptions('indicator_frequency');
+
+  const [disaggregationChildren, setDisaggregationChildren] = useState<{[key: number]: any[]}>({});
 
   return (
     // this modal wrapper should be a separate component that can be reused since the props are the same
@@ -371,12 +392,31 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             calculationMethod: values.calculationMethod,
             responsibleOrganizations: values.responsibleOrganizations,
             frequency: values.frequency,
+            disaggregationValues: values.disaggregationValues,
           };
 
           dispatch(createIndicator(indicatorData));
         }}
       >
-        {(props) => (
+        {(props) => {
+          // Move disaggregation children-fetching logic here
+          useEffect(() => {
+            const selected = props.values.disaggregation;
+            if (selected && (selected.length === 1 || selected.length === 2)) {
+              Promise.all(selected.map(id => axios.get(`/rest/indicator_disaggregation/options/${id}`)))
+                .then((responses) => {
+                  const childrenMap = {};
+                  selected.forEach((id, idx) => {
+                    childrenMap[id] = responses[idx].data;
+                  });
+                  setDisaggregationChildren(childrenMap);
+                });
+            } else {
+              setDisaggregationChildren({});
+            }
+          }, [props.values.disaggregation]);
+
+          return (
             <Form noValidate onSubmit={props.handleSubmit}>
               <Modal.Body>
                 <div className={styles.viewmodal_wrapper}>
@@ -581,21 +621,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       </Form.Group>
                     </Row>
                     <Row className={styles.view_row}>
-                      <Form.Group className={styles.view_item} controlId="formDisaggregation">
-                        <Form.Label>Disaggregation</Form.Label>
-                        <Select
-                            isMulti
-                            name="disaggregation"
-                            options={disaggregationOptions}
-                            onChange={(selectedValues) => {
-                              props.setFieldValue('disaggregation', selectedValues.map((v: any) => v.value));
-                            }}
-                            onBlur={props.handleBlur}
-                            className={`basic-multi-select ${(props.errors.disaggregation && props.touched.disaggregation) && styles.text_is_invalid}`}
-                            classNamePrefix="select"
-                            value={disaggregationOptions.filter(opt => props.values.disaggregation?.includes(opt.value))}
-                        />
-                      </Form.Group>
+
                       <Form.Group className={styles.view_item} controlId="formUnitOfMeasure">
                         <Form.Label>Unit of Measure</Form.Label>
                         <Select
@@ -610,19 +636,281 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             value={unitOfMeasureOptions.find(opt => opt.value === props.values.unitOfMeasure) || null}
                         />
                       </Form.Group>
+                        <Form.Group className={styles.view_one_item} controlId="formCalculationMethod">
+                            <Form.Label>Calculation Method</Form.Label>
+                            <Form.Control
+                                onChange={props.handleChange}
+                                onBlur={props.handleBlur}
+                                name="calculationMethod"
+                                type="text"
+                                className={styles.input_field}
+                                placeholder="Describe how the indicator's value is calculated"
+                            />
+                        </Form.Group>
                     </Row>
                     <Row className={styles.view_row}>
-                      <Form.Group className={styles.view_one_item} controlId="formCalculationMethod">
-                        <Form.Label>Calculation Method</Form.Label>
-                        <Form.Control
-                            onChange={props.handleChange}
-                            onBlur={props.handleBlur}
-                            name="calculationMethod"
-                            type="text"
-                            className={styles.input_field}
-                            placeholder="Describe how the indicator's value is calculated"
-                        />
-                      </Form.Group>
+                        <Form.Group className={styles.view_item} controlId="formDisaggregation">
+                            <Form.Label>Disaggregation</Form.Label>
+                            <Select
+                                isMulti
+                                name="disaggregation"
+                                options={disaggregationOptions}
+                                onChange={(selectedValues) => {
+                                    // Limit selection to max 2
+                                    const limitedValues = selectedValues.slice(0, 2);
+                                    props.setFieldValue('disaggregation', limitedValues.map((v: any) => v.value));
+                                }}
+                                onBlur={props.handleBlur}
+                                className={`basic-multi-select ${(props.errors.disaggregation && props.touched.disaggregation) && styles.text_is_invalid}`}
+                                classNamePrefix="select"
+                                value={disaggregationOptions.filter(opt => props.values.disaggregation?.includes(opt.value))}
+                            />
+                        </Form.Group>
+                        {props.values.disaggregation?.length === 1 &&
+                          (console.log('Render: disaggregationChildren', disaggregationChildren, 'disaggregation', props.values.disaggregation),
+                          disaggregationChildren[props.values.disaggregation[0]] && (
+                            <div style={{marginTop: '1rem'}}>
+                              <h6>Disaggregation Table</h6>
+                              <table className={styles.disaggregationTable} style={{width: '100%', borderCollapse: 'collapse'}}>
+                                <thead>
+                                  <tr>
+                                    <th></th>
+                                    {disaggregationChildren[props.values.disaggregation[0]].map((child: any) => (
+                                      <th key={child.id} colSpan={4} style={{border: '1px solid #ccc', padding: '4px'}}>{child.value}</th>
+                                    ))}
+                                  </tr>
+                                  <tr>
+                                    <th></th>
+                                    {disaggregationChildren[props.values.disaggregation[0]].map((child: any) => [
+                                      <th key={child.id + '-base'} colSpan={2} style={{border: '1px solid #ccc', padding: '4px'}}>Base Value</th>,
+                                      <th key={child.id + '-target'} colSpan={2} style={{border: '1px solid #ccc', padding: '4px'}}>Target Value</th>
+                                    ])}
+                                  </tr>
+                                  <tr>
+                                    <th></th>
+                                    {disaggregationChildren[props.values.disaggregation[0]].map((child: any) => [
+                                      <th key={child.id + '-base-value'} style={{border: '1px solid #ccc', padding: '4px'}}>Value</th>,
+                                      <th key={child.id + '-base-date'} style={{border: '1px solid #ccc', padding: '4px'}}>Date</th>,
+                                      <th key={child.id + '-target-value'} style={{border: '1px solid #ccc', padding: '4px'}}>Value</th>,
+                                      <th key={child.id + '-target-date'} style={{border: '1px solid #ccc', padding: '4px'}}>Date</th>
+                                    ])}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {[{ label: 'Original', key: 'originalValue', dateKey: 'originalValueDate' }, { label: 'Revised', key: 'revisedValue', dateKey: 'revisedValueDate' }].map((row, idx) => (
+                                    <tr key={row.label + '-base'}>
+                                      <td style={{border: '1px solid #ccc', padding: '4px'}}>{row.label + ' Base Value'}</td>
+                                      {disaggregationChildren[props.values.disaggregation[0]].map((child: any) => {
+                                        // Find or create the entry in disaggregationValues
+                                        const disaggArr = props.values.disaggregationValues ?? [];
+                                        const entryIdx = disaggArr.findIndex((v: any) => v.parentCategoryId === props.values.disaggregation[0] && v.childCategoryId === child.id);
+                                        const entry = entryIdx !== -1 ? disaggArr[entryIdx] : {
+                                          parentCategoryId: props.values.disaggregation[0],
+                                          childCategoryId: child.id,
+                                          base: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' },
+                                          target: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' }
+                                        };
+                                        return [
+                                          <td key={child.id + '-base-value-' + idx} style={{border: '1px solid #ccc', padding: '4px'}}>
+                                            <Form.Control
+                                              type="number"
+                                              value={entry.base[row.key] || ''}
+                                              onChange={e => {
+                                                const newValue = e.target.value;
+                                                const updated = [...disaggArr];
+                                                if (entryIdx === -1) {
+                                                  updated.push({ ...entry, base: { ...entry.base, [row.key]: newValue } });
+                                                } else {
+                                                  updated[entryIdx] = { ...entry, base: { ...entry.base, [row.key]: newValue } };
+                                                }
+                                                props.setFieldValue('disaggregationValues', updated);
+                                              }}
+                                              className={styles.input_field}
+                                            />
+                                          </td>,
+                                          <td key={child.id + '-base-date-' + idx} style={{border: '1px solid #ccc', padding: '4px'}}>
+                                            <DateInput
+                                              translations={translations}
+                                              value={entry.base[row.dateKey] || ''}
+                                              onChange={val => {
+                                                const updated = [...disaggArr];
+                                                if (entryIdx === -1) {
+                                                  updated.push({ ...entry, base: { ...entry.base, [row.dateKey]: val } });
+                                                } else {
+                                                  updated[entryIdx] = { ...entry, base: { ...entry.base, [row.dateKey]: val } };
+                                                }
+                                                props.setFieldValue('disaggregationValues', updated);
+                                              }}
+                                              className={styles.input_field}
+                                            />
+                                          </td>,
+                                          <td key={child.id + '-target-value-' + idx} style={{border: '1px solid #ccc', padding: '4px'}}>
+                                            <Form.Control
+                                              type="number"
+                                              value={entry.target[row.key] || ''}
+                                              onChange={e => {
+                                                const newValue = e.target.value;
+                                                const updated = [...disaggArr];
+                                                if (entryIdx === -1) {
+                                                  updated.push({ ...entry, target: { ...entry.target, [row.key]: newValue } });
+                                                } else {
+                                                  updated[entryIdx] = { ...entry, target: { ...entry.target, [row.key]: newValue } };
+                                                }
+                                                props.setFieldValue('disaggregationValues', updated);
+                                              }}
+                                              className={styles.input_field}
+                                            />
+                                          </td>,
+                                          <td key={child.id + '-target-date-' + idx} style={{border: '1px solid #ccc', padding: '4px'}}>
+                                            <DateInput
+                                              translations={translations}
+                                              value={entry.target[row.dateKey] || ''}
+                                              onChange={val => {
+                                                const updated = [...disaggArr];
+                                                if (entryIdx === -1) {
+                                                  updated.push({ ...entry, target: { ...entry.target, [row.dateKey]: val } });
+                                                } else {
+                                                  updated[entryIdx] = { ...entry, target: { ...entry.target, [row.dateKey]: val } };
+                                                }
+                                                props.setFieldValue('disaggregationValues', updated);
+                                              }}
+                                              className={styles.input_field}
+                                            />
+                                          </td>
+                                        ];
+                                      })}
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          ))
+                        }
+                        {props.values.disaggregation?.length === 2 &&
+                          (console.log('Render: disaggregationChildren', disaggregationChildren, 'disaggregation', props.values.disaggregation),
+                          disaggregationChildren[props.values.disaggregation[0]] &&
+                          disaggregationChildren[props.values.disaggregation[1]] && (
+                            <div style={{marginTop: '1rem'}}>
+                              <h6>Disaggregation Table</h6>
+                              <table className={styles.disaggregationTable} style={{width: '100%', borderCollapse: 'collapse'}}>
+                                <thead>
+                                  <tr>
+                                    <th rowSpan={3} style={{border: '1px solid #ccc', padding: '4px'}}>{disaggregationOptions.find(opt => opt.value === props.values.disaggregation[1])?.label}</th>
+                                    {disaggregationChildren[props.values.disaggregation[0]].map((child1: any) => (
+                                      <th key={child1.id} colSpan={disaggregationChildren[props.values.disaggregation[1]].length * 4} style={{border: '1px solid #ccc', padding: '4px'}}>{child1.value}</th>
+                                    ))}
+                                  </tr>
+                                  <tr>
+                                    {disaggregationChildren[props.values.disaggregation[0]].map((child1: any) => (
+                                      disaggregationChildren[props.values.disaggregation[1]].map((child2: any) => [
+                                        <th key={child1.id + '-' + child2.id + '-base'} colSpan={2} style={{border: '1px solid #ccc', padding: '4px'}}>Base Value</th>,
+                                        <th key={child1.id + '-' + child2.id + '-target'} colSpan={2} style={{border: '1px solid #ccc', padding: '4px'}}>Target Value</th>
+                                      ])
+                                    ))}
+                                  </tr>
+                                  <tr>
+                                    {disaggregationChildren[props.values.disaggregation[0]].map((child1: any) => (
+                                      disaggregationChildren[props.values.disaggregation[1]].map((child2: any) => [
+                                        <th key={child1.id + '-' + child2.id + '-base-value'} style={{border: '1px solid #ccc', padding: '4px'}}>Value</th>,
+                                        <th key={child1.id + '-' + child2.id + '-base-date'} style={{border: '1px solid #ccc', padding: '4px'}}>Date</th>,
+                                        <th key={child1.id + '-' + child2.id + '-target-value'} style={{border: '1px solid #ccc', padding: '4px'}}>Value</th>,
+                                        <th key={child1.id + '-' + child2.id + '-target-date'} style={{border: '1px solid #ccc', padding: '4px'}}>Date</th>
+                                      ])
+                                    ))}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {[{ label: 'Original', key: 'originalValue', dateKey: 'originalValueDate' }, { label: 'Revised', key: 'revisedValue', dateKey: 'revisedValueDate' }].map((row, idx) => (
+                                    <tr key={row.label + '-base'}>
+                                      <td style={{border: '1px solid #ccc', padding: '4px'}}>{row.label + ' Base Value'}</td>
+                                      {disaggregationChildren[props.values.disaggregation[0]].map((child1: any) => (
+                                        disaggregationChildren[props.values.disaggregation[1]].map((child2: any) => {
+                                          // Find or create the entry in disaggregationValues
+                                          const disaggArr = props.values.disaggregationValues ?? [];
+                                          const entryIdx = disaggArr.findIndex((v: any) => v.parentCategoryId === props.values.disaggregation[0] && v.childCategoryId === child1.id * 100000 + child2.id);
+                                          const entry = entryIdx !== -1 ? disaggArr[entryIdx] : {
+                                            parentCategoryId: props.values.disaggregation[0],
+                                            childCategoryId: child1.id * 100000 + child2.id,
+                                            base: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' },
+                                            target: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' }
+                                          };
+                                          return [
+                                            <td key={child1.id + '-' + child2.id + '-base-value-' + idx} style={{border: '1px solid #ccc', padding: '4px'}}>
+                                              <Form.Control
+                                                type="number"
+                                                value={entry.base[row.key] || ''}
+                                                onChange={e => {
+                                                  const newValue = e.target.value;
+                                                  const updated = [...disaggArr];
+                                                  if (entryIdx === -1) {
+                                                    updated.push({ ...entry, base: { ...entry.base, [row.key]: newValue } });
+                                                  } else {
+                                                    updated[entryIdx] = { ...entry, base: { ...entry.base, [row.key]: newValue } };
+                                                  }
+                                                  props.setFieldValue('disaggregationValues', updated);
+                                                }}
+                                                className={styles.input_field}
+                                              />
+                                            </td>,
+                                            <td key={child1.id + '-' + child2.id + '-base-date-' + idx} style={{border: '1px solid #ccc', padding: '4px'}}>
+                                              <DateInput
+                                                translations={translations}
+                                                value={entry.base[row.dateKey] || ''}
+                                                onChange={val => {
+                                                  const updated = [...disaggArr];
+                                                  if (entryIdx === -1) {
+                                                    updated.push({ ...entry, base: { ...entry.base, [row.dateKey]: val } });
+                                                  } else {
+                                                    updated[entryIdx] = { ...entry, base: { ...entry.base, [row.dateKey]: val } };
+                                                  }
+                                                  props.setFieldValue('disaggregationValues', updated);
+                                                }}
+                                                className={styles.input_field}
+                                              />
+                                            </td>,
+                                            <td key={child1.id + '-' + child2.id + '-target-value-' + idx} style={{border: '1px solid #ccc', padding: '4px'}}>
+                                              <Form.Control
+                                                type="number"
+                                                value={entry.target[row.key] || ''}
+                                                onChange={e => {
+                                                  const newValue = e.target.value;
+                                                  const updated = [...disaggArr];
+                                                  if (entryIdx === -1) {
+                                                    updated.push({ ...entry, target: { ...entry.target, [row.key]: newValue } });
+                                                  } else {
+                                                    updated[entryIdx] = { ...entry, target: { ...entry.target, [row.key]: newValue } };
+                                                  }
+                                                  props.setFieldValue('disaggregationValues', updated);
+                                                }}
+                                                className={styles.input_field}
+                                              />
+                                            </td>,
+                                            <td key={child1.id + '-' + child2.id + '-target-date-' + idx} style={{border: '1px solid #ccc', padding: '4px'}}>
+                                              <DateInput
+                                                translations={translations}
+                                                value={entry.target[row.dateKey] || ''}
+                                                onChange={val => {
+                                                  const updated = [...disaggArr];
+                                                  if (entryIdx === -1) {
+                                                    updated.push({ ...entry, target: { ...entry.target, [row.dateKey]: val } });
+                                                  } else {
+                                                    updated[entryIdx] = { ...entry, target: { ...entry.target, [row.dateKey]: val } };
+                                                  }
+                                                  props.setFieldValue('disaggregationValues', updated);
+                                                }}
+                                                className={styles.input_field}
+                                              />
+                                            </td>
+                                          ];
+                                        })
+                                      ))}
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          ))
+                        }
                     </Row>
                   </div>
                   {/* Responsibility and Frequency */}
@@ -884,7 +1172,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                 </Button>
               </Modal.Footer>
             </Form>
-        )}
+        )}}
       </Formik>
     </Modal>
   );

@@ -680,21 +680,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       </Form.Group>
                     </Row>
                     <Row className={styles.view_row}>
-                      <Form.Group className={styles.view_item} controlId="formDisaggregation">
-                        <Form.Label>Disaggregation</Form.Label>
-                        <Select
-                          isMulti
-                          name="disaggregation"
-                          options={disaggregationOptions}
-                          onChange={(selectedValues) => {
-                            props.setFieldValue('disaggregation', selectedValues.map((v: any) => v.value));
-                          }}
-                          onBlur={props.handleBlur}
-                          className={`basic-multi-select ${(props.errors.disaggregation && props.touched.disaggregation) && styles.text_is_invalid}`}
-                          classNamePrefix="select"
-                          value={disaggregationOptions.filter(opt => props.values.disaggregation?.includes(opt.value))}
-                        />
-                      </Form.Group>
+
                       <Form.Group className={styles.view_item} controlId="formUnitOfMeasure">
                         <Form.Label>Unit of Measure</Form.Label>
                         <Select
@@ -709,20 +695,38 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           value={unitOfMeasureOptions.find(opt => opt.value === props.values.unitOfMeasure) || null}
                         />
                       </Form.Group>
+
+                        <Form.Group className={styles.view_one_item} controlId="formCalculationMethod">
+                            <Form.Label>Calculation Method</Form.Label>
+                            <Form.Control
+                                defaultValue={props.values.calculationMethod}
+                                onChange={props.handleChange}
+                                onBlur={props.handleBlur}
+                                name="calculationMethod"
+                                type="text"
+                                className={styles.input_field}
+                                placeholder="Describe how the indicator's value is calculated"
+                            />
+                        </Form.Group>
                     </Row>
                     <Row className={styles.view_row}>
-                      <Form.Group className={styles.view_one_item} controlId="formCalculationMethod">
-                        <Form.Label>Calculation Method</Form.Label>
-                        <Form.Control
-                          defaultValue={props.values.calculationMethod}
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          name="calculationMethod"
-                          type="text"
-                          className={styles.input_field}
-                          placeholder="Describe how the indicator's value is calculated"
-                        />
-                      </Form.Group>
+
+                        <Form.Group className={styles.view_item} controlId="formDisaggregation">
+                            <Form.Label>Disaggregation</Form.Label>
+                            <Select
+                                isMulti
+                                name="disaggregation"
+                                options={disaggregationOptions}
+                                onChange={(selectedValues) => {
+                                    props.setFieldValue('disaggregation', selectedValues.map((v: any) => v.value));
+                                }}
+                                onBlur={props.handleBlur}
+                                className={`basic-multi-select ${(props.errors.disaggregation && props.touched.disaggregation) && styles.text_is_invalid}`}
+                                classNamePrefix="select"
+                                value={disaggregationOptions.filter(opt => props.values.disaggregation?.includes(opt.value))}
+                            />
+                        </Form.Group>
+
                     </Row>
                   </div>
                   {/* Responsibility and Frequency */}

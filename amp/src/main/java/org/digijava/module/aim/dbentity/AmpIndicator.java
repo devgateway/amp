@@ -75,6 +75,7 @@ public class AmpIndicator implements Serializable, Identifiable
 
     private AmpOutcome outcome;
     private AmpOutput output;
+    private Set<AmpIndicatorDisaggregationValue> disaggregationValues;
 
     private String relevanceForClimateChange;
     private AmpCategoryValue indicatorType;
@@ -301,5 +302,13 @@ public class AmpIndicator implements Serializable, Identifiable
     }
     public void setFrequency(AmpCategoryValue frequency) {
         this.frequency = frequency;
+    }
+
+    public Set<AmpIndicatorDisaggregationValue> getDisaggregationValues() {
+        return disaggregationValues;
+    }
+
+    public void setDisaggregationValues(Set<AmpIndicatorDisaggregationValue> disaggregationValues) {
+        this.disaggregationValues = disaggregationValues;
     }
 }

@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.dto.AmpIndicatorDisaggregationValueDto;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
@@ -22,7 +23,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -191,6 +191,31 @@ public class IndicatorManagerService {
         if (indicatorRequest.getOutputId() != null) {
             AmpOutput output = (AmpOutput) session.get(AmpOutput.class, indicatorRequest.getOutputId());
             indicator.setOutput(output);
+        }
+        //create disaggregation values
+        if(indicatorRequest.getDisaggregationValues()!=null)
+        {
+            for (AmpIndicatorDisaggregationValueDto dto : indicatorRequest.getDisaggregationValues()) {
+                AmpIndicatorDisaggregationValue disaggValue = new AmpIndicatorDisaggregationValue();
+                if (dto.getParentCategoryId() != null) {
+                    AmpCategoryValue parentCat = (AmpCategoryValue) session.get(AmpCategoryValue.class, dto.getParentCategoryId());
+                    disaggValue.setParentCategory(parentCat);
+                }
+                if (dto.getChildCategoryId() != null) {
+                    AmpCategoryValue childCat = (AmpCategoryValue) session.get(AmpCategoryValue.class, dto.getChildCategoryId());
+                    disaggValue.setChildCategory(childCat);
+                }
+                if (dto.getBaseValue() != null) {
+                    disaggValue.setBaseValue(dto.getBaseValue());
+                    disaggValue.getBaseValue().setType(AmpIndicatorGlobalValue.BASE);
+                }
+                if (dto.getTargetValue() != null) {
+                    disaggValue.setTargetValue(dto.getTargetValue());
+                    disaggValue.getTargetValue().setType(AmpIndicatorGlobalValue.TARGET);
+                }
+                disaggValue.setIndicator(indicator);
+                indicator.getDisaggregationValues().add(disaggValue);
+            }
         }
 
         session.save(indicator);

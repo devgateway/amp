@@ -281,6 +281,7 @@
 		<hibernate-class>org.digijava.module.aim.action.dataimporter.dbentity.ImportedProjectCurrency</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOutput</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOutcome</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorDisaggregationValue</hibernate-class>
 
 	</hibernate-classes>
 	<!-- AIM classes End-->

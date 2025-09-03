@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.dto.AmpIndicatorDisaggregationValueDto;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidProgramId;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidSectorIds;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateDeserializer;
@@ -104,6 +105,8 @@ public class MEIndicatorDTO {
 
     @JsonProperty("frequency")
     private Long frequency;
+    @JsonProperty("disaggregationValues")
+    private Set<AmpIndicatorDisaggregationValueDto> disaggregationValues = new HashSet<>();
 
     public MEIndicatorDTO() {
 
@@ -133,6 +136,17 @@ public class MEIndicatorDTO {
         this.calculationMethod = indicator.getCalculationMethod();
         this.responsibleOrganizations = indicator.getResponsibleOrganizations()!=null ? indicator.getResponsibleOrganizations().stream().map(AmpOrganisation::getAmpOrgId).collect(Collectors.toSet()) : null;
         this.frequency = indicator.getFrequency()!=null ? indicator.getFrequency().getId() : null;
+        if (indicator.getDisaggregationValues() != null) {
+            this.disaggregationValues = indicator.getDisaggregationValues().stream().map(dv -> {
+                AmpIndicatorDisaggregationValueDto dto = new AmpIndicatorDisaggregationValueDto();
+                dto.setId(dv.getId());
+                dto.setParentCategoryId(dv.getParentCategory() != null ? dv.getParentCategory().getId() : null);
+                dto.setChildCategoryId(dv.getChildCategory() != null ? dv.getChildCategory().getId() : null);
+                dto.setBaseValue(dv.getBaseValue());
+                dto.setTargetValue(dv.getTargetValue());
+                return dto;
+            }).collect(Collectors.toSet());
+        }
     }
 
     public Long getId() {
@@ -275,4 +289,12 @@ public class MEIndicatorDTO {
 
     public Long getFrequency() { return frequency; }
     public void setFrequency(Long frequency) { this.frequency = frequency; }
+
+    public Set<AmpIndicatorDisaggregationValueDto> getDisaggregationValues() {
+        return disaggregationValues;
+    }
+
+    public void setDisaggregationValues(Set<AmpIndicatorDisaggregationValueDto> disaggregationValues) {
+        this.disaggregationValues = disaggregationValues;
+    }
 }

@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.dto.AmpIndicatorDisaggregationValueDto;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
@@ -22,7 +23,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -84,7 +84,6 @@ public class IndicatorManagerService {
     public MEIndicatorDTO createMEIndicator(final MEIndicatorDTO indicatorRequest) {
         Session session = PersistenceManager.getSession();
         AmpIndicator indicator = new AmpIndicator();
-        String name = indicatorRequest.getName();
         validateYear(indicatorRequest);
         //TODO see why the following line was commented out
         //validateNameProgramSectorUnique(name, indicatorRequest, session);
@@ -101,7 +100,7 @@ public class IndicatorManagerService {
         // Set new fields from MEIndicatorDTO
         indicator.setRelevanceForClimateChange(indicatorRequest.getRelevanceForClimateChange());
         if (indicatorRequest.getIndicatorType() != null) {
-            AmpCategoryValue indicatorTypeCat = (AmpCategoryValue) session.get(AmpCategoryValue.class, indicatorRequest.getIndicatorType());
+            AmpCategoryValue indicatorTypeCat = session.get(AmpCategoryValue.class, indicatorRequest.getIndicatorType());
             indicator.setIndicatorType(indicatorTypeCat);
         } else {
             indicator.setIndicatorType(null);
@@ -111,14 +110,14 @@ public class IndicatorManagerService {
         indicator.setDataSource(indicatorRequest.getDataSource());
         if (indicatorRequest.getDisaggregation() != null && !indicatorRequest.getDisaggregation().isEmpty()) {
             Set<AmpCategoryValue> disaggregationCats = indicatorRequest.getDisaggregation().stream()
-                .map(id -> (AmpCategoryValue) session.get(AmpCategoryValue.class, id))
+                .map(id -> session.get(AmpCategoryValue.class, id))
                 .collect(Collectors.toSet());
             indicator.setDisaggregation(disaggregationCats);
         } else {
             indicator.setDisaggregation(new HashSet<>());
         }
         if (indicatorRequest.getUnitOfMeasure() != null) {
-            AmpCategoryValue unitOfMeasureCat = (AmpCategoryValue) session.get(AmpCategoryValue.class, indicatorRequest.getUnitOfMeasure());
+            AmpCategoryValue unitOfMeasureCat = session.get(AmpCategoryValue.class, indicatorRequest.getUnitOfMeasure());
             indicator.setUnitOfMeasure(unitOfMeasureCat);
         } else {
             indicator.setUnitOfMeasure(null);
@@ -126,14 +125,14 @@ public class IndicatorManagerService {
         indicator.setCalculationMethod(indicatorRequest.getCalculationMethod());
         if (indicatorRequest.getResponsibleOrganizations() != null && !indicatorRequest.getResponsibleOrganizations().isEmpty()) {
             Set<AmpOrganisation> orgs = indicatorRequest.getResponsibleOrganizations().stream()
-                .map(id -> (AmpOrganisation) session.get(AmpOrganisation.class, id))
+                .map(id -> session.get(AmpOrganisation.class, id))
                 .collect(Collectors.toSet());
             indicator.setResponsibleOrganizations(orgs);
         } else {
             indicator.setResponsibleOrganizations(new java.util.HashSet<>());
         }
         if (indicatorRequest.getFrequency() != null) {
-            AmpCategoryValue frequencyCat = (AmpCategoryValue) session.get(AmpCategoryValue.class, indicatorRequest.getFrequency());
+            AmpCategoryValue frequencyCat = session.get(AmpCategoryValue.class, indicatorRequest.getFrequency());
             indicator.setFrequency(frequencyCat);
         } else {
             indicator.setFrequency(null);
@@ -172,28 +171,55 @@ public class IndicatorManagerService {
             indicatorValues.add(validatedTargetValues);
         }
 
-        indicatorValues.stream().forEach(value -> value.setIndicator(indicator));
+        indicatorValues.forEach(value -> value.setIndicator(indicator));
         indicator.setIndicatorValues(indicatorValues);
 
         Set<AmpSector> sectors = indicatorRequest.getSectorIds().stream()
-                .map(id -> (AmpSector) session.get(AmpSector.class, id))
+                .map(id -> session.get(AmpSector.class, id))
                 .collect(Collectors.toSet());
         indicator.setSectors(sectors);
 
         if (indicatorRequest.getIndicatorsCategory() != null) {
-            AmpCategoryValue categoryValue = (AmpCategoryValue) session.get(AmpCategoryValue.class, indicatorRequest.getIndicatorsCategory());
+            AmpCategoryValue categoryValue = session.get(AmpCategoryValue.class, indicatorRequest.getIndicatorsCategory());
             indicator.setIndicatorsCategory(categoryValue);
         }
         if (indicatorRequest.getOutcomeId() != null) {
-            AmpOutcome outcome = (AmpOutcome) session.get(AmpOutcome.class, indicatorRequest.getOutcomeId());
+            AmpOutcome outcome = session.get(AmpOutcome.class, indicatorRequest.getOutcomeId());
             indicator.setOutcome(outcome);
         }
         if (indicatorRequest.getOutputId() != null) {
-            AmpOutput output = (AmpOutput) session.get(AmpOutput.class, indicatorRequest.getOutputId());
+            AmpOutput output = session.get(AmpOutput.class, indicatorRequest.getOutputId());
             indicator.setOutput(output);
         }
-
+        // Save the parent indicator first so it is not transient
         session.save(indicator);
+        //create disaggregation values
+        if(indicatorRequest.getDisaggregationValues()!=null)
+        {
+            for (AmpIndicatorDisaggregationValueDto dto : indicatorRequest.getDisaggregationValues()) {
+                AmpIndicatorDisaggregationValue disaggValue = new AmpIndicatorDisaggregationValue();
+                if (dto.getParentCategoryId() != null) {
+                    AmpCategoryValue parentCat = session.get(AmpCategoryValue.class, dto.getParentCategoryId());
+                    disaggValue.setParentCategory(parentCat);
+                }
+                if (dto.getChildCategoryId() != null) {
+                    AmpCategoryValue childCat = (AmpCategoryValue) session.get(AmpCategoryValue.class, dto.getChildCategoryId());
+                    disaggValue.setChildCategory(childCat);
+                }
+                if (dto.getBaseValue() != null) {
+                    disaggValue.setBaseValue(dto.getBaseValue());
+                    disaggValue.getBaseValue().setType(AmpIndicatorGlobalValue.BASE);
+                }
+                if (dto.getTargetValue() != null) {
+                    disaggValue.setTargetValue(dto.getTargetValue());
+                    disaggValue.getTargetValue().setType(AmpIndicatorGlobalValue.TARGET);
+                }
+                disaggValue.setIndicator(indicator);
+                session.save(disaggValue);
+                indicator.getDisaggregationValues().add(disaggValue);
+            }
+        }
+
 
         if (program != null) {
             try {
@@ -203,6 +229,7 @@ public class IndicatorManagerService {
                         ApiError.toError("Indicator with id " + indicator.getIndicatorId() + " could not be assigned to program with id " + program.getAmpThemeId()));
             }
         }
+        session.flush();
 
         return new MEIndicatorDTO(indicator);
     }
@@ -439,6 +466,47 @@ public class IndicatorManagerService {
             }
 
             session.update(indicator);
+            // Update disaggregation values
+            if (indRequest.getDisaggregationValues() != null) {
+                // Always remove all existing disaggregation values before updating
+                if (indicator.getDisaggregationValues() != null && !indicator.getDisaggregationValues().isEmpty()) {
+                    for (AmpIndicatorDisaggregationValue existing : indicator.getDisaggregationValues()) {
+                        session.delete(existing);
+                    }
+                    indicator.getDisaggregationValues().clear();
+                    session.update(indicator);
+                    session.flush();
+                }
+                // Now process incoming disaggregation values as usual
+                for (AmpIndicatorDisaggregationValueDto dto : indRequest.getDisaggregationValues()) {
+                    AmpIndicatorDisaggregationValue disaggValue = new AmpIndicatorDisaggregationValue();
+                    if (dto.getParentCategoryId() != null) {
+                        AmpCategoryValue parentCat = session.get(AmpCategoryValue.class, dto.getParentCategoryId());
+                        disaggValue.setParentCategory(parentCat);
+                    }
+                    if (dto.getChildCategoryId() != null) {
+                        AmpCategoryValue childCat = (AmpCategoryValue) session.get(AmpCategoryValue.class, dto.getChildCategoryId());
+                        disaggValue.setChildCategory(childCat);
+                    }
+                    if (dto.getBaseValue() != null) {
+                        disaggValue.setBaseValue(dto.getBaseValue());
+                        disaggValue.getBaseValue().setType(AmpIndicatorGlobalValue.BASE);
+                    }
+                    if (dto.getTargetValue() != null) {
+                        disaggValue.setTargetValue(dto.getTargetValue());
+                        disaggValue.getTargetValue().setType(AmpIndicatorGlobalValue.TARGET);
+                    }
+                    disaggValue.setIndicator(indicator);
+                    session.save(disaggValue);
+                    indicator.getDisaggregationValues().add(disaggValue);
+                }
+            } else {
+                // If no disaggregation values in request, remove all
+                for (AmpIndicatorDisaggregationValue existing : indicator.getDisaggregationValues()) {
+                    session.delete(existing);
+                }
+                indicator.getDisaggregationValues().clear();
+            }
             if (program != null) {
                 try {
                     IndicatorUtil.assignIndicatorToTheme(program, indicator);

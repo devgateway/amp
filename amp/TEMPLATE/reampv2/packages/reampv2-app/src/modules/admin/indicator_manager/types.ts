@@ -44,6 +44,25 @@ export interface IndicatorObjectType {
     indicatorsCategory: number | null;
     outcomeId?: number;
     outputId?: number;
+    // Add editable disaggregation values
+    disaggregationValues?: Array<{
+      parentCategoryId: number;
+      childCategoryId: number | null;
+        parentDisaggregationId: number | null;
+        childDisaggregationId: number | null;
+      base: {
+        originalValue: string | number;
+        originalValueDate: string;
+        revisedValue: string | number;
+        revisedValueDate: string;
+      };
+      target: {
+        originalValue: string | number;
+        originalValueDate: string;
+        revisedValue: string | number;
+        revisedValueDate: string;
+      };
+    }>;
 }
 
 export interface ProgramObjectType {

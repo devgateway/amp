@@ -1,7 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import {
-  Form, Modal, Button, Col, Row
-} from 'react-bootstrap';
+import { Card, Form, Modal, Button, Col, Row } from 'react-bootstrap';
 import { Formik, FormikProps } from 'formik';
 import Select from 'react-select';
 import styles from './css/IndicatorModal.module.css';
@@ -19,6 +17,9 @@ import useDidMountEffect from '../../utils/hooks';
 import DateInput from '../DateInput';
 import lodash from 'lodash';
 import { getResponsibleOrgs } from '../../reducers/fetchResponsibleOrgsReducer';
+import axios from 'axios';
+import Accordion from 'react-bootstrap/Accordion';
+
 
 const MySwal = withReactContent(Swal);
 
@@ -52,10 +53,27 @@ interface IndicatorFormValues {
   outputId?: number;
   outcomeId?: number;
   indicatorsCategory?: number;
+  // Add editable disaggregation values
+  disaggregationValues?: Array<{
+    parentCategoryId: number;
+    childCategoryId: number | null;
+    base: {
+      originalValue: string | number;
+      originalValueDate: string;
+      revisedValue: string | number;
+      revisedValueDate: string;
+    };
+    target: {
+      originalValue: string | number;
+      originalValueDate: string;
+      revisedValue: string | number;
+      revisedValueDate: string;
+    };
+  }>;
 }
 
 const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
-  const { show, setShow, translations, filterBySector, filterByProgram } = props;
+  const { show, setShow, translations } = props;
 
   const ascendingOptions = [
     { value: true, label: translations["amp.indicatormanager:true"] },
@@ -90,9 +108,9 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const [selectedProgramSchemeId, setSelectedProgramSchemeId] = useState<string | null>(null);
 
   const [sectors, setSectors] = useState<{ value: string, name: string }[]>([]);
-  const [categories, setCategories] = useState<{ value: string, name: string }[]>([]);
   const [programSchemes, setProgramSchemes] = useState<{ value: string, name: string }[]>([]);
   const [programs, setPrograms] = useState<{ value: string, label: string }[]>([]);
+  const [categories, setCategories] = useState<{ value: number, label: string }[]>([]);
 
   const [baseOriginalValueDateDisabled, setBaseOriginalValueDateDisabled] = useState(false);
   const [targetOriginalValueDateDisabled, setTargetOriginalValueDateDisabled] = useState(false);
@@ -290,20 +308,22 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     calculationMethod: '',
     responsibleOrganizations: [],
     frequency: undefined,
+    disaggregationValues: [],
   };
 
   // --- Dynamic category options from fetchAmpCategoryReducer ---
-  const getCategoryOptions = (keyName: string, isMulti = false) => {
-    // Filter only category values with the correct keyName
+  const getCategoryOptions = (keyName: string) => {
     return categoriesReducer.categories
       .filter((cat: any) => cat.ampCategoryClass && cat.ampCategoryClass.keyName === keyName)
       .map((cat: any) => ({ value: cat.id, label: cat.value }));
   };
 
   const indicatorTypeOptions = getCategoryOptions('indicator_type');
-  const disaggregationOptions = getCategoryOptions('indicator_disaggregation', true);
+  const disaggregationOptions = getCategoryOptions('indicator_disaggregation');
   const unitOfMeasureOptions = getCategoryOptions('indicator_unit_of_measure');
   const frequencyOptions = getCategoryOptions('indicator_frequency');
+
+  const [disaggregationChildren, setDisaggregationChildren] = useState<{[key: number]: any[]}>({});
 
   return (
     // this modal wrapper should be a separate component that can be reused since the props are the same
@@ -338,6 +358,22 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             return;
           }
 
+
+          // Format disaggregationValues date fields
+          const formattedDisaggregationValues = (values.disaggregationValues || []).map(dv => ({
+            ...dv,
+            base: {
+              ...dv.base,
+              originalValueDate: dv.base?.originalValueDate ? formatDate(dv.base.originalValueDate) : null,
+              revisedValueDate: dv.base?.revisedValueDate ? formatDate(dv.base.revisedValueDate) : null,
+            },
+            target: {
+              ...dv.target,
+              originalValueDate: dv.target?.originalValueDate ? formatDate(dv.target.originalValueDate) : null,
+              revisedValueDate: dv.target?.revisedValueDate ? formatDate(dv.target.revisedValueDate) : null,
+            }
+          }));
+
           const indicatorData = {
             name,
             description,
@@ -348,15 +384,15 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             creationDate: creationDate ? formatDate(new Date(creationDate)) : null,
             base: checkObjectIsNull(base) ? null : {
               originalValue: base.originalValue ? lodash.toNumber(base.originalValue): null,
-              originalValueDate: base.originalValueDate ? DateUtil.formatJavascriptDate(base.originalValueDate) : null,
+              originalValueDate: base.originalValueDate ? formatDate(base.originalValueDate) : null,
               revisedValue: base.revisedValue ? lodash.toNumber(base.revisedValue) : null,
-              revisedValueDate: base.revisedValueDate ? DateUtil.formatJavascriptDate(base.revisedValueDate) : null,
+              revisedValueDate: base.revisedValueDate ? formatDate(base.revisedValueDate) : null,
             },
             target: checkObjectIsNull(target) ? null : {
               originalValue: target.originalValue ? lodash.toNumber(target.originalValue) : null,
-              originalValueDate: target.originalValueDate ? DateUtil.formatJavascriptDate(target.originalValueDate) : null,
+              originalValueDate: target.originalValueDate ? formatDate(target.originalValueDate) : null,
               revisedValue: target.revisedValue ? lodash.toNumber(target.revisedValue) : null,
-              revisedValueDate: target.revisedValueDate ? DateUtil.formatJavascriptDate(target.revisedValueDate) : null,
+              revisedValueDate: target.revisedValueDate ? formatDate(target.revisedValueDate) : null,
             },
             indicatorsCategory,
             outputId: values.outputId,
@@ -371,12 +407,107 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             calculationMethod: values.calculationMethod,
             responsibleOrganizations: values.responsibleOrganizations,
             frequency: values.frequency,
+            disaggregationValues: formattedDisaggregationValues,
           };
 
           dispatch(createIndicator(indicatorData));
         }}
       >
-        {(props) => (
+        {(props) => {
+          // Move disaggregation children-fetching logic here
+          useEffect(() => {
+            const selected = props.values.disaggregation;
+            if (selected && (selected.length === 1 || selected.length === 2)) {
+              Promise.all(selected.map(id => axios.get(`/rest/indicator_disaggregation/options/${id}`)))
+                .then((responses) => {
+                  const childrenMap = {};
+                  selected.forEach((id, idx) => {
+                    childrenMap[id] = responses[idx].data;
+                  });
+                  setDisaggregationChildren(childrenMap);
+                });
+            } else {
+              setDisaggregationChildren({});
+            }
+          }, [props.values.disaggregation]);
+
+          // Ensure all required disaggregation entries exist in Formik state before rendering Accordion
+          useEffect(() => {
+            if (!Array.isArray(props.values.disaggregationValues)) return;
+            let updated = [...props.values.disaggregationValues];
+            if (props.values.disaggregation.length === 1) {
+              const parentId = props.values.disaggregation[0];
+              (disaggregationChildren[parentId] || []).forEach((child) => {
+                const entryIdx = updated.findIndex((v: any) => v.parentCategoryId === child.id && v.childCategoryId === null);
+                if (entryIdx === -1) {
+                  updated.push({
+                    parentCategoryId: child.id,
+                    childCategoryId: null,
+                    base: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' },
+                    target: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' }
+                  });
+                }
+              });
+            } else if (props.values.disaggregation.length === 2) {
+              const parentArr = disaggregationChildren[props.values.disaggregation[0]] || [];
+              const childArr = disaggregationChildren[props.values.disaggregation[1]] || [];
+              parentArr.forEach((parentChild) => {
+                childArr.forEach((child) => {
+                  const entryIdx = updated.findIndex((v: any) => v.parentCategoryId === parentChild.id && v.childCategoryId === child.id);
+                  if (entryIdx === -1) {
+                    updated.push({
+                      parentCategoryId: parentChild.id,
+                      childCategoryId: child.id,
+                      base: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' },
+                      target: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' }
+                    });
+                  }
+                });
+              });
+              // Remove any entries with childCategoryId: null
+              updated = updated.filter((v: any) => v.childCategoryId !== null);
+            }
+            if (updated.length !== props.values.disaggregationValues.length) {
+              props.setFieldValue('disaggregationValues', updated);
+            }
+          }, [props.values.disaggregation, disaggregationChildren]);
+
+          // Helper to update a field in disaggregationValues
+          const updateDisaggregationField = (entryIdx: number, fieldPath: string[], value: any) => {
+            let updated = Array.isArray(props.values.disaggregationValues) ? [...props.values.disaggregationValues] : [];
+            let entry = updated[entryIdx];
+            // If entry does not exist, create it and push to array
+            if (!entry) {
+              // Find parent/child ids from context
+              let parentCategoryId, childCategoryId;
+              if (fieldPath[0] === 'base' || fieldPath[0] === 'target') {
+                // Try to get from Accordion context
+                if (props.values.disaggregation.length === 1) {
+                  parentCategoryId = props.values.disaggregation[0];
+                  childCategoryId = disaggregationChildren[parentCategoryId]?.[entryIdx]?.id;
+                } else if (props.values.disaggregation.length === 2) {
+                  parentCategoryId = disaggregationChildren[props.values.disaggregation[0]]?.[Math.floor(entryIdx / disaggregationChildren[props.values.disaggregation[1]].length)]?.id;
+                  childCategoryId = disaggregationChildren[props.values.disaggregation[1]]?.[entryIdx % disaggregationChildren[props.values.disaggregation[1]].length]?.id;
+                }
+              }
+              entry = {
+                parentCategoryId: parentCategoryId,
+                childCategoryId: childCategoryId,
+                base: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' },
+                target: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' }
+              };
+              updated.push(entry);
+              entryIdx = updated.length - 1;
+            }
+            let obj = entry;
+            for (let i = 0; i < fieldPath.length - 1; i++) {
+              obj = obj[fieldPath[i]];
+            }
+            obj[fieldPath[fieldPath.length - 1]] = value;
+            props.setFieldValue('disaggregationValues', updated);
+          };
+
+          return (
             <Form noValidate onSubmit={props.handleSubmit}>
               <Modal.Body>
                 <div className={styles.viewmodal_wrapper}>
@@ -397,7 +528,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             placeholder={translations["amp.indicatormanager:enter-indicator-name"]}
                         />
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.name}
+                          {props.errors.name && <span>{props.errors.name}</span>}
                         </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group className={styles.view_item} controlId="formIndicatorCode">
@@ -412,7 +543,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             placeholder={translations["amp.indicatormanager:enter-indicator-code"]}
                         />
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.code}
+                          {props.errors.code && <span>{props.errors.code}</span>}
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Row>
@@ -429,7 +560,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             placeholder={translations["amp.indicatormanager:enter-indicator-description"]}
                         />
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.description}
+                          {props.errors.description && <span>{props.errors.description}</span>}
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Row>
@@ -581,21 +712,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       </Form.Group>
                     </Row>
                     <Row className={styles.view_row}>
-                      <Form.Group className={styles.view_item} controlId="formDisaggregation">
-                        <Form.Label>Disaggregation</Form.Label>
-                        <Select
-                            isMulti
-                            name="disaggregation"
-                            options={disaggregationOptions}
-                            onChange={(selectedValues) => {
-                              props.setFieldValue('disaggregation', selectedValues.map((v: any) => v.value));
-                            }}
-                            onBlur={props.handleBlur}
-                            className={`basic-multi-select ${(props.errors.disaggregation && props.touched.disaggregation) && styles.text_is_invalid}`}
-                            classNamePrefix="select"
-                            value={disaggregationOptions.filter(opt => props.values.disaggregation?.includes(opt.value))}
-                        />
-                      </Form.Group>
+
                       <Form.Group className={styles.view_item} controlId="formUnitOfMeasure">
                         <Form.Label>Unit of Measure</Form.Label>
                         <Select
@@ -610,20 +727,347 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             value={unitOfMeasureOptions.find(opt => opt.value === props.values.unitOfMeasure) || null}
                         />
                       </Form.Group>
+                        <Form.Group className={styles.view_one_item} controlId="formCalculationMethod">
+                            <Form.Label>Calculation Method</Form.Label>
+                            <Form.Control
+                                onChange={props.handleChange}
+                                onBlur={props.handleBlur}
+                                name="calculationMethod"
+                                type="text"
+                                className={styles.input_field}
+                                placeholder="Describe how the indicator's value is calculated"
+                            />
+                        </Form.Group>
                     </Row>
                     <Row className={styles.view_row}>
-                      <Form.Group className={styles.view_one_item} controlId="formCalculationMethod">
-                        <Form.Label>Calculation Method</Form.Label>
-                        <Form.Control
-                            onChange={props.handleChange}
-                            onBlur={props.handleBlur}
-                            name="calculationMethod"
-                            type="text"
-                            className={styles.input_field}
-                            placeholder="Describe how the indicator's value is calculated"
-                        />
-                      </Form.Group>
+                        <Form.Group className={styles.view_item} controlId="formDisaggregation">
+                            <Form.Label>Disaggregation</Form.Label>
+                            <Select
+                              isMulti
+                              name="disaggregation"
+                              options={disaggregationOptions}
+                              onChange={(selectedValues) => {
+                                // Limit selection to max 2
+                                const limitedValues = selectedValues.slice(0, 2);
+                                props.setFieldValue('disaggregation', limitedValues.map((v: any) => v.value));
+                              }}
+                              onBlur={props.handleBlur}
+                              className={`basic-multi-select ${(props.errors.disaggregation && props.touched.disaggregation) && styles.text_is_invalid}`}
+                              classNamePrefix="select"
+                              value={disaggregationOptions.filter(opt => props.values.disaggregation?.includes(opt.value))}
+                            />
+                        </Form.Group>
                     </Row>
+                    {/* Accordion for disaggregation values, always in a new row below the select */}
+                    {props.values.disaggregation?.length === 1 && (
+                      <Row className={styles.view_row}>
+                        <Col>
+                          <div style={{marginTop: '1rem'}}>
+                            <h6>Disaggregation Values</h6>
+                            <Accordion defaultActiveKey="0">
+                              {props.values.disaggregation.map((parentId, parentIdx) => (
+                                <Card key={parentId}>
+                                  <Accordion.Toggle
+                                    as={Card.Header}
+                                    eventKey={String(parentIdx)}
+                                    className={styles.accordionHeader}
+                                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', background: '#f7f7f7', fontWeight: 'bold' }}
+                                    aria-label="Click to expand/collapse"
+                                  >
+                                    <div className={styles.accordionHeaderTitle} style={{ flex: 1 }}>
+                                      {disaggregationOptions.find(opt => opt.value === parentId)?.label || `Disaggregation ${parentId}`}
+                                    </div>
+                                    <Accordion.Collapse eventKey={String(parentIdx)}>
+                                      <span style={{ marginLeft: 8 }}>▼</span>
+                                    </Accordion.Collapse>
+                                  </Accordion.Toggle>
+                                  <Accordion.Collapse eventKey={String(parentIdx)}>
+                                    <Card.Body>
+                                      {disaggregationChildren[parentId] && disaggregationChildren[parentId].length > 0 ? (
+                                        <div style={{maxHeight: '300px', overflowY: 'auto'}}>
+                                          {disaggregationChildren[parentId].map((child) => {
+                                            const disaggArr = Array.isArray(props.values.disaggregationValues) ? props.values.disaggregationValues : [];
+                                            // For single disaggregation, childCategoryId is null
+                                            const entryIdx = disaggArr.findIndex((v: any) => v.parentCategoryId === child.id && v.childCategoryId === null);
+                                            const entry = entryIdx !== -1 ? disaggArr[entryIdx] : {
+                                              parentCategoryId: child.id,
+                                              childCategoryId: null,
+                                              base: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' },
+                                              target: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' }
+                                            };
+                                            return (
+                                              <Card key={child.id} style={{marginBottom: '8px'}}>
+                                                <Card.Body>
+                                                  <Card.Title className={styles.accordionChildTitle}>{child.value}</Card.Title>
+                                                  <div style={{display: 'flex', flexWrap: 'wrap', gap: '32px'}}>
+                                                    <div style={{minWidth: '300px'}}>
+                                                      <h6 color={"red"}>Base Values</h6>
+                                                      <Form.Group>
+                                                        <Form.Label>Original Value</Form.Label>
+                                                        <Form.Control
+                                                          type="number"
+                                                          value={entry.base.originalValue || ''}
+                                                          onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValue'], e.target.value)}
+                                                          className={styles.input_field}
+                                                          aria-label="Base Original Value"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                      <Form.Group>
+                                                        <Form.Label>Original Value Date</Form.Label>
+                                                        <DateInput
+                                                          translations={translations}
+                                                          value={entry.base.originalValueDate || ''}
+                                                          onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValueDate'], val)}
+                                                          className={styles.input_field}
+                                                          aria-label="Base Original Value Date"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                      <Form.Group>
+                                                        <Form.Label>Revised Value</Form.Label>
+                                                        <Form.Control
+                                                          type="number"
+                                                          value={entry.base.revisedValue || ''}
+                                                          onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValue'], e.target.value)}
+                                                          className={styles.input_field}
+                                                          aria-label="Base Revised Value"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                      <Form.Group>
+                                                        <Form.Label>Revised Value Date</Form.Label>
+                                                        <DateInput
+                                                          translations={translations}
+                                                          value={entry.base.revisedValueDate || ''}
+                                                          onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValueDate'], val)}
+                                                          className={styles.input_field}
+                                                          aria-label="Base Revised Value Date"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                    </div>
+                                                    <div style={{minWidth: '300px'}}>
+                                                      <h6 color={"red"}>Target Values</h6>
+                                                      <Form.Group>
+                                                        <Form.Label>Original Value</Form.Label>
+                                                        <Form.Control
+                                                          type="number"
+                                                          value={entry.target.originalValue || ''}
+                                                          onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValue'], e.target.value)}
+                                                          className={styles.input_field}
+                                                          aria-label="Target Original Value"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                      <Form.Group>
+                                                        <Form.Label>Original Value Date</Form.Label>
+                                                        <DateInput
+                                                          translations={translations}
+                                                          value={entry.target.originalValueDate || ''}
+                                                          onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValueDate'], val)}
+                                                          className={styles.input_field}
+                                                          aria-label="Target Original Value Date"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                      <Form.Group>
+                                                        <Form.Label>Revised Value</Form.Label>
+                                                        <Form.Control
+                                                          type="number"
+                                                          value={entry.target.revisedValue || ''}
+                                                          onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValue'], e.target.value)}
+                                                          className={styles.input_field}
+                                                          aria-label="Target Revised Value"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                      <Form.Group>
+                                                        <Form.Label>Revised Value Date</Form.Label>
+                                                        <DateInput
+                                                          translations={translations}
+                                                          value={entry.target.revisedValueDate || ''}
+                                                          onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValueDate'], val)}
+                                                          className={styles.input_field}
+                                                          aria-label="Target Revised Value Date"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                    </div>
+                                                  </div>
+                                                </Card.Body>
+                                              </Card>
+                                            );
+                                          })}
+                                        </div>
+                                      ) : (
+                                        <div style={{color: '#888', padding: '1rem', textAlign: 'center', border: '1px solid #eee', borderRadius: '4px'}}>
+                                          No children found for this disaggregation.
+                                        </div>
+                                      )}
+                                    </Card.Body>
+                                  </Accordion.Collapse>
+                                </Card>
+                              ))}
+                            </Accordion>
+                          </div>
+                        </Col>
+                      </Row>
+                    )}
+                    {props.values.disaggregation?.length === 2 && (
+                      <Row className={styles.view_row}>
+                        <Col>
+                          <div style={{marginTop: '1rem'}}>
+                            <h6>Disaggregation Values</h6>
+                            <Accordion defaultActiveKey="0">
+                              {disaggregationChildren[props.values.disaggregation[0]]?.map((parentChild: any, parentIdx: number) => (
+                                <Card key={parentChild.id}>
+                                  <Accordion.Toggle
+                                    as={Card.Header}
+                                    eventKey={String(parentIdx)}
+                                    className={styles.accordionHeader}
+                                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', background: '#f7f7f7', fontWeight: 'bold' }}
+                                    aria-label="Click to expand/collapse"
+                                  >
+                                    <div className={styles.accordionHeaderTitle} style={{ flex: 1 }}>
+                                      {parentChild.value}
+                                    </div>
+                                    <Accordion.Collapse eventKey={String(parentIdx)}>
+                                      <span style={{ marginLeft: 8 }}>▼</span>
+                                    </Accordion.Collapse>
+                                  </Accordion.Toggle>
+                                  <Accordion.Collapse eventKey={String(parentIdx)}>
+                                    <Card.Body>
+                                      {disaggregationChildren[props.values.disaggregation[1]]?.length > 0 ? (
+                                        <div style={{maxHeight: '300px', overflowY: 'auto'}}>
+                                          {disaggregationChildren[props.values.disaggregation[1]].map((child: any) => {
+                                            const disaggArr = Array.isArray(props.values.disaggregationValues) ? props.values.disaggregationValues : [];
+                                            const entryIdx = disaggArr.findIndex((v: any) => v.parentCategoryId === parentChild.id && v.childCategoryId === child.id);
+                                            const entry = entryIdx !== -1 ? disaggArr[entryIdx] : {
+                                              parentCategoryId: parentChild.id,
+                                              childCategoryId: child.id,
+                                              base: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' },
+                                              target: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' }
+                                            };
+                                            return (
+                                              <Card key={child.id} style={{marginBottom: '8px'}}>
+                                                <Card.Body>
+                                                  <Card.Title className={styles.accordionChildTitle}>{child.value}</Card.Title>
+                                                  <div style={{display: 'flex', flexWrap: 'wrap', gap: '32px'}}>
+                                                    <div style={{minWidth: '300px'}}>
+                                                      <h6 color={"red"}>Base Values</h6>
+                                                      <Form.Group>
+                                                        <Form.Label>Original Value</Form.Label>
+                                                        <Form.Control
+                                                          type="number"
+                                                          value={entry.base.originalValue || ''}
+                                                          onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValue'], e.target.value)}
+                                                          className={styles.input_field}
+                                                          aria-label="Base Original Value"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                      <Form.Group>
+                                                        <Form.Label>Original Value Date</Form.Label>
+                                                        <DateInput
+                                                          translations={translations}
+                                                          value={entry.base.originalValueDate || ''}
+                                                          onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValueDate'], val)}
+                                                          className={styles.input_field}
+                                                          aria-label="Base Original Value Date"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                      <Form.Group>
+                                                        <Form.Label>Revised Value</Form.Label>
+                                                        <Form.Control
+                                                          type="number"
+                                                          value={entry.base.revisedValue || ''}
+                                                          onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValue'], e.target.value)}
+                                                          className={styles.input_field}
+                                                          aria-label="Base Revised Value"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                      <Form.Group>
+                                                        <Form.Label>Revised Value Date</Form.Label>
+                                                        <DateInput
+                                                          translations={translations}
+                                                          value={entry.base.revisedValueDate || ''}
+                                                          onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValueDate'], val)}
+                                                          className={styles.input_field}
+                                                          aria-label="Base Revised Value Date"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                    </div>
+                                                    <div style={{minWidth: '300px'}}>
+                                                      <h6 color={"red"}>Target Values</h6>
+                                                      <Form.Group>
+                                                        <Form.Label>Original Value</Form.Label>
+                                                        <Form.Control
+                                                          type="number"
+                                                          value={entry.target.originalValue || ''}
+                                                          onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValue'], e.target.value)}
+                                                          className={styles.input_field}
+                                                          aria-label="Target Original Value"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                      <Form.Group>
+                                                        <Form.Label>Original Value Date</Form.Label>
+                                                        <DateInput
+                                                          translations={translations}
+                                                          value={entry.target.originalValueDate || ''}
+                                                          onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValueDate'], val)}
+                                                          className={styles.input_field}
+                                                          aria-label="Target Original Value Date"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                      <Form.Group>
+                                                        <Form.Label>Revised Value</Form.Label>
+                                                        <Form.Control
+                                                          type="number"
+                                                          value={entry.target.revisedValue || ''}
+                                                          onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValue'], e.target.value)}
+                                                          className={styles.input_field}
+                                                          aria-label="Target Revised Value"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                      <Form.Group>
+                                                        <Form.Label>Revised Value Date</Form.Label>
+                                                        <DateInput
+                                                          translations={translations}
+                                                          value={entry.target.revisedValueDate || ''}
+                                                          onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValueDate'], val)}
+                                                          className={styles.input_field}
+                                                          aria-label="Target Revised Value Date"
+                                                          disabled={false}
+                                                        />
+                                                      </Form.Group>
+                                                    </div>
+                                                  </div>
+                                                </Card.Body>
+                                              </Card>
+                                            );
+                                          })}
+                                        </div>
+                                      ) : (
+                                        <div style={{color: '#888', padding: '1rem', textAlign: 'center', border: '1px solid #eee', borderRadius: '4px'}}>
+                                          No children found for this disaggregation.
+                                        </div>
+                                      )}
+                                    </Card.Body>
+                                  </Accordion.Collapse>
+                                </Card>
+                              ))}
+                            </Accordion>
+                          </div>
+                        </Col>
+                      </Row>
+                    )}
                   </div>
                   {/* Responsibility and Frequency */}
                   <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>Responsibility and Frequency</h5></Col></Row>
@@ -854,7 +1298,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             }}
                         />
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.ascending}
+                          {props.errors.ascending && <span>{props.errors.ascending}</span>}
                         </Form.Control.Feedback>
                       </Form.Group>
 
@@ -884,7 +1328,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                 </Button>
               </Modal.Footer>
             </Form>
-        )}
+        )}}
       </Formik>
     </Modal>
   );

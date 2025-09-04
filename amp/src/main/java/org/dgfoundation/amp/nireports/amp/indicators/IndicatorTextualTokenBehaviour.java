@@ -8,6 +8,7 @@ import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.behaviours.TextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
@@ -80,5 +82,27 @@ public class IndicatorTextualTokenBehaviour extends TextualTokenBehaviour {
             return "";
         }
         return ReportsUtil.getDecimalFormatOrDefault(engine.spec).format(value);
+    }
+
+    @Override
+    public boolean isTransactionLevelUndefinedSkipping() {
+        return true;
+    }
+
+    @Override
+    public Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell, boolean isTransactionLevelHierarchy) {
+        // TODO: match by key, dont iterate.
+        AtomicReference<Long> oldCellNPOId = new AtomicReference<>();
+        oldCell.getCoordinates().entrySet().stream().iterator().forEachRemaining(e -> {
+            if (e.getKey().toString().equals("sectors.Any")) {
+                oldCellNPOId.set(e.getValue().id);
+            }
+        });
+        if (splitCell.entityId == oldCellNPOId.get()) {
+            return super.filterCell(acceptors, oldCell, splitCell, isTransactionLevelHierarchy);
+        } else {
+            System.out.println("Ignoring cell with id " + splitCell.entityId + " because it is not part of the same NPO as the old cell");
+            return null;
+        }
     }
 }

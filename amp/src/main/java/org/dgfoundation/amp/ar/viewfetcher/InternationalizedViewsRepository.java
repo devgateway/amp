@@ -609,8 +609,12 @@ public class InternationalizedViewsRepository {
                     .addColumnDef(new I18nViewColumnDescription("org_grp_name", "org_grp_id", AmpOrgGroup.class, "orgGrpName")));
 
                 addViewDef(this, new I18nViewDescription("v_ni_donor_orgstypes")
-                    .addColumnDef(new I18nViewColumnDescription("org_type_name", "org_type_id", AmpOrgType.class, "orgType")));             
-                
+                    .addColumnDef(new I18nViewColumnDescription("org_type_name", "org_type_id", AmpOrgType.class, "orgType")));
+
+                // TODO: maybe amp_theme_id has to be amp_program_id
+                addViewDef(this, new I18nViewDescription("v_indicator_themes").
+                        addColumnDef(new I18nViewColumnDescription("name", "amp_theme_id", AmpTheme.class, "name")));
+
             }
             
             private void buildProgramsMultilingualData(){

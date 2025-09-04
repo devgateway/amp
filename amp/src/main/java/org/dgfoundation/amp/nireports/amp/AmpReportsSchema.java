@@ -337,7 +337,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             .put(ColumnConstants.AGREEMENT_CODE, "agreement_id")
             .put(ColumnConstants.FUNDING_ID, "funding_id")
             .put(ColumnConstants.INDICATOR_NAME, "me_indicator_id")
-            .put(ColumnConstants.INDICATOR_SECTOR, "me_indicator_sector_id")
+            .put(ColumnConstants.INDICATOR_SECTOR, "me_npo_id") /* TODO: Add a new column for themes. */
             .put(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, "me_indicator_logframe_id")
             .put(ColumnConstants.INDICATOR_RISK, "me_indicator_risk_id")
             .put(ColumnConstants.INDICATOR_TYPE, "me_indicator_type_id")

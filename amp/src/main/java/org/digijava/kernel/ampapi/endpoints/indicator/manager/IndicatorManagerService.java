@@ -84,7 +84,6 @@ public class IndicatorManagerService {
     public MEIndicatorDTO createMEIndicator(final MEIndicatorDTO indicatorRequest) {
         Session session = PersistenceManager.getSession();
         AmpIndicator indicator = new AmpIndicator();
-        String name = indicatorRequest.getName();
         validateYear(indicatorRequest);
         //TODO see why the following line was commented out
         //validateNameProgramSectorUnique(name, indicatorRequest, session);
@@ -101,7 +100,7 @@ public class IndicatorManagerService {
         // Set new fields from MEIndicatorDTO
         indicator.setRelevanceForClimateChange(indicatorRequest.getRelevanceForClimateChange());
         if (indicatorRequest.getIndicatorType() != null) {
-            AmpCategoryValue indicatorTypeCat = (AmpCategoryValue) session.get(AmpCategoryValue.class, indicatorRequest.getIndicatorType());
+            AmpCategoryValue indicatorTypeCat = session.get(AmpCategoryValue.class, indicatorRequest.getIndicatorType());
             indicator.setIndicatorType(indicatorTypeCat);
         } else {
             indicator.setIndicatorType(null);
@@ -111,14 +110,14 @@ public class IndicatorManagerService {
         indicator.setDataSource(indicatorRequest.getDataSource());
         if (indicatorRequest.getDisaggregation() != null && !indicatorRequest.getDisaggregation().isEmpty()) {
             Set<AmpCategoryValue> disaggregationCats = indicatorRequest.getDisaggregation().stream()
-                .map(id -> (AmpCategoryValue) session.get(AmpCategoryValue.class, id))
+                .map(id -> session.get(AmpCategoryValue.class, id))
                 .collect(Collectors.toSet());
             indicator.setDisaggregation(disaggregationCats);
         } else {
             indicator.setDisaggregation(new HashSet<>());
         }
         if (indicatorRequest.getUnitOfMeasure() != null) {
-            AmpCategoryValue unitOfMeasureCat = (AmpCategoryValue) session.get(AmpCategoryValue.class, indicatorRequest.getUnitOfMeasure());
+            AmpCategoryValue unitOfMeasureCat = session.get(AmpCategoryValue.class, indicatorRequest.getUnitOfMeasure());
             indicator.setUnitOfMeasure(unitOfMeasureCat);
         } else {
             indicator.setUnitOfMeasure(null);
@@ -126,14 +125,14 @@ public class IndicatorManagerService {
         indicator.setCalculationMethod(indicatorRequest.getCalculationMethod());
         if (indicatorRequest.getResponsibleOrganizations() != null && !indicatorRequest.getResponsibleOrganizations().isEmpty()) {
             Set<AmpOrganisation> orgs = indicatorRequest.getResponsibleOrganizations().stream()
-                .map(id -> (AmpOrganisation) session.get(AmpOrganisation.class, id))
+                .map(id -> session.get(AmpOrganisation.class, id))
                 .collect(Collectors.toSet());
             indicator.setResponsibleOrganizations(orgs);
         } else {
             indicator.setResponsibleOrganizations(new java.util.HashSet<>());
         }
         if (indicatorRequest.getFrequency() != null) {
-            AmpCategoryValue frequencyCat = (AmpCategoryValue) session.get(AmpCategoryValue.class, indicatorRequest.getFrequency());
+            AmpCategoryValue frequencyCat = session.get(AmpCategoryValue.class, indicatorRequest.getFrequency());
             indicator.setFrequency(frequencyCat);
         } else {
             indicator.setFrequency(null);
@@ -172,26 +171,28 @@ public class IndicatorManagerService {
             indicatorValues.add(validatedTargetValues);
         }
 
-        indicatorValues.stream().forEach(value -> value.setIndicator(indicator));
+        indicatorValues.forEach(value -> value.setIndicator(indicator));
         indicator.setIndicatorValues(indicatorValues);
 
         Set<AmpSector> sectors = indicatorRequest.getSectorIds().stream()
-                .map(id -> (AmpSector) session.get(AmpSector.class, id))
+                .map(id -> session.get(AmpSector.class, id))
                 .collect(Collectors.toSet());
         indicator.setSectors(sectors);
 
         if (indicatorRequest.getIndicatorsCategory() != null) {
-            AmpCategoryValue categoryValue = (AmpCategoryValue) session.get(AmpCategoryValue.class, indicatorRequest.getIndicatorsCategory());
+            AmpCategoryValue categoryValue = session.get(AmpCategoryValue.class, indicatorRequest.getIndicatorsCategory());
             indicator.setIndicatorsCategory(categoryValue);
         }
         if (indicatorRequest.getOutcomeId() != null) {
-            AmpOutcome outcome = (AmpOutcome) session.get(AmpOutcome.class, indicatorRequest.getOutcomeId());
+            AmpOutcome outcome = session.get(AmpOutcome.class, indicatorRequest.getOutcomeId());
             indicator.setOutcome(outcome);
         }
         if (indicatorRequest.getOutputId() != null) {
-            AmpOutput output = (AmpOutput) session.get(AmpOutput.class, indicatorRequest.getOutputId());
+            AmpOutput output = session.get(AmpOutput.class, indicatorRequest.getOutputId());
             indicator.setOutput(output);
         }
+        // Save the parent indicator first so it is not transient
+        session.save(indicator);
         //create disaggregation values
         if(indicatorRequest.getDisaggregationValues()!=null)
         {
@@ -214,11 +215,11 @@ public class IndicatorManagerService {
                     disaggValue.getTargetValue().setType(AmpIndicatorGlobalValue.TARGET);
                 }
                 disaggValue.setIndicator(indicator);
+                session.save(disaggValue);
                 indicator.getDisaggregationValues().add(disaggValue);
             }
         }
 
-        session.save(indicator);
 
         if (program != null) {
             try {
@@ -228,6 +229,7 @@ public class IndicatorManagerService {
                         ApiError.toError("Indicator with id " + indicator.getIndicatorId() + " could not be assigned to program with id " + program.getAmpThemeId()));
             }
         }
+        session.flush();
 
         return new MEIndicatorDTO(indicator);
     }

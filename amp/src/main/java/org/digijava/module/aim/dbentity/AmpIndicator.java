@@ -9,6 +9,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @TranslatableClass (displayName = "Indicator")
@@ -75,7 +76,7 @@ public class AmpIndicator implements Serializable, Identifiable
 
     private AmpOutcome outcome;
     private AmpOutput output;
-    private Set<AmpIndicatorDisaggregationValue> disaggregationValues;
+    private Set<AmpIndicatorDisaggregationValue> disaggregationValues= new HashSet<>();
 
     private String relevanceForClimateChange;
     private AmpCategoryValue indicatorType;

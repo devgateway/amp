@@ -68,7 +68,7 @@
             <many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="organization_id" />
         </set>
         <many-to-one name="frequency" column="frequency_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
-		<set name="disaggregationValues" lazy="true" inverse="true" cascade="all-delete-orphan">
+		<set name="disaggregationValues" lazy="false" inverse="true" cascade="all-delete-orphan">
             <key column="indicator_id"/>
             <one-to-many class="org.digijava.module.aim.dbentity.AmpIndicatorDisaggregationValue"/>
         </set>

@@ -56,7 +56,7 @@ interface IndicatorFormValues {
   // Add editable disaggregation values
   disaggregationValues?: Array<{
     parentCategoryId: number;
-    childCategoryId: number;
+    childCategoryId: number | null;
     base: {
       originalValue: string | number;
       originalValueDate: string;
@@ -358,6 +358,22 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             return;
           }
 
+
+          // Format disaggregationValues date fields
+          const formattedDisaggregationValues = (values.disaggregationValues || []).map(dv => ({
+            ...dv,
+            base: {
+              ...dv.base,
+              originalValueDate: dv.base?.originalValueDate ? formatDate(dv.base.originalValueDate) : null,
+              revisedValueDate: dv.base?.revisedValueDate ? formatDate(dv.base.revisedValueDate) : null,
+            },
+            target: {
+              ...dv.target,
+              originalValueDate: dv.target?.originalValueDate ? formatDate(dv.target.originalValueDate) : null,
+              revisedValueDate: dv.target?.revisedValueDate ? formatDate(dv.target.revisedValueDate) : null,
+            }
+          }));
+
           const indicatorData = {
             name,
             description,
@@ -368,15 +384,15 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             creationDate: creationDate ? formatDate(new Date(creationDate)) : null,
             base: checkObjectIsNull(base) ? null : {
               originalValue: base.originalValue ? lodash.toNumber(base.originalValue): null,
-              originalValueDate: base.originalValueDate ? DateUtil.formatJavascriptDate(base.originalValueDate) : null,
+              originalValueDate: base.originalValueDate ? formatDate(base.originalValueDate) : null,
               revisedValue: base.revisedValue ? lodash.toNumber(base.revisedValue) : null,
-              revisedValueDate: base.revisedValueDate ? DateUtil.formatJavascriptDate(base.revisedValueDate) : null,
+              revisedValueDate: base.revisedValueDate ? formatDate(base.revisedValueDate) : null,
             },
             target: checkObjectIsNull(target) ? null : {
               originalValue: target.originalValue ? lodash.toNumber(target.originalValue) : null,
-              originalValueDate: target.originalValueDate ? DateUtil.formatJavascriptDate(target.originalValueDate) : null,
+              originalValueDate: target.originalValueDate ? formatDate(target.originalValueDate) : null,
               revisedValue: target.revisedValue ? lodash.toNumber(target.revisedValue) : null,
-              revisedValueDate: target.revisedValueDate ? DateUtil.formatJavascriptDate(target.revisedValueDate) : null,
+              revisedValueDate: target.revisedValueDate ? formatDate(target.revisedValueDate) : null,
             },
             indicatorsCategory,
             outputId: values.outputId,
@@ -391,7 +407,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             calculationMethod: values.calculationMethod,
             responsibleOrganizations: values.responsibleOrganizations,
             frequency: values.frequency,
-            disaggregationValues: values.disaggregationValues,
+            disaggregationValues: formattedDisaggregationValues,
           };
 
           dispatch(createIndicator(indicatorData));
@@ -415,11 +431,74 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             }
           }, [props.values.disaggregation]);
 
+          // Ensure all required disaggregation entries exist in Formik state before rendering Accordion
+          useEffect(() => {
+            if (!Array.isArray(props.values.disaggregationValues)) return;
+            let updated = [...props.values.disaggregationValues];
+            if (props.values.disaggregation.length === 1) {
+              const parentId = props.values.disaggregation[0];
+              (disaggregationChildren[parentId] || []).forEach((child) => {
+                const entryIdx = updated.findIndex((v: any) => v.parentCategoryId === child.id && v.childCategoryId === null);
+                if (entryIdx === -1) {
+                  updated.push({
+                    parentCategoryId: child.id,
+                    childCategoryId: null,
+                    base: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' },
+                    target: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' }
+                  });
+                }
+              });
+            } else if (props.values.disaggregation.length === 2) {
+              const parentArr = disaggregationChildren[props.values.disaggregation[0]] || [];
+              const childArr = disaggregationChildren[props.values.disaggregation[1]] || [];
+              parentArr.forEach((parentChild) => {
+                childArr.forEach((child) => {
+                  const entryIdx = updated.findIndex((v: any) => v.parentCategoryId === parentChild.id && v.childCategoryId === child.id);
+                  if (entryIdx === -1) {
+                    updated.push({
+                      parentCategoryId: parentChild.id,
+                      childCategoryId: child.id,
+                      base: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' },
+                      target: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' }
+                    });
+                  }
+                });
+              });
+              // Remove any entries with childCategoryId: null
+              updated = updated.filter((v: any) => v.childCategoryId !== null);
+            }
+            if (updated.length !== props.values.disaggregationValues.length) {
+              props.setFieldValue('disaggregationValues', updated);
+            }
+          }, [props.values.disaggregation, disaggregationChildren]);
+
           // Helper to update a field in disaggregationValues
           const updateDisaggregationField = (entryIdx: number, fieldPath: string[], value: any) => {
-            const updated = [...(props.values.disaggregationValues ?? [])];
+            let updated = Array.isArray(props.values.disaggregationValues) ? [...props.values.disaggregationValues] : [];
             let entry = updated[entryIdx];
-            if (!entry) return;
+            // If entry does not exist, create it and push to array
+            if (!entry) {
+              // Find parent/child ids from context
+              let parentCategoryId, childCategoryId;
+              if (fieldPath[0] === 'base' || fieldPath[0] === 'target') {
+                // Try to get from Accordion context
+                if (props.values.disaggregation.length === 1) {
+                  parentCategoryId = props.values.disaggregation[0];
+                  childCategoryId = disaggregationChildren[parentCategoryId]?.[entryIdx]?.id;
+                } else if (props.values.disaggregation.length === 2) {
+                  parentCategoryId = disaggregationChildren[props.values.disaggregation[0]]?.[Math.floor(entryIdx / disaggregationChildren[props.values.disaggregation[1]].length)]?.id;
+                  childCategoryId = disaggregationChildren[props.values.disaggregation[1]]?.[entryIdx % disaggregationChildren[props.values.disaggregation[1]].length]?.id;
+                }
+              }
+              entry = {
+                parentCategoryId: parentCategoryId,
+                childCategoryId: childCategoryId,
+                base: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' },
+                target: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' }
+              };
+              updated.push(entry);
+              entryIdx = updated.length - 1;
+            }
             let obj = entry;
             for (let i = 0; i < fieldPath.length - 1; i++) {
               obj = obj[fieldPath[i]];
@@ -721,7 +800,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                   <Card.Title>{child.value}</Card.Title>
                                                   <div style={{display: 'flex', flexWrap: 'wrap', gap: '32px'}}>
                                                     <div style={{minWidth: '300px'}}>
-                                                      <h6>Base Values</h6>
+                                                      <h6 color={"red"}>Base Values</h6>
                                                       <Form.Group>
                                                         <Form.Label>Original Value</Form.Label>
                                                         <Form.Control
@@ -764,7 +843,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                       </Form.Group>
                                                     </div>
                                                     <div style={{minWidth: '300px'}}>
-                                                      <h6>Target Values</h6>
+                                                      <h6 color={"red"}>Target Values</h6>
                                                       <Form.Group>
                                                         <Form.Label>Original Value</Form.Label>
                                                         <Form.Control
@@ -866,7 +945,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                   <Card.Title>{child.value}</Card.Title>
                                                   <div style={{display: 'flex', flexWrap: 'wrap', gap: '32px'}}>
                                                     <div style={{minWidth: '300px'}}>
-                                                      <h6>Base Values</h6>
+                                                      <h6 color={"red"}>Base Values</h6>
                                                       <Form.Group>
                                                         <Form.Label>Original Value</Form.Label>
                                                         <Form.Control
@@ -909,7 +988,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                       </Form.Group>
                                                     </div>
                                                     <div style={{minWidth: '300px'}}>
-                                                      <h6>Target Values</h6>
+                                                      <h6 color={"red"}>Target Values</h6>
                                                       <Form.Group>
                                                         <Form.Label>Original Value</Form.Label>
                                                         <Form.Control

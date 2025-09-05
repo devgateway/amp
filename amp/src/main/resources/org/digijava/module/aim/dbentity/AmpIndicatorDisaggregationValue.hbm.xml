@@ -14,7 +14,7 @@
         <many-to-one name="parentCategory" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" column="parent_category_id" not-null="true"/>
         <many-to-one name="childCategory" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" column="child_category_id" not-null="false"/>
 
-        <many-to-one name="baseValue" class="org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue" column="base_value_id"/>
-        <many-to-one name="targetValue" class="org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue" column="target_value_id"/>
+        <many-to-one cascade="all" name="baseValue" class="org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue" column="base_value_id"/>
+        <many-to-one cascade="all" name="targetValue" class="org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue" column="target_value_id"/>
     </class>
 </hibernate-mapping>

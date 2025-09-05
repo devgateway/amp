@@ -337,7 +337,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             .put(ColumnConstants.AGREEMENT_CODE, "agreement_id")
             .put(ColumnConstants.FUNDING_ID, "funding_id")
             .put(ColumnConstants.INDICATOR_NAME, "me_indicator_id")
-            .put(ColumnConstants.INDICATOR_SECTOR, "me_npo_id") /* TODO: Add a new column for themes. */
+            .put(ColumnConstants.INDICATOR_SECTOR, "me_indicator_sector_id")
+            .put(ColumnConstants.INDICATOR_THEME, "me_npo_id")
             .put(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, "me_indicator_logframe_id")
             .put(ColumnConstants.INDICATOR_RISK, "me_indicator_risk_id")
             .put(ColumnConstants.INDICATOR_TYPE, "me_indicator_type_id")
@@ -760,6 +761,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         indicator_no_entity(ColumnConstants.INDICATOR_CODE, "v_indicator_code");
         indicator_date_column(ColumnConstants.INDICATOR_CREATION_DATE, "v_indicator_creation_date");
         indicator_single_dimension(ColumnConstants.INDICATOR_SECTOR, "v_indicator_sectors", RAW_SCT_LEVEL_COLUMN, indicatorSectorTokenBehaviour);
+        indicator_single_dimension(ColumnConstants.INDICATOR_THEME, "v_indicator_themes", RAW_PRG_LEVEL_COLUMN, indicatorSectorTokenBehaviour); // TODO: define new behaviour.
 
         indicator_degenerate_dimension(ColumnConstants.INDICATOR_RISK, "v_indicator_risk", indicatorRiskRatingsDimension);
         indicator_degenerate_dimension(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, "v_indicator_logframe_category", catsDimension);

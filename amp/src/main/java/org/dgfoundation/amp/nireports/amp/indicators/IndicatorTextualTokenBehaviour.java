@@ -94,7 +94,7 @@ public class IndicatorTextualTokenBehaviour extends TextualTokenBehaviour {
         // TODO: match by key, dont iterate.
         AtomicReference<Long> oldCellNPOId = new AtomicReference<>();
         oldCell.getCoordinates().entrySet().stream().iterator().forEachRemaining(e -> {
-            if (e.getKey().toString().equals("sectors.Any")) {
+            if (e.getKey().toString().equals("orgs.Any Program")) {
                 oldCellNPOId.set(e.getValue().id);
             }
         });

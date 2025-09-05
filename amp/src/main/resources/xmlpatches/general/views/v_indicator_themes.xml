@@ -2,7 +2,7 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
            xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../schemas/xmlpatcher.xsd ">
-    <jira>AMP-?????</jira>
+    <jira>AMP-31050</jira>
     <keyword>Views</keyword>
     <author>ginchauspe</author>
     <description>recreate view, this will always be the last version of the view</description>

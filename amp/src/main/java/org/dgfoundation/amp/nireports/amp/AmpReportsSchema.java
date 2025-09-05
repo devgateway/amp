@@ -281,6 +281,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     private IndicatorTextualTokenBehaviour indicatorSectorTokenBehaviour =
             IndicatorTextualTokenBehaviour.forText(INDICATOR_DIM_USG, false);
 
+    private IndicatorTextualTokenBehaviour indicatorThemeTokenBehaviour =
+            IndicatorTextualTokenBehaviour.forText(INDICATOR_DIM_USG, true);
+
     private IndicatorTextualTokenBehaviour indicatorDoubleTokenBehaviour =
             IndicatorTextualTokenBehaviour.forDouble(INDICATOR_DIM_USG);
 
@@ -761,7 +764,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         indicator_no_entity(ColumnConstants.INDICATOR_CODE, "v_indicator_code");
         indicator_date_column(ColumnConstants.INDICATOR_CREATION_DATE, "v_indicator_creation_date");
         indicator_single_dimension(ColumnConstants.INDICATOR_SECTOR, "v_indicator_sectors", RAW_SCT_LEVEL_COLUMN, indicatorSectorTokenBehaviour);
-        indicator_single_dimension(ColumnConstants.INDICATOR_THEME, "v_indicator_themes", RAW_PRG_LEVEL_COLUMN, indicatorSectorTokenBehaviour); // TODO: define new behaviour.
+        indicator_single_dimension(ColumnConstants.INDICATOR_THEME, "v_indicator_themes", RAW_PRG_LEVEL_COLUMN, indicatorThemeTokenBehaviour);
 
         indicator_degenerate_dimension(ColumnConstants.INDICATOR_RISK, "v_indicator_risk", indicatorRiskRatingsDimension);
         indicator_degenerate_dimension(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, "v_indicator_logframe_category", catsDimension);

@@ -413,6 +413,7 @@ public class ColumnConstants {
     public static final String INDICATOR_CODE = "Indicator Code";
     public static final String INDICATOR_CREATION_DATE = "Indicator Creation Date";
     public static final String INDICATOR_SECTOR = "Indicator Sector";
+    public static final String INDICATOR_THEME = "Indicator Theme";
     public static final String INDICATOR_RISK = "Risk";
     public static final String INDICATOR_LOGFRAME_CATEGORY = "Logframe Category";
 

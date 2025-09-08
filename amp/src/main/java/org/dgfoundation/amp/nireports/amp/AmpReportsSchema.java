@@ -1,6 +1,8 @@
 package org.dgfoundation.amp.nireports.amp;
 
 import com.google.common.collect.ImmutableMap;
+
+import static org.dgfoundation.amp.ar.ColumnConstants.NATIONAL_PLAN_OBJECTIVE;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.ADM_LEVEL_4;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.ADM_LEVEL_0;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.ADM_LEVEL_3;
@@ -241,12 +243,13 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     public final static LevelColumn RAW_SCT_LEVEL_COLUMN = RAW_SCT_DIM_USG.getLevelColumn(LEVEL_ALL_IDS);
 
     // the programs-based NiDimensionUsage's
+    public static final String ANY_PROGRAM_TYPE = "Any Program";
     public final static NiDimensionUsage PP_DIM_USG = progsDimension.getDimensionUsage("Primary Program");
     public static final NiDimensionUsage IPP_DIM_USG = progsDimension.getDimensionUsage("Indirect Primary Program");
     public final static NiDimensionUsage SP_DIM_USG = progsDimension.getDimensionUsage("Secondary Program");
     public final static NiDimensionUsage TP_DIM_USG = progsDimension.getDimensionUsage("Tertiary Program");
-    public final static NiDimensionUsage NPO_DIM_USG = progsDimension.getDimensionUsage("National Plan Objective");
-    public final static NiDimensionUsage RAW_PRG_DIM_USG = orgsDimension.getDimensionUsage("Any Program");
+    public final static NiDimensionUsage NPO_DIM_USG = progsDimension.getDimensionUsage(NATIONAL_PLAN_OBJECTIVE);
+    public final static NiDimensionUsage RAW_PRG_DIM_USG = orgsDimension.getDimensionUsage(ANY_PROGRAM_TYPE);
     public final static LevelColumn RAW_PRG_LEVEL_COLUMN = RAW_PRG_DIM_USG.getLevelColumn(LEVEL_ALL_IDS);
 
 

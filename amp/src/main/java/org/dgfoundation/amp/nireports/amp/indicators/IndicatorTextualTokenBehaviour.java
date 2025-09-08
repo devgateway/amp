@@ -9,6 +9,7 @@ import org.dgfoundation.amp.nireports.behaviours.TextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 
@@ -37,6 +38,7 @@ public class IndicatorTextualTokenBehaviour extends TextualTokenBehaviour {
     private final NiDimensionUsage indicatorDimensionUsage;
     private final boolean removeDuplicates;
     private final IndicatorCellComparator indicatorCellComparator;
+    private final static String PROGRAM_TYPE = "orgs." + ANY_PROGRAM_TYPE;
 
     public static IndicatorTextualTokenBehaviour forText(NiDimensionUsage indicatorDimensionUsage, boolean removeDuplicates) {
         return new IndicatorTextualTokenBehaviour((engine, cell) -> ((TextCell) cell).text, indicatorDimensionUsage, removeDuplicates);
@@ -93,23 +95,24 @@ public class IndicatorTextualTokenBehaviour extends TextualTokenBehaviour {
 
     @Override
     public Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell, boolean isTransactionLevelHierarchy) {
-        // TODO: match by key, dont iterate.
-        AtomicReference<Long> oldCellNPOId = new AtomicReference<>();
-        oldCell.getCoordinates().entrySet().stream().iterator().forEachRemaining(e -> {
-            if (e.getKey().toString().equals("orgs." + ANY_PROGRAM_TYPE)) {
-                oldCellNPOId.set(e.getValue().id);
+        long oldCellNPOId = -1;
+        for (Map.Entry<NiDimensionUsage, NiDimension.Coordinate> e : oldCell.getCoordinates().entrySet()) {
+            if (e.getKey().toString().equals(PROGRAM_TYPE)) {
+                oldCellNPOId = e.getValue().id;
+                break;
             }
-        });
-        if (splitCell.entityId == oldCellNPOId.get()) {
+        }
+        if (splitCell.entityId == oldCellNPOId) {
             return super.filterCell(acceptors, oldCell, splitCell, isTransactionLevelHierarchy);
         } else {
-            AtomicReference<Boolean> continueFiltering = new AtomicReference<>(false);
-            splitCell.getCoordinates().entrySet().stream().iterator().forEachRemaining(e -> {
+            boolean continueFiltering = false;
+            for (Map.Entry<NiDimensionUsage, NiDimension.Coordinate> e : splitCell.getCoordinates().entrySet()) {
                 if (!e.getKey().instanceName.equals(NATIONAL_PLAN_OBJECTIVE)) {
-                    continueFiltering.set(true);
+                    continueFiltering = true;
+                    break;
                 }
-            });
-            if (continueFiltering.get()) {
+            }
+            if (continueFiltering) {
                 return super.filterCell(acceptors, oldCell, splitCell, isTransactionLevelHierarchy);
             }
             System.out.println("Ignoring cell with id " + splitCell.entityId + " because it is not part of the same NPO as the old cell");

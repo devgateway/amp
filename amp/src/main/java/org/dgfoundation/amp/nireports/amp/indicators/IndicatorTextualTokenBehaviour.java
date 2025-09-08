@@ -21,6 +21,8 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 import static org.dgfoundation.amp.algo.AmpCollections.any;
+import static org.dgfoundation.amp.ar.ColumnConstants.NATIONAL_PLAN_OBJECTIVE;
+import static org.dgfoundation.amp.nireports.amp.AmpReportsSchema.ANY_PROGRAM_TYPE;
 
 /**
  * This behaviour matches {@link TextualTokenBehaviour} with the exception of how horizontal reduce is done.
@@ -94,7 +96,7 @@ public class IndicatorTextualTokenBehaviour extends TextualTokenBehaviour {
         // TODO: match by key, dont iterate.
         AtomicReference<Long> oldCellNPOId = new AtomicReference<>();
         oldCell.getCoordinates().entrySet().stream().iterator().forEachRemaining(e -> {
-            if (e.getKey().toString().equals("orgs.Any Program")) {
+            if (e.getKey().toString().equals("orgs." + ANY_PROGRAM_TYPE)) {
                 oldCellNPOId.set(e.getValue().id);
             }
         });
@@ -103,7 +105,7 @@ public class IndicatorTextualTokenBehaviour extends TextualTokenBehaviour {
         } else {
             AtomicReference<Boolean> continueFiltering = new AtomicReference<>(false);
             splitCell.getCoordinates().entrySet().stream().iterator().forEachRemaining(e -> {
-                if (!e.getKey().instanceName.equals("National Plan Objective")) {
+                if (!e.getKey().instanceName.equals(NATIONAL_PLAN_OBJECTIVE)) {
                     continueFiltering.set(true);
                 }
             });

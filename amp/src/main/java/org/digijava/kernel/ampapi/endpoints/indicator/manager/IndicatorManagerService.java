@@ -199,7 +199,7 @@ public class IndicatorManagerService {
             for (AmpIndicatorDisaggregationValueDto dto : indicatorRequest.getDisaggregationValues()) {
                 AmpIndicatorDisaggregationValue disaggValue = new AmpIndicatorDisaggregationValue();
                 if (dto.getParentCategoryId() != null) {
-                    AmpCategoryValue parentCat = (AmpCategoryValue) session.get(AmpCategoryValue.class, dto.getParentCategoryId());
+                    AmpCategoryValue parentCat = session.get(AmpCategoryValue.class, dto.getParentCategoryId());
                     disaggValue.setParentCategory(parentCat);
                 }
                 if (dto.getChildCategoryId() != null) {
@@ -466,6 +466,47 @@ public class IndicatorManagerService {
             }
 
             session.update(indicator);
+            // Update disaggregation values
+            if (indRequest.getDisaggregationValues() != null) {
+                // Always remove all existing disaggregation values before updating
+                if (indicator.getDisaggregationValues() != null && !indicator.getDisaggregationValues().isEmpty()) {
+                    for (AmpIndicatorDisaggregationValue existing : indicator.getDisaggregationValues()) {
+                        session.delete(existing);
+                    }
+                    indicator.getDisaggregationValues().clear();
+                    session.update(indicator);
+                    session.flush();
+                }
+                // Now process incoming disaggregation values as usual
+                for (AmpIndicatorDisaggregationValueDto dto : indRequest.getDisaggregationValues()) {
+                    AmpIndicatorDisaggregationValue disaggValue = new AmpIndicatorDisaggregationValue();
+                    if (dto.getParentCategoryId() != null) {
+                        AmpCategoryValue parentCat = session.get(AmpCategoryValue.class, dto.getParentCategoryId());
+                        disaggValue.setParentCategory(parentCat);
+                    }
+                    if (dto.getChildCategoryId() != null) {
+                        AmpCategoryValue childCat = (AmpCategoryValue) session.get(AmpCategoryValue.class, dto.getChildCategoryId());
+                        disaggValue.setChildCategory(childCat);
+                    }
+                    if (dto.getBaseValue() != null) {
+                        disaggValue.setBaseValue(dto.getBaseValue());
+                        disaggValue.getBaseValue().setType(AmpIndicatorGlobalValue.BASE);
+                    }
+                    if (dto.getTargetValue() != null) {
+                        disaggValue.setTargetValue(dto.getTargetValue());
+                        disaggValue.getTargetValue().setType(AmpIndicatorGlobalValue.TARGET);
+                    }
+                    disaggValue.setIndicator(indicator);
+                    session.save(disaggValue);
+                    indicator.getDisaggregationValues().add(disaggValue);
+                }
+            } else {
+                // If no disaggregation values in request, remove all
+                for (AmpIndicatorDisaggregationValue existing : indicator.getDisaggregationValues()) {
+                    session.delete(existing);
+                }
+                indicator.getDisaggregationValues().clear();
+            }
             if (program != null) {
                 try {
                     IndicatorUtil.assignIndicatorToTheme(program, indicator);

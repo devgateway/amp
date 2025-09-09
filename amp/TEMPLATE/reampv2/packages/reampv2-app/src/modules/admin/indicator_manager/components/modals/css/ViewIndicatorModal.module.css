@@ -3,6 +3,8 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    background: #fff; /* Ensure light background */
+    padding: 0;
 }
 
 .view_row {
@@ -27,7 +29,7 @@
 }
 
 .view_item {
-    width: 50%;
+    width: 100%; /* Remove 50% restriction for full width */
     text-align: left;
 }
 
@@ -91,10 +93,25 @@
   border-bottom: 2px solid #e0e0e0;
 }
 .modal_body {
-  background: #fff;
+  background: #fff !important; /* Force modal body to be light */
 }
+
+.hierarchical_table {
+    width: 100%;
+    background: #fff;
+}
+
 .error_state {
   text-align: center;
   color: #FF5630;
   padding: 32px 0;
+}
+.modal_backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 100;
 }

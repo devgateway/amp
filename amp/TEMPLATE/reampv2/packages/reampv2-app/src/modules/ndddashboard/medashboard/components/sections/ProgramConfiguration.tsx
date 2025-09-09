@@ -60,8 +60,8 @@ const ProgramConfiguration: React.FC<IndicatorByProgramProps> = (props) => {
             if (foundProgram) {
                 const children = extractLv1Children(foundProgram);
                 setLevel1Children(children);
-                setLevel1ChildName(children[0].name);
-                setLevel1Child(children[0].id);
+                setLevel1ChildName(children[0]?.name);
+                setLevel1Child(children[0]?.id);
                 dispatch(saveProgramStartDate(foundProgram.startDate))
             }
         }

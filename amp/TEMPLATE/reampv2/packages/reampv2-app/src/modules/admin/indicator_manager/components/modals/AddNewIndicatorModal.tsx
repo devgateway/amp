@@ -770,13 +770,13 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                   <Accordion.Toggle
                                     as={Card.Header}
                                     eventKey={String(parentIdx)}
+                                    className={styles.accordionHeader}
                                     style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', background: '#f7f7f7', fontWeight: 'bold' }}
                                     aria-label="Click to expand/collapse"
                                   >
-                                    <span style={{ flex: 1 }}>
+                                    <div className={styles.accordionHeaderTitle} style={{ flex: 1 }}>
                                       {disaggregationOptions.find(opt => opt.value === parentId)?.label || `Disaggregation ${parentId}`}
-                                    </span>
-                                    {/* Chevron icon: show down if expanded, right if collapsed */}
+                                    </div>
                                     <Accordion.Collapse eventKey={String(parentIdx)}>
                                       <span style={{ marginLeft: 8 }}>▼</span>
                                     </Accordion.Collapse>
@@ -787,17 +787,18 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                         <div style={{maxHeight: '300px', overflowY: 'auto'}}>
                                           {disaggregationChildren[parentId].map((child) => {
                                             const disaggArr = Array.isArray(props.values.disaggregationValues) ? props.values.disaggregationValues : [];
-                                            const entryIdx = disaggArr.findIndex((v: any) => v.parentCategoryId === parentId && v.childCategoryId === child.id);
+                                            // For single disaggregation, childCategoryId is null
+                                            const entryIdx = disaggArr.findIndex((v: any) => v.parentCategoryId === child.id && v.childCategoryId === null);
                                             const entry = entryIdx !== -1 ? disaggArr[entryIdx] : {
-                                              parentCategoryId: parentId,
-                                              childCategoryId: child.id,
+                                              parentCategoryId: child.id,
+                                              childCategoryId: null,
                                               base: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' },
                                               target: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' }
                                             };
                                             return (
                                               <Card key={child.id} style={{marginBottom: '8px'}}>
                                                 <Card.Body>
-                                                  <Card.Title>{child.value}</Card.Title>
+                                                  <Card.Title className={styles.accordionChildTitle}>{child.value}</Card.Title>
                                                   <div style={{display: 'flex', flexWrap: 'wrap', gap: '32px'}}>
                                                     <div style={{minWidth: '300px'}}>
                                                       <h6 color={"red"}>Base Values</h6>
@@ -809,6 +810,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValue'], e.target.value)}
                                                           className={styles.input_field}
                                                           aria-label="Base Original Value"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
@@ -819,6 +821,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValueDate'], val)}
                                                           className={styles.input_field}
                                                           aria-label="Base Original Value Date"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
@@ -829,6 +832,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValue'], e.target.value)}
                                                           className={styles.input_field}
                                                           aria-label="Base Revised Value"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
@@ -839,6 +843,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValueDate'], val)}
                                                           className={styles.input_field}
                                                           aria-label="Base Revised Value Date"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                     </div>
@@ -852,6 +857,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValue'], e.target.value)}
                                                           className={styles.input_field}
                                                           aria-label="Target Original Value"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
@@ -862,6 +868,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValueDate'], val)}
                                                           className={styles.input_field}
                                                           aria-label="Target Original Value Date"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
@@ -872,6 +879,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValue'], e.target.value)}
                                                           className={styles.input_field}
                                                           aria-label="Target Revised Value"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
@@ -882,6 +890,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValueDate'], val)}
                                                           className={styles.input_field}
                                                           aria-label="Target Revised Value Date"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                     </div>
@@ -916,12 +925,13 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                   <Accordion.Toggle
                                     as={Card.Header}
                                     eventKey={String(parentIdx)}
+                                    className={styles.accordionHeader}
                                     style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', background: '#f7f7f7', fontWeight: 'bold' }}
                                     aria-label="Click to expand/collapse"
                                   >
-                                    <span style={{ flex: 1 }}>
+                                    <div className={styles.accordionHeaderTitle} style={{ flex: 1 }}>
                                       {parentChild.value}
-                                    </span>
+                                    </div>
                                     <Accordion.Collapse eventKey={String(parentIdx)}>
                                       <span style={{ marginLeft: 8 }}>▼</span>
                                     </Accordion.Collapse>
@@ -942,7 +952,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                             return (
                                               <Card key={child.id} style={{marginBottom: '8px'}}>
                                                 <Card.Body>
-                                                  <Card.Title>{child.value}</Card.Title>
+                                                  <Card.Title className={styles.accordionChildTitle}>{child.value}</Card.Title>
                                                   <div style={{display: 'flex', flexWrap: 'wrap', gap: '32px'}}>
                                                     <div style={{minWidth: '300px'}}>
                                                       <h6 color={"red"}>Base Values</h6>
@@ -954,6 +964,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValue'], e.target.value)}
                                                           className={styles.input_field}
                                                           aria-label="Base Original Value"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
@@ -964,6 +975,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValueDate'], val)}
                                                           className={styles.input_field}
                                                           aria-label="Base Original Value Date"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
@@ -974,6 +986,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValue'], e.target.value)}
                                                           className={styles.input_field}
                                                           aria-label="Base Revised Value"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
@@ -984,6 +997,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValueDate'], val)}
                                                           className={styles.input_field}
                                                           aria-label="Base Revised Value Date"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                     </div>
@@ -997,6 +1011,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValue'], e.target.value)}
                                                           className={styles.input_field}
                                                           aria-label="Target Original Value"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
@@ -1007,6 +1022,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValueDate'], val)}
                                                           className={styles.input_field}
                                                           aria-label="Target Original Value Date"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
@@ -1017,6 +1033,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValue'], e.target.value)}
                                                           className={styles.input_field}
                                                           aria-label="Target Revised Value"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
@@ -1027,6 +1044,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValueDate'], val)}
                                                           className={styles.input_field}
                                                           aria-label="Target Revised Value Date"
+                                                          disabled={false}
                                                         />
                                                       </Form.Group>
                                                     </div>

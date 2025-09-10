@@ -7,6 +7,9 @@ public class AmpIndicatorDisaggregationValueDto {
     private Long id;
     private Long parentCategoryId;
     private Long childCategoryId;
+
+    private Long parentDisaggregationId;
+    private Long childDisaggregationId;
     @JsonProperty("base")
     private AmpIndicatorGlobalValue baseValue;
     @JsonProperty("target")
@@ -50,6 +53,20 @@ public class AmpIndicatorDisaggregationValueDto {
     public void setTargetValue(AmpIndicatorGlobalValue targetValue) {
         this.targetValue = targetValue;
     }
+    public Long getParentDisaggregationId() {
+        return parentDisaggregationId;
+    }
 
+    public void setParentDisaggregationId(Long parentDisaggregationId) {
+        this.parentDisaggregationId = parentDisaggregationId;
+    }
+
+    public Long getChildDisaggregationId() {
+        return childDisaggregationId;
+    }
+
+    public void setChildDisaggregationId(Long childDisaggregationId) {
+        this.childDisaggregationId = childDisaggregationId;
+    }
 
 }

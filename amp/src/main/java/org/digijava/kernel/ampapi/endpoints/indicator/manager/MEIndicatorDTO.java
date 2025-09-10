@@ -144,6 +144,19 @@ public class MEIndicatorDTO {
                 dto.setChildCategoryId(dv.getChildCategory() != null ? dv.getChildCategory().getId() : null);
                 dto.setBaseValue(dv.getBaseValue());
                 dto.setTargetValue(dv.getTargetValue());
+                Long parentDisaggregationId = dv.getParentCategory() != null
+                    ? Long.parseLong(
+                        dv.getParentCategory().getAmpCategoryClass().getKeyName().split("_")[dv.getParentCategory().getAmpCategoryClass().getKeyName().split("_").length - 1]
+                    )
+                    : null;
+                Long childDisaggregationId = dv.getChildCategory() != null
+                    ? Long.parseLong(
+                        dv.getChildCategory().getAmpCategoryClass().getKeyName().split("_")[dv.getChildCategory().getAmpCategoryClass().getKeyName().split("_").length - 1]
+                    )
+                    : null;
+                dto.setParentDisaggregationId(parentDisaggregationId);
+                dto.setChildDisaggregationId(childDisaggregationId);
+
                 return dto;
             }).collect(Collectors.toSet());
         }

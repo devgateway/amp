@@ -113,6 +113,12 @@ public class IndicatorTextualTokenBehaviour extends TextualTokenBehaviour {
                 }
             }
             if (continueFiltering) {
+                // TODO: evaluate if this code helps to display Donor Groups hierarchies + funding columns.
+                /* Cell cell = super.filterCell(acceptors, oldCell, splitCell, isTransactionLevelHierarchy);
+                if (cell != null) {
+                    return cell;
+                }
+                return super.filterCell(acceptors, oldCell, splitCell, false); */
                 return super.filterCell(acceptors, oldCell, splitCell, isTransactionLevelHierarchy);
             }
             System.out.println("Ignoring cell with id " + splitCell.entityId + " because it is not part of the same NPO as the old cell");

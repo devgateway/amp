@@ -16,5 +16,11 @@
 
         <many-to-one cascade="all" name="baseValue" class="org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue" column="base_value_id"/>
         <many-to-one cascade="all" name="targetValue" class="org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue" column="target_value_id"/>
+
+        <!-- New set of actual values via join table -->
+        <set name="actualValues" table="amp_disagg_actual_values" cascade="all" lazy="false">
+            <key column="disagg_value_id" not-null="true"/>
+            <many-to-many column="global_value_id" class="org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue"/>
+        </set>
     </class>
 </hibernate-mapping>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <span wicket:id="featureLabel"></span>
+    <div class="disagg-actual-values">
+        <table class="activity_me" cellpadding="2" cellspacing="2" width="100%">
+            <thead>
+            <tr>
+                <th style="width:25%">Actual Value</th>
+                <th style="width:25%">Actual Date</th>
+                <th style="width:10%">Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr wicket:id="rows">
+                <td wicket:id="actualValue"></td>
+                <td wicket:id="actualDate"></td>
+                <td wicket:id="delActualValue"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div style="margin-top:4px;" wicket:id="addDisaggActualValue"></div>
+    </div>
+</wicket:extend>
+</html>

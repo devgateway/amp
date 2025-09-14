@@ -2,7 +2,11 @@ package org.digijava.module.aim.dbentity;
 
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpIndicatorDisaggregationValue {
+import java.io.Serializable;
+import java.util.Set;
+import java.util.HashSet;
+
+public class AmpIndicatorDisaggregationValue implements Serializable {
     private Long id;
 
     private AmpCategoryValue parentCategory;
@@ -10,6 +14,8 @@ public class AmpIndicatorDisaggregationValue {
 
     private AmpIndicatorGlobalValue baseValue;
     private AmpIndicatorGlobalValue targetValue;
+    // changed from List to Set and will be mapped via hbm
+    private Set<AmpIndicatorGlobalValue> actualValues; // @OneToMany like mapping in hbm (inverse)
 
     private AmpIndicator indicator;
 
@@ -27,6 +33,15 @@ public class AmpIndicatorDisaggregationValue {
 
     public void setTargetValue(AmpIndicatorGlobalValue targetValue) {
         this.targetValue = targetValue;
+    }
+
+    public Set<AmpIndicatorGlobalValue> getActualValues() {
+        if(actualValues == null) actualValues = new HashSet<>();
+        return actualValues;
+    }
+
+    public void setActualValues(Set<AmpIndicatorGlobalValue> actualValues) {
+        this.actualValues = actualValues;
     }
 
     public AmpCategoryValue getParentCategory() {
@@ -60,5 +75,4 @@ public class AmpIndicatorDisaggregationValue {
     public void setIndicator(AmpIndicator indicator) {
         this.indicator = indicator;
     }
-
 }

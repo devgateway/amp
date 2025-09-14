@@ -14,6 +14,8 @@ public class AmpIndicatorDisaggregationValueDto {
     private AmpIndicatorGlobalValue baseValue;
     @JsonProperty("target")
     private AmpIndicatorGlobalValue targetValue;
+    @JsonProperty("actual")
+    private AmpIndicatorGlobalValue actualValue;
     public Long getParentCategoryId() {
         return parentCategoryId;
     }
@@ -67,6 +69,14 @@ public class AmpIndicatorDisaggregationValueDto {
 
     public void setChildDisaggregationId(Long childDisaggregationId) {
         this.childDisaggregationId = childDisaggregationId;
+    }
+
+    public AmpIndicatorGlobalValue getActualValue() {
+        return actualValue;
+    }
+
+    public void setActualValue(AmpIndicatorGlobalValue actualValue) {
+        this.actualValue = actualValue;
     }
 
 }

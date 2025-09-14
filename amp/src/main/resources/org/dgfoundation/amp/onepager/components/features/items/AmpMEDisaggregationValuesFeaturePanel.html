@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <span wicket:id="featureLabel"></span>
+    <div class="disaggregation-section" wicket:id="parentList">
+        <div class="disaggregation-parent">
+            <h4 wicket:id="parentName"></h4>
+            <div class="disaggregation-children" wicket:id="childList">
+                <div class="disaggregation-child">
+                    <div><b>Child:</b> <span wicket:id="childName"></span></div>
+                    <div>
+                        <b>Base:</b> <span wicket:id="baseValue"></span>
+                        (<span wicket:id="baseDate"></span>)
+                        &nbsp;&nbsp;
+                        <b>Target:</b> <span wicket:id="targetValue"></span>
+                        (<span wicket:id="targetDate"></span>)
+                    </div>
+                    <div wicket:id="actualValuesPanel"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</wicket:extend>
+</html>

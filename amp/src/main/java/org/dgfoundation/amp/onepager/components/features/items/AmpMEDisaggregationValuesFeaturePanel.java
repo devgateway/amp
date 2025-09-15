@@ -23,9 +23,10 @@ import java.util.stream.Collectors;
 public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIndicator> {
     private static final Logger logger = Logger.getLogger(AmpMEDisaggregationValuesFeaturePanel.class);
 
-    public AmpMEDisaggregationValuesFeaturePanel(String id, IModel<AmpIndicator> indicatorModel) {
-        super(id, indicatorModel, "Disaggregation Values", true);
+    public AmpMEDisaggregationValuesFeaturePanel(String id, String fmName, IModel<AmpIndicator> indicatorModel) {
+        super(id, indicatorModel, fmName, false);
         setOutputMarkupId(true);
+        logger.info("Initializing AmpMEDisaggregationValuesFeaturePanel for indicator: " + (indicatorModel.getObject() != null ? indicatorModel.getObject().getName() : "null"));
 
         IModel<List<Map.Entry<AmpCategoryValue, List<AmpIndicatorDisaggregationValue>>>> parentsModel = new LoadableDetachableModel<List<Map.Entry<AmpCategoryValue, List<AmpIndicatorDisaggregationValue>>>>() {
             @Override
@@ -46,7 +47,7 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
                 Map.Entry<AmpCategoryValue, List<AmpIndicatorDisaggregationValue>> entry = parentItem.getModelObject();
                 String parentName = entry.getKey() != null ? entry.getKey().getValue() : "N/A";
                 parentItem.add(new Label("parentName", Model.of(parentName)));
-
+                logger.info("Rendering disaggregation values for parent category: " + parentName);
                 List<AmpIndicatorDisaggregationValue> children = entry.getValue();
                 parentItem.add(new ListView<AmpIndicatorDisaggregationValue>("childList", children.stream().sorted(Comparator.comparing(a -> a.getChildCategory() != null ? a.getChildCategory().getValue() : "" )).collect(Collectors.toList())) {
                     @Override
@@ -54,7 +55,7 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
                         AmpIndicatorDisaggregationValue disaggVal = childItem.getModelObject();
                         String childName = disaggVal.getChildCategory() != null ? disaggVal.getChildCategory().getValue() : "N/A";
                         childItem.add(new Label("childName", Model.of(childName)));
-
+                        logger.info("  Child category: " + childName);
                         AmpIndicatorGlobalValue base = disaggVal.getBaseValue();
                         AmpIndicatorGlobalValue target = disaggVal.getTargetValue();
                         SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");

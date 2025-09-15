@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpIndicator;
@@ -29,10 +30,10 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
     private static final Logger logger = Logger.getLogger(AmpMEDisaggregationValuesFeaturePanel.class);
 
     public AmpMEDisaggregationValuesFeaturePanel(String id, String fmName, IModel<AmpIndicator> indicatorModel) {
-        super(id, indicatorModel, fmName, false);
-        setOutputMarkupId(true);
+        super(id, fmName, true);
         logger.info("Initializing AmpMEDisaggregationValuesFeaturePanel for indicator: " + (indicatorModel.getObject() != null ? indicatorModel.getObject().getName() : "null"));
-
+        final Label featureLabel = new Label("featureLabel", "Disaggregation Values");
+        add(featureLabel);
         IModel<List<Map.Entry<AmpCategoryValue, List<AmpIndicatorDisaggregationValue>>>> parentsModel = new LoadableDetachableModel<List<Map.Entry<AmpCategoryValue, List<AmpIndicatorDisaggregationValue>>>>() {
             @Override
             protected List<Map.Entry<AmpCategoryValue, List<AmpIndicatorDisaggregationValue>>> load() {
@@ -42,7 +43,13 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
                 for (AmpIndicatorDisaggregationValue v : indicator.getDisaggregationValues()) {
                     grouped.computeIfAbsent(v.getParentCategory(), k -> new ArrayList<>()).add(v);
                 }
-                return new ArrayList<>(grouped.entrySet());
+                List<Map.Entry<AmpCategoryValue, List<AmpIndicatorDisaggregationValue>>> list = new ArrayList<>(grouped.entrySet());
+                // sort parents by their category value (case-insensitive)
+                list.sort(Comparator.comparing(e -> {
+                    String name = e.getKey() != null && e.getKey().getValue() != null ? e.getKey().getValue() : "";
+                    return name.toLowerCase(Locale.ROOT);
+                }));
+                return list;
             }
         };
 
@@ -61,28 +68,33 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
 
                 }
                 // make parentDisaggregationName bold
-                Label parentNameLabel = new Label("parentName", Model.of("<b>" + parentDisaggregationName + "</b> :" + parentName));
+                Label parentNameLabel = new Label("parentName", Model.of("<b>" + parentDisaggregationName + "</b>: " + parentName));
                 parentNameLabel.setEscapeModelStrings(false);
                 parentNameLabel.setOutputMarkupId(true);
                 parentItem.add(parentNameLabel);
 
                 WebMarkupContainer childrenContainer = new WebMarkupContainer("childrenContainer");
                 childrenContainer.setOutputMarkupId(true);
-                childrenContainer.setOutputMarkupPlaceholderTag(true);
+                // keep always visible for CSS sliding (no placeholder toggling needed)
                 parentItem.add(childrenContainer);
 
-                // header click toggles children
                 parentNameLabel.add(new AjaxEventBehavior("click") {
                     @Override
                     protected void onEvent(AjaxRequestTarget target) {
-                        childrenContainer.setVisible(!childrenContainer.isVisible());
-                        target.add(childrenContainer);
+                        target.appendJavaScript("(function(){var el=document.getElementById('" + childrenContainer.getMarkupId() + "');if(el){el.classList.toggle('open');}})();");
                     }
                 });
 
                 logger.info("Rendering disaggregation values for parent category: " + parentName);
                 List<AmpIndicatorDisaggregationValue> children = entry.getValue();
-                ListView<AmpIndicatorDisaggregationValue> childListView = new ListView<AmpIndicatorDisaggregationValue>("childList", children.stream().sorted(Comparator.comparing(a -> a.getChildCategory() != null ? a.getChildCategory().getValue() : "" )).collect(Collectors.toList())) {
+                // ensure child list is sorted case-insensitively by child category value
+                List<AmpIndicatorDisaggregationValue> sortedChildren = children.stream()
+                        .sorted(Comparator.comparing(a -> {
+                            String v = a.getChildCategory() != null && a.getChildCategory().getValue() != null ? a.getChildCategory().getValue() : "";
+                            return v.toLowerCase(Locale.ROOT);
+                        }))
+                        .collect(Collectors.toList());
+                ListView<AmpIndicatorDisaggregationValue> childListView = new ListView<AmpIndicatorDisaggregationValue>("childList", sortedChildren) {
                     @Override
                     protected void populateItem(ListItem<AmpIndicatorDisaggregationValue> childItem) {
                         AmpIndicatorDisaggregationValue disaggVal = childItem.getModelObject();
@@ -95,7 +107,7 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
                             childDisaggregation = PersistenceManager.getSession().get(AmpCategoryValue.class, classId);
                             if (childDisaggregation != null) childDisaggregationName = childDisaggregation.getLabel();
                         }
-                        String childHeaderText = "<b>" + childDisaggregationName + "</b> :" + childName;
+                        String childHeaderText = "<b>" + childDisaggregationName + "</b>: " + childName;
                         Label childHeader = new Label("childHeader", Model.of(childHeaderText));
                         childHeader.setEscapeModelStrings(false);
                         childHeader.setOutputMarkupId(true);
@@ -105,14 +117,25 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
                         AmpIndicatorGlobalValue base = disaggVal.getBaseValue();
                         AmpIndicatorGlobalValue target = disaggVal.getTargetValue();
                         SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
-                        childItem.add(new Label("baseValue", Model.of(base != null && base.getOriginalValue() != null ? String.valueOf(base.getOriginalValue()) : "N/A")));
-                        childItem.add(new Label("baseDate", Model.of(base != null && base.getOriginalValueDate() != null ? fmt.format(base.getOriginalValueDate()) : "N/A")));
-                        childItem.add(new Label("targetValue", Model.of(target != null && target.getOriginalValue() != null ? String.valueOf(target.getOriginalValue()) : "N/A")));
-                        childItem.add(new Label("targetDate", Model.of(target != null && target.getOriginalValueDate() != null ? fmt.format(target.getOriginalValueDate()) : "N/A")));
+
+                        // choose revised (non-null & non-zero) else original
+                        Double baseDisplayVal = (base != null && base.getRevisedValue() != null && base.getRevisedValue() != 0d) ? base.getRevisedValue() : (base != null ? base.getOriginalValue() : null);
+                        Date baseDisplayDate = (base != null && base.getRevisedValue() != null && base.getRevisedValue() != 0d && base.getRevisedValueDate() != null)
+                                ? base.getRevisedValueDate()
+                                : (base != null ? base.getOriginalValueDate() : null);
+
+                        Double targetDisplayVal = (target != null && target.getRevisedValue() != null && target.getRevisedValue() != 0d) ? target.getRevisedValue() : (target != null ? target.getOriginalValue() : null);
+                        Date targetDisplayDate = (target != null && target.getRevisedValue() != null && target.getRevisedValue() != 0d && target.getRevisedValueDate() != null)
+                                ? target.getRevisedValueDate()
+                                : (target != null ? target.getOriginalValueDate() : null);
+
+                        childItem.add(new Label("baseValue", Model.of(baseDisplayVal != null ? String.valueOf(baseDisplayVal) : "N/A")));
+                        childItem.add(new Label("baseDate", Model.of(baseDisplayDate != null ? fmt.format(baseDisplayDate) : "N/A")));
+                        childItem.add(new Label("targetValue", Model.of(targetDisplayVal != null ? String.valueOf(targetDisplayVal) : "N/A")));
+                        childItem.add(new Label("targetDate", Model.of(targetDisplayDate != null ? fmt.format(targetDisplayDate) : "N/A")));
 
                         WebMarkupContainer actualValuesContainer = new WebMarkupContainer("actualValuesContainer");
                         actualValuesContainer.setOutputMarkupId(true);
-                        actualValuesContainer.setOutputMarkupPlaceholderTag(true);
                         childItem.add(actualValuesContainer);
 
                         AmpMEDisaggregationActualValuesPanel actualPanel = new AmpMEDisaggregationActualValuesPanel("actualValuesPanel", Model.of(disaggVal));
@@ -120,12 +143,10 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
                         actualPanel.setOutputMarkupPlaceholderTag(true);
                         actualValuesContainer.add(actualPanel);
 
-                        // make child header clickable to toggle actual values (replaces +/- link)
                         childHeader.add(new AjaxEventBehavior("click") {
                             @Override
                             protected void onEvent(AjaxRequestTarget target) {
-                                actualValuesContainer.setVisible(!actualValuesContainer.isVisible());
-                                target.add(actualValuesContainer);
+                                target.appendJavaScript("(function(){var el=document.getElementById('" + actualValuesContainer.getMarkupId() + "');if(el){el.classList.toggle('open');}})();");
                             }
                         });
                     }

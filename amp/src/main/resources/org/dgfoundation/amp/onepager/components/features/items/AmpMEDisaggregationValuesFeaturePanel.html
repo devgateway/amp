@@ -5,12 +5,15 @@
         .collapsible-header { cursor: pointer; }
         .disaggregation-parent { margin-bottom:8px; }
         .disaggregation-child { margin-left:15px; margin-bottom:6px; }
+        /* slider transition */
+        .collapsible-body { overflow:hidden; max-height:0; transition:max-height .35s ease; }
+        .collapsible-body.open { max-height:4000px; /* sufficiently large */ }
     </style>
-    <span wicket:id="featureLabel"></span>
+    <span class="featuredLabelLnk" wicket:id="featureLabel"></span>
     <div class="disaggregation-section" wicket:id="parentList">
         <div class="disaggregation-parent">
             <h4 class="collapsible-header" wicket:id="parentName"></h4>
-            <div wicket:id="childrenContainer">
+            <div class="collapsible-body open" wicket:id="childrenContainer">
                 <div class="disaggregation-children" wicket:id="childList">
                     <div class="disaggregation-child">
                         <!-- changed from div to h5 to emphasize section header -->
@@ -22,7 +25,7 @@
                             <b>Target Value:</b> <span wicket:id="targetValue"></span>
                             <b>Target Date:</b> <span wicket:id="targetDate"></span>
                         </div>
-                        <div wicket:id="actualValuesContainer">
+                        <div class="collapsible-body" wicket:id="actualValuesContainer">
                             <div wicket:id="actualValuesPanel"></div>
                         </div>
                     </div>

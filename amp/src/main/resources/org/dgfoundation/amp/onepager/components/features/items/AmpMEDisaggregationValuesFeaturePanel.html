@@ -5,11 +5,12 @@
         .collapsible-header { cursor: pointer; }
         .disaggregation-parent { margin-bottom:8px; }
         .disaggregation-child { margin-left:15px; margin-bottom:6px; }
+        .featuredLabelLnk{background-color:#FFFFFF; padding:5px; border:1px solid #CCCCCC; display:block; margin-top:7px;}
         /* slider transition */
         .collapsible-body { overflow:hidden; max-height:0; transition:max-height .35s ease; }
         .collapsible-body.open { max-height:4000px; /* sufficiently large */ }
     </style>
-    <span class="featuredLabelLnk" wicket:id="featureLabel"></span>
+    <span class="featuredLabelLnk" wicket:id="panelLabel"></span>
     <div class="disaggregation-section" wicket:id="parentList">
         <div class="disaggregation-parent">
             <h4 class="collapsible-header" wicket:id="parentName"></h4>

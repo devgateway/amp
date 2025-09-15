@@ -32,8 +32,8 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
     public AmpMEDisaggregationValuesFeaturePanel(String id, String fmName, IModel<AmpIndicator> indicatorModel) {
         super(id, fmName, true);
         logger.info("Initializing AmpMEDisaggregationValuesFeaturePanel for indicator: " + (indicatorModel.getObject() != null ? indicatorModel.getObject().getName() : "null"));
-        final Label featureLabel = new Label("featureLabel", "Disaggregation Values");
-        add(featureLabel);
+        final Label panelLabel = new Label("panelLabel", Model.of("Disaggregation Values"));
+        add(panelLabel);
         IModel<List<Map.Entry<AmpCategoryValue, List<AmpIndicatorDisaggregationValue>>>> parentsModel = new LoadableDetachableModel<List<Map.Entry<AmpCategoryValue, List<AmpIndicatorDisaggregationValue>>>>() {
             @Override
             protected List<Map.Entry<AmpCategoryValue, List<AmpIndicatorDisaggregationValue>>> load() {

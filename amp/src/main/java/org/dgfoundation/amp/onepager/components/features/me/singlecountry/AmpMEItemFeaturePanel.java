@@ -188,10 +188,13 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         add(setValue);
 
         // Add disaggregation values subsection
-        AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection","Disaggregation Values", indicator);
-        disaggPanel.setOutputMarkupId(true);
-        disaggPanel.setOutputMarkupPlaceholderTag(true);
-        add(disaggPanel);
+        if (indicator.getObject().getDisaggregation()!= null & !indicator.getObject().getDisaggregation().isEmpty()){
+            AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection","Disaggregation Values", indicator);
+            disaggPanel.setOutputMarkupId(true);
+            disaggPanel.setOutputMarkupPlaceholderTag(true);
+            add(disaggPanel);
+        }
+
 
     }
 

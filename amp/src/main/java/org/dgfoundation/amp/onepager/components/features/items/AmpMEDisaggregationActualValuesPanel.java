@@ -6,7 +6,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEActualValuesFormTableFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -51,10 +54,11 @@ public class AmpMEDisaggregationActualValuesPanel extends AmpFeaturePanel<AmpInd
                     }
                 });
                 item.add(new AmpDatePickerFieldPanel("actualDate", new PropertyModel<>(item.getModel(), "originalValueDate"), "Actual Date"));
-                item.add(new AmpAjaxLinkField("delActualValue", "Delete", "Delete") {
+                item.add(new ListEditorRemoveButton("delActualValue", "Delete", "Delete") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         AmpMEDisaggregationActualValuesPanel.this.getModel().getObject().getActualValues().remove(val);
+                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEDisaggregationActualValuesPanel.this));
                         target.add(AmpMEDisaggregationActualValuesPanel.this);
                     }
                 });

@@ -179,7 +179,6 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection","Disaggregation Values", indicator);
         disaggPanel.setOutputMarkupId(true);
         disaggPanel.setOutputMarkupPlaceholderTag(true);
-        disaggPanel.setVisibilityAllowed(true);
         add(disaggPanel);
 
     }

@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
+    <style type="text/css">
+        .collapsible-header { cursor: pointer; }
+        .disaggregation-parent { margin-bottom:8px; }
+        .disaggregation-child { margin-left:15px; margin-bottom:6px; }
+    </style>
     <span wicket:id="featureLabel"></span>
     <div class="disaggregation-section" wicket:id="parentList">
         <div class="disaggregation-parent">
-            <h4 wicket:id="parentName"></h4>
-            <div class="disaggregation-children" wicket:id="childList">
-                <div class="disaggregation-child">
-                    <div><b>Child:</b> <span wicket:id="childName"></span></div>
-                    <div>
-                        <b>Base:</b> <span wicket:id="baseValue"></span>
-                        (<span wicket:id="baseDate"></span>)
-                        &nbsp;&nbsp;
-                        <b>Target:</b> <span wicket:id="targetValue"></span>
-                        (<span wicket:id="targetDate"></span>)
+            <h4 class="collapsible-header" wicket:id="parentName"></h4>
+            <div wicket:id="childrenContainer">
+                <div class="disaggregation-children" wicket:id="childList">
+                    <div class="disaggregation-child">
+                        <!-- changed from div to h5 to emphasize section header -->
+                        <h5 class="child-header collapsible-header" wicket:id="childHeader"></h5>
+                        <div>
+                            <b>Base Value:</b> <span wicket:id="baseValue"></span>
+                            <b>Base Date:</b> <span wicket:id="baseDate"></span>
+                            &nbsp;&nbsp;
+                            <b>Target Value:</b> <span wicket:id="targetValue"></span>
+                            <b>Target Date:</b> <span wicket:id="targetDate"></span>
+                        </div>
+                        <div wicket:id="actualValuesContainer">
+                            <div wicket:id="actualValuesPanel"></div>
+                        </div>
                     </div>
-                    <div wicket:id="actualValuesPanel"></div>
                 </div>
             </div>
         </div>

@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -26,6 +27,10 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
     public AmpMEDisaggregationValuesFeaturePanel(String id, String fmName, IModel<AmpIndicator> indicatorModel) {
         super(id, indicatorModel, fmName, false);
         setOutputMarkupId(true);
+        setOutputMarkupPlaceholderTag(true);
+        // Ensure FM visibility rules do not hide this new panel if FM config missing
+        this.setIgnoreFmVisibility(true);
+
         logger.info("Initializing AmpMEDisaggregationValuesFeaturePanel for indicator: " + (indicatorModel.getObject() != null ? indicatorModel.getObject().getName() : "null"));
 
         IModel<List<Map.Entry<AmpCategoryValue, List<AmpIndicatorDisaggregationValue>>>> parentsModel = new LoadableDetachableModel<List<Map.Entry<AmpCategoryValue, List<AmpIndicatorDisaggregationValue>>>>() {
@@ -66,6 +71,8 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
                         childItem.add(new Label("targetDate", Model.of(target != null && target.getOriginalValueDate() != null ? fmt.format(target.getOriginalValueDate()) : "N/A")));
 
                         AmpMEDisaggregationActualValuesPanel actualPanel = new AmpMEDisaggregationActualValuesPanel("actualValuesPanel", Model.of(disaggVal));
+                        actualPanel.setOutputMarkupId(true);
+                        actualPanel.setOutputMarkupPlaceholderTag(true);
                         childItem.add(actualPanel);
                     }
                 });

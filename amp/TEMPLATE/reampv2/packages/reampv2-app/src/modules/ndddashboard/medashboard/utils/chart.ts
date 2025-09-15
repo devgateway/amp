@@ -69,7 +69,8 @@ class ChartUtils {
 
         if (!actualValue) {
             // if current year is not found, get the most recent year
-            const sortedActualValues = actualValues.sort((a: any, b: any) => b.year - a.year);
+            // Create a copy before sorting to avoid modifying the original read-only array
+            const sortedActualValues = [...actualValues].sort((a: any, b: any) => b.year - a.year);
             return sortedActualValues[0].value;
         }
 

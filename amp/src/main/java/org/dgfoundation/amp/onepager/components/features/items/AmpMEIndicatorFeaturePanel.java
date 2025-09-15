@@ -174,14 +174,15 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             throw new RuntimeException(e);
         }
         add(baseValues);
-
+        AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection", "Disaggregation Values", indicator);
+        disaggPanel.setOutputMarkupId(true);
+        disaggPanel.setOutputMarkupPlaceholderTag(true);
         // Add disaggregation values subsection
-        if (indicator.getObject().getDisaggregation()!= null & !indicator.getObject().getDisaggregation().isEmpty()) {
-            AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection", "Disaggregation Values", indicator);
-            disaggPanel.setOutputMarkupId(true);
-            disaggPanel.setOutputMarkupPlaceholderTag(true);
-            add(disaggPanel);
+        if (indicator.getObject().getDisaggregation()== null || indicator.getObject().getDisaggregation().isEmpty()) {
+            disaggPanel.setVisible(false);
         }
+        add(disaggPanel);
+
 
     }
 }

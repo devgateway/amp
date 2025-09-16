@@ -19,6 +19,7 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
+            DROP VIEW IF EXISTS v_indicator_themes;
                 CREATE OR REPLACE VIEW v_indicator_themes AS
                   SELECT con.activity_id                                                                        AS amp_activity_id,
        ind.name,

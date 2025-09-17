@@ -6,7 +6,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 public abstract class ConnectionCleaningJob implements Job {
-    
+
     @Override public final void execute(JobExecutionContext context) throws JobExecutionException {
         try {
             if (shouldExecuteInTransaction()) {
@@ -28,7 +28,7 @@ public abstract class ConnectionCleaningJob implements Job {
             }
         }
     }
-    
+
     public abstract void executeInternal(JobExecutionContext context) throws JobExecutionException;
 
     public boolean shouldExecuteInTransaction() {

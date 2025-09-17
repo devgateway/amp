@@ -6,11 +6,12 @@
   <property name="connection.datasource">java:comp/env/ampDS</property>
   <property name="hibernate.dialect">org.dgfoundation.amp.ar.viewfetcher.AmpPostgresDialect</property>
   &dialect;
-  <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
+  <property name="hibernate.current_session_context_class">thread</property>
   <property name="hibernate.enable_lazy_load_no_trans">true</property>
   <property name="hibernate.cache.ehcache.missing_cache_strategy">create</property>
   <property name="max_fetch_depth">0</property>
   <property name="default_batch_fetch_size">20</property>
+  <property name="hibernate.flushMode">AUTO</property>
   <property name="order_updates">true</property>
   <property name="cache.use_minimal_puts">true</property>
   <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</property>

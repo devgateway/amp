@@ -75,6 +75,11 @@ class ChartUtils {
 
         return actualValue ? actualValue.value : 0;
     }
+    public static sumActualValues = (actualValues: ActualValue []) => {
+        if (!actualValues || actualValues.length === 0) return 0;
+
+        return actualValues.reduce((acc, curr) => acc + curr.value, 0);
+    }
 
     public static getMaxActualValue = (actualValues: ActualValue []) => {
         if (!actualValues || actualValues.length === 0) return 0;
@@ -86,9 +91,9 @@ class ChartUtils {
     public static computeAggregateValues = (data: YearValues []) => {
         return data.reduce((acc, curr) => {
             if (!curr.actualValues || curr.actualValues.length === 0) {
-                acc.actualValue += curr.baseValue;
+                acc.actualValue += 0;
             }
-            acc.actualValue += ChartUtils.getActualValueForCurrentYear(curr.actualValues);
+            acc.actualValue += ChartUtils.sumActualValues(curr.actualValues);
             acc.targetValue += curr.targetValue;
             acc.baseValue += curr.baseValue;
             return acc;
@@ -167,53 +172,82 @@ class ChartUtils {
 
         const finalDataSet: DataType [] = [];
 
-        if (data) {
-            let aggregateValue = {
-                baseValue: 0,
-                targetValue: 0,
-                actualValue: 0
+        const collectItems = Array.isArray(data) ? data : (data ? [data] : []);
+
+        // helper to parse dd/MM/yyyy or ISO to Date
+        const parseDate = (d?: string): Date | null => {
+            if (!d) return null;
+            // try dd/MM/yyyy
+            const parts = d.split('/');
+            if (parts.length === 3 && parts[2].length === 4) {
+                const [dd, MM, yyyy] = parts;
+                const dateObj = new Date(Number(yyyy), Number(MM) - 1, Number(dd));
+                return isNaN(dateObj.getTime()) ? null : dateObj;
+            }
+            const iso = new Date(d);
+            return isNaN(iso.getTime()) ? null : iso;
+        };
+        const getLatestYearForActualValues = (values: ActualValue[]): string | undefined => {
+            if (!values || values.length === 0) return undefined;
+            const years = values.map(v => {
+                const y = Number(v.year);
+                return isNaN(y) ? null : y;
+            }).filter((y): y is number => y !== null);
+            if (years.length === 0) return undefined;
+            const maxYear = Math.max(...years);
+            return maxYear.toString();
+        }
+        const getMaxDateString = (dates: string[]): string | undefined => {
+            const mapped = dates.map(d => ({ raw: d, date: parseDate(d) }))
+                .filter(o => o.date !== null) as { raw: string; date: Date }[];
+            if (mapped.length === 0) return undefined;
+            mapped.sort((a,b) => a.date.getTime() - b.date.getTime());
+            return mapped[mapped.length - 1].raw; // keep original formatting
+        };
+
+        // aggregate numeric values (existing logic)
+        let aggregateValue = { baseValue: 0, targetValue: 0, actualValue: 0 };
+        if (collectItems.length > 0) {
+            aggregateValue = ChartUtils.computeAggregateValues(collectItems as YearValues[]);
+        }
+
+        // collect date strings
+        const baseDates: string[] = collectItems.map((i: YearValues) => i.baseValueDate).filter(Boolean);
+        const targetDates: string[] = collectItems.map((i: YearValues) => i.targetValueDate).filter(Boolean);
+        const maxBaseDateStr = getMaxDateString(baseDates);
+        const maxTargetDateStr = getMaxDateString(targetDates);
+        const year = new Date().getFullYear();
+        const maxActualYearStr = getLatestYearForActualValues(collectItems.flatMap(i => i.actualValues));
+
+        if (aggregateValue.baseValue) {
+            const baseData = {
+                id: translations['amp.ndd.dashboard:me-baseline'],
+                value: aggregateValue.baseValue,
+                label: `${translations['amp.ndd.dashboard:me-baseline']} ${maxBaseDateStr || year}`.trim(),
+                color: BASE_VALUE_COLOR
             };
-
-            if (Array.isArray(data)) {
-                aggregateValue = ChartUtils.computeAggregateValues(data);
-            } else {
-                aggregateValue = ChartUtils.computeAggregateValues([data]);
-            }
-
-            const year = new Date().getFullYear();
-            if (aggregateValue.baseValue) {
-                const baseData = {
-                    id: translations['amp.ndd.dashboard:me-baseline'],
-                    value: aggregateValue.baseValue,
-                    label: `${translations['amp.ndd.dashboard:me-baseline']} ${year}`,
-                    color: BASE_VALUE_COLOR
-                }
-
-                finalDataSet.push(baseData);
-            }
+            finalDataSet.push(baseData);
+        }
 
             if (aggregateValue.actualValue) {
                 const actualData = {
                     id: translations['amp.ndd.dashboard:me-current'],
                     value: aggregateValue.actualValue,
-                    label: `${translations['amp.ndd.dashboard:me-current']} ${year}`,
+                    label: `${translations['amp.ndd.dashboard:me-current']} ${maxActualYearStr || year}`.trim(),
                     color: CURRENT_VALUE_COLOR
                 };
 
                 finalDataSet.push(actualData);
             }
 
-            if (aggregateValue.targetValue) {
-                const targetData = {
-                    id: translations['amp.ndd.dashboard:me-target'],
-                    value: aggregateValue.targetValue,
-                    label: `${translations['amp.ndd.dashboard:me-target']} ${year}`,
-                    color: TARGET_VALUE_COLOR
-                };
-
-                finalDataSet.push(targetData);
-            }
-
+        if (aggregateValue.targetValue) {
+            const targetData = {
+                id: translations['amp.ndd.dashboard:me-target'],
+                value: aggregateValue.targetValue,
+                label: `${translations['amp.ndd.dashboard:me-target']} ${maxTargetDateStr || year}`.trim(),
+                color: TARGET_VALUE_COLOR
+            };
+            finalDataSet.push(targetData);
         }
 
         return finalDataSet;

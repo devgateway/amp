@@ -52,6 +52,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -72,6 +73,7 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 public class MeService {
     protected static final Logger logger = Logger.getLogger(MeService.class);
+    private static final ThreadLocal<SimpleDateFormat> BASE_DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("dd/MM/yyyy"));
 
     public static List<ProgramSchemeDTO> getProgramConfiguration() {
         List<AmpActivityProgramSettings> settings = ProgramUtil.getAmpActivityProgramSettingsList(true);
@@ -244,13 +246,21 @@ public class MeService {
                                                        final Map<Long, List<YearValue>> indicatorsWithYearValues) {
         BigDecimal baseValue = BigDecimal.ZERO;
         BigDecimal targetValue = BigDecimal.ZERO;
+        String baseValueDate = null;
+        String targetValueDate = null;
 
         if (indicator.getBaseValue() != null && indicator.getBaseValue().getValue() != null) {
             baseValue = BigDecimal.valueOf(indicator.getBaseValue().getValue());
         }
+        if (indicator.getBaseValue() != null && indicator.getBaseValue().getValueDate() != null) {
+            baseValueDate = BASE_DATE_FORMAT.get().format(indicator.getBaseValue().getValueDate());
+        }
 
         if (indicator.getTargetValue() != null && indicator.getTargetValue().getValue() != null) {
             targetValue = BigDecimal.valueOf(indicator.getTargetValue().getValue());
+        }
+        if (indicator.getTargetValue() != null && indicator.getTargetValue().getValueDate() != null) {
+            targetValueDate = BASE_DATE_FORMAT.get().format(indicator.getTargetValue().getValueDate());
         }
 
         List<YearValue> yearValues = indicatorsWithYearValues.get(indicator.getIndicatorId());
@@ -259,7 +269,7 @@ public class MeService {
             yearValues = Collections.emptyList();
         }
 
-        return new IndicatorYearValues(indicator, baseValue, yearValues, targetValue);
+        return new IndicatorYearValues(indicator, baseValue, baseValueDate, yearValues, targetValue, targetValueDate);
     }
 
     private IndicatorYearValues getIndicatorYearValues(final AmpIndicator indicator,

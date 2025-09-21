@@ -4,7 +4,6 @@ isTabView = ${isTabView};
 var isMeTabView = ${isMeTabView};
 var isRtl = ${isRtl};
 
-console.log("Is Me Tab View: " + isMeTabView);
 //the distance between the content body and the menu should be 40px
 const DISTANCE_BETWEEN_CONTENT_AND_MENU = 40;
 const INIT_RTL_DISTANCE_BETWEEN_CONTENT_AND_MENU = 68;

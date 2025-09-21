@@ -50,7 +50,9 @@ export interface ActualValue {
 export interface YearValues {
     actualValues: ActualValue [];
     baseValue: number;
+    baseValueDate: string;
     targetValue: number;
+    targetValueDate: string;
     indicatorId: number;
 }
 

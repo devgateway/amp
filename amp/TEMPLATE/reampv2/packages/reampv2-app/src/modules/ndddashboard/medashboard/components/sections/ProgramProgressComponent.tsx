@@ -18,7 +18,7 @@ interface IndicatorByProgramProps extends ComponentProps {
     settings: any;
 }
 
-const ProgramConfiguration: React.FC<IndicatorByProgramProps> = (props) => {
+const ProgramProgressComponent: React.FC<IndicatorByProgramProps> = (props) => {
     const {
         translations,
         level1Child,
@@ -254,4 +254,4 @@ const ProgramConfiguration: React.FC<IndicatorByProgramProps> = (props) => {
     )
 }
 
-export default ProgramConfiguration;
+export default ProgramProgressComponent;

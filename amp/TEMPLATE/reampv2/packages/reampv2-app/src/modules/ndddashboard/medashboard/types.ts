@@ -44,6 +44,7 @@ export type InitialState = {
 
 export interface ActualValue {
     year: string | number;
+    date: string;
     value: number
 }
 

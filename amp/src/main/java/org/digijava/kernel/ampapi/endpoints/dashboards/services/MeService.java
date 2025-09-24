@@ -47,15 +47,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.time.Year;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -63,7 +55,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.*;
 
 
 public class MeService {
@@ -102,29 +94,33 @@ public class MeService {
     }
 
     public List<IndicatorYearValues> getIndicatorValuesByProgramId(Long programId,
-                                                                   SettingsAndFiltersParameters params) {
+                                                                   SettingsAndFiltersParameters params)  {
 
-        List<AmpIndicator> indicatorsByProgram = getAllAmpIndicators().stream()
-                .filter(indicator -> indicator.getProgram() != null)
-                .filter(indicator -> indicator.getProgram().getAmpThemeId().equals(programId))
-                .collect(Collectors.toList());
+
+        Set<AmpIndicator> indicatorsByProgram   = new HashSet<>();
+        try {
+            indicatorsByProgram = IndicatorUtil.getThemeIndicators(programId);
+            if (indicatorsByProgram == null) {
+                return Collections.emptyList();
+            }
+        } catch (Exception e) {
+            throw new ApiRuntimeException(INTERNAL_SERVER_ERROR,
+                    ApiError.toError("Error loading indicators for program with id " + programId));
+        }
 
         Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
 
         return indicatorsByProgram.stream()
-                .map(indicator -> getIndicatorYearValues(indicator, indicatorsWithYearValues))
+                .map(indicator -> getIndicatorYearValues(indicator, indicatorsWithYearValues, programId))
                 .collect(Collectors.toList());
 
     }
 
     public IndicatorYearValues getIndicatorYearValuesByIndicatorId(Long indicatorId,
                                                                    SettingsAndFiltersParameters params) {
-        AmpIndicator existingIndicator = getAllAmpIndicators().stream()
-                .filter(indicator -> indicator.getIndicatorId().equals(indicatorId))
-                .findFirst()
-                .orElse(null);
+        AmpIndicator existingIndicator =PersistenceManager.getRequestDBSession().get(AmpIndicator.class, indicatorId);
 
-        int yearsCount = Integer.valueOf(params.getSettings().get("yearCount").toString());
+        int yearsCount = Integer.parseInt(params.getSettings().get("yearCount").toString());
 
         if (yearsCount < 5) {
             yearsCount = 5;
@@ -144,7 +140,7 @@ public class MeService {
     public List<ProgramIndicatorValues> getIndicatorYearValuesByIndicatorCountryProgramId(SettingsAndFiltersParameters params) {
         List<ProgramIndicatorValues> programIndicatorValues = new ArrayList<>();
         Map<Long, BaseTargetValue> baseTargetValues = getBaseTargetValues(params);
-        int yearsCount = Integer.valueOf(params.getSettings().get("yearCount").toString());
+        int yearsCount = Integer.parseInt(params.getSettings().get("yearCount").toString());
 
         if (yearsCount < 5) {
             yearsCount = 5;
@@ -238,43 +234,47 @@ public class MeService {
     }
 
     private IndicatorYearValues getIndicatorYearValues(final AmpIndicator indicator,
-                                                       final Map<Long, List<YearValue>> indicatorsWithYearValues) {
+                                                       final Map<Long, List<YearValue>> indicatorsWithYearValues, Long programId) {
         BigDecimal baseValue;
         BigDecimal targetValue;
         String baseValueDate = null;
         String targetValueDate = null;
-
-        baseValue = getValueFromIndicatorConnection(indicator,  indicator.getProgram().getAmpThemeId(),AmpIndicatorValue.BASE).value;
-        java.sql.Timestamp baseValueTimestamp = getValueFromIndicatorConnection(indicator,  indicator.getProgram().getAmpThemeId(),AmpIndicatorValue.BASE).valueDate;
+        IndicatorConnectionValueWithDate baseValueWithDate = getValueFromIndicatorConnection(indicator, programId, AmpIndicatorValue.BASE, true);
+        baseValue = baseValueWithDate.value;
+        java.sql.Timestamp baseValueTimestamp = baseValueWithDate.valueDate;
         if (baseValueTimestamp != null) {
             baseValueDate = BASE_DATE_FORMAT.get().format(baseValueTimestamp);
         }
-        targetValue = getValueFromIndicatorConnection(indicator, indicator.getProgram().getAmpThemeId(), AmpIndicatorValue.TARGET).value;
-        java.sql.Timestamp targetValueTimestamp = getValueFromIndicatorConnection(indicator, indicator.getProgram().getAmpThemeId(), AmpIndicatorValue.TARGET).valueDate;
+        IndicatorConnectionValueWithDate targetValueWithDate = getValueFromIndicatorConnection(indicator, programId, AmpIndicatorValue.TARGET, true);
+        targetValue = targetValueWithDate.value;
+        java.sql.Timestamp targetValueTimestamp = targetValueWithDate.valueDate;
         if (targetValueTimestamp != null) {
             targetValueDate = BASE_DATE_FORMAT.get().format(targetValueTimestamp);
         }
 
-        if (baseValue.equals(BigDecimal.ZERO)){
-            if (indicator.getBaseValue() != null && indicator.getBaseValue().getValue() != null) {
-                baseValue = BigDecimal.valueOf(indicator.getBaseValue().getValue());
-            }
-            if (indicator.getBaseValue() != null && indicator.getBaseValue().getValueDate() != null) {
-                baseValueDate = BASE_DATE_FORMAT.get().format(indicator.getBaseValue().getValueDate());
+        if (baseValue.equals(BigDecimal.ZERO)) {
+            if (indicator.getBaseValue() != null) {
+                if (indicator.getBaseValue().getValue() != null) {
+                    baseValue = BigDecimal.valueOf(indicator.getBaseValue().getValue());
+                }
+                if (indicator.getBaseValue().getValueDate() != null) {
+                    baseValueDate = BASE_DATE_FORMAT.get().format(indicator.getBaseValue().getValueDate());
+                }
             }
         }
 
-        if (targetValue.equals(BigDecimal.ZERO)){
-            if (indicator.getTargetValue() != null && indicator.getTargetValue().getValue() != null) {
-                targetValue = BigDecimal.valueOf(indicator.getTargetValue().getValue());
-            }
-            if (indicator.getTargetValue() != null && indicator.getTargetValue().getValueDate() != null) {
-                targetValueDate = BASE_DATE_FORMAT.get().format(indicator.getTargetValue().getValueDate());
+        if (targetValue.equals(BigDecimal.ZERO)) {
+            if (indicator.getTargetValue() != null) {
+                if (indicator.getTargetValue().getValue() != null) {
+                    targetValue = BigDecimal.valueOf(indicator.getTargetValue().getValue());
+                }
+                if (indicator.getTargetValue().getValueDate() != null) {
+                    targetValueDate = BASE_DATE_FORMAT.get().format(indicator.getTargetValue().getValueDate());
+                }
             }
         }
 
         List<YearValue> yearValues = indicatorsWithYearValues.get(indicator.getIndicatorId());
-
         if (yearValues == null) {
             yearValues = Collections.emptyList();
         }
@@ -291,19 +291,33 @@ public class MeService {
         }
     }
 
-    private IndicatorConnectionValueWithDate getValueFromIndicatorConnection(AmpIndicator indicator, Long programId, int valueType) {
+    private IndicatorConnectionValueWithDate getValueFromIndicatorConnection(AmpIndicator indicator, Long programId, int valueType, boolean singleRecord) {
         AtomicReference<BigDecimal> value = new AtomicReference<>(null);
         AtomicReference<java.sql.Timestamp> valueDate = new AtomicReference<>(null);
         Session session = PersistenceManager.getSession();
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT iv.value, iv.value_date FROM amp_indicator_values iv ");
-        sql.append("JOIN amp_indicator_connection ic ON iv.ind_connect_id = ic.id ");
-        sql.append("WHERE ic.indicator_id = ? AND iv.value_type = ? ");
-        if (programId != null) {
-            sql.append("AND ic.theme_id = ? ");
+        if (singleRecord) {
+            sql.append("SELECT iv.value, iv.value_date FROM amp_indicator_values iv ");
+            sql.append("JOIN amp_indicator_connection ic ON iv.ind_connect_id = ic.id ");
+            sql.append("WHERE ic.indicator_id = ? AND iv.value_type = ? ");
+            if (programId != null) {
+                sql.append("AND ic.theme_id = ? ");
+            }
+            sql.append("ORDER BY iv.value_date DESC ");
+            sql.append("LIMIT 1");
+        } else {
+            sql.append("SELECT SUM(latest.value) AS value, MAX(latest.value_date) AS value_date FROM (");
+            sql.append("SELECT iv.value, iv.value_date ");
+            sql.append("FROM amp_indicator_values iv ");
+            sql.append("JOIN amp_indicator_connection ic ON iv.ind_connect_id = ic.id ");
+            sql.append("WHERE ic.indicator_id = ? AND iv.value_type = ? ");
+            sql.append("AND iv.value_date = (");
+            sql.append("SELECT MAX(iv2.value_date) FROM amp_indicator_values iv2 ");
+            sql.append("JOIN amp_indicator_connection ic2 ON iv2.ind_connect_id = ic2.id ");
+            sql.append("WHERE ic2.theme_id = ic.theme_id AND ic2.indicator_id = ic.indicator_id AND iv2.value_type = iv.value_type");
+            sql.append(")");
+            sql.append(") latest");
         }
-        sql.append("ORDER BY iv.value_date DESC ");
-        sql.append("LIMIT 1");
 
         session.doWork(connection -> {
             try (java.sql.PreparedStatement ps = connection.prepareStatement(sql.toString())) {
@@ -360,7 +374,16 @@ public class MeService {
         return new IndicatorYearValues(indicator, baseValue, yearValues, targetValue);
     }
 
-
+    /**
+     *
+     * @param indicator
+     * @param indicatorsWithYearValues
+     * @param yearsCount
+     * @return
+     * NOTE: This method first tries to get the base and target values from the indicator itself. If those are not set (i.e., they are null or zero), it then attempts to retrieve
+     * the values from the indicator connections. This ensures that if the base and target values are not explicitly set on the indicator, they can still be obtained from related connections.
+     * @jdanquin
+     */
     private IndicatorYearValues getIndicatorYearValues(final AmpIndicator indicator,
                                                        final Map<Long, List<YearValue>> indicatorsWithYearValues, int yearsCount) {
         BigDecimal baseValue = BigDecimal.ZERO;
@@ -381,6 +404,23 @@ public class MeService {
             }
             if (indicator.getTargetValue() != null && indicator.getTargetValue().getValueDate() != null) {
                 targetValueDate = BASE_DATE_FORMAT.get().format(indicator.getTargetValue().getValueDate());
+            }
+
+            if (baseValue.equals(BigDecimal.ZERO)){
+                IndicatorConnectionValueWithDate baseValueWithDate = getValueFromIndicatorConnection(indicator,  null,AmpIndicatorValue.BASE, false);
+                baseValue = baseValueWithDate.value;
+                java.sql.Timestamp baseValueTimestamp = baseValueWithDate.valueDate;
+                if (baseValueTimestamp != null) {
+                    baseValueDate = BASE_DATE_FORMAT.get().format(baseValueTimestamp);
+                }
+            }
+            if (targetValue.equals(BigDecimal.ZERO)){
+                IndicatorConnectionValueWithDate targetValueWithDate = getValueFromIndicatorConnection(indicator, null, AmpIndicatorValue.TARGET,false);
+                targetValue = targetValueWithDate.value;
+                java.sql.Timestamp targetValueTimestamp = targetValueWithDate.valueDate;
+                if (targetValueTimestamp != null) {
+                    targetValueDate = BASE_DATE_FORMAT.get().format(targetValueTimestamp);
+                }
             }
 
 
@@ -413,11 +453,12 @@ public class MeService {
                 ? Collections.emptyList()
                 : generatedReport.reportContents.getChildren();
 
-        Map<Long, AmpIndicator> indicatorById = getAllAmpIndicators().stream()
-                .collect(Collectors.toMap(AmpIndicator::getIndicatorId, Function.identity()));
+        //avoid loading many items to memory
+//        Map<Long, AmpIndicator> indicatorById = getAllAmpIndicators().stream()
+//                .collect(Collectors.toMap(AmpIndicator::getIndicatorId, Function.identity()));
 
         for (ReportArea area : children) {
-            AmpIndicator indicator = indicatorById.get(area.getOwner().id);
+            AmpIndicator indicator = PersistenceManager.getRequestDBSession().get(AmpIndicator.class, area.getOwner().id);
             List<YearValue> actualValues = new ArrayList<>();
 
             for (Map.Entry<ReportOutputColumn, ReportCell> entry : area.getContents().entrySet()) {

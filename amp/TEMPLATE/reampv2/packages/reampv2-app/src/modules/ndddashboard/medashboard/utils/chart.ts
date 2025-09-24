@@ -56,9 +56,7 @@ class ChartUtils {
         const actual = actualValue ? actualValue : baseValue;
 
         // formula:  [(Current value - Base value) / (Target value - Base value)]*100
-        console.log('actual', 'baseValue', 'targetValue',actual, baseValue, targetValue);
         const progress = (actual - baseValue) / (targetValue - baseValue);
-        console.log('progress', progress);
         return Math.round(progress * 100);
     }
 

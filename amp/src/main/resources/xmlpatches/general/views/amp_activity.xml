@@ -19,11 +19,16 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    DROP VIEW IF EXISTS amp_activity CASCADE;
-			    CREATE OR REPLACE VIEW amp_activity AS
-					SELECT amp_activity_version.*
-					FROM amp_activity_version JOIN amp_activity_group ON 
-						amp_activity_version.amp_activity_id = amp_activity_group.amp_activity_last_version_id AND (amp_activity_version.deleted is null or amp_activity_version.deleted=false);
+				DROP VIEW IF EXISTS amp_activity CASCADE;
+
+				CREATE OR REPLACE VIEW amp_activity AS
+				SELECT DISTINCT ON (a.amp_activity_id)
+				a.*
+				FROM amp_activity_version a
+				JOIN amp_activity_group g
+				ON a.amp_activity_id = g.amp_activity_last_version_id
+				WHERE a.deleted IS NULL OR a.deleted = FALSE
+				ORDER BY a.amp_activity_id, a.amp_activity_id DESC;
        		</lang>
 		</script>
 	</apply>

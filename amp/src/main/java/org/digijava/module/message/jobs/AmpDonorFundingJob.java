@@ -224,6 +224,9 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     public static void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, String serverUrl) {
         try {
             // Create a URL object with the server's endpoint URL
+            logger.info("Sending data to amp dashboard at: " + serverUrl);
+            logger.info("Number of records to send: " + ampDashboardFunding.size());
+            logger.info("All records: " + new Gson().toJson(ampDashboardFunding));
             HttpURLConnection connection = getHttpURLConnection(serverUrl);
             // Convert the ampDashboardFunding to JSON using a JSON library (e.g., Gson)
             Gson gson = new Gson();

@@ -10,7 +10,7 @@
             <lang delimiter=";" type="postgres"><![CDATA[
          INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section) VALUES
                 ((select max(id) + 1 FROM amp_global_settings), 'Dashboard Currencies', 'USD|XOF|EUR', '',
-                'Dashboard Currencies Separated by pipe', 'general'););
+                'Dashboard Currencies Separated by pipe', 'general');
 			]]></lang>
         </script>
     </apply>

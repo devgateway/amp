@@ -244,10 +244,10 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             // Check if the request was successful (e.g., HTTP 200 OK)
             if (responseCode == 200) {
                 // The data has been successfully sent to the server
-                logger.debug("Data sent successfully to amp dashboard. HTTP Response Code: " + responseCode);
+                logger.info("Data sent successfully to amp dashboard. HTTP Response Code: " + responseCode);
             } else {
                 // Handle the error condition (e.g., log an error message)
-                logger.debug("Error sending data to amp dashboard. HTTP Response Code: " + responseCode);
+                logger.info("Error sending data to amp dashboard. HTTP Response Code: " + responseCode);
             }
 
             // Close the connection

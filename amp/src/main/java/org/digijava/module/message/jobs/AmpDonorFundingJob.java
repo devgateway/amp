@@ -33,9 +33,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AmpDonorFundingJob extends ConnectionCleaningJob implements StatefulJob {
@@ -49,6 +47,9 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
         //TODO make currency configurable
         List<ReportsDashboard> ampDashboardFundingCombined = new ArrayList<>();
+         currencies = Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_CURRENCIES)).isEmpty() ?
+                currencies :
+                 Arrays.asList(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_CURRENCIES)).split("\\|"));
         currencies.forEach(currency -> ampDashboardFundingCombined.addAll(getFundingByCurrency(currency)));
         //List<ReportsDashboard> ampDashboardFundingCombinedXDR = getFundingByCurrency("XDR");
 

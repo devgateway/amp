@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -226,7 +227,6 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             // Create a URL object with the server's endpoint URL
             logger.info("Sending data to amp dashboard at: " + serverUrl);
             logger.info("Number of records to send: " + ampDashboardFunding.size());
-            logger.info("All records: " + new Gson().toJson(ampDashboardFunding));
             HttpURLConnection connection = getHttpURLConnection(serverUrl);
             // Convert the ampDashboardFunding to JSON using a JSON library (e.g., Gson)
             Gson gson = new Gson();
@@ -235,7 +235,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             // Get the output stream of the connection
             try (OutputStream os = connection.getOutputStream()) {
                 // Write the JSON data to the output stream
-                os.write(jsonData.getBytes("UTF-8"));
+                os.write(jsonData.getBytes(StandardCharsets.UTF_8));
             }
 
             // Get the HTTP response code

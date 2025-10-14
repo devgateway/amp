@@ -54,6 +54,8 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         //List<ReportsDashboard> ampDashboardFundingCombinedXDR = getFundingByCurrency("XDR");
 
         String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);
+        assert serverUrl != null;
+        serverUrl = serverUrl.endsWith("/") ? serverUrl + "amp-funding/importDonorFunding" : serverUrl + "/amp-funding/importDonorFunding";
         sendReportsToServer(ampDashboardFundingCombined, serverUrl);
     }
 

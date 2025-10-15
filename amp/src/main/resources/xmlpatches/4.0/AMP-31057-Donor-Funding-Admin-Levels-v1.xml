@@ -61,19 +61,20 @@
                 FROM util_global_settings_possible_
                 WHERE setting_name = 'Donor Funding Administrative Level';
 
-                -- Link the setting to the view and update description
-                UPDATE amp_global_settings
-                SET
-                description = 'Specifies which administrative level applies when doing donor funding imports',
-                possiblevalues = 'v_g_donor_funding_settings_admin_levels',
-                value_translatable = TRUE
-                WHERE settingsname = 'Donor Funding Administrative Level';
-
-                -- ️Set default value if missing
-                UPDATE amp_global_settings
-                SET settingsvalue = 'Administrative Level 0'
+                -- Insert into amp_global_settings if not already existing
+                INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable)
+                SELECT
+                (SELECT COALESCE(MAX(id), 0) + 1 FROM amp_global_settings),
+                'Donor Funding Administrative Level',
+                'Administrative Level 0',
+                'v_g_donor_funding_settings_admin_levels',
+                'Specifies which administrative level applies when doing donor funding imports',
+                'general',
+                TRUE
+                WHERE NOT EXISTS (
+                SELECT 1 FROM amp_global_settings
                 WHERE settingsname = 'Donor Funding Administrative Level'
-                AND (settingsvalue IS NULL OR settingsvalue = '');
+                );
 
             </lang>
         </script>

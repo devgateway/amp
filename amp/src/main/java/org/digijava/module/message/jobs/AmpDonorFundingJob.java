@@ -73,7 +73,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                         report -> report.getDonorAgency()
                                 + "|" + report.getImplementingAgency()
                                 + "|" + report.getPillar()
-                                + "|" + report.getCountry()
+                                + "|" + report.getLocation()
                                 + "|" + report.getImplementationLevel()
                                 + "|" + report.getStatus()
                                 //+ "|" + report.getYear()
@@ -95,7 +95,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         ReportOutputColumn procurementSystemAgency = report.leafHeaders.get(2);
         ReportOutputColumn pilar = report.leafHeaders.get(3);
         ReportOutputColumn implementationLevel = report.leafHeaders.get(4);
-        ReportOutputColumn country = report.leafHeaders.get(5);
+        ReportOutputColumn impLocation = report.leafHeaders.get(5);
         ReportOutputColumn status = report.leafHeaders.get(6);
         ReportOutputColumn typeOfAssistance = report.leafHeaders.get(7);
         ReportOutputColumn reportingSystem = report.leafHeaders.get(8); // Also called Forum
@@ -116,7 +116,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                             for (ReportArea implLevel : pilarData.getChildren()) {
                                 TextCell implLevelCell = (TextCell) implLevel.getContents().get(implementationLevel);
                                 for (ReportArea location : implLevel.getChildren()) {
-                                    TextCell countryCell = (TextCell) location.getContents().get(country);
+                                    TextCell locationCell = (TextCell) location.getContents().get(impLocation);
                                     for (ReportArea statusData : location.getChildren()) {
                                         TextCell statusCell = (TextCell) statusData.getContents().get(status);
                                         for (ReportArea typeOfAssistanceData : statusData.getChildren()) {
@@ -139,7 +139,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                                             fundingReport.setDonorAgency(donorAgencyCell.value.toString());
                                                             fundingReport.setImplementingAgency(implementingAgencyCell.value.toString());
                                                             fundingReport.setPillar(pilarCell.value.toString());
-                                                            fundingReport.setCountry(countryCell.value.toString());
+                                                            fundingReport.setLocation(locationCell.value.toString());
                                                             fundingReport.setImplementationLevel(implLevelCell.value.toString());
                                                             fundingReport.setStatus(statusCell.value.toString());
                                                             fundingReport.setReportingSystem(reportSystemCell.value.toString());
@@ -204,12 +204,13 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     }
 
     private void addColumnsToSpecification(ReportSpecificationImpl spec) {
+        String location_adm_level = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DONOR_FUNDING_ADM_LEVEL);
         spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
         spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY));
         spec.addColumn(new ReportColumn(ColumnConstants.PROCUREMENT_SYSTEM));
         spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1));
         spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTATION_LEVEL));
-        spec.addColumn(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0));
+        spec.addColumn(new ReportColumn(location_adm_level));
         spec.addColumn(new ReportColumn(ColumnConstants.STATUS));
         spec.addColumn(new ReportColumn(ColumnConstants.TYPE_OF_ASSISTANCE));
         //TODO for GGW this is reporting system, for others it is Sectors

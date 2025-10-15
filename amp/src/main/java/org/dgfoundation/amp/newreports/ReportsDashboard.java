@@ -8,7 +8,7 @@ public class ReportsDashboard {
     private String pillar;
     private String implementationLevel;
     private String procurementSystem;
-    private String country;
+    private String location;
     private String status;
     private String reportingSystem;
     private String typeOfAssistance;
@@ -65,12 +65,12 @@ public class ReportsDashboard {
         this.actualCommitment = actualCommitment;
     }
 
-    public String getCountry() {
-        return country;
+    public String getLocation() {
+        return location;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getImplementationLevel() {

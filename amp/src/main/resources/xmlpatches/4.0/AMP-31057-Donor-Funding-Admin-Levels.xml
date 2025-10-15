@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../schemas/xmlpatcher.xsd">
+    <jira>AMP-31057</jira>
+    <keyword>Define possible values for Donor Funding Administrative Level and link to view</keyword>
+    <author>brianmokandu</author>
+
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+
+                -- ️ Insert possible values for Donor Funding Administrative Level (if not already existing)
+                INSERT INTO util_global_settings_possible_ (setting_name, value_id, value_shown)
+                SELECT 'Donor Funding Administrative Level', 'Administrative Level 0', 'Administrative Level 0'
+                WHERE NOT EXISTS (
+                SELECT 1 FROM util_global_settings_possible_
+                WHERE setting_name = 'Donor Funding Administrative Level'
+                AND value_id = 'Administrative Level 0'
+                AND value_shown = 'Administrative Level 0'
+                )
+                UNION
+                SELECT 'Donor Funding Administrative Level', 'Administrative Level 1', 'Administrative Level 1'
+                WHERE NOT EXISTS (
+                SELECT 1 FROM util_global_settings_possible_
+                WHERE setting_name = 'Donor Funding Administrative Level'
+                AND value_id = 'Administrative Level 1'
+                AND value_shown = 'Administrative Level 1'
+                )
+                UNION
+                SELECT 'Donor Funding Administrative Level', 'Administrative Level 2', 'Administrative Level 2'
+                WHERE NOT EXISTS (
+                SELECT 1 FROM util_global_settings_possible_
+                WHERE setting_name = 'Donor Funding Administrative Level'
+                AND value_id = 'Administrative Level 2'
+                AND value_shown = 'Administrative Level 2'
+                )
+                UNION
+                SELECT 'Donor Funding Administrative Level', 'Administrative Level 3', 'Administrative Level 3'
+                WHERE NOT EXISTS (
+                SELECT 1 FROM util_global_settings_possible_
+                WHERE setting_name = 'Donor Funding Administrative Level'
+                AND value_id = 'Administrative Level 3'
+                AND value_shown = 'Administrative Level 3'
+                )
+                UNION
+                SELECT 'Donor Funding Administrative Level', 'Administrative Level 4', 'Administrative Level 4'
+                WHERE NOT EXISTS (
+                SELECT 1 FROM util_global_settings_possible_
+                WHERE setting_name = 'Donor Funding Administrative Level'
+                AND value_id = 'Administrative Level 4'
+                AND value_shown = 'Administrative Level 4'
+                );
+
+                --  Create or replace view for dropdown (value_id kept as varchar)
+                CREATE OR REPLACE VIEW v_g_donor_funding_settings_admin_levels AS
+                SELECT
+                value_id AS id,
+                value_shown AS value
+                FROM util_global_settings_possible_
+                WHERE setting_name = 'Donor Funding Administrative Level';
+
+                -- Link the setting to the view and update description
+                UPDATE amp_global_settings
+                SET
+                description = 'Specifies which administrative level applies when doing donor funding imports',
+                possiblevalues = 'v_g_donor_funding_settings_admin_levels',
+                value_translatable = TRUE
+                WHERE settingsname = 'Donor Funding Administrative Level';
+
+                -- ️Set default value if missing
+                UPDATE amp_global_settings
+                SET settingsvalue = 'Administrative Level 0'
+                WHERE settingsname = 'Donor Funding Administrative Level'
+                AND (settingsvalue IS NULL OR settingsvalue = '');
+
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

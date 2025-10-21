@@ -27,7 +27,7 @@ def country
 def ampUrl
 def dockerRepo = "798366298150.dkr.ecr.us-east-1.amazonaws.com/"
 
-def DEPLOY_CRED_ID = 'Deploy'
+def DEPLOY_CRED_ID = 'amp-deploy-ssh'
 def deployUser() { return env.jenkinsUser?.trim() ? env.jenkinsUser.trim() : 'jenkins' }
 def setupKnownHosts = { host ->
     sh """

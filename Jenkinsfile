@@ -35,7 +35,7 @@ sh """
   chmod 700 ~/.ssh
   touch ~/.ssh/known_hosts
   chmod 600 ~/.ssh/known_hosts
-  ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts
+  ssh-keyscan -H ${host} >> ~/.ssh/known_hosts
 """
 }
 

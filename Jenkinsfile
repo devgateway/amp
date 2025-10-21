@@ -102,7 +102,7 @@ withEnv(["DEPLOY_HOST=${environment}", "DEPLOY_USER=${deployUser()}"]) {
       echo "Client keys loaded in agent:"
       ssh-add -L || true
       echo "Trying a no-op SSH with verbose logs..."
-      ssh -vvv -o IdentitiesOnly=yes "${DEPLOY_USER}@${DEPLOY_HOST}" true
+      ssh -vvv "${DEPLOY_USER}@${DEPLOY_HOST}" true
     '''
   }
 }
@@ -110,7 +110,7 @@ withEnv(["DEPLOY_HOST=${environment}", "DEPLOY_USER=${deployUser()}"]) {
         sshagent(credentials: [DEPLOY_CRED_ID]) {
         setupKnownHosts(environment)
         countries = sh(returnStdout: true,
-            script: "ssh -o IdentitiesOnly=yes ${deployUser()}@${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+            script: "ssh ${deployUser()}@${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
             .trim()
         }
 

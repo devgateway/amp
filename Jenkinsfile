@@ -179,14 +179,37 @@ def deployed = false
 stage('Deploy') {
     node('ansible') {
         try {
+            withEnv(["DEPLOY_HOST=${environment}", "DEPLOY_USER=${env.jenkinsUser ?: 'jenkins'}"]) {
+  sshagent(credentials: [DEPLOY_CRED_ID]) {
             // Find latest database version compatible with ${codeVersion}
             dbVersion = sh(returnStdout: true, script: "ssh ${env.jenkinsUser}@${environment} 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
 
             // Deploy AMP
-            sh "ssh ${env.jenkinsUser}@${environment} 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
+                sh '''#!/usr/bin/env bash
+      set -euxo pipefail
+
+      # Ensure ~/.ssh and known_hosts exist with proper perms
+      mkdir -p ~/.ssh
+      chmod 700 ~/.ssh
+      touch ~/.ssh/known_hosts
+      chmod 600 ~/.ssh/known_hosts
+
+      # Remove any old host key (avoids "Host key verification failed")
+      ssh-keygen -R "${DEPLOY_HOST}" 2>/dev/null || true
+
+      # Add the current host key
+      ssh-keyscan -H "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null
+
+      # Run your deployment command using the agent key
+      ssh -o StrictHostKeyChecking=yes "${DEPLOY_USER}@${DEPLOY_HOST}" \
+        "amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}"
+    '''
+    
             slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 
             deployed = true
+        }
+    }
         } catch (e) {
             slackSend(channel: 'amp-ci', color: 'warning', message: "Deploy AMP - Failed\nFailed to deploy ${changePretty}")
 

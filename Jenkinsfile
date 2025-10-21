@@ -30,15 +30,14 @@ def dockerRepo = "798366298150.dkr.ecr.us-east-1.amazonaws.com/"
 def DEPLOY_CRED_ID = 'amp-deploy-ssh'
 def deployUser() { return env.jenkinsUser?.trim() ? env.jenkinsUser.trim() : 'jenkins' }
 def setupKnownHosts = { host ->
-sh """
-  mkdir -p ~/.ssh
-  chmod 700 ~/.ssh
-  touch ~/.ssh/known_hosts
-  chmod 600 ~/.ssh/known_hosts
-  ssh-keyscan -H ${host} >> ~/.ssh/known_hosts
-"""
+    sh """
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
+        touch ~/.ssh/known_hosts
+        chmod 600 ~/.ssh/known_hosts
+        ssh-keyscan -H ${host} >> ~/.ssh/known_hosts
+    """
 }
-
 
 def updateGitHubCommitStatus(context, message, state) {
     repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
@@ -59,6 +58,7 @@ def updateGitHubCommitStatus(context, message, state) {
         ]
     ])
 }
+
 def codeVersion
 def countries
 def environment
@@ -67,11 +67,11 @@ stage('Build') {
     timeout(15) {
         milestone()
         environment = input(
-                message: "Server to deploy",
-                parameters: [choice(choices: ["${env.AMP_STAGING_HOSTNAME}", "${env.AMP_DE_HOSTNAME}"], name: 'environment')])
+            message: "Server to deploy",
+            parameters: [choice(choices: ["${env.AMP_STAGING_HOSTNAME}", "${env.AMP_DE_HOSTNAME}"], name: 'environment')]
+        )
         milestone()
     }
-
 
     println "Using environment: ${environment}"
     node('ansible') {
@@ -80,38 +80,19 @@ stage('Build') {
         // Find AMP version
         codeVersion = readMavenPom(file: 'amp/pom.xml').version
         println "AMP Version: ${codeVersion}"
-        //Used in the initial generation of keys when working with a new jenkins instance
-        //****************************************************************
-//        sh "ssh-keygen -t rsa -b 4096 -C 'jenkins@${environment}' -f ~/.ssh/id_rsa -N ''"
-sh """
-  mkdir -p ~/.ssh
-  chmod 700 ~/.ssh
-  touch ~/.ssh/known_hosts
-  chmod 600 ~/.ssh/known_hosts
-  ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts
-"""
-//        sh "cat /root/.ssh/id_rsa.pub"
-        //******************************************************
-  //      countries = sh(returnStdout: true,
-//                script: "ssh ${env.jenkinsUser}@${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
-    //            .trim()
-withEnv(["DEPLOY_HOST=${environment}", "DEPLOY_USER=${deployUser()}"]) {
-  sshagent(credentials: [DEPLOY_CRED_ID]) {
-    setupKnownHosts(env.DEPLOY_HOST)
-    sh '''#!/bin/bash
-      echo "Client keys loaded in agent:"
-      ssh-add -L || true
-      echo "Trying a no-op SSH with verbose logs..."
-      ssh -vvv "${DEPLOY_USER}@${DEPLOY_HOST}" true
-    '''
-  }
-}
-
+        
+        sh """
+            mkdir -p ~/.ssh
+            chmod 700 ~/.ssh
+            touch ~/.ssh/known_hosts
+            chmod 600 ~/.ssh/known_hosts
+            ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts
+        """
         sshagent(credentials: [DEPLOY_CRED_ID]) {
-        setupKnownHosts(environment)
-        countries = sh(returnStdout: true,
-            script: "ssh ${deployUser()}@${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
-            .trim()
+            setupKnownHosts(environment)
+            countries = sh(returnStdout: true,
+                script: "ssh ${deployUser()}@${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'"
+            ).trim()
         }
 
         if (countries == "") {
@@ -123,8 +104,9 @@ withEnv(["DEPLOY_HOST=${environment}", "DEPLOY_USER=${deployUser()}"]) {
     timeout(15) {
         milestone()
         country = input(
-                message: "Proceed with build and deploy?",
-                parameters: [choice(choices: countries, name: 'country')])
+            message: "Proceed with build and deploy?",
+            parameters: [choice(choices: countries, name: 'country')]
+        )
         milestone()
     }
 
@@ -142,6 +124,7 @@ withEnv(["DEPLOY_HOST=${environment}", "DEPLOY_USER=${deployUser()}"]) {
         checkout scm
         def image = "${dockerRepo}amp/webapp:${tag}"
         def hash = sh(returnStdout: true, script: "git log --pretty=%H -n 1").trim()
+        
         docker.withRegistry("https://798366298150.dkr.ecr.us-east-1.amazonaws.com", "ecr:us-east-1:aws-ecr-credentials-id") {
             try {
                 updateGitHubCommitStatus('jenkins/build', 'Build in progress', 'PENDING')
@@ -174,54 +157,67 @@ withEnv(["DEPLOY_HOST=${environment}", "DEPLOY_USER=${deployUser()}"]) {
         }
     }
 }
+
 def deployed = false
+
 // If this stage fails then next stage will retry deployment. Otherwise next stage will be skipped.
 stage('Deploy') {
     node('ansible') {
         try {
-withEnv([
-  "DEPLOY_HOST=${environment}",
-  "DEPLOY_USER=${env.jenkinsUser ?: 'jenkins'}",
-  "DEPLOY_TAG=${tag}",
-  "DEPLOY_COUNTRY=${country}",
-  "DEPLOY_DBVER=${dbVersion}",
-  "DEPLOY_PGVER=${pgVersion}"
-]) {
-      sshagent(credentials: [DEPLOY_CRED_ID]) {
-            // Find latest database version compatible with ${codeVersion}
-            dbVersion = sh(returnStdout: true, script: "ssh ${env.jenkinsUser}@${environment} 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
+            withEnv([
+                "DEPLOY_HOST=${environment}",
+                "DEPLOY_USER=${env.jenkinsUser ?: 'jenkins'}",
+                "DEPLOY_TAG=${tag}",
+                "DEPLOY_COUNTRY=${country}",
+                "DEPLOY_DBVER=${dbVersion}",
+                "DEPLOY_PGVER=${pgVersion}"
+            ]) {
+                sshagent(credentials: [DEPLOY_CRED_ID]) {
+                    // Find latest database version compatible with ${codeVersion}
+                    dbVersion = sh(returnStdout: true, 
+                        script: "ssh ${env.jenkinsUser}@${environment} 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'"
+                    ).trim()
 
-            // Deploy AMP
-sh '''#!/usr/bin/env bash
-      # Be strict but allow empty vars (no `-u`)
-      set -eox pipefail
+                    // Deploy AMP
+                    sh '''#!/usr/bin/env bash
+                        # Be strict but allow empty vars (no `-u`)
+                        set -eox pipefail
 
-      # Ensure ~/.ssh/known_hosts is sane
-      mkdir -p ~/.ssh && chmod 700 ~/.ssh
-      touch ~/.ssh/known_hosts && chmod 600 ~/.ssh/known_hosts
+                        # Ensure ~/.ssh/known_hosts is sane
+                        mkdir -p ~/.ssh && chmod 700 ~/.ssh
+                        touch ~/.ssh/known_hosts && chmod 600 ~/.ssh/known_hosts
 
-      # Clear any stale host key and re-pin the current one
-      ssh-keygen -R "${DEPLOY_HOST}" 2>/dev/null || true
-      ssh-keyscan -H "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null
+                        # Clear any stale host key and re-pin the current one
+                        ssh-keygen -R "${DEPLOY_HOST}" 2>/dev/null || true
+                        ssh-keyscan -H "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null
 
-      # Run the remote command
-      ssh -o StrictHostKeyChecking=yes \
-        "${DEPLOY_USER}@${DEPLOY_HOST}" \
-        "amp-up2 ${DEPLOY_TAG} ${DEPLOY_COUNTRY} ${DEPLOY_DBVER} ${DEPLOY_PGVER}"
-    '''
+                        # Run the remote command
+                        ssh -o StrictHostKeyChecking=yes \
+                            "${DEPLOY_USER}@${DEPLOY_HOST}" \
+                            "amp-up2 ${DEPLOY_TAG} ${DEPLOY_COUNTRY} ${DEPLOY_DBVER} ${DEPLOY_PGVER}"
+                    '''
 
-            slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
+                    slackSend(
+                        channel: 'amp-ci', 
+                        color: 'good', 
+                        message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes"
+                    )
 
-            deployed = true
-        }
-    }
+                    deployed = true
+                }
+            }
         } catch (e) {
-            slackSend(channel: 'amp-ci', color: 'warning', message: "Deploy AMP - Failed\nFailed to deploy ${changePretty}")
+            slackSend(
+                channel: 'amp-ci', 
+                color: 'warning', 
+                message: "Deploy AMP - Failed\nFailed to deploy ${changePretty}"
+            )
 
             currentBuild.result = 'UNSTABLE'
         }
     }
 }
+
 // Retry deploy with the same country.
 stage('Deploy again') {
     if (deployed) {
@@ -232,41 +228,52 @@ stage('Deploy again') {
             input message: "Proceed with repeated deploy for ${country}?"
             milestone()
         }
+        
         node {
             try {
-withEnv([
-  "DEPLOY_HOST=${environment}",
-  "DEPLOY_USER=${env.jenkinsUser ?: 'jenkins'}",
-  "DEPLOY_TAG=${tag}",
-  "DEPLOY_COUNTRY=${country}",
-  "DEPLOY_DBVER=${dbVersion}",
-  "DEPLOY_PGVER=${pgVersion}"
-]) {                    sshagent(credentials: [DEPLOY_CRED_ID]) {
-            // Deploy AMP
-                    sh '''#!/usr/bin/env bash
-      # Be strict but allow empty vars (no `-u`)
-      set -eox pipefail
+                withEnv([
+                    "DEPLOY_HOST=${environment}",
+                    "DEPLOY_USER=${env.jenkinsUser ?: 'jenkins'}",
+                    "DEPLOY_TAG=${tag}",
+                    "DEPLOY_COUNTRY=${country}",
+                    "DEPLOY_DBVER=${dbVersion}",
+                    "DEPLOY_PGVER=${pgVersion}"
+                ]) {
+                    sshagent(credentials: [DEPLOY_CRED_ID]) {
+                        // Deploy AMP
+                        sh '''#!/usr/bin/env bash
+                            # Be strict but allow empty vars (no `-u`)
+                            set -eox pipefail
 
-      # Ensure ~/.ssh/known_hosts is sane
-      mkdir -p ~/.ssh && chmod 700 ~/.ssh
-      touch ~/.ssh/known_hosts && chmod 600 ~/.ssh/known_hosts
+                            # Ensure ~/.ssh/known_hosts is sane
+                            mkdir -p ~/.ssh && chmod 700 ~/.ssh
+                            touch ~/.ssh/known_hosts && chmod 600 ~/.ssh/known_hosts
 
-      # Clear any stale host key and re-pin the current one
-      ssh-keygen -R "${DEPLOY_HOST}" 2>/dev/null || true
-      ssh-keyscan -H "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null
+                            # Clear any stale host key and re-pin the current one
+                            ssh-keygen -R "${DEPLOY_HOST}" 2>/dev/null || true
+                            ssh-keyscan -H "${DEPLOY_HOST}" >> ~/.ssh/known_hosts 2>/dev/null
 
-      # Run the remote command
-      ssh -o StrictHostKeyChecking=yes \
-        "${DEPLOY_USER}@${DEPLOY_HOST}" \
-        "amp-up2 ${DEPLOY_TAG} ${DEPLOY_COUNTRY} ${DEPLOY_DBVER} ${DEPLOY_PGVER}"
-    '''
-                    slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
+                            # Run the remote command
+                            ssh -o StrictHostKeyChecking=yes \
+                                "${DEPLOY_USER}@${DEPLOY_HOST}" \
+                                "amp-up2 ${DEPLOY_TAG} ${DEPLOY_COUNTRY} ${DEPLOY_DBVER} ${DEPLOY_PGVER}"
+                        '''
+                        
+                        slackSend(
+                            channel: 'amp-ci', 
+                            color: 'good', 
+                            message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes"
+                        )
 
-                currentBuild.result = 'SUCCESS'
-            }
-            }
+                        currentBuild.result = 'SUCCESS'
+                    }
+                }
             } catch (e) {
-                slackSend(channel: 'amp-ci', color: 'warning', message: "Deploy AMP - Failed\nFailed to deploy ${changePretty}")
+                slackSend(
+                    channel: 'amp-ci', 
+                    color: 'warning', 
+                    message: "Deploy AMP - Failed\nFailed to deploy ${changePretty}"
+                )
 
                 throw e
             }

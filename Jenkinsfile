@@ -30,14 +30,13 @@ def dockerRepo = "798366298150.dkr.ecr.us-east-1.amazonaws.com/"
 def DEPLOY_CRED_ID = 'amp-deploy-ssh'
 def deployUser() { return env.jenkinsUser?.trim() ? env.jenkinsUser.trim() : 'jenkins' }
 def setupKnownHosts = { host ->
-sh '''
+sh """
   mkdir -p ~/.ssh
   chmod 700 ~/.ssh
   touch ~/.ssh/known_hosts
   chmod 600 ~/.ssh/known_hosts
-  ssh-keyscan -H ampdev.aws.devgateway.org >> ~/.ssh/known_hosts
-'''
-
+  ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts
+"""
 }
 
 

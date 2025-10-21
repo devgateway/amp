@@ -33,9 +33,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AmpDonorFundingJob extends ConnectionCleaningJob implements StatefulJob {
@@ -49,10 +48,15 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
         //TODO make currency configurable
         List<ReportsDashboard> ampDashboardFundingCombined = new ArrayList<>();
+         currencies = Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_CURRENCIES)).isEmpty() ?
+                currencies :
+                 Arrays.asList(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_CURRENCIES)).split("\\|"));
         currencies.forEach(currency -> ampDashboardFundingCombined.addAll(getFundingByCurrency(currency)));
         //List<ReportsDashboard> ampDashboardFundingCombinedXDR = getFundingByCurrency("XDR");
 
         String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);
+        assert serverUrl != null;
+        serverUrl = serverUrl.endsWith("/") ? serverUrl + "amp-funding/importDonorFunding" : serverUrl + "/amp-funding/importDonorFunding";
         sendReportsToServer(ampDashboardFundingCombined, serverUrl);
     }
 
@@ -69,7 +73,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                         report -> report.getDonorAgency()
                                 + "|" + report.getImplementingAgency()
                                 + "|" + report.getPillar()
-                                + "|" + report.getCountry()
+                                + "|" + report.getLocation()
                                 + "|" + report.getImplementationLevel()
                                 + "|" + report.getStatus()
                                 //+ "|" + report.getYear()
@@ -91,7 +95,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         ReportOutputColumn procurementSystemAgency = report.leafHeaders.get(2);
         ReportOutputColumn pilar = report.leafHeaders.get(3);
         ReportOutputColumn implementationLevel = report.leafHeaders.get(4);
-        ReportOutputColumn country = report.leafHeaders.get(5);
+        ReportOutputColumn impLocation = report.leafHeaders.get(5);
         ReportOutputColumn status = report.leafHeaders.get(6);
         ReportOutputColumn typeOfAssistance = report.leafHeaders.get(7);
         ReportOutputColumn reportingSystem = report.leafHeaders.get(8); // Also called Forum
@@ -112,7 +116,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                             for (ReportArea implLevel : pilarData.getChildren()) {
                                 TextCell implLevelCell = (TextCell) implLevel.getContents().get(implementationLevel);
                                 for (ReportArea location : implLevel.getChildren()) {
-                                    TextCell countryCell = (TextCell) location.getContents().get(country);
+                                    TextCell locationCell = (TextCell) location.getContents().get(impLocation);
                                     for (ReportArea statusData : location.getChildren()) {
                                         TextCell statusCell = (TextCell) statusData.getContents().get(status);
                                         for (ReportArea typeOfAssistanceData : statusData.getChildren()) {
@@ -135,7 +139,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                                             fundingReport.setDonorAgency(donorAgencyCell.value.toString());
                                                             fundingReport.setImplementingAgency(implementingAgencyCell.value.toString());
                                                             fundingReport.setPillar(pilarCell.value.toString());
-                                                            fundingReport.setCountry(countryCell.value.toString());
+                                                            fundingReport.setLocation(locationCell.value.toString());
                                                             fundingReport.setImplementationLevel(implLevelCell.value.toString());
                                                             fundingReport.setStatus(statusCell.value.toString());
                                                             fundingReport.setReportingSystem(reportSystemCell.value.toString());
@@ -200,12 +204,13 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     }
 
     private void addColumnsToSpecification(ReportSpecificationImpl spec) {
+        String location_adm_level = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DONOR_FUNDING_ADM_LEVEL);
         spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
         spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY));
         spec.addColumn(new ReportColumn(ColumnConstants.PROCUREMENT_SYSTEM));
         spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1));
         spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTATION_LEVEL));
-        spec.addColumn(new ReportColumn(ColumnConstants.LOCATION_ADM_LEVEL_0));
+        spec.addColumn(new ReportColumn(location_adm_level));
         spec.addColumn(new ReportColumn(ColumnConstants.STATUS));
         spec.addColumn(new ReportColumn(ColumnConstants.TYPE_OF_ASSISTANCE));
         //TODO for GGW this is reporting system, for others it is Sectors
@@ -221,6 +226,8 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     public static void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, String serverUrl) {
         try {
             // Create a URL object with the server's endpoint URL
+            logger.info("Sending data to amp dashboard at: " + serverUrl);
+            logger.info("Number of records to send: " + ampDashboardFunding.size());
             HttpURLConnection connection = getHttpURLConnection(serverUrl);
             // Convert the ampDashboardFunding to JSON using a JSON library (e.g., Gson)
             Gson gson = new Gson();
@@ -229,7 +236,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             // Get the output stream of the connection
             try (OutputStream os = connection.getOutputStream()) {
                 // Write the JSON data to the output stream
-                os.write(jsonData.getBytes("UTF-8"));
+                os.write(jsonData.getBytes(StandardCharsets.UTF_8));
             }
 
             // Get the HTTP response code
@@ -238,10 +245,10 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             // Check if the request was successful (e.g., HTTP 200 OK)
             if (responseCode == 200) {
                 // The data has been successfully sent to the server
-                logger.debug("Data sent successfully to amp dashboard. HTTP Response Code: " + responseCode);
+                logger.info("Data sent successfully to amp dashboard. HTTP Response Code: " + responseCode);
             } else {
                 // Handle the error condition (e.g., log an error message)
-                logger.debug("Error sending data to amp dashboard. HTTP Response Code: " + responseCode);
+                logger.info("Error sending data to amp dashboard. HTTP Response Code: " + responseCode);
             }
 
             // Close the connection

@@ -27,6 +27,19 @@ def country
 def ampUrl
 def dockerRepo = "798366298150.dkr.ecr.us-east-1.amazonaws.com/"
 
+def DEPLOY_CRED_ID = 'amp-deploy-ssh'
+def deployUser() { return env.jenkinsUser?.trim() ? env.jenkinsUser.trim() : 'jenkins' }
+def setupKnownHosts = { host ->
+    sh """
+      mkdir -p ~/.ssh
+      chmod 700 ~/.ssh
+      touch ~/.ssh/known_hosts
+      chmod 600 ~/.ssh/known_hosts
+      ssh-keyscan -H ${host} >> ~/.ssh/known_hosts
+    """
+}
+
+
 def updateGitHubCommitStatus(context, message, state) {
     repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
     lastAuthor = sh(returnStdout: true, script: "git log --pretty=%an -n 1").trim()
@@ -73,9 +86,16 @@ stage('Build') {
         sh "ssh-keyscan -H ${environment} >> ~/.ssh/known_hosts"
 //        sh "cat /root/.ssh/id_rsa.pub"
         //******************************************************
+  //      countries = sh(returnStdout: true,
+//                script: "ssh ${env.jenkinsUser}@${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+    //            .trim()
+        sshagent(credentials: [DEPLOY_CRED_ID]) {
+        setupKnownHosts(environment)
         countries = sh(returnStdout: true,
-                script: "ssh ${env.jenkinsUser}@${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
-                .trim()
+            script: "ssh -o IdentitiesOnly=yes ${deployUser()}@${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+            .trim()
+        }
+
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"
             currentBuild.result = 'FAILURE'

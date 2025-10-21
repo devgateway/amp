@@ -95,15 +95,17 @@ sh """
   //      countries = sh(returnStdout: true,
 //                script: "ssh ${env.jenkinsUser}@${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
     //            .trim()
-    sshagent(credentials: [DEPLOY_CRED_ID]) {
-            setupKnownHosts(environment)  // you already do this
-            sh '''
-            echo "Client keys loaded in agent:"
-            ssh-add -L || true
-            echo "Trying a no-op SSH with verbose logs..."
-            ssh -vvv -o IdentitiesOnly=yes ${USER_OVERRIDE:-'${deployUser()}'}@${environment} true
-        '''
-        }
+withEnv(["DEPLOY_HOST=${environment}", "DEPLOY_USER=${deployUser()}"]) {
+  sshagent(credentials: [DEPLOY_CRED_ID]) {
+    setupKnownHosts(env.DEPLOY_HOST)
+    sh '''#!/bin/bash
+      echo "Client keys loaded in agent:"
+      ssh-add -L || true
+      echo "Trying a no-op SSH with verbose logs..."
+      ssh -vvv -o IdentitiesOnly=yes "${DEPLOY_USER}@${DEPLOY_HOST}" true
+    '''
+  }
+}
 
         sshagent(credentials: [DEPLOY_CRED_ID]) {
         setupKnownHosts(environment)

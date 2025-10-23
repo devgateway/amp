@@ -52,9 +52,9 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                 .getGlobalSettingValueLong(GlobalSettingsConstants.WORKSPACE_TO_RUN_REPORT_FROM_JOB);
         AmpJobsUtil.setTeamForNonRequestReport(ampTeamId);
         List<ReportsDashboard> ampDashboardFundingCombined = new ArrayList<>();
-        currencies = Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_CURRENCIES)).isEmpty() ?
+         currencies = Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_CURRENCIES)).isEmpty() ?
                 currencies :
-                Arrays.asList(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_CURRENCIES)).split("\\|"));
+                 Arrays.asList(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_CURRENCIES)).split("\\|"));
         currencies.forEach(currency -> ampDashboardFundingCombined.addAll(getFundingByCurrency(currency)));
         //List<ReportsDashboard> ampDashboardFundingCombinedXDR = getFundingByCurrency("XDR");
 
@@ -83,7 +83,8 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                 //+ "|" + report.getYear()
                                 + "|" + report.getReportingSystem()
                                 + "|" + report.getTypeOfAssistance()
-                                + "|" + report.getProcurementSystem(),
+                                + "|" + report.getProcurementSystem()
+                                + "|" + report.getResponsibleOrganization(),
                         report -> report,
                         (report1, report2) -> {
                             report1.sumWith(report2);
@@ -103,6 +104,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         ReportOutputColumn status = report.leafHeaders.get(6);
         ReportOutputColumn typeOfAssistance = report.leafHeaders.get(7);
         ReportOutputColumn reportingSystem = report.leafHeaders.get(8); // Also called Forum
+        ReportOutputColumn responsibleOrg = report.leafHeaders.get(9);
 
 
         List<ReportsDashboard> ampDashboardFunding = new ArrayList<>();
@@ -127,8 +129,10 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                             TextCell typeOfAssistanceCell = (TextCell) typeOfAssistanceData.getContents().get(typeOfAssistance);
                                             for (ReportArea reportSystemData : typeOfAssistanceData.getChildren()) {
                                                 TextCell reportSystemCell = (TextCell) reportSystemData.getContents().get(reportingSystem);
-                                                Long activityCount = 0L;
-                                                for (Map.Entry<ReportOutputColumn, ReportCell> content : reportSystemData.getContents().entrySet()) {
+                                                for (ReportArea responsibleOrgData : reportSystemData.getChildren()) {
+                                                    TextCell responsibleOrgCell = (TextCell) responsibleOrgData.getContents().get(responsibleOrg);
+                                                    Long activityCount = 0L;
+                                                for (Map.Entry<ReportOutputColumn, ReportCell> content : responsibleOrgData.getContents().entrySet()) {
 
                                                     ReportOutputColumn col = content.getKey();
                                                     if (col.originalColumnName.equals(ColumnConstants.ACTIVITY_COUNT)) {
@@ -149,6 +153,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                                             fundingReport.setReportingSystem(reportSystemCell.value.toString());
                                                             fundingReport.setTypeOfAssistance(typeOfAssistanceCell.value.toString());
                                                             fundingReport.setProcurementSystem(procurementSystemAgencyCell.value.toString());
+                                                            fundingReport.setResponsibleOrganization(responsibleOrgCell.value.toString());
                                                             //fundingReport.setYear(col.parentColumn.originalColumnName);
                                                             AmountCell amount = (AmountCell) content.getValue();
                                                             if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS)) {
@@ -161,6 +166,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                                             ampDashboardFunding.add(fundingReport);
                                                         }
                                                     }
+                                                }
                                                 }
                                             }
                                         }
@@ -210,7 +216,6 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     private void addColumnsToSpecification(ReportSpecificationImpl spec) {
         String location_adm_level = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DONOR_FUNDING_ADM_LEVEL);
         spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
-        spec.addColumn(new ReportColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION));
         spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY));
         spec.addColumn(new ReportColumn(ColumnConstants.PROCUREMENT_SYSTEM));
         spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1));
@@ -220,8 +225,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         spec.addColumn(new ReportColumn(ColumnConstants.TYPE_OF_ASSISTANCE));
         //TODO for GGW this is reporting system, for others it is Sectors
         spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
-        spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_SECTOR));
-        //spec.addColumn(new ReportColumn(ColumnConstants.REPORTING_SYSTEM));
+        spec.addColumn(new ReportColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION));
 
         spec.setHierarchies(spec.getColumns());
         spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_COUNT));

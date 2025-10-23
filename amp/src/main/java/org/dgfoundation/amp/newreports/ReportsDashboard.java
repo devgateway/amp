@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 public class ReportsDashboard {
     private String donorAgency;
     private String implementingAgency;
+    private String responsibleOrganization;
     private String pillar;
     private String implementationLevel;
     private String procurementSystem;
@@ -143,4 +144,13 @@ public class ReportsDashboard {
     public void setProcurementSystem(String procurementSystem) {
         this.procurementSystem = procurementSystem;
     }
+
+    public String getResponsibleOrganization() {
+        return responsibleOrganization;
+    }
+
+    public void setResponsibleOrganization(String responsibleOrganization) {
+        this.responsibleOrganization = responsibleOrganization;
+    }
+
 }

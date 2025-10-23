@@ -48,9 +48,9 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
         //TODO make currency configurable
         List<ReportsDashboard> ampDashboardFundingCombined = new ArrayList<>();
-         currencies = Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_CURRENCIES)).isEmpty() ?
+        currencies = Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_CURRENCIES)).isEmpty() ?
                 currencies :
-                 Arrays.asList(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_CURRENCIES)).split("\\|"));
+                Arrays.asList(Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_CURRENCIES)).split("\\|"));
         currencies.forEach(currency -> ampDashboardFundingCombined.addAll(getFundingByCurrency(currency)));
         //List<ReportsDashboard> ampDashboardFundingCombinedXDR = getFundingByCurrency("XDR");
 
@@ -206,6 +206,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     private void addColumnsToSpecification(ReportSpecificationImpl spec) {
         String location_adm_level = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DONOR_FUNDING_ADM_LEVEL);
         spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+        spec.addColumn(new ReportColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION));
         spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY));
         spec.addColumn(new ReportColumn(ColumnConstants.PROCUREMENT_SYSTEM));
         spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1));
@@ -215,6 +216,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         spec.addColumn(new ReportColumn(ColumnConstants.TYPE_OF_ASSISTANCE));
         //TODO for GGW this is reporting system, for others it is Sectors
         spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
+        spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_SECTOR));
         //spec.addColumn(new ReportColumn(ColumnConstants.REPORTING_SYSTEM));
 
         spec.setHierarchies(spec.getColumns());

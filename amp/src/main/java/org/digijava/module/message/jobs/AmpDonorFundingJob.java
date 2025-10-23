@@ -47,6 +47,10 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
         //TODO make currency configurable
+        AmpJobsUtil.populateRequest();
+        Long ampTeamId = FeaturesUtil
+                .getGlobalSettingValueLong(GlobalSettingsConstants.WORKSPACE_TO_RUN_REPORT_FROM_JOB);
+        AmpJobsUtil.setTeamForNonRequestReport(ampTeamId);
         List<ReportsDashboard> ampDashboardFundingCombined = new ArrayList<>();
         currencies = Objects.requireNonNull(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_CURRENCIES)).isEmpty() ?
                 currencies :

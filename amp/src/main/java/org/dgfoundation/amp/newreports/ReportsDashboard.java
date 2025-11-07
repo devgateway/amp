@@ -18,6 +18,9 @@ public class ReportsDashboard {
     private BigDecimal actualCommitment;
     private BigDecimal actualDisbursement;
     private Long activityCount;
+    // Comma separated AMP activity IDs aggregated under the current hierarchy path
+    private String activityIds;
+    private String projectTitle;
 
     public ReportsDashboard() {
         this.actualCommitment = BigDecimal.ZERO;
@@ -49,15 +52,21 @@ public class ReportsDashboard {
     public void setPillar(String pillar) {
         this.pillar = pillar;
     }
-/*
-    public String getYear() {
-        return year;
+    public String getActivityIds() {
+        return activityIds;
     }
+    public void setActivityIds(String activityIds) {
+        this.activityIds = activityIds;
+    }
+    /*
+        public String getYear() {
+            return year;
+        }
 
-    public void setYear(String year) {
-        this.year = year;
-    }
-*/
+        public void setYear(String year) {
+            this.year = year;
+        }
+    */
     public BigDecimal getActualCommitment() {
         return actualCommitment;
     }
@@ -151,6 +160,14 @@ public class ReportsDashboard {
 
     public void setResponsibleOrganization(String responsibleOrganization) {
         this.responsibleOrganization = responsibleOrganization;
+    }
+
+    public String getProjectTitle() {
+        return projectTitle;
+    }
+
+    public void setProjectTitle(String projectTitle) {
+        this.projectTitle = projectTitle;
     }
 
 }

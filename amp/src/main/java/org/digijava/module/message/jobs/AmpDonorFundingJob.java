@@ -66,13 +66,13 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         currencies.forEach(currency -> ampDashboardFundingCombined.addAll(getFundingByCurrency(currency)));
         //List<ReportsDashboard> ampDashboardFundingCombinedXDR = getFundingByCurrency("XDR");
 
-        // Populate translations for all reports
-        populateTranslations(ampDashboardFundingCombined);
+        // Get translations for all fields (once, not per record)
+        List<Map<String, String>> translations = getTranslations();
 
         String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);
         assert serverUrl != null;
         serverUrl = serverUrl.endsWith("/") ? serverUrl + "amp-funding/importDonorFunding" : serverUrl + "/amp-funding/importDonorFunding";
-        sendReportsToServer(ampDashboardFundingCombined, serverUrl);
+        sendReportsToServer(ampDashboardFundingCombined, translations, serverUrl);
     }
 
     @NotNull
@@ -368,26 +368,24 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     }
 
     /**
-     * Populates translations for all ReportsDashboard objects
+     * Gets translations for all field labels (returns once, not per record)
      */
-    private void populateTranslations(List<ReportsDashboard> reports) {
-        if (reports == null || reports.isEmpty()) {
-            return;
-        }
-
+    private List<Map<String, String>> getTranslations() {
+        List<Map<String, String>> translations = new ArrayList<>();
+        
         try {
             // Get all available locales
             List<String> localeCodes = getAvailableLocaleCodes();
             if (localeCodes.isEmpty()) {
                 logger.warn("No available locales found, skipping translations");
-                return;
+                return translations;
             }
 
             // Get the site
             Site site = TLSUtils.getSite();
             if (site == null) {
                 logger.warn("No site found, skipping translations");
-                return;
+                return translations;
             }
 
             // Get location column name
@@ -413,7 +411,6 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             fieldMappings.put("projectTitle", "Project Title");
 
             // Generate translations for all fields once
-            List<Map<String, String>> translations = new ArrayList<>();
             for (Map.Entry<String, String> entry : fieldMappings.entrySet()) {
                 String fieldName = entry.getKey();
                 String label = entry.getValue();
@@ -422,15 +419,12 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                 translations.add(fieldTranslation);
             }
 
-            // Set translations on all reports
-            for (ReportsDashboard report : reports) {
-                report.setTranslations(translations);
-            }
-
-            logger.info("Populated translations for " + reports.size() + " reports with " + localeCodes.size() + " locales");
+            logger.info("Generated translations for " + translations.size() + " fields with " + localeCodes.size() + " locales");
         } catch (Exception e) {
-            logger.error("Error populating translations", e);
+            logger.error("Error getting translations", e);
         }
+        
+        return translations;
     }
 
     /**
@@ -459,7 +453,6 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             try {
                 String translated = TranslatorWorker.translateText(label, localeCode, site);
                 translations.put(localeCode, translated != null ? translated : label);
-                logger.info("Translated label '" + label + "' to '" + translations.get(localeCode) + "' for locale '" + localeCode + "'");
             } catch (Exception e) {
                 logger.warn("Error translating label '" + label + "' for locale '" + localeCode + "': " + e.getMessage());
                 translations.put(localeCode, label);
@@ -468,15 +461,22 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         return translations;
     }
 
-    public static void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, String serverUrl) {
+    public static void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, List<Map<String, String>> translations, String serverUrl) {
         try {
             // Create a URL object with the server's endpoint URL
             logger.info("Sending data to amp dashboard at: " + serverUrl);
             logger.info("Number of records to send: " + ampDashboardFunding.size());
             HttpURLConnection connection = getHttpURLConnection(serverUrl);
-            // Convert the ampDashboardFunding to JSON using a JSON library (e.g., Gson)
+            
+            // Create a wrapper object with reports and translations
+            Map<String, Object> submissionData = new HashMap<>();
+            submissionData.put("reports", ampDashboardFunding);
+            submissionData.put("translations", translations);
+            
+            // Convert to JSON using a JSON library (e.g., Gson)
             Gson gson = new Gson();
-            String jsonData = gson.toJson(ampDashboardFunding);
+            String jsonData = gson.toJson(submissionData);
+            logger.info("JSON data: " + jsonData);
 
             // Get the output stream of the connection
             try (OutputStream os = connection.getOutputStream()) {

@@ -21,6 +21,8 @@ public class ReportsDashboard {
     // Comma separated AMP activity IDs aggregated under the current hierarchy path
     private String activityIds;
     private String projectTitle;
+    // Translations for field labels: List of maps, each map contains "label" key and locale codes as keys
+    private java.util.List<java.util.Map<String, String>> translations;
 
     public ReportsDashboard() {
         this.actualCommitment = BigDecimal.ZERO;
@@ -168,6 +170,14 @@ public class ReportsDashboard {
 
     public void setProjectTitle(String projectTitle) {
         this.projectTitle = projectTitle;
+    }
+
+    public java.util.List<java.util.Map<String, String>> getTranslations() {
+        return translations;
+    }
+
+    public void setTranslations(java.util.List<java.util.Map<String, String>> translations) {
+        this.translations = translations;
     }
 
 }

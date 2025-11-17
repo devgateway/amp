@@ -85,7 +85,8 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                 + "|" + report.getReportingSystem()
                                 + "|" + report.getTypeOfAssistance()
                                 + "|" + report.getProcurementSystem()
-                                + "|" + report.getResponsibleOrganization(),
+                                + "|" + report.getResponsibleOrganization()
+                                + "|" + report.getSecondarySector(),
                         report -> report,
                         (report1, report2) -> {
                             report1.sumWith(report2);
@@ -100,7 +101,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
 
         // Find columns by name for robustness (works regardless of order)
         // Note: Indices are based on the order in addColumnsToSpecification:
-        // Hierarchies: 0-9, then AMP_ID (10), ACTIVITY_COUNT (11), measures (12-13)
+        // Hierarchies: 0-10, then AMP_ID (11), ACTIVITY_COUNT (12), measures (13-14)
         ReportOutputColumn donorAgency = findColumnByName(report.leafHeaders, ColumnConstants.DONOR_AGENCY, 0);
         ReportOutputColumn implementingAgency = findColumnByName(report.leafHeaders, ColumnConstants.IMPLEMENTING_AGENCY, 1);
         ReportOutputColumn procurementSystemAgency = findColumnByName(report.leafHeaders, ColumnConstants.PROCUREMENT_SYSTEM, 2);
@@ -112,9 +113,8 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         ReportOutputColumn typeOfAssistance = findColumnByName(report.leafHeaders, ColumnConstants.TYPE_OF_ASSISTANCE, 7);
         ReportOutputColumn reportingSystem = findColumnByName(report.leafHeaders, ColumnConstants.PRIMARY_SECTOR, 8); // Also called Forum
         ReportOutputColumn responsibleOrg = findColumnByName(report.leafHeaders, ColumnConstants.RESPONSIBLE_ORGANIZATION, 9);
-        ReportOutputColumn ampId = findColumnByName(report.leafHeaders, ColumnConstants.AMP_ID, 10); // AMP_ID is now after hierarchies
-
-
+        ReportOutputColumn secondarySector = report.leafHeaders.get(10);
+        ReportOutputColumn ampId = findColumnByName(report.leafHeaders, ColumnConstants.AMP_ID, 11); // AMP_ID is now after hierarchies
 
         List<ReportsDashboard> ampDashboardFunding = new ArrayList<>();
 
@@ -156,62 +156,70 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                                                             if (primarySectorData.getChildren() != null) {
                                                                                 for (ReportArea responsibleOrgData : primarySectorData.getChildren()) {
                                                                                     TextCell responsibleOrgCell = (TextCell) responsibleOrgData.getContents().get(responsibleOrg);
-                                                                                    Long activityCount = 0L;
-                                                                                    // collect activity count
-                                                                                    for (Map.Entry<ReportOutputColumn, ReportCell> content : responsibleOrgData.getContents().entrySet()) {
-                                                                                        ReportOutputColumn col = content.getKey();
-                                                                                        if (col.originalColumnName.equals(ColumnConstants.ACTIVITY_COUNT)) {
-                                                                                            IntCell amount = (IntCell) content.getValue();
-                                                                                            if (amount != null && amount.value != null) {
-                                                                                                activityCount = (Long) amount.value;
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                    // gather AMP IDs from children (leaf nodes)
-                                                                                    List<String> ampIdsList = new ArrayList<>();
-                                                                                    if (responsibleOrgData.getChildren() != null) {
-                                                                                        for (ReportArea ampIdData : responsibleOrgData.getChildren()) {
-                                                                                            TextCell ampIdCell = (TextCell) ampIdData.getContents().get(ampId);
-                                                                                            if (ampIdCell != null && ampIdCell.value != null) {
-                                                                                                ampIdsList.add(ampIdCell.value.toString());
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                    // fallback if AMP ID directly on this node and no children
-                                                                                    if (ampIdsList.isEmpty()) {
-                                                                                        TextCell directAmpIdCell = (TextCell) responsibleOrgData.getContents().get(ampId);
-                                                                                        if (directAmpIdCell != null && directAmpIdCell.value != null) {
-                                                                                            ampIdsList.add(directAmpIdCell.value.toString());
-                                                                                        }
-                                                                                    }
-                                                                                    String ampIdsJoined = String.join(",", ampIdsList);
 
-                                                                                    // now process measures
-                                                                                    for (Map.Entry<ReportOutputColumn, ReportCell> content : responsibleOrgData.getContents().entrySet()) {
-                                                                                        ReportOutputColumn col = content.getKey();
-                                                                                        if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS) || col.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
-                                                                                            if (col.parentColumn != null && col.parentColumn.originalColumnName.equals("Totals")) {
-                                                                                                ReportsDashboard fundingReport = new ReportsDashboard();
-                                                                                                fundingReport.setDonorAgency(donorAgencyCell != null ? donorAgencyCell.value.toString() : null);
-                                                                                                fundingReport.setImplementingAgency(implementingAgencyCell != null ? implementingAgencyCell.value.toString() : null);
-                                                                                                fundingReport.setPillar(pilarCell != null ? pilarCell.value.toString() : null);
-                                                                                                fundingReport.setLocation(locationCell != null ? locationCell.value.toString() : null);
-                                                                                                fundingReport.setImplementationLevel(implLevelCell != null ? implLevelCell.value.toString() : null);
-                                                                                                fundingReport.setStatus(statusCell != null ? statusCell.value.toString() : null);
-                                                                                                fundingReport.setReportingSystem(reportingSystemCell != null ? reportingSystemCell.value.toString() : null);
-                                                                                                fundingReport.setTypeOfAssistance(typeOfAssistanceCell != null ? typeOfAssistanceCell.value.toString() : null);
-                                                                                                fundingReport.setProcurementSystem(procurementSystemAgencyCell != null ? procurementSystemAgencyCell.value.toString() : null);
-                                                                                                fundingReport.setResponsibleOrganization(responsibleOrgCell != null ? responsibleOrgCell.value.toString() : null);
-                                                                                                fundingReport.setActivityCount(activityCount);
-                                                                                                fundingReport.setCurrency(currencyCode);
-                                                                                                fundingReport.setActivityIds(ampIdsJoined);
-                                                                                                AmountCell amount = (AmountCell) content.getValue();
-                                                                                                if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS)) {
-                                                                                                    fundingReport.setActualCommitment(amount.extractValue());
-                                                                                                } else {
-                                                                                                    fundingReport.setActualDisbursement(amount.extractValue());
+                                                                                    if (responsibleOrgData.getChildren() != null) {
+                                                                                        for (ReportArea secondarySectorData : responsibleOrgData.getChildren()) {
+                                                                                            TextCell secondarySectorCell = (TextCell) secondarySectorData.getContents().get(secondarySector);
+
+                                                                                            Long activityCount = 0L;
+                                                                                            // collect activity count
+                                                                                            for (Map.Entry<ReportOutputColumn, ReportCell> content : responsibleOrgData.getContents().entrySet()) {
+                                                                                                ReportOutputColumn col = content.getKey();
+                                                                                                if (col.originalColumnName.equals(ColumnConstants.ACTIVITY_COUNT)) {
+                                                                                                    IntCell amount = (IntCell) content.getValue();
+                                                                                                    if (amount != null && amount.value != null) {
+                                                                                                        activityCount = (Long) amount.value;
+                                                                                                    }
                                                                                                 }
-                                                                                                ampDashboardFunding.add(fundingReport);
+                                                                                            }
+                                                                                            // gather AMP IDs from children (leaf nodes)
+                                                                                            List<String> ampIdsList = new ArrayList<>();
+                                                                                            if (responsibleOrgData.getChildren() != null) {
+                                                                                                for (ReportArea ampIdData : responsibleOrgData.getChildren()) {
+                                                                                                    TextCell ampIdCell = (TextCell) ampIdData.getContents().get(ampId);
+                                                                                                    if (ampIdCell != null && ampIdCell.value != null) {
+                                                                                                        ampIdsList.add(ampIdCell.value.toString());
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                            // fallback if AMP ID directly on this node and no children
+                                                                                            if (ampIdsList.isEmpty()) {
+                                                                                                TextCell directAmpIdCell = (TextCell) responsibleOrgData.getContents().get(ampId);
+                                                                                                if (directAmpIdCell != null && directAmpIdCell.value != null) {
+                                                                                                    ampIdsList.add(directAmpIdCell.value.toString());
+                                                                                                }
+                                                                                            }
+                                                                                            String ampIdsJoined = String.join(",", ampIdsList);
+
+                                                                                            // now process measures
+                                                                                            for (Map.Entry<ReportOutputColumn, ReportCell> content : responsibleOrgData.getContents().entrySet()) {
+                                                                                                ReportOutputColumn col = content.getKey();
+                                                                                                if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS) || col.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
+                                                                                                    if (col.parentColumn != null && col.parentColumn.originalColumnName.equals("Totals")) {
+                                                                                                        ReportsDashboard fundingReport = new ReportsDashboard();
+                                                                                                        fundingReport.setDonorAgency(donorAgencyCell != null ? donorAgencyCell.value.toString() : null);
+                                                                                                        fundingReport.setImplementingAgency(implementingAgencyCell != null ? implementingAgencyCell.value.toString() : null);
+                                                                                                        fundingReport.setPillar(pilarCell != null ? pilarCell.value.toString() : null);
+                                                                                                        fundingReport.setLocation(locationCell != null ? locationCell.value.toString() : null);
+                                                                                                        fundingReport.setImplementationLevel(implLevelCell != null ? implLevelCell.value.toString() : null);
+                                                                                                        fundingReport.setStatus(statusCell != null ? statusCell.value.toString() : null);
+                                                                                                        fundingReport.setReportingSystem(reportingSystemCell != null ? reportingSystemCell.value.toString() : null);
+                                                                                                        fundingReport.setTypeOfAssistance(typeOfAssistanceCell != null ? typeOfAssistanceCell.value.toString() : null);
+                                                                                                        fundingReport.setProcurementSystem(procurementSystemAgencyCell != null ? procurementSystemAgencyCell.value.toString() : null);
+                                                                                                        fundingReport.setResponsibleOrganization(responsibleOrgCell != null ? responsibleOrgCell.value.toString() : null);
+                                                                                                        fundingReport.setSecondarySector(secondarySectorCell != null ? secondarySectorCell.value.toString() : null);
+                                                                                                        fundingReport.setActivityCount(activityCount);
+                                                                                                        fundingReport.setCurrency(currencyCode);
+                                                                                                        fundingReport.setActivityIds(ampIdsJoined);
+                                                                                                        AmountCell amount = (AmountCell) content.getValue();
+                                                                                                        if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS)) {
+                                                                                                            fundingReport.setActualCommitment(amount.extractValue());
+                                                                                                        } else {
+                                                                                                            fundingReport.setActualDisbursement(amount.extractValue());
+                                                                                                        }
+                                                                                                        ampDashboardFunding.add(fundingReport);
+                                                                                                    }
+                                                                                                }
                                                                                             }
                                                                                         }
                                                                                     }
@@ -268,8 +276,8 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                 logger.info("Found " + columnName + " at different position");
                 return col;
             }
-            if(columnName.equals(MeasureConstants.ACTUAL_COMMITMENTS) || columnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
-                if (col.parentColumn!=null && col.parentColumn.columnName.equalsIgnoreCase(columnName)) {
+            if (columnName.equals(MeasureConstants.ACTUAL_COMMITMENTS) || columnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
+                if (col.parentColumn != null && col.parentColumn.columnName.equalsIgnoreCase(columnName)) {
                     logger.info("Found Measure" + columnName + " at different position");
                     return col;
                 }

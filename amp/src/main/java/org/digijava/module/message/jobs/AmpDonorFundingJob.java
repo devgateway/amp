@@ -113,7 +113,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         ReportOutputColumn typeOfAssistance = findColumnByName(report.leafHeaders, ColumnConstants.TYPE_OF_ASSISTANCE, 7);
         ReportOutputColumn reportingSystem = findColumnByName(report.leafHeaders, ColumnConstants.PRIMARY_SECTOR, 8); // Also called Forum
         ReportOutputColumn responsibleOrg = findColumnByName(report.leafHeaders, ColumnConstants.RESPONSIBLE_ORGANIZATION, 9);
-        ReportOutputColumn secondarySector = report.leafHeaders.get(10);
+        ReportOutputColumn secondarySector = findColumnByName(report.leafHeaders, ColumnConstants.SECONDARY_SECTOR, 10);
         ReportOutputColumn ampId = findColumnByName(report.leafHeaders, ColumnConstants.AMP_ID, 11); // AMP_ID is now after hierarchies
 
         List<ReportsDashboard> ampDashboardFunding = new ArrayList<>();
@@ -349,6 +349,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         //TODO for GGW this is reporting system, for others it is Sectors
         spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
         spec.addColumn(new ReportColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION));
+        spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_SECTOR));
         // Ensure AMP ID is part of the hierarchy so commitments roll up under each activity
 
         // Set hierarchies - includes AMP_ID so commitments/disbursements roll up under each activity

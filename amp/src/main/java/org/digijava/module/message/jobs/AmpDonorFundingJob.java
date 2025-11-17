@@ -75,7 +75,8 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                 //+ "|" + report.getYear()
                                 + "|" + report.getReportingSystem()
                                 + "|" + report.getTypeOfAssistance()
-                                + "|" + report.getProcurementSystem(),
+                                + "|" + report.getProcurementSystem()
+                                + "|" + report.getSecondarySector(),
                         report -> report,
                         (report1, report2) -> {
                             report1.sumWith(report2);
@@ -95,7 +96,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         ReportOutputColumn status = report.leafHeaders.get(6);
         ReportOutputColumn typeOfAssistance = report.leafHeaders.get(7);
         ReportOutputColumn reportingSystem = report.leafHeaders.get(8); // Also called Forum
-
+        ReportOutputColumn secondarySector = report.leafHeaders.get(9);
 
         List<ReportsDashboard> ampDashboardFunding = new ArrayList<>();
         for (ReportArea child : report.reportContents.getChildren()) {
@@ -103,8 +104,6 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             if (child.getChildren() != null) {
                 for (ReportArea implementingAgencyData : child.getChildren()) {
                     TextCell implementingAgencyCell = (TextCell) implementingAgencyData.getContents().get(implementingAgency);
-
-
                     for (ReportArea procurementSystemAgencyData : implementingAgencyData.getChildren()) {
                         TextCell procurementSystemAgencyCell = (TextCell) procurementSystemAgencyData.getContents().get(procurementSystemAgency);
                         for (ReportArea pilarData : procurementSystemAgencyData.getChildren()) {
@@ -119,38 +118,41 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                             TextCell typeOfAssistanceCell = (TextCell) typeOfAssistanceData.getContents().get(typeOfAssistance);
                                             for (ReportArea reportSystemData : typeOfAssistanceData.getChildren()) {
                                                 TextCell reportSystemCell = (TextCell) reportSystemData.getContents().get(reportingSystem);
-                                                Long activityCount = 0L;
                                                 for (Map.Entry<ReportOutputColumn, ReportCell> content : reportSystemData.getContents().entrySet()) {
-
-                                                    ReportOutputColumn col = content.getKey();
-                                                    if (col.originalColumnName.equals(ColumnConstants.ACTIVITY_COUNT)) {
-                                                        IntCell amount = (IntCell) content.getValue();
-                                                        activityCount = (Long) amount.value;
-                                                        System.out.println("Activity Count: " + amount.value);
-                                                    }
-                                                    if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS) || col.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
-                                                        //if (!col.parentColumn.originalColumnName.equals("Totals")) {
-                                                        if (col.parentColumn.originalColumnName.equals("Totals")) {
-                                                            ReportsDashboard fundingReport = new ReportsDashboard();
-                                                            fundingReport.setDonorAgency(donorAgencyCell.value.toString());
-                                                            fundingReport.setImplementingAgency(implementingAgencyCell.value.toString());
-                                                            fundingReport.setPillar(pilarCell.value.toString());
-                                                            fundingReport.setCountry(countryCell.value.toString());
-                                                            fundingReport.setImplementationLevel(implLevelCell.value.toString());
-                                                            fundingReport.setStatus(statusCell.value.toString());
-                                                            fundingReport.setReportingSystem(reportSystemCell.value.toString());
-                                                            fundingReport.setTypeOfAssistance(typeOfAssistanceCell.value.toString());
-                                                            fundingReport.setProcurementSystem(procurementSystemAgencyCell.value.toString());
-                                                            //fundingReport.setYear(col.parentColumn.originalColumnName);
-                                                            AmountCell amount = (AmountCell) content.getValue();
-                                                            if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS)) {
-                                                                fundingReport.setActualCommitment(amount.extractValue());
-                                                            } else {
-                                                                fundingReport.setActualDisbursement(amount.extractValue());
+                                                    for (ReportArea secondarySectorData : reportSystemData.getChildren()) {
+                                                        TextCell secondarySectorCell = (TextCell) secondarySectorData.getContents().get(secondarySector);
+                                                        Long activityCount = 0L;
+                                                        ReportOutputColumn col = content.getKey();
+                                                        if (col.originalColumnName.equals(ColumnConstants.ACTIVITY_COUNT)) {
+                                                            IntCell amount = (IntCell) content.getValue();
+                                                            activityCount = (Long) amount.value;
+                                                            System.out.println("Activity Count: " + amount.value);
+                                                        }
+                                                        if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS) || col.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
+                                                            //if (!col.parentColumn.originalColumnName.equals("Totals")) {
+                                                            if (col.parentColumn.originalColumnName.equals("Totals")) {
+                                                                ReportsDashboard fundingReport = new ReportsDashboard();
+                                                                fundingReport.setDonorAgency(donorAgencyCell.value.toString());
+                                                                fundingReport.setImplementingAgency(implementingAgencyCell.value.toString());
+                                                                fundingReport.setPillar(pilarCell.value.toString());
+                                                                fundingReport.setCountry(countryCell.value.toString());
+                                                                fundingReport.setImplementationLevel(implLevelCell.value.toString());
+                                                                fundingReport.setStatus(statusCell.value.toString());
+                                                                fundingReport.setReportingSystem(reportSystemCell.value.toString());
+                                                                fundingReport.setTypeOfAssistance(typeOfAssistanceCell.value.toString());
+                                                                fundingReport.setProcurementSystem(procurementSystemAgencyCell.value.toString());
+                                                                //fundingReport.setYear(col.parentColumn.originalColumnName);
+                                                                AmountCell amount = (AmountCell) content.getValue();
+                                                                if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS)) {
+                                                                    fundingReport.setActualCommitment(amount.extractValue());
+                                                                } else {
+                                                                    fundingReport.setActualDisbursement(amount.extractValue());
+                                                                }
+                                                                fundingReport.setActivityCount(activityCount);
+                                                                fundingReport.setCurrency(currencyCode);
+                                                                fundingReport.setSecondarySector(secondarySectorCell.value.toString());
+                                                                ampDashboardFunding.add(fundingReport);
                                                             }
-                                                            fundingReport.setActivityCount(activityCount);
-                                                            fundingReport.setCurrency(currencyCode);
-                                                            ampDashboardFunding.add(fundingReport);
                                                         }
                                                     }
                                                 }
@@ -210,6 +212,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         spec.addColumn(new ReportColumn(ColumnConstants.TYPE_OF_ASSISTANCE));
         //TODO for GGW this is reporting system, for others it is Sectors
         spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
+        spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_SECTOR));
         //spec.addColumn(new ReportColumn(ColumnConstants.REPORTING_SYSTEM));
 
         spec.setHierarchies(spec.getColumns());

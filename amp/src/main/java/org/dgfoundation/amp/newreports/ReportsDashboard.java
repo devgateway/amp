@@ -17,6 +17,7 @@ public class ReportsDashboard {
     private BigDecimal actualCommitment;
     private BigDecimal actualDisbursement;
     private Long activityCount;
+    private String secondarySector;
 
     public ReportsDashboard() {
         this.actualCommitment = BigDecimal.ZERO;
@@ -142,5 +143,13 @@ public class ReportsDashboard {
     }
     public void setProcurementSystem(String procurementSystem) {
         this.procurementSystem = procurementSystem;
+    }
+
+    public String getSecondarySector() {
+        return secondarySector;
+    }
+
+    public void setSecondarySector(String secondarySector) {
+        this.secondarySector = secondarySector;
     }
 }

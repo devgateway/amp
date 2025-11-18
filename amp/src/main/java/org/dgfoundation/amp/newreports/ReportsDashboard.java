@@ -21,13 +21,13 @@ public class ReportsDashboard {
     // Comma separated AMP activity IDs aggregated under the current hierarchy path
     private String activityIds;
     private String projectTitle;
+    private String secondarySector;
 
     public ReportsDashboard() {
         this.actualCommitment = BigDecimal.ZERO;
         this.actualDisbursement = BigDecimal.ZERO;
         this.activityCount = 0L;
     }
-
 
     public String getDonorAgency() {
         return donorAgency;
@@ -52,12 +52,15 @@ public class ReportsDashboard {
     public void setPillar(String pillar) {
         this.pillar = pillar;
     }
+
     public String getActivityIds() {
         return activityIds;
     }
+
     public void setActivityIds(String activityIds) {
         this.activityIds = activityIds;
     }
+
     /*
         public String getYear() {
             return year;
@@ -147,9 +150,11 @@ public class ReportsDashboard {
     public void setActivityCount(Long activityCount) {
         this.activityCount = activityCount;
     }
+
     public String getProcurementSystem() {
         return procurementSystem;
     }
+
     public void setProcurementSystem(String procurementSystem) {
         this.procurementSystem = procurementSystem;
     }
@@ -170,4 +175,11 @@ public class ReportsDashboard {
         this.projectTitle = projectTitle;
     }
 
+    public String getSecondarySector() {
+        return secondarySector;
+    }
+
+    public void setSecondarySector(String secondarySector) {
+        this.secondarySector = secondarySector;
+    }
 }

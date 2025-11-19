@@ -5,10 +5,11 @@ import java.math.BigDecimal;
 public class ReportsDashboard {
     private String donorAgency;
     private String implementingAgency;
+    private String responsibleOrganization;
     private String pillar;
     private String implementationLevel;
     private String procurementSystem;
-    private String country;
+    private String location;
     private String status;
     private String reportingSystem;
     private String typeOfAssistance;
@@ -17,13 +18,16 @@ public class ReportsDashboard {
     private BigDecimal actualCommitment;
     private BigDecimal actualDisbursement;
     private Long activityCount;
+    // Comma separated AMP activity IDs aggregated under the current hierarchy path
+    private String activityIds;
+    private String projectTitle;
+    private String secondarySector;
 
     public ReportsDashboard() {
         this.actualCommitment = BigDecimal.ZERO;
         this.actualDisbursement = BigDecimal.ZERO;
         this.activityCount = 0L;
     }
-
 
     public String getDonorAgency() {
         return donorAgency;
@@ -48,15 +52,24 @@ public class ReportsDashboard {
     public void setPillar(String pillar) {
         this.pillar = pillar;
     }
-/*
-    public String getYear() {
-        return year;
+
+    public String getActivityIds() {
+        return activityIds;
     }
 
-    public void setYear(String year) {
-        this.year = year;
+    public void setActivityIds(String activityIds) {
+        this.activityIds = activityIds;
     }
-*/
+
+    /*
+        public String getYear() {
+            return year;
+        }
+
+        public void setYear(String year) {
+            this.year = year;
+        }
+    */
     public BigDecimal getActualCommitment() {
         return actualCommitment;
     }
@@ -65,12 +78,12 @@ public class ReportsDashboard {
         this.actualCommitment = actualCommitment;
     }
 
-    public String getCountry() {
-        return country;
+    public String getLocation() {
+        return location;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getImplementationLevel() {
@@ -137,10 +150,36 @@ public class ReportsDashboard {
     public void setActivityCount(Long activityCount) {
         this.activityCount = activityCount;
     }
+
     public String getProcurementSystem() {
         return procurementSystem;
     }
+
     public void setProcurementSystem(String procurementSystem) {
         this.procurementSystem = procurementSystem;
+    }
+
+    public String getResponsibleOrganization() {
+        return responsibleOrganization;
+    }
+
+    public void setResponsibleOrganization(String responsibleOrganization) {
+        this.responsibleOrganization = responsibleOrganization;
+    }
+
+    public String getProjectTitle() {
+        return projectTitle;
+    }
+
+    public void setProjectTitle(String projectTitle) {
+        this.projectTitle = projectTitle;
+    }
+
+    public String getSecondarySector() {
+        return secondarySector;
+    }
+
+    public void setSecondarySector(String secondarySector) {
+        this.secondarySector = secondarySector;
     }
 }

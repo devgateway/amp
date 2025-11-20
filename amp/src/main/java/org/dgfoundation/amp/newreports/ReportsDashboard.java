@@ -23,6 +23,7 @@ public class ReportsDashboard {
     private String projectTitle;
     // Translations for field labels: List of maps, each map contains "label" key and locale codes as keys
     private java.util.List<java.util.Map<String, String>> translations;
+    private String secondarySector;
 
     public ReportsDashboard() {
         this.actualCommitment = BigDecimal.ZERO;
@@ -54,12 +55,15 @@ public class ReportsDashboard {
     public void setPillar(String pillar) {
         this.pillar = pillar;
     }
+
     public String getActivityIds() {
         return activityIds;
     }
+
     public void setActivityIds(String activityIds) {
         this.activityIds = activityIds;
     }
+
     /*
         public String getYear() {
             return year;
@@ -180,4 +184,11 @@ public class ReportsDashboard {
         this.translations = translations;
     }
 
+    public String getSecondarySector() {
+        return secondarySector;
+    }
+
+    public void setSecondarySector(String secondarySector) {
+        this.secondarySector = secondarySector;
+    }
 }

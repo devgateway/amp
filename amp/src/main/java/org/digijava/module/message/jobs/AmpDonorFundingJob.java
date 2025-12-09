@@ -22,8 +22,15 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.ReportsDashboard;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.jetbrains.annotations.NotNull;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -59,10 +66,13 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         currencies.forEach(currency -> ampDashboardFundingCombined.addAll(getFundingByCurrency(currency)));
         //List<ReportsDashboard> ampDashboardFundingCombinedXDR = getFundingByCurrency("XDR");
 
+        // Get translations for all fields (once, not per record)
+        List<Map<String, String>> translations = getTranslations();
+
         String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);
         assert serverUrl != null;
         serverUrl = serverUrl.endsWith("/") ? serverUrl + "amp-funding/importDonorFunding" : serverUrl + "/amp-funding/importDonorFunding";
-        sendReportsToServer(ampDashboardFundingCombined, serverUrl);
+        sendReportsToServer(ampDashboardFundingCombined, translations, serverUrl);
     }
 
     @NotNull
@@ -366,15 +376,116 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         logger.info("Report columns set for Donor Funding Report" + spec.getColumns().size());
     }
 
-    public static void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, String serverUrl) {
+    /**
+     * Gets translations for all field labels (returns once, not per record)
+     */
+    private List<Map<String, String>> getTranslations() {
+        List<Map<String, String>> translations = new ArrayList<>();
+        
+        try {
+            // Get all available locales
+            List<String> localeCodes = getAvailableLocaleCodes();
+            if (localeCodes.isEmpty()) {
+                logger.warn("No available locales found, skipping translations");
+                return translations;
+            }
+
+            // Get the site
+            Site site = TLSUtils.getSite();
+            if (site == null) {
+                logger.warn("No site found, skipping translations");
+                return translations;
+            }
+
+            // Get location column name
+            String locationAdmLevel = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DONOR_FUNDING_ADM_LEVEL);
+
+            // Define field mappings: field name -> column constant
+            Map<String, String> fieldMappings = new HashMap<>();
+            fieldMappings.put("donorAgency", ColumnConstants.DONOR_AGENCY);
+            fieldMappings.put("implementingAgency", ColumnConstants.IMPLEMENTING_AGENCY);
+            fieldMappings.put("pillar", ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
+            fieldMappings.put("location", locationAdmLevel != null ? locationAdmLevel : ColumnConstants.LOCATION);
+            fieldMappings.put("implementationLevel", ColumnConstants.IMPLEMENTATION_LEVEL);
+            fieldMappings.put("status", ColumnConstants.STATUS);
+            fieldMappings.put("reportingSystem", ColumnConstants.PRIMARY_SECTOR);
+            fieldMappings.put("typeOfAssistance", ColumnConstants.TYPE_OF_ASSISTANCE);
+            fieldMappings.put("procurementSystem", ColumnConstants.PROCUREMENT_SYSTEM);
+            fieldMappings.put("responsibleOrganization", ColumnConstants.RESPONSIBLE_ORGANIZATION);
+            fieldMappings.put("currency", "Currency");
+            fieldMappings.put("actualCommitment", MeasureConstants.ACTUAL_COMMITMENTS);
+            fieldMappings.put("actualDisbursement", MeasureConstants.ACTUAL_DISBURSEMENTS);
+            fieldMappings.put("activityCount", ColumnConstants.ACTIVITY_COUNT);
+            fieldMappings.put("activityIds", "Activity IDs");
+            fieldMappings.put("projectTitle", "Project Title");
+
+            // Generate translations for all fields once
+            for (Map.Entry<String, String> entry : fieldMappings.entrySet()) {
+                String fieldName = entry.getKey();
+                String label = entry.getValue();
+                Map<String, String> fieldTranslation = getFieldTranslations(label, localeCodes, site);
+                fieldTranslation.put("label", fieldName);
+                translations.add(fieldTranslation);
+            }
+
+            logger.info("Generated translations for " + translations.size() + " fields with " + localeCodes.size() + " locales");
+        } catch (Exception e) {
+            logger.error("Error getting translations", e);
+        }
+        
+        return translations;
+    }
+
+    /**
+     * Gets all available locale codes from the database
+     */
+    private List<String> getAvailableLocaleCodes() {
+        List<String> localeCodes = new ArrayList<>();
+        Session session = null;
+        try {
+            session = PersistenceManager.getSession();
+            Query<String> query = session.createQuery("SELECT l.code FROM " + Locale.class.getName() + " l WHERE l.available = true", String.class);
+            List<String> codes = query.list();
+            localeCodes.addAll(codes);
+        } catch (Exception e) {
+            logger.error("Error getting available locales", e);
+        }
+        return localeCodes;
+    }
+
+    /**
+     * Gets translations for a field label in all available locales
+     */
+    private Map<String, String> getFieldTranslations(String label, List<String> localeCodes, Site site) {
+        Map<String, String> translations = new HashMap<>();
+        for (String localeCode : localeCodes) {
+            try {
+                String translated = TranslatorWorker.translateText(label, localeCode, site);
+                translations.put(localeCode, translated != null ? translated : label);
+            } catch (Exception e) {
+                logger.warn("Error translating label '" + label + "' for locale '" + localeCode + "': " + e.getMessage());
+                translations.put(localeCode, label);
+            }
+        }
+        return translations;
+    }
+
+    public static void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, List<Map<String, String>> translations, String serverUrl) {
         try {
             // Create a URL object with the server's endpoint URL
             logger.info("Sending data to amp dashboard at: " + serverUrl);
             logger.info("Number of records to send: " + ampDashboardFunding.size());
             HttpURLConnection connection = getHttpURLConnection(serverUrl);
-            // Convert the ampDashboardFunding to JSON using a JSON library (e.g., Gson)
+            
+            // Create a wrapper object with reports and translations
+            Map<String, Object> submissionData = new HashMap<>();
+            submissionData.put("reports", ampDashboardFunding);
+            submissionData.put("translations", translations);
+            
+            // Convert to JSON using a JSON library (e.g., Gson)
             Gson gson = new Gson();
-            String jsonData = gson.toJson(ampDashboardFunding);
+            String jsonData = gson.toJson(submissionData);
+            logger.info("JSON data: " + jsonData);
 
             // Get the output stream of the connection
             try (OutputStream os = connection.getOutputStream()) {

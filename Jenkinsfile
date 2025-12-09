@@ -119,7 +119,6 @@ stage('Build') {
     }
 
     println "amp url is ${ampUrl}"
-
     node('docker') {
         checkout scm
         def image = "${dockerRepo}amp/webapp:${tag}"

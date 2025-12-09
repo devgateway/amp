@@ -21,6 +21,8 @@ public class ReportsDashboard {
     // Comma separated AMP activity IDs aggregated under the current hierarchy path
     private String activityIds;
     private String projectTitle;
+    // Translations for field labels: List of maps, each map contains "label" key and locale codes as keys
+    private java.util.List<java.util.Map<String, String>> translations;
     private String secondarySector;
 
     public ReportsDashboard() {
@@ -28,6 +30,7 @@ public class ReportsDashboard {
         this.actualDisbursement = BigDecimal.ZERO;
         this.activityCount = 0L;
     }
+
 
     public String getDonorAgency() {
         return donorAgency;
@@ -150,11 +153,9 @@ public class ReportsDashboard {
     public void setActivityCount(Long activityCount) {
         this.activityCount = activityCount;
     }
-
     public String getProcurementSystem() {
         return procurementSystem;
     }
-
     public void setProcurementSystem(String procurementSystem) {
         this.procurementSystem = procurementSystem;
     }
@@ -173,6 +174,14 @@ public class ReportsDashboard {
 
     public void setProjectTitle(String projectTitle) {
         this.projectTitle = projectTitle;
+    }
+
+    public java.util.List<java.util.Map<String, String>> getTranslations() {
+        return translations;
+    }
+
+    public void setTranslations(java.util.List<java.util.Map<String, String>> translations) {
+        this.translations = translations;
     }
 
     public String getSecondarySector() {

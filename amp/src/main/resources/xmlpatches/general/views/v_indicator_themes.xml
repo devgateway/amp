@@ -23,8 +23,8 @@
                   SELECT con.activity_id                                                                        AS amp_activity_id,
        ind.name,
        ind.indicator_id                                                                       AS me_indicator_id,
-       t2.amp_theme_id                                                                        AS me_npo_id,
-       t2.amp_theme_id                                                                        AS amp_theme_id,
+       t.amp_theme_id                                                                        AS me_npo_id,
+       t.amp_theme_id                                                                        AS amp_theme_id,
        CASE ind.type WHEN 'A' THEN 1 :: BIGINT WHEN 'D' THEN 2 :: BIGINT ELSE 3 :: BIGINT END AS me_indicator_type_id,
        con.ind_val_category                                                                   AS me_indicator_logframe_id,
        con.risk                                                                               AS me_indicator_risk_id

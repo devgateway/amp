@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports.amp.indicators;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.DoubleCell;
@@ -33,6 +34,8 @@ import static org.dgfoundation.amp.nireports.amp.AmpReportsSchema.ANY_PROGRAM_TY
  * @author Octavian Ciubotaru
  */
 public class IndicatorTextualTokenBehaviour extends TextualTokenBehaviour {
+
+    private static Logger log = Logger.getLogger(IndicatorTextualTokenBehaviour.class);
 
     private final BiFunction<NiReportsEngine, Cell, String> formatter;
     private final NiDimensionUsage indicatorDimensionUsage;
@@ -121,7 +124,7 @@ public class IndicatorTextualTokenBehaviour extends TextualTokenBehaviour {
                 return super.filterCell(acceptors, oldCell, splitCell, false); */
                 return super.filterCell(acceptors, oldCell, splitCell, isTransactionLevelHierarchy);
             }
-            System.out.println("Ignoring cell with id " + splitCell.entityId + " because it is not part of the same NPO as the old cell");
+            log.warn("Ignoring cell with id " + splitCell.entityId + " because it is not part of the same NPO as the old cell");
             return null;
         }
     }

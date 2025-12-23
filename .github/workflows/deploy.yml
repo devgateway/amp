@@ -15,34 +15,41 @@ on:
         required: true
         type: choice
         options:
-          - burkina
-          - togo
-          - tanzania
-          - drc
-          - malawi
-          - zambia
-          - uganda
-          - kenya
-          - ghana
-          - senegal
-          - mali
-          - niger
-          - benin
-          - guinea
-          - sierraleone
-          - liberia
-          - gambia
-          - mauritania
+          - bfaso
+          - boad
           - chad
-          - cameroon
-          - rwanda
-          - burundi
+          - civ
+          - drc
+          - ecowas
+          - egypt
           - ethiopia
-          - mozambique
+          - gambia
+          - ggw
+          - haiti
+          - haitiiati
+          - haititraining
+          - honduras
+          - honduraslight
+          - honduraslightssc
+          - jordan
+          - kosovo
+          - kyrgyzstan
+          - liberia
           - madagascar
-          - comoros
-          - seychelles
-          - mauritius
+          - malawi
+          - moldova
+          - nepal
+          - niger
+          - rdidemo
+          - rwanda
+          - rwandatest
+          - senegal
+          - senegalgiz
+          - tanzania
+          - timor
+          - togo
+          - uganda
+          - xchad
 
 env:
   PG_VERSION: 14

@@ -128,7 +128,8 @@ public class AmpIndicatorColumn extends AmpAmountColumn {
      * columns of type long which are optional
      */
     protected static List<ImmutablePair<MetaCategory, String>> longColumnsToFetch = Arrays.asList(
-            new ImmutablePair<>(MetaCategory.INDICATOR_VALUE_TYPE, "value_type")
+            new ImmutablePair<>(MetaCategory.INDICATOR_VALUE_TYPE, "value_type"),
+            new ImmutablePair<>(MetaCategory.INDICATOR_PROGRAM_ID, "program_id")
     );
 
     /**

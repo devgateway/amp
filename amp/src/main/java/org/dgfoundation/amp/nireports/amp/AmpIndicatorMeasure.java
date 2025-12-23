@@ -10,7 +10,7 @@ public class AmpIndicatorMeasure extends NiTransactionMeasure {
 
     public AmpIndicatorMeasure(String measureName, long valueType) {
         super(measureName,
-                cac -> true,
+                cac -> cac.metaInfo.containsMeta(MetaCategory.INDICATOR_VALUE_TYPE.category, Long.valueOf(valueType)),
                 IndicatorMeasureBehaviour.getInstance(),
                 AmpReportsSchema.measureDescriptions.get(measureName),
                 false);

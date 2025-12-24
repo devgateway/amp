@@ -129,7 +129,7 @@ jobs:
           DEPLOY_HOST="${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
           DEPLOY_USER="${{ steps.deploy_config.outputs.DEPLOY_USER }}"
           BASTION_HOST="${{ secrets.BASTION_HOST }}"
-          BASTION_USER="${{ secrets.BASTION_USER }}"
+          BASTION_USER="${{ vars.BASTION_USER }}"
           
           # Use default bastion user if not specified (matching local config: bmokandu)
           if [ -z "$BASTION_USER" ] || [ "$BASTION_USER" = "" ]; then

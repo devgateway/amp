@@ -113,7 +113,7 @@ jobs:
           if [ -n "${{ vars.DEPLOY_USER }}" ]; then
             echo "DEPLOY_USER=${{ vars.DEPLOY_USER }}" >> $GITHUB_OUTPUT
           else
-            echo "DEPLOY_USER=jenkins" >> $GITHUB_OUTPUT
+            echo "DEPLOY_USER=bmokandu" >> $GITHUB_OUTPUT
           fi
 
       - name: Setup SSH

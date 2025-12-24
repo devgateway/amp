@@ -102,16 +102,16 @@ jobs:
         id: deploy_config
         run: |
           if [[ "${{ inputs.environment }}" == "de" ]]; then
-            echo "DEPLOY_HOST=${{ secrets.AMP_DE_HOSTNAME }}" >> $GITHUB_OUTPUT
+            echo "DEPLOY_HOST=${{ vars.AMP_DE_HOSTNAME }}" >> $GITHUB_OUTPUT
             echo "AMP_URL=http://amp-${{ inputs.country }}-${{ steps.tag.outputs.TAG }}.de.ampsite.net/" >> $GITHUB_OUTPUT
           else
-            echo "DEPLOY_HOST=${{ secrets.AMP_STAGING_HOSTNAME }}" >> $GITHUB_OUTPUT
+            echo "DEPLOY_HOST=${{ vars.AMP_STAGING_HOSTNAME }}" >> $GITHUB_OUTPUT
             echo "AMP_URL=http://amp-${{ inputs.country }}-${{ steps.tag.outputs.TAG }}.stg.ampsite.net/" >> $GITHUB_OUTPUT
           fi
           
-          # Set deploy user from secret with fallback to 'jenkins'
-          if [ -n "${{ secrets.DEPLOY_USER }}" ]; then
-            echo "DEPLOY_USER=${{ secrets.DEPLOY_USER }}" >> $GITHUB_OUTPUT
+          # Set deploy user from vars with fallback to 'jenkins'
+          if [ -n "${{ vars.DEPLOY_USER }}" ]; then
+            echo "DEPLOY_USER=${{ vars.DEPLOY_USER }}" >> $GITHUB_OUTPUT
           else
             echo "DEPLOY_USER=jenkins" >> $GITHUB_OUTPUT
           fi

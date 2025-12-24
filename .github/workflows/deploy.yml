@@ -50,6 +50,10 @@ on:
           - togo
           - uganda
           - xchad
+      pr_number:
+        description: 'PR number (optional - if provided, will use pr-{number} format for tag and URL). See workflow logs for available PRs.'
+        required: false
+        type: string
 
 env:
   PG_VERSION: 14
@@ -81,6 +85,57 @@ jobs:
           # Use SSH for private submodules
           ssh-key: ${{ secrets.DOCKER_BUILD_SSH_KEY || '' }}
 
+      - name: List available PRs and validate
+        if: inputs.pr_number != ''
+        run: |
+          set -e
+          echo "📋 Fetching list of open pull requests..."
+          echo ""
+          
+          # Fetch open PRs using GitHub API
+          REPO="${{ github.repository }}"
+          PR_NUMBER="${{ inputs.pr_number }}"
+          
+          # Validate PR number is numeric
+          if ! [[ "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
+            echo "❌ Error: PR number must be numeric, got: ${PR_NUMBER}"
+            exit 1
+          fi
+          
+          # Get list of open PRs (limit to 50 most recent)
+          PRS_RESPONSE=$(curl -s -H "Authorization: token ${{ github.token }}" \
+            "https://api.github.com/repos/${REPO}/pulls?state=open&per_page=50&sort=updated&direction=desc")
+          
+          if [ -z "$PRS_RESPONSE" ] || [ "$PRS_RESPONSE" == "[]" ]; then
+            echo "❌ Error: Could not fetch PR list or no open PRs found"
+            echo "   Cannot validate PR #${PR_NUMBER}"
+            exit 1
+          fi
+          
+          echo "Available open PRs:"
+          echo "$PRS_RESPONSE" | jq -r '.[] | "  #\(.number) - \(.title) (branch: \(.head.ref))"' || echo "Could not parse PR list"
+          echo ""
+          
+          # Validate the provided PR number exists in open PRs
+          PR_EXISTS=$(echo "$PRS_RESPONSE" | jq -r --arg pr "$PR_NUMBER" '.[] | select(.number == ($pr | tonumber)) | .number' || echo "")
+          
+          if [ -z "$PR_EXISTS" ]; then
+            echo "❌ Error: PR #${PR_NUMBER} not found in open PRs list"
+            echo ""
+            echo "The PR might be:"
+            echo "  - Closed or merged"
+            echo "  - Not yet created"
+            echo "  - Incorrect number"
+            echo ""
+            echo "Please verify the PR number and try again."
+            exit 1
+          fi
+          
+          PR_TITLE=$(echo "$PRS_RESPONSE" | jq -r --arg pr "$PR_NUMBER" '.[] | select(.number == ($pr | tonumber)) | .title' || echo "")
+          PR_BRANCH=$(echo "$PRS_RESPONSE" | jq -r --arg pr "$PR_NUMBER" '.[] | select(.number == ($pr | tonumber)) | .head.ref' || echo "")
+          echo "✅ PR #${PR_NUMBER} found: ${PR_TITLE}"
+          echo "   Branch: ${PR_BRANCH}"
+
       - name: Set up JDK for Maven
         uses: actions/setup-java@v4
         with:
@@ -97,15 +152,24 @@ jobs:
       - name: Generate deployment tag
         id: tag
         run: |
-          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
-          if [[ "$BRANCH_NAME" =~ ^feature/AMP-[0-9]+.* ]]; then
-            JIRA_ID=$(echo "$BRANCH_NAME" | sed -n 's/^feature\/AMP-\([0-9]\+\).*/\1/p')
-            TAG="feature-${JIRA_ID}"
+          # Check if PR number is provided
+          if [ -n "${{ inputs.pr_number }}" ]; then
+            PR_NUMBER="${{ inputs.pr_number }}"
+            TAG="pr-${PR_NUMBER}"
+            echo "PR_NUMBER=${PR_NUMBER}" >> $GITHUB_OUTPUT
+            echo "Deployment tag: $TAG (PR #${PR_NUMBER})"
           else
-            TAG=$(echo "$BRANCH_NAME" | sed 's/[^a-zA-Z0-9_-]/-/g' | tr '[:upper:]' '[:lower:]')
+            # Handle branch-based deployments
+            BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+            if [[ "$BRANCH_NAME" =~ ^feature/AMP-[0-9]+.* ]]; then
+              JIRA_ID=$(echo "$BRANCH_NAME" | sed -n 's/^feature\/AMP-\([0-9]\+\).*/\1/p')
+              TAG="feature-${JIRA_ID}"
+            else
+              TAG=$(echo "$BRANCH_NAME" | sed 's/[^a-zA-Z0-9_-]/-/g' | tr '[:upper:]' '[:lower:]')
+            fi
+            echo "Deployment tag: $TAG"
           fi
           echo "TAG=$TAG" >> $GITHUB_OUTPUT
-          echo "Deployment tag: $TAG"
 
       - name: Login to Container Registry (Push)
         uses: docker/login-action@v3
@@ -117,12 +181,35 @@ jobs:
       - name: Set deployment hostname and user
         id: deploy_config
         run: |
-          if [[ "${{ inputs.environment }}" == "de" ]]; then
+          # Use inputs from workflow_dispatch
+          ENV="${{ inputs.environment }}"
+          COUNTRY="${{ inputs.country }}"
+          
+          # Store environment and country
+          echo "ENV=${ENV}" >> $GITHUB_OUTPUT
+          echo "COUNTRY=${COUNTRY}" >> $GITHUB_OUTPUT
+          
+          if [[ "$ENV" == "de" ]]; then
             echo "DEPLOY_HOST=${{ vars.AMP_DE_HOSTNAME }}" >> $GITHUB_OUTPUT
-            echo "AMP_URL=http://amp-${{ inputs.country }}-${{ steps.tag.outputs.TAG }}.de.ampsite.net/" >> $GITHUB_OUTPUT
+            # For PRs, use pr-{number} format in URL
+            if [ -n "${{ inputs.pr_number }}" ]; then
+              echo "AMP_URL=http://amp-${COUNTRY}-pr-${{ inputs.pr_number }}.de.ampsite.net/" >> $GITHUB_OUTPUT
+            else
+              echo "AMP_URL=http://amp-${COUNTRY}-${{ steps.tag.outputs.TAG }}.de.ampsite.net/" >> $GITHUB_OUTPUT
+            fi
           else
             echo "DEPLOY_HOST=${{ vars.AMP_STAGING_HOSTNAME }}" >> $GITHUB_OUTPUT
-            echo "AMP_URL=http://amp-${{ inputs.country }}-${{ steps.tag.outputs.TAG }}.stg.ampsite.net/" >> $GITHUB_OUTPUT
+            # For PRs, use pr-{number} format in URL
+            if [ -n "${{ inputs.pr_number }}" ]; then
+              echo "AMP_URL=http://amp-${COUNTRY}-pr-${{ inputs.pr_number }}.stg.ampsite.net/" >> $GITHUB_OUTPUT
+            else
+              echo "AMP_URL=http://amp-${COUNTRY}-${{ steps.tag.outputs.TAG }}.stg.ampsite.net/" >> $GITHUB_OUTPUT
+            fi
+          fi
+          
+          # Store PR number if provided
+          if [ -n "${{ inputs.pr_number }}" ]; then
+            echo "PR_NUMBER=${{ inputs.pr_number }}" >> $GITHUB_OUTPUT
           fi
           
           # Set deploy user from vars with fallback to 'jenkins'
@@ -262,26 +349,31 @@ jobs:
 
       - name: Validate selected country
         run: |
+          # Get country from deploy_config output
+          COUNTRY="${{ steps.deploy_config.outputs.COUNTRY }}"
+          
           # Convert countries list to newline-separated for validation
           COUNTRIES=$(echo "${{ steps.countries_list.outputs.COUNTRIES }}" | tr ' ' '\n')
           
           # Check if selected country is available
-          if ! echo "$COUNTRIES" | grep -q "^${{ inputs.country }}$"; then
-            echo "❌ Country '${{ inputs.country }}' not found in available countries"
+          if ! echo "$COUNTRIES" | grep -q "^${COUNTRY}$"; then
+            echo "❌ Country '${COUNTRY}' not found in available countries"
             echo ""
             echo "Available countries:"
             echo "$COUNTRIES"
             exit 1
           fi
           
-          echo "✅ Country '${{ inputs.country }}' is available"
+          echo "✅ Country '${COUNTRY}' is available"
 
       - name: Get database version
         id: db_version
         run: |
           DEPLOY_HOST="${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
           DEPLOY_USER="${{ steps.deploy_config.outputs.DEPLOY_USER }}"
-          DB_VERSION=$(ssh $DEPLOY_USER@$DEPLOY_HOST "cd /opt/amp_dbs && amp-db find ${{ steps.amp_version.outputs.AMP_VERSION }} ${{ inputs.country }}")
+          # Get country from deploy_config output
+          COUNTRY="${{ steps.deploy_config.outputs.COUNTRY }}"
+          DB_VERSION=$(ssh $DEPLOY_USER@$DEPLOY_HOST "cd /opt/amp_dbs && amp-db find ${{ steps.amp_version.outputs.AMP_VERSION }} ${COUNTRY}")
           echo "DB_VERSION=$DB_VERSION" >> $GITHUB_OUTPUT
           echo "Database version: $DB_VERSION"
 
@@ -367,9 +459,14 @@ jobs:
           ssh $DEPLOY_USER@$DEPLOY_HOST bash << DEPLOY_SCRIPT
             set -e
             TAG="${{ steps.tag.outputs.TAG }}"
-            COUNTRY="${{ inputs.country }}"
+            COUNTRY="${{ steps.deploy_config.outputs.COUNTRY }}"
             DB_VERSION="${{ steps.db_version.outputs.DB_VERSION }}"
             PG_VERSION="${{ env.PG_VERSION }}"
+            
+            # For PRs, log the PR number
+            if [ -n "${{ inputs.pr_number }}" ]; then
+              echo "Deploying PR #${{ inputs.pr_number }} to ${COUNTRY}"
+            fi
             
             # ECR credentials for pulling images (if ECR is used)
             ECR_REGISTRY="798366298150.dkr.ecr.us-east-1.amazonaws.com"

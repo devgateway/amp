@@ -60,11 +60,26 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Setup SSH for submodules
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DOCKER_BUILD_SSH_KEY || '' }}
+
+      - name: Configure git to use SSH for submodules
+        run: |
+          # Configure git to rewrite HTTPS URLs to SSH for submodules
+          git config --global url."git@github.com:".insteadOf "https://github.com/"
+          # Add GitHub to known hosts
+          mkdir -p ~/.ssh
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Checkout code with submodules
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: true
+          # Use SSH for private submodules
+          ssh-key: ${{ secrets.DOCKER_BUILD_SSH_KEY || '' }}
 
       - name: Set up JDK for Maven
         uses: actions/setup-java@v4

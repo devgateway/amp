@@ -77,7 +77,8 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H github.com >> ~/.ssh/known_hosts 2>/dev/null || true
 
-      - name: Checkout code with submodules
+      - name: Checkout code with submodules (default branch)
+        if: inputs.pr_number == ''
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -87,6 +88,7 @@ jobs:
 
       - name: List available PRs and validate
         if: inputs.pr_number != ''
+        id: pr_info
         run: |
           set -e
           echo "📋 Fetching list of open pull requests..."
@@ -131,10 +133,32 @@ jobs:
             exit 1
           fi
           
+          # Get PR details
           PR_TITLE=$(echo "$PRS_RESPONSE" | jq -r --arg pr "$PR_NUMBER" '.[] | select(.number == ($pr | tonumber)) | .title' || echo "")
           PR_BRANCH=$(echo "$PRS_RESPONSE" | jq -r --arg pr "$PR_NUMBER" '.[] | select(.number == ($pr | tonumber)) | .head.ref' || echo "")
+          PR_HEAD_REPO=$(echo "$PRS_RESPONSE" | jq -r --arg pr "$PR_NUMBER" '.[] | select(.number == ($pr | tonumber)) | .head.repo.full_name' || echo "")
+          PR_HEAD_SHA=$(echo "$PRS_RESPONSE" | jq -r --arg pr "$PR_NUMBER" '.[] | select(.number == ($pr | tonumber)) | .head.sha' || echo "")
+          
           echo "✅ PR #${PR_NUMBER} found: ${PR_TITLE}"
           echo "   Branch: ${PR_BRANCH}"
+          echo "   Repository: ${PR_HEAD_REPO}"
+          echo "   SHA: ${PR_HEAD_SHA}"
+          
+          # Store PR branch info for checkout step
+          echo "PR_BRANCH=${PR_BRANCH}" >> $GITHUB_OUTPUT
+          echo "PR_HEAD_REPO=${PR_HEAD_REPO}" >> $GITHUB_OUTPUT
+          echo "PR_HEAD_SHA=${PR_HEAD_SHA}" >> $GITHUB_OUTPUT
+
+      - name: Checkout PR branch
+        if: inputs.pr_number != ''
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pr_info.outputs.PR_BRANCH }}
+          repository: ${{ steps.pr_info.outputs.PR_HEAD_REPO }}
+          fetch-depth: 0
+          submodules: true
+          # Use SSH for private submodules
+          ssh-key: ${{ secrets.DOCKER_BUILD_SSH_KEY || '' }}
 
       - name: Set up JDK for Maven
         uses: actions/setup-java@v4

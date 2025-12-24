@@ -362,8 +362,43 @@ jobs:
           DEPLOY_HOST="${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
           DEPLOY_USER="${{ steps.deploy_config.outputs.DEPLOY_USER }}"
           
-          ssh $DEPLOY_USER@$DEPLOY_HOST \
-            "amp-up2 ${{ steps.tag.outputs.TAG }} ${{ inputs.country }} ${{ steps.db_version.outputs.DB_VERSION }} ${{ env.PG_VERSION }}"
+          # Check if user needs sudo for docker, or if they're in docker group
+          # Try without sudo first, fall back to sudo if needed
+          ssh $DEPLOY_USER@$DEPLOY_HOST bash << DEPLOY_SCRIPT
+            set -e
+            TAG="${{ steps.tag.outputs.TAG }}"
+            COUNTRY="${{ inputs.country }}"
+            DB_VERSION="${{ steps.db_version.outputs.DB_VERSION }}"
+            PG_VERSION="${{ env.PG_VERSION }}"
+            
+            # ECR credentials for pulling images (if ECR is used)
+            ECR_REGISTRY="798366298150.dkr.ecr.us-east-1.amazonaws.com"
+            ECR_USERNAME="${{ secrets.REGISTRY_PULL_USERNAME || '' }}"
+            ECR_PASSWORD="${{ secrets.REGISTRY_PULL_PASSWORD || '' }}"
+            
+            # Authenticate with ECR if credentials are provided
+            if [ -n "$ECR_USERNAME" ] && [ -n "$ECR_PASSWORD" ]; then
+              echo "Authenticating with ECR..."
+              echo "$ECR_PASSWORD" | docker login --username "$ECR_USERNAME" --password-stdin "$ECR_REGISTRY" || true
+            fi
+            
+            # Check if user can access docker without sudo
+            if docker ps > /dev/null 2>&1; then
+              echo "User has docker access, running amp-up2 without sudo"
+              amp-up2 "$TAG" "$COUNTRY" "$DB_VERSION" "$PG_VERSION"
+            elif sudo docker ps > /dev/null 2>&1; then
+              echo "User needs sudo for docker, running amp-up2 with sudo"
+              # If using sudo, authenticate with ECR using sudo as well
+              if [ -n "$ECR_USERNAME" ] && [ -n "$ECR_PASSWORD" ]; then
+                echo "$ECR_PASSWORD" | sudo docker login --username "$ECR_USERNAME" --password-stdin "$ECR_REGISTRY" || true
+              fi
+              sudo amp-up2 "$TAG" "$COUNTRY" "$DB_VERSION" "$PG_VERSION"
+            else
+              echo "❌ Cannot access Docker daemon. User may need to be added to docker group."
+              echo "Run: sudo usermod -aG docker $USER"
+              exit 1
+            fi
+          DEPLOY_SCRIPT
           
           echo "✅ Deployment successful"
 

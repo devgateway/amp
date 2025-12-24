@@ -4,7 +4,11 @@ FROM node as compile-amp-state
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-state
 COPY TEMPLATE/ampTemplate/node_modules/amp-state .
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci
+    npm config set fetch-retries 5 \
+    && npm config set fetch-retry-mintimeout 20000 \
+    && npm config set fetch-retry-maxtimeout 120000 \
+    && npm config set fetch-timeout 300000 \
+    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci))
 
 FROM node as compile-amp-translate
 
@@ -16,7 +20,11 @@ COPY TEMPLATE/ampTemplate/node_modules/amp-translate/package*.json ./
 
 # Install dependencies
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci
+    npm config set fetch-retries 5 \
+    && npm config set fetch-retry-mintimeout 20000 \
+    && npm config set fetch-retry-maxtimeout 120000 \
+    && npm config set fetch-timeout 300000 \
+    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci))
 
 # Copy the rest of the application code
 COPY TEMPLATE/ampTemplate/node_modules/amp-translate ./
@@ -31,7 +39,11 @@ COPY TEMPLATE/ampTemplate/node_modules/amp-boilerplate/.git .
 COPY TEMPLATE/ampTemplate/node_modules/amp-boilerplate .
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci \
+    npm config set fetch-retries 5 \
+    && npm config set fetch-retry-mintimeout 20000 \
+    && npm config set fetch-retry-maxtimeout 120000 \
+    && npm config set fetch-timeout 300000 \
+    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci)) \
     && npm run build
 
 FROM node as compile-amp-filter
@@ -42,7 +54,11 @@ COPY TEMPLATE/ampTemplate/node_modules/amp-filter .
 # HACK otherwise amp-filter won't compile!
 COPY TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci \
+    npm config set fetch-retries 5 \
+    && npm config set fetch-retry-mintimeout 20000 \
+    && npm config set fetch-retry-maxtimeout 120000 \
+    && npm config set fetch-timeout 300000 \
+    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci)) \
     && npm run build
 
 FROM node as compile-amp-settings
@@ -53,7 +69,11 @@ COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp
 # HACK otherwise amp-settings won't compile!
 COPY TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci \
+    npm config set fetch-retries 5 \
+    && npm config set fetch-retry-mintimeout 20000 \
+    && npm config set fetch-retry-maxtimeout 120000 \
+    && npm config set fetch-timeout 300000 \
+    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci)) \
     && npm run build
 
 FROM node as compile-gis-layers-manager
@@ -61,7 +81,11 @@ WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 COPY TEMPLATE/ampTemplate/node_modules/gis-layers-manager .
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci \
+    npm config set fetch-retries 5 \
+    && npm config set fetch-retry-mintimeout 20000 \
+    && npm config set fetch-retry-maxtimeout 120000 \
+    && npm config set fetch-timeout 300000 \
+    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci)) \
     && npm run build
 
 FROM node as compile-gis-module
@@ -77,7 +101,11 @@ COPY --from=compile-gis-layers-manager /tmp/amp/TEMPLATE/ampTemplate/node_module
 COPY TEMPLATE/ampTemplate/gisModule .
 RUN --mount=type=cache,target=/root/.npm \
     cd dev \
-    && npm ci \
+    && npm config set fetch-retries 5 \
+    && npm config set fetch-retry-mintimeout 20000 \
+    && npm config set fetch-retry-maxtimeout 120000 \
+    && npm config set fetch-timeout 300000 \
+    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci)) \
     && npm run test \
     && npm run build \
     && rm -rf node_modules
@@ -95,7 +123,11 @@ COPY TEMPLATE/ampTemplate/node_modules/amp-url ../node_modules/amp-url
 COPY TEMPLATE/ampTemplate/dashboard .
 RUN --mount=type=cache,target=/root/.npm \
     cd dev \
-    && npm ci \
+    && npm config set fetch-retries 5 \
+    && npm config set fetch-retry-mintimeout 20000 \
+    && npm config set fetch-retry-maxtimeout 120000 \
+    && npm config set fetch-timeout 300000 \
+    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci)) \
     && npm run build \
     && rm -rf node_modules
 
@@ -105,7 +137,11 @@ COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/a
 COPY TEMPLATE/reamp .
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
-    npm ci \
+    npm config set fetch-retries 5 \
+    && npm config set fetch-retry-mintimeout 20000 \
+    && npm config set fetch-retry-maxtimeout 120000 \
+    && npm config set fetch-timeout 300000 \
+    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci)) \
     && npm run build \
     && rm -rf node_modules
 
@@ -117,7 +153,11 @@ COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-
 COPY TEMPLATE/reampv2 .
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
-    npm ci \
+    npm config set fetch-retries 5 \
+    && npm config set fetch-retry-mintimeout 20000 \
+    && npm config set fetch-retry-maxtimeout 120000 \
+    && npm config set fetch-timeout 300000 \
+    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci)) \
     && npm run build \
     && rm -rf node_modules
 FROM maven:3.8.4-jdk-8 as compile-mvn

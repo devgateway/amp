@@ -91,10 +91,6 @@ public class IndicatorMeasureBehaviour implements Behaviour<NiAmountCell> {
     }
 
     public NiAmountCell doHorizontalReduce(List<NiCell> cells, NiReportsEngine context) {
-        /* TODO: usando datos del context me fijo si el id del program/theme/msdg de la celda es el mismo de la categoria actual si es asi
-        puedo usar BigDecimal value = ((NumberedCell) cell).getAmount() de NiCell.java y sino devuelvo NiFormulaicAmountCell.FORMULAIC_ZERO;
-        NOTA: podria tambien hacerlo diferente y ya venir con el porcentaje correcto pero no vi donde se hace eso todavia.
-        */
         NiPrecisionSetting precision = ((NumberedCell) cells.get(0).getCell()).getPrecision();
         BigDecimal res = precision.adjustPrecision(BigDecimal.ZERO);
         for (NiCell cell : cells) {

@@ -142,14 +142,19 @@ jobs:
             # Check if deployment host matches *.aws pattern for ProxyCommand
             if echo "$DEPLOY_HOST" | grep -q "\.aws"; then
               # Use ProxyCommand pattern for *.aws hosts (matching local SSH config)
-              # Transform hostname: something.aws.devgateway.org -> something.devgateway.org
-              if echo "$DEPLOY_HOST" | grep -q "\.aws\.devgateway\.org"; then
-                TARGET_HOST=$(echo "$DEPLOY_HOST" | sed 's/\.aws\.devgateway\.org$/.devgateway.org/')
+              # Pattern: %h.devgateway.org means if host is "ampdev.aws", target is "ampdev.aws.devgateway.org"
+              if echo "$DEPLOY_HOST" | grep -q "\.aws\.devgateway\.org$"; then
+                # Already in full format: something.aws.devgateway.org
+                TARGET_HOST="$DEPLOY_HOST"
               elif echo "$DEPLOY_HOST" | grep -q "\.aws$"; then
-                TARGET_HOST=$(echo "$DEPLOY_HOST" | sed 's/\.aws$/.devgateway.org/')
+                # Transform: something.aws -> something.aws.devgateway.org (matching %h.devgateway.org pattern)
+                TARGET_HOST="${DEPLOY_HOST}.devgateway.org"
               else
+                # Fallback: use as-is
                 TARGET_HOST="$DEPLOY_HOST"
               fi
+              
+              echo "DEBUG: DEPLOY_HOST=$DEPLOY_HOST, TARGET_HOST=$TARGET_HOST"
               
               cat >> ~/.ssh/config << EOF
           Host bastion

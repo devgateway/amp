@@ -34,6 +34,21 @@
 				join amp_activity_version a ON ic.activity_id = a.amp_activity_id
 				left JOIN amp_indicator ind ON ind.indicator_id = ic.indicator_id
 				LEFT JOIN amp_theme t ON ind.program_id = t.amp_theme_id
+				LEFT JOIN amp_theme t2 ON t.parent_theme_id = t2.amp_theme_id
+
+				UNION ALL
+
+				select ic.activity_id           as amp_activity_id,
+				aigv.original_value,
+				aigv.type                as value_type,
+				aigv.original_value_date as value_date,
+				ic.indicator_id          as me_indicator_id,
+				t.amp_theme_id           AS program_id
+				from amp_indicator i
+				join amp_indicator_connection ic ON i.indicator_id = ic.indicator_id and ic.sub_clazz = 'a'
+				join amp_indicator_global_value aigv ON ic.indicator_id = aigv.indicator_id
+				left JOIN amp_indicator ind ON ind.indicator_id = ic.indicator_id
+				LEFT JOIN amp_theme t ON ind.program_id = t.amp_theme_id
 				LEFT JOIN amp_theme t2 ON t.parent_theme_id = t2.amp_theme_id;
         	</lang>
 		</script>

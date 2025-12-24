@@ -433,14 +433,25 @@ jobs:
             SSH_ARGS="--ssh default"
           fi
           
+          # Use cache from registry to speed up builds
+          # Try to pull a previous image with the same tag to use as cache
+          CACHE_FROM=""
+          if docker pull "$IMAGE" 2>/dev/null; then
+            echo "✅ Found existing image, using as cache"
+            CACHE_FROM="--cache-from $IMAGE"
+          else
+            echo "ℹ️  No existing image found, building from scratch"
+          fi
+          
           docker build \
             --progress=plain \
             $SSH_ARGS \
+            $CACHE_FROM \
             -t "$IMAGE" \
             --build-arg BUILD_SOURCE="${{ steps.tag.outputs.TAG }}" \
             --build-arg AMP_URL="${{ steps.deploy_config.outputs.AMP_URL }}" \
-            --build-arg AMP_PULL_REQUEST="" \
-            --build-arg AMP_BRANCH="${{ github.ref_name }}" \
+            --build-arg AMP_PULL_REQUEST="${{ steps.deploy_config.outputs.PR_NUMBER || '' }}" \
+            --build-arg AMP_BRANCH="${GITHUB_REF#refs/heads/}" \
             --build-arg AMP_REGISTRY_PRIVATE_KEY="${{ secrets.AMP_REGISTRY_PRIVATE_KEY || '' }}" \
             --label git-hash="${{ steps.commit_hash.outputs.COMMIT_HASH }}" \
             amp

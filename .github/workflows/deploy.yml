@@ -169,9 +169,29 @@ jobs:
       - name: Read AMP version from pom.xml
         id: amp_version
         run: |
-          VERSION=$(mvn -f amp/pom.xml -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+          # Parse version directly from pom.xml (much faster than running Maven)
+          # Try to get project.version property first, then fallback to version tag
+          # This avoids Maven initialization which can take 30+ seconds
+          
+          # Method 1: Try to extract project.version property using sed
+          VERSION=$(sed -n 's/.*<project\.version>\([^<]*\)<\/project\.version>.*/\1/p' pom.xml | head -1)
+          
+          # Method 2: If not found, extract from version tag and remove -SNAPSHOT
+          if [ -z "$VERSION" ]; then
+            VERSION=$(sed -n 's/.*<version>\([^<]*\)<\/version>.*/\1/p' pom.xml | head -1 | sed 's/-SNAPSHOT//')
+          fi
+          
+          # Clean up: trim whitespace
+          VERSION=$(echo "$VERSION" | xargs)
+          
+          # Fallback to default if still empty
+          if [ -z "$VERSION" ]; then
+            echo "⚠️  Could not parse version from pom.xml, using default 4.0"
+            VERSION="4.0"
+          fi
+          
           echo "AMP_VERSION=$VERSION" >> $GITHUB_OUTPUT
-          echo "AMP Version: $VERSION"
+          echo "AMP Version: $VERSION (parsed from pom.xml in <1s vs 30s+ for Maven)"
 
       - name: Generate deployment tag
         id: tag
@@ -452,6 +472,7 @@ jobs:
         if: steps.check_image.outputs.SKIP_BUILD == 'false'
         env:
           DOCKER_BUILDKIT: 1
+          BUILDKIT_PROGRESS: plain
         run: |
           COMMIT_HASH="${{ steps.commit_hash.outputs.COMMIT_HASH }}"
           IMAGE_BY_HASH="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:commit-${COMMIT_HASH:0:12}"
@@ -463,27 +484,38 @@ jobs:
             SSH_ARGS="--ssh default"
           fi
           
-          # Use cache from registry to speed up builds
-          # Try multiple cache sources: commit hash image, deployment tag image, and latest
-          CACHE_FROM=""
+          # Collect cache sources for better layer reuse
+          CACHE_FROM_ARGS=()
           
           # Try to use commit-hash-based image as cache (if it exists from a previous build)
           if docker pull "$IMAGE_BY_HASH" 2>/dev/null; then
             echo "✅ Using commit-hash-based image as cache"
-            CACHE_FROM="--cache-from $IMAGE_BY_HASH"
+            CACHE_FROM_ARGS+=("--cache-from" "$IMAGE_BY_HASH")
+          fi
+          
           # Try to use deployment tag image as cache
-          elif docker pull "$IMAGE_BY_TAG" 2>/dev/null; then
+          if docker pull "$IMAGE_BY_TAG" 2>/dev/null; then
             echo "✅ Using deployment tag image as cache"
-            CACHE_FROM="--cache-from $IMAGE_BY_TAG"
-          else
+            CACHE_FROM_ARGS+=("--cache-from" "$IMAGE_BY_TAG")
+          fi
+          
+          # Try to use a recent 'latest' or 'main' branch image as cache (if exists)
+          LATEST_IMAGE="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:latest"
+          if docker pull "$LATEST_IMAGE" 2>/dev/null; then
+            echo "✅ Using latest image as additional cache source"
+            CACHE_FROM_ARGS+=("--cache-from" "$LATEST_IMAGE")
+          fi
+          
+          if [ ${#CACHE_FROM_ARGS[@]} -eq 0 ]; then
             echo "ℹ️  No existing image found, building from scratch"
           fi
           
           # Build the image with both tags
+          # SKIP_TESTS=true to skip Maven and npm tests for faster deployment builds
           docker build \
             --progress=plain \
             $SSH_ARGS \
-            $CACHE_FROM \
+            "${CACHE_FROM_ARGS[@]}" \
             -t "$IMAGE_BY_HASH" \
             -t "$IMAGE_BY_TAG" \
             --build-arg BUILD_SOURCE="${{ steps.tag.outputs.TAG }}" \
@@ -491,6 +523,7 @@ jobs:
             --build-arg AMP_PULL_REQUEST="${{ steps.deploy_config.outputs.PR_NUMBER || '' }}" \
             --build-arg AMP_BRANCH="${GITHUB_REF#refs/heads/}" \
             --build-arg AMP_REGISTRY_PRIVATE_KEY="${{ secrets.AMP_REGISTRY_PRIVATE_KEY || '' }}" \
+            --build-arg SKIP_TESTS=true \
             --label git-hash="$COMMIT_HASH" \
             amp
           

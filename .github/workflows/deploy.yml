@@ -171,15 +171,7 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-          cache: 'maven'  # Enable Maven dependency caching
-
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          cache: 'maven'  # Automatically caches Maven dependencies
 
       - name: Read AMP version from pom.xml
         id: amp_version

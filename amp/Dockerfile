@@ -220,7 +220,7 @@ COPY . .
 ARG SKIP_TESTS=false
 RUN --mount=type=cache,target=/root/.m2 \
     if [ "$SKIP_TESTS" = "true" ]; then \
-      mvn -B war:exploded \
+      mvn -B clean compile war:exploded \
         -DbuildSource=$BUILD_SOURCE \
         -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
         -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \

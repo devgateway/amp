@@ -416,16 +416,154 @@ jobs:
           echo "COMMIT_HASH=$HASH" >> $GITHUB_OUTPUT
           echo "Commit hash: $HASH"
 
+      - name: Check if code changes require a rebuild
+        id: check_code_changes
+        run: |
+          COMMIT_HASH="${{ steps.commit_hash.outputs.COMMIT_HASH }}"
+          
+          # Get the previous commit (parent of current commit)
+          # For merge commits, compare against first parent
+          PREV_COMMIT=$(git rev-parse ${COMMIT_HASH}~1 2>/dev/null || echo "")
+          
+          if [ -z "$PREV_COMMIT" ]; then
+            # First commit or can't determine parent - assume rebuild needed
+            echo "⚠️  Cannot determine previous commit, will rebuild"
+            echo "REBUILD_NEEDED=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          echo "Comparing ${PREV_COMMIT:0:12}..${COMMIT_HASH:0:12} to detect code changes..."
+          
+          # Get list of changed files
+          CHANGED_FILES=$(git diff --name-only $PREV_COMMIT $COMMIT_HASH || echo "")
+          
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "⚠️  No changed files detected, will rebuild to be safe"
+            echo "REBUILD_NEEDED=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          echo "Changed files:"
+          echo "$CHANGED_FILES" | head -20
+          if [ $(echo "$CHANGED_FILES" | wc -l) -gt 20 ]; then
+            echo "... and $(($(echo "$CHANGED_FILES" | wc -l) - 20)) more files"
+          fi
+          
+          # Filter to only relevant files that affect the build
+          # Relevant: source code, dependencies, Dockerfile, build configs
+          # Not relevant: workflow files, docs, README, etc.
+          RELEVANT_PATTERNS="^amp/|^pom\.xml$|^Dockerfile|package.*\.json$|package-lock\.json$|yarn\.lock$|\.gradle$|build\.gradle|settings\.gradle"
+          
+          RELEVANT_CHANGES=$(echo "$CHANGED_FILES" | grep -E "$RELEVANT_PATTERNS" || echo "")
+          
+          # Also check if Dockerfile in amp/ directory changed
+          if echo "$CHANGED_FILES" | grep -q "^amp/Dockerfile"; then
+            RELEVANT_CHANGES="${RELEVANT_CHANGES}"$'\n'"amp/Dockerfile"
+          fi
+          
+          # Remove empty lines and check if any relevant changes exist
+          RELEVANT_CHANGES=$(echo "$RELEVANT_CHANGES" | grep -v '^$' || echo "")
+          
+          if [ -n "$RELEVANT_CHANGES" ]; then
+            echo ""
+            echo "✅ Relevant code/build changes detected:"
+            echo "$RELEVANT_CHANGES"
+            echo "REBUILD_NEEDED=true" >> $GITHUB_OUTPUT
+          else
+            echo ""
+            echo "ℹ️  No relevant code/build changes detected"
+            echo "   Only workflow/docs/config files changed - rebuild not needed"
+            echo "REBUILD_NEEDED=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Setup SSH for Docker build
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.DOCKER_BUILD_SSH_KEY || '' }}
 
-      - name: Build Docker image
+      - name: Check if image with commit hash already exists
+        id: check_image
         env:
           DOCKER_BUILDKIT: 1
         run: |
-          IMAGE="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:${{ steps.tag.outputs.TAG }}"
+          COMMIT_HASH="${{ steps.commit_hash.outputs.COMMIT_HASH }}"
+          REBUILD_NEEDED="${{ steps.check_code_changes.outputs.REBUILD_NEEDED }}"
+          
+          # If no code changes, try to find the most recent image from a previous commit
+          if [ "$REBUILD_NEEDED" != "true" ]; then
+            echo "ℹ️  No code changes detected - looking for previous image to reuse..."
+            
+            # Try to find the most recent image by checking parent commits
+            # We'll look for images from the last 10 commits
+            PREV_COMMIT=$(git rev-parse ${COMMIT_HASH}~1 2>/dev/null || echo "")
+            FOUND_IMAGE=""
+            
+            if [ -n "$PREV_COMMIT" ]; then
+              # Check parent commit first
+              IMAGE_BY_PARENT_HASH="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:commit-${PREV_COMMIT:0:12}"
+              if docker pull "$IMAGE_BY_PARENT_HASH" 2>/dev/null; then
+                echo "✅ Found image from parent commit ${PREV_COMMIT:0:12}"
+                FOUND_IMAGE="$IMAGE_BY_PARENT_HASH"
+              fi
+            fi
+            
+            # If not found, check a few more recent commits
+            if [ -z "$FOUND_IMAGE" ]; then
+              for i in {1..10}; do
+                CHECK_COMMIT=$(git rev-parse ${COMMIT_HASH}~${i} 2>/dev/null || echo "")
+                if [ -z "$CHECK_COMMIT" ]; then
+                  break
+                fi
+                IMAGE_BY_CHECK_HASH="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:commit-${CHECK_COMMIT:0:12}"
+                if docker pull "$IMAGE_BY_CHECK_HASH" 2>/dev/null; then
+                  echo "✅ Found image from commit ${CHECK_COMMIT:0:12} (${i} commits back)"
+                  FOUND_IMAGE="$IMAGE_BY_CHECK_HASH"
+                  break
+                fi
+              done
+            fi
+            
+            if [ -n "$FOUND_IMAGE" ]; then
+              DEPLOY_TAG="${{ steps.tag.outputs.TAG }}"
+              IMAGE_BY_TAG="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:${DEPLOY_TAG}"
+              docker tag "$FOUND_IMAGE" "$IMAGE_BY_TAG"
+              echo "SKIP_BUILD=true" >> $GITHUB_OUTPUT
+              echo "SKIP_REASON=no_code_changes" >> $GITHUB_OUTPUT
+              echo "IMAGE=$IMAGE_BY_TAG" >> $GITHUB_ENV
+              exit 0
+            fi
+          fi
+          
+          # Create a commit-hash-based image tag for content-based lookup
+          IMAGE_BY_HASH="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:commit-${COMMIT_HASH:0:12}"
+          DEPLOY_TAG="${{ steps.tag.outputs.TAG }}"
+          IMAGE_BY_TAG="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:${DEPLOY_TAG}"
+          
+          echo "Checking for existing image with commit hash ${COMMIT_HASH:0:12}..."
+          
+          # Try to pull image by commit hash
+          if docker pull "$IMAGE_BY_HASH" 2>/dev/null; then
+            echo "✅ Found existing image for commit ${COMMIT_HASH:0:12}"
+            echo "SKIP_BUILD=true" >> $GITHUB_OUTPUT
+            echo "SKIP_REASON=existing_image" >> $GITHUB_OUTPUT
+            echo "EXISTING_IMAGE=$IMAGE_BY_HASH" >> $GITHUB_OUTPUT
+            # Tag it with the deployment tag for consistency
+            docker tag "$IMAGE_BY_HASH" "$IMAGE_BY_TAG"
+            echo "IMAGE=$IMAGE_BY_TAG" >> $GITHUB_ENV
+          else
+            echo "ℹ️  No existing image found for commit ${COMMIT_HASH:0:12}, will build new image"
+            echo "SKIP_BUILD=false" >> $GITHUB_OUTPUT
+            echo "IMAGE=$IMAGE_BY_TAG" >> $GITHUB_ENV
+          fi
+
+      - name: Build Docker image
+        if: steps.check_image.outputs.SKIP_BUILD == 'false'
+        env:
+          DOCKER_BUILDKIT: 1
+        run: |
+          COMMIT_HASH="${{ steps.commit_hash.outputs.COMMIT_HASH }}"
+          IMAGE_BY_HASH="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:commit-${COMMIT_HASH:0:12}"
+          IMAGE_BY_TAG="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:${{ steps.tag.outputs.TAG }}"
           
           # Build SSH args - only add if SSH_AUTH_SOCK is available (from ssh-agent)
           SSH_ARGS=""
@@ -434,34 +572,69 @@ jobs:
           fi
           
           # Use cache from registry to speed up builds
-          # Try to pull a previous image with the same tag to use as cache
+          # Try multiple cache sources: commit hash image, deployment tag image, and latest
           CACHE_FROM=""
-          if docker pull "$IMAGE" 2>/dev/null; then
-            echo "✅ Found existing image, using as cache"
-            CACHE_FROM="--cache-from $IMAGE"
+          
+          # Try to use commit-hash-based image as cache (if it exists from a previous build)
+          if docker pull "$IMAGE_BY_HASH" 2>/dev/null; then
+            echo "✅ Using commit-hash-based image as cache"
+            CACHE_FROM="--cache-from $IMAGE_BY_HASH"
+          # Try to use deployment tag image as cache
+          elif docker pull "$IMAGE_BY_TAG" 2>/dev/null; then
+            echo "✅ Using deployment tag image as cache"
+            CACHE_FROM="--cache-from $IMAGE_BY_TAG"
           else
             echo "ℹ️  No existing image found, building from scratch"
           fi
           
+          # Build the image with both tags
           docker build \
             --progress=plain \
             $SSH_ARGS \
             $CACHE_FROM \
-            -t "$IMAGE" \
+            -t "$IMAGE_BY_HASH" \
+            -t "$IMAGE_BY_TAG" \
             --build-arg BUILD_SOURCE="${{ steps.tag.outputs.TAG }}" \
             --build-arg AMP_URL="${{ steps.deploy_config.outputs.AMP_URL }}" \
             --build-arg AMP_PULL_REQUEST="${{ steps.deploy_config.outputs.PR_NUMBER || '' }}" \
             --build-arg AMP_BRANCH="${GITHUB_REF#refs/heads/}" \
             --build-arg AMP_REGISTRY_PRIVATE_KEY="${{ secrets.AMP_REGISTRY_PRIVATE_KEY || '' }}" \
-            --label git-hash="${{ steps.commit_hash.outputs.COMMIT_HASH }}" \
+            --label git-hash="$COMMIT_HASH" \
             amp
           
-          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+          echo "✅ Image built successfully"
 
       - name: Push Docker image to registry
         run: |
-          docker push "${{ env.IMAGE }}" > /dev/null
-          echo "✅ Image pushed successfully"
+          COMMIT_HASH="${{ steps.commit_hash.outputs.COMMIT_HASH }}"
+          IMAGE_BY_HASH="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:commit-${COMMIT_HASH:0:12}"
+          IMAGE_BY_TAG="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:${{ steps.tag.outputs.TAG }}"
+          SKIP_BUILD="${{ steps.check_image.outputs.SKIP_BUILD }}"
+          
+          # Push commit-hash-based image (for future reuse) - only if we built it
+          if [ "$SKIP_BUILD" != "true" ]; then
+            echo "Pushing commit-hash-based image (for future reuse)..."
+            docker push "$IMAGE_BY_HASH" > /dev/null
+          fi
+          
+          # Push deployment tag image
+          echo "Pushing deployment tag image..."
+          docker push "$IMAGE_BY_TAG" > /dev/null
+          
+          SKIP_REASON="${{ steps.check_image.outputs.SKIP_REASON }}"
+          
+          if [ "$SKIP_BUILD" == "true" ]; then
+            if [ "$SKIP_REASON" == "no_code_changes" ]; then
+              echo "✅ Reused existing image (no code changes detected) - saved build time!"
+            else
+              echo "✅ Reused existing image (no build needed) - saved build time!"
+            fi
+          else
+            echo "✅ Image built and pushed successfully"
+          fi
+          
+          # Set IMAGE for cleanup step
+          echo "IMAGE=$IMAGE_BY_TAG" >> $GITHUB_ENV
 
       - name: Logout from Container Registry
         if: always()
@@ -489,21 +662,34 @@ jobs:
           DEPLOY_HOST="${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
           DEPLOY_USER="${{ steps.deploy_config.outputs.DEPLOY_USER }}"
           
-          # Check if user needs sudo for docker, or if they're in docker group
-          # Try without sudo first, fall back to sudo if needed
+          # Set variables locally for passing to remote server
+          TAG="${{ steps.tag.outputs.TAG }}"
+          COUNTRY="${{ steps.deploy_config.outputs.COUNTRY }}"
+          DB_VERSION="${{ steps.db_version.outputs.DB_VERSION }}"
+          PG_VERSION="${{ env.PG_VERSION }}"
+          REGISTRY="${{ secrets.DOCKER_REGISTRY }}"
+          REGISTRY_USERNAME="${{ secrets.REGISTRY_PULL_USERNAME || '' }}"
+          REGISTRY_PASSWORD="${{ secrets.REGISTRY_PULL_PASSWORD || '' }}"
+          PR_NUMBER="${{ inputs.pr_number || '' }}"
+          
           # Debug: Print values before sending to remote server
           echo "Debug - Values to be passed to amp-up2:"
-          echo "  TAG: ${{ steps.tag.outputs.TAG }}"
-          echo "  COUNTRY: ${{ steps.deploy_config.outputs.COUNTRY }}"
-          echo "  DB_VERSION: ${{ steps.db_version.outputs.DB_VERSION }}"
-          echo "  PG_VERSION: ${{ env.PG_VERSION }}"
+          echo "  TAG: $TAG"
+          echo "  COUNTRY: $COUNTRY"
+          echo "  DB_VERSION: $DB_VERSION"
+          echo "  PG_VERSION: $PG_VERSION"
           
-          ssh $DEPLOY_USER@$DEPLOY_HOST bash << DEPLOY_SCRIPT
+          # Pass variables as environment variables through SSH
+          ssh $DEPLOY_USER@$DEPLOY_HOST bash -s << DEPLOY_SCRIPT
             set -exo pipefail
-            TAG="${{ steps.tag.outputs.TAG }}"
-            COUNTRY="${{ steps.deploy_config.outputs.COUNTRY }}"
-            DB_VERSION="${{ steps.db_version.outputs.DB_VERSION }}"
-            PG_VERSION="${{ env.PG_VERSION }}"
+            TAG="$TAG"
+            COUNTRY="$COUNTRY"
+            DB_VERSION="$DB_VERSION"
+            PG_VERSION="$PG_VERSION"
+            REGISTRY="$REGISTRY"
+            REGISTRY_USERNAME="$REGISTRY_USERNAME"
+            REGISTRY_PASSWORD="$REGISTRY_PASSWORD"
+            PR_NUMBER="$PR_NUMBER"
             
             # Debug: Print received values
             echo "=========================================="
@@ -525,17 +711,12 @@ jobs:
             fi
             
             # Set image name to match the registry used in the workflow
-            export AMP_WEBAPP_IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/amp/webapp"
+            export AMP_WEBAPP_IMAGE_NAME="${REGISTRY}/amp/webapp"
             
             # For PRs, log the PR number
-            if [ -n "${{ inputs.pr_number }}" ]; then
-              echo "Deploying PR #${{ inputs.pr_number }} to ${COUNTRY}"
+            if [ -n "$PR_NUMBER" ]; then
+              echo "Deploying PR #$PR_NUMBER to ${COUNTRY}"
             fi
-            
-            # Main registry credentials for pulling webapp image
-            REGISTRY="${{ secrets.DOCKER_REGISTRY }}"
-            REGISTRY_USERNAME="${{ secrets.REGISTRY_PULL_USERNAME || '' }}"
-            REGISTRY_PASSWORD="${{ secrets.REGISTRY_PULL_PASSWORD || '' }}"
             
             # Authenticate with main registry if credentials are provided
             if [ -n "$REGISTRY_USERNAME" ] && [ -n "$REGISTRY_PASSWORD" ]; then

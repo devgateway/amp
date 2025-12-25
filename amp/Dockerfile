@@ -128,8 +128,9 @@ RUN --mount=type=cache,target=/root/.npm \
     && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci))
 # Copy source code after dependencies are installed
 COPY TEMPLATE/ampTemplate/gisModule .
+ARG SKIP_TESTS=false
 RUN cd dev \
-    && npm run test \
+    && if [ "$SKIP_TESTS" != "true" ]; then npm run test; fi \
     && npm run build \
     && rm -rf node_modules
 
@@ -216,14 +217,25 @@ RUN --mount=type=cache,target=/root/.m2 \
     mvn -B dependency:go-offline -f pom.xml || true
 # Copy source code after dependencies are downloaded
 COPY . .
+ARG SKIP_TESTS=false
 RUN --mount=type=cache,target=/root/.m2 \
-    mvn -B test war:exploded \
-      -DbuildSource=$BUILD_SOURCE \
-      -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
-      -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
-      -Dskip.npm -Dskip.installnodenpm \
-    && mv target/amp exploded \
-    && rm -rf target
+    if [ "$SKIP_TESTS" = "true" ]; then \
+      mvn -B war:exploded \
+        -DbuildSource=$BUILD_SOURCE \
+        -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
+        -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
+        -Dskip.npm -Dskip.installnodenpm -DskipTests \
+        && mv target/amp exploded \
+        && rm -rf target; \
+    else \
+      mvn -B test war:exploded \
+        -DbuildSource=$BUILD_SOURCE \
+        -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
+        -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
+        -Dskip.npm -Dskip.installnodenpm \
+        && mv target/amp exploded \
+        && rm -rf target; \
+    fi
 
 FROM tomcat:8.5.79-jdk8
 

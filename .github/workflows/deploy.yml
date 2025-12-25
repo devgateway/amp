@@ -171,7 +171,8 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-          cache: 'maven'  # Automatically caches Maven dependencies
+          # Note: Maven cache is not needed here since Maven runs inside Docker
+          # Docker build uses its own Maven cache via --mount=type=cache,target=/root/.m2
 
       - name: Read AMP version from pom.xml
         id: amp_version

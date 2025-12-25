@@ -260,7 +260,7 @@ jobs:
           if [ -n "${{ vars.DEPLOY_USER }}" ]; then
             echo "DEPLOY_USER=${{ vars.DEPLOY_USER }}" >> $GITHUB_OUTPUT
           else
-            echo "DEPLOY_USER=bmokandu" >> $GITHUB_OUTPUT
+            echo "DEPLOY_USER=jenkins" >> $GITHUB_OUTPUT
           fi
 
       - name: Setup SSH
@@ -278,9 +278,9 @@ jobs:
           BASTION_HOST="${{ secrets.BASTION_HOST }}"
           BASTION_USER="${{ vars.BASTION_USER }}"
           
-          # Use default bastion user if not specified (matching local config: bmokandu)
+          # Use default bastion user if not specified
           if [ -z "$BASTION_USER" ] || [ "$BASTION_USER" = "" ]; then
-            BASTION_USER="bmokandu"
+            BASTION_USER="jenkins"
           fi
           
           # Create SSH config matching local configuration
@@ -300,8 +300,6 @@ jobs:
                 # Fallback: use as-is
                 TARGET_HOST="$DEPLOY_HOST"
               fi
-              
-              echo "DEBUG: DEPLOY_HOST=$DEPLOY_HOST, TARGET_HOST=$TARGET_HOST"
               
               cat >> ~/.ssh/config << EOF
           Host bastion
@@ -591,16 +589,9 @@ jobs:
           REGISTRY_PASSWORD="${{ secrets.REGISTRY_PULL_PASSWORD || '' }}"
           PR_NUMBER="${{ inputs.pr_number || '' }}"
           
-          # Debug: Print values before sending to remote server
-          echo "Debug - Values to be passed to amp-up2:"
-          echo "  TAG: $TAG"
-          echo "  COUNTRY: $COUNTRY"
-          echo "  DB_VERSION: $DB_VERSION"
-          echo "  PG_VERSION: $PG_VERSION"
-          
           # Pass variables as environment variables through SSH
           ssh $DEPLOY_USER@$DEPLOY_HOST bash -s << DEPLOY_SCRIPT
-            set -exo pipefail
+            set -eo pipefail
             TAG="$TAG"
             COUNTRY="$COUNTRY"
             DB_VERSION="$DB_VERSION"
@@ -609,15 +600,6 @@ jobs:
             REGISTRY_USERNAME="$REGISTRY_USERNAME"
             REGISTRY_PASSWORD="$REGISTRY_PASSWORD"
             PR_NUMBER="$PR_NUMBER"
-            
-            # Debug: Print received values
-            echo "=========================================="
-            echo "Values received on remote server:"
-            echo "  TAG: '$TAG'"
-            echo "  COUNTRY: '$COUNTRY'"
-            echo "  DB_VERSION: '$DB_VERSION'"
-            echo "  PG_VERSION: '$PG_VERSION'"
-            echo "=========================================="
             
             # Validate required variables
             if [ -z "$TAG" ] || [ -z "$COUNTRY" ] || [ -z "$DB_VERSION" ] || [ -z "$PG_VERSION" ]; then
@@ -645,16 +627,8 @@ jobs:
             
             # Check if user can access docker without sudo
             if docker ps > /dev/null 2>&1; then
-              echo "=========================================="
-              echo "Running amp-up2 without sudo"
-              echo "Command: amp-up2 \"$TAG\" \"$COUNTRY\" \"$DB_VERSION\" \"$PG_VERSION\""
-              echo "=========================================="
               amp-up2 "$TAG" "$COUNTRY" "$DB_VERSION" "$PG_VERSION"
             elif sudo docker ps > /dev/null 2>&1; then
-              echo "=========================================="
-              echo "Running amp-up2 with sudo"
-              echo "Command: sudo amp-up2 \"$TAG\" \"$COUNTRY\" \"$DB_VERSION\" \"$PG_VERSION\""
-              echo "=========================================="
               # If using sudo, authenticate with registry using sudo as well
               if [ -n "$REGISTRY_USERNAME" ] && [ -n "$REGISTRY_PASSWORD" ]; then
                 echo "$REGISTRY_PASSWORD" | sudo docker login --username "$REGISTRY_USERNAME" --password-stdin "$REGISTRY" || true
@@ -665,9 +639,6 @@ jobs:
               echo "Run: sudo usermod -aG docker $USER"
               exit 1
             fi
-            echo "=========================================="
-            echo "amp-up2 completed"
-            echo "=========================================="
           DEPLOY_SCRIPT
           
           echo "✅ Deployment successful"

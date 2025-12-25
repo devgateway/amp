@@ -1,19 +1,21 @@
 FROM node:16.4.0 as node
 
 FROM node as compile-amp-state
+# Copy npm install helper script
+COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
+RUN chmod +x /usr/local/bin/npm-install-with-retry.sh
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-state
 # Copy package files first for better caching
 COPY TEMPLATE/ampTemplate/node_modules/amp-state/package*.json ./
 RUN --mount=type=cache,target=/root/.npm \
-    npm config set fetch-retries 5 \
-    && npm config set fetch-retry-mintimeout 20000 \
-    && npm config set fetch-retry-maxtimeout 120000 \
-    && npm config set fetch-timeout 300000 \
-    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci))
+    npm-install-with-retry.sh
 # Copy source code after dependencies are installed
 COPY TEMPLATE/ampTemplate/node_modules/amp-state .
 
 FROM node as compile-amp-translate
+# Copy npm install helper script
+COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
+RUN chmod +x /usr/local/bin/npm-install-with-retry.sh
 
 # Create a directory for the app within the Docker image
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate
@@ -23,11 +25,7 @@ COPY TEMPLATE/ampTemplate/node_modules/amp-translate/package*.json ./
 
 # Install dependencies
 RUN --mount=type=cache,target=/root/.npm \
-    npm config set fetch-retries 5 \
-    && npm config set fetch-retry-mintimeout 20000 \
-    && npm config set fetch-retry-maxtimeout 120000 \
-    && npm config set fetch-timeout 300000 \
-    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci))
+    npm-install-with-retry.sh
 
 # Copy the rest of the application code
 COPY TEMPLATE/ampTemplate/node_modules/amp-translate ./
@@ -37,6 +35,9 @@ COPY TEMPLATE/ampTemplate/node_modules/amp-translate ./
 
 
 FROM node as compile-amp-boilerplate
+# Copy npm install helper script
+COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
+RUN chmod +x /usr/local/bin/npm-install-with-retry.sh
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate
 # Copy dependencies first
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
@@ -44,16 +45,15 @@ COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp
 COPY TEMPLATE/ampTemplate/node_modules/amp-boilerplate/package*.json ./
 COPY TEMPLATE/ampTemplate/node_modules/amp-boilerplate/.git ./
 RUN --mount=type=cache,target=/root/.npm \
-    npm config set fetch-retries 5 \
-    && npm config set fetch-retry-mintimeout 20000 \
-    && npm config set fetch-retry-maxtimeout 120000 \
-    && npm config set fetch-timeout 300000 \
-    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci))
+    npm-install-with-retry.sh
 # Copy source code after dependencies are installed
 COPY TEMPLATE/ampTemplate/node_modules/amp-boilerplate .
 RUN npm run build
 
 FROM node as compile-amp-filter
+# Copy npm install helper script
+COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
+RUN chmod +x /usr/local/bin/npm-install-with-retry.sh
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter
 # Copy dependencies first
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
@@ -61,11 +61,7 @@ COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp
 COPY TEMPLATE/ampTemplate/node_modules/amp-filter/package*.json ./
 COPY TEMPLATE/ampTemplate/node_modules/amp-filter/.git ./
 RUN --mount=type=cache,target=/root/.npm \
-    npm config set fetch-retries 5 \
-    && npm config set fetch-retry-mintimeout 20000 \
-    && npm config set fetch-retry-maxtimeout 120000 \
-    && npm config set fetch-timeout 300000 \
-    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci))
+    npm-install-with-retry.sh
 # Copy source code after dependencies are installed
 COPY TEMPLATE/ampTemplate/node_modules/amp-filter .
 # HACK otherwise amp-filter won't compile!
@@ -73,17 +69,16 @@ COPY TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
 RUN npm run build
 
 FROM node as compile-amp-settings
+# Copy npm install helper script
+COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
+RUN chmod +x /usr/local/bin/npm-install-with-retry.sh
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings
 # Copy dependencies first
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 # Copy package files for dependency installation
 COPY TEMPLATE/ampTemplate/node_modules/amp-settings/package*.json ./
 RUN --mount=type=cache,target=/root/.npm \
-    npm config set fetch-retries 5 \
-    && npm config set fetch-retry-mintimeout 20000 \
-    && npm config set fetch-retry-maxtimeout 120000 \
-    && npm config set fetch-timeout 300000 \
-    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci))
+    npm-install-with-retry.sh
 # Copy source code after dependencies are installed
 COPY TEMPLATE/ampTemplate/node_modules/amp-settings .
 # HACK otherwise amp-settings won't compile!
@@ -91,22 +86,24 @@ COPY TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
 RUN npm run build
 
 FROM node as compile-gis-layers-manager
+# Copy npm install helper script
+COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
+RUN chmod +x /usr/local/bin/npm-install-with-retry.sh
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager
 # Copy dependencies first
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 # Copy package files for dependency installation
 COPY TEMPLATE/ampTemplate/node_modules/gis-layers-manager/package*.json ./
 RUN --mount=type=cache,target=/root/.npm \
-    npm config set fetch-retries 5 \
-    && npm config set fetch-retry-mintimeout 20000 \
-    && npm config set fetch-retry-maxtimeout 120000 \
-    && npm config set fetch-timeout 300000 \
-    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci))
+    npm-install-with-retry.sh
 # Copy source code after dependencies are installed
 COPY TEMPLATE/ampTemplate/node_modules/gis-layers-manager .
 RUN npm run build
 
 FROM node as compile-gis-module
+# Copy npm install helper script
+COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
+RUN chmod +x /usr/local/bin/npm-install-with-retry.sh
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/gisModule
 # Copy dependencies first (these change less frequently)
 COPY --from=compile-amp-state /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-state ../node_modules/amp-state
@@ -120,12 +117,7 @@ COPY TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
 # Copy package files for dependency installation
 COPY TEMPLATE/ampTemplate/gisModule/dev/package*.json ./dev/
 RUN --mount=type=cache,target=/root/.npm \
-    cd dev \
-    && npm config set fetch-retries 5 \
-    && npm config set fetch-retry-mintimeout 20000 \
-    && npm config set fetch-retry-maxtimeout 120000 \
-    && npm config set fetch-timeout 300000 \
-    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci))
+    npm-install-with-retry.sh dev
 # Copy source code after dependencies are installed
 COPY TEMPLATE/ampTemplate/gisModule .
 ARG SKIP_TESTS=false
@@ -135,6 +127,9 @@ RUN cd dev \
     && rm -rf node_modules
 
 FROM node as compile-dashboard
+# Copy npm install helper script
+COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
+RUN chmod +x /usr/local/bin/npm-install-with-retry.sh
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/dashboard
 # Copy dependencies first (these change less frequently)
 COPY --from=compile-amp-state /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-state ../node_modules/amp-state
@@ -148,12 +143,7 @@ COPY TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
 # Copy package files for dependency installation
 COPY TEMPLATE/ampTemplate/dashboard/dev/package*.json ./dev/
 RUN --mount=type=cache,target=/root/.npm \
-    cd dev \
-    && npm config set fetch-retries 5 \
-    && npm config set fetch-retry-mintimeout 20000 \
-    && npm config set fetch-retry-maxtimeout 120000 \
-    && npm config set fetch-timeout 300000 \
-    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci))
+    npm-install-with-retry.sh dev
 # Copy source code after dependencies are installed
 COPY TEMPLATE/ampTemplate/dashboard .
 RUN cd dev \
@@ -161,6 +151,9 @@ RUN cd dev \
     && rm -rf node_modules
 
 FROM node as compile-reamp
+# Copy npm install helper script
+COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
+RUN chmod +x /usr/local/bin/npm-install-with-retry.sh
 WORKDIR /tmp/amp/TEMPLATE/reamp
 # Copy dependencies first
 COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../ampTemplate/node_modules/amp-boilerplate
@@ -168,17 +161,16 @@ COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/a
 COPY TEMPLATE/reamp/package*.json ./
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
-    npm config set fetch-retries 5 \
-    && npm config set fetch-retry-mintimeout 20000 \
-    && npm config set fetch-retry-maxtimeout 120000 \
-    && npm config set fetch-timeout 300000 \
-    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci))
+    npm-install-with-retry.sh
 # Copy source code after dependencies are installed
 COPY TEMPLATE/reamp .
 RUN npm run build \
     && rm -rf node_modules
 
 FROM node as compile-reampv2
+# Copy npm install helper script
+COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
+RUN chmod +x /usr/local/bin/npm-install-with-retry.sh
 WORKDIR /tmp/amp/TEMPLATE/reampv2
 # Copy dependencies first
 COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../ampTemplate/node_modules/amp-boilerplate
@@ -188,11 +180,7 @@ COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-
 COPY TEMPLATE/reampv2/package*.json ./
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
-    npm config set fetch-retries 5 \
-    && npm config set fetch-retry-mintimeout 20000 \
-    && npm config set fetch-retry-maxtimeout 120000 \
-    && npm config set fetch-timeout 300000 \
-    && (npm ci || (sleep 10 && npm ci) || (sleep 20 && npm ci))
+    npm-install-with-retry.sh
 # Copy source code after dependencies are installed
 COPY TEMPLATE/reampv2 .
 RUN npm run build \

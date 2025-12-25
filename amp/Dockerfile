@@ -213,7 +213,7 @@ COPY --from=compile-reampv2 /tmp/amp/TEMPLATE/reampv2 TEMPLATE/reampv2
 # Download Maven dependencies (this layer will be cached if pom.xml doesn't change)
 ARG BUILD_SOURCE
 RUN --mount=type=cache,target=/root/.m2 \
-    mvn -B dependency:go-offline -f amp/pom.xml || true
+    mvn -B dependency:go-offline -f pom.xml || true
 # Copy source code after dependencies are downloaded
 COPY . .
 RUN --mount=type=cache,target=/root/.m2 \

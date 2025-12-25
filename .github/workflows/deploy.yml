@@ -492,7 +492,7 @@ jobs:
           # Check if user needs sudo for docker, or if they're in docker group
           # Try without sudo first, fall back to sudo if needed
           ssh $DEPLOY_USER@$DEPLOY_HOST bash << DEPLOY_SCRIPT
-            set -e
+            set -euxo pipefail
             TAG="${{ steps.tag.outputs.TAG }}"
             COUNTRY="${{ steps.deploy_config.outputs.COUNTRY }}"
             DB_VERSION="${{ steps.db_version.outputs.DB_VERSION }}"
@@ -519,10 +519,14 @@ jobs:
             
             # Check if user can access docker without sudo
             if docker ps > /dev/null 2>&1; then
-              echo "User has docker access, running amp-up2 without sudo"
+              echo "=========================================="
+              echo "Running amp-up2 without sudo"
+              echo "=========================================="
               amp-up2 "$TAG" "$COUNTRY" "$DB_VERSION" "$PG_VERSION"
             elif sudo docker ps > /dev/null 2>&1; then
-              echo "User needs sudo for docker, running amp-up2 with sudo"
+              echo "=========================================="
+              echo "Running amp-up2 with sudo"
+              echo "=========================================="
               # If using sudo, authenticate with registry using sudo as well
               if [ -n "$REGISTRY_USERNAME" ] && [ -n "$REGISTRY_PASSWORD" ]; then
                 echo "$REGISTRY_PASSWORD" | sudo docker login --username "$REGISTRY_USERNAME" --password-stdin "$REGISTRY" || true
@@ -533,6 +537,9 @@ jobs:
               echo "Run: sudo usermod -aG docker $USER"
               exit 1
             fi
+            echo "=========================================="
+            echo "amp-up2 completed"
+            echo "=========================================="
           DEPLOY_SCRIPT
           
           echo "✅ Deployment successful"

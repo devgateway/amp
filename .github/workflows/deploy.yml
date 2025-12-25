@@ -63,6 +63,7 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 60  # Add timeout to prevent hanging jobs
     steps:
       - name: Setup SSH for submodules
         uses: webfactory/ssh-agent@v0.9.0
@@ -165,6 +166,17 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
+          cache: 'maven'  # Enable Maven dependency caching
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2/repository
+            amp/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
       - name: Read AMP version from pom.xml
         id: amp_version
@@ -262,11 +274,6 @@ jobs:
           else
             echo "DEPLOY_USER=jenkins" >> $GITHUB_OUTPUT
           fi
-
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
 
       - name: Setup SSH config for bastion
         run: |
@@ -421,6 +428,11 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: |
+            image=moby/buildkit:latest
+            network=host
+          buildkitd-flags: --debug
 
       - name: Get commit hash
         id: commit_hash
@@ -438,6 +450,11 @@ jobs:
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.DOCKER_BUILD_SSH_KEY || '' }}
+
+      - name: Setup SSH for deployment
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
 
       - name: Check if image with commit hash already exists
         id: check_image
@@ -508,14 +525,18 @@ jobs:
             echo "ℹ️  No existing image found, building from scratch"
           fi
           
-          # Build the image with both tags
+          # Build the image with both tags using cache modes for better optimization
           # SKIP_TESTS=true to skip Maven and npm tests for faster deployment builds
-          docker build \
+          docker buildx build \
             --progress=plain \
             $SSH_ARGS \
             "${CACHE_FROM_ARGS[@]}" \
+            --cache-to type=inline \
+            --cache-from type=registry,ref="$IMAGE_BY_TAG" \
+            --cache-from type=registry,ref="$LATEST_IMAGE" \
             -t "$IMAGE_BY_HASH" \
             -t "$IMAGE_BY_TAG" \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
             --build-arg BUILD_SOURCE="${{ steps.tag.outputs.TAG }}" \
             --build-arg AMP_URL="${{ steps.deploy_config.outputs.AMP_URL }}" \
             --build-arg AMP_PULL_REQUEST="${{ steps.deploy_config.outputs.PR_NUMBER || '' }}" \
@@ -523,6 +544,7 @@ jobs:
             --build-arg AMP_REGISTRY_PRIVATE_KEY="${{ secrets.AMP_REGISTRY_PRIVATE_KEY || '' }}" \
             --build-arg SKIP_TESTS=true \
             --label git-hash="$COMMIT_HASH" \
+            --load \
             amp
           
           echo "✅ Image built successfully"

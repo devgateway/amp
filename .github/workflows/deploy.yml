@@ -498,20 +498,23 @@ jobs:
             DB_VERSION="${{ steps.db_version.outputs.DB_VERSION }}"
             PG_VERSION="${{ env.PG_VERSION }}"
             
+            # Set image name to match the registry used in the workflow
+            export AMP_WEBAPP_IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/amp/webapp"
+            
             # For PRs, log the PR number
             if [ -n "${{ inputs.pr_number }}" ]; then
               echo "Deploying PR #${{ inputs.pr_number }} to ${COUNTRY}"
             fi
             
-            # ECR credentials for pulling images (if ECR is used)
-            ECR_REGISTRY="798366298150.dkr.ecr.us-east-1.amazonaws.com"
-            ECR_USERNAME="${{ secrets.REGISTRY_PULL_USERNAME || '' }}"
-            ECR_PASSWORD="${{ secrets.REGISTRY_PULL_PASSWORD || '' }}"
+            # Main registry credentials for pulling webapp image
+            REGISTRY="${{ secrets.DOCKER_REGISTRY }}"
+            REGISTRY_USERNAME="${{ secrets.REGISTRY_PULL_USERNAME || '' }}"
+            REGISTRY_PASSWORD="${{ secrets.REGISTRY_PULL_PASSWORD || '' }}"
             
-            # Authenticate with ECR if credentials are provided
-            if [ -n "$ECR_USERNAME" ] && [ -n "$ECR_PASSWORD" ]; then
-              echo "Authenticating with ECR..."
-              echo "$ECR_PASSWORD" | docker login --username "$ECR_USERNAME" --password-stdin "$ECR_REGISTRY" || true
+            # Authenticate with main registry if credentials are provided
+            if [ -n "$REGISTRY_USERNAME" ] && [ -n "$REGISTRY_PASSWORD" ]; then
+              echo "Authenticating with main registry ($REGISTRY)..."
+              echo "$REGISTRY_PASSWORD" | docker login --username "$REGISTRY_USERNAME" --password-stdin "$REGISTRY" || true
             fi
             
             # Check if user can access docker without sudo
@@ -520,9 +523,9 @@ jobs:
               amp-up2 "$TAG" "$COUNTRY" "$DB_VERSION" "$PG_VERSION"
             elif sudo docker ps > /dev/null 2>&1; then
               echo "User needs sudo for docker, running amp-up2 with sudo"
-              # If using sudo, authenticate with ECR using sudo as well
-              if [ -n "$ECR_USERNAME" ] && [ -n "$ECR_PASSWORD" ]; then
-                echo "$ECR_PASSWORD" | sudo docker login --username "$ECR_USERNAME" --password-stdin "$ECR_REGISTRY" || true
+              # If using sudo, authenticate with registry using sudo as well
+              if [ -n "$REGISTRY_USERNAME" ] && [ -n "$REGISTRY_PASSWORD" ]; then
+                echo "$REGISTRY_PASSWORD" | sudo docker login --username "$REGISTRY_USERNAME" --password-stdin "$REGISTRY" || true
               fi
               sudo amp-up2 "$TAG" "$COUNTRY" "$DB_VERSION" "$PG_VERSION"
             else

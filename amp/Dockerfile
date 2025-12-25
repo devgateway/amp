@@ -200,7 +200,7 @@ FROM maven:3.8.4-jdk-8 as compile-mvn
 WORKDIR /tmp/amp
 # Copy pom.xml first for better Maven caching
 COPY pom.xml .
-COPY amp/pom.xml amp/
+#COPY amp/pom.xml amp/
 # Copy only Maven dependencies (these change less frequently)
 COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist
 COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter/dist TEMPLATE/ampTemplate/node_modules/amp-filter/dist

@@ -491,12 +491,38 @@ jobs:
           
           # Check if user needs sudo for docker, or if they're in docker group
           # Try without sudo first, fall back to sudo if needed
+          # Debug: Print values before sending to remote server
+          echo "Debug - Values to be passed to amp-up2:"
+          echo "  TAG: ${{ steps.tag.outputs.TAG }}"
+          echo "  COUNTRY: ${{ steps.deploy_config.outputs.COUNTRY }}"
+          echo "  DB_VERSION: ${{ steps.db_version.outputs.DB_VERSION }}"
+          echo "  PG_VERSION: ${{ env.PG_VERSION }}"
+          
           ssh $DEPLOY_USER@$DEPLOY_HOST bash << DEPLOY_SCRIPT
-            set -euxo pipefail
+            set -exo pipefail
             TAG="${{ steps.tag.outputs.TAG }}"
             COUNTRY="${{ steps.deploy_config.outputs.COUNTRY }}"
             DB_VERSION="${{ steps.db_version.outputs.DB_VERSION }}"
             PG_VERSION="${{ env.PG_VERSION }}"
+            
+            # Debug: Print received values
+            echo "=========================================="
+            echo "Values received on remote server:"
+            echo "  TAG: '$TAG'"
+            echo "  COUNTRY: '$COUNTRY'"
+            echo "  DB_VERSION: '$DB_VERSION'"
+            echo "  PG_VERSION: '$PG_VERSION'"
+            echo "=========================================="
+            
+            # Validate required variables
+            if [ -z "$TAG" ] || [ -z "$COUNTRY" ] || [ -z "$DB_VERSION" ] || [ -z "$PG_VERSION" ]; then
+              echo "❌ Error: One or more required variables are empty!"
+              echo "  TAG: '$TAG'"
+              echo "  COUNTRY: '$COUNTRY'"
+              echo "  DB_VERSION: '$DB_VERSION'"
+              echo "  PG_VERSION: '$PG_VERSION'"
+              exit 1
+            fi
             
             # Set image name to match the registry used in the workflow
             export AMP_WEBAPP_IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/amp/webapp"
@@ -521,11 +547,13 @@ jobs:
             if docker ps > /dev/null 2>&1; then
               echo "=========================================="
               echo "Running amp-up2 without sudo"
+              echo "Command: amp-up2 \"$TAG\" \"$COUNTRY\" \"$DB_VERSION\" \"$PG_VERSION\""
               echo "=========================================="
               amp-up2 "$TAG" "$COUNTRY" "$DB_VERSION" "$PG_VERSION"
             elif sudo docker ps > /dev/null 2>&1; then
               echo "=========================================="
               echo "Running amp-up2 with sudo"
+              echo "Command: sudo amp-up2 \"$TAG\" \"$COUNTRY\" \"$DB_VERSION\" \"$PG_VERSION\""
               echo "=========================================="
               # If using sudo, authenticate with registry using sudo as well
               if [ -n "$REGISTRY_USERNAME" ] && [ -n "$REGISTRY_PASSWORD" ]; then

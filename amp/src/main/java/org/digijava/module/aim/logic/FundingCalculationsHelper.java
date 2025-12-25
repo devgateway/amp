@@ -205,7 +205,7 @@ public class FundingCalculationsHelper {
             fundingDetail.setContract(fundDet.getContract());
             java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
             
-            Double fixedExchangeRate = Double.valueOf(fundDet.getFixedExchangeRate());
+            Double fixedExchangeRate = fundDet.getFixedExchangeRate();
             DecimalWraper amt = new DecimalWraper();
             amt.setValue(BigDecimal.valueOf(fundDet.getTransactionAmount()).multiply(BigDecimal.valueOf
                     (AmpCurrencyConvertor.getInstance().getExchangeRate(fundDet.getAmpCurrencyId().getCurrencyCode(),

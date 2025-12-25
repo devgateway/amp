@@ -65,10 +65,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60  # Add timeout to prevent hanging jobs
     steps:
-      - name: Setup SSH for submodules
+      - name: Setup SSH agent for Docker build
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.DOCKER_BUILD_SSH_KEY || '' }}
+
+      - name: Add deployment SSH key to agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
 
       - name: Configure git to use SSH for submodules
         run: |
@@ -171,9 +176,7 @@ jobs:
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.m2/repository
-            amp/.m2/repository
+          path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
@@ -446,15 +449,6 @@ jobs:
           echo "COMMIT_HASH=$HASH" >> $GITHUB_OUTPUT
           echo "Commit hash: $HASH"
 
-      - name: Setup SSH for Docker build
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.DOCKER_BUILD_SSH_KEY || '' }}
-
-      - name: Setup SSH for deployment
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
 
       - name: Check if image with commit hash already exists
         id: check_image

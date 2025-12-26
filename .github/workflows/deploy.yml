@@ -1,0 +1,346 @@
+name: Deploy AMP
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Server to deploy'
+        required: true
+        type: choice
+        options:
+          - staging
+          - de
+      country:
+        description: 'Country to deploy (will be validated against available countries from server)'
+        required: true
+        type: choice
+        options:
+          - burkina
+          - togo
+          - tanzania
+          - drc
+          - malawi
+          - zambia
+          - uganda
+          - kenya
+          - ghana
+          - senegal
+          - mali
+          - niger
+          - benin
+          - guinea
+          - sierraleone
+          - liberia
+          - gambia
+          - mauritania
+          - chad
+          - cameroon
+          - rwanda
+          - burundi
+          - ethiopia
+          - mozambique
+          - madagascar
+          - comoros
+          - seychelles
+          - mauritius
+
+env:
+  PG_VERSION: 14
+  # Reference list from GitHub Repository Variables
+  COMMON_COUNTRIES: ${{ vars.COMMON_COUNTRIES }}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK for Maven
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      - name: Read AMP version from pom.xml
+        id: amp_version
+        run: |
+          VERSION=$(mvn -f amp/pom.xml -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+          echo "AMP_VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "AMP Version: $VERSION"
+
+      - name: Generate deployment tag
+        id: tag
+        run: |
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          if [[ "$BRANCH_NAME" =~ ^feature/AMP-[0-9]+.* ]]; then
+            JIRA_ID=$(echo "$BRANCH_NAME" | sed -n 's/^feature\/AMP-\([0-9]\+\).*/\1/p')
+            TAG="feature-${JIRA_ID}"
+          else
+            TAG=$(echo "$BRANCH_NAME" | sed 's/[^a-zA-Z0-9_-]/-/g' | tr '[:upper:]' '[:lower:]')
+          fi
+          echo "TAG=$TAG" >> $GITHUB_OUTPUT
+          echo "Deployment tag: $TAG"
+
+      - name: Login to Container Registry (Push)
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.REGISTRY_PUSH_USERNAME }}
+          password: ${{ secrets.REGISTRY_PUSH_PASSWORD }}
+
+      - name: Set deployment hostname and user
+        id: deploy_config
+        run: |
+          if [[ "${{ inputs.environment }}" == "de" ]]; then
+            echo "DEPLOY_HOST=${{ secrets.AMP_DE_HOSTNAME }}" >> $GITHUB_OUTPUT
+            echo "AMP_URL=http://amp-${{ inputs.country }}-${{ steps.tag.outputs.TAG }}.de.ampsite.net/" >> $GITHUB_OUTPUT
+          else
+            echo "DEPLOY_HOST=${{ secrets.AMP_STAGING_HOSTNAME }}" >> $GITHUB_OUTPUT
+            echo "AMP_URL=http://amp-${{ inputs.country }}-${{ steps.tag.outputs.TAG }}.stg.ampsite.net/" >> $GITHUB_OUTPUT
+          fi
+          
+          # Set deploy user from secret with fallback to 'jenkins'
+          if [ -n "${{ secrets.DEPLOY_USER }}" ]; then
+            echo "DEPLOY_USER=${{ secrets.DEPLOY_USER }}" >> $GITHUB_OUTPUT
+          else
+            echo "DEPLOY_USER=jenkins" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+
+      - name: Setup SSH config for bastion
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          
+          DEPLOY_HOST="${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
+          DEPLOY_USER="${{ steps.deploy_config.outputs.DEPLOY_USER }}"
+          BASTION_HOST="${{ secrets.BASTION_HOST }}"
+          BASTION_USER="${{ secrets.BASTION_USER }}"
+          
+          # Use default bastion user if not specified (matching local config: bmokandu)
+          if [ -z "$BASTION_USER" ] || [ "$BASTION_USER" = "" ]; then
+            BASTION_USER="bmokandu"
+          fi
+          
+          # Create SSH config matching local configuration
+          # Pattern: *.aws uses ProxyCommand ssh -W %h.devgateway.org:%p bastion
+          if [ -n "$BASTION_HOST" ] && [ "$BASTION_HOST" != "" ]; then
+            # Check if deployment host matches *.aws pattern for ProxyCommand
+            if echo "$DEPLOY_HOST" | grep -q "\.aws"; then
+              # Use ProxyCommand pattern for *.aws hosts (matching local SSH config)
+              # Transform hostname: something.aws.devgateway.org -> something.devgateway.org
+              if echo "$DEPLOY_HOST" | grep -q "\.aws\.devgateway\.org"; then
+                TARGET_HOST=$(echo "$DEPLOY_HOST" | sed 's/\.aws\.devgateway\.org$/.devgateway.org/')
+              elif echo "$DEPLOY_HOST" | grep -q "\.aws$"; then
+                TARGET_HOST=$(echo "$DEPLOY_HOST" | sed 's/\.aws$/.devgateway.org/')
+              else
+                TARGET_HOST="$DEPLOY_HOST"
+              fi
+              
+              cat >> ~/.ssh/config << EOF
+          Host bastion
+            HostName $BASTION_HOST
+            User $BASTION_USER
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+            ControlMaster no
+
+          Host $DEPLOY_HOST
+            HostName $DEPLOY_HOST
+            User $DEPLOY_USER
+            ProxyCommand ssh -W $TARGET_HOST:%p -o ClearAllForwardings=no bastion
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+            ControlMaster no
+          EOF
+            else
+              # Use ProxyJump for non-*.aws hosts
+              cat >> ~/.ssh/config << EOF
+          Host bastion
+            HostName $BASTION_HOST
+            User $BASTION_USER
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+            ControlMaster no
+
+          Host $DEPLOY_HOST
+            HostName $DEPLOY_HOST
+            User $DEPLOY_USER
+            ProxyJump bastion
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+            ControlMaster no
+          EOF
+            fi
+          else
+            # No bastion - direct connection
+            cat >> ~/.ssh/config << EOF
+          Host $DEPLOY_HOST
+            HostName $DEPLOY_HOST
+            User $DEPLOY_USER
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+            ControlMaster no
+          EOF
+          fi
+          
+          chmod 600 ~/.ssh/config
+          echo "✅ Configured SSH to use bastion: ${BASTION_HOST:-'none (direct connection)'}"
+          echo "✅ Using ProxyCommand pattern matching your local config"
+          echo "✅ Bastion user: $BASTION_USER"
+          echo "✅ Deployment host: $DEPLOY_HOST"
+          echo ""
+          echo "SSH configuration:"
+          cat ~/.ssh/config
+
+      - name: Test SSH connection
+        run: |
+          DEPLOY_HOST="${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
+          DEPLOY_USER="${{ steps.deploy_config.outputs.DEPLOY_USER }}"
+          echo "Testing SSH connection through bastion..."
+          ssh $DEPLOY_USER@$DEPLOY_HOST "echo 'SSH connection successful'"
+
+      - name: Get available countries list
+        id: countries_list
+        run: |
+          DEPLOY_HOST="${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
+          DEPLOY_USER="${{ steps.deploy_config.outputs.DEPLOY_USER }}"
+          # Get available countries for this version
+          COUNTRIES=$(ssh $DEPLOY_USER@$DEPLOY_HOST "cd /opt/amp_dbs && amp-db ls ${{ steps.amp_version.outputs.AMP_VERSION }} | sort" || echo "")
+          COUNTRIES=$(echo "$COUNTRIES" | tr '\n' ' ' | xargs)  # Trim whitespace
+          
+          if [ -z "$COUNTRIES" ] || [ "$COUNTRIES" = "" ]; then
+            echo "❌ No database backups compatible with version ${{ steps.amp_version.outputs.AMP_VERSION }}"
+            exit 1
+          fi
+          
+          # Store countries list for later use
+          echo "COUNTRIES<<EOF" >> $GITHUB_OUTPUT
+          echo "$COUNTRIES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "=========================================="
+          echo "Available countries for version ${{ steps.amp_version.outputs.AMP_VERSION }}:"
+          echo "=========================================="
+          echo "$COUNTRIES" | tr ' ' '\n'
+          echo "=========================================="
+
+      - name: Validate selected country
+        run: |
+          # Convert countries list to newline-separated for validation
+          COUNTRIES=$(echo "${{ steps.countries_list.outputs.COUNTRIES }}" | tr ' ' '\n')
+          
+          # Check if selected country is available
+          if ! echo "$COUNTRIES" | grep -q "^${{ inputs.country }}$"; then
+            echo "❌ Country '${{ inputs.country }}' not found in available countries"
+            echo ""
+            echo "Available countries:"
+            echo "$COUNTRIES"
+            exit 1
+          fi
+          
+          echo "✅ Country '${{ inputs.country }}' is available"
+
+      - name: Get database version
+        id: db_version
+        run: |
+          DEPLOY_HOST="${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
+          DEPLOY_USER="${{ steps.deploy_config.outputs.DEPLOY_USER }}"
+          DB_VERSION=$(ssh $DEPLOY_USER@$DEPLOY_HOST "cd /opt/amp_dbs && amp-db find ${{ steps.amp_version.outputs.AMP_VERSION }} ${{ inputs.country }}")
+          echo "DB_VERSION=$DB_VERSION" >> $GITHUB_OUTPUT
+          echo "Database version: $DB_VERSION"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Get commit hash
+        id: commit_hash
+        run: |
+          if git log --pretty=%an -n 1 | grep -q "GitHub Actions"; then
+            REF="HEAD~1"
+          else
+            REF="HEAD"
+          fi
+          HASH=$(git rev-parse $REF)
+          echo "COMMIT_HASH=$HASH" >> $GITHUB_OUTPUT
+          echo "Commit hash: $HASH"
+
+      - name: Setup SSH for Docker build
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DOCKER_BUILD_SSH_KEY || '' }}
+
+      - name: Build Docker image
+        env:
+          DOCKER_BUILDKIT: 1
+        run: |
+          IMAGE="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:${{ steps.tag.outputs.TAG }}"
+          
+          # Build SSH args - only add if SSH_AUTH_SOCK is available (from ssh-agent)
+          SSH_ARGS=""
+          if [ -n "$SSH_AUTH_SOCK" ]; then
+            SSH_ARGS="--ssh default"
+          fi
+          
+          docker build \
+            --progress=plain \
+            $SSH_ARGS \
+            -t "$IMAGE" \
+            --build-arg BUILD_SOURCE="${{ steps.tag.outputs.TAG }}" \
+            --build-arg AMP_URL="${{ steps.deploy_config.outputs.AMP_URL }}" \
+            --build-arg AMP_PULL_REQUEST="" \
+            --build-arg AMP_BRANCH="${{ github.ref_name }}" \
+            --build-arg AMP_REGISTRY_PRIVATE_KEY="${{ secrets.AMP_REGISTRY_PRIVATE_KEY || '' }}" \
+            --label git-hash="${{ steps.commit_hash.outputs.COMMIT_HASH }}" \
+            amp
+          
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+
+      - name: Push Docker image to registry
+        run: |
+          docker push "${{ env.IMAGE }}" > /dev/null
+          echo "✅ Image pushed successfully"
+
+      - name: Logout from Container Registry
+        if: always()
+        run: docker logout ${{ secrets.DOCKER_REGISTRY }} || true
+
+      - name: Update GitHub commit status
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ steps.commit_hash.outputs.COMMIT_HASH }}',
+              state: 'success',
+              target_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}',
+              description: 'Built successfully',
+              context: 'github-actions/build'
+            });
+
+      - name: Deploy to server
+        id: deploy
+        run: |
+          set -eox pipefail
+          
+          DEPLOY_HOST="${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
+          DEPLOY_USER="${{ steps.deploy_config.outputs.DEPLOY_USER }}"
+          
+          ssh $DEPLOY_USER@$DEPLOY_HOST \
+            "amp-up2 ${{ steps.tag.outputs.TAG }} ${{ inputs.country }} ${{ steps.db_version.outputs.DB_VERSION }} ${{ env.PG_VERSION }}"
+          
+          echo "✅ Deployment successful"
+
+      - name: Cleanup Docker image
+        if: always()
+        run: |
+          docker rmi "${{ env.IMAGE }}" || true
+

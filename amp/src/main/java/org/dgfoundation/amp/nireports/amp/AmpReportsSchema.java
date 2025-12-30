@@ -359,20 +359,20 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             .put(ColumnConstants.DONOR_COUNTRY, "donor_org_country_id")
             .put(ColumnConstants.PROCUREMENT_SYSTEM, "procurement_system_id")
             .put(ColumnConstants.INDICATOR_OUTCOME, "outcome_id")
-            /*.put(ColumnConstants.INDICATOR_OUTPUT, "me_indicator_id")*/
+            .put(ColumnConstants.INDICATOR_OUTPUT, "me_indicator_id")
             .build());
 
     private SubDimensions indicatorSubDimensions = new SubDimensions(new ImmutableMap.Builder<String, String>()
             .put(ColumnConstants.INDICATOR_NAME, "me_indicator_id")
             .put(ColumnConstants.INDICATOR_OUTCOME, "outcome_id")
-            /*.put(ColumnConstants.INDICATOR_OUTPUT, "me_indicator_id")*/
+            .put(ColumnConstants.INDICATOR_OUTPUT, "me_indicator_id")
             .build());
 
     /**
      * Hierarchies that are allowed only for measureless reports.
      * Since Indicators are not linked to funding we cannot use hierarchies by indicator since it would lead to double counting.
      */
-    public static final List<String> ONLY_MEASURELESS_HIERARCHIES = Arrays.asList(/*, ColumnConstants.INDICATOR_OUTPUT*/);
+    public static final List<String> ONLY_MEASURELESS_HIERARCHIES = Arrays.asList();
 
     private List<String> amountColumns = new ArrayList<>();
 
@@ -769,7 +769,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     private void addIndicatorColumns() {
         indicator_single_dimension(ColumnConstants.INDICATOR_NAME, "v_indicator_name", INDICATOR_LEVEL_COLUMN);
         indicator_single_dimension(ColumnConstants.INDICATOR_OUTCOME, "v_indicator_outcome", INDICATOR_LEVEL_COLUMN);
-        // indicator_single_dimension(ColumnConstants.INDICATOR_OUTPUT, "v_indicator_output", INDICATOR_LEVEL_COLUMN);
+        indicator_single_dimension(ColumnConstants.INDICATOR_OUTPUT, "v_indicator_output", INDICATOR_LEVEL_COLUMN);
 
         indicator_degenerate_dimension(ColumnConstants.INDICATOR_TYPE, "v_indicator_type", boolDimension);
         indicator_no_entity(ColumnConstants.INDICATOR_DESCRIPTION, "v_indicator_description");

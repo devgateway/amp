@@ -434,7 +434,7 @@ public class ColumnConstants {
     public static final String INDICATOR_REVISED_TARGET_COMMENT = "Indicator Revised Target Comment";
 
     public static final String INDICATOR_OUTCOME = "Indicator Outcome";
-    // public static final String INDICATOR_OUTPUT = "Indicator Output";
+    public static final String INDICATOR_OUTPUT = "Indicator Output";
 
     public static final String PROJECT_RESULTS_AVAILABLE = "Project Results Available";
     public static final String VULNERABLE_GROUP = "Vulnerable Group";

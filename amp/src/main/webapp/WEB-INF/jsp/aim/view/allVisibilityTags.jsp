@@ -714,6 +714,8 @@ deleted 6 fields, do not reinsert
 <field:display name="Indicator Target Value" feature="Reports"></field:display>
 <field:display name="Indicator Target Date" feature="Reports"></field:display>
 <field:display name="Indicator Target Comment" feature="Reports"></field:display>
+<field:display name="Indicator Output" feature="Reports"></field:display>
+<field:display name="Indicator Outcome" feature="Reports"></field:display>
 <field:display name="Admin Indicator Type" feature="Admin"></field:display>
 <field:display name="Indicator Type" feature="Reports"></field:display>
 <field:display name="Admin Indicator code" feature="Admin"></field:display>

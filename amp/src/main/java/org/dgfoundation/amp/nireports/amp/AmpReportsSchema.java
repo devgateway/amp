@@ -97,7 +97,7 @@ import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.*
  */
 public class AmpReportsSchema extends AbstractReportsSchema {
 
-    private static  final Logger logger = LoggerFactory.getLogger(AmpReportsSchema.class);
+    private static final Logger logger = LoggerFactory.getLogger(AmpReportsSchema.class);
 
     /**
      * the number to add to pledge ids in tables joined with activity tables
@@ -130,7 +130,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
     public final static OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
     public final static LocationsDimension locsDimension = LocationsDimension.instance;
-    public static final  RawLocationsDimension RAW_LOCS_DIMENSION = RawLocationsDimension.INSTANCE;
+    public static final RawLocationsDimension RAW_LOCS_DIMENSION = RawLocationsDimension.INSTANCE;
     public final static SectorsDimension secsDimension = SectorsDimension.instance;
     public final static ProgramsDimension progsDimension = ProgramsDimension.instance;
     public final static CategoriesDimension catsDimension = CategoriesDimension.instance;
@@ -145,6 +145,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     public final static NiDimension usersDimension = SqlSourcedNiDimension.buildDegenerateDimension("users", "dg_user", "id");
     public final static NiDimension departmentsDimension = SqlSourcedNiDimension.buildDegenerateDimension("departments", "amp_departments", "id_department");
     public final static NiDimension indicatorsDimension = SqlSourcedNiDimension.buildDegenerateDimension("indicators", "amp_indicator", "indicator_id");
+    // TODO: do we need a new dimension for indicators that link the indicator with program/theme/msdg?
     public final static NiDimension indicatorRiskRatingsDimension = SqlSourcedNiDimension.buildDegenerateDimension("risks", "amp_indicator_risk_ratings", "amp_ind_risk_ratings_id");
     public final static NiDimension fundingDimension = SqlSourcedNiDimension.buildDegenerateDimension("funding", "amp_funding", "amp_funding_id");
     public static final PerformanceAlertTypeDimension PERF_TYPE_DIM = new PerformanceAlertTypeDimension("perfTypes");
@@ -161,18 +162,18 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
     @SuppressWarnings("serial")
     public final static Map<String, String> columnDescriptions = new HashMap<String, String>() {{
-        put(ColumnConstants.PROJECT_PERIOD,  "Project Period (months),  Proposed Completion Date - Actual Start date");
-        put(ColumnConstants.OVERAGE_PROJECT,  "Current date - Date of Planned Completion");
-        put(ColumnConstants.AGE_OF_PROJECT_MONTHS,  "Current date - Date of Agreement Effective");
-        put(ColumnConstants.AVERAGE_SIZE_OF_PROJECTS,  "Total Commitments / Count Of Activities");
-        put(ColumnConstants.VARIANCE_OF_COMMITMENTS,  "Max Commitments - Min Commitments");
-        put(ColumnConstants.VARIANCE_OF_DISBURSEMENTS,  "Max Disbursements- Min Disbursements");
-        put(ColumnConstants.EXECUTION_RATE,  "(Cumulative Disbursement/ Cumulative Commitment) * 100 ");
-        put(ColumnConstants.AVERAGE_SIZE_OF_DISBURSEMENTS,  "Sun Actual Disbursments / Number of Actual disbursments");
-        put(ColumnConstants.ACTIVITY_COUNT,  "Count Of Activities under the current hierarchy");
-        put(ColumnConstants.PROJECT_AGE_RATIO,  "Project Age Ratio,  Age of project / Project Period");
-        put(ColumnConstants.CALCULATED_PROJECT_LIFE,  "Difference in days between Planned Start Date and Actual Completion Date");
-        put(ColumnConstants.CUMULATIVE_EXECUTION_RATE,  "(Cumulative Disbursement/ Cumulative Commitment) * 100 ");
+        put(ColumnConstants.PROJECT_PERIOD, "Project Period (months),  Proposed Completion Date - Actual Start date");
+        put(ColumnConstants.OVERAGE_PROJECT, "Current date - Date of Planned Completion");
+        put(ColumnConstants.AGE_OF_PROJECT_MONTHS, "Current date - Date of Agreement Effective");
+        put(ColumnConstants.AVERAGE_SIZE_OF_PROJECTS, "Total Commitments / Count Of Activities");
+        put(ColumnConstants.VARIANCE_OF_COMMITMENTS, "Max Commitments - Min Commitments");
+        put(ColumnConstants.VARIANCE_OF_DISBURSEMENTS, "Max Disbursements- Min Disbursements");
+        put(ColumnConstants.EXECUTION_RATE, "(Cumulative Disbursement/ Cumulative Commitment) * 100 ");
+        put(ColumnConstants.AVERAGE_SIZE_OF_DISBURSEMENTS, "Sun Actual Disbursments / Number of Actual disbursments");
+        put(ColumnConstants.ACTIVITY_COUNT, "Count Of Activities under the current hierarchy");
+        put(ColumnConstants.PROJECT_AGE_RATIO, "Project Age Ratio,  Age of project / Project Period");
+        put(ColumnConstants.CALCULATED_PROJECT_LIFE, "Difference in days between Planned Start Date and Actual Completion Date");
+        put(ColumnConstants.CUMULATIVE_EXECUTION_RATE, "(Cumulative Disbursement/ Cumulative Commitment) * 100 ");
     }};
 
     /**
@@ -187,30 +188,30 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
     @SuppressWarnings("serial")
     public final static Map<String, String> measureDescriptions = new HashMap<String, String>() {{
-        put(MeasureConstants.CUMULATED_DISBURSEMENTS , "Prior Actual Disbursements + Previous Month Disbursements");
-        put(MeasureConstants.CUMULATIVE_COMMITMENT,  "Sum of all ACTUAL COMMITMENTS independent of filters");
-        put(MeasureConstants.CUMULATIVE_DISBURSEMENT,  "Sum of all ACTUAL DISBURSEMENTS independent of filters");
-        put(MeasureConstants.CURRENT_MONTH_DISBURSEMENTS , "Sum of Actual Disbursements of the current month");
-        put(MeasureConstants.EXECUTION_RATE , "Sum Of Actual Disb (Dependent on Filter) / Sum Of Planned Disb (Dependent on Filter) * 100");
-        put(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS , "Previous Year Planned Disbursements");
-        put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS , "(Total Actual Disbursements for Year,Quarter,Month / Total Actual Disbursements) * 100");
-        put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS , "Actual commitments for the project / Total actual commitments * 100");
-        put(MeasureConstants.PLEDGES_COMMITMENT_GAP , "Total Pledge - Total Actual Commitments");
-        put(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS , "Actual Disbursements Of Previous Month");
-        put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS , "Current Year Actual Disbursements Until Previous Month (not included)");
-        put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS , "Selected Year Planned Disbursements");
-        put(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE,  "Proposed project cost - Cummulative Commitments");
-        put(MeasureConstants.UNDISBURSED_BALANCE , "Total Actual Commitment - Total Actual Disbursement");
-        put(MeasureConstants.UNEXPENDITURED_BALANCE , "Total Actual Disbursement - Total Actual Expenditure");
-        put(MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE,  "Cumulative Commitment - Cumulative Disbursement");
+        put(MeasureConstants.CUMULATED_DISBURSEMENTS, "Prior Actual Disbursements + Previous Month Disbursements");
+        put(MeasureConstants.CUMULATIVE_COMMITMENT, "Sum of all ACTUAL COMMITMENTS independent of filters");
+        put(MeasureConstants.CUMULATIVE_DISBURSEMENT, "Sum of all ACTUAL DISBURSEMENTS independent of filters");
+        put(MeasureConstants.CURRENT_MONTH_DISBURSEMENTS, "Sum of Actual Disbursements of the current month");
+        put(MeasureConstants.EXECUTION_RATE, "Sum Of Actual Disb (Dependent on Filter) / Sum Of Planned Disb (Dependent on Filter) * 100");
+        put(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS, "Previous Year Planned Disbursements");
+        put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, "(Total Actual Disbursements for Year,Quarter,Month / Total Actual Disbursements) * 100");
+        put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, "Actual commitments for the project / Total actual commitments * 100");
+        put(MeasureConstants.PLEDGES_COMMITMENT_GAP, "Total Pledge - Total Actual Commitments");
+        put(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, "Actual Disbursements Of Previous Month");
+        put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, "Current Year Actual Disbursements Until Previous Month (not included)");
+        put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS, "Selected Year Planned Disbursements");
+        put(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE, "Proposed project cost - Cummulative Commitments");
+        put(MeasureConstants.UNDISBURSED_BALANCE, "Total Actual Commitment - Total Actual Disbursement");
+        put(MeasureConstants.UNEXPENDITURED_BALANCE, "Total Actual Disbursement - Total Actual Expenditure");
+        put(MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE, "Cumulative Commitment - Cumulative Disbursement");
         put(MeasureConstants.VARIANCE_OF_COMMITMENTS, "Max Actual Commitments - Min Actual Commitments");
         put(MeasureConstants.VARIANCE_OF_DISBURSEMENTS, "Max Actual Disbursements - Min Actual Disbursements");
         put(MeasureConstants.AVERAGE_SIZE_DISBURSEMENTS, "Sum Actual Disbursements / Number of Actual Disbursements");
-        put(MeasureConstants.PREDICTABILITY_OF_FUNDING ,  "((Planned Disbursements - Actual Disbursements) / Planned Disbursements) X 100");
-        put(MeasureConstants.DISBURSED_AS_SCHEDULED ,  "((Actual Disbursements) / Planned Disbursements) X 100");
-        put(MeasureConstants.OVER_DISBURSED ,  "((Actual Disbursements - Planned Disbursements) / Actual Disbursements) X 100");
-        put(MeasureConstants.AVERAGE_DISBURSEMENT_RATE,  "Sum of Execution Rate / Number of Activities");
-        put(MeasureConstants.FORECAST_EXECUTION_RATE , "Sum of Actual Disbursements / Sum (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). ");
+        put(MeasureConstants.PREDICTABILITY_OF_FUNDING, "((Planned Disbursements - Actual Disbursements) / Planned Disbursements) X 100");
+        put(MeasureConstants.DISBURSED_AS_SCHEDULED, "((Actual Disbursements) / Planned Disbursements) X 100");
+        put(MeasureConstants.OVER_DISBURSED, "((Actual Disbursements - Planned Disbursements) / Actual Disbursements) X 100");
+        put(MeasureConstants.AVERAGE_DISBURSEMENT_RATE, "Sum of Execution Rate / Number of Activities");
+        put(MeasureConstants.FORECAST_EXECUTION_RATE, "Sum of Actual Disbursements / Sum (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). ");
         put(null, null);
     }};
 
@@ -318,8 +319,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         return instance;
     }
 
-    private AmpFundingColumn donorFundingColumn ;
-    private AmpFundingColumn pledgeFundingColumn ;
+    private AmpFundingColumn donorFundingColumn;
+    private AmpFundingColumn pledgeFundingColumn;
     private AmpFundingColumn componentFundingColumn;
     private AmpFundingColumn gpiFundingColumn;
     private AmpFundingColumn regionalFundingColumn;
@@ -357,19 +358,24 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             .put(ColumnConstants.VULNERABLE_GROUP, "vulnerable_group_id")
             .put(ColumnConstants.DONOR_COUNTRY, "donor_org_country_id")
             .put(ColumnConstants.PROCUREMENT_SYSTEM, "procurement_system_id")
+            .put(ColumnConstants.INDICATOR_OUTCOME, "outcome_id")
+            /*.put(ColumnConstants.INDICATOR_OUTPUT, "me_indicator_id")*/
             .build());
 
     private SubDimensions indicatorSubDimensions = new SubDimensions(new ImmutableMap.Builder<String, String>()
             .put(ColumnConstants.INDICATOR_NAME, "me_indicator_id")
+            .put(ColumnConstants.INDICATOR_OUTCOME, "outcome_id")
+            /*.put(ColumnConstants.INDICATOR_OUTPUT, "me_indicator_id")*/
             .build());
 
     /**
      * Hierarchies that are allowed only for measureless reports.
      * Since Indicators are not linked to funding we cannot use hierarchies by indicator since it would lead to double counting.
      */
-    public static final List<String> ONLY_MEASURELESS_HIERARCHIES = Arrays.asList(ColumnConstants.INDICATOR_NAME);
+    public static final List<String> ONLY_MEASURELESS_HIERARCHIES = Arrays.asList(/*, ColumnConstants.INDICATOR_OUTPUT*/);
 
     private List<String> amountColumns = new ArrayList<>();
+
     /**
      * the constructor defines all the columns and measures of the schema. Since this involves scanning the database quite a lot, this constructor is SLOW
      */
@@ -762,6 +768,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
     private void addIndicatorColumns() {
         indicator_single_dimension(ColumnConstants.INDICATOR_NAME, "v_indicator_name", INDICATOR_LEVEL_COLUMN);
+        indicator_single_dimension(ColumnConstants.INDICATOR_OUTCOME, "v_indicator_outcome", INDICATOR_LEVEL_COLUMN);
+        // indicator_single_dimension(ColumnConstants.INDICATOR_OUTPUT, "v_indicator_output", INDICATOR_LEVEL_COLUMN);
+
         indicator_degenerate_dimension(ColumnConstants.INDICATOR_TYPE, "v_indicator_type", boolDimension);
         indicator_no_entity(ColumnConstants.INDICATOR_DESCRIPTION, "v_indicator_description");
         indicator_no_entity(ColumnConstants.INDICATOR_CODE, "v_indicator_code");
@@ -905,7 +914,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             put(ColumnConstants.PLEDGE_CONTACT_1___TELEPHONE, "v_pledges_contact1_telephone");
             put(ColumnConstants.PLEDGE_CONTACT_1___TITLE, "v_pledges_contact1_title");
         }};
-        for(Entry<String, String> entry: pledgeContacts.entrySet()) {
+        for (Entry<String, String> entry : pledgeContacts.entrySet()) {
             no_entity(entry.getKey(), entry.getValue());
             no_entity(entry.getKey().replace("1", "2"), entry.getValue().replace("1", "2"));
         }
@@ -928,7 +937,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     }
 
     protected void addMtefColumns() {
-        for(int mtefYear:DynamicColumnsUtil.getMtefYears()) {
+        for (int mtefYear : DynamicColumnsUtil.getMtefYears()) {
 
             PsqlSourcedColumn<CategAmountCell> mtefColumn = new MtefColumn(
                     "MTEF " + mtefYear, new LocalizableLabel("MTEF {0,number,#}", mtefYear), mtefYear,
@@ -1000,9 +1009,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                 MeasureConstants.ACTUAL_EXPENDITURES, -1);
 
         addTrivialFilterMeasure(MeasureConstants.PLEDGES_COMMITMENT_GAP,
-            TrivialMeasureBehaviour.getInstance(),
-            MeasureConstants.ACTUAL_COMMITMENTS, -1,
-            MeasureConstants.PLEDGES_ACTUAL_PLEDGE, +1);
+                TrivialMeasureBehaviour.getInstance(),
+                MeasureConstants.ACTUAL_COMMITMENTS, -1,
+                MeasureConstants.PLEDGES_ACTUAL_PLEDGE, +1);
 
         addUnfilteredStrippedTrivialFilterMeasure(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE,
                 TrivialMeasureBehaviour.getTotalsOnlyInstance(),
@@ -1032,16 +1041,16 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
     /**
      * adds a computed-filtering measure which is derived from an another measure by the means of supplementarily filtering by a given function
-     * @param measureName the measure you are creating
+     * @param measureName     the measure you are creating
      * @param baseMeasureName the measure based on which you are creating
-     * @param contextBuilder the per-fetch context to build (precalculated info for the supplemental filterer)
-     * @param extraFilter the per-cell filterer
-     * @param behaviour the behaviour of the column
+     * @param contextBuilder  the per-fetch context to build (precalculated info for the supplemental filterer)
+     * @param extraFilter     the per-cell filterer
+     * @param behaviour       the behaviour of the column
      */
-    protected<K> void addDerivedMeasure(String measureName, String baseMeasureName,
-            Function<NiReportsEngine, K> contextBuilder,
-            BiFunction<K, CategAmountCell, Boolean> extraFilter,
-            Behaviour<?> behaviour) {
+    protected <K> void addDerivedMeasure(String measureName, String baseMeasureName,
+                                         Function<NiReportsEngine, K> contextBuilder,
+                                         BiFunction<K, CategAmountCell, Boolean> extraFilter,
+                                         Behaviour<?> behaviour) {
 
         NiTransactionMeasure baseMeasure = (NiTransactionMeasure) getMeasures().get(baseMeasureName);
         NiUtils.failIf(baseMeasure == null, String.format("you are trying to define measure %s based on nonexistant base measure %s", measureName, baseMeasureName));
@@ -1052,23 +1061,23 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         addMeasure(new NiTransactionContextMeasure<K>(measureName, contextBuilder, crit, behaviour, measureDescriptions.get(measureName)));
     }
 
-    protected void addUnfilteredStrippedTrivialFilterMeasure(String measureName, Behaviour<?> behaviour, Object...def) {
+    protected void addUnfilteredStrippedTrivialFilterMeasure(String measureName, Behaviour<?> behaviour, Object... def) {
         addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, true, true, def);
     }
 
-    protected void addUnfilteredTrivialFilterMeasure(String measureName, Behaviour<?> behaviour, Object...def) {
+    protected void addUnfilteredTrivialFilterMeasure(String measureName, Behaviour<?> behaviour, Object... def) {
         addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, true, false, def);
     }
 
-    protected void addTrivialFilterMeasure(String measureName, Behaviour<?> behaviour, Object...def) {
+    protected void addTrivialFilterMeasure(String measureName, Behaviour<?> behaviour, Object... def) {
         addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, false, false, def);
     }
 
-    protected void addTrivialStrippedFilterMeasure(String measureName, Behaviour<?> behaviour, Object...def) {
+    protected void addTrivialStrippedFilterMeasure(String measureName, Behaviour<?> behaviour, Object... def) {
         addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, false, true, def);
     }
 
-    protected void addDerivedFilterMeasure(String measureName, Behaviour<?> behaviour, Object...def) {
+    protected void addDerivedFilterMeasure(String measureName, Behaviour<?> behaviour, Object... def) {
         addDerivedLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, def);
     }
 
@@ -1127,26 +1136,26 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     @SuppressWarnings("deprecation")
     public Set<String> synchronizeAmpColumnsBackport(ServletContext sCtx) {
         final Set<String> notSerializedColumns = new HashSet<>(Arrays.asList(
-            ColumnConstants.DRAFT,
-            ColumnConstants.ACTIVITY_ID,
-            ColumnConstants.GEOCODE,
-            ColumnConstants.LOCATION,
-            ColumnConstants.DONOR_ID,
-            ColumnConstants.EXPENDITURE_CLASS,
-            ColumnConstants.FUNDING_ID
+                ColumnConstants.DRAFT,
+                ColumnConstants.ACTIVITY_ID,
+                ColumnConstants.GEOCODE,
+                ColumnConstants.LOCATION,
+                ColumnConstants.DONOR_ID,
+                ColumnConstants.EXPENDITURE_CLASS,
+                ColumnConstants.FUNDING_ID
         ));
         return PersistenceManager.getSession().doReturningWork(conn -> {
             Set<String> inDbColumns = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "columnname", "amp_columns"), 1));
             Set<String> toBeAdded = this.columns.keySet().stream().filter(z -> !inDbColumns.contains(z)).filter(z -> !notSerializedColumns.contains(z)).collect(Collectors.toSet());
             for (String newColumnName : toBeAdded) {
-                AmpColumns col= new AmpColumns();
+                AmpColumns col = new AmpColumns();
                 col.setColumnName(newColumnName);
                 col.setExtractorView("v_empty_text_column");
                 col.setCellType("org.dgfoundation.amp.ar.cell.TextCell");
                 col.setDescription(this.columns.get(newColumnName).description);
                 String group = null;
                 if (this.columns.get(newColumnName) instanceof PsqlSourcedColumn)
-                    group = ((PsqlSourcedColumn<?>)this.columns.get(newColumnName)).getGroup();
+                    group = ((PsqlSourcedColumn<?>) this.columns.get(newColumnName)).getGroup();
                 //group should be non-null only for MTEF columns
                 DynamicColumnsUtil.dynamicallyCreateNewColumn(col, group, sCtx);
             }
@@ -1164,10 +1173,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
     /**
      * This method is created for the following scenario: <br />
-     *      - a measure was added to AmpReportsSchema <br />
-     *      - this measure doesn't exist in the old reports schema (described by AmpMeasures) <br />
-     *  In this scenario, opening a report with said new measure in the old reports engine would probably result in a crash. <br />
-     *  Therefore, an empty row for said measure is added.
+     * - a measure was added to AmpReportsSchema <br />
+     * - this measure doesn't exist in the old reports schema (described by AmpMeasures) <br />
+     * In this scenario, opening a report with said new measure in the old reports engine would probably result in a crash. <br />
+     * Therefore, an empty row for said measure is added.
      */
     public Set<String> synchronizeAmpMeasureBackport() {
         final Set<String> notSerializedMeasures = new HashSet<>(Arrays.asList(
@@ -1320,7 +1329,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     }
 
     private AmpReportsSchema degenerate_dimension(String columnName, String view, NiDimension dimension,
-            Function<String, String> postprocessor) {
+                                                  Function<String, String> postprocessor) {
         LevelColumn levelColumn = dimension.getLevelColumn(columnName, dimension.depth - 1);
         SimpleTextColumn col = SimpleTextColumn.fromView(columnName, view, levelColumn)
                 .withPostprocessor(postprocessor);
@@ -1329,7 +1338,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     }
 
     private AmpReportsSchema degenerate_dimension(String columnName, String view, NiDimension dimension,
-            boolean sscEnabledColumn) {
+                                                  boolean sscEnabledColumn) {
         NiUtils.failIf(!whitelistedDegenerateDimensions.contains(dimension),
                 dimension.toString() + " is not whitelisted as a shortcut degenerate dimension");
         LevelColumn levelColumn = dimension.getLevelColumn(columnName, dimension.depth - 1); // taking the leaves
@@ -1360,7 +1369,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     }
 
     private AmpReportsSchema single_dimension(String columnName, String view, LevelColumn levelColumn,
-            boolean sscEnabledColumn) {
+                                              boolean sscEnabledColumn) {
         return addColumn(SimpleTextColumn.fromView(columnName, view, levelColumn, sscEnabledColumn));
     }
 
@@ -1393,7 +1402,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
     private AmpReportsSchema with_percentage(String columnName, String viewName, NiDimensionUsage dimUsg, int level) {
         Map<NiDimensionUsage, PercentagesCorrector> correctors =
-            PsqlSourcedColumn.keyColumnName(viewName, "amp_activity_id").equals("amp_activity_id") ? PERCENTAGE_CORRECTORS : PLEDGES_PERCENTAGE_CORRECTORS;
+                PsqlSourcedColumn.keyColumnName(viewName, "amp_activity_id").equals("amp_activity_id") ? PERCENTAGE_CORRECTORS : PLEDGES_PERCENTAGE_CORRECTORS;
         return with_percentage(columnName, viewName, dimUsg, level, correctors);
     }
 
@@ -1434,7 +1443,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
     @Override
     public AmpAmountColumn getFundingFetcher(NiReportsEngine engine) {
-        switch(engine.spec.getReportType()) {
+        switch (engine.spec.getReportType()) {
 
             case ArConstants.DONOR_TYPE:
                 return donorFundingColumn;
@@ -1528,10 +1537,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      */
     public static void init() throws AMPException {
         AmpReportsSchema.getExecutor(false).executeReport(ReportSpecificationImpl.buildFor("self-test report",
-            Arrays.asList(ColumnConstants.PROJECT_TITLE),
-            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
-            null,
-            GroupingCriteria.GROUPING_YEARLY));
+                Arrays.asList(ColumnConstants.PROJECT_TITLE),
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+                null,
+                GroupingCriteria.GROUPING_YEARLY));
 
         // test dimensions: make a snapshot of each
         for (NiDimension dimension : Arrays.asList(orgsDimension, locsDimension, secsDimension, progsDimension)) {
@@ -1549,16 +1558,16 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      * temporary stub until amp_columns.description and amp_measures.description are done with
      */
     public void maintainDescriptions() {
-        try(java.sql.Connection conn = PersistenceManager.getJdbcConnection()) {
-            for(String measureName:this.measures.keySet()) {
+        try (java.sql.Connection conn = PersistenceManager.getJdbcConnection()) {
+            for (String measureName : this.measures.keySet()) {
                 NiReportMeasure<?> meas = this.measures.get(measureName);
                 SQLUtils.executeQuery(conn, String.format("UPDATE amp_measures SET description = %s WHERE measurename = %s AND description <> %s",
-                    SQLUtils.stringifyObject(meas.description), SQLUtils.stringifyObject(meas.name), SQLUtils.stringifyObject(meas.description)));
+                        SQLUtils.stringifyObject(meas.description), SQLUtils.stringifyObject(meas.name), SQLUtils.stringifyObject(meas.description)));
             }
-            for(String columnName:this.columns.keySet()) {
+            for (String columnName : this.columns.keySet()) {
                 NiReportColumn<?> col = this.columns.get(columnName);
                 SQLUtils.executeQuery(conn, String.format("UPDATE amp_columns SET description = %s WHERE columnname = %s AND description <> %s",
-                    SQLUtils.stringifyObject(col.description), SQLUtils.stringifyObject(col.name), SQLUtils.stringifyObject(col.description)));
+                        SQLUtils.stringifyObject(col.description), SQLUtils.stringifyObject(col.name), SQLUtils.stringifyObject(col.description)));
             }
             SQLUtils.flush(conn);
         }
@@ -1574,11 +1583,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     @Override
     public Map<String, List<ReportRenderWarning>> performColumnChecks(Optional<Set<String>> columns) {
         Map<String, List<ReportRenderWarning>> sp = new HashMap<>(super.performColumnChecks(columns));
-        try(java.sql.Connection conn = PersistenceManager.getJdbcConnection()) {
-            for(Map.Entry<NiDimensionUsage, PercentagesCorrector> z:PERCENTAGE_CORRECTORS.entrySet()) {
+        try (java.sql.Connection conn = PersistenceManager.getJdbcConnection()) {
+            for (Map.Entry<NiDimensionUsage, PercentagesCorrector> z : PERCENTAGE_CORRECTORS.entrySet()) {
                 sp.put(z.getKey().toString(), z.getValue().validateDb(z.getKey().toString(), conn));
             }
-            for(Map.Entry<NiDimensionUsage, PercentagesCorrector> z:PLEDGES_PERCENTAGE_CORRECTORS.entrySet()) {
+            for (Map.Entry<NiDimensionUsage, PercentagesCorrector> z : PLEDGES_PERCENTAGE_CORRECTORS.entrySet()) {
                 sp.put("Pledges " + z.getKey().toString(), z.getValue().validateDb(z.getKey().toString(), conn));
             }
         }
@@ -1593,7 +1602,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public<K extends Cell> List<K> fetchEntity(NiReportsEngine engine, NiReportedEntity<K> entity) throws Exception {
+    public <K extends Cell> List<K> fetchEntity(NiReportsEngine engine, NiReportedEntity<K> entity) throws Exception {
         List<K> origResult = entity.fetch(engine);
 
         String pledgeCompanion = AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.get(entity.name);
@@ -1624,7 +1633,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     }
 
     @SuppressWarnings("unchecked")
-    protected<K extends Cell> K pledgeCellToDonorCell(K pledgeCell) {
+    protected <K extends Cell> K pledgeCellToDonorCell(K pledgeCell) {
         return (K) pledgeCell.changeOwnerId(pledgeCell.activityId + PLEDGE_ID_ADDER);
     }
 
@@ -1683,9 +1692,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                 && engine.spec.isShowOriginalCurrency();
 
         if (splitByCurrencies) {
-            logger.info("Raw: "+raw);
-            logger.info("Used currency: "+scratch.usedCurrency);
-            logger.info("Strategy: "+CurrencySplittingStrategy.getInstance(scratch.usedCurrency));
+            logger.info("Raw: " + raw);
+            logger.info("Used currency: " + scratch.usedCurrency);
+            logger.info("Strategy: " + CurrencySplittingStrategy.getInstance(scratch.usedCurrency));
             raw.add(CurrencySplittingStrategy.getInstance(scratch.usedCurrency));
         }
 
@@ -1717,7 +1726,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             return NamedElemType.UNKNOWN;
 
         LevelColumn lc = niCol.levelColumn.get();
-        switch(lc.dimensionUsage.dimension.name) {
+        switch (lc.dimensionUsage.dimension.name) {
             case "sectors":
                 return NamedElemType.SECTOR;
 
@@ -1729,7 +1738,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                 return NamedElemType.LOCATION;
 
             case "orgs": {
-                switch(lc.level) {
+                switch (lc.level) {
                     case 0:
                         return NamedElemType.ORG_TYPE;
                     case 1:

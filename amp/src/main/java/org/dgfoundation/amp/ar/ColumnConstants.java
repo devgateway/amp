@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.dgfoundation.amp.ar;
 
@@ -32,12 +32,12 @@ public class ColumnConstants {
     public static final String AGREEMENT_PARLIAMENTARY_APPROVAL_DATE = "Agreement Parlimentary Approval Date";
     public static final String AGREEMENT_TITLE_CODE = "Agreement Title + Code";
     public static final String AMP_ID = "AMP ID";
-    
+
     /**
      * text column which will always have a constant value (currently "constant", but do not count on it)
      */
     public static final String CONSTANT = "Constant";
-    
+
     public static final String APPROVAL_STATUS = "Approval Status";
     public static final String VALIDATION_STATUS = "Filtered Approval Status";
     public static final String ARCHIVED = "Archived";
@@ -222,19 +222,19 @@ public class ColumnConstants {
     public static final String PLEDGES_DETAIL_START_DATE = "Pledges Detail Start Date";
     public static final String PLEDGES_DONOR_GROUP = "Pledges Donor Group";
     public static final String PLEDGES_DONOR_TYPE = "Pledges Donor Type";
-    
+
     public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES = "Pledges National Plan Objectives";
     public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0 = "Pledges National Plan Objectives Level 0";
     public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1 = "Pledges National Plan Objectives Level 1";
     public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2 = "Pledges National Plan Objectives Level 2";
     public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3 = "Pledges National Plan Objectives Level 3";
-    
+
     public static final String PLEDGES_PROGRAMS = "Pledges Programs";
     public static final String PLEDGES_PROGRAMS_LEVEL_0 = "Pledges Programs Level 0";
     public static final String PLEDGES_PROGRAMS_LEVEL_1 = "Pledges Programs Level 1";
     public static final String PLEDGES_PROGRAMS_LEVEL_2 = "Pledges Programs Level 2";
     public static final String PLEDGES_PROGRAMS_LEVEL_3 = "Pledges Programs Level 3";
-    
+
     public static final String PLEDGES_LOCATION_ADM_LEVEL_0 = "Pledges Administrative Level 0";
     public static final String PLEDGES_LOCATION_ADM_LEVEL_1 = "Pledges Administrative Level 1";
     public static final String PLEDGES_LOCATION_ADM_LEVEL_2 = "Pledges Administrative Level 2";
@@ -246,21 +246,21 @@ public class ColumnConstants {
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_1 = "Pledges Secondary Programs Level 1";
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_2 = "Pledges Secondary Programs Level 2";
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_3 = "Pledges Secondary Programs Level 3";
-    
+
     public static final String PLEDGES_TERTIARY_PROGRAMS = "Pledges Tertiary Programs";
     public static final String PLEDGES_TERTIARY_PROGRAMS_LEVEL_0 = "Pledges Tertiary Programs Level 0";
     public static final String PLEDGES_TERTIARY_PROGRAMS_LEVEL_1 = "Pledges Tertiary Programs Level 1";
     public static final String PLEDGES_TERTIARY_PROGRAMS_LEVEL_2 = "Pledges Tertiary Programs Level 2";
     public static final String PLEDGES_TERTIARY_PROGRAMS_LEVEL_3 = "Pledges Tertiary Programs Level 3";
-    
+
     public static final String PLEDGES_SECTORS = "Pledges Sectors";
     public static final String PLEDGES_SECTORS_SUBSECTORS = "Pledges Sectors Sub-Sectors";
     public static final String PLEDGES_SECTORS_SUBSUBSECTORS = "Pledges Sectors Sub-Sub-Sectors";
-    
+
     public static final String PLEDGES_SECONDARY_SECTORS = "Pledges Secondary Sectors";
     public static final String PLEDGES_SECONDARY_SUBSECTORS = "Pledges Secondary Sub-Sectors";
     public static final String PLEDGES_SECONDARY_SUBSUBSECTORS = "Pledges Secondary Sub-Sub-Sectors";
-    
+
     public static final String PLEDGES_TERTIARY_SECTORS = "Pledges Tertiary Sectors";
     public static final String PLEDGES_TERTIARY_SUBSECTORS = "Pledges Tertiary Sub-Sectors";
     public static final String PLEDGES_TERTIARY_SUBSUBSECTORS = "Pledges Tertiary Sub-Sub-Sectors";
@@ -277,7 +277,7 @@ public class ColumnConstants {
     public static final String PLEDGES_TITLES = "Pledges Titles";
     public static final String PLEDGES_TYPE_OF_ASSISTANCE = "Pledges Type Of Assistance";
     public static final String RELATED_PLEDGES = "Related Pledges";
-    
+
     public static final String RELATED_PROJECTS = "Related Projects";
     public static final String PRIMARY_PROGRAM = "Primary Program";
     public static final String PRIMARY_PROGRAM_LEVEL_0 = "Primary Program Level 0";
@@ -330,7 +330,7 @@ public class ColumnConstants {
     public static final String RATIFICATION_DATE = "Loan Ratification Date";
     public static final String REGIONAL_REGION = "Regional Region";
     public static final String REGIONAL_GROUP = "Regional Group";
-    public static final String REGIONAL_GROUP_GROUP = "Regional Group Group";   
+    public static final String REGIONAL_GROUP_GROUP = "Regional Group Group";
     public static final String REGIONAL_GROUP_DEPARTMENT_DIVISION = "Regional Group Department/Division";
     public static final String REGIONAL_OBSERVATIONS = "Regional Observations";
     public static final String REGIONAL_OBSERVATIONS_ACTORS = "Regional Observations Actors";
@@ -432,6 +432,9 @@ public class ColumnConstants {
     public static final String INDICATOR_REVISED_TARGET_VALUE = "Indicator Revised Target Value";
     public static final String INDICATOR_REVISED_TARGET_DATE = "Indicator Revised Target Date";
     public static final String INDICATOR_REVISED_TARGET_COMMENT = "Indicator Revised Target Comment";
+
+    public static final String INDICATOR_OUTCOME = "Indicator Outcome";
+    // public static final String INDICATOR_OUTPUT = "Indicator Output";
 
     public static final String PROJECT_RESULTS_AVAILABLE = "Project Results Available";
     public static final String VULNERABLE_GROUP = "Vulnerable Group";

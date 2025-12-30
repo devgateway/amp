@@ -128,7 +128,10 @@ public class IndicatorTextualTokenBehaviour extends TextualTokenBehaviour {
                 if (cell != null) {
                     return cell;
                 }
-                return super.filterCell(acceptors, oldCell, splitCell, false);
+
+                // TODO: this change allowed to display outcomes and outputs (new columns), check if it has side effects.
+                // return super.filterCell(acceptors, oldCell, splitCell, false);
+                return oldCell;
             }
             log.warn("Ignoring cell with id " + splitCell.entityId + " because it is not part of the same NPO as the old cell");
             //return super.filterCell(acceptors, oldCell, splitCell, isTransactionLevelHierarchy);

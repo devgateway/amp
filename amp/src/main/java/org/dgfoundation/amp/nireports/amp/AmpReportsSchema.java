@@ -63,6 +63,7 @@ import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.nireports.*;
 import org.dgfoundation.amp.nireports.amp.dimensions.*;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDateTokenBehaviour;
+import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDisaggregationTextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorTextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.*;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
@@ -218,6 +219,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     // the indicator-based NiDimensionUsage's
     public final static NiDimensionUsage INDICATOR_DIM_USG = indicatorsDimension.getDimensionUsage("Indicator");
     public final static LevelColumn INDICATOR_LEVEL_COLUMN = INDICATOR_DIM_USG.getLevelColumn(0);
+    public final static NiDimensionUsage IND_DIM_USG = indicatorsDimension.getDimensionUsage("Indicator Disaggregation");
 
     // the organisation-based NiDimensionUsage's
     public final static NiDimensionUsage DONOR_DIM_USG = orgsDimension.getDimensionUsage(Constants.FUNDING_AGENCY);
@@ -287,6 +289,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
     private IndicatorTextualTokenBehaviour indicatorThemeTokenBehaviour =
             IndicatorTextualTokenBehaviour.forText(INDICATOR_DIM_USG, true);
+
+    private IndicatorDisaggregationTextualTokenBehaviour indicatorDisaggregationTokenBehaviour =
+            IndicatorDisaggregationTextualTokenBehaviour.forText(INDICATOR_DIM_USG, false);
 
     private IndicatorTextualTokenBehaviour indicatorDoubleTokenBehaviour =
             IndicatorTextualTokenBehaviour.forDouble(INDICATOR_DIM_USG);
@@ -771,6 +776,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         indicator_single_dimension(ColumnConstants.INDICATOR_OUTCOME, "v_indicator_outcome", INDICATOR_LEVEL_COLUMN);
         indicator_single_dimension(ColumnConstants.INDICATOR_OUTPUT, "v_indicator_output", INDICATOR_LEVEL_COLUMN);
 
+        indicator_disaggregation_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_0, "v_indicator_disaggregation_level_0", INDICATOR_LEVEL_COLUMN);
         indicator_degenerate_dimension(ColumnConstants.INDICATOR_TYPE, "v_indicator_type", boolDimension);
         indicator_no_entity(ColumnConstants.INDICATOR_DESCRIPTION, "v_indicator_description");
         indicator_no_entity(ColumnConstants.INDICATOR_CODE, "v_indicator_code");
@@ -1266,6 +1272,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_ACTUAL_VALUE, AmpIndicatorValue.ACTUAL));
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_TARGET_VALUE, AmpIndicatorValue.TARGET));
 
+        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_BASE_VALUE, AmpIndicatorValue.BASE));
+        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_TARGET_VALUE, AmpIndicatorValue.TARGET));
+        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_SECONDARY_DISAGGREGATION_BASE_VALUE, AmpIndicatorValue.BASE));
+        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_SECONDARY_DISAGGREGATION_TARGET_VALUE, AmpIndicatorValue.TARGET));
+
         return this;
     }
 
@@ -1351,6 +1362,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
     private AmpReportsSchema indicator_single_dimension(String columnName, String view, LevelColumn levelColumn) {
         return indicator_single_dimension(columnName, view, levelColumn, indicatorTextualTokenBehaviour);
+    }
+
+    private AmpReportsSchema indicator_disaggregation_dimension(String columnName, String view, LevelColumn levelColumn) {
+        return indicator_single_dimension(columnName, view, levelColumn, indicatorDisaggregationTokenBehaviour);
     }
 
     private AmpReportsSchema indicator_single_dimension(String columnName, String view, LevelColumn levelColumn, Behaviour<NiTextCell> behaviour) {

@@ -416,25 +416,23 @@ public class ColumnConstants {
     public static final String INDICATOR_THEME = "Indicator Theme";
     public static final String INDICATOR_RISK = "Risk";
     public static final String INDICATOR_LOGFRAME_CATEGORY = "Logframe Category";
-
     public static final String INDICATOR_ACTUAL_VALUE = "Indicator Current Value";
     public static final String INDICATOR_ACTUAL_DATE = "Indicator Current Date";
     public static final String INDICATOR_ACTUAL_COMMENT = "Indicator Current Comment";
-
     public static final String INDICATOR_BASE_VALUE = "Indicator Base Value";
     public static final String INDICATOR_BASE_DATE = "Indicator Base Date";
     public static final String INDICATOR_BASE_COMMENT = "Indicator Base Comment";
-
     public static final String INDICATOR_TARGET_VALUE = "Indicator Target Value";
     public static final String INDICATOR_TARGET_DATE = "Indicator Target Date";
     public static final String INDICATOR_TARGET_COMMENT = "Indicator Target Comment";
-
     public static final String INDICATOR_REVISED_TARGET_VALUE = "Indicator Revised Target Value";
     public static final String INDICATOR_REVISED_TARGET_DATE = "Indicator Revised Target Date";
     public static final String INDICATOR_REVISED_TARGET_COMMENT = "Indicator Revised Target Comment";
-
     public static final String INDICATOR_OUTCOME = "Indicator Outcome";
     public static final String INDICATOR_OUTPUT = "Indicator Output";
+    public static final String INDICATOR_DISAGGREGATION = "Indicator Disaggregation";
+    public static final String INDICATOR_DISAGGREGATION_LEVEL_0 = "Indicator Disaggregation Level 0";
+    public static final String INDICATOR_DISAGGREGATION_LEVEL_1 = "Indicator Disaggregation Level 1";
 
     public static final String PROJECT_RESULTS_AVAILABLE = "Project Results Available";
     public static final String VULNERABLE_GROUP = "Vulnerable Group";

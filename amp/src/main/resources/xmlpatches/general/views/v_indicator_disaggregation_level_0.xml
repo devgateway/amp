@@ -24,6 +24,7 @@
 				SELECT
 					con.activity_id AS amp_activity_id,
 					acv.category_value AS name,
+					acv.id AS category_value_id,
 					ind.indicator_id AS me_indicator_id/*,
 					aidv.id as disaggregation_value_id*/
 				FROM amp_indicator_connection con
@@ -33,7 +34,7 @@
 					JOIN amp_category_value acv ON acv.id = aidv.parent_category_id
 				WHERE con.activity_id IS NOT NULL
 					AND aigv.type = 2
-				GROUP BY con.activity_id, acv.category_value, ind.indicator_id
+				GROUP BY con.activity_id, acv.category_value, acv.id, ind.indicator_id/*, aidv.id*/
 				ORDER BY activity_id/*, acv.id*/;
          	</lang>
 		</script>

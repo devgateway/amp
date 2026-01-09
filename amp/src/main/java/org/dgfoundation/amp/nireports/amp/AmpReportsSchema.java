@@ -371,6 +371,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             .put(ColumnConstants.INDICATOR_NAME, "me_indicator_id")
             .put(ColumnConstants.INDICATOR_OUTCOME, "outcome_id")
             .put(ColumnConstants.INDICATOR_OUTPUT, "me_indicator_id")
+            .put(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_0, "me_indicator_id")
             .build());
 
     /**

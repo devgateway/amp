@@ -272,11 +272,9 @@ jobs:
           echo "✅ ECR login token obtained"
 
       - name: Login to Container Registry (ECR)
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ secrets.ECR_REGISTRY }}
-          username: AWS
-          password: ${{ steps.ecr-login.outputs.password }}
+        run: |
+          echo "${{ steps.ecr-login.outputs.password }}" | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
+          echo "✅ Successfully logged in to ECR"
 
       - name: Set deployment hostname and user
         id: deploy_config

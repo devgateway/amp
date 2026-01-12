@@ -678,27 +678,39 @@ jobs:
               echo "Deploying PR #$PR_NUMBER to ${COUNTRY}"
             fi
             
-            # Authenticate with ECR if AWS credentials are provided
-            if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
-              echo "Authenticating with ECR ($REGISTRY)..."
+            # Check if user can access docker without sudo
+            if docker ps > /dev/null 2>&1; then
+              # Authenticate with ECR if AWS credentials are provided (for regular user)
+              if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+                echo "Authenticating with ECR ($REGISTRY)..."
+                export AWS_ACCESS_KEY_ID
+                export AWS_SECRET_ACCESS_KEY
+                export AWS_DEFAULT_REGION=us-east-1
+                aws ecr get-login-password --region us-east-1 2>/dev/null | docker login --username AWS --password-stdin "$REGISTRY" 2>&1 | grep -v -i "password\|token" || {
+                  echo "⚠️  Warning: ECR authentication failed, but continuing..."
+                }
+              fi
+              # Export AWS credentials for the script to use
               export AWS_ACCESS_KEY_ID
               export AWS_SECRET_ACCESS_KEY
               export AWS_DEFAULT_REGION=us-east-1
-              aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$REGISTRY" || true
-            fi
-            
-            # Check if user can access docker without sudo
-            if docker ps > /dev/null 2>&1; then
               amp-up2 "$TAG" "$COUNTRY" "$DB_VERSION" "$PG_VERSION"
             elif sudo docker ps > /dev/null 2>&1; then
               # If using sudo, authenticate with ECR using sudo as well
               if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+                echo "Authenticating with ECR ($REGISTRY) for sudo user..."
                 export AWS_ACCESS_KEY_ID
                 export AWS_SECRET_ACCESS_KEY
                 export AWS_DEFAULT_REGION=us-east-1
-                aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin "$REGISTRY" || true
+                aws ecr get-login-password --region us-east-1 2>/dev/null | sudo docker login --username AWS --password-stdin "$REGISTRY" 2>&1 | grep -v -i "password\|token" || {
+                  echo "⚠️  Warning: ECR authentication failed, but continuing..."
+                }
               fi
-              sudo amp-up2 "$TAG" "$COUNTRY" "$DB_VERSION" "$PG_VERSION"
+              # Export AWS credentials for the script to use (sudo will preserve environment)
+              export AWS_ACCESS_KEY_ID
+              export AWS_SECRET_ACCESS_KEY
+              export AWS_DEFAULT_REGION=us-east-1
+              sudo -E amp-up2 "$TAG" "$COUNTRY" "$DB_VERSION" "$PG_VERSION"
             else
               echo "❌ Cannot access Docker daemon. User may need to be added to docker group."
               echo "Run: sudo usermod -aG docker $USER"

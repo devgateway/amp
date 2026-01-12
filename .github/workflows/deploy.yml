@@ -259,6 +259,7 @@ jobs:
       - name: Get ECR login token
         id: ecr-login
         run: |
+          set +x  # Avoid command echoing to prevent token exposure
           echo "Getting ECR login token for ${{ secrets.ECR_REGISTRY }}..."
           PASSWORD=$(aws ecr get-login-password --region us-east-1) || {
             echo "❌ Error: Failed to get ECR login token"
@@ -268,12 +269,15 @@ jobs:
             echo "  3. Region is correct: us-east-1"
             exit 1
           }
+          # Use ::add-mask:: to prevent token from appearing in logs
+          echo "::add-mask::$PASSWORD"
           echo "password=$PASSWORD" >> $GITHUB_OUTPUT
           echo "✅ ECR login token obtained"
 
       - name: Login to Container Registry (ECR)
         run: |
-          echo "${{ steps.ecr-login.outputs.password }}" | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
+          set +x  # Avoid command echoing to prevent token exposure
+          echo "${{ steps.ecr-login.outputs.password }}" | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }} 2>&1 | sed 's/.*password.*/***/g'
           echo "✅ Successfully logged in to ECR"
 
       - name: Set deployment hostname and user

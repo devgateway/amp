@@ -223,12 +223,25 @@ jobs:
           fi
           echo "TAG=$TAG" >> $GITHUB_OUTPUT
 
-      - name: Login to Container Registry (Push)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Get ECR login token
+        id: ecr-login
+        run: |
+          PASSWORD=$(aws ecr get-login-password --region us-east-1)
+          echo "password=$PASSWORD" >> $GITHUB_OUTPUT
+
+      - name: Login to Container Registry (ECR)
         uses: docker/login-action@v3
         with:
-          registry: ${{ secrets.DOCKER_REGISTRY }}
-          username: ${{ secrets.REGISTRY_PUSH_USERNAME }}
-          password: ${{ secrets.REGISTRY_PUSH_PASSWORD }}
+          registry: ${{ secrets.ECR_REGISTRY }}
+          username: AWS
+          password: ${{ steps.ecr-login.outputs.password }}
 
       - name: Set deployment hostname and user
         id: deploy_config
@@ -450,9 +463,9 @@ jobs:
         run: |
           COMMIT_HASH="${{ steps.commit_hash.outputs.COMMIT_HASH }}"
           # Create a commit-hash-based image tag for content-based lookup
-          IMAGE_BY_HASH="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:commit-${COMMIT_HASH:0:12}"
+          IMAGE_BY_HASH="${{ secrets.ECR_REGISTRY }}/amp/webapp:commit-${COMMIT_HASH:0:12}"
           DEPLOY_TAG="${{ steps.tag.outputs.TAG }}"
-          IMAGE_BY_TAG="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:${DEPLOY_TAG}"
+          IMAGE_BY_TAG="${{ secrets.ECR_REGISTRY }}/amp/webapp:${DEPLOY_TAG}"
           
           echo "Checking for existing image with commit hash ${COMMIT_HASH:0:12}..."
           
@@ -477,8 +490,8 @@ jobs:
           BUILDKIT_PROGRESS: plain
         run: |
           COMMIT_HASH="${{ steps.commit_hash.outputs.COMMIT_HASH }}"
-          IMAGE_BY_HASH="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:commit-${COMMIT_HASH:0:12}"
-          IMAGE_BY_TAG="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:${{ steps.tag.outputs.TAG }}"
+          IMAGE_BY_HASH="${{ secrets.ECR_REGISTRY }}/amp/webapp:commit-${COMMIT_HASH:0:12}"
+          IMAGE_BY_TAG="${{ secrets.ECR_REGISTRY }}/amp/webapp:${{ steps.tag.outputs.TAG }}"
           
           # Build SSH args - only add if SSH_AUTH_SOCK is available (from ssh-agent)
           SSH_ARGS=""
@@ -502,7 +515,7 @@ jobs:
           fi
           
           # Try to use a recent 'latest' or 'main' branch image as cache (if exists)
-          LATEST_IMAGE="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:latest"
+          LATEST_IMAGE="${{ secrets.ECR_REGISTRY }}/amp/webapp:latest"
           if docker pull "$LATEST_IMAGE" 2>/dev/null; then
             echo "✅ Using latest image as additional cache source"
             CACHE_FROM_ARGS+=("--cache-from" "$LATEST_IMAGE")
@@ -539,8 +552,8 @@ jobs:
       - name: Push Docker image to registry
         run: |
           COMMIT_HASH="${{ steps.commit_hash.outputs.COMMIT_HASH }}"
-          IMAGE_BY_HASH="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:commit-${COMMIT_HASH:0:12}"
-          IMAGE_BY_TAG="${{ secrets.DOCKER_REGISTRY }}/amp/webapp:${{ steps.tag.outputs.TAG }}"
+          IMAGE_BY_HASH="${{ secrets.ECR_REGISTRY }}/amp/webapp:commit-${COMMIT_HASH:0:12}"
+          IMAGE_BY_TAG="${{ secrets.ECR_REGISTRY }}/amp/webapp:${{ steps.tag.outputs.TAG }}"
           SKIP_BUILD="${{ steps.check_image.outputs.SKIP_BUILD }}"
           
           # Push commit-hash-based image (for future reuse) - only if we built it
@@ -564,7 +577,7 @@ jobs:
 
       - name: Logout from Container Registry
         if: always()
-        run: docker logout ${{ secrets.DOCKER_REGISTRY }} || true
+        run: docker logout ${{ secrets.ECR_REGISTRY }} || true
 
       - name: Update GitHub commit status
         uses: actions/github-script@v7
@@ -593,9 +606,9 @@ jobs:
           COUNTRY="${{ steps.deploy_config.outputs.COUNTRY }}"
           DB_VERSION="${{ steps.db_version.outputs.DB_VERSION }}"
           PG_VERSION="${{ env.PG_VERSION }}"
-          REGISTRY="${{ secrets.DOCKER_REGISTRY }}"
-          REGISTRY_USERNAME="${{ secrets.REGISTRY_PULL_USERNAME || '' }}"
-          REGISTRY_PASSWORD="${{ secrets.REGISTRY_PULL_PASSWORD || '' }}"
+          REGISTRY="${{ secrets.ECR_REGISTRY }}"
+          AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID || '' }}"
+          AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY || '' }}"
           PR_NUMBER="${{ inputs.pr_number || '' }}"
           
           # Pass variables as environment variables through SSH
@@ -606,8 +619,8 @@ jobs:
             DB_VERSION="$DB_VERSION"
             PG_VERSION="$PG_VERSION"
             REGISTRY="$REGISTRY"
-            REGISTRY_USERNAME="$REGISTRY_USERNAME"
-            REGISTRY_PASSWORD="$REGISTRY_PASSWORD"
+            AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
+            AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
             PR_NUMBER="$PR_NUMBER"
             
             # Validate required variables
@@ -628,19 +641,25 @@ jobs:
               echo "Deploying PR #$PR_NUMBER to ${COUNTRY}"
             fi
             
-            # Authenticate with main registry if credentials are provided
-            if [ -n "$REGISTRY_USERNAME" ] && [ -n "$REGISTRY_PASSWORD" ]; then
-              echo "Authenticating with main registry ($REGISTRY)..."
-              echo "$REGISTRY_PASSWORD" | docker login --username "$REGISTRY_USERNAME" --password-stdin "$REGISTRY" || true
+            # Authenticate with ECR if AWS credentials are provided
+            if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+              echo "Authenticating with ECR ($REGISTRY)..."
+              export AWS_ACCESS_KEY_ID
+              export AWS_SECRET_ACCESS_KEY
+              export AWS_DEFAULT_REGION=us-east-1
+              aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$REGISTRY" || true
             fi
             
             # Check if user can access docker without sudo
             if docker ps > /dev/null 2>&1; then
               amp-up2 "$TAG" "$COUNTRY" "$DB_VERSION" "$PG_VERSION"
             elif sudo docker ps > /dev/null 2>&1; then
-              # If using sudo, authenticate with registry using sudo as well
-              if [ -n "$REGISTRY_USERNAME" ] && [ -n "$REGISTRY_PASSWORD" ]; then
-                echo "$REGISTRY_PASSWORD" | sudo docker login --username "$REGISTRY_USERNAME" --password-stdin "$REGISTRY" || true
+              # If using sudo, authenticate with ECR using sudo as well
+              if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+                export AWS_ACCESS_KEY_ID
+                export AWS_SECRET_ACCESS_KEY
+                export AWS_DEFAULT_REGION=us-east-1
+                aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin "$REGISTRY" || true
               fi
               sudo amp-up2 "$TAG" "$COUNTRY" "$DB_VERSION" "$PG_VERSION"
             else

@@ -29,16 +29,17 @@ module.exports = BackboneDash.View.extend({
     'click .download': 'download',
     'click .expand': 'big',
     'click .retry': 'render',
-    'click .heatmap-switch': 'heatmapSwitchAxis'
+    'click .heatmap-switch': 'heatmapSwitchAxis',
+    'change .dash-program-type select': 'changeProgramType',
   },
 
   chartViews: [
     'bar',
     'pie',
     'heatmap',
-    'table'    
-  ],  
-  
+    'table'
+  ],
+
   initialize: function(options) {
     this.app = options.app;
     this.model.set(this.uiDefaults);
@@ -61,6 +62,7 @@ module.exports = BackboneDash.View.extend({
     this.listenTo(this.model, 'change:xAxisColumn', this.render);
     this.listenTo(this.model, 'change:limit', this.updateData);
     this.listenTo(this.model, 'change:view', this.render);
+    this.listenTo(this.model, 'change:programType', this.render);
 
     this.app.state.register(this, 'chart:' + this.model.url, {
       get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'xAxisColumn', 'view', 'big','stacked','showPlannedDisbursements','showActualDisbursements','seriesToExclude', 'xLimit', 'yLimit', 'swapAxes'),
@@ -84,18 +86,18 @@ module.exports = BackboneDash.View.extend({
     };
     // We need to be sure all dependencies have been loaded before processing each chart (specially the templates).
     $.when(this._stateWait, this.app.filter.loaded, this.app.translator.promise, this.app.settingsWidget.definitions.loaded, this.app.generalSettings.loaded).done(function() {
-    	
+
     	self.extractNumberFormatSettings();
     	self.$el.html(template(renderOptions));
     	self.hideExportInPublicView();
     	self.message = self.$('.dash-chart-diagnostic');
     	self.chartContainer = self.$('.dash-chart-wrap');
-	
+
 	    if (self.model.get('adjtype') !== void 0) {  // this chart has adj settings
 	    	self.rendered = true;
-	        var adjSettings = self.app.settingsWidget.definitions.getFundingTypeSetting(); 	        	
-	        if (!adjSettings) { 
-	        	self.app.report('Could not find Funding Type settings'); 
+	        var adjSettings = self.app.settingsWidget.definitions.getFundingTypeSetting();
+	        if (!adjSettings) {
+	        	self.app.report('Could not find Funding Type settings');
 	        } else {
 	        	if (self.model.get('adjtype') === 'FAKE') {
 	        		self.model.set('adjtype', adjSettings.get('value').defaultId);
@@ -109,11 +111,35 @@ module.exports = BackboneDash.View.extend({
 	            });
 	          }, self)
 	        );
-	      
+
 	    } else {
 	    	self.rendered = true;
 	    }
-	    
+
+      if (self.model.get('programType') !== void 0) {  // this chart has programs type
+            self.rendered = true;
+            const pgrOptions = self.app.settingsWidget.definitions.getProgramSetting();
+
+            if (!pgrOptions) {
+                self.app.report('Could not find Program Type settings');
+            } else {
+                if (self.model.get('programType') === 'FAKE') {
+                    self.model.set('programType', pgrOptions.get('value').defaultId);
+                }
+            }
+
+            self.$('.program-options').html(
+              _(pgrOptions.get('value').options).map(function(opt) {
+                    return adjOptTemplate({
+                        opt: opt,
+                        current: (opt.id === self.model.get('programType'))
+                    });
+                }, self)
+            );
+        } else {
+            self.rendered = true;
+        }
+
 	    // For heatmaps add some extra combos.
         if (self.model.get('chartType') === 'fragmentation') {
             var heatMapConfigs = self.model.get('heatmap_config').models[0];
@@ -133,7 +159,7 @@ module.exports = BackboneDash.View.extend({
                 }, self)
             );
         }
-	
+
 	    if (self._stateWait.state() !== 'pending') {
 	    	self.updateData();
 	    }
@@ -146,7 +172,7 @@ module.exports = BackboneDash.View.extend({
   },
 
   updateData: function() {
-	if(this.app.rendered !== true) { return; }  
+	if(this.app.rendered !== true) { return; }
     if (!this.rendered) { return; }  // short-circuit on early filters apply event
     if (this._stateWait.state() === 'pending') {  // short-circuit until we have state
       this.message.html('Loading...').attr('data-i18n', 'amp.dashboard:chart-loading-saved-settings');
@@ -184,14 +210,14 @@ module.exports = BackboneDash.View.extend({
 
   showChart: function() {
 	  this.showNegativeAlert();
-	  
+
     // TODO: why are we triggering twice on load???
     if (!this.model.hasData()) {
       this.message.html('No Data Available').attr('data-i18n','amp.dashboard:chart-no-data-available');
       app.translator.translateDOM($('.chart-container'));
       this.resetNumbers();
       return;
-    }    
+    }
     var chart = getChart(this.model.get('view'), this.model.get('processed'), this.getChartOptions(), this.model);
     this.chartContainer.html(chart.el);
 
@@ -199,7 +225,7 @@ module.exports = BackboneDash.View.extend({
     	this.renderNumbers();
     	this.fixTitleWidth();
     }
-    
+
     if (this.model.get('chartType') !== 'fragmentation') {
 	    var limit = this.model.get('limit');
 	    if (limit) {
@@ -213,13 +239,13 @@ module.exports = BackboneDash.View.extend({
         }
     }
     this.message.stop().fadeOut(200);
-    
+
     this.beautifyLegends(this);
-    
+
     if (this.model.get('view') === 'heatmap') {
     	this.handleHeatmapClicks();
     }
-        
+
     this.showChartPromise.resolve();
   },
 
@@ -270,7 +296,7 @@ module.exports = BackboneDash.View.extend({
 		  });
 	  }
   },
-  
+
   showNegativeAlert: function() {
     if(this.model.get('view') === 'pie' && _.find(this.model.get('processed')[0].values, function(item) { return item.y < 0;})) {
       this.$('.negative-values-message').show();
@@ -279,14 +305,14 @@ module.exports = BackboneDash.View.extend({
     }
   },
 
-  getChartOptions: function() {	  
+  getChartOptions: function() {
     var co = _(_(this.chartOptions).clone() || {}).defaults({
       trimLabels: !this.model.get('big'),
       getTTContent: this.getTTContent,
       clickHandler: this.chartClickHandler,
       width: this.$('.panel-body').width(),
       height: this.$('.panel-body').height()
-      
+
     });
     if(this.model.get('view') == 'multibar'){
   	  co.stacked = this.model.get('stacked');
@@ -307,7 +333,7 @@ module.exports = BackboneDash.View.extend({
     	this.$('.chart-total').html(util.translateLanguage(this.model.get('sumarizedTotal'))); // this shall use the format from the server and translate it in the front end
     }
     var self = this;
-   var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;    	
+   var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;
     this.$('.chart-currency').html(currencyName);
   },
 
@@ -315,7 +341,7 @@ module.exports = BackboneDash.View.extend({
     this.$('.chart-total').html('');
     this.$('.chart-currency').html('');
   },
-  
+
   fixTitleWidth: function() {
 	  var elementsSpace = 10;
 	  var max_lines_on_title = 2;
@@ -333,7 +359,7 @@ module.exports = BackboneDash.View.extend({
 		  }
 	  }
   },
-  
+
   calculateTextLines: function(object) {
 	  var lineHeight = 24;
 	  var lines = Math.floor($(object).height() / lineHeight);
@@ -353,11 +379,16 @@ module.exports = BackboneDash.View.extend({
     var newType = e.currentTarget.value;
     this.model.set('adjtype', newType);
   },
-  
+
+  changeProgramType: function(e) {
+    var newType = e.currentTarget.value;
+    this.model.set('programType', newType);
+  },
+
   changeXAxis: function(e) {
 	  var newType = e.currentTarget.value;
 	  this.model.set('xAxisColumn', newType);
-  },  
+  },
 
   changeChartView: function(e) {
     var view = util.data(e.currentTarget, 'view');
@@ -370,8 +401,8 @@ module.exports = BackboneDash.View.extend({
 		  this.$el.find('.download').hide();
 	  }else{
 		  this.$el.find('.download').show();
-	  }  
-  },  
+	  }
+  },
   big: function() {
     // toggle big/small charts on large screens
     this.model.set('big', !this.model.get('big'));
@@ -381,8 +412,8 @@ module.exports = BackboneDash.View.extend({
     this.$el[shouldBreak ? 'addClass' : 'removeClass']('clearfix');
   },
 
-  download: function() {     
-	var chartOptions = _(this.getChartOptions()).omit('height', 'width');	
+  download: function() {
+	var chartOptions = _(this.getChartOptions()).omit('height', 'width');
     var downloadView = new DownloadView({
       app: this.app,
       model: this.model,
@@ -394,22 +425,22 @@ module.exports = BackboneDash.View.extend({
       specialClass: specialClass,
       i18nTitle: 'amp.dashboard:download-download-chart'
     });
-    
-    // Translate modal popup.	
+
+    // Translate modal popup.
    	app.translator.translateDOM($("." + specialClass));
   },
-  
+
   heatmapSwitchAxis: function () {
 	  if (this.model.get('swapAxes') === true) {
 		  this.model.set('swapAxes', false);
 	  } else {
 		  this.model.set('swapAxes', true);
-	  }  
+	  }
 	  this.updateData();
   },
 
   //AMP-18630: Here we setup a simple tooltip for each legend element.
-  beautifyLegends : function(self) {	  
+  beautifyLegends : function(self) {
 	  var hasValues = false;
 	  var hasProcessed = false;
 	  if(self.model !== undefined && self.model.get('values') !== undefined && self.model.get('values').length > 0) {
@@ -418,7 +449,7 @@ module.exports = BackboneDash.View.extend({
 	  if(self.model !== undefined && self.model.get('processed') !== undefined && self.model.get('processed').length > 1) {
 		  hasProcessed = true;
 	  }
-	  
+
 	  // Iterate the list of legend elements in DOM (only for this chart) and set a data element called 'data-title' that
 	  // will be then used when a hover event is fired.
 	  $(this.$el).find(".nv-series").each(function(i, elem) {
@@ -440,12 +471,12 @@ module.exports = BackboneDash.View.extend({
 				  }
 			  }
 		  }
-	    
+
 		  // Now bind NV tooltip mechanism to hover event for each legend.
 		  self.addSimpleTooltip(elem);
 	  });
   },
-  
+
   addSimpleTooltip: function(object) {
 	  if ($(object).data('data-title') || $(object).data('title')) {
 		  $(object).hover(function() {
@@ -458,21 +489,21 @@ module.exports = BackboneDash.View.extend({
 	  }
   },
   extractNumberFormatSettings: function(settings) {
-		  var numberFormat = {}; 
+		  var numberFormat = {};
 	      numberFormat.numberFormat = this.app.generalSettings.get('number-format') || '#,#.#';
 
-		  // If the format pattern doesnt have thousands grouping then ignore 'number-group-separator' param or it will 
+		  // If the format pattern doesnt have thousands grouping then ignore 'number-group-separator' param or it will
 		  // be used by JS to group by thousands (ie: in the 'Others' columns).
-		  if(numberFormat.numberFormat.indexOf(',') !== -1) {			  		  
+		  if(numberFormat.numberFormat.indexOf(',') !== -1) {
 			  numberFormat.groupSeparator = this.app.generalSettings.get('number-group-separator') || ',';
 		  } else {
 			  numberFormat.groupSeparator = '';
 		  }
-		  			  
+
 		  numberFormat.decimalSeparator = this.app.generalSettings.get('number-decimal-separator') || '.';
-		  this.app.generalSettings.numberFormatSettings = numberFormat;		
-		  
-		  this.app.generalSettings.numberDivider = this.app.generalSettings.get('number-divider');		  
+		  this.app.generalSettings.numberFormatSettings = numberFormat;
+
+		  this.app.generalSettings.numberDivider = this.app.generalSettings.get('number-divider');
 		  if (this.app.generalSettings.numberDivider === 1) {
 			  this.app.generalSettings.numberDividerDescription = 'amp.dashboard:chart-tops-inunits';
 		  } else if(this.app.generalSettings.numberDivider === 1000) {

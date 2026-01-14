@@ -23,6 +23,7 @@ var HeatmapsConfigCollection = require('../models/heatmaps-config-collection');
 
 var DO = '/Dashboards[true]/Top Donors[true]';
 var DG = '/Dashboards[true]/Top Donor Group[true]';
+var MCT = '/Dashboards[true]/Top Countries[true]';
 var RE = '/Dashboards[true]/Top Regions[true]';
 var PS = '/Dashboards[true]/Top Sectors[true]';
 var AP = '/Dashboards[true]/Aid Predictability[true]';
@@ -35,6 +36,7 @@ var NDD = '/Dashboards[true]/Peace-building and State-building Goals[true]';
 var SEC = '/Dashboards[true]/Sector Fragmentation[true]';
 var LOC = '/Dashboards[true]/Location Fragmentation[true]';
 var PRG = '/Dashboards[true]/Program Fragmentation[true]';
+var PR = '/Dashboards[true]/Top Programs[true]';
 
 module.exports = BackboneDash.View.extend({
 
@@ -76,6 +78,14 @@ module.exports = BackboneDash.View.extend({
                 {app: this.app, url: '/rest/dashboard/tops/dg'}));
         }
         if (_.find(enabledCharts, function (item) {
+            return item === MCT;
+        })) {
+            col.push(new TopsChart(
+                {name: 'Top Countries', big: false, view: 'bar'},
+                {app: this.app, url: '/rest/dashboard/tops/mct'}));
+        }
+
+        if (_.find(enabledCharts, function (item) {
             return item === RE;
         })) {
             col.push(new TopsChart(
@@ -89,6 +99,15 @@ module.exports = BackboneDash.View.extend({
                 {name: 'Top Sectors', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/ps'}));
         }
+
+        if (_.find(enabledCharts, function (item) {
+            return item === PR;
+        })) {
+            col.push(new TopsChart(
+                {name: 'Top Programs', big: false, view: 'bar'},
+                {app: this.app, url: '/rest/dashboard/tops/pr'}));
+        }
+
         if (_.find(enabledCharts, function (item) {
             return item === AP;
         })) {

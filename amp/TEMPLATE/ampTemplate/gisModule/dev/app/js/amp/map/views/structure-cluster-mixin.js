@@ -67,7 +67,7 @@ module.exports = {
 
     var marker = null;
     //Try and show icons if looking at sectors
-    if (self.structureMenuModel.get('filterVertical') === 'Primary Sector' &&
+    if ((self.structureMenuModel.get('filterVertical') === 'Primary Sector' || self.structureMenuModel.get('filterVertical') === 'Programs') &&
       self.rawData.features.length < self.maxNumberOfIcons) {
 
       var filterVertical = self.structureMenuModel.get('filterVertical');

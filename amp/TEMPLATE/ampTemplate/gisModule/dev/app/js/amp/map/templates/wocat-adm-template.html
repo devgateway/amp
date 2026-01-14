@@ -1,0 +1,14 @@
+<% if (properties.wocatActivities){ %>
+<% if(properties.wocatActivities.length <= 9) { %>
+<div class="map-circle smaller">
+    <% } else if(properties.wocatActivities.length <= 99) { %>
+    <div class="map-circle">
+        <% } else if(properties.wocatActivities.length <= 999) { %>
+        <div class="map-circle medium">
+            <% } else { %>
+            <div class="map-circle large">
+                <% } %>
+                <%= properties.wocatActivities.length %>
+            </div>
+            <div class="map-circle-label"><%= properties.admName %></div>
+            <% } %>

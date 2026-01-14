@@ -56,6 +56,7 @@
 "amp.common:title-filters": "Filters",
 "amp.dashboard:chart-TopDonorAgencies": "Top Donor Agencies",
 "amp.dashboard:chart-TopDonorGroups": "Top Donor Groups",
+"amp.dashboard:chart-TopCountries": "Top Countries",
 "amp.dashboard:chart-TopRegions": "Top Regions",
 "amp.dashboard:chart-TopSectors": "Top Sectors",
 "amp.dashboard:chart-AidPredictability": "Aid Predictability",
@@ -72,6 +73,7 @@
 "amp.dashboard:chart-FundingType-others": "Others",
 "amp.dashboard:chart-TopRegions-DistrictUndefined": "District: U",
 "amp.dashboard:chart-TopRegions-others": "Others",
+"amp.dashboard:chart-TopCountries-others": "Others",
 "amp.dashboard:chart-TopSectors-others": "Others",
 "amp.dashboard:chart-TopDonorAgencies-others": "Others",
 "amp.dashboard:chart-TopDonorGroups-others": "Others",
@@ -149,5 +151,11 @@
 "amp.dashboard:chart-tooltip-download-chart[title]":"Download image or table",
 "amp.dashboard:chart-tooltip-expand-chart[title]":"Expand chart",
 "amp.dashboard:chart-tooltip-collapse-chart[title]":"Collapse chart",
-"amp.dashboard:chart-tooltip-heatmap-chart[title]":"View heat map"
+"amp.dashboard:chart-tooltip-heatmap-chart[title]":"View heat map",
+"amp.dashboard:chart-TopPrograms": "Top Programs",
+"amp.dashboard:chart-TopPrograms-others": "Others",
+"amp.dashboard:prgscheme-national-plan-objective": "National Plan Objective",
+"amp.dashboard:prgscheme-primary-program": "Primary Program",
+"amp.dashboard:prgscheme-secondary-program": "Secondary Program",
+"amp.dashboard:prgscheme-tertiary-program": "Tertiary Program"
 }

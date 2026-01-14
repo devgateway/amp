@@ -7,13 +7,27 @@ RUN --mount=type=cache,target=/root/.npm \
     npm ci
 
 FROM node as compile-amp-translate
+
+# Create a directory for the app within the Docker image
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate
-COPY TEMPLATE/ampTemplate/node_modules/amp-translate .
+
+# Copy only the package.json and package-lock.json files
+COPY TEMPLATE/ampTemplate/node_modules/amp-translate/package*.json ./
+
+# Install dependencies
 RUN --mount=type=cache,target=/root/.npm \
     npm ci
 
+# Copy the rest of the application code
+COPY TEMPLATE/ampTemplate/node_modules/amp-translate ./
+
+# Continue with your build steps if needed
+
+
+
 FROM node as compile-amp-boilerplate
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate
+COPY TEMPLATE/ampTemplate/node_modules/amp-boilerplate/.git .
 COPY TEMPLATE/ampTemplate/node_modules/amp-boilerplate .
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 RUN --mount=type=cache,target=/root/.npm \
@@ -22,6 +36,7 @@ RUN --mount=type=cache,target=/root/.npm \
 
 FROM node as compile-amp-filter
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter
+COPY TEMPLATE/ampTemplate/node_modules/amp-filter/.git .
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 COPY TEMPLATE/ampTemplate/node_modules/amp-filter .
 # HACK otherwise amp-filter won't compile!
@@ -32,8 +47,11 @@ RUN --mount=type=cache,target=/root/.npm \
 
 FROM node as compile-amp-settings
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings
-COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
+#COPY TEMPLATE/ampTemplate/node_modules/amp-settings/.git .
 COPY TEMPLATE/ampTemplate/node_modules/amp-settings .
+COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
+# HACK otherwise amp-settings won't compile!
+COPY TEMPLATE/reamp/tools/log /tmp/amp/TEMPLATE/reamp/tools/log
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \
     && npm run build
@@ -102,7 +120,6 @@ RUN --mount=type=cache,target=/root/.npm \
     npm ci \
     && npm run build \
     && rm -rf node_modules
-
 FROM maven:3.8.4-jdk-8 as compile-mvn
 WORKDIR /tmp/amp
 COPY . .
@@ -113,7 +130,7 @@ COPY --from=compile-gis-layers-manager /tmp/amp/TEMPLATE/ampTemplate/node_module
 COPY --from=compile-gis-module /tmp/amp/TEMPLATE/ampTemplate/gisModule/dist TEMPLATE/ampTemplate/gisModule/dist
 COPY --from=compile-dashboard /tmp/amp/TEMPLATE/ampTemplate/dashboard/build TEMPLATE/ampTemplate/dashboard/build
 COPY --from=compile-reamp /tmp/amp/TEMPLATE/reamp TEMPLATE/reamp
-COPY --from=compile-reampv2 /tmp/amp/TEMPLATE/reampv2/build TEMPLATE/reampv2/build
+COPY --from=compile-reampv2 /tmp/amp/TEMPLATE/reampv2 TEMPLATE/reampv2
 ARG BUILD_SOURCE
 RUN --mount=type=cache,target=/root/.m2 \
     mvn -B test war:exploded \

@@ -7,7 +7,7 @@ public class TruRevokePermissionRequest {
     private String apiVersion;
 
     @JsonProperty("data")
-    private TruRevokePermissionRequest.Data data;
+    private Data data;
 
     // Getters and setters
 
@@ -21,11 +21,11 @@ public class TruRevokePermissionRequest {
 
 
 
-    public TruRevokePermissionRequest.Data getData() {
+    public Data getData() {
         return data;
     }
 
-    public void setData(TruRevokePermissionRequest.Data data) {
+    public void setData(Data data) {
         this.data = data;
     }
 

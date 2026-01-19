@@ -149,7 +149,7 @@ public class AMPStartupListener extends HttpServlet implements
             PermissionUtil.getAvailableGates(ampContext);
 
             // initialize permissible simple name singleton
-            GatePermConst.availablePermissiblesBySimpleNames = new Hashtable<String, Class>();
+            GatePermConst.availablePermissiblesBySimpleNames = new Hashtable<>();
             for (int i = 0; i < GatePermConst.availablePermissibles.length; i++) {
                 GatePermConst.availablePermissiblesBySimpleNames.put(
                         GatePermConst.availablePermissibles[i].getSimpleName(),
@@ -316,17 +316,21 @@ public class AMPStartupListener extends HttpServlet implements
                     statement.executeUpdate(createConstraint);
                 }
 
-                String insertIntoGlobalSettings="INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) \n" +
-                        "                        VALUES\n" +
-                        "                         (nextval('amp_global_settings_seq'),'isEnabled','false','t_Boolean','Is Trubudget enabled for this deployment','trubudget',NULL,true),\n" +
-                        "                         (nextval('amp_global_settings_seq'),'baseUrl','https://api.tru.ampsite.net/','','Trubudget base url','trubudget',NULL,true),\n" +
-                        "                         (nextval('amp_global_settings_seq'),'rootUser','root','','Trubudget username for root user','trubudget',NULL,true),\n" +
-                        "                        (nextval('amp_global_settings_seq'),'rootPassword','root-secret','','Trubudget password for root user','trubudget',NULL,true),\n" +
-                        "                        (nextval('amp_global_settings_seq'),'apiVersion','1.0','','Trubudget api version','trubudget',NULL,true),\n" +
-                        "                        (nextval('amp_global_settings_seq'),'defaultSubProjectCurrency','USD','','Trubudget default sub project currency','trubudget',NULL,true),\n" +
-                        "                        (nextval('amp_global_settings_seq'),'workFlowItemDueDays','10','t_Integer','Number of days for a workflow item to be due.','trubudget',NULL,true),\n" +
-                        "                        (nextval('amp_global_settings_seq'),'organization','KfW','','Organization name to be used for this deployment','trubudget',NULL,true) ON CONFLICT (settingsname,section) DO NOTHING";
-                statement.executeUpdate(insertIntoGlobalSettings);
+                // Insert trubudget global settings individually, following the pattern from XML patches
+                String[] trubudgetSettings = {
+                    "INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) VALUES ((select max(id) + 1 FROM amp_global_settings), 'isEnabled', 'false', 't_Boolean', 'Is Trubudget enabled for this deployment', 'trubudget', NULL, true) ON CONFLICT (settingsname,section) DO NOTHING",
+                    "INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) VALUES ((select max(id) + 1 FROM amp_global_settings), 'baseUrl', 'https://api.tru.ampsite.net/', '', 'Trubudget base url', 'trubudget', NULL, true) ON CONFLICT (settingsname,section) DO NOTHING",
+                    "INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) VALUES ((select max(id) + 1 FROM amp_global_settings), 'rootUser', 'root', '', 'Trubudget username for root user', 'trubudget', NULL, true) ON CONFLICT (settingsname,section) DO NOTHING",
+                    "INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) VALUES ((select max(id) + 1 FROM amp_global_settings), 'rootPassword', 'root-secret', '', 'Trubudget password for root user', 'trubudget', NULL, true) ON CONFLICT (settingsname,section) DO NOTHING",
+                    "INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) VALUES ((select max(id) + 1 FROM amp_global_settings), 'apiVersion', '1.0', '', 'Trubudget api version', 'trubudget', NULL, true) ON CONFLICT (settingsname,section) DO NOTHING",
+                    "INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) VALUES ((select max(id) + 1 FROM amp_global_settings), 'defaultSubProjectCurrency', 'USD', '', 'Trubudget default sub project currency', 'trubudget', NULL, true) ON CONFLICT (settingsname,section) DO NOTHING",
+                    "INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) VALUES ((select max(id) + 1 FROM amp_global_settings), 'workFlowItemDueDays', '10', 't_Integer', 'Number of days for a workflow item to be due.', 'trubudget', NULL, true) ON CONFLICT (settingsname,section) DO NOTHING",
+                    "INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) VALUES ((select max(id) + 1 FROM amp_global_settings), 'organization', 'KfW', '', 'Organization name to be used for this deployment', 'trubudget', NULL, true) ON CONFLICT (settingsname,section) DO NOTHING"
+                };
+                
+                for (String insertSql : trubudgetSettings) {
+                    statement.executeUpdate(insertSql);
+                }
                 String insertStatusClass ="INSERT INTO amp_category_class(id, category_name, keyname, description, is_multiselect, is_ordered)" +
                         " VALUES (nextval('amp_category_class_seq'), 'Component Funding Status' , 'component_funding_status', '', 'f', 'f') ON CONFLICT(keyname) DO NOTHING";
                 statement.executeUpdate(insertStatusClass);

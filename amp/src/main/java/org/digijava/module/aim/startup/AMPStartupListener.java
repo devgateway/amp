@@ -293,22 +293,28 @@ public class AMPStartupListener extends HttpServlet implements
                 statement.executeUpdate(relationSql);
 
                 // Remove duplicates and create unique constraint on (settingsname, section) if it doesn't exist
-                String createUniqueConstraint = "DO $$ " +
-                        "BEGIN " +
-                        "  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'amp_global_settings_unique_name_section') THEN " +
-                        "    -- Remove duplicate rows, keeping the one with the lowest ID " +
-                        "    DELETE FROM amp_global_settings ags " +
-                        "    WHERE EXISTS ( " +
-                        "      SELECT 1 FROM amp_global_settings gs " +
-                        "      WHERE gs.settingsname = ags.settingsname " +
-                        "        AND gs.section = ags.section " +
-                        "        AND gs.id < ags.id " +
-                        "    ); " +
-                        "    -- Now create the unique constraint " +
-                        "    ALTER TABLE amp_global_settings ADD CONSTRAINT amp_global_settings_unique_name_section UNIQUE(settingsname, section); " +
-                        "  END IF; " +
-                        "END $$;";
-                statement.executeUpdate(createUniqueConstraint);
+                // First check if constraint exists
+                String checkConstraint = "SELECT 1 FROM pg_constraint WHERE conname = 'amp_global_settings_unique_name_section'";
+                boolean constraintExists = false;
+                try (java.sql.ResultSet rs = statement.executeQuery(checkConstraint)) {
+                    constraintExists = rs.next();
+                }
+                
+                if (!constraintExists) {
+                    // Remove duplicate rows, keeping the one with the lowest ID
+                    String removeDuplicates = "DELETE FROM amp_global_settings ags " +
+                            "WHERE EXISTS ( " +
+                            "  SELECT 1 FROM amp_global_settings gs " +
+                            "  WHERE gs.settingsname = ags.settingsname " +
+                            "    AND gs.section = ags.section " +
+                            "    AND gs.id < ags.id " +
+                            ")";
+                    statement.executeUpdate(removeDuplicates);
+                    
+                    // Now create the unique constraint
+                    String createConstraint = "ALTER TABLE amp_global_settings ADD CONSTRAINT amp_global_settings_unique_name_section UNIQUE(settingsname, section)";
+                    statement.executeUpdate(createConstraint);
+                }
 
                 String insertIntoGlobalSettings="INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) \n" +
                         "                        VALUES\n" +

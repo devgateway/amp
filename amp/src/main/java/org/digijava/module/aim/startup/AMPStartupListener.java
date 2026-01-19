@@ -7,7 +7,6 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.management.ManagementService;
 import org.apache.jackrabbit.util.TransientFileFactory;
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.PledgesToActivitiesBridge;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.error.AMPException;
@@ -41,8 +40,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
-import java.io.File;
-import java.io.FileInputStream;
 import java.lang.management.ManagementFactory;
 import java.sql.Statement;
 import java.util.Collection;
@@ -186,7 +183,7 @@ public class AMPStartupListener extends HttpServlet implements
             importGazeteer();
             registerEhCacheMBeans();
             initAPI();
-
+            runTrubudgetInitQueries();
             new SwaggerConfigurer().configure();
 
             DgEmailManager.triggerStaticInitializers();
@@ -194,6 +191,224 @@ public class AMPStartupListener extends HttpServlet implements
             logger.error("Exception while initialising AMP :" + e.getMessage(), e);
             throw new Error(e);
         }
+    }
+
+    public static void runTrubudgetInitQueries()
+    {
+        logger.info("Creating trubudget relations");
+        Session session = PersistenceManager.openNewSession();
+
+        Transaction transaction = session.beginTransaction();
+
+        // Using Hibernate's native SQL execution
+        session.doWork(connection -> {
+            try (Statement statement = connection.createStatement()) {
+                String intentSeq="CREATE SEQUENCE IF NOT EXISTS amp_trubudget_intent_seq;";
+//                String groupSeq="CREATE SEQUENCE IF NOT EXISTS trubudget_intent_group_seq;";
+//                statement.executeUpdate(intentSeq);
+//                statement.executeUpdate(groupSeq);
+//                String createIntentGroupSql ="CREATE TABLE IF NOT EXISTS trubudget_intent_group ("
+//                        +"trubudget_intent_group_id BIGINT DEFAULT nextval('trubudget_intent_group_seq') PRIMARY KEY,"
+//                        +"trubudget_intent_group_name VARCHAR(255)"
+//                        +");";
+//                statement.executeUpdate(createIntentGroupSql);
+                String createIntentSql = "CREATE TABLE IF NOT EXISTS amp_trubudget_intent ("
+                        + "trubudget_intent_id BIGINT DEFAULT nextval('trubudget_intent_seq') PRIMARY KEY,"
+                        + "trubudget_intent_name VARCHAR(255) UNIQUE,"
+                        + "trubudget_intent_display_name VARCHAR(255)"
+                        + ")";
+//                statement.executeUpdate(createIntentSql);
+                String insertStatement="INSERT INTO amp_trubudget_intent (trubudget_intent_id,trubudget_intent_name, trubudget_intent_display_name)\n" +
+                        "VALUES\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.listPermissions', 'List Permissions'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'project.intent.grantPermission', 'Grant permissions to project.'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.grantPermission', 'Grant Permission'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.grantAllPermissions', 'Grant All Permissions'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.revokePermission', 'Revoke Permission'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.createProject', 'Create Project'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.createUser', 'Create User'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.enableUser', 'Enable User'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.disableUser', 'Disable User'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.listAssignments', 'List Assignments'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.createGroup', 'Create Group'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'network.registerNode', 'Register Node'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'network.list', 'List Nodes'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'network.listActive', 'List Active Nodes'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'network.voteForPermission', 'Vote for Permission'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'network.approveNewOrganization', 'Approve New Organization'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'network.approveNewNodeForExistingOrganization', 'Approve New Node for Existing Organization'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'network.declineNode', 'Decline Node'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'provisioning.start', 'Start Provisioning'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'provisioning.end', 'End Provisioning'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'provisioning.get', 'Get Provisioning Status') ON CONFLICT (trubudget_intent_name) DO NOTHING;\n";
+                logger.info("Inserting global intents");
+                statement.executeUpdate(insertStatement);
+
+                String insertSubIntentsStatement ="INSERT INTO amp_trubudget_sub_intent (sub_trubudget_intent_id,sub_trubudget_intent_name,mother_intent_name)" +
+                        "VALUES" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.assign', 'project'),"+
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.close', 'project'),"+
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.update', 'project'),"+
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.list', 'project'),"+
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.viewHistory', 'project'),"+
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.createSubproject', 'project'),"+
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.intent.grantPermission', 'project'),"+
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.intent.listPermissions', 'project'),"+
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.intent.revokePermission', 'project'),"+
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.budget.updateProjected', 'project')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.budget.updateProjected', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.update', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.list', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.viewHistory', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.intent.revokePermission', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.intent.grantPermission', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.intent.listPermissions', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.reorderWorkflowitems', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.createWorkflowitem', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.close', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.assign', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'workflowitem.assign', 'workflowitem')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'workflowitem.update', 'workflowitem')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'workflowitem.close', 'workflowitem')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'workflowitem.viewHistory', 'workflowitem')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'workflowitem.list', 'workflowitem')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'workflowitem.intent.revokePermission', 'workflowitem')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'workflowitem.intent.listPermissions', 'workflowitem')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'workflowitem.intent.grantPermission', 'workflowitem')" +
+                        " ON CONFLICT (sub_trubudget_intent_name,mother_intent_name) DO NOTHING";
+                logger.info("Inserting sub intents");
+
+                statement.executeUpdate(insertSubIntentsStatement);
+//                String addColumnSql = "ALTER TABLE trubudget_intent ADD COLUMN IF NOT EXISTS intent_group INTEGER";
+//                statement.executeUpdate(addColumnSql);
+//
+//                String addForeignKeySql = "ALTER TABLE trubudget_intent ADD CONSTRAINT fk_intent_group "
+//                        + "FOREIGN KEY (intent_group) REFERENCES trubudget_intent_group (trubudget_intent_group_id)";
+//                statement.executeUpdate(addForeignKeySql);
+                String relationSql="CREATE TABLE IF NOT EXISTS amp_user_trubudget_intent (\n" +
+                        "    user_id BIGINT REFERENCES DG_USER(id),\n" +
+                        "    trubudget_intent_id BIGINT REFERENCES trubudget_intent(trubudget_intent_id),\n" +
+                        "    PRIMARY KEY (user_id, trubudget_intent_id)\n" +
+                        ");";
+                statement.executeUpdate(relationSql);
+
+                String insertIntoGlobalSettings="INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) \n" +
+                        "                        VALUES\n" +
+                        "                         (nextval('amp_global_settings_seq'),'isEnabled','false','t_Boolean','Is Trubudget enabled for this deployment','trubudget',NULL,true),\n" +
+                        "                         (nextval('amp_global_settings_seq'),'baseUrl','https://api.tru.ampsite.net/','','Trubudget base url','trubudget',NULL,true),\n" +
+                        "                         (nextval('amp_global_settings_seq'),'rootUser','root','','Trubudget username for root user','trubudget',NULL,true),\n" +
+                        "                        (nextval('amp_global_settings_seq'),'rootPassword','root-secret','','Trubudget password for root user','trubudget',NULL,true),\n" +
+                        "                        (nextval('amp_global_settings_seq'),'apiVersion','1.0','','Trubudget api version','trubudget',NULL,true),\n" +
+                        "                        (nextval('amp_global_settings_seq'),'defaultSubProjectCurrency','USD','','Trubudget default sub project currency','trubudget',NULL,true),\n" +
+                        "                        (nextval('amp_global_settings_seq'),'workFlowItemDueDays','10','t_Integer','Number of days for a workflow item to be due.','trubudget',NULL,true),\n" +
+                        "                        (nextval('amp_global_settings_seq'),'organization','KfW','','Organization name to be used for this deployment','trubudget',NULL,true) ON CONFLICT (settingsname,section) DO NOTHING";
+                statement.executeUpdate(insertIntoGlobalSettings);
+                String insertStatusClass ="INSERT INTO amp_category_class(id, category_name, keyname, description, is_multiselect, is_ordered)" +
+                        " VALUES (nextval('amp_category_class_seq'), 'Component Funding Status' , 'component_funding_status', '', 'f', 'f') ON CONFLICT(keyname) DO NOTHING";
+                statement.executeUpdate(insertStatusClass);
+//                String alterTable="ALTER TABLE AMP_CATEGORY_VALUE\n" +
+//                        "ADD CONSTRAINT unique_value_index_constraint UNIQUE (category_value, index_column)";
+//                statement.executeUpdate(alterTable);
+                String insertStatusValues ="INSERT INTO amp_category_value (id, category_value, amp_category_class_id, index_column)\n" +
+                        "SELECT\n" +
+                        "    nextval('amp_category_value_seq'),\n" +
+                        "    'Open',\n" +
+                        "    (SELECT id FROM amp_category_class WHERE keyname = 'component_funding_status'),\n" +
+                        "    0\n" +
+                        "WHERE NOT EXISTS (\n" +
+                        "    SELECT 1\n" +
+                        "    FROM amp_category_value\n" +
+                        "    WHERE\n" +
+                        "        amp_category_class_id = (SELECT id FROM amp_category_class WHERE keyname = 'component_funding_status')\n" +
+                        "        AND category_value = 'Open'\n" +
+                        ");\n" +
+                        "\n" +
+                        "INSERT INTO amp_category_value (id, category_value, amp_category_class_id, index_column)\n" +
+                        "SELECT\n" +
+                        "    nextval('amp_category_value_seq'),\n" +
+                        "    'Closed',\n" +
+                        "    (SELECT id FROM amp_category_class WHERE keyname = 'component_funding_status'),\n" +
+                        "    1\n" +
+                        "WHERE NOT EXISTS (\n" +
+                        "    SELECT 1\n" +
+                        "    FROM amp_category_value\n" +
+                        "    WHERE\n" +
+                        "        amp_category_class_id = (SELECT id FROM amp_category_class WHERE keyname = 'component_funding_status')\n" +
+                        "        AND category_value = 'Closed'\n" +
+                        ");\n" +
+                        "\n" +
+                        "INSERT INTO amp_category_value (id, category_value, amp_category_class_id, index_column)\n" +
+                        "SELECT\n" +
+                        "    nextval('amp_category_value_seq'),\n" +
+                        "    'Rejected',\n" +
+                        "    (SELECT id FROM amp_category_class WHERE keyname = 'component_funding_status'),\n" +
+                        "    2\n" +
+                        "WHERE NOT EXISTS (\n" +
+                        "    SELECT 1\n" +
+                        "    FROM amp_category_value\n" +
+                        "    WHERE\n" +
+                        "        amp_category_class_id = (SELECT id FROM amp_category_class WHERE keyname = 'component_funding_status')\n" +
+                        "        AND category_value = 'Rejected'\n" +
+                        ");\n";
+                statement.executeUpdate(insertStatusValues);
+                String updateDocs="ALTER TABLE AMP_COMPONENT_FUNDING_DOCUMENTS ALTER COLUMN amp_component_funding_id DROP NOT NULL;";
+                statement.executeUpdate(updateDocs);
+
+                String updateComponents="ALTER TABLE AMP_COMPONENTS ALTER COLUMN amp_activity_id DROP NOT NULL;";
+                statement.executeUpdate(updateComponents);
+
+                String insertComponentStatusClass ="INSERT INTO amp_category_class(id, category_name, keyname, description, is_multiselect, is_ordered)" +
+                        " VALUES (nextval('amp_category_class_seq'), 'Component Status' , 'component_status', '', 'f', 'f') ON CONFLICT(keyname) DO NOTHING";
+                statement.executeUpdate(insertComponentStatusClass);
+
+                String insertComponentStatusValues ="INSERT INTO amp_category_value (id, category_value, amp_category_class_id, index_column)\n" +
+                        "SELECT\n" +
+                        "    nextval('amp_category_value_seq'),\n" +
+                        "    'Open',\n" +
+                        "    (SELECT id FROM amp_category_class WHERE keyname = 'component_status'),\n" +
+                        "    0\n" +
+                        "WHERE NOT EXISTS (\n" +
+                        "    SELECT 1\n" +
+                        "    FROM amp_category_value\n" +
+                        "    WHERE\n" +
+                        "        amp_category_class_id = (SELECT id FROM amp_category_class WHERE keyname = 'component_status')\n" +
+                        "        AND category_value = 'Open'\n" +
+                        ");\n" +
+                        "INSERT INTO amp_category_value (id, category_value, amp_category_class_id, index_column)\n" +
+                        "SELECT\n" +
+                        "    nextval('amp_category_value_seq'),\n" +
+                        "    'Closed',\n" +
+                        "    (SELECT id FROM amp_category_class WHERE keyname = 'component_status'),\n" +
+                        "    1\n" +
+                        "WHERE NOT EXISTS (\n" +
+                        "    SELECT 1\n" +
+                        "    FROM amp_category_value\n" +
+                        "    WHERE\n" +
+                        "        amp_category_class_id = (SELECT id FROM amp_category_class WHERE keyname = 'component_status')\n" +
+                        "        AND category_value = 'Closed'\n" +
+                        ");\n"+
+                        "INSERT INTO amp_category_value (id, category_value, amp_category_class_id, index_column)\n" +
+                        "SELECT\n" +
+                        "    nextval('amp_category_value_seq'),\n" +
+                        "    'Rejected',\n" +
+                        "    (SELECT id FROM amp_category_class WHERE keyname = 'component_status'),\n" +
+                        "    2\n" +
+                        "WHERE NOT EXISTS (\n" +
+                        "    SELECT 1\n" +
+                        "    FROM amp_category_value\n" +
+                        "    WHERE\n" +
+                        "        amp_category_class_id = (SELECT id FROM amp_category_class WHERE keyname = 'component_status')\n" +
+                        "        AND category_value = 'Rejected'\n" +
+                        ");\n";
+                statement.executeUpdate(insertComponentStatusValues);
+
+            } catch (Exception e) {
+                // Handle the exception
+                logger.info("Error occurred during init db  operations", e);
+            }
+        });
+        transaction.commit();
+        session.close();
     }
 
     public void registerEhCacheMBeans() {

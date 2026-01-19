@@ -21,18 +21,22 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.*;
+import org.digijava.kernel.entity.trubudget.SubIntents;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.*;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.um.dbentity.ResetPassword;
 import org.digijava.module.um.dbentity.SuspendLogin;
 import org.digijava.module.um.exception.UMException;
+import org.digijava.module.um.model.*;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
@@ -40,10 +44,16 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+import reactor.core.CorePublisher;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class DbUtil {
@@ -388,6 +398,34 @@ public class DbUtil {
             user.updateLastModified();
 
             session.update(user);
+
+            session.flush();
+            List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+                try {
+                    TruUserData userData = new TruUserData();
+                    TruUserData.Data data = new TruUserData.Data();
+                    TruUserData.User user1 = new TruUserData.User();
+                    user1.setDisplayName(user.getFirstNames() + " " + user.getLastName());
+                    // TODO: 8/28/23 if you are editing a user for the first time with Trubudget integrated. their password will be the email
+                    // TODO: 8/28/23 this can be changed later in Trubudget
+                    String pass = user.getTruBudgetPassword()!=null?UmUtil.decrypt(user.getTruBudgetPassword(), user.getTruBudgetKeyGen()):"amptrubudget";
+                    user1.setPassword(pass);
+                    user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
+                    data.setUser(user1);
+                    userData.setData(data);
+                    if (registerUserOnTrubudget(userData, user)) {
+                        user.setTruBudgetEnabled(true);
+                        session.update(user);
+                        session.flush();
+                    }
+                } catch (Exception e) {
+                    logger.info("Error: " + e.getMessage(), e);
+                    tx.rollback();
+
+                }
+            }
             
             if(user.getUserPreference()!=null){
                 UserUtils.saveUserPreferences(user.getUserPreference());
@@ -402,6 +440,26 @@ public class DbUtil {
             throw new UMException(
                 "Unable to update user information into database", ex);
         }
+    }
+
+    // TODO: 9/1/23 rollback if trubudget registration not successful
+    public static Mono<TruLoginResponse> loginToTruBudget(TruLoginRequest truLoginRequest, List<AmpGlobalSettings> settings) throws URISyntaxException {
+        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/user.authenticate",truLoginRequest, TruLoginRequest.class,TruLoginResponse.class);
+    }
+    public static List<AmpGlobalSettings> getGlobalSettingsBySection(String sectionName)
+    {
+        Session session = PersistenceManager.getRequestDBSession();
+        Query<AmpGlobalSettings> query = session.createQuery("FROM "+AmpGlobalSettings.class.getName()+" gs WHERE gs.section= :sectionName", AmpGlobalSettings.class);
+        query.setCacheable(true);
+        query.setParameter("sectionName", sectionName);
+
+        return query.list();
+    }
+    public static String getSettingValue(List<AmpGlobalSettings> globalSettings, String settingName)
+    {
+        String value = globalSettings.stream().filter(x->x.getGlobalSettingsName().equals(settingName)).findFirst().orElseThrow(()->new RuntimeException("Unable to find setting for name: "+settingName)).getGlobalSettingsValue();
+        logger.info("Setting value: "+value);
+        return value;
     }
     
     public static void registerUser(User user) throws UMException {
@@ -420,6 +478,32 @@ public class DbUtil {
 
             // update user
             session.save(user);
+
+            session.flush();
+            List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+
+                try {
+                    TruUserData userData = new TruUserData();
+                    TruUserData.Data data = new TruUserData.Data();
+                    TruUserData.User user1 = new TruUserData.User();
+                    user1.setDisplayName(user.getFirstNames() + " " + user.getLastName());
+                    user1.setPassword(user.getTruBudgetPassword()!=null?UmUtil.decrypt(user.getTruBudgetPassword(), user.getTruBudgetKeyGen()):"amptrubudget");
+                    user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
+                    data.setUser(user1);
+                    userData.setData(data);
+                    if (registerUserOnTrubudget(userData, user)) {
+                        user.setTruBudgetEnabled(true);
+                        session.update(user);
+                        session.flush();
+                    }
+
+                } catch (Exception e) {
+                    logger.info("Error: " + e.getMessage(), e);
+                    tx.rollback();
+                }
+            }
 
             // update user preference
             if(user.getUserPreference() != null) {
@@ -477,7 +561,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getSession();
             //"from " + User.class.getName() + " rs where sha1(concat(cast(rs.email as byte),rs.id))=:hash and rs.emailVerified=false"; 
-            String queryString = "select ID from DG_USER where encode(digest(CAST(EMAIL as text) || CAST(id as text), 'sha1'), 'hex')=:hash and EMAIL_VERIFIED=false";
+            String queryString = "select ID from DG_USER where encode(digest(CAST(EMAIL as text) || CAST(id as text), 'sha1'), 'hex')= :hash and EMAIL_VERIFIED=false";
             Query query = session.createNativeQuery(queryString);
             query.setParameter("hash", id,StringType.INSTANCE);
             iduser = (BigInteger) query.uniqueResult();
@@ -519,6 +603,144 @@ public class DbUtil {
             throw new UMException(ex0.getMessage(), ex0);
         }
         return iscorrect;
+    }
+
+    public static boolean registerUserOnTrubudget(TruUserData userData, User user) throws URISyntaxException {
+        List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+        if (!getSettingValue(settings,"isEnabled").equals("true")) {
+            logger.info("Trubudget is not enabled for this site.");
+            return false;
+        }
+        userData.setApiVersion(getSettingValue(settings, "apiVersion"));
+        userData.getData().getUser().setOrganization(getSettingValue(settings, "organization"));
+        logger.info("Registering user on Trubudget");
+        // TODO: 9/15/23 check why the baseUrl setting is empty on haiti
+        logger.info("Settings: "+settings);
+        TruLoginRequest truLoginRequest = new TruLoginRequest();
+        truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
+        TruLoginRequest.Data data = new TruLoginRequest.Data();
+        TruLoginRequest.User user1 = new TruLoginRequest.User();
+
+        user1.setPassword(getSettingValue(settings,"rootPassword"));
+        user1.setId(getSettingValue(settings,"rootUser"));
+        data.setUser(user1);
+        truLoginRequest.setData(data);
+        Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest,settings);
+        logger.info("Trubudget for user: "+user.getTruBudgetEnabled());
+        truResp.subscribe(truLoginResponse -> {
+
+//            TruUserData response = null;
+
+
+            try {
+                GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/global.createUser", userData, TruUserData.class, TruUserData.class, truLoginResponse.getData().getUser().getToken()).subscribe(registerResponse->{
+                    logger.info("Create user response: " + registerResponse);
+                    List<TruBudgetIntent> toBeRevoked = new ArrayList<>();
+                    for (TruBudgetIntent truBudgetIntent : user.getInitialTruBudgetIntents())
+                    {
+                        if (!user.getTruBudgetIntents().contains(truBudgetIntent))
+                        {
+                            toBeRevoked.add(truBudgetIntent);
+                        }
+                    }
+                    if (!user.getTruBudgetIntents().isEmpty()) {
+                        Flux.range(0, user.getTruBudgetIntents().size())
+                                .flatMap(index -> {
+                                    TruGrantPermissionRequest permData = new TruGrantPermissionRequest();
+                                    TruGrantPermissionRequest.Data data1 = new TruGrantPermissionRequest.Data();
+                                    data1.setIdentity(registerResponse !=null? registerResponse.getData().getUser().getId():user.getEmail().split("@")[0]);
+                                    return grantPermRequest(settings, truLoginResponse, permData, data1,new ArrayList<>(user.getTruBudgetIntents()).get(index).getTruBudgetIntentName());
+
+                                }).subscribeOn(Schedulers.parallel()).subscribe(permissionResponse->logger.info("Grant permission response:ss " + permissionResponse));
+                    }
+                    // TODO: 9/6/23  complete the revoke process.. need to checkout all available permissions
+
+                    if (!toBeRevoked.isEmpty()) {
+                        Flux.range(0, toBeRevoked.size())
+                                .flatMap(index -> {
+                                    TruRevokePermissionRequest permData = new TruRevokePermissionRequest();
+                                    TruRevokePermissionRequest.Data data1 = new TruRevokePermissionRequest.Data();
+                                    data1.setIdentity(registerResponse !=null? registerResponse.getData().getUser().getId():user.getEmail().split("@")[0]);
+                                    data1.setUserId(registerResponse !=null? registerResponse.getData().getUser().getId():user.getEmail().split("@")[0]);
+                                    data1.setIntent(new ArrayList<>(toBeRevoked).get(index).getTruBudgetIntentName());
+                                    permData.setData(data1);
+                                    permData.setApiVersion(getSettingValue(settings,"apiVersion"));
+                                    try {
+                                        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/user.intent.revokePermission", permData, TruRevokePermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken());
+                                    } catch (URISyntaxException e) {
+                                        return Flux.error(new RuntimeException(e));
+                                    }
+                                }).subscribeOn(Schedulers.parallel()).subscribe(permissionResponse->logger.info("Revoke permission response:ss " + permissionResponse));
+                    }
+
+                });
+            } catch (Exception e) {
+                logger.error("Error during trubudget registration ",e);
+            }
+
+
+        });
+        return true;
+
+    }
+
+    @NotNull
+    private static CorePublisher<String> grantPermRequest(List<AmpGlobalSettings> settings, TruLoginResponse truLoginResponse, TruGrantPermissionRequest permData, TruGrantPermissionRequest.Data data1, String intent) {
+        data1.setIntent(intent);
+        permData.setData(data1);
+        permData.setApiVersion(getSettingValue(settings,"apiVersion"));
+        try {
+
+            return GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/global.grantPermission", permData, TruGrantPermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken());
+        } catch (URISyntaxException e) {
+            return Flux.error(new RuntimeException(e));
+        }
+    }
+
+    public static List<SubIntents> getSubIntentsByMother(String motherName)
+    {
+        Session session = PersistenceManager.openNewSession();
+        try {
+            return session.createNativeQuery(" SELECT t. * FROM amp_trubudget_sub_intent t WHERE mother_intent_name='"+motherName+"'", SubIntents.class).setCacheable(true).list();
+
+        }catch (Exception e)
+        {
+            logger.info("Error during intent fetch ",e);
+            throw new RuntimeException(e);
+        }
+    }
+    public static  List<TruBudgetIntent> getTruBudgetIntents()
+    {
+        Session session = PersistenceManager.getRequestDBSession();
+        try {
+            return session.createNativeQuery(" SELECT t.* FROM amp_trubudget_intent t ORDER BY trubudget_intent_name", TruBudgetIntent.class).list();
+
+        }catch (Exception e)
+        {
+            logger.info("Error during intent fetch ",e);
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public static  List<TruBudgetIntent> getTruBudgetIntentsByName(String [] names)
+    {
+        if (names.length!=0) {
+            Session session = PersistenceManager.getRequestDBSession();
+            StringBuilder convertedNames = new StringBuilder("(");
+            for (String name : names) {
+                convertedNames.append("'").append(name).append("'").append(",");
+            }
+            String c = convertedNames.toString().replaceAll(",$", "");
+            c += ")";
+            logger.info("Intent query: " + c);
+
+            return session.createNativeQuery(" SELECT t. * FROM amp_trubudget_intent t WHERE trubudget_intent_name in " + c, TruBudgetIntent.class).list();
+
+        }
+        return Collections.emptyList();
+
+
     }
     
     public static boolean EmailExist(String email, Long id) throws

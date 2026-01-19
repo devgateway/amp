@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
+import static org.digijava.module.aim.auth.AmpPostLoginAction.doActualTruBudgetLogin;
+
 
 /**
  * Validates a user using the user name and the password.
@@ -50,6 +52,7 @@ public class Login extends Action {
 
         LoginForm lForm = (LoginForm) form; // login form instance
         ampContext = getServlet().getServletContext();
+
 
         ActionMessages errors = new ActionMessages();
         HttpSession session = request.getSession();
@@ -129,6 +132,7 @@ public class Login extends Action {
 
                 // Check whether the user is a site admin or not
                 boolean siteAdmin = DgUtil.isSiteAdministrator(request);
+                doActualTruBudgetLogin(usr);
 
                 /*
                  * if the member is part of multiple teams the below collection contains more than one element.

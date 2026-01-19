@@ -38,9 +38,16 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.um.dbentity.SuspendLogin;
 import org.digijava.module.um.exception.UMException;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.*;
 
@@ -48,6 +55,70 @@ import java.util.*;
 public class UmUtil {
 
     public static final Comparator organizationNameComparator;
+    private static final Random rand = new Random((new Date()).getTime());
+
+    /**
+     * encrypt trubudget password
+     * @param plaintext
+     * @return encrypted password
+     */
+    public static String encrypt(String plaintext, String secretKey) throws Exception {
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] iv = new byte[16];
+        secureRandom.nextBytes(iv);
+        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+
+        SecretKey key = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "AES");
+
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, key, ivParameterSpec);
+
+        byte[] encryptedBytes = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
+
+        // Combine IV and encrypted data and encode in Base64
+        byte[] combined = new byte[iv.length + encryptedBytes.length];
+        System.arraycopy(iv, 0, combined, 0, iv.length);
+        System.arraycopy(encryptedBytes, 0, combined, iv.length, encryptedBytes.length);
+
+        return Base64.getEncoder().encodeToString(combined);
+    }
+    public static String generateAESKey(int keyLength) throws NoSuchAlgorithmException {
+        KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+        keyGen.init(keyLength); // Key length in bits (128, 192, or 256)
+        SecretKey key = keyGen.generateKey();
+        byte[] keyBytes = key.getEncoded();
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : keyBytes) {
+            hexString.append(String.format("%02X", b));
+        }
+        return hexString.toString();
+    }
+
+
+    /**
+     * decrypt trubudget password
+     * @param ciphertext
+     * @return decrypted password
+     */
+
+    public static String decrypt(String ciphertext, String secretKey) throws Exception {
+        byte[] combined = Base64.getDecoder().decode(ciphertext);
+        byte[] iv = new byte[16];
+        byte[] encryptedBytes = new byte[combined.length - iv.length];
+        System.arraycopy(combined, 0, iv, 0, iv.length);
+        System.arraycopy(combined, iv.length, encryptedBytes, 0, encryptedBytes.length);
+
+        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+
+        SecretKey key = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "AES");
+
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, key, ivParameterSpec);
+
+        byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
+
+        return new String(decryptedBytes, StandardCharsets.UTF_8);
+    }
 
     /**
      * Get random code

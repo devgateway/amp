@@ -15,6 +15,8 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.io.Serializable;
 import java.util.*;
@@ -47,6 +49,11 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
             fmPath="/Activity Form/Components/Component/Component Information/Description")
     @TranslatableField
     private String description;
+    @Interchangeable(fieldTitle = COMPONENT_STATUS, importable = true, pickIdOnly = true,
+            fmPath = "/Activity Form/Components/Component/Component Information/" + COMPONENT_STATUS,
+            interValidators = @InterchangeableValidator(RequiredValidator.class),
+            discriminatorOption = CategoryConstants.COMPONENT_STATUS_KEY)
+    private AmpCategoryValue componentStatus;
 
     private java.sql.Timestamp creationdate;
 
@@ -113,7 +120,13 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     public void setActivity(AmpActivityVersion activity) {
         this.activity = activity;
     }
+    public AmpCategoryValue getComponentStatus() {
+        return componentStatus;
+    }
 
+    public void setComponentStatus(AmpCategoryValue componentStatus) {
+        this.componentStatus = componentStatus;
+    }
     public Long getAmpComponentId() {
         return ampComponentId;
     }

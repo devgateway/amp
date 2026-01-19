@@ -35,7 +35,6 @@ import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
@@ -618,64 +617,60 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
     try {
       session = PersistenceManager.getSession();
-      AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
-      Set comp = activity.getComponents();
-      if (comp != null && comp.size() > 0) {
-        Iterator itr1 = comp.iterator();
-        while (itr1.hasNext()) {
-          AmpComponent ampComp = (AmpComponent) itr1.next();
-          Components<FundingDetail> components = new Components<FundingDetail>();
-          components.setComponentId(ampComp.getAmpComponentId());
-          components.setDescription(ampComp.getDescription());
-          components.setType_Id((ampComp.getType()!=null)?ampComp.getType().getType_id():null);
-          components.setTitle(ampComp.getTitle());
-          components.setCommitments(new ArrayList());
-          components.setDisbursements(new ArrayList());
-          components.setExpenditures(new ArrayList());
+      AmpActivityVersion activity = session.load(AmpActivityVersion.class, id);
+      Set<AmpComponent> comp = activity.getComponents();
+      if (comp != null && !comp.isEmpty()) {
+          for (Object o : comp) {
+              AmpComponent ampComp = (AmpComponent) o;
+              Components<FundingDetail> components = new Components<FundingDetail>();
+              components.setComponentId(ampComp.getAmpComponentId());
+              components.setDescription(ampComp.getDescription());
+              components.setType_Id((ampComp.getType() != null) ? ampComp.getType().getType_id() : null);
+              components.setTitle(ampComp.getTitle());
+              components.setCommitments(new ArrayList<>());
+              components.setDisbursements(new ArrayList<>());
+              components.setExpenditures(new ArrayList<>());
 
-          Collection<AmpComponentFunding> componentsFunding = ampComp.getFundings();
-          Iterator compFundIterator = componentsFunding.iterator();
-          while (compFundIterator.hasNext()) {
-            AmpComponentFunding cf = (AmpComponentFunding) compFundIterator.next();
-            FundingDetail fd = new FundingDetail();
-            fd.setAdjustmentTypeName(cf.getAdjustmentType());
-
-            fd.setCurrencyCode(cf.getCurrency().getCurrencyCode());
-            fd.setCurrencyName(cf.getCurrency().getCurrencyName());
-            fd.setTransactionAmount(FormatHelper.formatNumber(cf.getTransactionAmount().doubleValue()));
-            fd.setTransactionDate(DateConversion.convertDateToLocalizedString(cf.getTransactionDate()));
-            fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(cf.getTransactionDate()));
-            fd.setTransactionType(cf.getTransactionType().intValue());
-            if (fd.getTransactionType() == Constants.COMMITMENT) {
-              components.getCommitments().add(fd);
-            }
-            else if (fd.getTransactionType() == Constants.DISBURSEMENT) {
-              components.getDisbursements().add(fd);
-            }
-            else if (fd.getTransactionType() == Constants.EXPENDITURE) {
-              components.getExpenditures().add(fd);
-            }
+              Collection<AmpComponentFunding> componentsFunding = ampComp.getFundings();
+              for (AmpComponentFunding cf : componentsFunding) {
+                  FundingDetail fd = new FundingDetail();
+                  fd.setAdjustmentTypeName(cf.getAdjustmentType());
+                  fd.setComponentFundingStatus(cf.getComponentFundingStatus());
+                  fd.setComponentRejectReason(cf.getComponentRejectReason());
+                  fd.setCurrencyCode(cf.getCurrency().getCurrencyCode());
+                  fd.setCurrencyName(cf.getCurrency().getCurrencyName());
+                  fd.setTransactionAmount(FormatHelper.formatNumber(cf.getTransactionAmount().doubleValue()));
+                  fd.setTransactionDate(DateConversion.convertDateToLocalizedString(cf.getTransactionDate()));
+                  fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(cf.getTransactionDate()));
+                  fd.setTransactionType(cf.getTransactionType());
+                  if (fd.getTransactionType() == Constants.COMMITMENT) {
+                      components.getCommitments().add(fd);
+                  } else if (fd.getTransactionType() == Constants.DISBURSEMENT) {
+                      components.getDisbursements().add(fd);
+                  } else if (fd.getTransactionType() == Constants.EXPENDITURE) {
+                      components.getExpenditures().add(fd);
+                  }
+              }
+              List list = null;
+              if (components.getCommitments() != null) {
+                  list = new ArrayList<>(components.getCommitments());
+                  list.sort(FundingValidator.dateComp);
+              }
+              components.setCommitments(list);
+              list = null;
+              if (components.getDisbursements() != null) {
+                  list = new ArrayList<>(components.getDisbursements());
+                  list.sort(FundingValidator.dateComp);
+              }
+              components.setDisbursements(list);
+              list = null;
+              if (components.getExpenditures() != null) {
+                  list = new ArrayList<>(components.getExpenditures());
+                  list.sort(FundingValidator.dateComp);
+              }
+              components.setExpenditures(list);
+              componentsCollection.add(components);
           }
-          List list = null;
-          if (components.getCommitments() != null) {
-            list = new ArrayList(components.getCommitments());
-            Collections.sort(list, FundingValidator.dateComp);
-          }
-          components.setCommitments(list);
-          list = null;
-          if (components.getDisbursements() != null) {
-            list = new ArrayList(components.getDisbursements());
-            Collections.sort(list, FundingValidator.dateComp);
-          }
-          components.setDisbursements(list);
-          list = null;
-          if (components.getExpenditures() != null) {
-            list = new ArrayList(components.getExpenditures());
-            Collections.sort(list, FundingValidator.dateComp);
-          }
-          components.setExpenditures(list);
-          componentsCollection.add(components);
-        }
       }
 
     }

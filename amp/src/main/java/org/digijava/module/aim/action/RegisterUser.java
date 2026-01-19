@@ -10,6 +10,7 @@ import org.apache.struts.action.*;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
@@ -26,6 +27,13 @@ import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
+import org.digijava.module.um.util.UmUtil;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import static org.digijava.module.um.util.DbUtil.*;
 
 public class RegisterUser extends Action {
 
@@ -46,6 +54,26 @@ public class RegisterUser extends Action {
             User user = new User(userRegisterForm.getEmail().toLowerCase(),
                     userRegisterForm.getFirstNames(), userRegisterForm
                             .getLastName());
+
+            List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+
+                String keyGen = UmUtil.generateAESKey(128);
+                user.setTruBudgetKeyGen(keyGen);
+                String encryptedTruPassword = UmUtil.encrypt(userRegisterForm.getTruBudgetPassword()!=null?userRegisterForm.getTruBudgetPassword():"amptrubudget", keyGen);
+                user.setTruBudgetPassword(encryptedTruPassword);
+                String[] intents = userRegisterForm.getSelectedTruBudgetIntents();
+                List<TruBudgetIntent> truBudgetIntents = new ArrayList<>();
+                if (intents != null) {
+                    truBudgetIntents = getTruBudgetIntentsByName(intents);
+                }
+                logger.info("Intents: " + truBudgetIntents);
+
+//            user.getTruBudgetIntents().addAll(new HashSet<>(truBudgetIntents));
+                user.setInitialTruBudgetIntents(new HashSet<>(user.getTruBudgetIntents()));
+                user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
+            }
 
             // set client IP address
             user.setModifyingIP(RequestUtils.getRemoteAddress(request));

@@ -937,18 +937,17 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         }
 
         //Regional Funding
-        Set regionalSet = activity.getRegionalFundings();
+        Set<AmpRegionalFunding> regionalSet = activity.getRegionalFundings();
         if (regionalSet != null){
             HashSet<Long> verifiedRegions = new HashSet<Long>();
-            for (Iterator<AmpRegionalFunding> iterator = regionalSet.iterator(); iterator.hasNext(); ){
-                AmpRegionalFunding funding = iterator.next();
+            for (AmpRegionalFunding funding : regionalSet) {
                 if (funding.getRegionLocation() == null || verifiedRegions.contains(funding.getRegionLocation().getId()))
                     continue;
                 verifiedRegions.add(funding.getRegionLocation().getId());
-                verifySet(new PropertyModel<Set>(am, "regionalFundings"), alertIfDisbursementBiggerCommitments,
+                verifySet(new PropertyModel<>(am, "regionalFundings"), alertIfDisbursementBiggerCommitments,
                         alertIfExpenditureBiggerDisbursement, commitmentErrors, expenditureErrors, funding.getRegionLocation(),
                         TranslatorUtil.getTranslatedText(OnePager.REGIONAL_FUNDING_SECTION_NAME) + ": " +
-                        funding.getRegionLocation().getAutoCompleteLabel());
+                                funding.getRegionLocation().getAutoCompleteLabel());
             }
         }
 
@@ -957,7 +956,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         if (componentSet != null) {
             for (AmpComponent component : componentSet) {
                 for (AmpComponentFunding funding : component.getFundings()) {
-                    verifySet(new PropertyModel<Set>(component, "fundings"), alertIfDisbursementBiggerCommitments,
+                    verifySet(new PropertyModel<>(component, "fundings"), alertIfDisbursementBiggerCommitments,
                         alertIfExpenditureBiggerDisbursement, commitmentErrors, expenditureErrors, funding.getComponent(),
                         TranslatorUtil.getTranslatedText(OnePager.COMPONENTS_SECTION_NAME) + ": " +
                         funding.getComponent().getTitle());
@@ -980,7 +979,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         if (alertIfExpenditureBiggerDisbursement){
             double expenditureSum = sumUp(details, Constants.EXPENDITURE, parent);
             if (expenditureSum > disbursementSum)
-                expenditureErrors.put(itemIdentifier, Double.toString(expenditureSum) + " > " + Double.toString(disbursementSum));
+                expenditureErrors.put(itemIdentifier, expenditureSum + " > " + disbursementSum);
         }
     }
 

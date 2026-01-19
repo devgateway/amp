@@ -17,6 +17,8 @@
 
 		<many-to-one name="activity" column="amp_activity_id" index="i_activity"
 					 class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none"/>
+		<many-to-one name="componentStatus" column="component_status"
+					 class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<many-to-one name="type" column="type"
 			class="org.digijava.module.aim.dbentity.AmpComponentType" cascade="none" />
 		<set name="fundings" cascade="all-delete-orphan" table="AMP_COMPONENT_FUNDING" order-by="transactionDate asc">

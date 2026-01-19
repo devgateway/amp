@@ -220,6 +220,7 @@ public class ActivityVersionUtil {
      */
     public static AmpActivityVersion cloneActivity(AmpActivityVersion in) throws CloneNotSupportedException {
         AmpActivityVersion out = (AmpActivityVersion) in.clone();
+
         
         Class clazz = AmpActivityFields.class;
         

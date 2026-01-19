@@ -365,8 +365,8 @@ public class NodeWrapper{
  
                     
                 }
-                    
-                String encTitle = URLEncoder.encode(tempDoc.getTitle(), "UTF-8");
+
+                String encTitle = URLEncoder.encode(!Objects.equals(tempDoc.getTitle(), "") ?tempDoc.getTitle():"<missing title>", "UTF-8");
                 newNode = parentNode.addNode(encTitle);
                 newNode.addMixin("mix:versionable");
             }
@@ -376,7 +376,7 @@ public class NodeWrapper{
                 newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)vernum);
             }
             else{
-                newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)1.0);
+                newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, 1.0);
             }
             String contentType          = null;
             //HashMap errors = new HashMap();
@@ -414,7 +414,7 @@ public class NodeWrapper{
                 if(tempDoc.getYearofPublication()!=null){
                     Integer yearofPublication = new Integer(tempDoc.yearofPublication);
                     yearofPublicationDate= Calendar.getInstance();
-                    yearofPublicationDate.set(yearofPublication.intValue(), 1, 1);
+                    yearofPublicationDate.set(yearofPublication, Calendar.FEBRUARY, 1);
                 }
                 populateNode(isANewVersion,newNode, tempDoc.getTitle(), tempDoc.getDescription(), tempDoc.getNotes(), 
                     contentType, tempDoc.getCmDocTypeId(), teamMember.getEmail(), teamMember.getTeamId(), yearofPublicationDate,

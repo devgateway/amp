@@ -1825,23 +1825,20 @@ public class EditActivity extends Action {
             tempComp.setExpenditures(new ArrayList<FundingDetail>());
 
             Collection<AmpComponentFunding> fundingComponentActivity = temp.getFundings();
-            Iterator<AmpComponentFunding> cItr = fundingComponentActivity.iterator();
 
-            while (cItr.hasNext()) {
-                AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr.next();
-
+            for (AmpComponentFunding ampCompFund : fundingComponentActivity) {
                 double disb = 0;
 
                 if (ampCompFund.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())
                         && ampCompFund.getTransactionType().intValue() == 1)
-                disb = ampCompFund.getTransactionAmount().doubleValue();
+                    disb = ampCompFund.getTransactionAmount().doubleValue();
 
                 eaForm.getComponents().setCompTotalDisb(eaForm.getComponents().getCompTotalDisb() + disb);
 
                 FundingDetail fd = new FundingDetail();
-                fd.setAdjustmentTypeName(ampCompFund.getAdjustmentType() );
+                fd.setAdjustmentTypeName(ampCompFund.getAdjustmentType());
 
-            //  fd.setAdjustmentType(ampCompFund.getAdjustmentType().intValue());
+                //  fd.setAdjustmentType(ampCompFund.getAdjustmentType().intValue());
 
                 fd.setAmpComponentFundingId(ampCompFund.getAmpComponentFundingId());
 
@@ -1855,13 +1852,15 @@ public class EditActivity extends Action {
 
 
                 fd.setCurrencyCode(toCurrCode);
-                fd.setTransactionAmount(FormatHelper.formatNumber( amt.getValue()));
+                fd.setTransactionAmount(FormatHelper.formatNumber(amt.getValue()));
 
 
                 fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
+                fd.setComponentFundingStatus(ampCompFund.getComponentFundingStatus());
+                fd.setComponentRejectReason(ampCompFund.getComponentRejectReason());
                 fd.setTransactionDate(DateConversion.convertDateToLocalizedString(ampCompFund.getTransactionDate()));
                 fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampCompFund.getTransactionDate()));
-                fd.setTransactionType(ampCompFund.getTransactionType().intValue());
+                fd.setTransactionType(ampCompFund.getTransactionType());
                 fd.setComponentOrganisation(ampCompFund.getReportingOrganization());
                 fd.setComponentSecondResponsibleOrganization(ampCompFund.getComponentSecondResponsibleOrganization());
                 fd.setComponentTransactionDescription(ampCompFund.getDescription());

@@ -2,6 +2,7 @@ package org.digijava.module.um.form;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
@@ -55,6 +56,10 @@ public class ViewEditUserForm extends ActionForm {
     
     private String selectedLanguageCode;
     private Collection languages;
+    private String truBudgetEnabled;
+    private Collection<TruBudgetIntent> truBudgetIntents;
+    private String truBudgetPassword;
+    private String[] selectedTruBudgetIntents;
 
     private String event;
     private Boolean ban;
@@ -432,5 +437,36 @@ public class ViewEditUserForm extends ActionForm {
     public void setNotificationEmail(String notificationEmail) {
         this.notificationEmail = notificationEmail;
     }
-    
+
+    public String getTruBudgetEnabled() {
+        return truBudgetEnabled;
+    }
+
+    public void setTruBudgetEnabled(String truBudgetEnabled) {
+        this.truBudgetEnabled = truBudgetEnabled;
+    }
+
+    public Collection<TruBudgetIntent> getTruBudgetIntents() {
+        return truBudgetIntents;
+    }
+
+    public void setTruBudgetIntents(Collection<TruBudgetIntent> truBudgetIntents) {
+        this.truBudgetIntents = truBudgetIntents;
+    }
+
+    public String getTruBudgetPassword() {
+        return truBudgetPassword;
+    }
+
+    public void setTruBudgetPassword(String truBudgetPassword) {
+        this.truBudgetPassword = truBudgetPassword;
+    }
+
+    public String[] getSelectedTruBudgetIntents() {
+        return selectedTruBudgetIntents;
+    }
+
+    public void setSelectedTruBudgetIntents(String[] selectedTruBudgetIntents) {
+        this.selectedTruBudgetIntents = selectedTruBudgetIntents;
+    }
 }

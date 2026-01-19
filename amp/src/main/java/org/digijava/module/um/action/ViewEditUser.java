@@ -4,6 +4,7 @@ import org.apache.struts.action.*;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
@@ -24,14 +25,19 @@ import org.digijava.module.um.form.ViewEditUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.module.um.util.UmUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.digijava.module.um.util.DbUtil.*;
 
 public class ViewEditUser extends Action {
-
+    private static Logger  logger = LoggerFactory.getLogger(ViewEditUser.class);
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
         
         ViewEditUserForm uForm = (ViewEditUserForm) form;
@@ -80,20 +86,19 @@ public class ViewEditUser extends Action {
                             DbUtil.updateUser(user);
                         }
                         if ( ampTeamMembers != null && ampTeamMembers.size() > 0 ) {
-                            String teamNames    = "";
-                            Iterator iter       = ampTeamMembers.iterator();
-                            while ( iter.hasNext() ) {
-                                AmpTeamMember atm   = (AmpTeamMember) iter.next();
-                                AmpTeam team        = atm.getAmpTeam();
-                                if (team != null && team.getName() != null)  {
+                            StringBuilder teamNames    = new StringBuilder();
+                            for (Object ampTeamMember : ampTeamMembers) {
+                                AmpTeamMember atm = (AmpTeamMember) ampTeamMember;
+                                AmpTeam team = atm.getAmpTeam();
+                                if (team != null && team.getName() != null) {
                                     if (teamNames.length() == 0)
-                                        teamNames   += "'" + team.getName() + "'";
+                                        teamNames.append("'").append(team.getName()).append("'");
                                     else
-                                        teamNames   += ", '" + team.getName() + "'";
+                                        teamNames.append(", '").append(team.getName()).append("'");
                                 }
                             }
                             errors.add("title",
-                                    new ActionMessage("error.um.userIsInTeams", teamNames));
+                                    new ActionMessage("error.um.userIsInTeams", teamNames.toString()));
                         }
                         if ( ampTeamMembers == null ) {
                             errors.add("title",new ActionMessage("error.um.errorBanning"));
@@ -171,7 +176,28 @@ public class ViewEditUser extends Action {
             uForm.setEmailerror(false);
             uForm.setExemptFromDataFreezing(false);
             uForm.setNationalCoordinator(false);
-            
+            //trubudget details
+            List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+            uForm.setTruBudgetEnabled(getSettingValue(settings, "isEnabled"));
+            Collection<TruBudgetIntent> intents = getTruBudgetIntents();
+            logger.info("Intents:  "+intents);
+
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && user.getTruBudgetEnabled()) {
+
+                Set<String> intentNames = user.getTruBudgetIntents().stream().map(TruBudgetIntent::getTruBudgetIntentName).collect(Collectors.toSet());
+
+                uForm.setTruBudgetPassword(user.getTruBudgetPassword()!=null?UmUtil.decrypt(user.getTruBudgetPassword(), user.getTruBudgetKeyGen()):"");
+
+
+                intents.forEach(intent ->
+                {
+                    if (intentNames.contains(intent.getTruBudgetIntentName())) {
+                        intent.setUserHas(true);
+                    }
+                });
+
+            }
+            uForm.setTruBudgetIntents(intents);
             if (user != null) {
                 uForm.setMailingAddress(user.getAddress());
                 AmpUserExtension userExt = AmpUserUtil.getAmpUserExtension(user);
@@ -294,6 +320,27 @@ public class ViewEditUser extends Action {
                         AmpOrganisation organ = org.digijava.module.aim.util.DbUtil.getOrganisation(uForm.getSelectedOrgId());
                         userExt.setOrganization(organ);
                         AmpUserUtil.saveAmpUserExtension(userExt);
+                    }
+
+                    List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+
+                    if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+
+                        String[] intents = uForm.getSelectedTruBudgetIntents();
+                        List<TruBudgetIntent> truBudgetIntents = new ArrayList<>();
+                        if (intents != null) {
+                            truBudgetIntents = getTruBudgetIntentsByName(intents);
+                        }
+                        // TODO: 8/28/23 add for trubudget request
+
+//                    user.getTruBudgetIntents().addAll(new HashSet<>(truBudgetIntents));
+                        user.setInitialTruBudgetIntents(new HashSet<>(user.getTruBudgetIntents()));
+                        user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
+                        String keyGen = UmUtil.generateAESKey(128);
+                        user.setTruBudgetKeyGen(keyGen);
+
+                        String encryptedTruPassword = UmUtil.encrypt(uForm.getTruBudgetPassword()!=null? uForm.getTruBudgetPassword() : "amptrubudget", keyGen);
+                        user.setTruBudgetPassword(encryptedTruPassword);
                     }
 
                     user.setCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(uForm.getSelectedCountryIso()));

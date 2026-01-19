@@ -127,6 +127,7 @@
         lastname = document.umAddUserForm.lastName.value;
         password = document.umAddUserForm.password.value;
         passwordConfirmation = document.umAddUserForm.passwordConfirmation.value;
+		truBudgetPassword = document.umAddUserForm.truBudgetPassword.value;
         selectedOrgType = document.umAddUserForm.selectedOrgType.value;
         selectedOrgGroup = document.umAddUserForm.selectedOrgGroup.value;
         selectedOrganizationId = document.umAddUserForm.selectedOrganizationId.value;
@@ -478,6 +479,41 @@
 													</html:select></td>
 
 											</tr>
+											<c:if test="${umAddUserForm.truBudgetEnabled=='true'}">
+											<tr>
+												<td width="3%">&nbsp;</td>
+												<td align=right class=f-names noWrap>
+														<%--													<FONT color=red>*</FONT>--%>
+													<digi:trn key="um:truBudgetIntents">TruBudget Permissions </digi:trn></td>
+												<td align="left">
+													<html:select property="selectedTruBudgetIntents" styleClass="inp-text" multiple="true">
+														<c:forEach var="cn"	items="${umAddUserForm.truBudgetIntents}">
+															<html:option value="${cn.truBudgetIntentName}"><c:out value="${cn.truBudgetIntentDisplayName}"></c:out></html:option>
+														</c:forEach>
+													</html:select>
+												</td>
+											</tr>
+											<tr>
+												<td width="3%">&nbsp;</td>
+												<td align=right class=f-names noWrap>
+													<FONT color=red>*</FONT>
+													<digi:trn key="um:truBudgetPassword">Enter TruBudget Password</digi:trn></td>
+												<td align="left">
+													<html:password styleId="userPassword" property="truBudgetPassword"
+																   size="20" autocomplete="new-password" />
+												</td>
+											</tr>
+												<%--											<tr>--%>
+												<%--												<td width="3%">&nbsp;</td>--%>
+												<%--												<td align=right class=f-names noWrap>--%>
+												<%--													<FONT color=red>*</FONT>--%>
+												<%--													<digi:trn key="um:truBudgetPassword">Repeat TruBudget Password</digi:trn></td>--%>
+												<%--												<td align="left">--%>
+												<%--													<html:password styleId="userPassword" property="truBudgetPasswordConfirmation"--%>
+												<%--																   size="20" autocomplete="new-password" />--%>
+												<%--												</td>--%>
+												<%--											</tr>--%>
+											</c:if>
  											<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
 											<tr>
 												<td  width="3%">&nbsp;</td>

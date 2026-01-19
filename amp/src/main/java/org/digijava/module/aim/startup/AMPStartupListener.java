@@ -292,6 +292,15 @@ public class AMPStartupListener extends HttpServlet implements
                         ");";
                 statement.executeUpdate(relationSql);
 
+                // Create unique constraint on (settingsname, section) if it doesn't exist
+                String createUniqueConstraint = "DO $$ " +
+                        "BEGIN " +
+                        "  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'amp_global_settings_unique_name_section') THEN " +
+                        "    ALTER TABLE amp_global_settings ADD CONSTRAINT amp_global_settings_unique_name_section UNIQUE(settingsname, section); " +
+                        "  END IF; " +
+                        "END $$;";
+                statement.executeUpdate(createUniqueConstraint);
+
                 String insertIntoGlobalSettings="INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) \n" +
                         "                        VALUES\n" +
                         "                         (nextval('amp_global_settings_seq'),'isEnabled','false','t_Boolean','Is Trubudget enabled for this deployment','trubudget',NULL,true),\n" +

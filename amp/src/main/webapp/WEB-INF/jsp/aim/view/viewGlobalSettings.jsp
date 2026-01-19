@@ -66,6 +66,7 @@
 	sections.add("date");
 	sections.add("user");
 	sections.add("gis");
+	sections.add("trubudget");
 %>
 
 

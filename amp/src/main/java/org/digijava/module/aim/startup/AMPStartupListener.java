@@ -292,10 +292,19 @@ public class AMPStartupListener extends HttpServlet implements
                         ");";
                 statement.executeUpdate(relationSql);
 
-                // Create unique constraint on (settingsname, section) if it doesn't exist
+                // Remove duplicates and create unique constraint on (settingsname, section) if it doesn't exist
                 String createUniqueConstraint = "DO $$ " +
                         "BEGIN " +
                         "  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'amp_global_settings_unique_name_section') THEN " +
+                        "    -- Remove duplicate rows, keeping the one with the lowest ID " +
+                        "    DELETE FROM amp_global_settings ags " +
+                        "    WHERE EXISTS ( " +
+                        "      SELECT 1 FROM amp_global_settings gs " +
+                        "      WHERE gs.settingsname = ags.settingsname " +
+                        "        AND gs.section = ags.section " +
+                        "        AND gs.id < ags.id " +
+                        "    ); " +
+                        "    -- Now create the unique constraint " +
                         "    ALTER TABLE amp_global_settings ADD CONSTRAINT amp_global_settings_unique_name_section UNIQUE(settingsname, section); " +
                         "  END IF; " +
                         "END $$;";

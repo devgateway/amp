@@ -1,9 +1,9 @@
 package org.digijava.module.um.model;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TruLoginResponse {
     @JsonProperty("apiVersion")
@@ -79,6 +79,9 @@ public class TruLoginResponse {
         @JsonProperty("token")
         private String token;
 
+        @JsonProperty("refreshToken")
+        private String refreshToken;
+
         // Getters and setters
 
         public String getId() {
@@ -129,6 +132,14 @@ public class TruLoginResponse {
             this.token = token;
         }
 
+        public String getRefreshToken() {
+            return refreshToken;
+        }
+
+        public void setRefreshToken(String refreshToken) {
+            this.refreshToken = refreshToken;
+        }
+
         @Override
         public String toString() {
             return "User{" +
@@ -138,6 +149,7 @@ public class TruLoginResponse {
                     ", allowedIntents=" + allowedIntents +
                     ", groups=" + groups +
                     ", token='" + token + '\'' +
+                    ", refreshToken='" + refreshToken + '\'' +
                     '}';
         }
     }

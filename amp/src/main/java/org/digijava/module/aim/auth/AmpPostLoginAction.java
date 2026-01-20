@@ -89,6 +89,9 @@ public class AmpPostLoginAction extends Action {
                         logger.info("Trubudget login response: " + Objects.requireNonNull(truLoginResponse).getData());
                         AbstractCache myCache = new EhCacheWrapper("trubudget");
                         myCache.put("truBudgetToken", truLoginResponse.getData().getUser().getToken());
+                        if (truLoginResponse.getData().getUser().getRefreshToken() != null) {
+                            myCache.put("truBudgetRefreshToken", truLoginResponse.getData().getUser().getRefreshToken());
+                        }
                         myCache.put("truBudgetUser", currentUser.getEmail().split("@")[0]);
                         myCache.put("truBudgetPassword", currentUser.getEmail());
                     })

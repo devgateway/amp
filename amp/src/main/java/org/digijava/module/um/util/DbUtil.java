@@ -446,6 +446,18 @@ public class DbUtil {
     public static Mono<TruLoginResponse> loginToTruBudget(TruLoginRequest truLoginRequest, List<AmpGlobalSettings> settings) throws URISyntaxException {
         return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/user.authenticate",truLoginRequest, TruLoginRequest.class,TruLoginResponse.class);
     }
+    
+    public static Mono<TruLoginResponse> refreshTruBudgetToken(String userId, String refreshToken, List<AmpGlobalSettings> settings) throws URISyntaxException {
+        TruRefreshTokenRequest refreshRequest = new TruRefreshTokenRequest();
+        refreshRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
+        TruRefreshTokenRequest.Data data = new TruRefreshTokenRequest.Data();
+        TruRefreshTokenRequest.User user = new TruRefreshTokenRequest.User();
+        user.setId(userId);
+        user.setRefreshToken(refreshToken);
+        data.setUser(user);
+        refreshRequest.setData(data);
+        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/user.refreshToken", refreshRequest, TruRefreshTokenRequest.class, TruLoginResponse.class);
+    }
     public static List<AmpGlobalSettings> getGlobalSettingsBySection(String sectionName)
     {
         Session session = PersistenceManager.getRequestDBSession();

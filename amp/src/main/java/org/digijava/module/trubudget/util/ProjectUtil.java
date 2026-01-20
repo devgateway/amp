@@ -77,6 +77,56 @@ public class ProjectUtil {
             transaction=session.beginTransaction();
         }
     }
+    
+    /**
+     * Sanitizes tags to match TruBudget API requirements.
+     * Pattern: /^([A-Za-zÀ-ÿ0-9])*[A-Za-zÀ-ÿ0-9-_]+$/
+     * - Can start with optional alphanumeric characters (A-Z, a-z, À-ÿ, 0-9)
+     * - Must end with alphanumeric characters or dash/underscore (A-Z, a-z, À-ÿ, 0-9, -, _)
+     * - No other special characters allowed
+     * 
+     * @param tags List of raw tag strings
+     * @return List of sanitized tags that match the pattern
+     */
+    private static List<String> sanitizeTags(List<String> tags) {
+        if (tags == null || tags.isEmpty()) {
+            return new ArrayList<>();
+        }
+        
+        return tags.stream()
+            .map(tag -> {
+                if (tag == null || tag.isEmpty()) {
+                    return null;
+                }
+                
+                // Remove all characters that don't match the pattern: A-Z, a-z, À-ÿ, 0-9, -, _
+                // Keep only valid characters
+                String sanitized = tag.replaceAll("[^A-Za-zÀ-ÿ0-9\\-_]", "");
+                
+                // Remove leading dashes and underscores (must start with alphanumeric)
+                sanitized = sanitized.replaceAll("^[-_]+", "");
+                
+                // Remove trailing dashes and underscores (must end with alphanumeric)
+                sanitized = sanitized.replaceAll("[-_]+$", "");
+                
+                // Return null if empty after sanitization
+                if (sanitized.isEmpty()) {
+                    return null;
+                }
+                
+                // Limit length to 15 characters
+                if (sanitized.length() > 15) {
+                    sanitized = sanitized.substring(0, 15);
+                    // Ensure it still ends with alphanumeric after truncation
+                    sanitized = sanitized.replaceAll("[-_]+$", "");
+                }
+                
+                return sanitized.isEmpty() ? null : sanitized;
+            })
+            .filter(tag -> tag != null && !tag.isEmpty() && tag.length() >= 1 && tag.length() <= 15)
+            .distinct()
+            .collect(Collectors.toList());
+    }
 
     public static void createProject(AmpActivityVersion ampActivityVersion, List<AmpComponent> ampComponents, String name) throws URISyntaxException {
         List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
@@ -96,7 +146,11 @@ public class ProjectUtil {
         project.setDisplayName(name);
         project.setDescription(ampActivityVersion.getDescription());
         project.setStatus("open");// TODO: 9/11/23 set correct status
-        List<String> tags =Arrays.stream((name + " " + ampActivityVersion.getDescription()).trim().split(" ")).filter(x -> x.length() <= 15 && x.length() >= 1).collect(Collectors.toList());
+        // Generate tags from name and description, then sanitize to match TruBudget API requirements
+        List<String> rawTags = Arrays.stream((name + " " + ampActivityVersion.getDescription()).trim().split(" "))
+            .filter(x -> x.length() <= 15 && x.length() >= 1)
+            .collect(Collectors.toList());
+        List<String> tags = sanitizeTags(rawTags);
         project.setTags(tags);
         AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
 
@@ -192,7 +246,11 @@ public class ProjectUtil {
         data.setProjectId(projectId);
         data.setDescription(ampActivityVersion.getDescription());
         data.setDisplayName(name);
-        List<String> tags =Arrays.stream((name + " " + ampActivityVersion.getDescription()).trim().split(" ")).filter(x -> x.length() <= 15 && x.length() >= 1).collect(Collectors.toList());
+        // Generate tags from name and description, then sanitize to match TruBudget API requirements
+        List<String> rawTags = Arrays.stream((name + " " + ampActivityVersion.getDescription()).trim().split(" "))
+            .filter(x -> x.length() <= 15 && x.length() >= 1)
+            .collect(Collectors.toList());
+        List<String> tags = sanitizeTags(rawTags);
         data.setTags(tags);
         editProjectModel.setData(data);
         AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();

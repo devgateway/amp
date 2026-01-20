@@ -31,7 +31,7 @@ import org.digijava.module.trubudget.util.ProjectUtil;
 import java.util.*;
 
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
-import static org.digijava.module.aim.auth.AmpPostLoginAction.doActualTruBudgetLogin;
+import static org.digijava.module.trubudget.util.TruBudgetAuthUtil.doActualTruBudgetLogin;
 import static org.digijava.module.um.util.DbUtil.getGlobalSettingsBySection;
 import static org.digijava.module.um.util.DbUtil.getSettingValue;
 

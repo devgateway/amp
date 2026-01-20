@@ -3,33 +3,24 @@
  */
 package org.digijava.module.aim.auth;
 
+import java.io.PrintWriter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.security.ApiAuthentication;
-import org.digijava.kernel.cache.AbstractCache;
-import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.um.model.TruLoginRequest;
-import org.digijava.module.um.model.TruLoginResponse;
-import org.digijava.module.um.util.UmUtil;
+import org.digijava.module.trubudget.util.TruBudgetAuthUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import reactor.core.publisher.Mono;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
-import java.util.List;
-import java.util.Objects;
-
-import static org.digijava.module.um.util.DbUtil.*;
 
 /**
  * @author mihai
@@ -57,7 +48,7 @@ public class AmpPostLoginAction extends Action {
             throw new RuntimeException(ex);
         }
 
-        doActualTruBudgetLogin(currentUser);
+        TruBudgetAuthUtil.doActualTruBudgetLogin(currentUser);
         ApiErrorMessage res = ApiAuthentication.login(currentUser, request);
         if(res != null) {
             out.println(getJsonResponse(res.description));
@@ -68,43 +59,6 @@ public class AmpPostLoginAction extends Action {
         return null;
     }
 
-    public static void doActualTruBudgetLogin(User currentUser) throws Exception {
-        List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
-        if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && currentUser.getTruBudgetEnabled() && currentUser.getTruBudgetPassword()!=null) {
-
-
-            //login into TruBudget
-            TruLoginRequest truLoginRequest = new TruLoginRequest();
-            truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
-            TruLoginRequest.Data data = new TruLoginRequest.Data();
-            TruLoginRequest.User user1 = new TruLoginRequest.User();
-            user1.setPassword(UmUtil.decrypt(currentUser.getTruBudgetPassword(), currentUser.getTruBudgetKeyGen()));
-            user1.setId(currentUser.getEmail().split("@")[0]);
-            data.setUser(user1);
-            truLoginRequest.setData(data);
-            Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest, settings);
-            truResp.doOnSuccess(truLoginResponse -> {
-                        // This code block will run on success
-                        // TODO: 8/29/23 -- cache this token to be used for TruBudget requests in Login.java and AmpPostLoginAction.java
-                        logger.info("Trubudget login response: " + Objects.requireNonNull(truLoginResponse).getData());
-                        AbstractCache myCache = new EhCacheWrapper("trubudget");
-                        myCache.put("truBudgetToken", truLoginResponse.getData().getUser().getToken());
-                        if (truLoginResponse.getData().getUser().getRefreshToken() != null) {
-                            myCache.put("truBudgetRefreshToken", truLoginResponse.getData().getUser().getRefreshToken());
-                        }
-                        myCache.put("truBudgetUser", currentUser.getEmail().split("@")[0]);
-                        myCache.put("truBudgetPassword", currentUser.getEmail());
-                    })
-                    .onErrorResume(e -> {
-                        // This code block will run if an exception occurs
-                        logger.info("Error during trubudget login: " + e.getMessage(), e);
-                        // Handle the exception here or return a default value
-                        return Mono.empty(); // or any other Mono if you want to continue processing
-                    })
-                    .block();
-
-        }
-    }
     
     private String getJsonResponse(String originalMessage){
         return getJsonResponse(originalMessage,null);

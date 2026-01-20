@@ -57,7 +57,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
-import static org.digijava.module.aim.auth.AmpPostLoginAction.doActualTruBudgetLogin;
+import static org.digijava.module.trubudget.util.TruBudgetAuthUtil.doActualTruBudgetLogin;
 import static org.digijava.module.um.util.DbUtil.getGlobalSettingsBySection;
 import static org.digijava.module.um.util.DbUtil.getSettingValue;
 

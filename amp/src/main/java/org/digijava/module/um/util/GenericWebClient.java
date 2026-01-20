@@ -79,34 +79,12 @@ public class GenericWebClient {
                 .map(responseEntity -> {
                     V responseBody = responseEntity.getBody();
                     HttpHeaders headers = responseEntity.getHeaders();
-                    List<String> cookies = headers.get(HttpHeaders.SET_COOKIE);
                     
-                    // Extract token and refreshToken from cookies if present
-                    if (cookies != null && responseBody != null 
+                    // Extract token and refreshToken from cookies if this is a TruLoginResponse
+                    if (responseBody != null 
                             && responseBody instanceof org.digijava.module.um.model.TruLoginResponse) {
-                        org.digijava.module.um.model.TruLoginResponse truResponse = 
-                            (org.digijava.module.um.model.TruLoginResponse) responseBody;
-                        if (truResponse.getData() != null && truResponse.getData().getUser() != null) {
-                            for (String cookie : cookies) {
-                                // Look for token in cookie (common patterns: "token=...", "auth-token=...", etc.)
-                                // Exclude refreshToken to avoid matching it here
-                                if (cookie.contains("token=") && !cookie.contains("refreshToken=")) {
-                                    String tokenValue = extractTokenFromCookie(cookie, "token");
-                                    if (tokenValue != null) {
-                                        truResponse.getData().getUser().setToken(tokenValue);
-                                        logger.info("Token extracted from cookie and set in response");
-                                    }
-                                }
-                                // Look for refreshToken in cookie
-                                if (cookie.contains("refreshToken=")) {
-                                    String refreshTokenValue = extractTokenFromCookie(cookie, "refreshToken");
-                                    if (refreshTokenValue != null) {
-                                        truResponse.getData().getUser().setRefreshToken(refreshTokenValue);
-                                        logger.info("RefreshToken extracted from cookie and set in response");
-                                    }
-                                }
-                            }
-                        }
+                        org.digijava.module.trubudget.util.TruBudgetAuthUtil.extractTokensFromCookies(
+                            (org.digijava.module.um.model.TruLoginResponse) responseBody, headers);
                     }
                     return responseBody;
                 })
@@ -160,17 +138,12 @@ public class GenericWebClient {
             
             return DbUtil.refreshTruBudgetToken(userId, refreshToken, settings)
                     .doOnSuccess(truLoginResponse -> {
-                        // Update cache with new tokens
-                        if (truLoginResponse.getData() != null && truLoginResponse.getData().getUser() != null) {
-                            String newToken = truLoginResponse.getData().getUser().getToken();
-                            String newRefreshToken = truLoginResponse.getData().getUser().getRefreshToken();
-                            
-                            cache.put("truBudgetToken", newToken);
-                            if (newRefreshToken != null) {
-                                cache.put("truBudgetRefreshToken", newRefreshToken);
-                            }
-                            logger.info("Token refreshed successfully and cached");
-                        }
+                        // Update cache with new tokens using centralized caching method
+                        // Get user email from cache for user info caching
+                        String userEmail = (String) cache.get("truBudgetPassword");
+                        org.digijava.module.trubudget.util.TruBudgetAuthUtil.cacheTokensFromResponse(
+                            truLoginResponse, userEmail);
+                        logger.info("Token refreshed successfully and cached");
                     })
                     .map(truLoginResponse -> {
                         if (truLoginResponse.getData() != null && truLoginResponse.getData().getUser() != null) {
@@ -188,34 +161,6 @@ public class GenericWebClient {
         }
     }
     
-    private static String extractTokenFromCookie(String cookie, String cookieName) {
-        // Extract token value from cookie string
-        // Format: "token=value; Path=/; HttpOnly" or similar
-        if (cookie == null || cookie.isEmpty()) {
-            return null;
-        }
-        
-        // Look for the specified cookie name
-        int tokenStart = cookie.indexOf(cookieName + "=");
-        if (tokenStart == -1 && "token".equals(cookieName)) {
-            // Try other common cookie names for token
-            tokenStart = cookie.indexOf("auth-token=");
-            if (tokenStart == -1) {
-                tokenStart = cookie.indexOf("authToken=");
-            }
-        }
-        
-        if (tokenStart != -1) {
-            int valueStart = cookie.indexOf("=", tokenStart) + 1;
-            int valueEnd = cookie.indexOf(";", valueStart);
-            if (valueEnd == -1) {
-                valueEnd = cookie.length();
-            }
-            return cookie.substring(valueStart, valueEnd).trim();
-        }
-        
-        return null;
-    }
 
     /**
      *

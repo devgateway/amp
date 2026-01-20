@@ -630,6 +630,7 @@ public class DbUtil {
         truResp.subscribe(truLoginResponse -> {
 
 //            TruUserData response = null;
+            logger.info("Tru login response: " + truLoginResponse);
 
 
             try {

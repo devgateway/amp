@@ -193,6 +193,30 @@ public class AMPStartupListener extends HttpServlet implements
         }
     }
 
+    /**
+     * Generates a secure default master encryption key for TruBudget password encryption.
+     * This key should be changed in production environments.
+     * 
+     * @return A base64-encoded 256-bit (32-byte) encryption key
+     */
+    private static String generateDefaultMasterKey() {
+        try {
+            java.security.SecureRandom secureRandom = new java.security.SecureRandom();
+            byte[] keyBytes = new byte[32]; // 32 bytes = 256 bits
+            secureRandom.nextBytes(keyBytes);
+            return java.util.Base64.getEncoder().encodeToString(keyBytes);
+        } catch (Exception e) {
+            logger.error("Error generating default master key, using fallback", e);
+            // Fallback: use a deterministic but still secure key based on system properties
+            // This should never happen in practice, but provides a safety net
+            String fallback = System.getProperty("user.name", "default") + 
+                             System.getProperty("java.home", "") + 
+                             System.currentTimeMillis();
+            return java.util.Base64.getEncoder().encodeToString(
+                fallback.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        }
+    }
+    
     public static void runTrubudgetInitQueries()
     {
         logger.info("Creating trubudget relations");
@@ -316,6 +340,9 @@ public class AMPStartupListener extends HttpServlet implements
                     statement.executeUpdate(createConstraint);
                 }
 
+                // Generate a secure default master encryption key (32 bytes = 256 bits, base64 encoded)
+                String defaultMasterKey = generateDefaultMasterKey();
+                
                 // Insert trubudget global settings individually, following the pattern from XML patches
                 String[] trubudgetSettings = {
                     "INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) VALUES ((select max(id) + 1 FROM amp_global_settings), 'isEnabled', 'false', 't_Boolean', 'Is Trubudget enabled for this deployment', 'trubudget', NULL, false) ON CONFLICT (settingsname,section) DO NOTHING",
@@ -325,7 +352,8 @@ public class AMPStartupListener extends HttpServlet implements
                     "INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) VALUES ((select max(id) + 1 FROM amp_global_settings), 'apiVersion', '1.0', '', 'Trubudget api version', 'trubudget', NULL, false) ON CONFLICT (settingsname,section) DO NOTHING",
                     "INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) VALUES ((select max(id) + 1 FROM amp_global_settings), 'defaultSubProjectCurrency', 'USD', '', 'Trubudget default sub project currency', 'trubudget', NULL, false) ON CONFLICT (settingsname,section) DO NOTHING",
                     "INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) VALUES ((select max(id) + 1 FROM amp_global_settings), 'workFlowItemDueDays', '10', 't_Integer', 'Number of days for a workflow item to be due.', 'trubudget', NULL, false) ON CONFLICT (settingsname,section) DO NOTHING",
-                    "INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) VALUES ((select max(id) + 1 FROM amp_global_settings), 'organization', 'KfW', '', 'Organization name to be used for this deployment', 'trubudget', NULL, false) ON CONFLICT (settingsname,section) DO NOTHING"
+                    "INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) VALUES ((select max(id) + 1 FROM amp_global_settings), 'organization', 'KfW', '', 'Organization name to be used for this deployment', 'trubudget', NULL, false) ON CONFLICT (settingsname,section) DO NOTHING",
+                    "INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) VALUES ((select max(id) + 1 FROM amp_global_settings), 'masterEncryptionKey', '" + defaultMasterKey + "', '', 'Master encryption key for TruBudget password encryption (256-bit key, base64 encoded). Change this in production!', 'trubudget', NULL, true) ON CONFLICT (settingsname,section) DO NOTHING"
                 };
                 
                 for (String insertSql : trubudgetSettings) {

@@ -5,12 +5,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.digijava.kernel.cache.AbstractCache;
-import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -122,43 +118,9 @@ public class GenericWebClient {
     }
     
     private static <T, V> Mono<String> attemptTokenRefresh(String originalUrl, T originalRequest, Class<T> requestClass, Class<V> responseClass, String[] oldToken) {
-        try {
-            AbstractCache cache = new EhCacheWrapper("trubudget");
-            String refreshToken = (String) cache.get("truBudgetRefreshToken");
-            String userId = (String) cache.get("truBudgetUser");
-            
-            if (refreshToken == null || userId == null) {
-                logger.warn("Cannot refresh token: refreshToken or userId not found in cache");
-                return Mono.empty();
-            }
-            
-            // Get settings from cache or retrieve them
-            List<AmpGlobalSettings> settings = 
-                DbUtil.getGlobalSettingsBySection("trubudget");
-            
-            return DbUtil.refreshTruBudgetToken(userId, refreshToken, settings)
-                    .doOnSuccess(truLoginResponse -> {
-                        // Update cache with new tokens using centralized caching method
-                        // Get user email from cache for user info caching
-                        String userEmail = (String) cache.get("truBudgetPassword");
-                        org.digijava.module.trubudget.util.TruBudgetAuthUtil.cacheTokensFromResponse(
-                            truLoginResponse, userEmail);
-                        logger.info("Token refreshed successfully and cached");
-                    })
-                    .map(truLoginResponse -> {
-                        if (truLoginResponse.getData() != null && truLoginResponse.getData().getUser() != null) {
-                            return truLoginResponse.getData().getUser().getToken();
-                        }
-                        return null;
-                    })
-                    .onErrorResume(e -> {
-                        logger.error("Failed to refresh token: " + e.getMessage(), e);
-                        return Mono.empty();
-                    });
-        } catch (Exception e) {
-            logger.error("Error attempting token refresh: " + e.getMessage(), e);
-            return Mono.empty();
-        }
+        // TruBudget API doesn't support refresh tokens, so we need to re-login
+        logger.info("Token expired, attempting to re-login to TruBudget");
+        return org.digijava.module.trubudget.util.TruBudgetAuthUtil.reLoginToTruBudget();
     }
     
 

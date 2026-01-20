@@ -186,7 +186,7 @@ public class ViewEditUser extends Action {
 
                 Set<String> intentNames = user.getTruBudgetIntents().stream().map(TruBudgetIntent::getTruBudgetIntentName).collect(Collectors.toSet());
 
-                uForm.setTruBudgetPassword(user.getTruBudgetPassword()!=null?UmUtil.decrypt(user.getTruBudgetPassword(), user.getTruBudgetKeyGen()):"");
+                uForm.setTruBudgetPassword(user.getTruBudgetPassword()!=null?UmUtil.decryptTruBudgetPassword(user.getTruBudgetPassword(), user.getEmail(), user.getTruBudgetKeyGen()):"");
 
 
                 intents.forEach(intent ->
@@ -336,10 +336,11 @@ public class ViewEditUser extends Action {
 //                    user.getTruBudgetIntents().addAll(new HashSet<>(truBudgetIntents));
                         user.setInitialTruBudgetIntents(new HashSet<>(user.getTruBudgetIntents()));
                         user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
+                        // Use secure master key encryption (no need to store keyGen anymore, but keep for backward compatibility)
                         String keyGen = UmUtil.generateAESKey(128);
                         user.setTruBudgetKeyGen(keyGen);
 
-                        String encryptedTruPassword = UmUtil.encrypt(uForm.getTruBudgetPassword()!=null? uForm.getTruBudgetPassword() : "amptrubudget", keyGen);
+                        String encryptedTruPassword = UmUtil.encryptTruBudgetPassword(uForm.getTruBudgetPassword()!=null? uForm.getTruBudgetPassword() : "amptrubudget", user.getEmail());
                         user.setTruBudgetPassword(encryptedTruPassword);
                     }
 

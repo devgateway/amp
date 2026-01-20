@@ -72,9 +72,10 @@ public class RegisterUser extends Action {
             List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
             if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+                // Use secure master key encryption (no need to store keyGen anymore, but keep for backward compatibility)
                 String keyGen = UmUtil.generateAESKey(128);
                 user.setTruBudgetKeyGen(keyGen);
-                String encryptedTruPassword = UmUtil.encrypt(userRegisterForm.getTruBudgetPassword()!=null? userRegisterForm.getTruBudgetPassword() : "amptrubudget", keyGen);
+                String encryptedTruPassword = UmUtil.encryptTruBudgetPassword(userRegisterForm.getTruBudgetPassword()!=null? userRegisterForm.getTruBudgetPassword() : "amptrubudget", user.getEmail());
                 user.setTruBudgetPassword(encryptedTruPassword);
                 String[] intents = userRegisterForm.getSelectedTruBudgetIntents();
                 List<TruBudgetIntent> truBudgetIntents = new ArrayList<>();

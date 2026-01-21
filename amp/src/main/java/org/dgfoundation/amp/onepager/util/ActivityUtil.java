@@ -360,7 +360,7 @@ public class ActivityUtil {
         //            z.setActivity(null);//we can also delete this component permanently
 //        query.stream().filter(x->!ampActivityVersion.getComponents().stream().map(AmpComponent::getAmpComponentId).collect(Collectors.toList()).contains(x.getAmpComponentId()) && x.getAmpComponentId()!=null).forEach(y->y.setActivity(null));
         for (AmpComponent ampComponent: query.list()){
-            if (ampActivityVersion.getComponents().contains(ampComponent))
+            if (!ampActivityVersion.getComponents().contains(ampComponent))
             {
                 ampComponent.setActivity(null);
                 session.update(ampComponent);

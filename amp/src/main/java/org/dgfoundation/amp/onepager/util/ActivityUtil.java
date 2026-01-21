@@ -359,6 +359,8 @@ public class ActivityUtil {
         query.setParameter("activity", ampActivityVersion.getAmpActivityId(), LongType.INSTANCE);
         //            z.setActivity(null);//we can also delete this component permanently
 //        query.stream().filter(x->!ampActivityVersion.getComponents().stream().map(AmpComponent::getAmpComponentId).collect(Collectors.toList()).contains(x.getAmpComponentId()) && x.getAmpComponentId()!=null).forEach(y->y.setActivity(null));
+        logger.info("Components found: "+query.list().size());
+        logger.info("Components in activity: "+ampActivityVersion.getComponents().size());
         for (AmpComponent ampComponent: query.list()){
             if (!ampActivityVersion.getComponents().contains(ampComponent))
             {
@@ -366,6 +368,7 @@ public class ActivityUtil {
                 session.update(ampComponent);
             }
         }
+        logger.info("Components after update: "+query.list().size());
     }
     private static <T> void cleanObjectFromSession(Session session, Class<T> objectClass, Long id)
     {

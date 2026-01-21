@@ -364,19 +364,14 @@ public class ActivityUtil {
         for (AmpComponent ampComponent: query.list()){
             logger.info("Checking component: "+ampComponent.getAmpComponentId() + " in activity: "+(ampActivityVersion.getComponents().stream().map(AmpComponent::getAmpComponentId).collect(Collectors.toList()).contains(ampComponent.getAmpComponentId())));
 
-            if (!ampActivityVersion.getComponents().contains(ampComponent))
+            if (!ampActivityVersion.getComponents().stream().map(AmpComponent::getAmpComponentId).collect(Collectors.toList()).contains(ampComponent.getAmpComponentId()))
             {
                 logger.info("Removing component from activity: "+ampComponent.getAmpComponentId());
                 ampComponent.setActivity(null);
                 session.update(ampComponent);
             }
-            else
-            {
-                ampComponent.setActivity(ampActivityVersion);
-                session.update(ampComponent);
-            }
         }
-        logger.info("Components activity after update: "+query.list().size());
+        logger.info("Components activity after update: "+ampActivityVersion.getComponents().size());
     }
     private static <T> void cleanObjectFromSession(Session session, Class<T> objectClass, Long id)
     {

@@ -756,6 +756,9 @@ public class ProjectUtil {
     }
 
     private static String convertToISO8601(Date date) {
+        if (date == null) {
+            return null;
+        }
         Instant instant = date.toInstant();
         return instant.toString();
     }

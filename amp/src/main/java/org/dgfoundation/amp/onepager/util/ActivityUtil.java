@@ -364,11 +364,17 @@ public class ActivityUtil {
         for (AmpComponent ampComponent: query.list()){
             if (!ampActivityVersion.getComponents().contains(ampComponent))
             {
+                logger.info("Removing component from activity: "+ampComponent.getAmpComponentId());
                 ampComponent.setActivity(null);
                 session.update(ampComponent);
             }
+            else
+            {
+                ampComponent.setActivity(ampActivityVersion);
+                session.update(ampComponent);
+            }
         }
-        logger.info("Components after update: "+query.list().size());
+        logger.info("Components activity after update: "+query.list().size());
     }
     private static <T> void cleanObjectFromSession(Session session, Class<T> objectClass, Long id)
     {

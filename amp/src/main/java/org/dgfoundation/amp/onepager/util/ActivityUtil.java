@@ -362,6 +362,8 @@ public class ActivityUtil {
         logger.info("Components found: "+query.list().size());
         logger.info("Components in activity: "+ampActivityVersion.getComponents().size());
         for (AmpComponent ampComponent: query.list()){
+            logger.info("Checking component: "+ampComponent.getAmpComponentId() + " in activity: "+(ampActivityVersion.getComponents().stream().map(AmpComponent::getAmpComponentId).collect(Collectors.toList()).contains(ampComponent.getAmpComponentId())));
+
             if (!ampActivityVersion.getComponents().contains(ampComponent))
             {
                 logger.info("Removing component from activity: "+ampComponent.getAmpComponentId());

@@ -333,7 +333,7 @@ public class ActivityUtil {
             // TODO: 9/12/23 check if project is already existing
             Query<AmpComponent> query = session.createQuery("FROM "+AmpComponent.class.getName()+" ac  WHERE ac.activity=:activity AND ac.activity IS NOT NULL", AmpComponent.class).setCacheable(true);
             query.setParameter("activity", a.getAmpActivityId(), LongType.INSTANCE);
-            ProjectUtil.init();
+            // No need for init() or waitAndClose() - each database operation uses its own session via doInTransaction()
             TruBudgetActivity truBudgetActivity = ProjectUtil.activityAlreadyInTrubudget(a.getAmpActivityId());
             logger.info("TrubudgetActivity found "+truBudgetActivity);
             if (truBudgetActivity==null) {
@@ -346,7 +346,6 @@ public class ActivityUtil {
                 ProjectUtil.updateProject(truBudgetActivity.getTruBudgetId(),a,query.list(),name);
 //                session.flush();
             }
-            new Thread(ProjectUtil::end).start();
 
         }
 
@@ -662,16 +661,12 @@ public class ActivityUtil {
 
                     try {
 
-                        doActualTruBudgetLogin(user);
                         String token = ProjectUtil.getTrubudgetToken();
-                        new Thread(()-> {
+                        new Thread(() -> {
                             logger.info("Started background task for closing project.");
                             try {
-                                Session session = PersistenceManager.openNewSession();
-                                Transaction transaction = session.beginTransaction();
-                                ProjectUtil.closeProject(truBudgetActivity.getTruBudgetId(), settings, token, session);
-                                session.flush();
-                                transaction.commit();
+                                // closeProject now uses doInTransaction internally, no need to manage session here
+                                ProjectUtil.closeProject(truBudgetActivity.getTruBudgetId(), settings, token);
                             } catch (Exception e) {
                                 logger.info("Error during project close", e);
                             }

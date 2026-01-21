@@ -81,7 +81,6 @@ public class AmpComponentsFundingFormTableFeature extends
                             WorkflowItemDetailsModel workflowItemDetailsModel = null;
                             try {
                                 List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
-                                doActualTruBudgetLogin(user);
                                 String token = ProjectUtil.getTrubudgetToken();
                                 workflowItemDetailsModel = ProjectUtil.getWFItemDetails(ampComponentFundingTruWF,settings,token);
                             } catch (Exception e) {

@@ -764,6 +764,9 @@ public class ProjectUtil {
     }
 
     private static String convertToISO8601AndAddDays(Date date, int daysToAdd) {
+        if (date == null) {
+            return null;
+        }
         LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate newLocalDate = localDate.plusDays(daysToAdd);
         date = Date.from(newLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());

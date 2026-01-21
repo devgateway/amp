@@ -178,9 +178,17 @@ COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-fi
 COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings ../ampTemplate/node_modules/amp-settings
 # Copy package files for dependency installation
 COPY TEMPLATE/reampv2/package*.json ./
+COPY TEMPLATE/reampv2/lerna.json ./
+# Create packages directory structure and copy package.json files
+RUN mkdir -p packages/user-manager packages/reampv2-app packages/ampoffline packages/container
+COPY TEMPLATE/reampv2/packages/user-manager/package*.json ./packages/user-manager/
+COPY TEMPLATE/reampv2/packages/reampv2-app/package*.json ./packages/reampv2-app/
+COPY TEMPLATE/reampv2/packages/ampoffline/package*.json ./packages/ampoffline/
+COPY TEMPLATE/reampv2/packages/container/package*.json ./packages/container/
+# Install dependencies with clean install to avoid cache issues
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
-    npm-install-with-retry.sh
+    npm ci --force || npm-install-with-retry.sh
 # Copy source code after dependencies are installed
 COPY TEMPLATE/reampv2 .
 RUN npm run build \

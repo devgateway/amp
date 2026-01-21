@@ -771,7 +771,7 @@ public class ProjectUtil {
     public static WorkflowItemDetailsModel getWFItemDetails(AmpComponentFundingTruWF ampComponentFundingTruWF, List<AmpGlobalSettings> settings,String token) throws URISyntaxException {
 
         if (ampComponentFundingTruWF!=null) {
-            // getForSingleObjResponse now handles automatic token refresh on 401 Unauthorized
+            // getForSingleObjResponse handles automatic token refresh on 401 Unauthorized
             return GenericWebClient.getForSingleObjResponse(getSettingValue(settings, "baseUrl") + String.format("api/workflowitem.viewDetails?projectId=%s&subprojectId=%s&workflowitemId=%s", ampComponentFundingTruWF.getTruProjectId(), ampComponentFundingTruWF.getTruSubprojectId(), ampComponentFundingTruWF.getTruWFId()), WorkflowItemDetailsModel.class, token)
                     .onErrorReturn(new WorkflowItemDetailsModel()).block();
         }

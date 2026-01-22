@@ -2439,10 +2439,10 @@ public class DbUtil {
                     relatedObj = org;
                 }
                 query = session.createQuery(qhl);
-                query.setParameter("relatedObj", relatedObj, ObjectType.INSTANCE);
+                query.setParameter("relatedObj", relatedObj);
                 query.executeUpdate();
             } catch (Exception e) {
-                logger.error("Delete Failed: " + e.toString());
+                logger.error("Delete Failed: ", e);
             }
         }
     }

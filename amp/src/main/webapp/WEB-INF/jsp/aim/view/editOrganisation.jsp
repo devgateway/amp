@@ -441,12 +441,15 @@
                     return false;
                 }
 
-                var countryId= document.aimAddOrgForm.countryId.value;
+                var countryIdElement = document.aimAddOrgForm.countryId;
                 var mandatoryCountryOfOrigin = document.getElementById('mandatoryCountryOfOrigin');
-                if (mandatoryCountryOfOrigin!=null && (countryId == null||countryId == '-1')) {
-                    alert('<digi:trn  jsFriendly="true">Please Select Country of Origin.</digi:trn>');
-                    document.aimAddOrgForm.countryId.focus();
-                    return false;
+                if (mandatoryCountryOfOrigin!=null && countryIdElement != null) {
+                    var countryId = countryIdElement.value;
+                    if (countryId == null || countryId == '' || countryId == '-1') {
+                        alert('<digi:trn  jsFriendly="true">Please Select Country of Origin.</digi:trn>');
+                        countryIdElement.focus();
+                        return false;
+                    }
                 }
 
                 var address= document.aimAddOrgForm.address.value;

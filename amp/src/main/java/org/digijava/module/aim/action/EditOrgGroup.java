@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
-import java.util.Iterator;
 
 public class EditOrgGroup extends Action {
 
@@ -127,10 +126,12 @@ public class EditOrgGroup extends Action {
 
         if ("delete".equals(action)) {
 
-            Iterator itr1 = DbUtil.getOrgByGroup(editForm.getAmpOrgGrpId()).iterator();
-            if (itr1.hasNext()) {
+            Collection referencingOrgs = DbUtil.getOrgByGroup(editForm.getAmpOrgGrpId());
+            logger.info("Number of organizations referencing this org group: " + referencingOrgs.size());
+            if (referencingOrgs != null && !referencingOrgs.isEmpty()) {
                 //means there are organizations referencing this org group
                 editForm.setFlag("orgReferences");
+                editForm.setReferencingOrgs(referencingOrgs);
                 editForm.setAction("edit");
                 return mapping.findForward("forward");
             } else {

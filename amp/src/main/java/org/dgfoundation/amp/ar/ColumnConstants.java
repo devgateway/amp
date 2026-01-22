@@ -343,6 +343,7 @@ public class ColumnConstants {
     public static final String RESPONSIBLE_ORGANIZATION_GROUPS = "Responsible Organization Groups";
     public static final String RESPONSIBLE_ORGANIZATION_TYPE = "Responsible Organization Type";
     public static final String RESULTS = "Results";
+    public static final String LESSONS_LEARNED = "Lessons Learned";
     public static final String REVISED_PROJECT_AMOUNT = "Revised Project Amount";
     public static final String SECONDARY_PROGRAM = "Secondary Program";
     public static final String SECONDARY_PROGRAM_LEVEL_0 = "Secondary Program Level 0";

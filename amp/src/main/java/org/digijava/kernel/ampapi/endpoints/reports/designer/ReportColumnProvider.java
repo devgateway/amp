@@ -46,24 +46,6 @@ public class ReportColumnProvider extends ReportEntityProvider {
 
     private static final Map<String, String> COLUMN_TO_FM_FIELD_MAP = new ImmutableMap.Builder<String, String>()
             .put(REGIONAL_REGION, LOCATION_ADM_LEVEL_1)
-            // Indicator columns - ensure exact match between column names and FM field names
-            .put(ColumnConstants.INDICATOR_ACTUAL_VALUE, "Indicator Current Value")
-            .put(ColumnConstants.INDICATOR_ACTUAL_DATE, "Indicator Current Date")
-            .put(ColumnConstants.INDICATOR_ACTUAL_COMMENT, "Indicator Current Comment")
-            .put(ColumnConstants.INDICATOR_BASE_VALUE, "Indicator Base Value")
-            .put(ColumnConstants.INDICATOR_BASE_DATE, "Indicator Base Date")
-            .put(ColumnConstants.INDICATOR_BASE_COMMENT, "Indicator Base Comment")
-            .put(ColumnConstants.INDICATOR_TARGET_VALUE, "Indicator Target Value")
-            .put(ColumnConstants.INDICATOR_TARGET_DATE, "Indicator Target Date")
-            .put(ColumnConstants.INDICATOR_TARGET_COMMENT, "Indicator Target Comment")
-            .put(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, "Indicator Revised Target Value")
-            .put(ColumnConstants.INDICATOR_REVISED_TARGET_DATE, "Indicator Revised Target Date")
-            .put(ColumnConstants.INDICATOR_REVISED_TARGET_COMMENT, "Indicator Revised Target Comment")
-            // Additional columns that may have different names in FM vs column definitions
-            .put("Compensation Rate", "Compensation Rate")
-            .put("Planned Outcomes", "Planned Outcomes")
-            .put("Planned Outputs", "Planned Outputs")
-            .put("Actual Outputs", "Actual Outputs")
             .build();
 
     private static final Map<String, Integer> ME_COLUMNS_ORDER = new ImmutableMap.Builder<String, Integer>()

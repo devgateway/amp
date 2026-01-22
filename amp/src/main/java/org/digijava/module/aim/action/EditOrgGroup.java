@@ -127,7 +127,6 @@ public class EditOrgGroup extends Action {
         if ("delete".equals(action)) {
 
             Collection referencingOrgs = DbUtil.getOrgByGroup(editForm.getAmpOrgGrpId());
-            logger.info("Number of organizations referencing this org group: " + referencingOrgs.size());
             if (referencingOrgs != null && !referencingOrgs.isEmpty()) {
                 //means there are organizations referencing this org group
                 editForm.setFlag("orgReferences");

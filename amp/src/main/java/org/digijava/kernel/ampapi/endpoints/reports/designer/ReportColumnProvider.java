@@ -240,6 +240,16 @@ public class ReportColumnProvider extends ReportEntityProvider {
             AmpFieldsVisibility ampFieldVisibility = ampAllFieldsByName
                     .get(COLUMN_TO_FM_FIELD_MAP.getOrDefault(columnName, columnName));
 
+            // Skip if field visibility is null (shouldn't happen after isColumnVisible check, but safety check)
+            if (ampFieldVisibility == null) {
+                continue;
+            }
+
+            // Skip if parent is null (needed for grouping columns by theme)
+            if (ampFieldVisibility.getParent() == null) {
+                continue;
+            }
+
             AmpColumnsVisibility ampColumnVisibilityObj = new AmpColumnsVisibility();
             ampColumnVisibilityObj.setAmpColumn(ampColumn);
             ampColumnVisibilityObj.setAmpfield(ampFieldVisibility);

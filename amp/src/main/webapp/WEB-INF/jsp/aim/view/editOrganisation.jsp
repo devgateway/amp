@@ -1984,7 +1984,7 @@ border-right: 1px solid rgb(208, 208, 208);
 	                                            <td class="tdClass">
 	                                            	<c:forEach var="phone" items="${orgCont.contact.properties}">
 														<c:if test="${phone.name=='contact phone'}">
-                                                                                 <div><c:if test="${not empty phone.phoneCategory}"><digi:trn> <c:out value="${phone.phoneCategory}"/></digi:trn></c:if> <c:out value="${phone.actualPhoneNumber}"></c:out></div>
+                                                                                 <div><c:if test="${not empty phone.phoneCategory}"><digi:trn> <c:out value="${phone.phoneCategory}"/></digi:trn></c:if> <c:out value="${phone.value}"/></div>
 														</c:if>
 													</c:forEach>
 	                                            </td>

@@ -207,17 +207,17 @@
 																				<br/><br/>
 																				<logic:notEmpty name="aimAddOrgGroupForm" property="referencingOrgs">
 																					<ul style="margin-left: 20px; color: #FF0000;">
-																						<logic:iterate id="org" name="aimAddOrgGroupForm" property="referencingOrgs">
+																						<c:forEach var="org" items="${aimAddOrgGroupForm.referencingOrgs}">
 																							<li>
-																								<bean:write name="org" property="name"/>
-																								<logic:notEmpty name="org" property="acronym">
-																									&nbsp;(<bean:write name="org" property="acronym"/>)
-																								</logic:notEmpty>
-																								<logic:notEmpty name="org" property="orgCode">
-																									&nbsp;- <bean:write name="org" property="orgCode"/>
-																								</logic:notEmpty>
+																								<c:out value="${org.name}"/>
+																								<c:if test="${not empty org.acronym}">
+																									&nbsp;(<c:out value="${org.acronym}"/>)
+																								</c:if>
+																								<c:if test="${not empty org.orgCode}">
+																									&nbsp;- <c:out value="${org.orgCode}"/>
+																								</c:if>
 																							</li>
-																						</logic:iterate>
+																						</c:forEach>
 																					</ul>
 																				</logic:notEmpty>
 																			

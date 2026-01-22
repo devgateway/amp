@@ -28,6 +28,7 @@ import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeManager;
 import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeValidationResponse;
 import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeValidationStatus;
@@ -49,6 +50,7 @@ public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
 
     protected WebMarkupContainer webLinkFeedbackContainer;
     protected Label webLinkFeedbackLabel;
+    protected FileUploadPanel fileUpload;
     boolean resourceIsURL = false;
     protected boolean pathSelected;
     protected boolean urlSelected;
@@ -94,7 +96,8 @@ public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
         if (model.getObject().getAmpComponentFundingId() != null)
             componentId = Long.toString(model.getObject().getAmpComponentFundingId());
         final Model<FileItem> fileItemModel = new Model<FileItem>();
-        FileUploadPanel fileUpload = new FileUploadPanel("componentFundingDocumentFile",componentId, fileItemModel);
+        fileUpload = new FileUploadPanel("componentFundingDocumentFile",componentId, fileItemModel);
+        fileUpload.setOutputMarkupId(true);
 
 //        final AmpTextFieldPanel<String> webLink = new AmpTextFieldPanel<String>("webLink",
 //                new PropertyModel<String>(td, "webLink"), "Web Link", true, true);
@@ -228,6 +231,23 @@ public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
 
         createWebLinkFeedbackContainer();
         form.add(webLinkFeedbackContainer);
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        // Make file upload respect FM enabled state
+        if (fileUpload != null) {
+            boolean fmMode = ((AmpAuthWebSession) getSession()).isFmMode();
+            if (fmMode) {
+                // In FM mode, check if this panel is enabled
+                boolean parentEnabled = FMUtil.isFmEnabled(this);
+                fileUpload.setVisible(parentEnabled);
+            } else {
+                // In normal mode, respect parent's visibility
+                fileUpload.setVisible(isVisibleInHierarchy());
+            }
+        }
     }
 
     protected AjaxLink createAddNewLink(final String fmName) {

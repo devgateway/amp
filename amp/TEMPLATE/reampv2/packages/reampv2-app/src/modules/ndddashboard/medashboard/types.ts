@@ -44,13 +44,16 @@ export type InitialState = {
 
 export interface ActualValue {
     year: string | number;
+    date: string;
     value: number
 }
 
 export interface YearValues {
     actualValues: ActualValue [];
     baseValue: number;
+    baseValueDate: string;
     targetValue: number;
+    targetValueDate: string;
     indicatorId: number;
 }
 

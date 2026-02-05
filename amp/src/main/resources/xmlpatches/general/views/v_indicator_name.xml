@@ -30,6 +30,7 @@
                     con.ind_val_category AS me_indicator_logframe_id,
                     con.risk AS me_indicator_risk_id,
                     t.amp_theme_id AS me_npo_id
+                    /*t2.amp_theme_id AS me_npo_id*/
                 FROM amp_indicator_connection con
                 JOIN amp_indicator ind ON ind.indicator_id = con.indicator_id
                 --LEFT JOIN amp_sector_indicator si ON si.indicator_id=ind.indicator_id

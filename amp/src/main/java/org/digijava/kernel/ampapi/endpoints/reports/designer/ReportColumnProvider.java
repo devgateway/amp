@@ -129,6 +129,7 @@ public class ReportColumnProvider extends ReportEntityProvider {
 
     private static final List<String> MEASURELESS_ONLY_HIERARCHIES = ImmutableList.of(
             INDICATOR_LOGFRAME_CATEGORY, INDICATOR_RISK, INDICATOR_SECTOR, INDICATOR_TYPE,
+            INDICATOR_NAME, INDICATOR_LOGFRAME_CATEGORY, INDICATOR_RISK, INDICATOR_SECTOR, INDICATOR_TYPE,
             INDICATOR_THEME);
 
     private static final Map<ReportType, List<String>> REPORT_TYPE_HIERARCHIES =

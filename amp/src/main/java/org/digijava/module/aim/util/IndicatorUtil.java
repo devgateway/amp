@@ -628,7 +628,7 @@ public class IndicatorUtil {
         try {
 //beginTransaction();
             Set<AmpIndicatorValue> indValues=connection.getValues();                    
-            if(indValues!=null && indValues.size()>0){
+            if(indValues!=null && !indValues.isEmpty()){
                 for (AmpIndicatorValue indicatorValue : indValues) {
                     AmpLocation location = indicatorValue.getLocation();
                     if (location != null) {

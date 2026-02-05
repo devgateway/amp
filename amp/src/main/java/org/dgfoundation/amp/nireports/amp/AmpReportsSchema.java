@@ -793,6 +793,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         indicator_degenerate_dimension(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, "v_indicator_logframe_category", catsDimension);
 
         indicator_degenerate_dimension(ColumnConstants.INDICATOR_ACTUAL_VALUE, "v_indicator_actualvalue", indicatorsDimension);
+        indicator_no_entity(ColumnConstants.INDICATOR_ACTUAL_VALUE, "v_indicator_actualvalue");
         indicator_date_column(ColumnConstants.INDICATOR_ACTUAL_DATE, "v_indicator_actual_date");
         indicator_no_entity(ColumnConstants.INDICATOR_ACTUAL_COMMENT, "v_indicator_actual_comment");
 

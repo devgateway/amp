@@ -55,7 +55,7 @@ public class IndicatorTextualTokenBehaviour extends TextualTokenBehaviour {
     }
 
     protected IndicatorTextualTokenBehaviour(BiFunction<NiReportsEngine, Cell, String> formatter,
-                                           NiDimensionUsage indicatorDimensionUsage, boolean removeDuplicates) {
+                                             NiDimensionUsage indicatorDimensionUsage, boolean removeDuplicates) {
         this.formatter = formatter;
         this.indicatorDimensionUsage = indicatorDimensionUsage;
         this.removeDuplicates = removeDuplicates;
@@ -133,8 +133,8 @@ public class IndicatorTextualTokenBehaviour extends TextualTokenBehaviour {
                 // return super.filterCell(acceptors, oldCell, splitCell, false);
                 return oldCell;
             }
-            log.warn("Ignoring cell with id " + splitCell.entityId + " because it is not part of the same NPO as the old cell");
-            //return super.filterCell(acceptors, oldCell, splitCell, isTransactionLevelHierarchy);
+            System.out.println("Ignoring cell with id " + splitCell.entityId + " because it is not part of the same NPO as the old cell");
+            // return super.filterCell(acceptors, oldCell, splitCell, isTransactionLevelHierarchy);
             return null;
         }
     }

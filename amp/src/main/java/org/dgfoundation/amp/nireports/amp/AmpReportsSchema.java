@@ -778,6 +778,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         indicator_single_dimension(ColumnConstants.INDICATOR_OUTPUT, "v_indicator_output", INDICATOR_LEVEL_COLUMN);
 
         indicator_disaggregation_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_0, "v_indicator_disaggregation_level_0", INDICATOR_LEVEL_COLUMN);
+        // indicator_single_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_1, "v_indicator_disaggregation_level_1", IND_DIM_USG, LEVEL_1);
+        indicator_degenerate_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_BASE_VALUE, "v_indicator_disaggregation_basevalue", indicatorsDimension);
+        // indicator_degenerate_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_TARGET_VALUE, "v_indicator_disaggregation_targetvalue", indicatorsDimension);
+
         indicator_degenerate_dimension(ColumnConstants.INDICATOR_TYPE, "v_indicator_type", boolDimension);
         indicator_no_entity(ColumnConstants.INDICATOR_DESCRIPTION, "v_indicator_description");
         indicator_no_entity(ColumnConstants.INDICATOR_CODE, "v_indicator_code");
@@ -1273,6 +1277,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_ACTUAL_VALUE, AmpIndicatorValue.ACTUAL));
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_TARGET_VALUE, AmpIndicatorValue.TARGET));
 
+        // TODO: maybe we need a different behaviour for disaggregations because the values displayed come from the Admin and are "fixed".
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_BASE_VALUE, AmpIndicatorValue.BASE));
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_TARGET_VALUE, AmpIndicatorValue.TARGET));
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_SECONDARY_DISAGGREGATION_BASE_VALUE, AmpIndicatorValue.BASE));

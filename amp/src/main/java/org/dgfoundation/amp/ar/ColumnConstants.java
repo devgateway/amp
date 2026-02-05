@@ -416,6 +416,7 @@ public class ColumnConstants {
     public static final String INDICATOR_THEME = "Indicator Theme";
     public static final String INDICATOR_RISK = "Risk";
     public static final String INDICATOR_LOGFRAME_CATEGORY = "Logframe Category";
+    // This is a regular column, not a measure.
     public static final String INDICATOR_ACTUAL_VALUE = "Indicator Current Value";
     public static final String INDICATOR_ACTUAL_DATE = "Indicator Current Date";
     public static final String INDICATOR_ACTUAL_COMMENT = "Indicator Current Comment";
@@ -433,6 +434,8 @@ public class ColumnConstants {
     public static final String INDICATOR_DISAGGREGATION = "Indicator Disaggregation";
     public static final String INDICATOR_DISAGGREGATION_LEVEL_0 = "Indicator Disaggregation Level 0";
     public static final String INDICATOR_DISAGGREGATION_LEVEL_1 = "Indicator Disaggregation Level 1";
+    public static final String INDICATOR_DISAGGREGATION_BASE_VALUE = "Indicator Disaggregation Base Value";
+    public static final String INDICATOR_DISAGGREGATION_TARGET_VALUE = "Indicator Disaggregation Target Value";
 
     public static final String PROJECT_RESULTS_AVAILABLE = "Project Results Available";
     public static final String VULNERABLE_GROUP = "Vulnerable Group";

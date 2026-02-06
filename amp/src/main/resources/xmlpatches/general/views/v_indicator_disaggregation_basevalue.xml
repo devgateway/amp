@@ -19,7 +19,7 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
-            ESTO ESTA MAL, NO ES EL BASE VALUE DEL ADMIN. tiene q considerar si hay desagregacion o no.
+                /* THIS IS WRONG, WE NEED TO CONSIDER THE NEW DISAGGREGATIONS + NON DISAGGREGATED VALUE */
                 DROP VIEW IF EXISTS v_indicator_disaggregation_basevalue;
 				CREATE OR REPLACE VIEW v_indicator_disaggregation_basevalue AS
 				SELECT

@@ -1277,6 +1277,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_ACTUAL_VALUE, AmpIndicatorValue.ACTUAL));
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_TARGET_VALUE, AmpIndicatorValue.TARGET));
+        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_BASE_VALUE, AmpIndicatorValue.BASE));
 
         // TODO: maybe we need a different behaviour for disaggregations because the values displayed come from the Admin and are "fixed".
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_BASE_VALUE, AmpIndicatorValue.BASE));

@@ -103,6 +103,7 @@ public class MeasureConstants {
     //type = I
     public static final String INDICATOR_ACTUAL_VALUE = "Indicator Actual Value";
     public static final String INDICATOR_TARGET_VALUE = "Indicator Target Value";
+    public static final String INDICATOR_BASE_VALUE = "Indicator Base Value";
     public static final String INDICATOR_PRIMARY_DISAGGREGATION_BASE_VALUE = "Indicator Primary Disaggregation Base Value";
     public static final String INDICATOR_PRIMARY_DISAGGREGATION_TARGET_VALUE = "Indicator Primary Disaggregation Target Value";
     public static final String INDICATOR_SECONDARY_DISAGGREGATION_BASE_VALUE = "Indicator Secondary Disaggregation Base Value";

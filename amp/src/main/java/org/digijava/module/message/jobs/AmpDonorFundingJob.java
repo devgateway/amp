@@ -485,7 +485,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             // Convert to JSON using a JSON library (e.g., Gson)
             Gson gson = new Gson();
             String jsonData = gson.toJson(submissionData);
-            logger.info("JSON data: " + jsonData);
+//            logger.info("JSON data: " + jsonData);
 
             // Get the output stream of the connection
             try (OutputStream os = connection.getOutputStream()) {

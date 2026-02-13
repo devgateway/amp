@@ -79,6 +79,33 @@ public class IndicatorManagerService {
         throw new ApiRuntimeException(BAD_REQUEST,
                 ApiError.toError("Indicator with id " + indicatorId + " not found"));
     }
+    public MEIndicatorDTO getMeIndicatorByNameAndProgramName(String name, String programName) {
+        Session session = PersistenceManager.getSession();
+        AmpIndicator indicator;
+        if (programName==null){
+             indicator = (AmpIndicator) session.createCriteria(AmpIndicator.class)
+                    .add(Restrictions.eq("name", name))
+                    .setMaxResults(1)
+                    .uniqueResult();
+        }
+        else {
+            indicator = (AmpIndicator) session.createCriteria(AmpIndicator.class)
+                    .add(Restrictions.eq("name", name))
+                    .createAlias("program", "p")
+                    .add(Restrictions.eq("p.name", programName))
+                    .setMaxResults(1)
+                    .uniqueResult();
+        }
+
+
+
+        if (indicator != null) {
+            return new MEIndicatorDTO(indicator);
+        }
+
+        throw new ApiRuntimeException(BAD_REQUEST,
+                ApiError.toError("Indicator with name " + name + " and program name " + programName + " not found"));
+    }
 
     public MEIndicatorDTO createMEIndicator(final MEIndicatorDTO indicatorRequest) {
         Session session = PersistenceManager.getSession();

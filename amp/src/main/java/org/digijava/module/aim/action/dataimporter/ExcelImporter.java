@@ -1,6 +1,17 @@
 package org.digijava.module.aim.action.dataimporter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import java.io.File;
+import java.io.IOException;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -16,6 +27,16 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
 import org.digijava.module.aim.action.dataimporter.model.Funding;
 import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
 import org.digijava.module.aim.action.dataimporter.util.ImportedFileUtil;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.existingActivity;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.getColumnIndexByName;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.getKey;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.getStringValueFromCell;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.importTheData;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.setAFundingItemForExcel;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.setStatus;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.updateLocations;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.updateOrgs;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.updateSectors;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -23,44 +44,48 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class ExcelImporter {
     static Logger logger = LoggerFactory.getLogger(ExcelImporter.class);
     private static final int BATCH_SIZE = 1000;
 
     public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal) {
-        int res=0;
+        return processExcelFileInBatches(importedFilesRecord, file, request, config, isInternal, null);
+    }
+
+    public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, String sheetNameToProcess) {
+        int res = 0;
         ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.IN_PROGRESS);
         try (Workbook workbook = new XSSFWorkbook(file)) {
             int numberOfSheets = workbook.getNumberOfSheets();
             logger.info("Number of sheets: {}", numberOfSheets);
 
-            // Process each sheet in the workbook
-            for (int i = 0; i < numberOfSheets; i++) {
-                logger.info("Sheet number: {}", i);
-                Sheet sheet = workbook.getSheetAt(i);
+            if (sheetNameToProcess != null && !sheetNameToProcess.trim().isEmpty()) {
+                Sheet sheet = workbook.getSheet(sheetNameToProcess);
+                if (sheet == null) {
+                    logger.error("Sheet not found: {}", sheetNameToProcess);
+                    ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
+                    return 0;
+                }
                 if (isInternal) {
                     addDonorAgencyColumn(sheet, FeaturesUtil.getGlobalSettingValue("Internal Ecowas Donor"));
-
                 }
-
-                processSheetInBatches(sheet, request,config, importedFilesRecord);
+                processSheetInBatches(sheet, request, config, importedFilesRecord);
+            } else {
+                // Process each sheet in the workbook
+                for (int i = 0; i < numberOfSheets; i++) {
+                    logger.info("Sheet number: {}", i);
+                    Sheet sheet = workbook.getSheetAt(i);
+                    if (isInternal) {
+                        addDonorAgencyColumn(sheet, FeaturesUtil.getGlobalSettingValue("Internal Ecowas Donor"));
+                    }
+                    processSheetInBatches(sheet, request, config, importedFilesRecord);
+                }
             }
 
             logger.info("Closing the workbook...");
-            res =1;
+            res = 1;
         } catch (IOException e) {
             ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
             logger.error("Error processing Excel file: {}", e.getMessage(), e);
@@ -171,6 +196,9 @@ public class ExcelImporter {
                 int projectTitleColumn = getColumnIndexByName(sheet, getKey(config, "Project Title"));
                 String projectTitle = projectTitleColumn >= 0 ? getStringValueFromCell(row.getCell(projectTitleColumn),false) : "";
                 importDataModel.setProject_title(projectTitle);
+                int objectiveColumn = getColumnIndexByName(sheet, getKey(config, "Objective"));
+                String objective = objectiveColumn >= 0 ? getStringValueFromCell(row.getCell(objectiveColumn),false) : null;
+                importDataModel.setObjective(objective);
 
                 int projectDescColumn = getColumnIndexByName(sheet, getKey(config, "Project Description"));
                 String projectDesc = projectDescColumn >= 0 ? getStringValueFromCell(row.getCell(projectDescColumn),false) : null;

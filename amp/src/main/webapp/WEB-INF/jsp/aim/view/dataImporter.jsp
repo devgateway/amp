@@ -29,6 +29,9 @@
     }
     $(document).ready(function() {
       $('#existing-config').val('0');
+      if ($('#file-type').val() === 'excel') {
+        $('#data-sheet-choice-div').show();
+      }
       $('.remove-row').click(function() {
         var selectedRows = $('.fields-table tbody').find('.remove-checkbox:checked').closest('tr');
 
@@ -54,25 +57,66 @@
           $('#data-file').attr("accept", ".csv");
           $('#template-file').attr("accept", ".csv");
           $('#separator-div').hide();
-
+          $('#data-sheet-choice-div').hide();
         } else if(fileType==="text") {
           $('#select-file-label').html("Select text file");
           $('#data-file').attr("accept", ".txt");
           $('#template-file').attr("accept", ".txt");
           $('#separator-div').show();
+          $('#data-sheet-choice-div').hide();
         }
         else if(fileType==="excel") {
           $('#select-file-label').html("Select excel file");
           $('#data-file').attr("accept", ".xls,.xlsx");
           $('#template-file').attr("accept", ".xls,.xlsx");
           $('#separator-div').hide();
+          $('#data-sheet-choice-div').show();
         }
         else if(fileType==="json") {
           $('#select-file-label').html("Select json file");
           $('#data-file').attr("accept", ".json");
           $('#template-file').attr("accept", ".json");
           $('#separator-div').hide();
+          $('#data-sheet-choice-div').hide();
         }
+      });
+
+      $('input[name="dataSheetChoice"]').change(function() {
+        var v = $(this).val();
+        if (v === 'sheet') {
+          $('#data-sheet-select-wrap').show();
+        } else {
+          $('#data-sheet-select-wrap').hide();
+        }
+      });
+
+      $('#load-sheets-btn').click(function() {
+        var fileInput = document.getElementById('data-file');
+        if (!fileInput.files || !fileInput.files.length) {
+          alert("Please select a data file first.");
+          return;
+        }
+        var formData = new FormData();
+        formData.append('dataFile', fileInput.files[0]);
+        formData.append('action', 'getDataFileSheets');
+        formData.append('fileType', $('#file-type').val());
+        var $select = $('#data-sheet');
+        $select.prop('disabled', true).empty().append('<option value="">-- Loading... --</option>');
+        fetch("${pageContext.request.contextPath}/aim/dataImporter.do", { method: "POST", body: formData })
+          .then(function(r) { return r.json(); })
+          .then(function(names) {
+            $select.empty().append('<option value="">-- Select sheet --</option>');
+            if (Array.isArray(names)) {
+              names.forEach(function(name) {
+                $select.append($('<option></option>').attr('value', name).text(name));
+              });
+              $select.prop('disabled', false);
+            }
+          })
+          .catch(function() {
+            $select.empty().append('<option value="">-- Error loading sheets --</option>').prop('disabled', false);
+            alert("Could not load sheets from file.");
+          });
       });
 
       $('.existing-config').change(function() {
@@ -225,13 +269,24 @@
 
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
-      xhr.setRequestHeader("Accept", "text/html");  // Ensure response is HTML
+      xhr.setRequestHeader("Accept", "application/json, text/html");
 
       xhr.onload = function () {
         if (xhr.status === 200) {
           if (xhr.responseText && xhr.responseText.trim().length >= 1) {
-            // Set response HTML inside the headers div
-            document.getElementById('headers').innerHTML = xhr.responseText;
+            var ct = xhr.getResponseHeader("Content-Type") || "";
+            if (ct.indexOf("application/json") !== -1) {
+              try {
+                var data = JSON.parse(xhr.responseText);
+                renderTemplateSheetAndColumns(data);
+              } catch (e) {
+                console.error("Invalid JSON response", e);
+                alert("Unable to parse template. Please try again.");
+                return;
+              }
+            } else {
+              document.getElementById('headers').innerHTML = xhr.responseText;
+            }
             alert("The template has been successfully uploaded.");
             document.getElementById("otherComponents").removeAttribute("hidden");
             $('#add-field').show();
@@ -251,6 +306,48 @@
       xhr.send(formData);
     }
 
+    function renderTemplateSheetAndColumns(data) {
+      var sheetNames = data.sheetNames || [];
+      var columnsBySheet = data.columnsBySheet || {};
+      var headersDiv = document.getElementById('headers');
+      if (sheetNames.length === 0) {
+        headersDiv.innerHTML = '<p>No sheets found in the template.</p>';
+        return;
+      }
+      var firstSheet = sheetNames[0];
+      var html = '<label for="template-sheet">Select Sheet:</label><br>';
+      html += '<select class="select2" style="width: 300px;" id="template-sheet">';
+      for (var i = 0; i < sheetNames.length; i++) {
+        html += '<option value="' + escapeHtml(sheetNames[i]) + '">' + escapeHtml(sheetNames[i]) + '</option>';
+      }
+      html += '</select><br><br>';
+      html += '<label for="columnName">Select Column Name:</label><br>';
+      html += '<select class="select2" style="width: 300px;" id="columnName">';
+      var firstCols = columnsBySheet[firstSheet] || [];
+      for (var j = 0; j < firstCols.length; j++) {
+        html += '<option>' + escapeHtml(firstCols[j]) + '</option>';
+      }
+      html += '</select>';
+      headersDiv.innerHTML = html;
+
+      window._templateColumnsBySheet = columnsBySheet;
+      $('#template-sheet').off('change.templateColumns').on('change.templateColumns', function() {
+        var sheet = $(this).val();
+        var cols = window._templateColumnsBySheet[sheet] || [];
+        var $colSelect = $('#columnName');
+        $colSelect.empty();
+        for (var k = 0; k < cols.length; k++) {
+          $colSelect.append($('<option></option>').text(cols[k]));
+        }
+      });
+    }
+
+    function escapeHtml(text) {
+      var div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
     function uploadDataFile() {
       var formData = new FormData();
       var fileType = $('#file-type').val();
@@ -265,12 +362,20 @@
         alert("Please select a file to upload.");
         return;
       }
+      var dataSheetChoice = $('input[name="dataSheetChoice"]:checked').val();
+      var dataSheetName = $('#data-sheet').val() || '';
+      if (fileType === 'excel' && dataSheetChoice === 'sheet' && !dataSheetName) {
+        alert("Please load sheets and select a sheet, or choose 'Whole file'.");
+        return;
+      }
       formData.append('dataFile', fileInput.files[0]);
       formData.append('internal', internal);
       formData.append('action',"uploadDataFile");
       formData.append('fileType', fileType);
       formData.append('dataSeparator', dataSeparator);
       formData.append('existingConfig', existingConfig);
+      formData.append('dataSheetChoice', dataSheetChoice || 'all');
+      formData.append('dataSheetName', dataSheetName);
 
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
@@ -411,6 +516,19 @@
   <label id="select-file-label">Select Excel File:</label>
 <%--  <html:file property="uploadedFile" name="dataImporterForm"   />--%>
   <input id="data-file" type="file" accept=".xls,.xlsx,.csv" name="dataFile" />
+
+  <div id="data-sheet-choice-div" style="display: none;">
+    <br>
+    <label>Process data from:</label><br>
+    <input type="radio" name="dataSheetChoice" id="data-sheet-choice-all" value="all" checked> <label for="data-sheet-choice-all">Whole file (all sheets)</label><br>
+    <input type="radio" name="dataSheetChoice" id="data-sheet-choice-sheet" value="sheet"> <label for="data-sheet-choice-sheet">Specific sheet</label><br>
+    <div id="data-sheet-select-wrap" style="display: none; margin-top: 8px;">
+      <input type="button" id="load-sheets-btn" value="Load sheets from file">
+      <select id="data-sheet" style="width: 300px; margin-left: 8px;" disabled title="Select a file and click Load sheets">
+        <option value="">-- Select sheet --</option>
+      </select>
+    </div>
+  </div>
 
   <br><br>
   <input type="text" id="existing-config" hidden="hidden"/>

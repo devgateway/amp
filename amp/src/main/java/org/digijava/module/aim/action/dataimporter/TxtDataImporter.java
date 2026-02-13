@@ -102,6 +102,7 @@ public class TxtDataImporter {
             String projectCode= row.get(getKey(config, "Project Code"));
             String projectTitle= row.get(getKey(config, "Project Title"));
             String projectDesc= row.get(getKey(config, "Project Description"));
+            String objective= row.get(getKey(config, "Objective"));
             String primarySubSector= row.get(getKey(config, "Primary Subsector"));
             String secondarySubSector= row.get(getKey(config, "Secondary Subsector"));
             AmpActivityVersion existing = existingActivity(projectTitle,projectCode,session);
@@ -113,6 +114,7 @@ public class TxtDataImporter {
             }
 
             importDataModel.setProject_title(projectTitle);
+            importDataModel.setObjective(objective);
             importDataModel.setProject_code(projectCode);
             importDataModel.setDescription(projectDesc);
 

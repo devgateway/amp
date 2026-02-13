@@ -1,11 +1,34 @@
 package org.digijava.module.aim.action.dataimporter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-import com.opencsv.exceptions.CsvValidationException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -16,11 +39,16 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
+import static org.digijava.module.aim.action.dataimporter.ExcelImporter.processExcelFileInBatches;
 import org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfig;
 import org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfigValues;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.digijava.module.aim.action.dataimporter.util.ImportedFileUtil;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.ConstantsMap;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.isFileContentValid;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.isFileReadable;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.removeMapItem;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -28,22 +56,12 @@ import org.hibernate.type.StringType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.nio.file.Files;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.digijava.module.aim.action.dataimporter.ExcelImporter.processExcelFileInBatches;
-import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvValidationException;
 
 public class DataImporter extends Action {
     static Logger logger = LoggerFactory.getLogger(DataImporter.class);
@@ -81,59 +99,87 @@ public class DataImporter extends Action {
             logger.info(" this is the action " + request.getParameter("action"));
             if (request.getParameter("uploadTemplate") != null) {
                 logger.info(" this is the action " + request.getParameter("uploadTemplate"));
-                Set<String> headersSet = new HashSet<>();
+                response.setCharacterEncoding("UTF-8");
+                dataImporterForm.getColumnPairs().clear();
 
                 if (request.getParameter("fileType") != null) {
                     InputStream fileInputStream = dataImporterForm.getTemplateFile().getInputStream();
-                    if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
-                        Workbook workbook = new XSSFWorkbook(fileInputStream);
-                        int numberOfSheets = workbook.getNumberOfSheets();
-                        for (int i = 0; i < numberOfSheets; i++) {
-                            Sheet sheet = workbook.getSheetAt(i);
-                            Row headerRow = sheet.getRow(0);
-                            Iterator<Cell> cellIterator = headerRow.cellIterator();
-                            while (cellIterator.hasNext()) {
-                                Cell cell = cellIterator.next();
-                                headersSet.add(cell.getStringCellValue());
+                    if (Objects.equals(request.getParameter("fileType"), "excel")) {
+                        // Excel: return sheet names and columns per sheet for template configuration
+                        List<String> sheetNames = new ArrayList<>();
+                        Map<String, List<String>> columnsBySheet = new HashMap<>();
+                        try (Workbook workbook = new XSSFWorkbook(fileInputStream)) {
+                            int numberOfSheets = workbook.getNumberOfSheets();
+                            for (int i = 0; i < numberOfSheets; i++) {
+                                Sheet sheet = workbook.getSheetAt(i);
+                                String sheetName = sheet.getSheetName();
+                                sheetNames.add(sheetName);
+                                List<String> columns = new ArrayList<>();
+                                Row headerRow = sheet.getRow(0);
+                                if (headerRow != null) {
+                                    Iterator<Cell> cellIterator = headerRow.cellIterator();
+                                    while (cellIterator.hasNext()) {
+                                        Cell cell = cellIterator.next();
+                                        String val = cell.getStringCellValue();
+                                        if (val != null && !val.trim().isEmpty()) {
+                                            columns.add(val.trim());
+                                        }
+                                    }
+                                }
+                                columnsBySheet.put(sheetName, columns.stream().sorted().collect(Collectors.toList()));
                             }
-
                         }
-                        workbook.close();
-
-
-                    } else if (Objects.equals(request.getParameter("fileType"), "text")) {
-                        CSVParser parser = new CSVParserBuilder().withSeparator(request.getParameter("dataSeparator").charAt(0)).build();
-
-                        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(fileInputStream)).withCSVParser(parser).build()) {
-                            String[] headers = reader.readNext(); // Read the first line which contains headers
-
+                        Map<String, Object> jsonResponse = new HashMap<>();
+                        jsonResponse.put("sheetNames", sheetNames);
+                        jsonResponse.put("columnsBySheet", columnsBySheet);
+                        response.setContentType("application/json");
+                        new ObjectMapper().writeValue(response.getWriter(), jsonResponse);
+                    } else if (Objects.equals(request.getParameter("fileType"), "csv")) {
+                        Set<String> headersSet = new HashSet<>();
+                        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(fileInputStream)).build()) {
+                            String[] headers = reader.readNext();
                             if (headers != null) {
-                                // Print each header
+                                headersSet.addAll(Arrays.asList(headers));
+                            }
+                        } catch (IOException | CsvValidationException e) {
+                            logger.error("An error occurred during extraction of headers.", e);
+                        }
+                        headersSet = headersSet.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+                        StringBuilder headers = new StringBuilder();
+                        headers.append("  <label for=\"columnName\">Select Column Name:</label>\n<select  class=\"select2\" style=\"width: 300px;\" id=\"columnName\">");
+                        for (String option : headersSet) {
+                            headers.append("<option>").append(option).append("</option>");
+                        }
+                        headers.append("</select>");
+                        response.setContentType("text/html;charset=UTF-8");
+                        response.getWriter().write(headers.toString());
+                    } else if (Objects.equals(request.getParameter("fileType"), "text")) {
+                        Set<String> headersSet = new HashSet<>();
+                        String sep = request.getParameter("dataSeparator");
+                        char separator = (sep != null && !sep.isEmpty()) ? sep.charAt(0) : ',';
+                        CSVParser parser = new CSVParserBuilder().withSeparator(separator).build();
+                        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(fileInputStream)).withCSVParser(parser).build()) {
+                            String[] headers = reader.readNext();
+                            if (headers != null) {
                                 headersSet.addAll(Arrays.asList(headers));
                             } else {
                                 logger.info("File is empty or does not contain headers.");
                             }
                         } catch (IOException | CsvValidationException e) {
-                            logger.error("An error occurred during extraction of headers.",e);
+                            logger.error("An error occurred during extraction of headers.", e);
                         }
-
+                        headersSet = headersSet.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+                        StringBuilder headers = new StringBuilder();
+                        headers.append("  <label for=\"columnName\">Select Column Name:</label>\n<select  class=\"select2\" style=\"width: 300px;\" id=\"columnName\">");
+                        for (String option : headersSet) {
+                            headers.append("<option>").append(option).append("</option>");
+                        }
+                        headers.append("</select>");
+                        response.setContentType("text/html;charset=UTF-8");
+                        response.getWriter().write(headers.toString());
                     }
                 }
-                headersSet = headersSet.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
-                StringBuilder headers = new StringBuilder();
-                headers.append("  <label for=\"columnName\">Select Column Name:</label>\n<select  class=\"select2\" style=\"width: 300px;\" id=\"columnName\">");
-                for (String option : headersSet) {
-                    headers.append("<option>").append(option).append("</option>");
-                }
-                headers.append("</select>");
-                response.setCharacterEncoding("UTF-8");
-                response.setContentType("text/html;charset=UTF-8");
-
-                response.getWriter().write(headers.toString());
                 response.setHeader("updatedMap", "");
-
-                dataImporterForm.getColumnPairs().clear();
-
             }
             return null;
         }
@@ -179,6 +225,34 @@ public class DataImporter extends Action {
 
                 return null;
 
+            }
+
+            if (Objects.equals(request.getParameter("action"), "getDataFileSheets")) {
+                logger.info("This is the action getDataFileSheets");
+                if (dataImporterForm.getDataFile() == null || dataImporterForm.getDataFile().getFileSize() == 0) {
+                    response.setStatus(400);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"error\":\"No file provided\"}");
+                    return null;
+                }
+                String fileType = request.getParameter("fileType");
+                if (!Objects.equals(fileType, "excel")) {
+                    response.setContentType("application/json");
+                    new ObjectMapper().writeValue(response.getWriter(), Collections.emptyList());
+                    return null;
+                }
+                List<String> sheetNames = new ArrayList<>();
+                try (InputStream is = dataImporterForm.getDataFile().getInputStream();
+                     Workbook workbook = new XSSFWorkbook(is)) {
+                    int n = workbook.getNumberOfSheets();
+                    for (int i = 0; i < n; i++) {
+                        sheetNames.add(workbook.getSheetAt(i).getSheetName());
+                    }
+                }
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                new ObjectMapper().writeValue(response.getWriter(), sheetNames);
+                return null;
             }
 
             if (Objects.equals(request.getParameter("action"), "uploadDataFile")) {
@@ -245,9 +319,11 @@ public class DataImporter extends Action {
                     }
                     logger.info("Configuration"+ dataImporterForm.getColumnPairs());
                     if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
-
+                        String dataSheetChoice = request.getParameter("dataSheetChoice");
+                        String dataSheetName = request.getParameter("dataSheetName");
+                        boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
                         // Process the file in batches
-                         res = processExcelFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs(), isInternal);
+                         res = processExcelFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs(), isInternal, useSpecificSheet ? dataSheetName : null);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
                         res=TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs(), isInternal);
                     }
@@ -388,6 +464,7 @@ public class DataImporter extends Action {
         List<String> fieldsInfos = new ArrayList<>();
         fieldsInfos.add("Project Title");
         fieldsInfos.add("Project Code");
+        fieldsInfos.add("Objective");
         fieldsInfos.add("Project Description");
         fieldsInfos.add("Primary Sector");
         fieldsInfos.add("Secondary Sector");

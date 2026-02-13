@@ -107,6 +107,21 @@ public class IndicatorManagerService {
                 ApiError.toError("Indicator with name " + name + " and program name " + programName + " not found"));
     }
 
+    /**
+     * Returns the indicator by name and optional program name, or null if not found.
+     * Use this when you need to look up an indicator without throwing (e.g. data import).
+     */
+    public MEIndicatorDTO getMeIndicatorByNameAndProgramNameOptional(String name, String programName) {
+        if (name == null || name.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            return getMeIndicatorByNameAndProgramName(name.trim(), programName != null && !programName.trim().isEmpty() ? programName.trim() : null);
+        } catch (ApiRuntimeException e) {
+            return null;
+        }
+    }
+
     public MEIndicatorDTO createMEIndicator(final MEIndicatorDTO indicatorRequest) {
         Session session = PersistenceManager.getSession();
         AmpIndicator indicator = new AmpIndicator();

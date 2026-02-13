@@ -31,6 +31,7 @@ import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.exis
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.getColumnIndexByName;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.getKey;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.getStringValueFromCell;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.addIndicatorDataToActivity;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.importTheData;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.setAFundingItemForExcel;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.setStatus;
@@ -278,8 +279,14 @@ public class ExcelImporter {
                 }
 
 
-                importTheData(importDataModel, session, importedProject, componentName, componentCode, responsibleOrgId, fundings, existing);
-
+                Long activityId = importTheData(importDataModel, session, importedProject, componentName, componentCode, responsibleOrgId, fundings, existing);
+                if (activityId != null && config.containsValue("Indicator Name")) {
+                    try {
+                        addIndicatorDataToActivity(activityId, row, sheet, config, session);
+                    } catch (Exception e) {
+                        logger.error("Failed to add indicator data for activity " + activityId, e);
+                    }
+                }
             }
         }
     }

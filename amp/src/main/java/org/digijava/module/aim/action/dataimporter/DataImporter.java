@@ -494,6 +494,21 @@ public class DataImporter extends Action {
         fieldsInfos.add("Component Name");
         fieldsInfos.add("Component Code");
         fieldsInfos.add("Beneficiary Agency");
+        // Indicator columns for M&E import
+        fieldsInfos.add("Indicator Name");
+        fieldsInfos.add("Program Name");
+        fieldsInfos.add("Location");
+        fieldsInfos.add("Original Base Value");
+        fieldsInfos.add("Original Base Value Date");
+        fieldsInfos.add("Revised Base Value");
+        fieldsInfos.add("Revised Base Value Date");
+        fieldsInfos.add("Original Target Value");
+        fieldsInfos.add("Original Target Value Date");
+        fieldsInfos.add("Revised Target Value");
+        fieldsInfos.add("Revised Target Value Date");
+        fieldsInfos.add("Actual Value");
+        fieldsInfos.add("Actual Value Date");
+        fieldsInfos.add("Unit of Measure");
         return fieldsInfos.stream().sorted().collect(Collectors.toList());
     }
 

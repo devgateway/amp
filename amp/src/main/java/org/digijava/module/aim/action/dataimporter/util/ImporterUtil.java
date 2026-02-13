@@ -13,6 +13,8 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
@@ -20,6 +22,7 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProjectCurre
 import org.digijava.module.aim.action.dataimporter.model.*;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Query;
@@ -571,14 +574,27 @@ public class ImporterUtil {
         if (!session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
-        String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +
-                "WHERE a.name = :name";
-        Query query = session.createQuery(hql);
-        query.setCacheable(true);
-        query.setParameter("name", projectTitle, StringType.INSTANCE);
-//        query.setString("projectCode", projectCode);
-        List<AmpActivityVersion> ampActivityVersions = query.list();
-        return !ampActivityVersions.isEmpty() ? ampActivityVersions.get(ampActivityVersions.size() - 1) : null;
+        // Prefer project code if provided
+        if (projectCode != null && !projectCode.trim().isEmpty()) {
+            String hqlByCode = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a WHERE a.projectCode = :projectCode";
+            Query queryByCode = session.createQuery(hqlByCode);
+            queryByCode.setCacheable(true);
+            queryByCode.setParameter("projectCode", projectCode.trim(), StringType.INSTANCE);
+            List<AmpActivityVersion> byCode = queryByCode.list();
+            if (!byCode.isEmpty()) {
+                return byCode.get(byCode.size() - 1);
+            }
+        }
+        // Fall back to project title (name)
+        if (projectTitle != null && !projectTitle.trim().isEmpty()) {
+            String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a WHERE a.name = :name";
+            Query query = session.createQuery(hql);
+            query.setCacheable(true);
+            query.setParameter("name", projectTitle.trim(), StringType.INSTANCE);
+            List<AmpActivityVersion> ampActivityVersions = query.list();
+            return !ampActivityVersions.isEmpty() ? ampActivityVersions.get(ampActivityVersions.size() - 1) : null;
+        }
+        return null;
     }
 
     public static void setStatus(ImportDataModel importDataModel) {
@@ -587,7 +603,8 @@ public class ImporterUtil {
         importDataModel.setApproval_status(ApprovalStatus.started.getId());
     }
 
-    public static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, AmpActivityVersion existing) throws JsonProcessingException {
+    /** @return activity ID on success, null on skip or failure */
+    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, AmpActivityVersion existing) throws JsonProcessingException {
         if (!session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
@@ -605,7 +622,7 @@ public class ImporterUtil {
         if (importDataModel.getProject_title().trim().isEmpty() && importDataModel.getProject_code().trim().isEmpty()) {
             logger.info("Project title and code are empty. Skipping import");
             importedProject.setImportStatus(ImportStatus.SKIPPED);
-            return;
+            return null;
         }
         if (existing == null) {
             logger.info("New activity");
@@ -627,20 +644,19 @@ public class ImporterUtil {
                     });
             response = ActivityInterchangeUtils.importActivity(map, true, rules, "activity/update");
         }
+        Long activityId = null;
         if (response != null) {
             if (!response.getErrors().isEmpty()) {
                 importedProject.setImportStatus(ImportStatus.FAILED);
             } else {
                 importedProject.setImportStatus(ImportStatus.SUCCESS);
+                activityId = existing != null ? existing.getAmpActivityId() : (Long) response.getContent().getAmpActivityId();
                 logger.info("Successfully imported the project. Now adding component if present");
                 logger.info("--------------------------------");
                 logger.info("Component name at start: " + componentName);
                 if (componentName != null && !componentName.isEmpty()) {
                     addComponentsAndProjectCode(response, componentName, componentCode, responsibleOrgId, fundings, importDataModel.getProject_code());
                 }
-//                logger.info("Updating expenditures ................");
-//                updateExpendituresIfAny(response);
-
             }
         }
 
@@ -653,6 +669,7 @@ public class ImporterUtil {
         session.flush();
 
         logger.info("Imported project: " + importedProject);
+        return activityId;
     }
 
     private static void updateFundingOrgsAndSectorsWithAlreadyExisting(AmpActivityVersion ampActivityVersion, ImportDataModel importDataModel) {
@@ -1222,5 +1239,172 @@ public class ImporterUtil {
             return -1;
         }
 
+    }
+
+    /** Parse date from Excel cell or string; returns today if null/empty/invalid. */
+    public static Date parseDateDefaultToday(Row row, Sheet sheet, Map<String, String> config, String columnName) {
+        String key = getKey(config, columnName);
+        if (key == null) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        int col = getColumnIndexByName(sheet, key);
+        if (col < 0) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Cell cell = row.getCell(col);
+        if (cell == null) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        String dateStr = extractDateFromStringCell(cell);
+        if (dateStr == null || dateStr.isEmpty()) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        try {
+            return java.sql.Date.valueOf(dateStr);
+        } catch (Exception e) {
+            return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        }
+    }
+
+    /** Add indicator data to an activity from the current row. Called after importTheData when indicator columns are mapped. */
+    public static void addIndicatorDataToActivity(Long activityId, Row row, Sheet sheet, Map<String, String> config, Session session) {
+        if (activityId == null || config == null || row == null || sheet == null) return;
+        if (getKey(config, "Indicator Name") == null || getKey(config, "Location") == null || getKey(config, "Actual Value") == null) {
+            return;
+        }
+        String indicatorName = getCellValueByConfig(row, sheet, config, "Indicator Name");
+        String locationName = getCellValueByConfig(row, sheet, config, "Location");
+        if (indicatorName == null || indicatorName.trim().isEmpty() || locationName == null || locationName.trim().isEmpty()) {
+            return;
+        }
+        indicatorName = indicatorName.trim();
+        locationName = locationName.trim();
+        String programName = getCellValueByConfig(row, sheet, config, "Program Name");
+        if (programName != null) programName = programName.trim();
+
+        IndicatorManagerService indicatorService = new IndicatorManagerService();
+        MEIndicatorDTO indicatorDto = indicatorService.getMeIndicatorByNameAndProgramNameOptional(indicatorName, (programName == null || programName.isEmpty()) ? null : programName);
+        AmpIndicator indicator;
+        if (indicatorDto == null) {
+            MEIndicatorDTO createDto = new MEIndicatorDTO();
+            createDto.setName(indicatorName);
+            createDto.setCode(indicatorName + "_" + System.currentTimeMillis());
+            createDto.setCreationDate(new Date());
+            createDto.setAscending(true);
+            createDto.setSectorIds(new ArrayList<>());
+            if (programName != null && !programName.isEmpty()) {
+                try {
+                    AmpTheme theme = ProgramUtil.getTheme(programName);
+                    if (theme != null && theme.getAmpThemeId() != null) createDto.setProgramId(theme.getAmpThemeId());
+                } catch (Exception e) {
+                    logger.warn("Could not resolve program by name: " + programName, e);
+                }
+            }
+            try {
+                indicatorDto = indicatorService.createMEIndicator(createDto);
+            } catch (Exception e) {
+                logger.error("Failed to create indicator: " + indicatorName, e);
+                return;
+            }
+            indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorDto.getId());
+        } else {
+            indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorDto.getId());
+        }
+        if (indicator == null) return;
+
+        AmpActivityVersion activity = (AmpActivityVersion) session.get(AmpActivityVersion.class, activityId);
+        if (activity == null) return;
+        AmpActivityLocation activityLocation = null;
+        if (activity.getLocations() != null) {
+            for (AmpActivityLocation aal : activity.getLocations()) {
+                if (aal.getLocation() != null && locationName.equalsIgnoreCase(aal.getLocation().getName())) {
+                    activityLocation = aal;
+                    break;
+                }
+            }
+        }
+
+        IndicatorActivity ia = new IndicatorActivity();
+        ia.setActivity(activity);
+        ia.setIndicator(indicator);
+        if (activityLocation != null) ia.setActivityLocation(activityLocation);
+
+        AmpIndicatorGlobalValue existingBase = indicator.getBaseValue();
+
+        double origBase = parseDoubleFromConfig(row, sheet, config, "Original Base Value");
+        boolean hasOrigBase = getKey(config, "Original Base Value") != null && !Double.isNaN(origBase);
+        double revBase = parseDoubleFromConfig(row, sheet, config, "Revised Base Value");
+        boolean hasRevBase = getKey(config, "Revised Base Value") != null && !Double.isNaN(revBase);
+        double origTarget = parseDoubleFromConfig(row, sheet, config, "Original Target Value");
+        double revTarget = parseDoubleFromConfig(row, sheet, config, "Revised Target Value");
+        double actualVal = parseDoubleFromConfig(row, sheet, config, "Actual Value");
+        if (Double.isNaN(actualVal)) actualVal = 0.0;
+
+        Date origBaseDate = parseDateDefaultToday(row, sheet, config, "Original Base Value Date");
+        Date revBaseDate = parseDateDefaultToday(row, sheet, config, "Revised Base Value Date");
+        Date origTargetDate = parseDateDefaultToday(row, sheet, config, "Original Target Value Date");
+        Date revTargetDate = parseDateDefaultToday(row, sheet, config, "Revised Target Value Date");
+        Date actualDate = parseDateDefaultToday(row, sheet, config, "Actual Value Date");
+
+        double baseOrigVal = hasOrigBase ? origBase : (existingBase != null && existingBase.getOriginalValue() != null ? existingBase.getOriginalValue() : 0.0);
+        double baseRevVal = hasRevBase ? revBase : (existingBase != null && existingBase.getRevisedValue() != null ? existingBase.getRevisedValue() : 0.0);
+        double targetOrigVal = Double.isNaN(origTarget) ? 0.0 : origTarget;
+        double targetRevVal = Double.isNaN(revTarget) ? 0.0 : revTarget;
+
+        Set<AmpIndicatorValue> values = new HashSet<>();
+        if (getKey(config, "Original Base Value") != null || getKey(config, "Revised Base Value") != null || existingBase != null) {
+            AmpIndicatorValue baseOrig = new AmpIndicatorValue(AmpIndicatorValue.BASE);
+            baseOrig.setValue(baseOrigVal);
+            baseOrig.setValueDate(origBaseDate);
+            baseOrig.setIndicatorConnection(ia);
+            values.add(baseOrig);
+            AmpIndicatorValue baseRev = new AmpIndicatorValue(AmpIndicatorValue.REVISED);
+            baseRev.setValue(baseRevVal);
+            baseRev.setValueDate(revBaseDate);
+            baseRev.setIndicatorConnection(ia);
+            values.add(baseRev);
+        }
+        if (getKey(config, "Original Target Value") != null || getKey(config, "Revised Target Value") != null) {
+            AmpIndicatorValue tOrig = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
+            tOrig.setValue(targetOrigVal);
+            tOrig.setValueDate(origTargetDate);
+            tOrig.setIndicatorConnection(ia);
+            values.add(tOrig);
+            AmpIndicatorValue tRev = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
+            tRev.setValue(targetRevVal);
+            tRev.setValueDate(revTargetDate);
+            tRev.setIndicatorConnection(ia);
+            values.add(tRev);
+        }
+        AmpIndicatorValue actual = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
+        actual.setValue(actualVal);
+        actual.setValueDate(actualDate);
+        actual.setIndicatorConnection(ia);
+        String unit = getCellValueByConfig(row, sheet, config, "Unit of Measure");
+        if (unit != null && !unit.trim().isEmpty()) actual.setComment("Unit: " + unit.trim());
+        values.add(actual);
+
+        ia.setValues(values);
+        if (activity.getIndicators() == null) activity.setIndicators(new HashSet<>());
+        activity.getIndicators().add(ia);
+        session.save(ia);
+        session.flush();
+    }
+
+    private static String getCellValueByConfig(Row row, Sheet sheet, Map<String, String> config, String fieldName) {
+        String key = getKey(config, fieldName);
+        if (key == null) return null;
+        int col = getColumnIndexByName(sheet, key);
+        if (col < 0) return null;
+        return getStringValueFromCell(row.getCell(col), true);
+    }
+
+    private static double parseDoubleFromConfig(Row row, Sheet sheet, Map<String, String> config, String fieldName) {
+        String key = getKey(config, fieldName);
+        if (key == null) return Double.NaN;
+        int col = getColumnIndexByName(sheet, key);
+        if (col < 0) return Double.NaN;
+        Cell cell = row.getCell(col);
+        if (cell == null) return Double.NaN;
+        try {
+            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) return cell.getNumericCellValue();
+            String s = getStringValueFromCell(cell, true);
+            if (s == null || s.trim().isEmpty()) return Double.NaN;
+            return Double.parseDouble(s.trim());
+        } catch (Exception e) {
+            return Double.NaN;
+        }
     }
 }

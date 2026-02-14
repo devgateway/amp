@@ -9,6 +9,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
@@ -22,6 +23,7 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProjectCurre
 import org.digijava.module.aim.action.dataimporter.model.*;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -1274,6 +1276,15 @@ public class ImporterUtil {
         String programName = getCellValueByConfig(row, sheet, config, "Program Name");
         if (programName != null) programName = programName.trim();
 
+        AmpTheme programTheme = null;
+        if (programName != null && !programName.isEmpty()) {
+            try {
+                programTheme = getOrCreateProgramByName(programName, session);
+            } catch (Exception e) {
+                logger.warn("Could not resolve or create program by name: " + programName, e);
+            }
+        }
+
         IndicatorManagerService indicatorService = new IndicatorManagerService();
         MEIndicatorDTO indicatorDto = indicatorService.getMeIndicatorByNameAndProgramNameOptional(indicatorName, (programName == null || programName.isEmpty()) ? null : programName);
         AmpIndicator indicator;
@@ -1284,13 +1295,8 @@ public class ImporterUtil {
             createDto.setCreationDate(new Date());
             createDto.setAscending(true);
             createDto.setSectorIds(new ArrayList<>());
-            if (programName != null && !programName.isEmpty()) {
-                try {
-                    AmpTheme theme = ProgramUtil.getTheme(programName);
-                    if (theme != null && theme.getAmpThemeId() != null) createDto.setProgramId(theme.getAmpThemeId());
-                } catch (Exception e) {
-                    logger.warn("Could not resolve program by name: " + programName, e);
-                }
+            if (programTheme != null && programTheme.getAmpThemeId() != null) {
+                createDto.setProgramId(programTheme.getAmpThemeId());
             }
             try {
                 indicatorDto = indicatorService.createMEIndicator(createDto);
@@ -1298,14 +1304,19 @@ public class ImporterUtil {
                 logger.error("Failed to create indicator: " + indicatorName, e);
                 return;
             }
-            indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorDto.getId());
+            indicator = session.get(AmpIndicator.class, indicatorDto.getId());
         } else {
-            indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorDto.getId());
+            indicator = session.get(AmpIndicator.class, indicatorDto.getId());
         }
         if (indicator == null) return;
 
-        AmpActivityVersion activity = (AmpActivityVersion) session.get(AmpActivityVersion.class, activityId);
+        AmpActivityVersion activity = session.get(AmpActivityVersion.class, activityId);
         if (activity == null) return;
+
+        if (programTheme != null) {
+            addProgramToActivityIfMissing(activity, programTheme, session);
+        }
+
         AmpActivityLocation activityLocation = null;
         if (activity.getLocations() != null) {
             for (AmpActivityLocation aal : activity.getLocations()) {
@@ -1381,6 +1392,77 @@ public class ImporterUtil {
         activity.getIndicators().add(ia);
         session.save(ia);
         session.flush();
+    }
+
+    /**
+     * Adds the program (theme) to the activity's programs if not already present.
+     * When the Program Percentage field is enabled, percentages are recalculated and
+     * divided evenly among all activity programs (including the one just added).
+     */
+    public static void addProgramToActivityIfMissing(AmpActivityVersion activity, AmpTheme program, Session session) {
+        if (activity == null || program == null) return;
+        Set<AmpActivityProgram> actPrograms = activity.getActPrograms();
+        if (actPrograms == null) {
+            actPrograms = new HashSet<>();
+            activity.setActPrograms(actPrograms);
+        }
+        for (AmpActivityProgram ap : actPrograms) {
+            if (ap.getProgram() != null && program.getAmpThemeId() != null
+                    && program.getAmpThemeId().equals(ap.getProgram().getAmpThemeId())) {
+                return;
+            }
+        }
+        AmpActivityProgram activityProgram = new AmpActivityProgram();
+        activityProgram.setActivity(activity);
+        activityProgram.setProgram(program);
+        activityProgram.setProgramPercentage(100f);
+        actPrograms.add(activityProgram);
+        session.save(activityProgram);
+
+        // If Program Percentage field is enabled, distribute 100% evenly among all programs
+        boolean percentageEnabled = false;
+        try {
+            percentageEnabled = FeaturesUtil.isVisibleField(ArConstants.PROGRAM_PERCENTAGE);
+        } catch (Exception e) {
+            // No request/session (e.g. batch) – skip percentage redistribution
+            logger.error("Could not determine if Program Percentage field is enabled; skipping percentage redistribution", e);
+        }
+        if (percentageEnabled && !actPrograms.isEmpty()) {
+            List<AmpActivityProgram> list = new ArrayList<>(actPrograms);
+            int n = list.size();
+            Map<Integer, Float> percentages = divide100(n);
+            for (int i = 0; i < n; i++) {
+                list.get(i).setProgramPercentage(percentages.get(i));
+            }
+        }
+    }
+
+    /**
+     * Returns the program (theme) by name, or creates a new root-level program if it does not exist.
+     * @param programName program name (must be non-empty)
+     * @param session current session (used for create and flush)
+     * @return AmpTheme or null if programName is null/empty or creation fails
+     */
+    public static AmpTheme getOrCreateProgramByName(String programName, Session session) {
+        if (programName == null || programName.trim().isEmpty()) return null;
+        programName = programName.trim();
+        AmpTheme theme = ProgramUtil.getTheme(programName);
+        if (theme != null) return theme;
+        try {
+            AmpTheme newTheme = new AmpTheme();
+            newTheme.setName(programName);
+            String code = programName.replaceAll("[^a-zA-Z0-9_-]", "_").replaceAll("_+", "_").trim();
+            if (code.length() > 45) code = code.substring(0, 45);
+            newTheme.setThemeCode("IMP_" + code + "_" + System.currentTimeMillis());
+            newTheme.setIndlevel(0);
+            newTheme.setParentThemeId(null);
+            session.save(newTheme);
+            session.flush();
+            return newTheme;
+        } catch (Exception e) {
+            logger.warn("Failed to create program: " + programName, e);
+            return null;
+        }
     }
 
     private static String getCellValueByConfig(Row row, Sheet sheet, Map<String, String> config, String fieldName) {

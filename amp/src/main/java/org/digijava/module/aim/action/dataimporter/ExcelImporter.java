@@ -173,7 +173,6 @@ public class ExcelImporter {
                 importDataModel.setIs_draft(true);
                 OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
                 importDataModel.setCreation_date(now.format(formatter));
-                setStatus(importDataModel);
 
                 int componentCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.COMPONENT_CODE));
                 String componentCode = componentCodeColumn >= 0 ? getStringValueFromCell(row.getCell(componentCodeColumn),true) : null;
@@ -207,6 +206,17 @@ public class ExcelImporter {
                 int projectDescColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PROJECT_DESCRIPTION));
                 String projectDesc = projectDescColumn >= 0 ? getStringValueFromCell(row.getCell(projectDescColumn),false) : null;
                 importDataModel.setDescription(projectDesc);
+
+                if (config.containsValue(ImporterConstants.PROJECT_STATUS)) {
+                    String projectStatusStr = ImporterUtil.getCellValueByConfig(row, sheet, config, ImporterConstants.PROJECT_STATUS);
+                    if (projectStatusStr != null && !projectStatusStr.trim().isEmpty()) {
+                        Long statusId = ImporterUtil.getOrCreateActivityStatusCategoryValue(projectStatusStr.trim(), session);
+                        if (statusId != null) {
+                            importDataModel.setActivity_status(statusId);
+                        }
+                    }
+                }
+                setStatus(importDataModel);
 
                 AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
                 Long responsibleOrgId = null;
@@ -282,6 +292,8 @@ public class ExcelImporter {
                                 break;
                             case ImporterConstants.MEASURE_TYPE:
                                 break;
+                            case ImporterConstants.PROJECT_STATUS:
+                                break;
                             case ImporterConstants.REPORTING_DATE:
                             default:
                                 logger.error("Unexpected value: " + entry.getValue());
@@ -295,7 +307,6 @@ public class ExcelImporter {
 
 
                 }
-
 
                 Long activityId = importTheData(importDataModel, session, importedProject, componentName, componentCode, responsibleOrgId, fundings, existing);
                 if (activityId != null && config.containsValue(ImporterConstants.INDICATOR_NAME)) {

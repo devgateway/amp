@@ -98,7 +98,6 @@ public class TxtDataImporter {
             importDataModel.setIs_draft(true);
             OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             importDataModel.setCreation_date(now.format(formatter));
-            setStatus(importDataModel);
             String componentName= row.get(getKey(config, ImporterConstants.COMPONENT_NAME));
             String componentCode= row.get(getKey(config, ImporterConstants.COMPONENT_CODE));
             String projectCode= row.get(getKey(config, ImporterConstants.PROJECT_CODE));
@@ -107,6 +106,7 @@ public class TxtDataImporter {
             String objective= row.get(getKey(config, ImporterConstants.OBJECTIVE));
             String primarySubSector= row.get(getKey(config, ImporterConstants.PRIMARY_SUBSECTOR));
             String secondarySubSector= row.get(getKey(config, ImporterConstants.SECONDARY_SUBSECTOR));
+            String projectStatusStr = row.get(getKey(config, ImporterConstants.PROJECT_STATUS));
             AmpActivityVersion existing = existingActivity(projectTitle,projectCode,session);
             if (existing!=null && SKIP_EXISTING)
             {
@@ -119,6 +119,14 @@ public class TxtDataImporter {
             importDataModel.setObjective(objective);
             importDataModel.setProject_code(projectCode);
             importDataModel.setDescription(projectDesc);
+
+            if (projectStatusStr != null && !projectStatusStr.trim().isEmpty()) {
+                Long statusId = getOrCreateActivityStatusCategoryValue(projectStatusStr.trim(), session);
+                if (statusId != null) {
+                    importDataModel.setActivity_status(statusId);
+                }
+            }
+            setStatus(importDataModel);
 
             String donorAgencyCode= row.get(getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
             String responsibleOrgCode= row.get(getKey(config, ImporterConstants.RESPONSIBLE_ORGANIZATION_CODE));
@@ -181,6 +189,8 @@ public class TxtDataImporter {
                         setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, false,true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
                         break;
                     case ImporterConstants.MEASURE_TYPE:
+                        break;
+                    case ImporterConstants.PROJECT_STATUS:
                         break;
                     default:
                         logger.error("Unexpected value: " + entry.getValue());

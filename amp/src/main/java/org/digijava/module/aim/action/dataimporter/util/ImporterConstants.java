@@ -55,6 +55,7 @@ public final class ImporterConstants {
     public static final String COMPONENT_CODE = "Component Code";
 
     public static final String REPORTING_DATE = "Reporting Date";
+    public static final String PROJECT_STATUS = "Project Status";
 
     // ----- Indicator (M&E) columns -----
     public static final String INDICATOR_NAME = "Indicator Name";

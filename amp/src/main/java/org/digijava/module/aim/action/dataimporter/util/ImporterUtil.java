@@ -25,8 +25,10 @@ import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.type.StringType;
@@ -618,6 +620,64 @@ public class ImporterUtil {
         return categoryId;
     }
 
+    /**
+     * Resolves activity (project) status by value: looks up existing category value for ACTIVITY_STATUS_KEY;
+     * if not found in DB, creates a new category value and returns its id.
+     * @param statusValue value from the file (e.g. "Ongoing", "Completed")
+     * @param session current session (used for create and flush)
+     * @return category value id, or null if statusValue is null/empty
+     */
+    public static Long getOrCreateActivityStatusCategoryValue(String statusValue, Session session) {
+        if (statusValue == null || statusValue.trim().isEmpty()) return null;
+        String trimmed = statusValue.trim();
+        String cacheKey = "statusId_" + trimmed;
+        if (ConstantsMap.containsKey(cacheKey)) {
+            return ConstantsMap.get(cacheKey);
+        }
+        if (!session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
+        String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
+        Query query = session.createQuery(hql);
+        query.setParameter("categoryKey", CategoryConstants.ACTIVITY_STATUS_KEY);
+        @SuppressWarnings("unchecked")
+        List<AmpCategoryValue> values = (List<AmpCategoryValue>) query.list();
+        if (values != null) {
+            for (AmpCategoryValue cv : values) {
+                if (cv.getValue() != null && cv.getValue().equalsIgnoreCase(trimmed)) {
+                    Long id = cv.getId();
+                    ConstantsMap.put(cacheKey, id);
+                    return id;
+                }
+            }
+        }
+        AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
+        if (categoryClass == null) {
+            logger.warn("Activity status category class not found; cannot create value: " + trimmed);
+            return null;
+        }
+        try {
+            AmpCategoryValue newValue = new AmpCategoryValue();
+            newValue.setValue(trimmed);
+            newValue.setAmpCategoryClass(categoryClass);
+            if (categoryClass.getPossibleValues() == null) {
+                categoryClass.setPossibleValues(new java.util.ArrayList<>());
+            }
+            newValue.setIndex(categoryClass.getPossibleValues().size());
+            session.save(newValue);
+            session.flush();
+            Long id = newValue.getId();
+            if (id != null) {
+                ConstantsMap.put(cacheKey, id);
+                logger.info("Created new activity status category value: " + trimmed + " (id=" + id + ")");
+                return id;
+            }
+        } catch (Exception e) {
+            logger.warn("Failed to create activity status value: " + trimmed, e);
+        }
+        return null;
+    }
+
     public static AmpActivityVersion existingActivity(String projectTitle, String projectCode, Session session) {
         if ((projectTitle == null || projectTitle.trim().isEmpty()) &&
                 (projectCode == null || projectCode.trim().isEmpty())) {
@@ -649,9 +709,15 @@ public class ImporterUtil {
         return null;
     }
 
+    /**
+     * Sets default activity status and approval status on the import model.
+     * If activity_status is already set (e.g. from Project Status column), it is left unchanged.
+     */
     public static void setStatus(ImportDataModel importDataModel) {
-        Long statusId = getCategoryValue("statusId", CategoryConstants.ACTIVITY_STATUS_KEY, "");
-        importDataModel.setActivity_status(statusId);
+        if (importDataModel.getActivity_status() == null) {
+            Long statusId = getCategoryValue("statusId", CategoryConstants.ACTIVITY_STATUS_KEY, "");
+            importDataModel.setActivity_status(statusId);
+        }
         importDataModel.setApproval_status(ApprovalStatus.started.getId());
     }
 

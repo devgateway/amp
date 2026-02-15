@@ -38,8 +38,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -74,19 +72,19 @@ public class ImporterUtil {
 
     public static Funding setAFundingItemForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, boolean expenditure, String
             adjustmentType, Funding fundingItem, AmpActivityVersion existingActivity) {
-        int detailColumn = getColumnIndexByName(sheet, getKey(config, "Financing Instrument"));
+        int detailColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.FINANCING_INSTRUMENT));
         String finInstrument = detailColumn >= 0 ? getStringValueFromCell(row.getCell(detailColumn), false) : "";
 
-        detailColumn = getColumnIndexByName(sheet, getKey(config, "Exchange Rate"));
+        detailColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.EXCHANGE_RATE));
         String exchangeRate = detailColumn >= 0 ? getStringValueFromCell(row.getCell(detailColumn), false) : "";
         Double exchangeRateValue = !exchangeRate.isEmpty() ? parseDouble(exchangeRate) : Double.valueOf(0.0);
 
-        detailColumn = getColumnIndexByName(sheet, getKey(config, "Type Of Assistance"));
+        detailColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.TYPE_OF_ASSISTANCE));
         String typeOfAss = detailColumn >= 0 ? getStringValueFromCell(row.getCell(detailColumn), false) : "";
-        int separateFundingDateColumn = getColumnIndexByName(sheet, getKey(config, "Transaction Date"));
+        int separateFundingDateColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.TRANSACTION_DATE));
         String separateFundingDate = separateFundingDateColumn >= 0 ? getDateFromExcel(row, separateFundingDateColumn) : null;
 
-        int currencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Currency"));
+        int currencyCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.CURRENCY));
         String currencyCode = currencyCodeColumn >= 0 ? getStringValueFromCell(row.getCell(currencyCodeColumn), true) : CurrencyUtil.getDefaultCurrency().getCurrencyCode();
         if (existingActivity != null) {
             String existingActivityCurrencyCode = getCurrencyCodeFromExistingImported(existingActivity.getName());
@@ -96,15 +94,15 @@ public class ImporterUtil {
         }
         saveCurrencyCode(currencyCode, importDataModel.getProject_title());
         Funding funding;
-        int componentNameColumn = getColumnIndexByName(sheet, getKey(config, "Component Name"));
+        int componentNameColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.COMPONENT_NAME));
         String componentName = componentNameColumn >= 0 ? getStringValueFromCell(row.getCell(componentNameColumn), true) : null;
         if (importDataModel.getDonor_organization() == null || importDataModel.getDonor_organization().isEmpty()) {
-            if (!config.containsValue("Donor Agency")) {
+            if (!config.containsValue(ImporterConstants.DONOR_AGENCY)) {
                 funding = updateFunding(fundingItem, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
 
             } else {
-                int columnIndex1 = getColumnIndexByName(sheet, getKey(config, "Donor Agency"));
-                int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Donor Agency Code"));
+                int columnIndex1 = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY));
+                int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
                 String donorAgencyCode = donorAgencyCodeColumn >= 0 ? getStringValueFromCell(row.getCell(donorAgencyCodeColumn), true) : null;
                 updateOrgs(importDataModel, columnIndex1 >= 0 ? Objects.requireNonNull(getStringValueFromCell(row.getCell(columnIndex1), false)).trim() : "no org", donorAgencyCode, session, "donor");
                 funding = updateFunding(fundingItem, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
@@ -119,17 +117,17 @@ public class ImporterUtil {
 
     public static Funding setAFundingItemForTxt(Map<String, String> row, Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Number value, boolean commitment, boolean disbursement, boolean expenditure, String
             adjustmentType, Funding fundingItem, AmpActivityVersion existingActivity) {
-        String finInstrument = row.get(getKey(config, "Financing Instrument"));
+        String finInstrument = row.get(getKey(config, ImporterConstants.FINANCING_INSTRUMENT));
         finInstrument = finInstrument != null ? finInstrument : "";
 
-        String typeOfAss = row.get(getKey(config, "Type Of Assistance"));
+        String typeOfAss = row.get(getKey(config, ImporterConstants.TYPE_OF_ASSISTANCE));
         typeOfAss = typeOfAss != null ? typeOfAss : "";
         Funding funding;
 
-        String separateFundingDate = row.get(getKey(config, "Transaction Date"));
+        String separateFundingDate = row.get(getKey(config, ImporterConstants.TRANSACTION_DATE));
         separateFundingDate = separateFundingDate != null ? separateFundingDate : "";
 
-        String currencyCode = row.get(getKey(config, "Currency"));
+        String currencyCode = row.get(getKey(config, ImporterConstants.CURRENCY));
         currencyCode = currencyCode != null ? currencyCode : CurrencyUtil.getDefaultCurrency().getCurrencyCode();
         if (existingActivity != null) {
             String existingActivityCurrencyCode = getCurrencyCodeFromExistingImported(existingActivity.getName());
@@ -138,23 +136,23 @@ public class ImporterUtil {
             }
         }
         saveCurrencyCode(currencyCode, importDataModel.getProject_title());
-        String componentName = row.get(getKey(config, "Component Name"));
+        String componentName = row.get(getKey(config, ImporterConstants.COMPONENT_NAME));
         componentName = componentName != null ? componentName : "";
 
 
-        String exchangeRate = row.get(getKey(config, "Exchange Rate"));
+        String exchangeRate = row.get(getKey(config, ImporterConstants.EXCHANGE_RATE));
         exchangeRate = exchangeRate != null ? exchangeRate : "";
 
         Double exchangeRateValue = !exchangeRate.isEmpty() ? parseDouble(exchangeRate) : Double.valueOf(0.0);
 
 
         if (importDataModel.getDonor_organization() == null || importDataModel.getDonor_organization().isEmpty()) {
-            if (!config.containsValue("Donor Agency")) {
+            if (!config.containsValue(ImporterConstants.DONOR_AGENCY)) {
                 funding = updateFunding(fundingItem, importDataModel, value, entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
 
             } else {
-                String donorColumn = row.get(getKey(config, "Donor Agency"));
-                String donorAgencyCode = row.get(getKey(config, "Donor Agency Code"));
+                String donorColumn = row.get(getKey(config, ImporterConstants.DONOR_AGENCY));
+                String donorAgencyCode = row.get(getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
 
                 updateOrgs(importDataModel, donorColumn != null && !donorColumn.isEmpty() ? donorColumn.trim() : "no org", donorAgencyCode, session, "donor");
                 funding = updateFunding(fundingItem, importDataModel, value, entry.getKey(), separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
@@ -389,6 +387,58 @@ public class ImporterUtil {
                 return entry.getKey();
             }
         }
+        return null;
+    }
+
+    /**
+     * Result of parsing a Measure Type string (e.g. "PC - Planned Commitment").
+     * Used to set commitment/disbursement/expenditure and Actual/Planned for funding.
+     */
+    public static class MeasureTypeResult {
+        public final boolean commitment;
+        public final boolean disbursement;
+        public final boolean expenditure;
+        public final String adjustmentType; // "Actual" or "Planned"
+
+        public MeasureTypeResult(boolean commitment, boolean disbursement, boolean expenditure, String adjustmentType) {
+            this.commitment = commitment;
+            this.disbursement = disbursement;
+            this.expenditure = expenditure;
+            this.adjustmentType = adjustmentType;
+        }
+    }
+
+    /**
+     * Parses a Measure Type value from the template (e.g. "PC - Planned Commitment", "AC", or "Actual Commitment").
+     * @return MeasureTypeResult or null if not recognized
+     */
+    public static MeasureTypeResult parseMeasureType(String value) {
+        if (value == null) return null;
+        String s = value.trim();
+        if (s.isEmpty()) return null;
+        // AC / PC / AD / PD / AE / PE
+        if (s.equalsIgnoreCase("AC")) return new MeasureTypeResult(true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+        if (s.equalsIgnoreCase("PC")) return new MeasureTypeResult(true, false, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+        if (s.equalsIgnoreCase("AD")) return new MeasureTypeResult(false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+        if (s.equalsIgnoreCase("PD")) return new MeasureTypeResult(false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+        if (s.equalsIgnoreCase("AE")) return new MeasureTypeResult(false, false, true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+        if (s.equalsIgnoreCase("PE")) return new MeasureTypeResult(false, false, true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+        // Full form "PC - Planned Commitment" or label only "Planned Commitment"
+        if (s.contains(" - ")) {
+            String code = s.substring(0, s.indexOf(" - ")).trim();
+            if (code.equalsIgnoreCase("AC")) return new MeasureTypeResult(true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+            if (code.equalsIgnoreCase("PC")) return new MeasureTypeResult(true, false, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+            if (code.equalsIgnoreCase("AD")) return new MeasureTypeResult(false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+            if (code.equalsIgnoreCase("PD")) return new MeasureTypeResult(false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+            if (code.equalsIgnoreCase("AE")) return new MeasureTypeResult(false, false, true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+            if (code.equalsIgnoreCase("PE")) return new MeasureTypeResult(false, false, true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+        }
+        if (s.equalsIgnoreCase(ImporterConstants.ACTUAL_COMMITMENT)) return new MeasureTypeResult(true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+        if (s.equalsIgnoreCase(ImporterConstants.PLANNED_COMMITMENT)) return new MeasureTypeResult(true, false, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+        if (s.equalsIgnoreCase(ImporterConstants.ACTUAL_DISBURSEMENT)) return new MeasureTypeResult(false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+        if (s.equalsIgnoreCase(ImporterConstants.PLANNED_DISBURSEMENT)) return new MeasureTypeResult(false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+        if (s.equalsIgnoreCase(ImporterConstants.ACTUAL_EXPENDITURE)) return new MeasureTypeResult(false, false, true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+        if (s.equalsIgnoreCase(ImporterConstants.PLANNED_EXPENDITURE)) return new MeasureTypeResult(false, false, true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
         return null;
     }
 
@@ -1263,17 +1313,17 @@ public class ImporterUtil {
     /** Add indicator data to an activity from the current row. Called after importTheData when indicator columns are mapped. */
     public static void addIndicatorDataToActivity(Long activityId, Row row, Sheet sheet, Map<String, String> config, Session session) {
         if (activityId == null || config == null || row == null || sheet == null) return;
-        if (getKey(config, "Indicator Name") == null || getKey(config, "Location") == null || getKey(config, "Actual Value") == null) {
+        if (getKey(config, ImporterConstants.INDICATOR_NAME) == null || getKey(config, ImporterConstants.LOCATION) == null || getKey(config, ImporterConstants.ACTUAL_VALUE) == null) {
             return;
         }
-        String indicatorName = getCellValueByConfig(row, sheet, config, "Indicator Name");
-        String locationName = getCellValueByConfig(row, sheet, config, "Location");
+        String indicatorName = getCellValueByConfig(row, sheet, config, ImporterConstants.INDICATOR_NAME);
+        String locationName = getCellValueByConfig(row, sheet, config, ImporterConstants.LOCATION);
         if (indicatorName == null || indicatorName.trim().isEmpty() || locationName == null || locationName.trim().isEmpty()) {
             return;
         }
         indicatorName = indicatorName.trim();
         locationName = locationName.trim();
-        String programName = getCellValueByConfig(row, sheet, config, "Program Name");
+        String programName = getCellValueByConfig(row, sheet, config, ImporterConstants.PROGRAM_NAME);
         if (programName != null) programName = programName.trim();
 
         AmpTheme programTheme = null;
@@ -1334,20 +1384,20 @@ public class ImporterUtil {
 
         AmpIndicatorGlobalValue existingBase = indicator.getBaseValue();
 
-        double origBase = parseDoubleFromConfig(row, sheet, config, "Original Base Value");
-        boolean hasOrigBase = getKey(config, "Original Base Value") != null && !Double.isNaN(origBase);
-        double revBase = parseDoubleFromConfig(row, sheet, config, "Revised Base Value");
-        boolean hasRevBase = getKey(config, "Revised Base Value") != null && !Double.isNaN(revBase);
-        double origTarget = parseDoubleFromConfig(row, sheet, config, "Original Target Value");
-        double revTarget = parseDoubleFromConfig(row, sheet, config, "Revised Target Value");
-        double actualVal = parseDoubleFromConfig(row, sheet, config, "Actual Value");
+        double origBase = parseDoubleFromConfig(row, sheet, config, ImporterConstants.ORIGINAL_BASE_VALUE);
+        boolean hasOrigBase = getKey(config, ImporterConstants.ORIGINAL_BASE_VALUE) != null && !Double.isNaN(origBase);
+        double revBase = parseDoubleFromConfig(row, sheet, config, ImporterConstants.REVISED_BASE_VALUE);
+        boolean hasRevBase = getKey(config, ImporterConstants.REVISED_BASE_VALUE) != null && !Double.isNaN(revBase);
+        double origTarget = parseDoubleFromConfig(row, sheet, config, ImporterConstants.ORIGINAL_TARGET_VALUE);
+        double revTarget = parseDoubleFromConfig(row, sheet, config, ImporterConstants.REVISED_TARGET_VALUE);
+        double actualVal = parseDoubleFromConfig(row, sheet, config, ImporterConstants.ACTUAL_VALUE);
         if (Double.isNaN(actualVal)) actualVal = 0.0;
 
-        Date origBaseDate = parseDateDefaultToday(row, sheet, config, "Original Base Value Date");
-        Date revBaseDate = parseDateDefaultToday(row, sheet, config, "Revised Base Value Date");
-        Date origTargetDate = parseDateDefaultToday(row, sheet, config, "Original Target Value Date");
-        Date revTargetDate = parseDateDefaultToday(row, sheet, config, "Revised Target Value Date");
-        Date actualDate = parseDateDefaultToday(row, sheet, config, "Actual Value Date");
+        Date origBaseDate = parseDateDefaultToday(row, sheet, config, ImporterConstants.ORIGINAL_BASE_VALUE_DATE);
+        Date revBaseDate = parseDateDefaultToday(row, sheet, config, ImporterConstants.REVISED_BASE_VALUE_DATE);
+        Date origTargetDate = parseDateDefaultToday(row, sheet, config, ImporterConstants.ORIGINAL_TARGET_VALUE_DATE);
+        Date revTargetDate = parseDateDefaultToday(row, sheet, config, ImporterConstants.REVISED_TARGET_VALUE_DATE);
+        Date actualDate = parseDateDefaultToday(row, sheet, config, ImporterConstants.ACTUAL_VALUE_DATE);
 
         double baseOrigVal = hasOrigBase ? origBase : (existingBase != null && existingBase.getOriginalValue() != null ? existingBase.getOriginalValue() : 0.0);
         double baseRevVal = hasRevBase ? revBase : (existingBase != null && existingBase.getRevisedValue() != null ? existingBase.getRevisedValue() : 0.0);
@@ -1355,7 +1405,7 @@ public class ImporterUtil {
         double targetRevVal = Double.isNaN(revTarget) ? 0.0 : revTarget;
 
         Set<AmpIndicatorValue> values = new HashSet<>();
-        if (getKey(config, "Original Base Value") != null || getKey(config, "Revised Base Value") != null || existingBase != null) {
+        if (getKey(config, ImporterConstants.ORIGINAL_BASE_VALUE) != null || getKey(config, ImporterConstants.REVISED_BASE_VALUE) != null || existingBase != null) {
             AmpIndicatorValue baseOrig = new AmpIndicatorValue(AmpIndicatorValue.BASE);
             baseOrig.setValue(baseOrigVal);
             baseOrig.setValueDate(origBaseDate);
@@ -1367,7 +1417,7 @@ public class ImporterUtil {
             baseRev.setIndicatorConnection(ia);
             values.add(baseRev);
         }
-        if (getKey(config, "Original Target Value") != null || getKey(config, "Revised Target Value") != null) {
+        if (getKey(config, ImporterConstants.ORIGINAL_TARGET_VALUE) != null || getKey(config, ImporterConstants.REVISED_TARGET_VALUE) != null) {
             AmpIndicatorValue tOrig = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
             tOrig.setValue(targetOrigVal);
             tOrig.setValueDate(origTargetDate);
@@ -1383,7 +1433,7 @@ public class ImporterUtil {
         actual.setValue(actualVal);
         actual.setValueDate(actualDate);
         actual.setIndicatorConnection(ia);
-        String unit = getCellValueByConfig(row, sheet, config, "Unit of Measure");
+        String unit = getCellValueByConfig(row, sheet, config, ImporterConstants.UNIT_OF_MEASURE);
         if (unit != null && !unit.trim().isEmpty()) actual.setComment("Unit: " + unit.trim());
         values.add(actual);
 
@@ -1465,7 +1515,7 @@ public class ImporterUtil {
         }
     }
 
-    private static String getCellValueByConfig(Row row, Sheet sheet, Map<String, String> config, String fieldName) {
+    public static String getCellValueByConfig(Row row, Sheet sheet, Map<String, String> config, String fieldName) {
         String key = getKey(config, fieldName);
         if (key == null) return null;
         int col = getColumnIndexByName(sheet, key);

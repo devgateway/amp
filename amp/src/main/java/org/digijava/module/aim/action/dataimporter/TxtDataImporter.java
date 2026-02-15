@@ -12,7 +12,9 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
 import org.digijava.module.aim.action.dataimporter.model.Funding;
+import org.digijava.module.aim.action.dataimporter.util.ImporterConstants;
 import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
+import org.digijava.module.aim.action.dataimporter.util.ImporterUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -97,14 +99,14 @@ public class TxtDataImporter {
             OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             importDataModel.setCreation_date(now.format(formatter));
             setStatus(importDataModel);
-            String componentName= row.get(getKey(config, "Component Name"));
-            String componentCode= row.get(getKey(config, "Component Code"));
-            String projectCode= row.get(getKey(config, "Project Code"));
-            String projectTitle= row.get(getKey(config, "Project Title"));
-            String projectDesc= row.get(getKey(config, "Project Description"));
-            String objective= row.get(getKey(config, "Objective"));
-            String primarySubSector= row.get(getKey(config, "Primary Subsector"));
-            String secondarySubSector= row.get(getKey(config, "Secondary Subsector"));
+            String componentName= row.get(getKey(config, ImporterConstants.COMPONENT_NAME));
+            String componentCode= row.get(getKey(config, ImporterConstants.COMPONENT_CODE));
+            String projectCode= row.get(getKey(config, ImporterConstants.PROJECT_CODE));
+            String projectTitle= row.get(getKey(config, ImporterConstants.PROJECT_TITLE));
+            String projectDesc= row.get(getKey(config, ImporterConstants.PROJECT_DESCRIPTION));
+            String objective= row.get(getKey(config, ImporterConstants.OBJECTIVE));
+            String primarySubSector= row.get(getKey(config, ImporterConstants.PRIMARY_SUBSECTOR));
+            String secondarySubSector= row.get(getKey(config, ImporterConstants.SECONDARY_SUBSECTOR));
             AmpActivityVersion existing = existingActivity(projectTitle,projectCode,session);
             if (existing!=null && SKIP_EXISTING)
             {
@@ -118,52 +120,67 @@ public class TxtDataImporter {
             importDataModel.setProject_code(projectCode);
             importDataModel.setDescription(projectDesc);
 
-            String donorAgencyCode= row.get(getKey(config, "Donor Agency Code"));
-            String responsibleOrgCode= row.get(getKey(config, "Responsible Organization Code"));
+            String donorAgencyCode= row.get(getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
+            String responsibleOrgCode= row.get(getKey(config, ImporterConstants.RESPONSIBLE_ORGANIZATION_CODE));
             Long responsibleOrgId=null;
 
             logger.info("Configuration: "+config);
             for (Map.Entry<String, String> entry : config.entrySet()) {
                 Funding fundingItem = new Funding();
                 switch (entry.getValue()) {
-                    case "Project Location":
+                    case ImporterConstants.PROJECT_LOCATION:
                         updateLocations(importDataModel, row.get(entry.getKey().trim()),session);
                         break;
-                    case "Primary Sector":
+                    case ImporterConstants.PRIMARY_SECTOR:
                         updateSectors(importDataModel, row.get(entry.getKey().trim()), session, true, primarySubSector);
                         break;
-                    case "Secondary Sector":
+                    case ImporterConstants.SECONDARY_SECTOR:
                         updateSectors(importDataModel, row.get(entry.getKey().trim()), session, false, secondarySubSector);
                         break;
-                    case "Donor Agency":
-                        updateOrgs(importDataModel,row.get(entry.getKey().trim()),donorAgencyCode, session, "donor");
+                    case ImporterConstants.DONOR_AGENCY:
+                        updateOrgs(importDataModel,row.get(entry.getKey().trim()),donorAgencyCode, session, ImporterConstants.ORG_TYPE_DONOR);
                         break;
-                    case "Responsible Organization":
-                        responsibleOrgId=updateOrgs(importDataModel,row.get(entry.getKey().trim()),responsibleOrgCode, session, "responsibleOrg");
+                    case ImporterConstants.RESPONSIBLE_ORGANIZATION:
+                        responsibleOrgId=updateOrgs(importDataModel,row.get(entry.getKey().trim()),responsibleOrgCode, session, ImporterConstants.ORG_TYPE_RESPONSIBLE_ORG);
                         break;
-                    case "Beneficiary Agency":
-                        responsibleOrgId=updateOrgs(importDataModel,row.get(entry.getKey().trim()),responsibleOrgCode, session, "beneficiaryAgency");
+                    case ImporterConstants.BENEFICIARY_AGENCY:
+                        responsibleOrgId=updateOrgs(importDataModel,row.get(entry.getKey().trim()),responsibleOrgCode, session, ImporterConstants.ORG_TYPE_BENEFICIARY_AGENCY);
                         break;
-                    case "Funding Item":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), true, true, false,"Actual", fundingItem, existing);
+                    case ImporterConstants.TRANSACTION_AMOUNT: {
+                        boolean commitment = true, disbursement = true, expenditure = false;
+                        String adjustmentType = ImporterConstants.ADJUSTMENT_TYPE_ACTUAL;
+                        if (config.containsValue(ImporterConstants.MEASURE_TYPE)) {
+                            String measureTypeStr = row.get(getKey(config, ImporterConstants.MEASURE_TYPE));
+                            ImporterUtil.MeasureTypeResult parsed = parseMeasureType(measureTypeStr);
+                            if (parsed != null) {
+                                commitment = parsed.commitment;
+                                disbursement = parsed.disbursement;
+                                expenditure = parsed.expenditure;
+                                adjustmentType = parsed.adjustmentType;
+                            }
+                        }
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), commitment, disbursement, expenditure, adjustmentType, fundingItem, existing);
                         break;
-                    case "Planned Commitment":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), true, false, false,"Planned", fundingItem, existing);
+                    }
+                    case ImporterConstants.PLANNED_COMMITMENT:
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existing);
                         break;
-                    case "Planned Disbursement":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, true, false,"Planned", fundingItem, existing);
+                    case ImporterConstants.PLANNED_DISBURSEMENT:
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existing);
                         break;
-                    case "Planned Expenditure":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, false,true, "Planned", fundingItem, existing);
+                    case ImporterConstants.PLANNED_EXPENDITURE:
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, false,true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existing);
                         break;
-                    case "Actual Commitment":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), true, false, false,"Actual", fundingItem, existing);
+                    case ImporterConstants.ACTUAL_COMMITMENT:
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
                         break;
-                    case "Actual Disbursement":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, true, false,"Actual", fundingItem, existing);
+                    case ImporterConstants.ACTUAL_DISBURSEMENT:
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
                         break;
-                    case "Actual Expenditure":
-                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, false,true, "Actual", fundingItem, existing);
+                    case ImporterConstants.ACTUAL_EXPENDITURE:
+                        setAFundingItemForTxt(config, row, entry, importDataModel, session, Double.parseDouble(row.get(entry.getKey().trim())), false, false,true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
+                        break;
+                    case ImporterConstants.MEASURE_TYPE:
                         break;
                     default:
                         logger.error("Unexpected value: " + entry.getValue());

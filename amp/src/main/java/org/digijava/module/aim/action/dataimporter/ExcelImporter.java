@@ -26,11 +26,14 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
 import org.digijava.module.aim.action.dataimporter.model.Funding;
 import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
+import org.digijava.module.aim.action.dataimporter.util.ImporterConstants;
 import org.digijava.module.aim.action.dataimporter.util.ImportedFileUtil;
+import org.digijava.module.aim.action.dataimporter.util.ImporterUtil;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.existingActivity;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.getColumnIndexByName;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.getKey;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.getStringValueFromCell;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.parseMeasureType;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.addIndicatorDataToActivity;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.importTheData;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.setAFundingItemForExcel;
@@ -172,36 +175,36 @@ public class ExcelImporter {
                 importDataModel.setCreation_date(now.format(formatter));
                 setStatus(importDataModel);
 
-                int componentCodeColumn = getColumnIndexByName(sheet, getKey(config, "Component Code"));
+                int componentCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.COMPONENT_CODE));
                 String componentCode = componentCodeColumn >= 0 ? getStringValueFromCell(row.getCell(componentCodeColumn),true) : null;
 
-                int componentNameColumn = getColumnIndexByName(sheet, getKey(config, "Component Name"));
+                int componentNameColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.COMPONENT_NAME));
                 String componentName = componentNameColumn >= 0 ? getStringValueFromCell(row.getCell(componentNameColumn),true): null;
 
-                int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Donor Agency Code"));
+                int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
                 String donorAgencyCode = donorAgencyCodeColumn >= 0 ? getStringValueFromCell(row.getCell(donorAgencyCodeColumn),true) : null;
 
-                int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, "Responsible Organization Code"));
+                int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.RESPONSIBLE_ORGANIZATION_CODE));
                 String responsibleOrgCode = responsibleOrgCodeColumn >= 0 ? getStringValueFromCell(row.getCell(responsibleOrgCodeColumn),true) : null;
 
-                int primarySubSectorColumn = getColumnIndexByName(sheet, getKey(config, "Primary Subsector"));
+                int primarySubSectorColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PRIMARY_SUBSECTOR));
                 String primarySubSector = primarySubSectorColumn >= 0 ? getStringValueFromCell(row.getCell(primarySubSectorColumn),true) : null;
 
-                int secondarySubSectorColumn = getColumnIndexByName(sheet, getKey(config, "Secondary Subsector"));
+                int secondarySubSectorColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.SECONDARY_SUBSECTOR));
                 String secondarySubSector = secondarySubSectorColumn >= 0 ? getStringValueFromCell(row.getCell(secondarySubSectorColumn),true) : null;
 
-                int projectCodeColumn = getColumnIndexByName(sheet, getKey(config, "Project Code"));
+                int projectCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PROJECT_CODE));
                 String projectCode = projectCodeColumn >= 0 ? getStringValueFromCell(row.getCell(projectCodeColumn),false) : "";
                 importDataModel.setProject_code(projectCode);
 
-                int projectTitleColumn = getColumnIndexByName(sheet, getKey(config, "Project Title"));
+                int projectTitleColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PROJECT_TITLE));
                 String projectTitle = projectTitleColumn >= 0 ? getStringValueFromCell(row.getCell(projectTitleColumn),false) : "";
                 importDataModel.setProject_title(projectTitle);
-                int objectiveColumn = getColumnIndexByName(sheet, getKey(config, "Objective"));
+                int objectiveColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.OBJECTIVE));
                 String objective = objectiveColumn >= 0 ? getStringValueFromCell(row.getCell(objectiveColumn),false) : null;
                 importDataModel.setObjective(objective);
 
-                int projectDescColumn = getColumnIndexByName(sheet, getKey(config, "Project Description"));
+                int projectDescColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PROJECT_DESCRIPTION));
                 String projectDesc = projectDescColumn >= 0 ? getStringValueFromCell(row.getCell(projectDescColumn),false) : null;
                 importDataModel.setDescription(projectDesc);
 
@@ -224,47 +227,62 @@ public class ExcelImporter {
                     if (columnIndex >= 0) {
                         Cell cell = row.getCell(columnIndex);
                         switch (entry.getValue()) {
-                            case "Project Location":
+                            case ImporterConstants.PROJECT_LOCATION:
                                  updateLocations(importDataModel,Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(),session);
                                 break;
-                            case "Primary Sector":
+                            case ImporterConstants.PRIMARY_SECTOR:
                                 updateSectors(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), session, true, primarySubSector);
                                 break;
-                            case "Secondary Sector":
+                            case ImporterConstants.SECONDARY_SECTOR:
                                 updateSectors(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), session, false, secondarySubSector);
                                 break;
-                            case "Donor Agency":
+                            case ImporterConstants.DONOR_AGENCY:
                                 logger.info("Getting donor");
-                                updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), donorAgencyCode, session, "donor");
+                                updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), donorAgencyCode, session, ImporterConstants.ORG_TYPE_DONOR);
                                 break;
-                            case "Responsible Organization":
-                                responsibleOrgId = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, "responsibleOrg");
+                            case ImporterConstants.RESPONSIBLE_ORGANIZATION:
+                                responsibleOrgId = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, ImporterConstants.ORG_TYPE_RESPONSIBLE_ORG);
                                 break;
-                            case "Beneficiary Agency":
-                                responsibleOrgId = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, "beneficiaryAgency");
+                            case ImporterConstants.BENEFICIARY_AGENCY:
+                                responsibleOrgId = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, ImporterConstants.ORG_TYPE_BENEFICIARY_AGENCY);
                                 break;
-                            case "Funding Item":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, true, false,"Actual", fundingItem, existing);
+                            case ImporterConstants.TRANSACTION_AMOUNT: {
+                                boolean commitment = true, disbursement = true, expenditure = false;
+                                String adjustmentType = ImporterConstants.ADJUSTMENT_TYPE_ACTUAL;
+                                if (config.containsValue(ImporterConstants.MEASURE_TYPE)) {
+                                    String measureTypeStr = ImporterUtil.getCellValueByConfig(row, sheet, config, ImporterConstants.MEASURE_TYPE);
+                                    ImporterUtil.MeasureTypeResult parsed = parseMeasureType(measureTypeStr);
+                                    if (parsed != null) {
+                                        commitment = parsed.commitment;
+                                        disbursement = parsed.disbursement;
+                                        expenditure = parsed.expenditure;
+                                        adjustmentType = parsed.adjustmentType;
+                                    }
+                                }
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, commitment, disbursement, expenditure, adjustmentType, fundingItem, existing);
                                 break;
-                            case "Planned Commitment":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false,false, "Planned", fundingItem, existing);
+                            }
+                            case ImporterConstants.PLANNED_COMMITMENT:
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false,false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existing);
                                 break;
-                            case "Planned Disbursement":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, false,"Planned", fundingItem, existing);
+                            case ImporterConstants.PLANNED_DISBURSEMENT:
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existing);
                                 break;
-                            case "Planned Expenditure":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, false,true, "Planned", fundingItem, existing);
+                            case ImporterConstants.PLANNED_EXPENDITURE:
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existing);
                                 break;
-                            case "Actual Commitment":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false, false,"Actual", fundingItem, existing);
+                            case ImporterConstants.ACTUAL_COMMITMENT:
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
                                 break;
-                            case "Actual Disbursement":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, false,"Actual", fundingItem, existing);
+                            case ImporterConstants.ACTUAL_DISBURSEMENT:
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
                                 break;
-                            case "Actual Expenditure":
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, false,true, "Actual", fundingItem, existing);
+                            case ImporterConstants.ACTUAL_EXPENDITURE:
+                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
                                 break;
-                            case "Reporting Date":
+                            case ImporterConstants.MEASURE_TYPE:
+                                break;
+                            case ImporterConstants.REPORTING_DATE:
                             default:
                                 logger.error("Unexpected value: " + entry.getValue());
                                 break;
@@ -280,7 +298,7 @@ public class ExcelImporter {
 
 
                 Long activityId = importTheData(importDataModel, session, importedProject, componentName, componentCode, responsibleOrgId, fundings, existing);
-                if (activityId != null && config.containsValue("Indicator Name")) {
+                if (activityId != null && config.containsValue(ImporterConstants.INDICATOR_NAME)) {
                     try {
                         addIndicatorDataToActivity(activityId, row, sheet, config, session);
                     } catch (Exception e) {

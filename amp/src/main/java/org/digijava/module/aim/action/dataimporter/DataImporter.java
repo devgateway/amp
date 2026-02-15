@@ -49,6 +49,8 @@ import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.Cons
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.isFileContentValid;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.isFileReadable;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.removeMapItem;
+
+import org.digijava.module.aim.action.dataimporter.util.ImporterConstants;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -287,7 +289,7 @@ public class DataImporter extends Action {
                         }
                     }
                 }
-                if (dataImporterForm.getColumnPairs().isEmpty() ||(!dataImporterForm.getColumnPairs().containsValue("Project Title") && !dataImporterForm.getColumnPairs().containsValue("Project Code"))) {
+                if (dataImporterForm.getColumnPairs().isEmpty() ||(!dataImporterForm.getColumnPairs().containsValue(ImporterConstants.PROJECT_TITLE) && !dataImporterForm.getColumnPairs().containsValue(ImporterConstants.PROJECT_CODE))) {
 
                     response.setHeader("errorMessage", "You must have at least the 'Project Title' or 'Project Code' column in your config.");
                     response.setStatus(400);
@@ -462,53 +464,54 @@ public class DataImporter extends Action {
 
     private List<String> getEntityFieldsInfo() {
         List<String> fieldsInfos = new ArrayList<>();
-        fieldsInfos.add("Project Title");
-        fieldsInfos.add("Project Code");
-        fieldsInfos.add("Objective");
-        fieldsInfos.add("Project Description");
-        fieldsInfos.add("Primary Sector");
-        fieldsInfos.add("Secondary Sector");
-        fieldsInfos.add("Project Location");
-        fieldsInfos.add("Project Start Date");
-        fieldsInfos.add("Project End Date");
-        fieldsInfos.add("Donor Agency");
-        fieldsInfos.add("Exchange Rate");
-        fieldsInfos.add("Donor Agency Code");
-        fieldsInfos.add("Responsible Organization");
-        fieldsInfos.add("Responsible Organization Code");
-        fieldsInfos.add("Executing Agency");
-        fieldsInfos.add("Implementing Agency");
-        fieldsInfos.add("Actual Disbursement");
-        fieldsInfos.add("Actual Commitment");
-        fieldsInfos.add("Actual Expenditure");
-        fieldsInfos.add("Planned Disbursement");
-        fieldsInfos.add("Planned Commitment");
-        fieldsInfos.add("Planned Expenditure");
-        fieldsInfos.add("Funding Item");
-        fieldsInfos.add("Transaction Date");
-        fieldsInfos.add("Financing Instrument");
-        fieldsInfos.add("Type Of Assistance");
-        fieldsInfos.add("Secondary Subsector");
-        fieldsInfos.add("Primary Subsector");
-        fieldsInfos.add("Currency");
-        fieldsInfos.add("Component Name");
-        fieldsInfos.add("Component Code");
-        fieldsInfos.add("Beneficiary Agency");
+        fieldsInfos.add(ImporterConstants.PROJECT_TITLE);
+        fieldsInfos.add(ImporterConstants.PROJECT_CODE);
+        fieldsInfos.add(ImporterConstants.OBJECTIVE);
+        fieldsInfos.add(ImporterConstants.PROJECT_DESCRIPTION);
+        fieldsInfos.add(ImporterConstants.PRIMARY_SECTOR);
+        fieldsInfos.add(ImporterConstants.SECONDARY_SECTOR);
+        fieldsInfos.add(ImporterConstants.PROJECT_LOCATION);
+        fieldsInfos.add(ImporterConstants.PROJECT_START_DATE);
+        fieldsInfos.add(ImporterConstants.PROJECT_END_DATE);
+        fieldsInfos.add(ImporterConstants.DONOR_AGENCY);
+        fieldsInfos.add(ImporterConstants.EXCHANGE_RATE);
+        fieldsInfos.add(ImporterConstants.DONOR_AGENCY_CODE);
+        fieldsInfos.add(ImporterConstants.RESPONSIBLE_ORGANIZATION);
+        fieldsInfos.add(ImporterConstants.RESPONSIBLE_ORGANIZATION_CODE);
+        fieldsInfos.add(ImporterConstants.EXECUTING_AGENCY);
+        fieldsInfos.add(ImporterConstants.IMPLEMENTING_AGENCY);
+        fieldsInfos.add(ImporterConstants.ACTUAL_DISBURSEMENT);
+        fieldsInfos.add(ImporterConstants.ACTUAL_COMMITMENT);
+        fieldsInfos.add(ImporterConstants.ACTUAL_EXPENDITURE);
+        fieldsInfos.add(ImporterConstants.PLANNED_DISBURSEMENT);
+        fieldsInfos.add(ImporterConstants.PLANNED_COMMITMENT);
+        fieldsInfos.add(ImporterConstants.PLANNED_EXPENDITURE);
+        fieldsInfos.add(ImporterConstants.TRANSACTION_AMOUNT);
+        fieldsInfos.add(ImporterConstants.MEASURE_TYPE);
+        fieldsInfos.add(ImporterConstants.TRANSACTION_DATE);
+        fieldsInfos.add(ImporterConstants.FINANCING_INSTRUMENT);
+        fieldsInfos.add(ImporterConstants.TYPE_OF_ASSISTANCE);
+        fieldsInfos.add(ImporterConstants.SECONDARY_SUBSECTOR);
+        fieldsInfos.add(ImporterConstants.PRIMARY_SUBSECTOR);
+        fieldsInfos.add(ImporterConstants.CURRENCY);
+        fieldsInfos.add(ImporterConstants.COMPONENT_NAME);
+        fieldsInfos.add(ImporterConstants.COMPONENT_CODE);
+        fieldsInfos.add(ImporterConstants.BENEFICIARY_AGENCY);
         // Indicator columns for M&E import
-        fieldsInfos.add("Indicator Name");
-        fieldsInfos.add("Program Name");
-        fieldsInfos.add("Location");
-        fieldsInfos.add("Original Base Value");
-        fieldsInfos.add("Original Base Value Date");
-        fieldsInfos.add("Revised Base Value");
-        fieldsInfos.add("Revised Base Value Date");
-        fieldsInfos.add("Original Target Value");
-        fieldsInfos.add("Original Target Value Date");
-        fieldsInfos.add("Revised Target Value");
-        fieldsInfos.add("Revised Target Value Date");
-        fieldsInfos.add("Actual Value");
-        fieldsInfos.add("Actual Value Date");
-        fieldsInfos.add("Unit of Measure");
+        fieldsInfos.add(ImporterConstants.INDICATOR_NAME);
+        fieldsInfos.add(ImporterConstants.PROGRAM_NAME);
+        fieldsInfos.add(ImporterConstants.LOCATION);
+        fieldsInfos.add(ImporterConstants.ORIGINAL_BASE_VALUE);
+        fieldsInfos.add(ImporterConstants.ORIGINAL_BASE_VALUE_DATE);
+        fieldsInfos.add(ImporterConstants.REVISED_BASE_VALUE);
+        fieldsInfos.add(ImporterConstants.REVISED_BASE_VALUE_DATE);
+        fieldsInfos.add(ImporterConstants.ORIGINAL_TARGET_VALUE);
+        fieldsInfos.add(ImporterConstants.ORIGINAL_TARGET_VALUE_DATE);
+        fieldsInfos.add(ImporterConstants.REVISED_TARGET_VALUE);
+        fieldsInfos.add(ImporterConstants.REVISED_TARGET_VALUE_DATE);
+        fieldsInfos.add(ImporterConstants.ACTUAL_VALUE);
+        fieldsInfos.add(ImporterConstants.ACTUAL_VALUE_DATE);
+        fieldsInfos.add(ImporterConstants.UNIT_OF_MEASURE);
         return fieldsInfos.stream().sorted().collect(Collectors.toList());
     }
 

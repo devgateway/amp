@@ -168,7 +168,7 @@ public class ExcelImporter {
 
                 ImportDataModel importDataModel = new ImportDataModel();
                 importDataModel.setModified_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
-                importDataModel.setCreated_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
+                // created_by is set in ensureCreatedBySet when building the API map (correct for new vs existing)
                 importDataModel.setTeam(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeam().getAmpTeamId());
                 importDataModel.setIs_draft(true);
                 OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);

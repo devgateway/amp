@@ -501,7 +501,6 @@ public class DataImporter extends Action {
         // Indicator columns for M&E import
         fieldsInfos.add(ImporterConstants.INDICATOR_NAME);
         fieldsInfos.add(ImporterConstants.PROGRAM_NAME);
-        fieldsInfos.add(ImporterConstants.LOCATION);
         fieldsInfos.add(ImporterConstants.INDICATOR_LOCATION);
         fieldsInfos.add(ImporterConstants.ORIGINAL_BASE_VALUE);
         fieldsInfos.add(ImporterConstants.ORIGINAL_BASE_VALUE_DATE);

@@ -53,9 +53,9 @@
                             console.log("Response: " + JSON.stringify(response));
                             var data = JSON.parse(JSON.stringify(response));
                             $(".countRecords").html(
-                                '<h4 style="color: #f1b0b7">All Projects: ' +data.totalProjects+'</h4>' +
-                                '<h4 style="color: forestgreen">Successful Projects: ' +data.successfulProjects+'</h4>' +
-                                '<h4 style="color: red">Failed Projects: ' +data.failedProjects +'</h4>'
+                                '<h4 style="color: #f1b0b7">All Records: ' +data.totalProjects+'</h4>' +
+                                '<h4 style="color: forestgreen">Successful Records: ' +data.successfulProjects+'</h4>' +
+                                '<h4 style="color: red">Failed Records: ' +data.failedProjects +'</h4>'
                             );
                             var importProjects = data.importedProjects;
 
@@ -150,7 +150,7 @@
     <!-- Table to display import projects for a particular ImportedFilesRecord -->
     <div class="file-projects">
 
-    <h3>File Projects</h3>
+    <h3>File Records</h3>
         <div class="filter-div">
             <label for="all-projects">All: </label>
             <input type="radio" id="all-projects" name="project-filter" value="ALL" checked>

@@ -277,6 +277,10 @@ public class ImporterUtil {
 
 
     private static String getFundingDate(String dateString) {
+        if (dateString != null && dateString.trim().matches("\\d{4}")) {
+            int year = Integer.parseInt(dateString.trim());
+            return LocalDate.of(year, 1, 1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
         LocalDate date = LocalDate.now();
         if (isCommonDateFormat(dateString)) {
             List<DateTimeFormatter> formatters = Arrays.asList(
@@ -731,26 +735,23 @@ public class ImporterUtil {
      * when that creator is present (never overwrite with current user for existing activities).
      */
     private static void ensureCreatedBySet(Map<String, Object> map, AmpActivityVersion existing) {
+        if (existing != null) {
+            AmpTeamMember creator = existing.getActivityCreator();
+            if (creator == null) {
+                // Existing activity has no creator (legacy); API expects null.
+                map.put(CREATED_BY_KEY, null);
+                return;
+            }
+            map.put(CREATED_BY_KEY, creator.getAmpTeamMemId());
+            return;
+        }
         Object createdBy = map.get(CREATED_BY_KEY);
         if (createdBy != null) {
             return;
         }
-        Long creatorId = null;
-        if (existing != null) {
-            AmpTeamMember creator = existing.getActivityCreator();
-            if (creator != null) {
-                creatorId = creator.getAmpTeamMemId();
-            }
-            // When existing activity has no creator (legacy data), leave created_by null;
-            // do not set to current user so we don't wrongly attribute creation.
-        } else {
-            AmpTeamMember currentMember = TeamUtil.getCurrentAmpTeamMember();
-            if (currentMember != null) {
-                creatorId = currentMember.getAmpTeamMemId();
-            }
-        }
-        if (creatorId != null) {
-            map.put(CREATED_BY_KEY, creatorId);
+        AmpTeamMember currentMember = TeamUtil.getCurrentAmpTeamMember();
+        if (currentMember != null) {
+            map.put(CREATED_BY_KEY, currentMember.getAmpTeamMemId());
         }
     }
 
@@ -1200,6 +1201,58 @@ public class ImporterUtil {
 
     }
 
+    /**
+     * Ensures the activity has an activity location for the given location name (for indicator location).
+     * If the location is not already on the activity, resolves it by name and adds it.
+     * @return the AmpActivityLocation for the name, or null if the location name cannot be resolved
+     */
+    private static AmpActivityLocation getOrAddActivityLocationForName(AmpActivityVersion activity, String locationName, Session session) {
+        if (activity == null || locationName == null || locationName.trim().isEmpty()) return null;
+        locationName = locationName.trim();
+        if (ConstantsMap.containsKey("location_" + locationName)) {
+            Long locationId = ConstantsMap.get("location_" + locationName);
+            AmpCategoryValueLocations loc = session.get(AmpCategoryValueLocations.class, locationId);
+            if (loc == null) return null;
+            AmpActivityLocation aal = new AmpActivityLocation();
+            aal.setActivity(activity);
+            aal.setLocation(loc);
+            aal.setLocationPercentage(100f);
+            if (activity.getLocations() == null) activity.setLocations(new HashSet<>());
+            activity.getLocations().add(aal);
+            session.save(aal);
+            return aal;
+        }
+        if (!session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
+        final Long[] foundId = new Long[1];
+        session.doWork(connection -> {
+            String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, locationName);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        foundId[0] = resultSet.getLong("location_id");
+                        ConstantsMap.put("location_" + locationName, foundId[0]);
+                    }
+                }
+            } catch (SQLException e) {
+                logger.error("Error resolving location by name: " + locationName, e);
+            }
+        });
+        if (foundId[0] == null) return null;
+        AmpCategoryValueLocations loc = session.get(AmpCategoryValueLocations.class, foundId[0]);
+        if (loc == null) return null;
+        AmpActivityLocation aal = new AmpActivityLocation();
+        aal.setActivity(activity);
+        aal.setLocation(loc);
+        aal.setLocationPercentage(100f);
+        if (activity.getLocations() == null) activity.setLocations(new HashSet<>());
+        activity.getLocations().add(aal);
+        session.save(aal);
+        return aal;
+    }
+
     public static void updateImpLevels(ImportDataModel importDataModel, Session session)
     {
         if (ConstantsMap.containsKey("implementation_level_")) {
@@ -1479,6 +1532,9 @@ public class ImporterUtil {
                     break;
                 }
             }
+        }
+        if (activityLocation == null) {
+            activityLocation = getOrAddActivityLocationForName(activity, locationName, session);
         }
 
         AmpIndicatorGlobalValue existingBase = indicator.getBaseValue();

@@ -360,7 +360,8 @@
       var internal = $('#internal').prop('checked');
       console.log("Internal", internal);
       var dataSeparator = $('#data-separator').val();
-      var existingConfig = $('#existing-config').val();
+      var currentConfigName = $('#current-config-name').val();
+      var existingConfig = (currentConfigName && currentConfigName.trim() !== '') ? currentConfigName.trim() : $('#existing-config').val();
       console.log("Existing configuration: "  + existingConfig);
       var fileInput = document.getElementById('data-file');
       // Check if a file is selected
@@ -380,6 +381,9 @@
       formData.append('fileType', fileType);
       formData.append('dataSeparator', dataSeparator);
       formData.append('existingConfig', existingConfig);
+      if (currentConfigName && currentConfigName.trim() !== '') {
+        formData.append('configName', currentConfigName.trim());
+      }
       formData.append('dataSheetChoice', dataSheetChoice || 'all');
       formData.append('dataSheetName', dataSheetName);
 

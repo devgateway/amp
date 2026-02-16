@@ -302,8 +302,17 @@ public class DataImporter extends Action {
                         }
                     }
                 }
-                if (dataImporterForm.getColumnPairs().isEmpty() ||(!dataImporterForm.getColumnPairs().containsValue(ImporterConstants.PROJECT_TITLE) && !dataImporterForm.getColumnPairs().containsValue(ImporterConstants.PROJECT_CODE))) {
+                // Resolve which config to use: saved config by name (from load/edit) or form's column pairs
+                String existingConfig = request.getParameter("existingConfig");
+                String configNameParam = request.getParameter("configName");
+                String configNameToUse = (configNameParam != null && !configNameParam.trim().isEmpty())
+                        ? configNameParam.trim()
+                        : (existingConfig != null && !existingConfig.isEmpty() && !"0".equals(existingConfig) && !"1".equals(existingConfig) ? existingConfig.trim() : null);
+                Map<String, String> columnPairsToUse = (configNameToUse != null)
+                        ? getConfigByName(configNameToUse)
+                        : dataImporterForm.getColumnPairs();
 
+                if (columnPairsToUse.isEmpty() || (!columnPairsToUse.containsValue(ImporterConstants.PROJECT_TITLE) && !columnPairsToUse.containsValue(ImporterConstants.PROJECT_CODE))) {
                     response.setHeader("errorMessage", "You must have at least the 'Project Title' or 'Project Code' column in your config.");
                     response.setStatus(400);
                     return mapping.findForward("importData");
@@ -316,10 +325,8 @@ public class DataImporter extends Action {
                     return mapping.findForward("importData");
 
                 } else {
-                    // Proceed with processing the file
-                    String existingConfig = request.getParameter("existingConfig");
-                    logger.info("Existing configuration: {}",existingConfig);
-                    if (!Objects.equals(existingConfig, "1")) {
+                    logger.info("Existing configuration: {}", existingConfig);
+                    if (configNameToUse == null) {
                         saveImportConfig(request, fileName, dataImporterForm.getColumnPairs());
                     }
 
@@ -328,19 +335,19 @@ public class DataImporter extends Action {
                     logger.info("Saved file record: {}",importedFilesRecord);
                     boolean isInternal= dataImporterForm.isInternal();
                     logger.info("Internal: "+ isInternal);
-                    if (isInternal)
-                    {
-                        dataImporterForm.getColumnPairs().put("Donor Agency", "Donor Agency");
+                    if (isInternal) {
+                        columnPairsToUse = new HashMap<>(columnPairsToUse);
+                        columnPairsToUse.put("Donor Agency", "Donor Agency");
                     }
-                    logger.info("Configuration"+ dataImporterForm.getColumnPairs());
+                    logger.info("Configuration: {}", columnPairsToUse);
                     if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
                         String dataSheetChoice = request.getParameter("dataSheetChoice");
                         String dataSheetName = request.getParameter("dataSheetName");
                         boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
                         // Process the file in batches
-                         res = processExcelFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs(), isInternal, useSpecificSheet ? dataSheetName : null);
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, useSpecificSheet ? dataSheetName : null);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res=TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs(), isInternal);
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal);
                     }
                     if (res != 1) {
                         // Handle error

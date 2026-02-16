@@ -1475,13 +1475,7 @@ public class ImporterUtil {
             }
         }
 
-        IndicatorActivity ia = new IndicatorActivity();
-        ia.setActivity(activity);
-        ia.setIndicator(indicator);
-        if (activityLocation != null) ia.setActivityLocation(activityLocation);
-
         AmpIndicatorGlobalValue existingBase = indicator.getBaseValue();
-
         double origBase = parseDoubleFromConfig(row, sheet, config, ImporterConstants.ORIGINAL_BASE_VALUE);
         boolean hasOrigBase = getKey(config, ImporterConstants.ORIGINAL_BASE_VALUE) != null && !Double.isNaN(origBase);
         double revBase = parseDoubleFromConfig(row, sheet, config, ImporterConstants.REVISED_BASE_VALUE);
@@ -1501,6 +1495,24 @@ public class ImporterUtil {
         double baseRevVal = hasRevBase ? revBase : (existingBase != null && existingBase.getRevisedValue() != null ? existingBase.getRevisedValue() : 0.0);
         double targetOrigVal = Double.isNaN(origTarget) ? 0.0 : origTarget;
         double targetRevVal = Double.isNaN(revTarget) ? 0.0 : revTarget;
+        String unit = getCellValueByConfig(row, sheet, config, ImporterConstants.UNIT_OF_MEASURE);
+        if (unit != null) unit = unit.trim();
+        String actualComment = (unit != null && !unit.isEmpty()) ? "Unit: " + unit : null;
+
+        IndicatorActivity ia = findExistingIndicatorActivity(activity, indicator, activityLocation);
+        if (ia != null) {
+            mergeIndicatorValuesIntoExisting(ia, session, config,
+                    baseOrigVal, origBaseDate, baseRevVal, revBaseDate,
+                    targetOrigVal, origTargetDate, targetRevVal, revTargetDate,
+                    actualVal, actualDate, actualComment);
+            session.flush();
+            return;
+        }
+
+        ia = new IndicatorActivity();
+        ia.setActivity(activity);
+        ia.setIndicator(indicator);
+        if (activityLocation != null) ia.setActivityLocation(activityLocation);
 
         Set<AmpIndicatorValue> values = new HashSet<>();
         if (getKey(config, ImporterConstants.ORIGINAL_BASE_VALUE) != null || getKey(config, ImporterConstants.REVISED_BASE_VALUE) != null || existingBase != null) {
@@ -1531,8 +1543,7 @@ public class ImporterUtil {
         actual.setValue(actualVal);
         actual.setValueDate(actualDate);
         actual.setIndicatorConnection(ia);
-        String unit = getCellValueByConfig(row, sheet, config, ImporterConstants.UNIT_OF_MEASURE);
-        if (unit != null && !unit.trim().isEmpty()) actual.setComment("Unit: " + unit.trim());
+        if (actualComment != null) actual.setComment(actualComment);
         values.add(actual);
 
         ia.setValues(values);
@@ -1540,6 +1551,135 @@ public class ImporterUtil {
         activity.getIndicators().add(ia);
         session.save(ia);
         session.flush();
+    }
+
+    /**
+     * Finds an existing activity–indicator connection for the same activity, indicator, and location.
+     * Match is by indicator id and activity location (both null or same location).
+     */
+    private static IndicatorActivity findExistingIndicatorActivity(AmpActivityVersion activity, AmpIndicator indicator,
+            AmpActivityLocation activityLocation) {
+        if (activity.getIndicators() == null) return null;
+        Long indicatorId = indicator != null ? indicator.getIndicatorId() : null;
+        Long locationId = activityLocation != null && activityLocation.getLocation() != null
+                ? activityLocation.getLocation().getAmpLocationId() : null;
+        for (IndicatorActivity ia : activity.getIndicators()) {
+            if (ia.getIndicator() == null) continue;
+            if (!Objects.equals(ia.getIndicator().getIndicatorId(), indicatorId)) continue;
+            Long existingLocId = ia.getActivityLocation() != null && ia.getActivityLocation().getLocation() != null
+                    ? ia.getActivityLocation().getLocation().getAmpLocationId() : null;
+            if (Objects.equals(existingLocId, locationId)) return ia;
+        }
+        return null;
+    }
+
+    /**
+     * Merges imported values into an existing indicator connection: updates existing values by type where present,
+     * adds new values only for types that are missing.
+     */
+    private static void mergeIndicatorValuesIntoExisting(IndicatorActivity ia, Session session, Map<String, String> config,
+            double baseOrigVal, Date origBaseDate, double baseRevVal, Date revBaseDate,
+            double targetOrigVal, Date origTargetDate, double targetRevVal, Date revTargetDate,
+            double actualVal, Date actualDate, String actualComment) {
+        Set<AmpIndicatorValue> existing = ia.getValues();
+        if (existing == null) {
+            existing = new HashSet<>();
+            ia.setValues(existing);
+        }
+        boolean hasBase = getKey(config, ImporterConstants.ORIGINAL_BASE_VALUE) != null || getKey(config, ImporterConstants.REVISED_BASE_VALUE) != null;
+        boolean hasTarget = getKey(config, ImporterConstants.ORIGINAL_TARGET_VALUE) != null || getKey(config, ImporterConstants.REVISED_TARGET_VALUE) != null;
+
+        AmpIndicatorValue existingActual = findValueByType(existing, AmpIndicatorValue.ACTUAL);
+        if (existingActual != null) {
+            existingActual.setValue(actualVal);
+            existingActual.setValueDate(actualDate);
+            if (actualComment != null) existingActual.setComment(actualComment);
+        } else {
+            AmpIndicatorValue actual = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
+            actual.setValue(actualVal);
+            actual.setValueDate(actualDate);
+            if (actualComment != null) actual.setComment(actualComment);
+            actual.setIndicatorConnection(ia);
+            existing.add(actual);
+            session.save(actual);
+        }
+
+        if (hasBase) {
+            AmpIndicatorValue existingBase = findValueByType(existing, AmpIndicatorValue.BASE);
+            if (existingBase != null) {
+                existingBase.setValue(baseOrigVal);
+                existingBase.setValueDate(origBaseDate);
+            } else {
+                AmpIndicatorValue baseOrig = new AmpIndicatorValue(AmpIndicatorValue.BASE);
+                baseOrig.setValue(baseOrigVal);
+                baseOrig.setValueDate(origBaseDate);
+                baseOrig.setIndicatorConnection(ia);
+                existing.add(baseOrig);
+                session.save(baseOrig);
+            }
+            AmpIndicatorValue existingRev = findValueByType(existing, AmpIndicatorValue.REVISED);
+            if (existingRev != null) {
+                existingRev.setValue(baseRevVal);
+                existingRev.setValueDate(revBaseDate);
+            } else {
+                AmpIndicatorValue baseRev = new AmpIndicatorValue(AmpIndicatorValue.REVISED);
+                baseRev.setValue(baseRevVal);
+                baseRev.setValueDate(revBaseDate);
+                baseRev.setIndicatorConnection(ia);
+                existing.add(baseRev);
+                session.save(baseRev);
+            }
+        }
+
+        if (hasTarget) {
+            List<AmpIndicatorValue> targets = getValuesByType(existing, AmpIndicatorValue.TARGET);
+            if (targets.size() >= 2) {
+                targets.get(0).setValue(targetOrigVal);
+                targets.get(0).setValueDate(origTargetDate);
+                targets.get(1).setValue(targetRevVal);
+                targets.get(1).setValueDate(revTargetDate);
+            } else if (targets.size() == 1) {
+                targets.get(0).setValue(targetOrigVal);
+                targets.get(0).setValueDate(origTargetDate);
+                AmpIndicatorValue tRev = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
+                tRev.setValue(targetRevVal);
+                tRev.setValueDate(revTargetDate);
+                tRev.setIndicatorConnection(ia);
+                existing.add(tRev);
+                session.save(tRev);
+            } else {
+                AmpIndicatorValue tOrig = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
+                tOrig.setValue(targetOrigVal);
+                tOrig.setValueDate(origTargetDate);
+                tOrig.setIndicatorConnection(ia);
+                existing.add(tOrig);
+                session.save(tOrig);
+                AmpIndicatorValue tRev = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
+                tRev.setValue(targetRevVal);
+                tRev.setValueDate(revTargetDate);
+                tRev.setIndicatorConnection(ia);
+                existing.add(tRev);
+                session.save(tRev);
+            }
+        }
+    }
+
+    private static AmpIndicatorValue findValueByType(Set<AmpIndicatorValue> values, int valueType) {
+        if (values == null) return null;
+        for (AmpIndicatorValue v : values) {
+            if (v.getValueType() == valueType) return v;
+        }
+        return null;
+    }
+
+    private static List<AmpIndicatorValue> getValuesByType(Set<AmpIndicatorValue> values, int valueType) {
+        if (values == null) return Collections.emptyList();
+        List<AmpIndicatorValue> list = new ArrayList<>();
+        for (AmpIndicatorValue v : values) {
+            if (v.getValueType() == valueType) list.add(v);
+        }
+        list.sort(Comparator.comparing(AmpIndicatorValue::getValueDate, Comparator.nullsLast(Comparator.naturalOrder())));
+        return list;
     }
 
     /**

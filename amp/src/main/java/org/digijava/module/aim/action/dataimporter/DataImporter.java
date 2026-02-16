@@ -502,6 +502,7 @@ public class DataImporter extends Action {
         fieldsInfos.add(ImporterConstants.INDICATOR_NAME);
         fieldsInfos.add(ImporterConstants.PROGRAM_NAME);
         fieldsInfos.add(ImporterConstants.LOCATION);
+        fieldsInfos.add(ImporterConstants.INDICATOR_LOCATION);
         fieldsInfos.add(ImporterConstants.ORIGINAL_BASE_VALUE);
         fieldsInfos.add(ImporterConstants.ORIGINAL_BASE_VALUE_DATE);
         fieldsInfos.add(ImporterConstants.REVISED_BASE_VALUE);

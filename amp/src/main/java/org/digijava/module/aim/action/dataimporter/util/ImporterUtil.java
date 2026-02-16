@@ -25,6 +25,7 @@ import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -721,6 +722,32 @@ public class ImporterUtil {
         importDataModel.setApproval_status(ApprovalStatus.started.getId());
     }
 
+    private static final String CREATED_BY_KEY = "created_by";
+
+    /**
+     * Ensures created_by in the activity map is set to a valid team member id when null,
+     * so the activity API validator does not reject with "(Invalid field value) created_by".
+     * For new activities uses current user; for updates uses existing activity's creator.
+     */
+    private static void ensureCreatedBySet(Map<String, Object> map, AmpActivityVersion existing) {
+        Object createdBy = map.get(CREATED_BY_KEY);
+        if (createdBy != null) {
+            return;
+        }
+        Long creatorId = null;
+        if (existing != null && existing.getActivityCreator() != null) {
+            creatorId = existing.getActivityCreator().getAmpTeamMemId();
+        } else {
+            AmpTeamMember currentMember = TeamUtil.getCurrentAmpTeamMember();
+            if (currentMember != null) {
+                creatorId = currentMember.getAmpTeamMemId();
+            }
+        }
+        if (creatorId != null) {
+            map.put(CREATED_BY_KEY, creatorId);
+        }
+    }
+
     /** @return activity ID on success, null on skip or failure */
     public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, AmpActivityVersion existing) throws JsonProcessingException {
         if (!session.isOpen()) {
@@ -743,6 +770,7 @@ public class ImporterUtil {
             return null;
         }
         if (existing == null) {
+            ensureCreatedBySet(map, null);
             logger.info("New activity");
             importedProject.setNewProject(true);
             response = ActivityInterchangeUtils.importActivity(map, false, rules, "activity/new");
@@ -760,6 +788,7 @@ public class ImporterUtil {
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                     });
+            ensureCreatedBySet(map, existing);
             response = ActivityInterchangeUtils.importActivity(map, true, rules, "activity/update");
         }
         Long activityId = null;
@@ -1379,11 +1408,14 @@ public class ImporterUtil {
     /** Add indicator data to an activity from the current row. Called after importTheData when indicator columns are mapped. */
     public static void addIndicatorDataToActivity(Long activityId, Row row, Sheet sheet, Map<String, String> config, Session session) {
         if (activityId == null || config == null || row == null || sheet == null) return;
-        if (getKey(config, ImporterConstants.INDICATOR_NAME) == null || getKey(config, ImporterConstants.LOCATION) == null || getKey(config, ImporterConstants.ACTUAL_VALUE) == null) {
+        String locationConfigKey = getKey(config, ImporterConstants.INDICATOR_LOCATION) != null
+                ? ImporterConstants.INDICATOR_LOCATION
+                : ImporterConstants.LOCATION;
+        if (getKey(config, ImporterConstants.INDICATOR_NAME) == null || getKey(config, locationConfigKey) == null || getKey(config, ImporterConstants.ACTUAL_VALUE) == null) {
             return;
         }
         String indicatorName = getCellValueByConfig(row, sheet, config, ImporterConstants.INDICATOR_NAME);
-        String locationName = getCellValueByConfig(row, sheet, config, ImporterConstants.LOCATION);
+        String locationName = getCellValueByConfig(row, sheet, config, locationConfigKey);
         if (indicatorName == null || indicatorName.trim().isEmpty() || locationName == null || locationName.trim().isEmpty()) {
             return;
         }

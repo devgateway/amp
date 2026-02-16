@@ -1160,45 +1160,56 @@ public class ImporterUtil {
 
     }
 
-    public static void updateLocations(ImportDataModel importDataModel, String locationName, Session session) {
+    /**
+     * Splits a comma- or semicolon-separated string into non-empty trimmed parts.
+     */
+    private static List<String> splitLocationNames(String locationNames) {
+        if (locationNames == null || locationNames.trim().isEmpty()) return Collections.emptyList();
+        List<String> result = new ArrayList<>();
+        for (String part : locationNames.split("[,;]")) {
+            String trimmed = part.trim();
+            if (!trimmed.isEmpty()) result.add(trimmed);
+        }
+        return result;
+    }
+
+    public static void updateLocations(ImportDataModel importDataModel, String locationNames, Session session) {
         logger.info("Updating locations");
+        if (locationNames == null || locationNames.trim().isEmpty()) return;
+        for (String locationName : splitLocationNames(locationNames)) {
+            if (ConstantsMap.containsKey("location_" + locationName)) {
+                Long location = ConstantsMap.get("location_" + locationName);
+                logger.info("In cache... location " + "location_" + locationName + ":" + location);
+                importDataModel.getLocations().add(new Location(location, 100.00));
 
-        if (ConstantsMap.containsKey("location_" + locationName)) {
-            Long location = ConstantsMap.get("location_" + locationName);
-            logger.info("In cache... location " + "location_" + locationName + ":" + location);
-            importDataModel.getLocations().add(new Location(location, 100.00));
-
-        } else {
-            if (!session.isOpen()) {
-                session = PersistenceManager.getRequestDBSession();
-            }
-
-            session.doWork(connection -> {
-                String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
-                try (PreparedStatement statement = connection.prepareStatement(query)) {
-                    statement.setString(1, locationName);
-
-                    try (ResultSet resultSet = statement.executeQuery()) {
-                        while (resultSet.next()) {
-                            Long location = resultSet.getLong("location_id");
-                            logger.info("Location:" + location);
-                            importDataModel.getLocations().add(new Location(location, 100.00));
-//                            importDataModel.setImplementation_location(location);
-                            ConstantsMap.put("location_" + locationName, location);
-                        }
-                    }
-
-                } catch (SQLException e) {
-                    logger.error("Error getting locations", e);
+            } else {
+                if (!session.isOpen()) {
+                    session = PersistenceManager.getRequestDBSession();
                 }
 
-            });
+                final String locationNameFinal = locationName;
+                session.doWork(connection -> {
+                    String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
+                    try (PreparedStatement statement = connection.prepareStatement(query)) {
+                        statement.setString(1, locationNameFinal);
 
+                        try (ResultSet resultSet = statement.executeQuery()) {
+                            while (resultSet.next()) {
+                                Long location = resultSet.getLong("location_id");
+                                logger.info("Location:" + location);
+                                importDataModel.getLocations().add(new Location(location, 100.00));
+                                ConstantsMap.put("location_" + locationNameFinal, location);
+                            }
+                        }
 
+                    } catch (SQLException e) {
+                        logger.error("Error getting locations", e);
+                    }
+
+                });
+            }
         }
-        updateImpLevels(importDataModel,session);
-
-
+        updateImpLevels(importDataModel, session);
     }
 
     /**
@@ -1467,24 +1478,37 @@ public class ImporterUtil {
 
     /** Add indicator data to an activity from the current row. Called after importTheData when indicator columns are mapped. */
     public static void addIndicatorDataToActivity(Long activityId, Row row, Sheet sheet, Map<String, String> config, Session session) {
-        if (activityId == null || config == null || row == null || sheet == null) return;
+        logger.info("addIndicatorDataToActivity: activityId={}, row={}", activityId, row != null ? row.getRowNum() : null);
+        if (activityId == null || config == null || row == null || sheet == null) {
+            logger.info("addIndicatorDataToActivity: skipping - activityId, config, row or sheet is null");
+            return;
+        }
         // importTheData runs inside ActivityGatekeeper.doWithLock which commits and closes the session; use a fresh one if closed
         if (session == null || !session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
+            logger.info("addIndicatorDataToActivity: obtained fresh session");
         }
         String locationConfigKey = getKey(config, ImporterConstants.INDICATOR_LOCATION) != null
                 ? ImporterConstants.INDICATOR_LOCATION
                 : ImporterConstants.LOCATION;
         if (getKey(config, ImporterConstants.INDICATOR_NAME) == null || getKey(config, locationConfigKey) == null || getKey(config, ImporterConstants.ACTUAL_VALUE) == null) {
+            logger.info("addIndicatorDataToActivity: skipping - missing config for indicator name, location or actual value");
             return;
         }
         String indicatorName = getCellValueByConfig(row, sheet, config, ImporterConstants.INDICATOR_NAME);
-        String locationName = getCellValueByConfig(row, sheet, config, locationConfigKey);
-        if (indicatorName == null || indicatorName.trim().isEmpty() || locationName == null || locationName.trim().isEmpty()) {
+        String locationNamesStr = getCellValueByConfig(row, sheet, config, locationConfigKey);
+        if (indicatorName == null || indicatorName.trim().isEmpty() || locationNamesStr == null || locationNamesStr.trim().isEmpty()) {
+            logger.info("addIndicatorDataToActivity: skipping - indicatorName or locationNamesStr empty (indicatorName='{}', locationNamesStr='{}')", indicatorName, locationNamesStr);
             return;
         }
         indicatorName = indicatorName.trim();
-        locationName = locationName.trim();
+        List<String> locationNames = splitLocationNames(locationNamesStr);
+        logger.info("addIndicatorDataToActivity: indicator='{}', locations(count={}): {}", indicatorName, locationNames.size(), locationNames);
+        if (locationNames.isEmpty()) {
+            logger.debug("addIndicatorDataToActivity: no location names after split");
+            return;
+        }
+
         String programName = getCellValueByConfig(row, sheet, config, ImporterConstants.PROGRAM_NAME);
         if (programName != null) programName = programName.trim();
 
@@ -1501,6 +1525,7 @@ public class ImporterUtil {
         MEIndicatorDTO indicatorDto = indicatorService.getMeIndicatorByNameAndProgramNameOptional(indicatorName, (programName == null || programName.isEmpty()) ? null : programName);
         AmpIndicator indicator;
         if (indicatorDto == null) {
+            logger.info("addIndicatorDataToActivity: creating new indicator '{}' (program={})", indicatorName, programName);
             MEIndicatorDTO createDto = new MEIndicatorDTO();
             createDto.setName(indicatorName);
             createDto.setCode(indicatorName + "_" + System.currentTimeMillis());
@@ -1517,29 +1542,24 @@ public class ImporterUtil {
                 return;
             }
             indicator = session.get(AmpIndicator.class, indicatorDto.getId());
+            logger.info("addIndicatorDataToActivity: created indicator id={}", indicator != null ? indicator.getIndicatorId() : null);
         } else {
             indicator = session.get(AmpIndicator.class, indicatorDto.getId());
+            logger.info("addIndicatorDataToActivity: using existing indicator id={} name='{}'", indicator != null ? indicator.getIndicatorId() : null, indicatorName);
         }
-        if (indicator == null) return;
+        if (indicator == null) {
+            logger.info("addIndicatorDataToActivity: indicator is null after lookup/create");
+            return;
+        }
 
         AmpActivityVersion activity = session.get(AmpActivityVersion.class, activityId);
-        if (activity == null) return;
+        if (activity == null) {
+            logger.info("addIndicatorDataToActivity: activity not found for activityId={}", activityId);
+            return;
+        }
 
         if (programTheme != null) {
             addProgramToActivityIfMissing(activity, programTheme, session);
-        }
-
-        AmpActivityLocation activityLocation = null;
-        if (activity.getLocations() != null) {
-            for (AmpActivityLocation aal : activity.getLocations()) {
-                if (aal.getLocation() != null && locationName.equalsIgnoreCase(aal.getLocation().getName())) {
-                    activityLocation = aal;
-                    break;
-                }
-            }
-        }
-        if (activityLocation == null) {
-            activityLocation = getOrAddActivityLocationForName(activity, locationName, session);
         }
 
         AmpIndicatorGlobalValue existingBase = indicator.getBaseValue();
@@ -1566,58 +1586,86 @@ public class ImporterUtil {
         if (unit != null) unit = unit.trim();
         String actualComment = (unit != null && !unit.isEmpty()) ? "Unit: " + unit : null;
 
-        IndicatorActivity ia = findExistingIndicatorActivity(activity, indicator, activityLocation);
-        if (ia != null) {
-            mergeIndicatorValuesIntoExisting(ia, session, config,
-                    baseOrigVal, origBaseDate, baseRevVal, revBaseDate,
-                    targetOrigVal, origTargetDate, targetRevVal, revTargetDate,
-                    actualVal, actualDate, actualComment);
-            session.flush();
-            return;
-        }
+        int merged = 0, created = 0, skipped = 0;
+        for (String locationName : locationNames) {
+            logger.info("addIndicatorDataToActivity: processing location '{}' for activityId={} indicator='{}'", locationName, activityId, indicatorName);
+            AmpActivityLocation activityLocation = null;
+            if (activity.getLocations() != null) {
+                for (AmpActivityLocation aal : activity.getLocations()) {
+                    if (aal.getLocation() != null && locationName.equalsIgnoreCase(aal.getLocation().getName())) {
+                        activityLocation = aal;
+                        break;
+                    }
+                }
+            }
+            if (activityLocation == null) {
+                activityLocation = getOrAddActivityLocationForName(activity, locationName, session);
+            }
+            if (activityLocation == null) {
+                logger.info("addIndicatorDataToActivity: could not resolve or add location '{}' for activityId={}, skipping", locationName, activityId);
+                skipped++;
+                continue;
+            }
+            logger.info("addIndicatorDataToActivity: activityLocation id={} for '{}'", activityLocation.getLocation() != null ? activityLocation.getLocation().getId() : null, locationName);
 
-        ia = new IndicatorActivity();
-        ia.setActivity(activity);
-        ia.setIndicator(indicator);
-        if (activityLocation != null) ia.setActivityLocation(activityLocation);
+            IndicatorActivity ia = findExistingIndicatorActivity(activity, indicator, activityLocation);
+            if (ia != null) {
+                logger.info("addIndicatorDataToActivity: merging into existing IndicatorActivity for location '{}' (actual={})", locationName, actualVal);
+                mergeIndicatorValuesIntoExisting(ia, session, config,
+                        baseOrigVal, origBaseDate, baseRevVal, revBaseDate,
+                        targetOrigVal, origTargetDate, targetRevVal, revTargetDate,
+                        actualVal, actualDate, actualComment);
+                session.flush();
+                merged++;
+                continue;
+            }
 
-        Set<AmpIndicatorValue> values = new HashSet<>();
-        if (getKey(config, ImporterConstants.ORIGINAL_BASE_VALUE) != null || getKey(config, ImporterConstants.REVISED_BASE_VALUE) != null || existingBase != null) {
-            AmpIndicatorValue baseOrig = new AmpIndicatorValue(AmpIndicatorValue.BASE);
-            baseOrig.setValue(baseOrigVal);
-            baseOrig.setValueDate(origBaseDate);
-            baseOrig.setIndicatorConnection(ia);
-            values.add(baseOrig);
-            AmpIndicatorValue baseRev = new AmpIndicatorValue(AmpIndicatorValue.REVISED);
-            baseRev.setValue(baseRevVal);
-            baseRev.setValueDate(revBaseDate);
-            baseRev.setIndicatorConnection(ia);
-            values.add(baseRev);
-        }
-        if (getKey(config, ImporterConstants.ORIGINAL_TARGET_VALUE) != null || getKey(config, ImporterConstants.REVISED_TARGET_VALUE) != null) {
-            AmpIndicatorValue tOrig = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
-            tOrig.setValue(targetOrigVal);
-            tOrig.setValueDate(origTargetDate);
-            tOrig.setIndicatorConnection(ia);
-            values.add(tOrig);
-            AmpIndicatorValue tRev = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
-            tRev.setValue(targetRevVal);
-            tRev.setValueDate(revTargetDate);
-            tRev.setIndicatorConnection(ia);
-            values.add(tRev);
-        }
-        AmpIndicatorValue actual = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
-        actual.setValue(actualVal);
-        actual.setValueDate(actualDate);
-        actual.setIndicatorConnection(ia);
-        if (actualComment != null) actual.setComment(actualComment);
-        values.add(actual);
+            logger.info("addIndicatorDataToActivity: creating new IndicatorActivity for activityId={} indicator='{}' location='{}' (actual={})", activityId, indicatorName, locationName, actualVal);
+            ia = new IndicatorActivity();
+            ia.setActivity(activity);
+            ia.setIndicator(indicator);
+            ia.setActivityLocation(activityLocation);
 
-        ia.setValues(values);
-        if (activity.getIndicators() == null) activity.setIndicators(new HashSet<>());
-        activity.getIndicators().add(ia);
-        session.save(ia);
+            Set<AmpIndicatorValue> values = new HashSet<>();
+            if (getKey(config, ImporterConstants.ORIGINAL_BASE_VALUE) != null || getKey(config, ImporterConstants.REVISED_BASE_VALUE) != null || existingBase != null) {
+                AmpIndicatorValue baseOrig = new AmpIndicatorValue(AmpIndicatorValue.BASE);
+                baseOrig.setValue(baseOrigVal);
+                baseOrig.setValueDate(origBaseDate);
+                baseOrig.setIndicatorConnection(ia);
+                values.add(baseOrig);
+                AmpIndicatorValue baseRev = new AmpIndicatorValue(AmpIndicatorValue.REVISED);
+                baseRev.setValue(baseRevVal);
+                baseRev.setValueDate(revBaseDate);
+                baseRev.setIndicatorConnection(ia);
+                values.add(baseRev);
+            }
+            if (getKey(config, ImporterConstants.ORIGINAL_TARGET_VALUE) != null || getKey(config, ImporterConstants.REVISED_TARGET_VALUE) != null) {
+                AmpIndicatorValue tOrig = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
+                tOrig.setValue(targetOrigVal);
+                tOrig.setValueDate(origTargetDate);
+                tOrig.setIndicatorConnection(ia);
+                values.add(tOrig);
+                AmpIndicatorValue tRev = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
+                tRev.setValue(targetRevVal);
+                tRev.setValueDate(revTargetDate);
+                tRev.setIndicatorConnection(ia);
+                values.add(tRev);
+            }
+            AmpIndicatorValue actual = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
+            actual.setValue(actualVal);
+            actual.setValueDate(actualDate);
+            actual.setIndicatorConnection(ia);
+            if (actualComment != null) actual.setComment(actualComment);
+            values.add(actual);
+
+            ia.setValues(values);
+            if (activity.getIndicators() == null) activity.setIndicators(new HashSet<>());
+            activity.getIndicators().add(ia);
+            session.save(ia);
+            created++;
+        }
         session.flush();
+        logger.info("addIndicatorDataToActivity: done for activityId={} indicator='{}' - merged={}, created={}, skipped={}", activityId, indicatorName, merged, created, skipped);
     }
 
     /**
@@ -1648,6 +1696,7 @@ public class ImporterUtil {
             double baseOrigVal, Date origBaseDate, double baseRevVal, Date revBaseDate,
             double targetOrigVal, Date origTargetDate, double targetRevVal, Date revTargetDate,
             double actualVal, Date actualDate, String actualComment) {
+        logger.debug("mergeIndicatorValuesIntoExisting: indicatorConnection id={}, actualVal={}", ia.getId(), actualVal);
         Set<AmpIndicatorValue> existing = ia.getValues();
         if (existing == null) {
             existing = new HashSet<>();

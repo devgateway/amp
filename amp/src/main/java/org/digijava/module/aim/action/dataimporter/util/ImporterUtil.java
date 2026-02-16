@@ -1493,7 +1493,7 @@ public class ImporterUtil {
             try {
                 programTheme = getOrCreateProgramByName(programName, session);
             } catch (Exception e) {
-                logger.warn("Could not resolve or create program by name: " + programName, e);
+                logger.error("Could not resolve or create program by name: " + programName, e);
             }
         }
 

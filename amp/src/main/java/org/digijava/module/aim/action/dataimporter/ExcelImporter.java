@@ -158,10 +158,10 @@ public class ExcelImporter {
     public static void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord) throws JsonProcessingException {
         // Process the batch of rows
         SessionUtil.extendSessionIfNeeded(request);
-        Session session = PersistenceManager.getRequestDBSession();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
         for (Row row : batch) {
             if (row != null) {
+                final Row rowRef = row;
                 ImportedProject importedProject = new ImportedProject();
                 importedProject.setImportedFilesRecord(importedFilesRecord);
                 List<Funding> fundings = new ArrayList<>();
@@ -175,40 +175,42 @@ public class ExcelImporter {
                 importDataModel.setCreation_date(now.format(formatter));
 
                 int componentCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.COMPONENT_CODE));
-                String componentCode = componentCodeColumn >= 0 ? getStringValueFromCell(row.getCell(componentCodeColumn),true) : null;
+                String componentCode = componentCodeColumn >= 0 ? getStringValueFromCell(rowRef.getCell(componentCodeColumn),true) : null;
 
                 int componentNameColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.COMPONENT_NAME));
-                String componentName = componentNameColumn >= 0 ? getStringValueFromCell(row.getCell(componentNameColumn),true): null;
+                String componentName = componentNameColumn >= 0 ? getStringValueFromCell(rowRef.getCell(componentNameColumn),true): null;
 
                 int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
-                String donorAgencyCode = donorAgencyCodeColumn >= 0 ? getStringValueFromCell(row.getCell(donorAgencyCodeColumn),true) : null;
+                String donorAgencyCode = donorAgencyCodeColumn >= 0 ? getStringValueFromCell(rowRef.getCell(donorAgencyCodeColumn),true) : null;
 
                 int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.RESPONSIBLE_ORGANIZATION_CODE));
-                String responsibleOrgCode = responsibleOrgCodeColumn >= 0 ? getStringValueFromCell(row.getCell(responsibleOrgCodeColumn),true) : null;
+                String responsibleOrgCode = responsibleOrgCodeColumn >= 0 ? getStringValueFromCell(rowRef.getCell(responsibleOrgCodeColumn),true) : null;
 
                 int primarySubSectorColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PRIMARY_SUBSECTOR));
-                String primarySubSector = primarySubSectorColumn >= 0 ? getStringValueFromCell(row.getCell(primarySubSectorColumn),true) : null;
+                String primarySubSector = primarySubSectorColumn >= 0 ? getStringValueFromCell(rowRef.getCell(primarySubSectorColumn),true) : null;
 
                 int secondarySubSectorColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.SECONDARY_SUBSECTOR));
-                String secondarySubSector = secondarySubSectorColumn >= 0 ? getStringValueFromCell(row.getCell(secondarySubSectorColumn),true) : null;
+                String secondarySubSector = secondarySubSectorColumn >= 0 ? getStringValueFromCell(rowRef.getCell(secondarySubSectorColumn),true) : null;
 
                 int projectCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PROJECT_CODE));
-                String projectCode = projectCodeColumn >= 0 ? getStringValueFromCell(row.getCell(projectCodeColumn),false) : "";
+                String projectCode = projectCodeColumn >= 0 ? getStringValueFromCell(rowRef.getCell(projectCodeColumn),false) : "";
                 importDataModel.setProject_code(projectCode);
 
                 int projectTitleColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PROJECT_TITLE));
-                String projectTitle = projectTitleColumn >= 0 ? getStringValueFromCell(row.getCell(projectTitleColumn),false) : "";
+                String projectTitle = projectTitleColumn >= 0 ? getStringValueFromCell(rowRef.getCell(projectTitleColumn),false) : "";
                 importDataModel.setProject_title(projectTitle);
                 int objectiveColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.OBJECTIVE));
-                String objective = objectiveColumn >= 0 ? getStringValueFromCell(row.getCell(objectiveColumn),false) : null;
+                String objective = objectiveColumn >= 0 ? getStringValueFromCell(rowRef.getCell(objectiveColumn),false) : null;
                 importDataModel.setObjective(objective);
 
                 int projectDescColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PROJECT_DESCRIPTION));
-                String projectDesc = projectDescColumn >= 0 ? getStringValueFromCell(row.getCell(projectDescColumn),false) : null;
+                String projectDesc = projectDescColumn >= 0 ? getStringValueFromCell(rowRef.getCell(projectDescColumn),false) : null;
                 importDataModel.setDescription(projectDesc);
 
+                PersistenceManager.inTransaction(() -> {
+                    Session session = PersistenceManager.getRequestDBSession();
                 if (config.containsValue(ImporterConstants.PROJECT_STATUS)) {
-                    String projectStatusStr = ImporterUtil.getCellValueByConfig(row, sheet, config, ImporterConstants.PROJECT_STATUS);
+                    String projectStatusStr = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PROJECT_STATUS);
                     if (projectStatusStr != null && !projectStatusStr.trim().isEmpty()) {
                         Long statusId = ImporterUtil.getOrCreateActivityStatusCategoryValue(projectStatusStr.trim(), session);
                         if (statusId != null) {
@@ -228,14 +230,14 @@ public class ExcelImporter {
 //                    continue;
 //                }
 
-                logger.info("Row Number: {}, Sheet Name: {}", row.getRowNum(), sheet.getSheetName());
+                logger.info("Row Number: {}, Sheet Name: {}", rowRef.getRowNum(), sheet.getSheetName());
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     Funding fundingItem = new Funding();
 
                     int columnIndex = getColumnIndexByName(sheet, entry.getKey());
 
                     if (columnIndex >= 0) {
-                        Cell cell = row.getCell(columnIndex);
+                        Cell cell = rowRef.getCell(columnIndex);
                         switch (entry.getValue()) {
                             case ImporterConstants.PROJECT_LOCATION:
                                  updateLocations(importDataModel,Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(),session);
@@ -260,7 +262,7 @@ public class ExcelImporter {
                                 boolean commitment = true, disbursement = true, expenditure = false;
                                 String adjustmentType = ImporterConstants.ADJUSTMENT_TYPE_ACTUAL;
                                 if (config.containsValue(ImporterConstants.MEASURE_TYPE)) {
-                                    String measureTypeStr = ImporterUtil.getCellValueByConfig(row, sheet, config, ImporterConstants.MEASURE_TYPE);
+                                    String measureTypeStr = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.MEASURE_TYPE);
                                     ImporterUtil.MeasureTypeResult parsed = parseMeasureType(measureTypeStr);
                                     if (parsed != null) {
                                         commitment = parsed.commitment;
@@ -269,26 +271,26 @@ public class ExcelImporter {
                                         adjustmentType = parsed.adjustmentType;
                                     }
                                 }
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, commitment, disbursement, expenditure, adjustmentType, fundingItem, existing);
+                                setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, commitment, disbursement, expenditure, adjustmentType, fundingItem, existing);
                                 break;
                             }
                             case ImporterConstants.PLANNED_COMMITMENT:
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false,false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existing);
+                                setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false,false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existing);
                                 break;
                             case ImporterConstants.PLANNED_DISBURSEMENT:
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existing);
+                                setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existing);
                                 break;
                             case ImporterConstants.PLANNED_EXPENDITURE:
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existing);
+                                setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existing);
                                 break;
                             case ImporterConstants.ACTUAL_COMMITMENT:
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
+                                setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
                                 break;
                             case ImporterConstants.ACTUAL_DISBURSEMENT:
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
+                                setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
                                 break;
                             case ImporterConstants.ACTUAL_EXPENDITURE:
-                                setAFundingItemForExcel(sheet, config, row, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
+                                setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
                                 break;
                             case ImporterConstants.MEASURE_TYPE:
                                 break;
@@ -312,18 +314,14 @@ public class ExcelImporter {
                 if (activityId != null && config.containsValue(ImporterConstants.INDICATOR_NAME)) {
                     logger.info("Adding indicator data for activity " + activityId);
                     try {
-                        // importTheData runs inside ActivityGatekeeper.doWithLock which commits and closes the session;
-                        // run indicator add in its own transaction so it gets a fresh open session
-                        final Long aid = activityId;
-                        PersistenceManager.inTransaction(() -> {
-                            Session s = PersistenceManager.getRequestDBSession();
-                            addIndicatorDataToActivity(aid, row, sheet, config, s);
-                        });
+                        Session s = PersistenceManager.getRequestDBSession();
+                        addIndicatorDataToActivity(activityId, rowRef, sheet, config, s);
                         logger.info("Indicator data added for activity " + activityId);
                     } catch (Exception e) {
                         logger.error("Failed to add indicator data for activity " + activityId, e);
                     }
                 }
+                });
             }
         }
     }

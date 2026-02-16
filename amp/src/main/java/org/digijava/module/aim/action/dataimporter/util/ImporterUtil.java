@@ -30,6 +30,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.type.StringType;
@@ -769,6 +770,9 @@ public class ImporterUtil {
         Map<String, Object> map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                 });
+        // Do not send indicators in the payload so activity/update does not replace or clear existing indicators.
+        // Indicator data is appended separately in addIndicatorDataToActivity.
+        map.remove("indicators");
         JsonApiResponse<ActivitySummary> response;
         logger.info("Data model object: " + importDataModel);
         if (importDataModel.getProject_title().trim().isEmpty() && importDataModel.getProject_code().trim().isEmpty()) {
@@ -795,6 +799,7 @@ public class ImporterUtil {
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                     });
+            map.remove("indicators"); // preserve existing indicators; we append in addIndicatorDataToActivity
             ensureCreatedBySet(map, existing);
             response = ActivityInterchangeUtils.importActivity(map, true, rules, "activity/update");
         }
@@ -1231,6 +1236,7 @@ public class ImporterUtil {
             if (activity.getLocations() == null) activity.setLocations(new HashSet<>());
             activity.getLocations().add(aal);
             session.save(aal);
+            session.flush();
             return aal;
         }
         if (!session.isOpen()) {
@@ -1557,6 +1563,12 @@ public class ImporterUtil {
             logger.info("addIndicatorDataToActivity: activity not found for activityId={}", activityId);
             return;
         }
+        // Force-load indicators so we append to existing; avoid replacing due to lazy/uninitialized collection
+        if (activity.getIndicators() != null) {
+            Hibernate.initialize(activity.getIndicators());
+        }
+        int indicatorsCountBefore = activity.getIndicators() == null ? 0 : activity.getIndicators().size();
+        logger.info("addIndicatorDataToActivity: activityId={} existing indicators count={}", activityId, indicatorsCountBefore);
 
         if (programTheme != null) {
             addProgramToActivityIfMissing(activity, programTheme, session);
@@ -1569,14 +1581,17 @@ public class ImporterUtil {
         boolean hasRevBase = getKey(config, ImporterConstants.REVISED_BASE_VALUE) != null && !Double.isNaN(revBase);
         double origTarget = parseDoubleFromConfig(row, sheet, config, ImporterConstants.ORIGINAL_TARGET_VALUE);
         double revTarget = parseDoubleFromConfig(row, sheet, config, ImporterConstants.REVISED_TARGET_VALUE);
+        String actualValueConfigKey = getKey(config, ImporterConstants.ACTUAL_VALUE);
         double actualVal = parseDoubleFromConfig(row, sheet, config, ImporterConstants.ACTUAL_VALUE);
         if (Double.isNaN(actualVal)) actualVal = 0.0;
+        logger.info("addIndicatorDataToActivity: actual value configKey='{}' parsed actualVal={} (NaN->0)", actualValueConfigKey, actualVal);
 
         Date origBaseDate = parseDateDefaultToday(row, sheet, config, ImporterConstants.ORIGINAL_BASE_VALUE_DATE);
         Date revBaseDate = parseDateDefaultToday(row, sheet, config, ImporterConstants.REVISED_BASE_VALUE_DATE);
         Date origTargetDate = parseDateDefaultToday(row, sheet, config, ImporterConstants.ORIGINAL_TARGET_VALUE_DATE);
         Date revTargetDate = parseDateDefaultToday(row, sheet, config, ImporterConstants.REVISED_TARGET_VALUE_DATE);
         Date actualDate = parseDateDefaultToday(row, sheet, config, ImporterConstants.ACTUAL_VALUE_DATE);
+        logger.info("addIndicatorDataToActivity: actualDate={}", actualDate);
 
         double baseOrigVal = hasOrigBase ? origBase : (existingBase != null && existingBase.getOriginalValue() != null ? existingBase.getOriginalValue() : 0.0);
         double baseRevVal = hasRevBase ? revBase : (existingBase != null && existingBase.getRevisedValue() != null ? existingBase.getRevisedValue() : 0.0);
@@ -1657,15 +1672,19 @@ public class ImporterUtil {
             actual.setIndicatorConnection(ia);
             if (actualComment != null) actual.setComment(actualComment);
             values.add(actual);
+            logger.info("addIndicatorDataToActivity: new IndicatorActivity - created ACTUAL value: value={}, valueDate={}, saving child", actualVal, actualDate);
 
             ia.setValues(values);
             if (activity.getIndicators() == null) activity.setIndicators(new HashSet<>());
             activity.getIndicators().add(ia);
             session.save(ia);
+            session.save(actual);
+            logger.info("addIndicatorDataToActivity: saved IndicatorActivity id={} and ACTUAL AmpIndicatorValue", ia.getId());
             created++;
         }
         session.flush();
-        logger.info("addIndicatorDataToActivity: done for activityId={} indicator='{}' - merged={}, created={}, skipped={}", activityId, indicatorName, merged, created, skipped);
+        int indicatorsCountAfter = activity.getIndicators() == null ? 0 : activity.getIndicators().size();
+        logger.info("addIndicatorDataToActivity: done for activityId={} indicator='{}' - merged={}, created={}, skipped={}, indicatorsCount before={} after={}", activityId, indicatorName, merged, created, skipped, indicatorsCountBefore, indicatorsCountAfter);
     }
 
     /**
@@ -1707,10 +1726,12 @@ public class ImporterUtil {
 
         AmpIndicatorValue existingActual = findValueByType(existing, AmpIndicatorValue.ACTUAL);
         if (existingActual != null) {
+            logger.info("mergeIndicatorValuesIntoExisting: updating existing ACTUAL value: indValId={} oldValue={} newValue={} newDate={}", existingActual.getIndValId(), existingActual.getValue(), actualVal, actualDate);
             existingActual.setValue(actualVal);
             existingActual.setValueDate(actualDate);
             if (actualComment != null) existingActual.setComment(actualComment);
         } else {
+            logger.info("mergeIndicatorValuesIntoExisting: adding new ACTUAL value: value={} valueDate={}", actualVal, actualDate);
             AmpIndicatorValue actual = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
             actual.setValue(actualVal);
             actual.setValueDate(actualDate);
@@ -1879,17 +1900,36 @@ public class ImporterUtil {
 
     private static double parseDoubleFromConfig(Row row, Sheet sheet, Map<String, String> config, String fieldName) {
         String key = getKey(config, fieldName);
-        if (key == null) return Double.NaN;
+        if (key == null) {
+            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: no config key for field '{}'", fieldName);
+            return Double.NaN;
+        }
         int col = getColumnIndexByName(sheet, key);
-        if (col < 0) return Double.NaN;
+        if (col < 0) {
+            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: column not found for key '{}' in sheet", key);
+            return Double.NaN;
+        }
         Cell cell = row.getCell(col);
-        if (cell == null) return Double.NaN;
+        if (cell == null) {
+            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: cell is null for col={} key='{}'", col, key);
+            return Double.NaN;
+        }
         try {
-            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) return cell.getNumericCellValue();
+            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                double v = cell.getNumericCellValue();
+                if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE from numeric cell col='{}' value={}", key, v);
+                return v;
+            }
             String s = getStringValueFromCell(cell, true);
-            if (s == null || s.trim().isEmpty()) return Double.NaN;
-            return Double.parseDouble(s.trim());
+            if (s == null || s.trim().isEmpty()) {
+                if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE cell empty for col='{}'", key);
+                return Double.NaN;
+            }
+            double v = Double.parseDouble(s.trim());
+            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE from string cell col='{}' raw='{}' parsed={}", key, s, v);
+            return v;
         } catch (Exception e) {
+            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE parse failed for col='{}' cellType={} error={}", key, cell.getCellType(), e.getMessage());
             return Double.NaN;
         }
     }

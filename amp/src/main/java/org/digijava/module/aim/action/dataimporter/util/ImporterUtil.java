@@ -1468,6 +1468,10 @@ public class ImporterUtil {
     /** Add indicator data to an activity from the current row. Called after importTheData when indicator columns are mapped. */
     public static void addIndicatorDataToActivity(Long activityId, Row row, Sheet sheet, Map<String, String> config, Session session) {
         if (activityId == null || config == null || row == null || sheet == null) return;
+        // importTheData runs inside ActivityGatekeeper.doWithLock which commits and closes the session; use a fresh one if closed
+        if (session == null || !session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
         String locationConfigKey = getKey(config, ImporterConstants.INDICATOR_LOCATION) != null
                 ? ImporterConstants.INDICATOR_LOCATION
                 : ImporterConstants.LOCATION;

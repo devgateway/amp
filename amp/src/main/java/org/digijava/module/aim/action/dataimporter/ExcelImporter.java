@@ -310,8 +310,16 @@ public class ExcelImporter {
 
                 Long activityId = importTheData(importDataModel, session, importedProject, componentName, componentCode, responsibleOrgId, fundings, existing);
                 if (activityId != null && config.containsValue(ImporterConstants.INDICATOR_NAME)) {
+                    logger.info("Adding indicator data for activity " + activityId);
                     try {
-                        addIndicatorDataToActivity(activityId, row, sheet, config, session);
+                        // importTheData runs inside ActivityGatekeeper.doWithLock which commits and closes the session;
+                        // run indicator add in its own transaction so it gets a fresh open session
+                        final Long aid = activityId;
+                        PersistenceManager.inTransaction(() -> {
+                            Session s = PersistenceManager.getRequestDBSession();
+                            addIndicatorDataToActivity(aid, row, sheet, config, s);
+                        });
+                        logger.info("Indicator data added for activity " + activityId);
                     } catch (Exception e) {
                         logger.error("Failed to add indicator data for activity " + activityId, e);
                     }

@@ -52,7 +52,7 @@ public class ImportDataModel {
     private Integer approval_status;
     private Object archived;
 //    private Set<Object> indicators;
-    private Set<Object> activity_documents;
+//    private Set<Object> activity_documents;
     private Long activity_status;
     private Long activity_budget;
     private Long implementation_location;
@@ -401,13 +401,13 @@ public class ImportDataModel {
 //        this.indicators = indicators;
 //    }
 
-    public Set<Object> getActivity_documents() {
-        return activity_documents;
-    }
+//    public Set<Object> getActivity_documents() {
+//        return activity_documents;
+//    }
 
-    public void setActivity_documents(Set<Object> activity_documents) {
-        this.activity_documents = activity_documents;
-    }
+//    public void setActivity_documents(Set<Object> activity_documents) {
+//        this.activity_documents = activity_documents;
+//    }
 
     public Long getActivity_status() {
         return activity_status;
@@ -546,7 +546,7 @@ public class ImportDataModel {
                 ", approval_status=" + approval_status +
                 ", archived=" + archived +
 //                ", indicators=" + indicators +
-                ", activity_documents=" + activity_documents +
+//                ", activity_documents=" + activity_documents +
                 ", activity_status=" + activity_status +
                 ", activity_budget=" + activity_budget +
                 ", implementation_level=" + implementation_level +

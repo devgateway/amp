@@ -1568,12 +1568,12 @@ public class ImporterUtil {
         if (activity.getIndicators() == null) return null;
         Long indicatorId = indicator != null ? indicator.getIndicatorId() : null;
         Long locationId = activityLocation != null && activityLocation.getLocation() != null
-                ? activityLocation.getLocation().getAmpLocationId() : null;
+                ? activityLocation.getLocation().getId() : null;
         for (IndicatorActivity ia : activity.getIndicators()) {
             if (ia.getIndicator() == null) continue;
             if (!Objects.equals(ia.getIndicator().getIndicatorId(), indicatorId)) continue;
             Long existingLocId = ia.getActivityLocation() != null && ia.getActivityLocation().getLocation() != null
-                    ? ia.getActivityLocation().getLocation().getAmpLocationId() : null;
+                    ? ia.getActivityLocation().getLocation().getId() : null;
             if (Objects.equals(existingLocId, locationId)) return ia;
         }
         return null;

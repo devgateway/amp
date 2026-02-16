@@ -545,7 +545,7 @@ public class ImportDataModel {
                 ", approval_date=" + approval_date +
                 ", approval_status=" + approval_status +
                 ", archived=" + archived +
-                ", indicators=" + indicators +
+//                ", indicators=" + indicators +
                 ", activity_documents=" + activity_documents +
                 ", activity_status=" + activity_status +
                 ", activity_budget=" + activity_budget +

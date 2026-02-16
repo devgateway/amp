@@ -767,6 +767,7 @@ public class ImporterUtil {
         objectMapper.configure(ESCAPE_NON_ASCII, false); // Disable escaping of non-ASCII characters during serialization
         objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 
+        normalizeLocationPercentages(importDataModel);
         Map<String, Object> map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                 });
@@ -798,6 +799,8 @@ public class ImporterUtil {
             updateFundingOrgsAndSectorsWithAlreadyExisting(existing, importDataModel);
             // Merge existing activity locations into payload so we only add (row + existing), never remove
             mergeExistingActivityLocationsIntoImport(existing, importDataModel);
+            ensureImplementationLevelWhenHasLocations(importDataModel, session);
+            normalizeLocationPercentages(importDataModel);
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                     });
@@ -916,6 +919,48 @@ public class ImporterUtil {
             importDataModel.getLocations().add(new Location(locId, pct));
             alreadyInImport.add(locId);
         }
+    }
+
+    /**
+     * Scales location percentages so they sum to 100, as required by activity validation.
+     * If there are no locations or sum is 0, does nothing.
+     */
+    private static void normalizeLocationPercentages(ImportDataModel importDataModel) {
+        if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty())
+            return;
+        Set<Location> locs = importDataModel.getLocations();
+        double sum = 0;
+        for (Location loc : locs) {
+            Double pct = loc.getLocation_percentage();
+            sum += (pct != null ? pct : 0);
+        }
+        if (sum <= 0) return;
+        if (Math.abs(sum - 100.0) < 0.001) return; // already 100
+        List<Location> list = new ArrayList<>(locs);
+        double scale = 100.0 / sum;
+        double running = 0;
+        for (int i = 0; i < list.size(); i++) {
+            Location loc = list.get(i);
+            double v;
+            if (i == list.size() - 1) {
+                v = 100.0 - running; // last one gets remainder so total is exactly 100
+            } else {
+                Double pct = loc.getLocation_percentage();
+                v = (pct != null ? pct : 0) * scale;
+                running += v;
+            }
+            loc.setLocation_percentage(v);
+        }
+    }
+
+    /**
+     * When the payload has locations, implementation level is required. Sets default if missing (e.g. after merging locations for existing activity).
+     */
+    private static void ensureImplementationLevelWhenHasLocations(ImportDataModel importDataModel, Session session) {
+        if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty())
+            return;
+        if (importDataModel.getImplementation_level() != null) return;
+        updateImpLevels(importDataModel, session);
     }
 
     static void updateExpendituresIfAny(JsonApiResponse<ActivitySummary> response) {

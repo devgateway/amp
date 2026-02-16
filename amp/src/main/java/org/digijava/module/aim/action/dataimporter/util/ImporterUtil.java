@@ -1225,19 +1225,20 @@ public class ImporterUtil {
         if (!session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
+        final String locationNameFinal = locationName;
         final Long[] foundId = new Long[1];
         session.doWork(connection -> {
             String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setString(1, locationName);
+                statement.setString(1, locationNameFinal);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
                         foundId[0] = resultSet.getLong("location_id");
-                        ConstantsMap.put("location_" + locationName, foundId[0]);
+                        ConstantsMap.put("location_" + locationNameFinal, foundId[0]);
                     }
                 }
             } catch (SQLException e) {
-                logger.error("Error resolving location by name: " + locationName, e);
+                logger.error("Error resolving location by name: " + locationNameFinal, e);
             }
         });
         if (foundId[0] == null) return null;

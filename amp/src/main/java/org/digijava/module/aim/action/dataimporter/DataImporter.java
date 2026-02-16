@@ -192,13 +192,20 @@ public class DataImporter extends Action {
 
                 String columnName = request.getParameter("columnName");
                 String selectedField = request.getParameter("selectedField");
-                dataImporterForm.getColumnPairs().put(columnName, selectedField);
-                logger.info("Column Pairs:" + dataImporterForm.getColumnPairs());
+                String configName = request.getParameter("configName");
+                Map<String, String> columnPairs = dataImporterForm.getColumnPairs();
+
+                if (configName != null && !configName.trim().isEmpty()) {
+                    addColumnPairToConfig(configName.trim(), columnName, selectedField);
+                    columnPairs = getConfigByName(configName.trim());
+                } else {
+                    columnPairs.put(columnName, selectedField);
+                }
+                logger.info("Column Pairs:" + columnPairs);
 
                 ObjectMapper objectMapper = new ObjectMapper();
-                String json = objectMapper.writeValueAsString(dataImporterForm.getColumnPairs());
+                String json = objectMapper.writeValueAsString(columnPairs);
 
-                // Send response
                 response.setContentType("application/json");
                 response.getWriter().write(json);
                 response.setCharacterEncoding("UTF-8");
@@ -213,14 +220,20 @@ public class DataImporter extends Action {
 
                 String columnName = request.getParameter("columnName");
                 String selectedField = request.getParameter("selectedField");
-                dataImporterForm.getColumnPairs().put(columnName, selectedField);
-                removeMapItem(dataImporterForm.getColumnPairs(), columnName, selectedField);
-                logger.info("Column Pairs:" + dataImporterForm.getColumnPairs());
+                String configName = request.getParameter("configName");
+                Map<String, String> columnPairs = dataImporterForm.getColumnPairs();
+
+                if (configName != null && !configName.trim().isEmpty()) {
+                    removeColumnPairFromConfig(configName.trim(), columnName);
+                    columnPairs = getConfigByName(configName.trim());
+                } else {
+                    removeMapItem(columnPairs, columnName, selectedField);
+                }
+                logger.info("Column Pairs:" + columnPairs);
 
                 ObjectMapper objectMapper = new ObjectMapper();
-                String json = objectMapper.writeValueAsString(dataImporterForm.getColumnPairs());
+                String json = objectMapper.writeValueAsString(columnPairs);
 
-                // Send response
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(json);
@@ -398,6 +411,50 @@ public class DataImporter extends Action {
             }
 
         return configValues;
+    }
+
+    private static DataImporterConfig getConfigEntityByName(String configName) {
+        Session session = PersistenceManager.getRequestDBSession();
+        String hql = "FROM DataImporterConfig WHERE configName = :configName";
+        Query query = session.createQuery(hql);
+        query.setParameter("configName", configName, StringType.INSTANCE);
+        query.setMaxResults(1);
+        List<DataImporterConfig> list = query.list();
+        return list.isEmpty() ? null : list.get(0);
+    }
+
+    private static void addColumnPairToConfig(String configName, String columnName, String selectedField) {
+        DataImporterConfig config = getConfigEntityByName(configName);
+        if (config == null) {
+            logger.warn("Config not found for name: {}", configName);
+            return;
+        }
+        Session session = PersistenceManager.getRequestDBSession();
+        DataImporterConfigValues cv = new DataImporterConfigValues(columnName, selectedField, config);
+        session.save(cv);
+        config.getConfigValues().add(cv);
+        session.flush();
+    }
+
+    private static void removeColumnPairFromConfig(String configName, String columnName) {
+        DataImporterConfig config = getConfigEntityByName(configName);
+        if (config == null) {
+            logger.warn("Config not found for name: {}", configName);
+            return;
+        }
+        DataImporterConfigValues toRemove = null;
+        for (DataImporterConfigValues v : config.getConfigValues()) {
+            if (columnName.equals(v.getConfigKey())) {
+                toRemove = v;
+                break;
+            }
+        }
+        if (toRemove != null) {
+            config.getConfigValues().remove(toRemove);
+            Session session = PersistenceManager.getRequestDBSession();
+            session.delete(toRemove);
+            session.flush();
+        }
     }
 
     public static void saveImportConfig(HttpServletRequest request, String fileName, Map<String, String> config) {

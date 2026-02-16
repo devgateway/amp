@@ -20,12 +20,18 @@
       }
     }
     function addField() {
-      var columnName = document.getElementById("columnName").value;
+      var columnName = ($('#current-config-name').val())
+        ? $('#column-name-edit').val()
+        : document.getElementById("columnName").value;
       var selectedField = document.getElementById("selected-field").value;
-
-      sendValuesToBackend(columnName,selectedField,"addField")
-
-
+      if (!columnName || !selectedField) {
+        alert("Please enter column name and select a field.");
+        return;
+      }
+      sendValuesToBackend(columnName, selectedField, "addField");
+      if ($('#current-config-name').val()) {
+        $('#column-name-edit').val('');
+      }
     }
     $(document).ready(function() {
       $('#existing-config').val('0');
@@ -121,7 +127,7 @@
 
       $('.existing-config').change(function() {
         var configName = $(this).val();
-        if (configName!=='none'){
+        if (configName!=='none' && configName!=='0'){
 
         var formData = new FormData();
         formData.append("configName", configName);
@@ -138,33 +144,28 @@
                   console.log("Response: ",response);
                   $("#templateUploadForm").hide();
                   $('#existing-config').val('0');
+                  $('#current-config-name').val(configName);
                   return response.json();
                 })
                 .then(updatedMap => {
                   console.log("Map :" ,updatedMap)
 
-                  // Update UI or perform any additional actions if needed
-                  console.log("Selected pairs updated successfully.");
-                  console.log("Updated map received:", updatedMap);
                   var tbody = document.getElementById("selected-pairs-table-body");
-
-                  // Remove all rows from the table body
                   tbody.innerHTML = "";
 
                   for (var key in updatedMap) {
                     if (updatedMap.hasOwnProperty(key)) {
-                      // Access each property using the key
                       var value = updatedMap[key];
                       updateTable(key, value, tbody);
                       console.log('Key:', key, 'Value:', value);
                     }
                   }
                   document.getElementById("otherComponents").removeAttribute("hidden");
-                  $('#add-field').hide();
-                  $('.remove-row').hide();
-                  $('#selected-field').hide();
-                  $('#existing-config').val('1');
-
+                  $('#add-field').show();
+                  $('.remove-row').show();
+                  $('#selected-field').show();
+                  $('#add-pair-edit-section').show();
+                  $('#column-name-edit').val('');
 
                 })
                 .catch(error => {
@@ -172,6 +173,8 @@
                 });
         }else
         {
+          $('#current-config-name').val('');
+          $('#add-pair-edit-section').hide();
           $("#templateUploadForm").show();
         }
       });
@@ -179,11 +182,14 @@
 
 
     function sendValuesToBackend(columnName, selectedField, action) {
-      // Create a FormData object to send data in the request body
       var formData = new FormData();
       formData.append("columnName", columnName);
       formData.append("selectedField", selectedField);
       formData.append("action", action);
+      var configName = $('#current-config-name').val();
+      if (configName) {
+        formData.append("configName", configName);
+      }
 
       fetch("${pageContext.request.contextPath}/aim/dataImporter.do", {
         method: "POST",
@@ -474,11 +480,16 @@
 
 <div id="otherComponents" hidden>
 <html:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
+  <input type="hidden" id="current-config-name" value="">
 
     <br><br>
     <div id="headers"></div>
 
     <br><br>
+  <div id="add-pair-edit-section" style="display: none; margin-bottom: 12px;">
+    <label for="column-name-edit">Column name (for new pair):</label>
+    <input type="text" id="column-name-edit" placeholder="e.g. Column A" style="width: 200px; margin-right: 12px;">
+  </div>
   <label for="selected-field">Select Entity Field:</label>
   <select id="selected-field"  class="select2" style="width: 300px;">
     <!-- Populate dropdown with entity field names -->

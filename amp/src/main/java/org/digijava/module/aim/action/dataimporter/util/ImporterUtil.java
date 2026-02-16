@@ -796,6 +796,8 @@ public class ImporterUtil {
             importDataModel.setProject_title(existing.getName());
             importDataModel.setProject_code(!Objects.equals(importDataModel.getProject_code(), "") ? importDataModel.getProject_code() : existing.getProjectCode());
             updateFundingOrgsAndSectorsWithAlreadyExisting(existing, importDataModel);
+            // Merge existing activity locations into payload so we only add (row + existing), never remove
+            mergeExistingActivityLocationsIntoImport(existing, importDataModel);
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                     });
@@ -886,6 +888,33 @@ public class ImporterUtil {
             for (AmpActivitySector ampActivitySector : ampActivityVersion.getSectors()) {
                 createSector(importDataModel,ampActivitySector.getClassificationConfig().getName().equalsIgnoreCase("primary"),ampActivitySector.getSectorId().getAmpSectorId());
             }
+        }
+    }
+
+    /**
+     * For an existing activity, merges its current locations into the import payload so we only add locations
+     * (row locations + existing), never remove. Any existing activity location not already in importDataModel
+     * is added. This avoids activity/update deleting locations (e.g. those referenced by indicator connections).
+     */
+    private static void mergeExistingActivityLocationsIntoImport(AmpActivityVersion existing, ImportDataModel importDataModel) {
+        if (existing == null || importDataModel == null) return;
+        if (existing.getLocations() == null) return;
+        Hibernate.initialize(existing.getLocations());
+        Set<Long> alreadyInImport = new HashSet<>();
+        if (importDataModel.getLocations() != null) {
+            for (Location loc : importDataModel.getLocations()) {
+                if (loc != null && loc.getLocation() != null) alreadyInImport.add(loc.getLocation());
+            }
+        }
+        for (AmpActivityLocation aal : existing.getLocations()) {
+            AmpCategoryValueLocations loc = aal.getLocation();
+            if (loc == null) continue;
+            Long locId = loc.getId();
+            if (locId == null || alreadyInImport.contains(locId)) continue;
+            if (importDataModel.getLocations() == null) importDataModel.setLocations(new HashSet<>());
+            double pct = aal.getLocationPercentage() != null ? aal.getLocationPercentage().doubleValue() : 100.0;
+            importDataModel.getLocations().add(new Location(locId, pct));
+            alreadyInImport.add(locId);
         }
     }
 

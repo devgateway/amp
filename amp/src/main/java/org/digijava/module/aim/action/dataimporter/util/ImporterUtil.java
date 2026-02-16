@@ -689,7 +689,7 @@ public class ImporterUtil {
         }
         // Prefer project code if provided
         if (projectCode != null && !projectCode.trim().isEmpty()) {
-            String hqlByCode = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a WHERE a.projectCode = :projectCode";
+            String hqlByCode = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a LEFT JOIN FETCH a.activityCreator WHERE a.projectCode = :projectCode";
             Query queryByCode = session.createQuery(hqlByCode);
             queryByCode.setCacheable(true);
             queryByCode.setParameter("projectCode", projectCode.trim(), StringType.INSTANCE);
@@ -700,7 +700,7 @@ public class ImporterUtil {
         }
         // Fall back to project title (name)
         if (projectTitle != null && !projectTitle.trim().isEmpty()) {
-            String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a WHERE a.name = :name";
+            String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a LEFT JOIN FETCH a.activityCreator WHERE a.name = :name";
             Query query = session.createQuery(hql);
             query.setCacheable(true);
             query.setParameter("name", projectTitle.trim(), StringType.INSTANCE);
@@ -727,7 +727,8 @@ public class ImporterUtil {
     /**
      * Ensures created_by in the activity map is set to a valid team member id when null,
      * so the activity API validator does not reject with "(Invalid field value) created_by".
-     * For new activities uses current user; for updates uses existing activity's creator.
+     * For new activities uses current user; for updates uses existing activity's creator only
+     * when that creator is present (never overwrite with current user for existing activities).
      */
     private static void ensureCreatedBySet(Map<String, Object> map, AmpActivityVersion existing) {
         Object createdBy = map.get(CREATED_BY_KEY);
@@ -735,8 +736,13 @@ public class ImporterUtil {
             return;
         }
         Long creatorId = null;
-        if (existing != null && existing.getActivityCreator() != null) {
-            creatorId = existing.getActivityCreator().getAmpTeamMemId();
+        if (existing != null) {
+            AmpTeamMember creator = existing.getActivityCreator();
+            if (creator != null) {
+                creatorId = creator.getAmpTeamMemId();
+            }
+            // When existing activity has no creator (legacy data), leave created_by null;
+            // do not set to current user so we don't wrongly attribute creation.
         } else {
             AmpTeamMember currentMember = TeamUtil.getCurrentAmpTeamMember();
             if (currentMember != null) {

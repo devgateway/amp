@@ -209,6 +209,12 @@ public class IndicatorManagerService {
     }
 
     private void validateYearRange(String startYear, String endYear, AmpIndicatorGlobalValue value, String error){
+        if (value == null) {
+            return;
+        }
+        if (startYear == null || endYear == null) {
+            return;
+        }
         String startInString = "01/01/" + startYear;
         DateTime dateTime = DateTime.parse(startInString, formatter);
 

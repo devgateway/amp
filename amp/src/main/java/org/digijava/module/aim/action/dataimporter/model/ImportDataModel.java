@@ -51,7 +51,7 @@ public class ImportDataModel {
     private Object approval_date;
     private Integer approval_status;
     private Object archived;
-    private Set<Object> indicators;
+//    private Set<Object> indicators;
     private Set<Object> activity_documents;
     private Long activity_status;
     private Long activity_budget;
@@ -393,13 +393,13 @@ public class ImportDataModel {
         this.archived = archived;
     }
 
-    public Set<Object> getIndicators() {
-        return indicators;
-    }
+//    public Set<Object> getIndicators() {
+//        return indicators;
+//    }
 
-    public void setIndicators(Set<Object> indicators) {
-        this.indicators = indicators;
-    }
+//    public void setIndicators(Set<Object> indicators) {
+//        this.indicators = indicators;
+//    }
 
     public Set<Object> getActivity_documents() {
         return activity_documents;

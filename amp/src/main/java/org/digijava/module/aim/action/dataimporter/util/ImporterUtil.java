@@ -839,57 +839,69 @@ public class ImporterUtil {
     private static void updateFundingOrgsAndSectorsWithAlreadyExisting(AmpActivityVersion ampActivityVersion, ImportDataModel importDataModel) {
 
         if (ampActivityVersion.getFunding() != null) {
+            Hibernate.initialize(ampActivityVersion.getFunding());
             Long adjType = getCategoryValue("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY, "");
             Long assType = getCategoryValue("assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "");
             Long finInstrument = getCategoryValue("finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, "");
+            if (importDataModel.getFundings() == null) importDataModel.setFundings(new HashSet<>());
             for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
                 Funding funding = new Funding();
+                if (ampFunding.getAmpFundingId() != null) funding.setFunding_id(ampFunding.getAmpFundingId());
                 funding.setDonor_organization_id(ampFunding.getAmpDonorOrgId().getAmpOrgId());
                 funding.setType_of_assistance(ampFunding.getTypeOfAssistance() != null ? ampFunding.getTypeOfAssistance().getId() : assType);
                 funding.setFinancing_instrument(ampFunding.getFinancingInstrument() != null ? ampFunding.getFinancingInstrument().getId() : finInstrument);
                 funding.setSource_role(ampFunding.getSourceRole().getAmpRoleId());
-                for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
-                    Transaction transaction = new Transaction();
-                    transaction.setCurrency(ampFundingDetail.getAmpCurrencyId().getAmpCurrencyId());
-                    transaction.setAdjustment_type(ampFundingDetail.getAdjustmentType() != null ? ampFundingDetail.getAdjustmentType().getId() : adjType);
-                    transaction.setTransaction_amount(ampFundingDetail.getTransactionAmount());
-                    if (ampFundingDetail.getTransactionDate() != null) {
-
-                        transaction.setTransaction_date(getFundingDate(ampFundingDetail.getTransactionDate().toInstant()
-                                .atZone(ZoneId.systemDefault())
-                                .toLocalDate().toString()));
-                    }
-                    transaction.setFixed_exchange_rate(ampFundingDetail.getFixedExchangeRate());
-                    if (ampFundingDetail.getTransactionType() == 0) {
-                        funding.getCommitments().add(transaction);
-                    } else if (ampFundingDetail.getTransactionType() == 1) {
-                        funding.getDisbursements().add(transaction);
+                if (ampFunding.getFundingDetails() != null) {
+                    Hibernate.initialize(ampFunding.getFundingDetails());
+                    for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
+                        Transaction transaction = new Transaction();
+                        if (ampFundingDetail.getAmpFundDetailId() != null) transaction.setTransaction_id(ampFundingDetail.getAmpFundDetailId());
+                        transaction.setCurrency(ampFundingDetail.getAmpCurrencyId().getAmpCurrencyId());
+                        transaction.setAdjustment_type(ampFundingDetail.getAdjustmentType() != null ? ampFundingDetail.getAdjustmentType().getId() : adjType);
+                        transaction.setTransaction_amount(ampFundingDetail.getTransactionAmount());
+                        if (ampFundingDetail.getTransactionDate() != null) {
+                            transaction.setTransaction_date(getFundingDate(ampFundingDetail.getTransactionDate().toInstant()
+                                    .atZone(ZoneId.systemDefault())
+                                    .toLocalDate().toString()));
+                        }
+                        transaction.setFixed_exchange_rate(ampFundingDetail.getFixedExchangeRate());
+                        if (ampFundingDetail.getTransactionType() == 0) {
+                            funding.getCommitments().add(transaction);
+                        } else if (ampFundingDetail.getTransactionType() == 1) {
+                            funding.getDisbursements().add(transaction);
+                        }
                     }
                 }
-
+                importDataModel.getFundings().add(funding);
             }
         }
         if (ampActivityVersion.getOrgrole() != null && !ampActivityVersion.getOrgrole().isEmpty()) {
             for (AmpOrgRole ampOrgRole : ampActivityVersion.getOrgrole()) {
-                if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("DN")) {
-                    createDonorOrg(importDataModel,ampOrgRole.getOrganisation().getAmpOrgId());
-                } else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("EA")) {
+                if (ampOrgRole.getRole() == null) continue;
+                String roleCode = ampOrgRole.getRole().getRoleCode();
+                if (roleCode == null) continue;
+                if (roleCode.equalsIgnoreCase("DN")) {
+                    createDonorOrg(importDataModel, ampOrgRole.getOrganisation().getAmpOrgId(), ampOrgRole.getAmpOrgRoleId());
+                } else if (roleCode.equalsIgnoreCase("EA")) {
                     Organization responsibleOrg = new Organization();
                     responsibleOrg.setOrganization(ampOrgRole.getOrganisation().getAmpOrgId());
+                    if (ampOrgRole.getAmpOrgRoleId() != null) responsibleOrg.setId(ampOrgRole.getAmpOrgRoleId());
                     importDataModel.getResponsible_organization().add(responsibleOrg);
-                } else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("BA")) {
+                } else if (roleCode.equalsIgnoreCase("BA")) {
                     Organization beneficiaryAgency = new Organization();
                     beneficiaryAgency.setOrganization(ampOrgRole.getOrganisation().getAmpOrgId());
+                    if (ampOrgRole.getAmpOrgRoleId() != null) beneficiaryAgency.setId(ampOrgRole.getAmpOrgRoleId());
                     importDataModel.getBeneficiary_agency().add(beneficiaryAgency);
-
                 }
             }
         }
 
-
         if (ampActivityVersion.getSectors() != null && !ampActivityVersion.getSectors().isEmpty()) {
+            Hibernate.initialize(ampActivityVersion.getSectors());
             for (AmpActivitySector ampActivitySector : ampActivityVersion.getSectors()) {
-                createSector(importDataModel,ampActivitySector.getClassificationConfig().getName().equalsIgnoreCase("primary"),ampActivitySector.getSectorId().getAmpSectorId());
+                if (ampActivitySector.getSectorId() == null) continue;
+                boolean primary = ampActivitySector.getClassificationConfig() != null && "primary".equalsIgnoreCase(ampActivitySector.getClassificationConfig().getName());
+                createSector(importDataModel, primary, ampActivitySector.getSectorId().getAmpSectorId(), ampActivitySector.getAmpActivitySectorId());
             }
         }
     }
@@ -1380,23 +1392,25 @@ public class ImporterUtil {
     }
 
     private static void createSector(ImportDataModel importDataModel, boolean primary, Long ampSectorId) {
-        Sector sector1 = new Sector();
+        createSector(importDataModel, primary, ampSectorId, null);
+    }
 
+    private static void createSector(ImportDataModel importDataModel, boolean primary, Long ampSectorId, Long sectorPkId) {
+        Sector sector1 = new Sector();
         sector1.setSector(ampSectorId);
+        if (sectorPkId != null) sector1.setId(sectorPkId);
         if (primary) {
             importDataModel.getPrimary_sectors().add(sector1);
             Map<Integer, Float> percentages = divide100(importDataModel.getPrimary_sectors().size());
-            int index=0;
+            int index = 0;
             for (Sector sec : importDataModel.getPrimary_sectors()) {
                 sec.setSector_percentage(percentages.get(index));
                 index++;
             }
-        }
-        else
-        {
+        } else {
             importDataModel.getSecondary_sectors().add(sector1);
             Map<Integer, Float> percentages = divide100(importDataModel.getSecondary_sectors().size());
-            int index=0;
+            int index = 0;
             for (Sector sec : importDataModel.getSecondary_sectors()) {
                 sec.setSector_percentage(percentages.get(index));
                 index++;
@@ -1512,11 +1526,16 @@ public class ImporterUtil {
     }
 
     private static void createDonorOrg(ImportDataModel importDataModel, Long orgId) {
+        createDonorOrg(importDataModel, orgId, null);
+    }
+
+    private static void createDonorOrg(ImportDataModel importDataModel, Long orgId, Long orgRoleId) {
         DonorOrganization donorOrganization = new DonorOrganization();
         donorOrganization.setOrganization(orgId);
+        if (orgRoleId != null) donorOrganization.setId(orgRoleId);
         importDataModel.getDonor_organization().add(donorOrganization);
         Map<Integer, Float> percentages = divide100(importDataModel.getDonor_organization().size());
-        int index=0;
+        int index = 0;
         for (DonorOrganization donorOrganization1 : importDataModel.getDonor_organization()) {
             donorOrganization1.setPercentage(percentages.get(index));
             index++;

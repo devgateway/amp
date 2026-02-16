@@ -805,6 +805,20 @@ public class ImporterUtil {
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                     });
             map.remove("indicators"); // preserve existing indicators; we append in addIndicatorDataToActivity
+            // Do not replace programs; avoids StaleStateException when deleting AMP_ACTIVITY_PROGRAM rows
+            map.remove("national_plan_objective");
+            map.remove("primary_programs");
+            map.remove("secondary_programs");
+            map.remove("tertiary_programs");
+            // Avoid triggering merge of contacts/documents that may reference deleted rows (ObjectNotFoundException)
+            map.remove("activity_contacts");
+            map.remove("activityContacts");
+            map.remove("donor_contact_information");
+            map.remove("project_coordinator_contact_information");
+            map.remove("sector_ministry_contact_information");
+            map.remove("mofed_contact_information");
+            map.remove("implementing_executing_agency_contact_information");
+            evictActivityFromSecondLevelCache(existing.getAmpActivityId());
             ensureCreatedBySet(map, existing);
             response = ActivityInterchangeUtils.importActivity(map, true, rules, "activity/update");
         }
@@ -1721,7 +1735,7 @@ public class ImporterUtil {
             IndicatorActivity ia = findExistingIndicatorActivity(activity, indicator, activityLocation);
             if (ia != null) {
                 logger.info("addIndicatorDataToActivity: merging into existing IndicatorActivity for location '{}' (actual={})", locationName, actualVal);
-                mergeIndicatorValuesIntoExisting(ia, session, config,
+                mergeIndicatorValuesIntoExisting(ia, activityLocation, session, config,
                         baseOrigVal, origBaseDate, baseRevVal, revBaseDate,
                         targetOrigVal, origTargetDate, targetRevVal, revTargetDate,
                         actualVal, actualDate, actualComment);
@@ -1742,11 +1756,13 @@ public class ImporterUtil {
                 baseOrig.setValue(baseOrigVal);
                 baseOrig.setValueDate(origBaseDate);
                 baseOrig.setIndicatorConnection(ia);
+                baseOrig.setActivityLocation(activityLocation);
                 values.add(baseOrig);
                 AmpIndicatorValue baseRev = new AmpIndicatorValue(AmpIndicatorValue.REVISED);
                 baseRev.setValue(baseRevVal);
                 baseRev.setValueDate(revBaseDate);
                 baseRev.setIndicatorConnection(ia);
+                baseRev.setActivityLocation(activityLocation);
                 values.add(baseRev);
             }
             if (getKey(config, ImporterConstants.ORIGINAL_TARGET_VALUE) != null || getKey(config, ImporterConstants.REVISED_TARGET_VALUE) != null) {
@@ -1754,17 +1770,20 @@ public class ImporterUtil {
                 tOrig.setValue(targetOrigVal);
                 tOrig.setValueDate(origTargetDate);
                 tOrig.setIndicatorConnection(ia);
+                tOrig.setActivityLocation(activityLocation);
                 values.add(tOrig);
                 AmpIndicatorValue tRev = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
                 tRev.setValue(targetRevVal);
                 tRev.setValueDate(revTargetDate);
                 tRev.setIndicatorConnection(ia);
+                tRev.setActivityLocation(activityLocation);
                 values.add(tRev);
             }
             AmpIndicatorValue actual = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
             actual.setValue(actualVal);
             actual.setValueDate(actualDate);
             actual.setIndicatorConnection(ia);
+            actual.setActivityLocation(activityLocation); // required for OnePager form to show value (filters by activityLocation)
             if (actualComment != null) actual.setComment(actualComment);
             values.add(actual);
             logger.info("addIndicatorDataToActivity: new IndicatorActivity - created ACTUAL value: value={}, valueDate={}, saving child", actualVal, actualDate);
@@ -1804,9 +1823,9 @@ public class ImporterUtil {
 
     /**
      * Merges imported values into an existing indicator connection: updates existing values by type where present,
-     * adds new values only for types that are missing.
+     * adds new values only for types that are missing. Sets activityLocation on values so OnePager form can display them.
      */
-    private static void mergeIndicatorValuesIntoExisting(IndicatorActivity ia, Session session, Map<String, String> config,
+    private static void mergeIndicatorValuesIntoExisting(IndicatorActivity ia, AmpActivityLocation activityLocation, Session session, Map<String, String> config,
             double baseOrigVal, Date origBaseDate, double baseRevVal, Date revBaseDate,
             double targetOrigVal, Date origTargetDate, double targetRevVal, Date revTargetDate,
             double actualVal, Date actualDate, String actualComment) {
@@ -1819,12 +1838,13 @@ public class ImporterUtil {
         boolean hasBase = getKey(config, ImporterConstants.ORIGINAL_BASE_VALUE) != null || getKey(config, ImporterConstants.REVISED_BASE_VALUE) != null;
         boolean hasTarget = getKey(config, ImporterConstants.ORIGINAL_TARGET_VALUE) != null || getKey(config, ImporterConstants.REVISED_TARGET_VALUE) != null;
 
-        AmpIndicatorValue existingActual = findValueByType(existing, AmpIndicatorValue.ACTUAL);
+        AmpIndicatorValue existingActual = findValueByTypeAndLocation(existing, AmpIndicatorValue.ACTUAL, activityLocation);
         if (existingActual != null) {
             logger.info("mergeIndicatorValuesIntoExisting: updating existing ACTUAL value: indValId={} oldValue={} newValue={} newDate={}", existingActual.getIndValId(), existingActual.getValue(), actualVal, actualDate);
             existingActual.setValue(actualVal);
             existingActual.setValueDate(actualDate);
             if (actualComment != null) existingActual.setComment(actualComment);
+            if (activityLocation != null && existingActual.getActivityLocation() == null) existingActual.setActivityLocation(activityLocation);
             session.update(existingActual);
             session.flush();
         } else {
@@ -1834,6 +1854,7 @@ public class ImporterUtil {
             actual.setValueDate(actualDate);
             if (actualComment != null) actual.setComment(actualComment);
             actual.setIndicatorConnection(ia);
+            actual.setActivityLocation(activityLocation);
             existing.add(actual);
             session.save(actual);
         }
@@ -1843,11 +1864,13 @@ public class ImporterUtil {
             if (existingBase != null) {
                 existingBase.setValue(baseOrigVal);
                 existingBase.setValueDate(origBaseDate);
+                if (activityLocation != null && existingBase.getActivityLocation() == null) existingBase.setActivityLocation(activityLocation);
             } else {
                 AmpIndicatorValue baseOrig = new AmpIndicatorValue(AmpIndicatorValue.BASE);
                 baseOrig.setValue(baseOrigVal);
                 baseOrig.setValueDate(origBaseDate);
                 baseOrig.setIndicatorConnection(ia);
+                baseOrig.setActivityLocation(activityLocation);
                 existing.add(baseOrig);
                 session.save(baseOrig);
             }
@@ -1855,11 +1878,13 @@ public class ImporterUtil {
             if (existingRev != null) {
                 existingRev.setValue(baseRevVal);
                 existingRev.setValueDate(revBaseDate);
+                if (activityLocation != null && existingRev.getActivityLocation() == null) existingRev.setActivityLocation(activityLocation);
             } else {
                 AmpIndicatorValue baseRev = new AmpIndicatorValue(AmpIndicatorValue.REVISED);
                 baseRev.setValue(baseRevVal);
                 baseRev.setValueDate(revBaseDate);
                 baseRev.setIndicatorConnection(ia);
+                baseRev.setActivityLocation(activityLocation);
                 existing.add(baseRev);
                 session.save(baseRev);
             }
@@ -1870,15 +1895,19 @@ public class ImporterUtil {
             if (targets.size() >= 2) {
                 targets.get(0).setValue(targetOrigVal);
                 targets.get(0).setValueDate(origTargetDate);
+                if (activityLocation != null && targets.get(0).getActivityLocation() == null) targets.get(0).setActivityLocation(activityLocation);
                 targets.get(1).setValue(targetRevVal);
                 targets.get(1).setValueDate(revTargetDate);
+                if (activityLocation != null && targets.get(1).getActivityLocation() == null) targets.get(1).setActivityLocation(activityLocation);
             } else if (targets.size() == 1) {
                 targets.get(0).setValue(targetOrigVal);
                 targets.get(0).setValueDate(origTargetDate);
+                if (activityLocation != null && targets.get(0).getActivityLocation() == null) targets.get(0).setActivityLocation(activityLocation);
                 AmpIndicatorValue tRev = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
                 tRev.setValue(targetRevVal);
                 tRev.setValueDate(revTargetDate);
                 tRev.setIndicatorConnection(ia);
+                tRev.setActivityLocation(activityLocation);
                 existing.add(tRev);
                 session.save(tRev);
             } else {
@@ -1886,17 +1915,36 @@ public class ImporterUtil {
                 tOrig.setValue(targetOrigVal);
                 tOrig.setValueDate(origTargetDate);
                 tOrig.setIndicatorConnection(ia);
+                tOrig.setActivityLocation(activityLocation);
                 existing.add(tOrig);
                 session.save(tOrig);
                 AmpIndicatorValue tRev = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
                 tRev.setValue(targetRevVal);
                 tRev.setValueDate(revTargetDate);
                 tRev.setIndicatorConnection(ia);
+                tRev.setActivityLocation(activityLocation);
                 existing.add(tRev);
                 session.save(tRev);
             }
         }
         evictIndicatorConnectionFromSecondLevelCache(ia);
+    }
+
+    /**
+     * Evicts the activity from the second-level cache before an update. Avoids ObjectNotFoundException
+     * when the cached activity (or its activityContacts) references deleted entities (e.g. AmpActivityDocument).
+     */
+    private static void evictActivityFromSecondLevelCache(Long activityId) {
+        if (activityId == null) return;
+        try {
+            org.hibernate.SessionFactory sessionFactory = org.digijava.kernel.persistence.PersistenceManager.sf();
+            if (sessionFactory == null) return;
+            org.hibernate.Cache cache = sessionFactory.getCache();
+            if (cache == null) return;
+            cache.evictEntityData(AmpActivityVersion.class, activityId);
+        } catch (Exception e) {
+            logger.debug("Could not evict activity from cache: {}", e.getMessage());
+        }
     }
 
     /**
@@ -1926,6 +1974,21 @@ public class ImporterUtil {
             if (v.getValueType() == valueType) return v;
         }
         return null;
+    }
+
+    /** Finds ACTUAL value matching this location; falls back to ACTUAL with null location if none match (for backward compat). */
+    private static AmpIndicatorValue findValueByTypeAndLocation(Set<AmpIndicatorValue> values, int valueType, AmpActivityLocation activityLocation) {
+        if (values == null) return null;
+        AmpIndicatorValue fallbackNull = null;
+        Long wantLocId = activityLocation != null && activityLocation.getLocation() != null ? activityLocation.getLocation().getId() : null;
+        for (AmpIndicatorValue v : values) {
+            if (v.getValueType() != valueType) continue;
+            Long vLocId = v.getActivityLocation() != null && v.getActivityLocation().getLocation() != null
+                    ? v.getActivityLocation().getLocation().getId() : null;
+            if (Objects.equals(vLocId, wantLocId)) return v;
+            if (v.getActivityLocation() == null) fallbackNull = v;
+        }
+        return fallbackNull;
     }
 
     private static List<AmpIndicatorValue> getValuesByType(Set<AmpIndicatorValue> values, int valueType) {

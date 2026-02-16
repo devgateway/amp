@@ -216,8 +216,13 @@ public class ImporterUtil {
                 return null;
             }
 
-            if (rawValue.matches("\\d+")) {
+            if (rawValue.matches("\\d+(\\.0+)?")) {
                 double numericValue = Double.parseDouble(rawValue);
+                int intVal = (int) numericValue;
+                // Year-only: whole number in reasonable year range (e.g. 2023 or 2023.0) -> use as calendar year, not Excel serial days
+                if (intVal >= 1800 && intVal <= 2700 && numericValue == Math.floor(numericValue)) {
+                    return intVal + "-01-01";
+                }
                 if (numericValue > 59) {  // Excel bug: after 28 Feb 1900, 60+ is valid
                     Date date = DateUtil.getJavaDate(numericValue);
                     return outputFormat.format(date);
@@ -1838,26 +1843,16 @@ public class ImporterUtil {
         boolean hasBase = getKey(config, ImporterConstants.ORIGINAL_BASE_VALUE) != null || getKey(config, ImporterConstants.REVISED_BASE_VALUE) != null;
         boolean hasTarget = getKey(config, ImporterConstants.ORIGINAL_TARGET_VALUE) != null || getKey(config, ImporterConstants.REVISED_TARGET_VALUE) != null;
 
-        AmpIndicatorValue existingActual = findValueByTypeAndLocation(existing, AmpIndicatorValue.ACTUAL, activityLocation);
-        if (existingActual != null) {
-            logger.info("mergeIndicatorValuesIntoExisting: updating existing ACTUAL value: indValId={} oldValue={} newValue={} newDate={}", existingActual.getIndValId(), existingActual.getValue(), actualVal, actualDate);
-            existingActual.setValue(actualVal);
-            existingActual.setValueDate(actualDate);
-            if (actualComment != null) existingActual.setComment(actualComment);
-            if (activityLocation != null && existingActual.getActivityLocation() == null) existingActual.setActivityLocation(activityLocation);
-            session.update(existingActual);
-            session.flush();
-        } else {
-            logger.info("mergeIndicatorValuesIntoExisting: adding new ACTUAL value: value={} valueDate={}", actualVal, actualDate);
-            AmpIndicatorValue actual = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
-            actual.setValue(actualVal);
-            actual.setValueDate(actualDate);
-            if (actualComment != null) actual.setComment(actualComment);
-            actual.setIndicatorConnection(ia);
-            actual.setActivityLocation(activityLocation);
-            existing.add(actual);
-            session.save(actual);
-        }
+        // Always add a new ACTUAL value (do not merge/update existing) so each import creates a new actual for this indicator+location
+        logger.info("mergeIndicatorValuesIntoExisting: adding new ACTUAL value: value={} valueDate={}", actualVal, actualDate);
+        AmpIndicatorValue actual = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
+        actual.setValue(actualVal);
+        actual.setValueDate(actualDate);
+        if (actualComment != null) actual.setComment(actualComment);
+        actual.setIndicatorConnection(ia);
+        actual.setActivityLocation(activityLocation);
+        existing.add(actual);
+        session.save(actual);
 
         if (hasBase) {
             AmpIndicatorValue existingBase = findValueByType(existing, AmpIndicatorValue.BASE);

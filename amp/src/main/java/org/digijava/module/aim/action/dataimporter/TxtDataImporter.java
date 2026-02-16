@@ -106,6 +106,7 @@ public class TxtDataImporter {
             String secondarySubSector= rowRef.get(getKey(config, ImporterConstants.SECONDARY_SUBSECTOR));
             String projectStatusStr = rowRef.get(getKey(config, ImporterConstants.PROJECT_STATUS));
 
+            try {
             PersistenceManager.inTransaction(() -> {
                 Session session = PersistenceManager.getRequestDBSession();
             AmpActivityVersion existing = existingActivity(projectTitle,projectCode,session);
@@ -202,8 +203,19 @@ public class TxtDataImporter {
 
             }
 
-            importTheData(importDataModel, session, importedProject, componentName, componentCode,responsibleOrgId,fundings,existing);
+            try {
+                importTheData(importDataModel, session, importedProject, componentName, componentCode,responsibleOrgId,fundings,existing);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
             });
+            } catch (RuntimeException e) {
+                Throwable cause = e.getCause();
+                if (cause instanceof JsonProcessingException) {
+                    throw (JsonProcessingException) cause;
+                }
+                throw e;
+            }
         }
 
     }

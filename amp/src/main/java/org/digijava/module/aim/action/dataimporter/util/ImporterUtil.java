@@ -916,7 +916,9 @@ public class ImporterUtil {
             if (locId == null || alreadyInImport.contains(locId)) continue;
             if (importDataModel.getLocations() == null) importDataModel.setLocations(new HashSet<>());
             double pct = aal.getLocationPercentage() != null ? aal.getLocationPercentage().doubleValue() : 100.0;
-            importDataModel.getLocations().add(new Location(locId, pct));
+            // Include aal.getId() (amp_activity_location_id) so the API matches and keeps this row; otherwise removeByIdExcept drops it and Hibernate deletes it (FK violation if referenced by amp_indicator_connection).
+            Long aalId = aal.getId();
+            importDataModel.getLocations().add(aalId != null ? new Location(aalId, locId, pct) : new Location(locId, pct));
             alreadyInImport.add(locId);
         }
     }

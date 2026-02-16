@@ -207,6 +207,7 @@ public class ExcelImporter {
                 String projectDesc = projectDescColumn >= 0 ? getStringValueFromCell(rowRef.getCell(projectDescColumn),false) : null;
                 importDataModel.setDescription(projectDesc);
 
+                try {
                 PersistenceManager.inTransaction(() -> {
                     Session session = PersistenceManager.getRequestDBSession();
                 if (config.containsValue(ImporterConstants.PROJECT_STATUS)) {
@@ -310,7 +311,12 @@ public class ExcelImporter {
 
                 }
 
-                Long activityId = importTheData(importDataModel, session, importedProject, componentName, componentCode, responsibleOrgId, fundings, existing);
+                Long activityId;
+                try {
+                    activityId = importTheData(importDataModel, session, importedProject, componentName, componentCode, responsibleOrgId, fundings, existing);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
                 if (activityId != null && config.containsValue(ImporterConstants.INDICATOR_NAME)) {
                     logger.info("Adding indicator data for activity " + activityId);
                     try {
@@ -322,6 +328,13 @@ public class ExcelImporter {
                     }
                 }
                 });
+                } catch (RuntimeException e) {
+                    Throwable cause = e.getCause();
+                    if (cause instanceof JsonProcessingException) {
+                        throw (JsonProcessingException) cause;
+                    }
+                    throw e;
+                }
             }
         }
     }

@@ -1825,6 +1825,8 @@ public class ImporterUtil {
             existingActual.setValue(actualVal);
             existingActual.setValueDate(actualDate);
             if (actualComment != null) existingActual.setComment(actualComment);
+            session.update(existingActual);
+            session.flush();
         } else {
             logger.info("mergeIndicatorValuesIntoExisting: adding new ACTUAL value: value={} valueDate={}", actualVal, actualDate);
             AmpIndicatorValue actual = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
@@ -1893,6 +1895,28 @@ public class ImporterUtil {
                 existing.add(tRev);
                 session.save(tRev);
             }
+        }
+        evictIndicatorConnectionFromSecondLevelCache(ia);
+    }
+
+    /**
+     * Evicts the indicator connection and its values from the second-level cache so the activity form
+     * sees updated values on next load (otherwise cached stale values can be shown).
+     */
+    private static void evictIndicatorConnectionFromSecondLevelCache(IndicatorActivity ia) {
+        try {
+            org.hibernate.SessionFactory sessionFactory = org.digijava.kernel.persistence.PersistenceManager.sf();
+            if (sessionFactory == null) return;
+            org.hibernate.Cache cache = sessionFactory.getCache();
+            if (cache == null) return;
+            if (ia.getId() != null) cache.evictEntityData(IndicatorConnection.class, ia.getId());
+            if (ia.getValues() != null) {
+                for (AmpIndicatorValue v : ia.getValues()) {
+                    if (v != null && v.getIndValId() != null) cache.evictEntityData(AmpIndicatorValue.class, v.getIndValId());
+                }
+            }
+        } catch (Exception e) {
+            logger.debug("Could not evict indicator connection from cache: {}", e.getMessage());
         }
     }
 

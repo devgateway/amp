@@ -531,6 +531,13 @@ public class PersistenceManager {
     private static final ThreadLocal<Boolean> CURRENT_SESSION_IS_MANAGED = ThreadLocal.withInitial(() -> false);
 
     /**
+     * Nesting depth of supplyInTransaction/inTransaction. Only the outermost call (depth 1 -> 0) should close the session,
+     * to avoid "possible non-threadsafe access to session" when nested (e.g. import calls activity save which runs
+     * in its own inTransaction and would otherwise close the session still needed by the outer import).
+     */
+    private static final ThreadLocal<Integer> TRANSACTION_NESTING_DEPTH = ThreadLocal.withInitial(() -> 0);
+
+    /**
      * Execute runnable and ensures that if an active hibernate transaction exists it is committed or rolled back.
      * Will always close the current session before returning.
      *
@@ -544,6 +551,9 @@ public class PersistenceManager {
      * about nested transaction semantics but this is how it worked before. Known to be used by
      * {@link HibernateSessionRequestFilter} which is itself invoked recursively during error processing.</p>
      *
+     * <p>When inTransaction is nested, only the outermost invocation closes the session so the inner callback can
+     * safely use the same session (e.g. Excel import batch transaction wrapping activity import).</p>
+     *
      * @param runnable the runnable to execute with open session in view context
      */
     public static void inTransaction(Runnable runnable) {
@@ -555,6 +565,8 @@ public class PersistenceManager {
 
     public static <T> T supplyInTransaction(Supplier<T> supplier) {
         boolean prevManagedFlag = CURRENT_SESSION_IS_MANAGED.get();
+        int depth = TRANSACTION_NESTING_DEPTH.get();
+        TRANSACTION_NESTING_DEPTH.set(depth + 1);
         try {
             CURRENT_SESSION_IS_MANAGED.set(true);
             return supplier.get();
@@ -562,7 +574,11 @@ public class PersistenceManager {
             PersistenceManager.rollbackCurrentSessionTx();
             throw e;
         } finally {
-            PersistenceManager.endSessionLifecycle();
+            int newDepth = TRANSACTION_NESTING_DEPTH.get() - 1;
+            TRANSACTION_NESTING_DEPTH.set(newDepth);
+            if (newDepth == 0) {
+                PersistenceManager.endSessionLifecycle();
+            }
             CURRENT_SESSION_IS_MANAGED.set(prevManagedFlag);
         }
     }

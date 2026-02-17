@@ -110,16 +110,55 @@ public class IndicatorManagerService {
     /**
      * Returns the indicator by name and optional program name, or null if not found.
      * Use this when you need to look up an indicator without throwing (e.g. data import).
+     * Tries exact name match first; if not found, looks for an indicator whose name contains
+     * the given name (e.g. DB "1.2.1 - Number of ... - 1.2.1" matches file "Number of ...").
      */
     public MEIndicatorDTO getMeIndicatorByNameAndProgramNameOptional(String name, String programName) {
         if (name == null || name.trim().isEmpty()) {
             return null;
         }
+        String trimmedName = name.trim();
+        String trimmedProgram = programName != null && !programName.trim().isEmpty() ? programName.trim() : null;
         try {
-            return getMeIndicatorByNameAndProgramName(name.trim(), programName != null && !programName.trim().isEmpty() ? programName.trim() : null);
+            return getMeIndicatorByNameAndProgramName(trimmedName, trimmedProgram);
         } catch (ApiRuntimeException e) {
+            logger.info("getMeIndicatorByNameAndProgramNameOptional: exact match not found, trying substring match for name='{}' programName='{}'", trimmedName, trimmedProgram);
+            // exact match not found, try substring match (e.g. DB "1.2.1 - X - 1.2.1" vs file "X")
+        }
+        return getMeIndicatorByNameSubstringOptional(trimmedName, trimmedProgram);
+    }
+
+    /**
+     * Finds an indicator whose stored name contains the given name (e.g. "1.2.1 - X - 1.2.1" contains "X").
+     * Returns null if none or multiple matches (when program not specified), or the match when program is specified.
+     */
+    private MEIndicatorDTO getMeIndicatorByNameSubstringOptional(String name, String programName) {
+        Session session = PersistenceManager.getSession();
+        String escaped = escapeForLike(name);
+        String pattern = "%" + escaped + "%";
+        String hql = "from " + AmpIndicator.class.getName() + " i where i.name like :name escape '\\'";
+        if (programName != null) {
+            hql += " and i.program is not null and i.program.name = :programName";
+        }
+        org.hibernate.query.Query<?> query = session.createQuery(hql);
+        query.setParameter("name", pattern);
+        if (programName != null) {
+            query.setParameter("programName", programName);
+        }
+        @SuppressWarnings("unchecked")
+        List<AmpIndicator> list = (List<AmpIndicator>) query.list();
+        if (list == null || list.isEmpty()) {
             return null;
         }
+        if (list.size() > 1 && programName == null) {
+            logger.warn("getMeIndicatorByNameSubstringOptional: multiple indicators contain name substring '" + name + "', returning first");
+        }
+        return new MEIndicatorDTO(list.get(0));
+    }
+
+    private static String escapeForLike(String s) {
+        if (s == null) return null;
+        return s.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");
     }
 
     public MEIndicatorDTO createMEIndicator(final MEIndicatorDTO indicatorRequest) {

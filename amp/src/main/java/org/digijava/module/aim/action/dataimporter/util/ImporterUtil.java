@@ -2008,12 +2008,21 @@ public class ImporterUtil {
         return false;
     }
 
+    /**
+     * Converts a Date to LocalDate, handling both java.util.Date and java.sql.Date.
+     * java.sql.Date doesn't support toInstant(), so we use toLocalDate() for it.
+     */
+    private static LocalDate toLocalDate(Date date) {
+        if (date instanceof java.sql.Date) {
+            return ((java.sql.Date) date).toLocalDate();
+        }
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
     private static boolean isSameDay(Date a, Date b) {
         if (a == null && b == null) return true;
         if (a == null || b == null) return false;
-        LocalDate ldA = a.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate ldB = b.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        return ldA.equals(ldB);
+        return toLocalDate(a).equals(toLocalDate(b));
     }
 
     /** Finds ACTUAL value matching this location; falls back to ACTUAL with null location if none match (for backward compat). */

@@ -532,17 +532,16 @@ public class PersistenceManager {
 
     /**
      * Execute runnable and ensures that if an active hibernate transaction exists it is committed or rolled back.
-     * Will always close the current session before returning.
+     * The current session is closed only when this is the outermost (non-nested) call to inTransaction.
      *
      * <p>If the runnable throws an exception, then transaction is rolled back and same exception is thrown again.</p>
      *
      * <p>Transaction is not created before calling the runnable. For actual semantics when the transaction is created
      * please check {@link #getSession()}.</p>
      *
-     * <p>Neither active session nor transaction are nested. Calling this method recursively will ensure that active
-     * transaction and session are closed upon exiting the method. This is not very useful nor a good way to reason
-     * about nested transaction semantics but this is how it worked before. Known to be used by
-     * {@link HibernateSessionRequestFilter} which is itself invoked recursively during error processing.</p>
+     * <p>Nested calls to this method share the same session and transaction. Only the outermost call closes the
+     * session and commits/rolls back. This avoids "possible non-threadsafe access to session" when code paths
+     * nest inTransaction (e.g. Data Importer per-row inTransaction and ActivityImporter doWithLock inTransaction).</p>
      *
      * @param runnable the runnable to execute with open session in view context
      */
@@ -562,7 +561,9 @@ public class PersistenceManager {
             PersistenceManager.rollbackCurrentSessionTx();
             throw e;
         } finally {
-            PersistenceManager.endSessionLifecycle();
+            if (!prevManagedFlag) {
+                PersistenceManager.endSessionLifecycle();
+            }
             CURRENT_SESSION_IS_MANAGED.set(prevManagedFlag);
         }
     }

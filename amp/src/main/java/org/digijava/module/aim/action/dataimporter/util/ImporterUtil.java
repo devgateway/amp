@@ -221,7 +221,7 @@ public class ImporterUtil {
                 int intVal = (int) numericValue;
                 // Year-only: whole number in reasonable year range (e.g. 2023 or 2023.0) -> use as calendar year, not Excel serial days
                 if (intVal >= 1800 && intVal <= 2700 && numericValue == Math.floor(numericValue)) {
-                    return intVal + "-01-01";
+                    return intVal + "-12-12";
                 }
                 if (numericValue > 59) {  // Excel bug: after 28 Feb 1900, 60+ is valid
                     Date date = DateUtil.getJavaDate(numericValue);
@@ -343,7 +343,7 @@ public class ImporterUtil {
         if (Pattern.matches("\\d{4}", date)) {
             try {
                 // Parse the year and create a Date object for January 1 of that year
-                Date januaryFirst = new SimpleDateFormat("yyyy-MM-dd").parse(date + "-01-01");
+                Date januaryFirst = new SimpleDateFormat("yyyy-MM-dd").parse(date + "-12-12");
                 return new SimpleDateFormat("yyyy-MM-dd").format(januaryFirst); // Return as "yyyy-MM-dd"
             } catch (Exception e) {
                 logger.info("Error parsing date", e);

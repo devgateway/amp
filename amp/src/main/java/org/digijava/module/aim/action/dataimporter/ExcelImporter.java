@@ -313,6 +313,13 @@ public class ExcelImporter {
                     logger.error("Error preparing data for row " + rowRef.getRowNum() + " in sheet " + sheet.getSheetName() + ": " + e.getMessage(), e);
                 }
 
+                // Clear session after Phase 1 to avoid contamination of Phase 2's transaction
+                // Phase 1's committed changes may leave pending actions in the session that conflict with ActivityGatekeeper
+                Session currentSession = PersistenceManager.getRequestDBSession();
+                if (currentSession != null && currentSession.isOpen()) {
+                    currentSession.clear();
+                }
+
                 // Phase 2: Activity import - DO NOT wrap in transaction, let ActivityGatekeeper handle it
                 // This avoids nested transaction issues when ActivityGatekeeper.doWithLock creates its own transaction
                 Long activityId;

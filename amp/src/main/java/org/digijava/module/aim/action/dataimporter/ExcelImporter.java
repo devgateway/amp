@@ -312,19 +312,24 @@ public class ExcelImporter {
                     logger.error("Error preparing data for row " + rowRef.getRowNum() + " in sheet " + sheet.getSheetName() + ": " + e.getMessage(), e);
                 }
 
-                // importTheData internally uses ActivityGatekeeper.doWithLock which creates its own transaction
-                // Clear any existing session to ensure a clean transaction boundary
+                // Phase 2: Activity import - wrap in transaction to establish clear boundary
                 Long activityId;
                 try {
-                    // This prevents the nested transaction issue when ActivityGatekeeper.doWithLock is called
-                    Session currentSession = PersistenceManager.getRequestDBSession();
-                    if (currentSession != null && currentSession.isOpen()) {
-                        currentSession.clear();
-                    }
-                    
-                    // Pass null for session since importTheData will get its own session
-                    activityId = importTheData(importDataModel, null, importedProject, componentName, componentCode, responsibleOrgIdHolder[0], fundings, existingHolder[0]);
+                    final Long[] activityIdHolder = new Long[1];
+                    PersistenceManager.inTransaction(() -> {
+                        try {
+                            activityIdHolder[0] = importTheData(importDataModel, null, importedProject, componentName, componentCode, responsibleOrgIdHolder[0], fundings, existingHolder[0]);
+                        } catch (JsonProcessingException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                    activityId = activityIdHolder[0];
                 } catch (JsonProcessingException e) {
+                    throw e;
+                } catch (RuntimeException e) {
+                    if (e.getCause() instanceof JsonProcessingException) {
+                        throw (JsonProcessingException) e.getCause();
+                    }
                     throw e;
                 }
 

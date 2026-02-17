@@ -309,7 +309,7 @@ public class ExcelImporter {
                     if (cause instanceof JsonProcessingException) {
                         throw (JsonProcessingException) cause;
                     }
-                    throw e;
+                    logger.error("Error preparing data for row " + rowRef.getRowNum() + " in sheet " + sheet.getSheetName() + ": " + e.getMessage(), e);
                 }
 
                 // Phase 2: Activity import - NO transaction wrapper here!

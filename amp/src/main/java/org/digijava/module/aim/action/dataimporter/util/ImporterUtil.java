@@ -825,7 +825,15 @@ public class ImporterUtil {
             map.remove("implementing_executing_agency_contact_information");
             evictActivityFromSecondLevelCache(existing.getAmpActivityId());
             ensureCreatedBySet(map, existing);
-            response = ActivityInterchangeUtils.importActivity(map, true, rules, "activity/update");
+            try {
+                response = ActivityInterchangeUtils.importActivityInNewSession(map, true, rules, "activity/update");
+            } catch (Exception e) {
+                logger.error("Activity import failed for row", e);
+                importedProject.setImportStatus(ImportStatus.FAILED);
+                Map<String, Collection<Object>> errMap = new LinkedHashMap<>();
+                errMap.put("1", Collections.singletonList("Internal Error : [" + (e.getMessage() != null ? e.getMessage() : "Activity import failed") + "]"));
+                response = new JsonApiResponse<>(errMap, null, null, null);
+            }
         }
         Long activityId = null;
         if (response != null) {

@@ -221,7 +221,7 @@ public class ImporterUtil {
                 int intVal = (int) numericValue;
                 // Year-only: whole number in reasonable year range (e.g. 2023 or 2023.0) -> use as calendar year, not Excel serial days
                 if (intVal >= 1800 && intVal <= 2700 && numericValue == Math.floor(numericValue)) {
-                    return intVal + "-12-12";
+                    return intVal + "-12-31";
                 }
                 if (numericValue > 59) {  // Excel bug: after 28 Feb 1900, 60+ is valid
                     Date date = DateUtil.getJavaDate(numericValue);
@@ -285,7 +285,7 @@ public class ImporterUtil {
     private static String getFundingDate(String dateString) {
         if (dateString != null && dateString.trim().matches("\\d{4}")) {
             int year = Integer.parseInt(dateString.trim());
-            return LocalDate.of(year, 1, 1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return LocalDate.of(year, 12, 31).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         }
         LocalDate date = LocalDate.now();
         if (isCommonDateFormat(dateString)) {
@@ -342,9 +342,9 @@ public class ImporterUtil {
         // Check if date is in year-only format (e.g., "2024")
         if (Pattern.matches("\\d{4}", date)) {
             try {
-                // Parse the year and create a Date object for January 1 of that year
-                Date januaryFirst = new SimpleDateFormat("yyyy-MM-dd").parse(date + "-12-12");
-                return new SimpleDateFormat("yyyy-MM-dd").format(januaryFirst); // Return as "yyyy-MM-dd"
+                // Parse the year and create a Date object for December 31 of that year
+                Date decemberLast = new SimpleDateFormat("yyyy-MM-dd").parse(date + "-12-31");
+                return new SimpleDateFormat("yyyy-MM-dd").format(decemberLast); // Return as "yyyy-MM-dd"
             } catch (Exception e) {
                 logger.info("Error parsing date", e);
             }

@@ -283,12 +283,9 @@ public class ImporterUtil {
 
 
     private static String getFundingDate(String dateString) {
-        if (dateString == null || dateString.trim().isEmpty()) {
-            return LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        }
         if (dateString != null && dateString.trim().matches("\\d{4}")) {
             int year = Integer.parseInt(dateString.trim());
-            return LocalDate.of(year, 12, 31).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            return LocalDate.of(year, 12, 31).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
         LocalDate date = LocalDate.now();
         if (isCommonDateFormat(dateString)) {
@@ -765,9 +762,15 @@ public class ImporterUtil {
     }
 
     /** @return activity ID on success, null on skip or failure */
-    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, AmpActivityVersion existing) throws JsonProcessingException {
+    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId) throws JsonProcessingException {
         if (session == null || !session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
+        }
+        
+        // Re-fetch existing activity in this transaction if ID is provided to avoid detached entity issues
+        AmpActivityVersion existing = null;
+        if (existingActivityId != null) {
+            existing = session.get(AmpActivityVersion.class, existingActivityId);
         }
         ActivityImportRules rules = new ActivityImportRules(true, false,
                 true);
@@ -779,6 +782,9 @@ public class ImporterUtil {
         Map<String, Object> map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                 });
+        // Remove null values and "null" strings from the map to avoid API validation errors
+        map.entrySet().removeIf(entry -> entry.getValue() == null || "null".equals(String.valueOf(entry.getValue())));
+        
         // Do not send indicators in the payload so activity/update does not replace or clear existing indicators.
         // Indicator data is appended separately in addIndicatorDataToActivity.
         map.remove("indicators");
@@ -799,11 +805,14 @@ public class ImporterUtil {
             importedProject.setNewProject(false);
             importDataModel.setInternal_id(existing.getAmpActivityId());
             importDataModel.setAmp_id(existing.getAmpId());
-            ActivityGroup activityGroup = new ActivityGroup();
-            activityGroup.setVersion(existing.getAmpActivityGroup().getVersion());
-            importDataModel.setActivity_group(activityGroup);
-            importDataModel.setProject_title(existing.getName());
-            importDataModel.setProject_code(!Objects.equals(importDataModel.getProject_code(), "") ? importDataModel.getProject_code() : existing.getProjectCode());
+            // Only set activity group if it exists and has the data we need
+            if (existing.getAmpActivityGroup() != null) {
+                ActivityGroup activityGroup = new ActivityGroup();
+                activityGroup.setVersion(existing.getAmpActivityGroup().getVersion());
+                importDataModel.setActivity_group(activityGroup);
+            }
+            importDataModel.setProject_title(existing.getName() != null ? existing.getName() : "");
+            importDataModel.setProject_code(!Objects.equals(importDataModel.getProject_code(), "") ? importDataModel.getProject_code() : (existing.getProjectCode() != null ? existing.getProjectCode() : ""));
             updateFundingOrgsAndSectorsWithAlreadyExisting(existing, importDataModel);
             // Merge existing activity locations into payload so we only add (row + existing), never remove
             mergeExistingActivityLocationsIntoImport(existing, importDataModel);
@@ -812,6 +821,9 @@ public class ImporterUtil {
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                     });
+            // Remove null values and "null" strings from the map to avoid API validation errors
+            map.entrySet().removeIf(entry -> entry.getValue() == null || "null".equals(String.valueOf(entry.getValue())));
+            
             map.remove("indicators"); // preserve existing indicators; we append in addIndicatorDataToActivity
             // Do not replace programs; avoids StaleStateException when deleting AMP_ACTIVITY_PROGRAM rows
             map.remove("national_plan_objective");

@@ -208,7 +208,7 @@ public class ExcelImporter {
                 importDataModel.setDescription(projectDesc);
 
                 // Use holder arrays to capture values from lambda (for effectively final requirement)
-                final AmpActivityVersion[] existingHolder = new AmpActivityVersion[1];
+                final Long[] existingActivityIdHolder = new Long[1];  // Store only the ID, not the entity
                 final Long[] responsibleOrgIdHolder = new Long[1];
                 
                 // Phase 1: Data preparation - use transaction for reading/preparing data ONLY
@@ -227,7 +227,8 @@ public class ExcelImporter {
                         }
                         setStatus(importDataModel);
 
-                        existingHolder[0] = existingActivity(projectTitle, projectCode, session);
+                        AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
+                        existingActivityIdHolder[0] = existing != null ? existing.getAmpActivityId() : null;
 
                         logger.info("Row Number: {}, Sheet Name: {}", rowRef.getRowNum(), sheet.getSheetName());
                         for (Map.Entry<String, String> entry : config.entrySet()) {
@@ -270,26 +271,26 @@ public class ExcelImporter {
                                                 adjustmentType = parsed.adjustmentType;
                                             }
                                         }
-                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, commitment, disbursement, expenditure, adjustmentType, fundingItem, existingHolder[0]);
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, commitment, disbursement, expenditure, adjustmentType, fundingItem, null);
                                         break;
                                     }
                                     case ImporterConstants.PLANNED_COMMITMENT:
-                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false,false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existingHolder[0]);
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false,false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null);
                                         break;
                                     case ImporterConstants.PLANNED_DISBURSEMENT:
-                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existingHolder[0]);
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null);
                                         break;
                                     case ImporterConstants.PLANNED_EXPENDITURE:
-                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existingHolder[0]);
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null);
                                         break;
                                     case ImporterConstants.ACTUAL_COMMITMENT:
-                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existingHolder[0]);
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null);
                                         break;
                                     case ImporterConstants.ACTUAL_DISBURSEMENT:
-                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existingHolder[0]);
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null);
                                         break;
                                     case ImporterConstants.ACTUAL_EXPENDITURE:
-                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existingHolder[0]);
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null);
                                         break;
                                     case ImporterConstants.MEASURE_TYPE:
                                         break;
@@ -312,22 +313,13 @@ public class ExcelImporter {
                     logger.error("Error preparing data for row " + rowRef.getRowNum() + " in sheet " + sheet.getSheetName() + ": " + e.getMessage(), e);
                 }
 
-                // Phase 2: Activity import - wrap in transaction to establish clear boundary
+                // Phase 2: Activity import - DO NOT wrap in transaction, let ActivityGatekeeper handle it
+                // This avoids nested transaction issues when ActivityGatekeeper.doWithLock creates its own transaction
                 Long activityId;
                 try {
-                    final Long[] activityIdHolder = new Long[1];
-                    PersistenceManager.inTransaction(() -> {
-                        try {
-                            activityIdHolder[0] = importTheData(importDataModel, null, importedProject, componentName, componentCode, responsibleOrgIdHolder[0], fundings, existingHolder[0]);
-                        } catch (JsonProcessingException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-                    activityId = activityIdHolder[0];
-                } catch (RuntimeException e) {
-                    if (e.getCause() instanceof JsonProcessingException) {
-                        throw (JsonProcessingException) e.getCause();
-                    }
+                    // Pass only the ID, not the entity - importTheData will re-fetch in its own transaction context
+                    activityId = importTheData(importDataModel, null, importedProject, componentName, componentCode, responsibleOrgIdHolder[0], fundings, existingActivityIdHolder[0]);
+                } catch (JsonProcessingException e) {
                     throw e;
                 }
 

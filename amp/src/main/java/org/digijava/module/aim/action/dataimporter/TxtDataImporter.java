@@ -107,7 +107,7 @@ public class TxtDataImporter {
             String projectStatusStr = rowRef.get(getKey(config, ImporterConstants.PROJECT_STATUS));
 
             // Use holder arrays to capture values from lambda (for effectively final requirement)
-            final AmpActivityVersion[] existingHolder = new AmpActivityVersion[1];
+            final Long[] existingActivityIdHolder = new Long[1];  // Store only the ID, not the entity
             final Long[] responsibleOrgIdHolder = new Long[1];
             
             // Phase 1: Data preparation - use transaction for reading/preparing data ONLY
@@ -115,8 +115,9 @@ public class TxtDataImporter {
                 PersistenceManager.inTransaction(() -> {
                     Session session = PersistenceManager.getRequestDBSession();
                     
-                    existingHolder[0] = existingActivity(projectTitle, projectCode, session);
-                    if (existingHolder[0] != null && SKIP_EXISTING) {
+                    AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
+                    existingActivityIdHolder[0] = existing != null ? existing.getAmpActivityId() : null;
+                    if (existing != null && SKIP_EXISTING) {
                         logger.info("Instructed to skip existing activities");
                         importedProject.setImportStatus(ImportStatus.SKIPPED);
                         return;
@@ -173,26 +174,26 @@ public class TxtDataImporter {
                                         adjustmentType = parsed.adjustmentType;
                                     }
                                 }
-                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), commitment, disbursement, expenditure, adjustmentType, fundingItem, existingHolder[0]);
+                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), commitment, disbursement, expenditure, adjustmentType, fundingItem, null);
                                 break;
                             }
                             case ImporterConstants.PLANNED_COMMITMENT:
-                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existingHolder[0]);
+                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null);
                                 break;
                             case ImporterConstants.PLANNED_DISBURSEMENT:
-                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existingHolder[0]);
+                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null);
                                 break;
                             case ImporterConstants.PLANNED_EXPENDITURE:
-                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existingHolder[0]);
+                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null);
                                 break;
                             case ImporterConstants.ACTUAL_COMMITMENT:
-                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existingHolder[0]);
+                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null);
                                 break;
                             case ImporterConstants.ACTUAL_DISBURSEMENT:
-                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existingHolder[0]);
+                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null);
                                 break;
                             case ImporterConstants.ACTUAL_EXPENDITURE:
-                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existingHolder[0]);
+                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null);
                                 break;
                             case ImporterConstants.MEASURE_TYPE:
                                 break;
@@ -214,19 +215,12 @@ public class TxtDataImporter {
                 throw e;
             }
 
-            // Phase 2: Activity import - wrap in transaction to establish clear boundary
+            // Phase 2: Activity import - DO NOT wrap in transaction, let ActivityGatekeeper handle it
+            // This avoids nested transaction issues when ActivityGatekeeper.doWithLock creates its own transaction
             try {
-                PersistenceManager.inTransaction(() -> {
-                    try {
-                        importTheData(importDataModel, null, importedProject, componentName, componentCode, responsibleOrgIdHolder[0], fundings, existingHolder[0]);
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-            } catch (RuntimeException e) {
-                if (e.getCause() instanceof JsonProcessingException) {
-                    throw (JsonProcessingException) e.getCause();
-                }
+                // Pass only the ID, not the entity - importTheData will re-fetch in its own transaction context
+                importTheData(importDataModel, null, importedProject, componentName, componentCode, responsibleOrgIdHolder[0], fundings, existingActivityIdHolder[0]);
+            } catch (JsonProcessingException e) {
                 throw e;
             }
         }

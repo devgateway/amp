@@ -283,6 +283,9 @@ public class ImporterUtil {
 
 
     private static String getFundingDate(String dateString) {
+        if (dateString == null || dateString.trim().isEmpty()) {
+            return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
         if (dateString != null && dateString.trim().matches("\\d{4}")) {
             int year = Integer.parseInt(dateString.trim());
             return LocalDate.of(year, 12, 31).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));

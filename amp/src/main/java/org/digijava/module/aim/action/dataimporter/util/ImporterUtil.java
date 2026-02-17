@@ -1851,16 +1851,20 @@ public class ImporterUtil {
         boolean hasBase = getKey(config, ImporterConstants.ORIGINAL_BASE_VALUE) != null || getKey(config, ImporterConstants.REVISED_BASE_VALUE) != null;
         boolean hasTarget = getKey(config, ImporterConstants.ORIGINAL_TARGET_VALUE) != null || getKey(config, ImporterConstants.REVISED_TARGET_VALUE) != null;
 
-        // Always add a new ACTUAL value (do not merge/update existing) so each import creates a new actual for this indicator+location
-        logger.info("mergeIndicatorValuesIntoExisting: adding new ACTUAL value: value={} valueDate={}", actualVal, actualDate);
-        AmpIndicatorValue actual = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
-        actual.setValue(actualVal);
-        actual.setValueDate(actualDate);
-        if (actualComment != null) actual.setComment(actualComment);
-        actual.setIndicatorConnection(ia);
-        actual.setActivityLocation(activityLocation);
-        existing.add(actual);
-        session.save(actual);
+        // Add a new ACTUAL value only if we don't already have the same value on the same date for this location
+        if (hasActualWithSameValueAndDate(existing, activityLocation, actualVal, actualDate)) {
+            logger.info("mergeIndicatorValuesIntoExisting: skipping ACTUAL - same value {} and date {} already present for this location", actualVal, actualDate);
+        } else {
+            logger.info("mergeIndicatorValuesIntoExisting: adding new ACTUAL value: value={} valueDate={}", actualVal, actualDate);
+            AmpIndicatorValue actual = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
+            actual.setValue(actualVal);
+            actual.setValueDate(actualDate);
+            if (actualComment != null) actual.setComment(actualComment);
+            actual.setIndicatorConnection(ia);
+            actual.setActivityLocation(activityLocation);
+            existing.add(actual);
+            session.save(actual);
+        }
 
         if (hasBase) {
             AmpIndicatorValue existingBase = findValueByType(existing, AmpIndicatorValue.BASE);
@@ -1977,6 +1981,30 @@ public class ImporterUtil {
             if (v.getValueType() == valueType) return v;
         }
         return null;
+    }
+
+    /** Returns true if there is already an ACTUAL value for this location with the same value and same date (calendar day). */
+    private static boolean hasActualWithSameValueAndDate(Set<AmpIndicatorValue> values, AmpActivityLocation activityLocation, double value, Date valueDate) {
+        if (values == null) return false;
+        Long wantLocId = activityLocation != null && activityLocation.getLocation() != null ? activityLocation.getLocation().getId() : null;
+        for (AmpIndicatorValue v : values) {
+            if (v.getValueType() != AmpIndicatorValue.ACTUAL) continue;
+            Long vLocId = v.getActivityLocation() != null && v.getActivityLocation().getLocation() != null
+                    ? v.getActivityLocation().getLocation().getId() : null;
+            if (!Objects.equals(vLocId, wantLocId)) continue;
+            if (Double.compare(v.getValue(), value) != 0) continue;
+            if (!isSameDay(v.getValueDate(), valueDate)) continue;
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isSameDay(Date a, Date b) {
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
+        LocalDate ldA = a.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate ldB = b.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return ldA.equals(ldB);
     }
 
     /** Finds ACTUAL value matching this location; falls back to ACTUAL with null location if none match (for backward compat). */

@@ -49,6 +49,7 @@ import org.hibernate.mapping.PersistentClass;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.query.Query;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
+import org.hibernate.context.internal.ThreadLocalSessionContext;
 
 import javax.persistence.FlushModeType;
 import java.io.Serializable;
@@ -530,12 +531,6 @@ public class PersistenceManager {
      */
     private static final ThreadLocal<Boolean> CURRENT_SESSION_IS_MANAGED = ThreadLocal.withInitial(() -> false);
 
-    /**
-     * When set, {@link #getSession()} returns this session instead of the thread's current session.
-     * Used by {@link #runInNewSession(java.util.function.Supplier)} to isolate activity import in its own
-     * session/transaction so a failure does not mark the outer transaction for rollback.
-     */
-    private static final ThreadLocal<Session> SESSION_OVERRIDE = ThreadLocal.withInitial(() -> null);
 
     /**
      * Execute runnable and ensures that if an active hibernate transaction exists it is committed or rolled back.
@@ -576,9 +571,11 @@ public class PersistenceManager {
     }
 
     /**
-     * Runs the given supplier in a new, isolated session and transaction. {@link #getSession()} will return this
-     * session for the duration of the call. Use this when a sub-operation must not share the current transaction
-     * (e.g. so its failure does not mark the outer transaction for rollback).
+     * Runs the given supplier in a new, isolated session and transaction. The new session is bound to the
+     * current thread via {@link org.hibernate.context.internal.ThreadLocalSessionContext} so that
+     * {@link #getSession()} and any internal Hibernate thread checks see it as the current session.
+     * Use this when a sub-operation must not share the current transaction (e.g. so its failure does
+     * not mark the outer transaction for rollback).
      * Caller must be inside a managed session context ({@link #inTransaction} or similar).
      *
      * @param supplier work to run with the new session
@@ -589,9 +586,15 @@ public class PersistenceManager {
         if (!CURRENT_SESSION_IS_MANAGED.get()) {
             throw new IllegalStateException("runInNewSession requires an active managed session context.");
         }
+        Session previousSession = null;
+        try {
+            previousSession = sf().getCurrentSession();
+        } catch (Exception ignored) {
+            // no current session
+        }
         Session session = openNewSession();
         session.beginTransaction();
-        SESSION_OVERRIDE.set(session);
+        ThreadLocalSessionContext.bind(session);
         try {
             T result = supplier.get();
             session.getTransaction().commit();
@@ -600,7 +603,10 @@ public class PersistenceManager {
             session.getTransaction().rollback();
             throw e;
         } finally {
-            SESSION_OVERRIDE.remove();
+            ThreadLocalSessionContext.unbind(sf());
+            if (previousSession != null) {
+                ThreadLocalSessionContext.bind(previousSession);
+            }
             if (session.isOpen()) {
                 session.close();
             }
@@ -610,21 +616,11 @@ public class PersistenceManager {
     /**
      * Returns the current Session. If there is none, creates one and returns it
      * upon creating a new session, a transaction is created.
-     * When {@link #SESSION_OVERRIDE} is set (e.g. by {@link #runInNewSession}), that session is returned instead.
      */
     public static Session getSession() {
         boolean currentSessionIsManaged = CURRENT_SESSION_IS_MANAGED.get();
         if (!currentSessionIsManaged) {
             throw new IllegalStateException("Called outside of managed session context.");
-        }
-        Session override = SESSION_OVERRIDE.get();
-        if (override != null) {
-            override.setFlushMode(FlushModeType.AUTO);
-            Transaction transaction = override.getTransaction();
-            if (transaction == null || !transaction.isActive()) {
-                override.beginTransaction();
-            }
-            return override;
         }
         Session sess = sf().getCurrentSession();
         sess.setFlushMode(FlushModeType.AUTO);

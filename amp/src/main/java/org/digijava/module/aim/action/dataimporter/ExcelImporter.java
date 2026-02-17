@@ -207,133 +207,134 @@ public class ExcelImporter {
                 String projectDesc = projectDescColumn >= 0 ? getStringValueFromCell(rowRef.getCell(projectDescColumn),false) : null;
                 importDataModel.setDescription(projectDesc);
 
+                // Use holder arrays to capture values from lambda (for effectively final requirement)
+                final AmpActivityVersion[] existingHolder = new AmpActivityVersion[1];
+                final Long[] responsibleOrgIdHolder = new Long[1];
+                
+                // Phase 1: Data preparation - use transaction for reading/preparing data ONLY
                 try {
-                PersistenceManager.inTransaction(() -> {
-                    Session session = PersistenceManager.getRequestDBSession();
-                if (config.containsValue(ImporterConstants.PROJECT_STATUS)) {
-                    String projectStatusStr = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PROJECT_STATUS);
-                    if (projectStatusStr != null && !projectStatusStr.trim().isEmpty()) {
-                        Long statusId = ImporterUtil.getOrCreateActivityStatusCategoryValue(projectStatusStr.trim(), session);
-                        if (statusId != null) {
-                            importDataModel.setActivity_status(statusId);
-                        }
-                    }
-                }
-                setStatus(importDataModel);
-
-                AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
-                Long responsibleOrgId = null;
-
-//                if (existing!=null && SKIP_EXISTING)
-//                {
-//                    logger.info("Instructed to skip existing activities");
-//                    importedProject.setImportStatus(ImportStatus.SKIPPED);
-//                    continue;
-//                }
-
-                logger.info("Row Number: {}, Sheet Name: {}", rowRef.getRowNum(), sheet.getSheetName());
-                for (Map.Entry<String, String> entry : config.entrySet()) {
-                    Funding fundingItem = new Funding();
-
-                    int columnIndex = getColumnIndexByName(sheet, entry.getKey());
-
-                    if (columnIndex >= 0) {
-                        Cell cell = rowRef.getCell(columnIndex);
-                        switch (entry.getValue()) {
-                            case ImporterConstants.PROJECT_LOCATION:
-                                 updateLocations(importDataModel,Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(),session);
-                                break;
-                            case ImporterConstants.PRIMARY_SECTOR:
-                                updateSectors(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), session, true, primarySubSector);
-                                break;
-                            case ImporterConstants.SECONDARY_SECTOR:
-                                updateSectors(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), session, false, secondarySubSector);
-                                break;
-                            case ImporterConstants.DONOR_AGENCY:
-                                logger.info("Getting donor");
-                                updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), donorAgencyCode, session, ImporterConstants.ORG_TYPE_DONOR);
-                                break;
-                            case ImporterConstants.RESPONSIBLE_ORGANIZATION:
-                                responsibleOrgId = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, ImporterConstants.ORG_TYPE_RESPONSIBLE_ORG);
-                                break;
-                            case ImporterConstants.BENEFICIARY_AGENCY:
-                                responsibleOrgId = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, ImporterConstants.ORG_TYPE_BENEFICIARY_AGENCY);
-                                break;
-                            case ImporterConstants.TRANSACTION_AMOUNT: {
-                                boolean commitment = true, disbursement = true, expenditure = false;
-                                String adjustmentType = ImporterConstants.ADJUSTMENT_TYPE_ACTUAL;
-                                if (config.containsValue(ImporterConstants.MEASURE_TYPE)) {
-                                    String measureTypeStr = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.MEASURE_TYPE);
-                                    ImporterUtil.MeasureTypeResult parsed = parseMeasureType(measureTypeStr);
-                                    if (parsed != null) {
-                                        commitment = parsed.commitment;
-                                        disbursement = parsed.disbursement;
-                                        expenditure = parsed.expenditure;
-                                        adjustmentType = parsed.adjustmentType;
-                                    }
+                    PersistenceManager.inTransaction(() -> {
+                        Session session = PersistenceManager.getRequestDBSession();
+                        
+                        if (config.containsValue(ImporterConstants.PROJECT_STATUS)) {
+                            String projectStatusStr = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PROJECT_STATUS);
+                            if (projectStatusStr != null && !projectStatusStr.trim().isEmpty()) {
+                                Long statusId = ImporterUtil.getOrCreateActivityStatusCategoryValue(projectStatusStr.trim(), session);
+                                if (statusId != null) {
+                                    importDataModel.setActivity_status(statusId);
                                 }
-                                setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, commitment, disbursement, expenditure, adjustmentType, fundingItem, existing);
-                                break;
                             }
-                            case ImporterConstants.PLANNED_COMMITMENT:
-                                setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false,false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existing);
-                                break;
-                            case ImporterConstants.PLANNED_DISBURSEMENT:
-                                setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existing);
-                                break;
-                            case ImporterConstants.PLANNED_EXPENDITURE:
-                                setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existing);
-                                break;
-                            case ImporterConstants.ACTUAL_COMMITMENT:
-                                setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
-                                break;
-                            case ImporterConstants.ACTUAL_DISBURSEMENT:
-                                setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
-                                break;
-                            case ImporterConstants.ACTUAL_EXPENDITURE:
-                                setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existing);
-                                break;
-                            case ImporterConstants.MEASURE_TYPE:
-                                break;
-                            case ImporterConstants.PROJECT_STATUS:
-                                break;
-                            case ImporterConstants.REPORTING_DATE:
-                            default:
-                                logger.error("Unexpected value: " + entry.getValue());
-                                break;
-
                         }
+                        setStatus(importDataModel);
 
+                        existingHolder[0] = existingActivity(projectTitle, projectCode, session);
 
-                    }
-                    fundings.add(fundingItem);
+                        logger.info("Row Number: {}, Sheet Name: {}", rowRef.getRowNum(), sheet.getSheetName());
+                        for (Map.Entry<String, String> entry : config.entrySet()) {
+                            Funding fundingItem = new Funding();
 
+                            int columnIndex = getColumnIndexByName(sheet, entry.getKey());
 
-                }
-
-                Long activityId;
-                try {
-                    activityId = importTheData(importDataModel, session, importedProject, componentName, componentCode, responsibleOrgId, fundings, existing);
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-                if (activityId != null && config.containsValue(ImporterConstants.INDICATOR_NAME)) {
-                    logger.info("Adding indicator data for activity " + activityId);
-                    try {
-                        Session s = PersistenceManager.getRequestDBSession();
-                        addIndicatorDataToActivity(activityId, rowRef, sheet, config, s);
-                        logger.info("Indicator data added for activity " + activityId);
-                    } catch (Exception e) {
-                        logger.error("Failed to add indicator data for activity " + activityId, e);
-                    }
-                }
-                });
+                            if (columnIndex >= 0) {
+                                Cell cell = rowRef.getCell(columnIndex);
+                                switch (entry.getValue()) {
+                                    case ImporterConstants.PROJECT_LOCATION:
+                                        updateLocations(importDataModel,Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(),session);
+                                        break;
+                                    case ImporterConstants.PRIMARY_SECTOR:
+                                        updateSectors(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), session, true, primarySubSector);
+                                        break;
+                                    case ImporterConstants.SECONDARY_SECTOR:
+                                        updateSectors(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), session, false, secondarySubSector);
+                                        break;
+                                    case ImporterConstants.DONOR_AGENCY:
+                                        logger.info("Getting donor");
+                                        updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), donorAgencyCode, session, ImporterConstants.ORG_TYPE_DONOR);
+                                        break;
+                                    case ImporterConstants.RESPONSIBLE_ORGANIZATION:
+                                        responsibleOrgIdHolder[0] = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, ImporterConstants.ORG_TYPE_RESPONSIBLE_ORG);
+                                        break;
+                                    case ImporterConstants.BENEFICIARY_AGENCY:
+                                        responsibleOrgIdHolder[0] = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, ImporterConstants.ORG_TYPE_BENEFICIARY_AGENCY);
+                                        break;
+                                    case ImporterConstants.TRANSACTION_AMOUNT: {
+                                        boolean commitment = true, disbursement = true, expenditure = false;
+                                        String adjustmentType = ImporterConstants.ADJUSTMENT_TYPE_ACTUAL;
+                                        if (config.containsValue(ImporterConstants.MEASURE_TYPE)) {
+                                            String measureTypeStr = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.MEASURE_TYPE);
+                                            ImporterUtil.MeasureTypeResult parsed = parseMeasureType(measureTypeStr);
+                                            if (parsed != null) {
+                                                commitment = parsed.commitment;
+                                                disbursement = parsed.disbursement;
+                                                expenditure = parsed.expenditure;
+                                                adjustmentType = parsed.adjustmentType;
+                                            }
+                                        }
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, commitment, disbursement, expenditure, adjustmentType, fundingItem, existingHolder[0]);
+                                        break;
+                                    }
+                                    case ImporterConstants.PLANNED_COMMITMENT:
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false,false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existingHolder[0]);
+                                        break;
+                                    case ImporterConstants.PLANNED_DISBURSEMENT:
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existingHolder[0]);
+                                        break;
+                                    case ImporterConstants.PLANNED_EXPENDITURE:
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, existingHolder[0]);
+                                        break;
+                                    case ImporterConstants.ACTUAL_COMMITMENT:
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existingHolder[0]);
+                                        break;
+                                    case ImporterConstants.ACTUAL_DISBURSEMENT:
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existingHolder[0]);
+                                        break;
+                                    case ImporterConstants.ACTUAL_EXPENDITURE:
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, existingHolder[0]);
+                                        break;
+                                    case ImporterConstants.MEASURE_TYPE:
+                                        break;
+                                    case ImporterConstants.PROJECT_STATUS:
+                                        break;
+                                    case ImporterConstants.REPORTING_DATE:
+                                    default:
+                                        logger.error("Unexpected value: " + entry.getValue());
+                                        break;
+                                }
+                            }
+                            fundings.add(fundingItem);
+                        }
+                    });
                 } catch (RuntimeException e) {
                     Throwable cause = e.getCause();
                     if (cause instanceof JsonProcessingException) {
                         throw (JsonProcessingException) cause;
                     }
                     throw e;
+                }
+
+                // Phase 2: Activity import - NO transaction wrapper here!
+                // importTheData internally uses ActivityGatekeeper.doWithLock which creates its own transaction
+                Long activityId;
+                try {
+                    // Pass null for session since importTheData will get its own session
+                    activityId = importTheData(importDataModel, null, importedProject, componentName, componentCode, responsibleOrgIdHolder[0], fundings, existingHolder[0]);
+                } catch (JsonProcessingException e) {
+                    throw e;
+                }
+
+                // Phase 3: Indicator import - use separate transaction
+                if (activityId != null && config.containsValue(ImporterConstants.INDICATOR_NAME)) {
+                    logger.info("Adding indicator data for activity " + activityId);
+                    try {
+                        final Long activityIdFinal = activityId;
+                        PersistenceManager.inTransaction(() -> {
+                            Session s = PersistenceManager.getRequestDBSession();
+                            addIndicatorDataToActivity(activityIdFinal, rowRef, sheet, config, s);
+                            logger.info("Indicator data added for activity " + activityIdFinal);
+                        });
+                    } catch (Exception e) {
+                        logger.error("Failed to add indicator data for activity " + activityId, e);
+                    }
                 }
             }
         }

@@ -531,22 +531,6 @@ public class PersistenceManager {
     private static final ThreadLocal<Boolean> CURRENT_SESSION_IS_MANAGED = ThreadLocal.withInitial(() -> false);
 
     /**
-     * Nesting depth of inTransaction/supplyInTransaction. Only the outermost exit closes the session,
-     * avoiding "possible non-threadsafe access to session" when e.g. import runs doWithLock inside a batch transaction.
-     */
-    private static final ThreadLocal<Integer> TRANSACTION_NESTING_DEPTH = ThreadLocal.withInitial(() -> 0);
-
-    /**
-     * Returns the current transaction nesting depth (0 when not inside inTransaction/supplyInTransaction).
-     * Used by {@link DBPersistenceTransactionManager} to avoid nesting when already inside a transaction
-     * (e.g. import batch), so a single session is used for the whole batch and Hibernate's thread-safety
-     * assertion is not triggered.
-     */
-    public static int getTransactionNestingDepth() {
-        return TRANSACTION_NESTING_DEPTH.get();
-    }
-
-    /**
      * Execute runnable and ensures that if an active hibernate transaction exists it is committed or rolled back.
      * Will always close the current session before returning.
      *
@@ -555,9 +539,10 @@ public class PersistenceManager {
      * <p>Transaction is not created before calling the runnable. For actual semantics when the transaction is created
      * please check {@link #getSession()}.</p>
      *
-     * <p>Nested calls are supported: the session is only closed when the outermost inTransaction exits, so inner
-     * transactions (e.g. ActivityGatekeeper.doWithLock during import) do not close the session used by the outer
-     * batch.</p>
+     * <p>Neither active session nor transaction are nested. Calling this method recursively will ensure that active
+     * transaction and session are closed upon exiting the method. This is not very useful nor a good way to reason
+     * about nested transaction semantics but this is how it worked before. Known to be used by
+     * {@link HibernateSessionRequestFilter} which is itself invoked recursively during error processing.</p>
      *
      * @param runnable the runnable to execute with open session in view context
      */
@@ -570,8 +555,6 @@ public class PersistenceManager {
 
     public static <T> T supplyInTransaction(Supplier<T> supplier) {
         boolean prevManagedFlag = CURRENT_SESSION_IS_MANAGED.get();
-        int depth = TRANSACTION_NESTING_DEPTH.get();
-        TRANSACTION_NESTING_DEPTH.set(depth + 1);
         try {
             CURRENT_SESSION_IS_MANAGED.set(true);
             return supplier.get();
@@ -579,12 +562,13 @@ public class PersistenceManager {
             PersistenceManager.rollbackCurrentSessionTx();
             throw e;
         } finally {
-            CURRENT_SESSION_IS_MANAGED.set(prevManagedFlag);
-            int currentDepth = TRANSACTION_NESTING_DEPTH.get();
-            TRANSACTION_NESTING_DEPTH.set(Math.max(0, currentDepth - 1));
-            if (currentDepth == 1) {
+            // Only close/commit the session at the outermost transaction to avoid "possible non-threadsafe
+            // access to session" when nesting (e.g. import -> processBatch inTransaction -> per-row inTransaction
+            // -> ActivityGatekeeper.doWithLock inTransaction). Inner levels must not end the session lifecycle.
+            if (!prevManagedFlag) {
                 PersistenceManager.endSessionLifecycle();
             }
+            CURRENT_SESSION_IS_MANAGED.set(prevManagedFlag);
         }
     }
 

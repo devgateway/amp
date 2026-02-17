@@ -49,7 +49,6 @@ import org.hibernate.mapping.PersistentClass;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.query.Query;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
-import org.hibernate.context.internal.ThreadLocalSessionContext;
 
 import javax.persistence.FlushModeType;
 import java.io.Serializable;
@@ -531,19 +530,19 @@ public class PersistenceManager {
      */
     private static final ThreadLocal<Boolean> CURRENT_SESSION_IS_MANAGED = ThreadLocal.withInitial(() -> false);
 
-
     /**
      * Execute runnable and ensures that if an active hibernate transaction exists it is committed or rolled back.
-     * The current session is closed only when this is the outermost (non-nested) call to inTransaction.
+     * Will always close the current session before returning.
      *
      * <p>If the runnable throws an exception, then transaction is rolled back and same exception is thrown again.</p>
      *
      * <p>Transaction is not created before calling the runnable. For actual semantics when the transaction is created
      * please check {@link #getSession()}.</p>
      *
-     * <p>Nested calls to this method share the same session and transaction. Only the outermost call closes the
-     * session and commits/rolls back. This avoids "possible non-threadsafe access to session" when code paths
-     * nest inTransaction (e.g. Data Importer per-row inTransaction and ActivityImporter doWithLock inTransaction).</p>
+     * <p>Neither active session nor transaction are nested. Calling this method recursively will ensure that active
+     * transaction and session are closed upon exiting the method. This is not very useful nor a good way to reason
+     * about nested transaction semantics but this is how it worked before. Known to be used by
+     * {@link HibernateSessionRequestFilter} which is itself invoked recursively during error processing.</p>
      *
      * @param runnable the runnable to execute with open session in view context
      */
@@ -563,53 +562,8 @@ public class PersistenceManager {
             PersistenceManager.rollbackCurrentSessionTx();
             throw e;
         } finally {
-            if (!prevManagedFlag) {
-                PersistenceManager.endSessionLifecycle();
-            }
+            PersistenceManager.endSessionLifecycle();
             CURRENT_SESSION_IS_MANAGED.set(prevManagedFlag);
-        }
-    }
-
-    /**
-     * Runs the given supplier in a new, isolated session and transaction. The new session is bound to the
-     * current thread via {@link org.hibernate.context.internal.ThreadLocalSessionContext} so that
-     * {@link #getSession()} and any internal Hibernate thread checks see it as the current session.
-     * Use this when a sub-operation must not share the current transaction (e.g. so its failure does
-     * not mark the outer transaction for rollback).
-     * Caller must be inside a managed session context ({@link #inTransaction} or similar).
-     *
-     * @param supplier work to run with the new session
-     * @param <T>      return type
-     * @return result of the supplier
-     */
-    public static <T> T runInNewSession(Supplier<T> supplier) {
-        if (!CURRENT_SESSION_IS_MANAGED.get()) {
-            throw new IllegalStateException("runInNewSession requires an active managed session context.");
-        }
-        Session previousSession = null;
-        try {
-            previousSession = sf().getCurrentSession();
-        } catch (Exception ignored) {
-            // no current session
-        }
-        Session session = openNewSession();
-        session.beginTransaction();
-        ThreadLocalSessionContext.bind(session);
-        try {
-            T result = supplier.get();
-            session.getTransaction().commit();
-            return result;
-        } catch (Throwable e) {
-            session.getTransaction().rollback();
-            throw e;
-        } finally {
-            ThreadLocalSessionContext.unbind(sf());
-            if (previousSession != null) {
-                ThreadLocalSessionContext.bind(previousSession);
-            }
-            if (session.isOpen()) {
-                session.close();
-            }
         }
     }
 

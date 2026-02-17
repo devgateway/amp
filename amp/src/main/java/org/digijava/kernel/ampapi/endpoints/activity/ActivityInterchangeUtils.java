@@ -79,15 +79,6 @@ public final class ActivityInterchangeUtils {
                 .getResult();
     }
 
-    /**
-     * Same as {@link #importActivity(Map, boolean, ActivityImportRules, String)} but runs in a new session/transaction.
-     * Use from bulk import so that a failure (e.g. Hibernate assertion) does not mark the row's transaction for
-     * rollback and the row can still record its status (e.g. saveOrUpdate(importedProject)).
-     */
-    public static JsonApiResponse<ActivitySummary> importActivityInNewSession(Map<String, Object> newJson,
-            boolean update, ActivityImportRules rules, String endpointContextPath) {
-        return PersistenceManager.runInNewSession(() -> importActivity(newJson, update, rules, endpointContextPath));
-    }
 
     private static Long getFMTemplateId(Map<String, Object> newJson) {
         if (AmpClientModeHolder.isOfflineClient()) {

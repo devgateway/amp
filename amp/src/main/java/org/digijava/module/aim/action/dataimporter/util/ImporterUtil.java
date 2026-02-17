@@ -826,7 +826,7 @@ public class ImporterUtil {
             evictActivityFromSecondLevelCache(existing.getAmpActivityId());
             ensureCreatedBySet(map, existing);
             try {
-                response = ActivityInterchangeUtils.importActivityInNewSession(map, true, rules, "activity/update");
+                response = ActivityInterchangeUtils.importActivity(map, true, rules, "activity/update");
             } catch (Exception e) {
                 logger.error("Activity import failed for row", e);
                 importedProject.setImportStatus(ImportStatus.FAILED);

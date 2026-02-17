@@ -562,12 +562,7 @@ public class PersistenceManager {
             PersistenceManager.rollbackCurrentSessionTx();
             throw e;
         } finally {
-            // Only close/commit the session at the outermost transaction to avoid "possible non-threadsafe
-            // access to session" when nesting (e.g. import -> processBatch inTransaction -> per-row inTransaction
-            // -> ActivityGatekeeper.doWithLock inTransaction). Inner levels must not end the session lifecycle.
-            if (!prevManagedFlag) {
-                PersistenceManager.endSessionLifecycle();
-            }
+            PersistenceManager.endSessionLifecycle();
             CURRENT_SESSION_IS_MANAGED.set(prevManagedFlag);
         }
     }

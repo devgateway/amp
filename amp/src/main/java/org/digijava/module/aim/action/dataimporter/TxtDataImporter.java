@@ -223,8 +223,6 @@ public class TxtDataImporter {
                         throw new RuntimeException(e);
                     }
                 });
-            } catch (JsonProcessingException e) {
-                throw e;
             } catch (RuntimeException e) {
                 if (e.getCause() instanceof JsonProcessingException) {
                     throw (JsonProcessingException) e.getCause();

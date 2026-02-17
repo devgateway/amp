@@ -283,6 +283,9 @@ public class ImporterUtil {
 
 
     private static String getFundingDate(String dateString) {
+        if (dateString == null || dateString.trim().isEmpty()) {
+            return LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        }
         if (dateString != null && dateString.trim().matches("\\d{4}")) {
             int year = Integer.parseInt(dateString.trim());
             return LocalDate.of(year, 12, 31).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -511,12 +514,12 @@ public class ImporterUtil {
                 fundingDate = getFundingDate(separateFundingDate);
             } else {
                 yearString = findYearSubstring(separateFundingDate);
-                fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
+                fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate(null);
 
             }
         } else {
             yearString = findYearSubstring(columnHeaderContainingYear);
-            fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
+            fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate(null);
 
         }
 

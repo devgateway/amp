@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
     <jira>AMP-DATAIMPORT</jira>
     <keyword>Increase imported_project_name column length to support long project names</keyword>
-    <author>system</author>
+    <author>brianbrix</author>
     <description>
         Increases the IMPORTED_PROJECT_CURRENCY.imported_project_name column from varchar(255) to varchar(2000)
         to accommodate lengthy project names that may exceed 255 characters.

@@ -763,7 +763,7 @@ public class ImporterUtil {
 
     /** @return activity ID on success, null on skip or failure */
     public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, AmpActivityVersion existing) throws JsonProcessingException {
-        if (!session.isOpen()) {
+        if (session == null || !session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
         ActivityImportRules rules = new ActivityImportRules(true, false,
@@ -854,7 +854,7 @@ public class ImporterUtil {
         String resp = objectMapper.writeValueAsString(response);
         importedProject.setImportResponse(resp);
         try {
-            if (!session.isOpen()) {
+            if (session == null || !session.isOpen()) {
                 // After importActivityInNewSession fails, thread's current session may be closed; use a fresh transaction to save status
                 PersistenceManager.doInTransaction(s -> {
                     s.saveOrUpdate(importedProject);

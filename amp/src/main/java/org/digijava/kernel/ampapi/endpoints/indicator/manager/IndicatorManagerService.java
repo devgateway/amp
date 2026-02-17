@@ -122,8 +122,9 @@ public class IndicatorManagerService {
         try {
             return getMeIndicatorByNameAndProgramName(trimmedName, trimmedProgram);
         } catch (ApiRuntimeException e) {
-            logger.info("getMeIndicatorByNameAndProgramNameOptional: exact match not found, trying substring match for name='" + trimmedName + "' programName='" + trimmedProgram + "'");
             // exact match not found, try substring match (e.g. DB "1.2.1 - X - 1.2.1" vs file "X")
+          logger.info("getMeIndicatorByNameAndProgramNameOptional: exact match not found, trying substring match for name='" + trimmedName + "' programName='" + trimmedProgram + "'");
+
         }
         return getMeIndicatorByNameSubstringOptional(trimmedName, trimmedProgram);
     }

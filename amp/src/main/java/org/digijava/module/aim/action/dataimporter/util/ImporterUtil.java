@@ -853,11 +853,20 @@ public class ImporterUtil {
 
         String resp = objectMapper.writeValueAsString(response);
         importedProject.setImportResponse(resp);
-        if (!session.isOpen()) {
-            session = PersistenceManager.getRequestDBSession();
+        try {
+            if (!session.isOpen()) {
+                // After importActivityInNewSession fails, thread's current session may be closed; use a fresh transaction to save status
+                PersistenceManager.doInTransaction(s -> {
+                    s.saveOrUpdate(importedProject);
+                    s.flush();
+                });
+            } else {
+                session.saveOrUpdate(importedProject);
+                session.flush();
+            }
+        } catch (Exception e) {
+            logger.warn("Could not save import status for imported project (response already set): {}", e.getMessage());
         }
-        session.saveOrUpdate(importedProject);
-        session.flush();
 
         logger.info("Imported project: " + importedProject);
         return activityId;

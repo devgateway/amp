@@ -28,10 +28,18 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
 
     /**
      * Indicator. this field is mandatory. It defines indicator in connection with activity, theme or team.
+     * Uniqueness is per (indicator + activity_location) via indicator_location_key, not per indicator alone.
      */
     @PossibleValues(AmpIndicatorPossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = "Indicator", importable = true, pickIdOnly = true, uniqueConstraint = true)
+    @Interchangeable(fieldTitle = "Indicator", importable = true, pickIdOnly = true, uniqueConstraint = false)
     private AmpIndicator indicator;
+
+    /**
+     * Synthetic key for uniqueness: same indicator can appear multiple times with different locations.
+     * Used by UniqueValidator so (indicator A, location 1) and (indicator A, location 2) are both allowed.
+     */
+    @Interchangeable(fieldTitle = "Indicator Location Key", uniqueConstraint = true, importable = false)
+    private transient String indicatorLocationKey;
 
     /**
      * Indicator values.
@@ -56,6 +64,7 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
 
     public void setIndicator(AmpIndicator indicator) {
         this.indicator = indicator;
+        this.indicatorLocationKey = null; // reset so getIndicatorLocationKey() recomputes
     }
 
     public Set<AmpIndicatorValue> getValues() {
@@ -96,5 +105,17 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
 
     public void setActivityLocation(AmpActivityLocation activityLocation) {
         this.activityLocation = activityLocation;
+        this.indicatorLocationKey = null; // reset so getter recomputes
+    }
+
+    /** Composite key for uniqueness: indicator id + location id so same indicator with different locations is allowed. */
+    public String getIndicatorLocationKey() {
+        if (indicatorLocationKey == null) {
+            Long indId = indicator != null ? indicator.getIndicatorId() : null;
+            Long locId = activityLocation != null && activityLocation.getLocation() != null
+                    ? activityLocation.getLocation().getId() : null;
+            indicatorLocationKey = (indId != null ? indId : "") + "_" + (locId != null ? locId : "");
+        }
+        return indicatorLocationKey;
     }
 }

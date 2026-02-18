@@ -534,20 +534,22 @@ public class ImporterUtil {
         transaction.setTransaction_amount(amount != null ? amount.doubleValue() : 0.0);
         transaction.setTransaction_date(fundingDate);
         transaction.setFixed_exchange_rate(exchangeRate);
+        
+        // Check for duplicate transactions by currency, amount, and date before adding
         if (commitment) {
-            fundingItem.getCommitments().add(transaction);
+            if (!transactionExists(fundingItem.getCommitments(), transaction)) {
+                fundingItem.getCommitments().add(transaction);
+            }
         }
         if (disbursement) {
-            fundingItem.getDisbursements().add(transaction);
+            if (!transactionExists(fundingItem.getDisbursements(), transaction)) {
+                fundingItem.getDisbursements().add(transaction);
+            }
         }
         if (expenditure) {
-            if (transaction.getTransaction_amount() == 0) {
-                transaction.setTransaction_amount(-1);
+            if (!transactionExists(fundingItem.getExpenditures(), transaction)) {
+                fundingItem.getExpenditures().add(transaction);
             }
-            if (transaction.getTransaction_amount() > 0) {
-                transaction.setTransaction_amount(-transaction.getTransaction_amount());
-            }
-            fundingItem.getCommitments().add(transaction);
 
         }
 
@@ -558,6 +560,24 @@ public class ImporterUtil {
 
         }
         return fundingItem;
+    }
+
+    /**
+     * Check if a transaction with the same currency, amount, and date already exists in the list
+     * @param transactions List of existing transactions
+     * @param newTransaction Transaction to check for duplicates
+     * @return true if a duplicate exists, false otherwise
+     */
+    private static boolean transactionExists(List<Transaction> transactions, Transaction newTransaction) {
+        if (transactions == null || newTransaction == null) {
+            return false;
+        }
+        
+        return transactions.stream().anyMatch(existing -> 
+            existing.getCurrency() != null && existing.getCurrency().equals(newTransaction.getCurrency()) &&
+            existing.getTransaction_amount() != null && existing.getTransaction_amount().equals(newTransaction.getTransaction_amount()) &&
+            existing.getTransaction_date() != null && existing.getTransaction_date().equals(newTransaction.getTransaction_date())
+        );
     }
 
     private static Long getOrganizationRole(Session session) {

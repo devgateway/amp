@@ -575,7 +575,7 @@ public class ImporterUtil {
         
         return transactions.stream().anyMatch(existing -> 
             existing.getCurrency() != null && existing.getCurrency().equals(newTransaction.getCurrency()) &&
-            existing.getTransaction_amount() != null && existing.getTransaction_amount().equals(newTransaction.getTransaction_amount()) &&
+            Double.compare(existing.getTransaction_amount(), newTransaction.getTransaction_amount()) == 0 &&
             existing.getTransaction_date() != null && existing.getTransaction_date().equals(newTransaction.getTransaction_date())
         );
     }

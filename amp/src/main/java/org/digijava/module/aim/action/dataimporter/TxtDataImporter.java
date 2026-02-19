@@ -110,11 +110,10 @@ public class TxtDataImporter {
             final Long[] existingActivityIdHolder = new Long[1];  // Store only the ID, not the entity
             final Long[] responsibleOrgIdHolder = new Long[1];
             
-            // Phase 1: Data preparation - use transaction for reading/preparing data ONLY
+            // Phase 1: Data preparation - use independent transaction/session
             try {
-                PersistenceManager.inTransaction(() -> {
-                    Session session = PersistenceManager.getRequestDBSession();
-                    
+                PersistenceManager.doInTransaction(session -> {
+
                     AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
                     existingActivityIdHolder[0] = existing != null ? existing.getAmpActivityId() : null;
                     if (existing != null && SKIP_EXISTING) {
@@ -213,13 +212,6 @@ public class TxtDataImporter {
                     throw (JsonProcessingException) cause;
                 }
                 throw e;
-            }
-
-            // Clear session after Phase 1 to avoid contamination of Phase 2's transaction
-            // Phase 1's committed changes may leave pending actions in the session that conflict with ActivityGatekeeper
-            Session currentSession = PersistenceManager.getRequestDBSession();
-            if (currentSession != null && currentSession.isOpen()) {
-                currentSession.clear();
             }
 
             // Phase 2: Activity import - DO NOT wrap in transaction, let ActivityGatekeeper handle it

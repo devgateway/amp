@@ -211,11 +211,10 @@ public class ExcelImporter {
                 final Long[] existingActivityIdHolder = new Long[1];  // Store only the ID, not the entity
                 final Long[] responsibleOrgIdHolder = new Long[1];
                 
-                // Phase 1: Data preparation - use transaction for reading/preparing data ONLY
+                // Phase 1: Data preparation - use independent transaction/session
                 try {
-                    PersistenceManager.inTransaction(() -> {
-                        Session session = PersistenceManager.getRequestDBSession();
-                        
+                    PersistenceManager.doInTransaction(session -> {
+
                         if (config.containsValue(ImporterConstants.PROJECT_STATUS)) {
                             String projectStatusStr = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PROJECT_STATUS);
                             if (projectStatusStr != null && !projectStatusStr.trim().isEmpty()) {
@@ -313,13 +312,6 @@ public class ExcelImporter {
                     logger.error("Error preparing data for row " + rowRef.getRowNum() + " in sheet " + sheet.getSheetName() + ": " + e.getMessage(), e);
                 }
 
-                // Clear session after Phase 1 to avoid contamination of Phase 2's transaction
-                // Phase 1's committed changes may leave pending actions in the session that conflict with ActivityGatekeeper
-                Session currentSession = PersistenceManager.getRequestDBSession();
-                if (currentSession != null && currentSession.isOpen()) {
-                    currentSession.clear();
-                }
-
                 // Phase 2: Activity import - DO NOT wrap in transaction, let ActivityGatekeeper handle it
                 // This avoids nested transaction issues when ActivityGatekeeper.doWithLock creates its own transaction
                 Long activityId;
@@ -330,13 +322,12 @@ public class ExcelImporter {
                     throw e;
                 }
 
-                // Phase 3: Indicator import - use separate transaction
+                // Phase 3: Indicator import - use independent transaction/session
                 if (activityId != null && config.containsValue(ImporterConstants.INDICATOR_NAME)) {
                     logger.info("Adding indicator data for activity " + activityId);
                     try {
                         final Long activityIdFinal = activityId;
-                        PersistenceManager.inTransaction(() -> {
-                            Session s = PersistenceManager.getRequestDBSession();
+                        PersistenceManager.doInTransaction(s -> {
                             addIndicatorDataToActivity(activityIdFinal, rowRef, sheet, config, s);
                             logger.info("Indicator data added for activity " + activityIdFinal);
                         });

@@ -892,16 +892,10 @@ public class ImporterUtil {
         String resp = objectMapper.writeValueAsString(response);
         importedProject.setImportResponse(resp);
         try {
-            if (session == null || !session.isOpen()) {
-                // After importActivityInNewSession fails, thread's current session may be closed; use a fresh transaction to save status
-                PersistenceManager.doInTransaction(s -> {
-                    s.saveOrUpdate(importedProject);
-                    s.flush();
-                });
-            } else {
-                session.saveOrUpdate(importedProject);
-                session.flush();
-            }
+            PersistenceManager.doInTransaction(s -> {
+                s.saveOrUpdate(importedProject);
+                s.flush();
+            });
         } catch (Exception e) {
             logger.warn("Could not save import status for imported project (response already set): {}", e.getMessage());
         }

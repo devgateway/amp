@@ -756,6 +756,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         addComputedLinearMeasures();
         addSscMeasures();
         addFormulaMeasures();
+        addIndicatorMeasures();
 
         addDividingMeasure(MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT, MeasureConstants.ACTUAL_DISBURSEMENTS, false);
         addMeasure(new ForecastExecutionRateMeasure(MeasureConstants.FORECAST_EXECUTION_RATE));
@@ -1275,15 +1276,19 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
         addMeasure(new AmpTrivialMeasure(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, Constants.PLEDGE));
 
+        return this;
+    }
+
+    private AmpReportsSchema addIndicatorMeasures() {
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_ACTUAL_VALUE, AmpIndicatorValue.ACTUAL));
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_TARGET_VALUE, AmpIndicatorValue.TARGET));
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_BASE_VALUE, AmpIndicatorValue.BASE));
 
         // TODO: maybe we need a different behaviour for disaggregations because the values displayed come from the Admin and are "fixed".
-        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_BASE_VALUE, AmpIndicatorValue.BASE));
-        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_TARGET_VALUE, AmpIndicatorValue.TARGET));
-        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_SECONDARY_DISAGGREGATION_BASE_VALUE, AmpIndicatorValue.BASE));
-        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_SECONDARY_DISAGGREGATION_TARGET_VALUE, AmpIndicatorValue.TARGET));
+        //addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_BASE_VALUE, AmpIndicatorValue.BASE_DISAGGREGATED_LEVEL_0));
+        //addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_TARGET_VALUE, AmpIndicatorValue.TARGET_DISAGGREGATED_LEVEL_0));
+        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_BASE_VALUE, AmpIndicatorValue.BASE_DISAGGREGATED_LEVEL_0));
+        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_TARGET_VALUE, AmpIndicatorValue.TARGET_DISAGGREGATED_LEVEL_0));
 
         return this;
     }

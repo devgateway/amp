@@ -65,7 +65,7 @@ public class ReportColumnProvider extends ReportEntityProvider {
             .put(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, 14)
             .put(ColumnConstants.INDICATOR_REVISED_TARGET_DATE, 15)
             .put(ColumnConstants.INDICATOR_REVISED_TARGET_COMMENT, 16)
-            .put(ColumnConstants.INDICATOR_ACTUAL_VALUE, 17)
+            .put(ColumnConstants.INDICATOR_CURRENT_VALUE, 17)
             .put(ColumnConstants.INDICATOR_ACTUAL_DATE, 18)
             .put(ColumnConstants.INDICATOR_ACTUAL_COMMENT, 19)
             .put(ColumnConstants.INDICATOR_RISK, 20)

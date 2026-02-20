@@ -417,7 +417,7 @@ public class ColumnConstants {
     public static final String INDICATOR_RISK = "Risk";
     public static final String INDICATOR_LOGFRAME_CATEGORY = "Logframe Category";
     // This is a regular column, not a measure.
-    public static final String INDICATOR_ACTUAL_VALUE = "Indicator Current Value";
+    public static final String INDICATOR_CURRENT_VALUE = "Indicator Current Value";
     public static final String INDICATOR_ACTUAL_DATE = "Indicator Current Date";
     public static final String INDICATOR_ACTUAL_COMMENT = "Indicator Current Comment";
     public static final String INDICATOR_BASE_VALUE = "Indicator Base Value";

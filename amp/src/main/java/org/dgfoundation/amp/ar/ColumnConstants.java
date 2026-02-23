@@ -431,11 +431,8 @@ public class ColumnConstants {
     public static final String INDICATOR_REVISED_TARGET_COMMENT = "Indicator Revised Target Comment";
     public static final String INDICATOR_OUTCOME = "Indicator Outcome";
     public static final String INDICATOR_OUTPUT = "Indicator Output";
-    public static final String INDICATOR_DISAGGREGATION = "Indicator Disaggregation";
     public static final String INDICATOR_DISAGGREGATION_LEVEL_0 = "Indicator Disaggregation Level 0";
     public static final String INDICATOR_DISAGGREGATION_LEVEL_1 = "Indicator Disaggregation Level 1";
-    public static final String INDICATOR_DISAGGREGATION_BASE_VALUE = "Indicator Disaggregation Base Value";
-    public static final String INDICATOR_DISAGGREGATION_TARGET_VALUE = "Indicator Disaggregation Target Value";
 
     public static final String PROJECT_RESULTS_AVAILABLE = "Project Results Available";
     public static final String VULNERABLE_GROUP = "Vulnerable Group";

@@ -19,6 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
+				DROP VIEW IF EXISTS v_indicator_actualvalue CASCADE;
 				CREATE OR REPLACE VIEW v_indicator_actualvalue AS
 				  SELECT
 					con.activity_id AS amp_activity_id,
@@ -29,15 +30,20 @@
 					CASE ind.type WHEN 'A' THEN 1 :: BIGINT WHEN 'D' THEN 2 :: BIGINT ELSE 3 :: BIGINT END AS me_indicator_type_id,
 					con.ind_val_category AS me_indicator_logframe_id,
 					con.risk AS me_indicator_risk_id,
-					t.amp_theme_id AS me_npo_id
-					/*t2.amp_theme_id AS me_npo_id*/
-				  FROM amp_indicator_connection con
-					JOIN amp_indicator ind ON ind.indicator_id = con.indicator_id
+					t.amp_theme_id AS me_npo_id,
+					acv.id AS category_value_id,
+					acv.category_value AS category_value
+				FROM amp_indicator_connection con
+						 JOIN amp_indicator ind ON ind.indicator_id = con.indicator_id
 					--LEFT JOIN amp_sector_indicator si ON si.indicator_id=ind.indicator_id
-                    LEFT JOIN amp_theme t ON ind.program_id = t.amp_theme_id
-                    LEFT JOIN amp_theme t2 ON t.parent_theme_id = t2.amp_theme_id
-					JOIN amp_indicator_values val ON val.ind_connect_id = con.id
-				  WHERE val.value_type = 1 AND con.sub_clazz::text = 'a'::text
+						 LEFT JOIN amp_theme t ON ind.program_id = t.amp_theme_id
+						 LEFT JOIN amp_theme t2 ON t.parent_theme_id = t2.amp_theme_id
+						 JOIN amp_indicator_values val ON val.ind_connect_id = con.id
+						 JOIN amp_indicator_disaggregation_values aidv ON ind.indicator_id = aidv.indicator_id
+						 JOIN amp_indicator_global_value aigv ON aidv.base_value_id = aigv.id
+						 JOIN amp_category_value acv ON acv.id = aidv.parent_category_id
+				WHERE val.value_type = 1 AND con.sub_clazz::text = 'a'::text
+				GROUP BY con.activity_id, val.value, ind.indicator_id, con.ind_val_category, con.risk, t.amp_theme_id, acv.id, acv.category_value
 				ORDER BY amp_activity_id, name, me_indicator_id;
 			]]></lang>
 		</script>

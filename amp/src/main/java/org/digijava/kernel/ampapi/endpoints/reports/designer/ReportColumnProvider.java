@@ -72,9 +72,8 @@ public class ReportColumnProvider extends ReportEntityProvider {
             .put(ColumnConstants.INDICATOR_THEME, 21)
             .put(ColumnConstants.INDICATOR_OUTCOME, 22)
             .put(ColumnConstants.INDICATOR_OUTPUT, 23)
-            .put(INDICATOR_DISAGGREGATION, 24)
-            .put(INDICATOR_DISAGGREGATION_LEVEL_0, 25)
-            .put(INDICATOR_DISAGGREGATION_LEVEL_1, 26)
+            .put(INDICATOR_DISAGGREGATION_LEVEL_0, 24)
+            .put(INDICATOR_DISAGGREGATION_LEVEL_1, 25)
             .build();
 
     private static final List<String> DONOR_HIERARCHIES = ImmutableList.of(
@@ -110,7 +109,7 @@ public class ReportColumnProvider extends ReportEntityProvider {
             CONCESSIONALITY_LEVEL, DISASTER_RESPONSE_MARKER, PROJECT_CATEGORY, PROJECT_RESULTS_AVAILABLE,
             INDICATOR_NAME, INDICATOR_LOGFRAME_CATEGORY, INDICATOR_RISK, INDICATOR_SECTOR, INDICATOR_TYPE,
             REPORTING_SYSTEM, INDICATOR_DONOR, INDICATOR_THEME, INDICATOR_OUTCOME, INDICATOR_OUTPUT,
-            INDICATOR_DISAGGREGATION, INDICATOR_DISAGGREGATION_LEVEL_0, INDICATOR_DISAGGREGATION_LEVEL_1
+            INDICATOR_DISAGGREGATION_LEVEL_0, INDICATOR_DISAGGREGATION_LEVEL_1
     );
 
     private static final List<String> COMPONENT_HIERARCHIES = ImmutableList.of(
@@ -130,7 +129,7 @@ public class ReportColumnProvider extends ReportEntityProvider {
     private static final List<String> MEASURELESS_ONLY_HIERARCHIES = ImmutableList.of(
             INDICATOR_LOGFRAME_CATEGORY, INDICATOR_RISK, INDICATOR_SECTOR, INDICATOR_TYPE,
             INDICATOR_NAME, INDICATOR_LOGFRAME_CATEGORY, INDICATOR_RISK, INDICATOR_SECTOR, INDICATOR_TYPE,
-            INDICATOR_THEME);
+            INDICATOR_THEME, INDICATOR_DISAGGREGATION_LEVEL_0, INDICATOR_DISAGGREGATION_LEVEL_1);
 
     private static final Map<ReportType, List<String>> REPORT_TYPE_HIERARCHIES =
             new ImmutableMap.Builder<ReportType, List<String>>()

@@ -32,6 +32,8 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     public static final int ACTUAL = 1;
     public static final int BASE = 2;
     public static final int REVISED = 3;
+    public static final int TARGET_DISAGGREGATED_LEVEL_0 = 4;
+    public static final int BASE_DISAGGREGATED_LEVEL_0 = 5;
 
 
 

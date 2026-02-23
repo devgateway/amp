@@ -221,6 +221,18 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     public final static LevelColumn INDICATOR_LEVEL_COLUMN = INDICATOR_DIM_USG.getLevelColumn(0);
     public final static NiDimensionUsage IND_DIM_USG = indicatorsDimension.getDimensionUsage("Indicator Disaggregation");
 
+    /**
+     * A dedicated NiDimensionUsage for "Indicator Disaggregation Level 0" columns, backed by
+     * {@link CategoriesDimension} (amp_category_value.id) so that the HierarchiesTracker can
+     * distinguish a split-by-disaggregation-category from a split-by-program.
+     * This allows {@link org.dgfoundation.amp.nireports.behaviours.IndicatorMeasureBehaviour}
+     * to compare the correct metadata key (CATEGORY_VALUE_ID) when computing percentages.
+     */
+    public final static NiDimensionUsage INDICATOR_DISAGG_DIM_USG =
+            catsDimension.getDimensionUsage("Indicator Disaggregation Category");
+    public final static LevelColumn INDICATOR_DISAGG_LEVEL_COLUMN =
+            INDICATOR_DISAGG_DIM_USG.getLevelColumn(CategoriesDimension.LEVEL_CAT_VALUE);
+
     // the organisation-based NiDimensionUsage's
     public final static NiDimensionUsage DONOR_DIM_USG = orgsDimension.getDimensionUsage(Constants.FUNDING_AGENCY);
     public final static NiDimensionUsage IA_DIM_USG = orgsDimension.getDimensionUsage(Constants.IMPLEMENTING_AGENCY);
@@ -365,13 +377,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             .put(ColumnConstants.PROCUREMENT_SYSTEM, "procurement_system_id")
             .put(ColumnConstants.INDICATOR_OUTCOME, "outcome_id")
             .put(ColumnConstants.INDICATOR_OUTPUT, "me_indicator_id")
-            .build());
-
-    private SubDimensions indicatorSubDimensions = new SubDimensions(new ImmutableMap.Builder<String, String>()
-            .put(ColumnConstants.INDICATOR_NAME, "me_indicator_id")
-            .put(ColumnConstants.INDICATOR_OUTCOME, "outcome_id")
-            .put(ColumnConstants.INDICATOR_OUTPUT, "me_indicator_id")
-            .put(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_0, "me_indicator_id")
+            // INDICATOR_DISAGGREGATION_LEVEL_0 maps to "category_value_id" in the views.
+            // After initialize(), this becomes "category_value_id" -> INDICATOR_DISAGG_LEVEL_COLUMN
+            // (catsDimension-backed), so funding cells get the correct INDICATOR_DISAGG_DIM_USG
+            // coordinate for filtering, and doHorizontalReduce can compare CATEGORY_VALUE_ID metadata.
+            .put(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_0, "category_value_id")
             .build());
 
     /**
@@ -768,7 +778,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         pledgeFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_PLEDGE_FUNDING, "v_ni_pledges_funding", subDimensions);
         componentFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_COMPONENT_FUNDING, "v_ni_component_funding", subDimensions);
         gpiFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_GPI_FUNDING, "v_ni_gpi_funding", subDimensions);
-        indicatorColumn = new AmpIndicatorColumn("Indicator Values", "v_ni_indicator_funding", indicatorSubDimensions);
+        indicatorColumn = new AmpIndicatorColumn("Indicator Values", "v_ni_indicator_funding", subDimensions);
         regionalFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_REGIONAL_FUNDING,
                 "v_ni_regional_funding", subDimensions);
     }
@@ -778,9 +788,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         indicator_single_dimension(ColumnConstants.INDICATOR_OUTCOME, "v_indicator_outcome", INDICATOR_LEVEL_COLUMN);
         indicator_single_dimension(ColumnConstants.INDICATOR_OUTPUT, "v_indicator_output", INDICATOR_LEVEL_COLUMN);
 
-        indicator_disaggregation_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_0, "v_indicator_disaggregation_level_0", INDICATOR_LEVEL_COLUMN);
+        indicator_disaggregation_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_0, "v_indicator_disaggregation_level_0", INDICATOR_DISAGG_LEVEL_COLUMN);
         // indicator_single_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_1, "v_indicator_disaggregation_level_1", IND_DIM_USG, LEVEL_1);
-        indicator_degenerate_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_BASE_VALUE, "v_indicator_disaggregation_basevalue", indicatorsDimension);
+        // indicator_degenerate_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_BASE_VALUE, "v_indicator_disaggregation_basevalue", indicatorsDimension);
         // indicator_degenerate_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_TARGET_VALUE, "v_indicator_disaggregation_targetvalue", indicatorsDimension);
 
         indicator_degenerate_dimension(ColumnConstants.INDICATOR_TYPE, "v_indicator_type", boolDimension);
@@ -793,8 +803,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         indicator_degenerate_dimension(ColumnConstants.INDICATOR_RISK, "v_indicator_risk", indicatorRiskRatingsDimension);
         indicator_degenerate_dimension(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, "v_indicator_logframe_category", catsDimension);
 
-        indicator_degenerate_dimension(ColumnConstants.INDICATOR_ACTUAL_VALUE, "v_indicator_actualvalue", indicatorsDimension);
-        // indicator_no_entity(ColumnConstants.INDICATOR_ACTUAL_VALUE, "v_indicator_actualvalue");
+        // This is the Indicator Current Value as a regular column, not a measure.
+        indicator_degenerate_dimension(ColumnConstants.INDICATOR_CURRENT_VALUE, "v_indicator_actualvalue", indicatorsDimension);
         indicator_date_column(ColumnConstants.INDICATOR_ACTUAL_DATE, "v_indicator_actual_date");
         indicator_no_entity(ColumnConstants.INDICATOR_ACTUAL_COMMENT, "v_indicator_actual_comment");
 
@@ -1338,7 +1348,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
     List<NiDimension> whitelistedDegenerateDimensions =
             Arrays.asList(catsDimension, agreementsDimension, boolDimension, usersDimension, departmentsDimension,
-                    fundingDimension, COMPS_DIMENSION, COMP_TYPES_DIMENSION, RAW_LOCS_DIMENSION);
+                    fundingDimension, COMPS_DIMENSION, COMP_TYPES_DIMENSION, RAW_LOCS_DIMENSION, indicatorsDimension);
 
 
     /**

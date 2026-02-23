@@ -7,6 +7,7 @@ import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NumberedCell;
+import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.meta.MetaInfo;
 import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
@@ -25,9 +26,14 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+
+import static org.dgfoundation.amp.nireports.amp.MetaCategory.CATEGORY_VALUE_ID;
 import static org.dgfoundation.amp.nireports.amp.MetaCategory.INDICATOR_PROGRAM_ID;
 
 /**
@@ -95,16 +101,57 @@ public class IndicatorMeasureBehaviour implements Behaviour<NiAmountCell> {
         BigDecimal res = precision.adjustPrecision(BigDecimal.ZERO);
         for (NiCell cell : cells) {
             AtomicReference<BigDecimal> percentage = new AtomicReference<>(new BigDecimal(0));
-            MetaInfo metaInfo = cell.getCell().getMetaInfo().getMetaInfo(INDICATOR_PROGRAM_ID.category);
+
+            Map<NiDimensionUsage, HierarchiesTracker.SplitCellPercentage> hierarchyPercentages =
+                    ((HierarchiesTracker) cell.getHiersTracker()).getPercentages();
+
+            if (hierarchyPercentages.isEmpty()) {
+                // No active hierarchy split — include at full value (e.g. totals row)
+                percentage.set(new BigDecimal(1));
+            } else {
+                // Walk every dimension in the tracker; require ALL of them to match
+                // so that combined hierarchies (e.g. program + disaggregation) work correctly.
+                boolean allMatch = true;
+                for (Map.Entry<NiDimensionUsage, HierarchiesTracker.SplitCellPercentage> entry
+                        : hierarchyPercentages.entrySet()) {
+                    NiDimensionUsage dimUsage = entry.getKey();
+                    long splitId = entry.getValue().getSplitCellPercentageId();
+
+                    MetaCategory metaKey = resolveMetaCategory(dimUsage);
+                    MetaInfo metaInfo = cell.getCell().getMetaInfo().getMetaInfo(metaKey.category);
             Object metadataId = metaInfo != null ? metaInfo.getValue() : null;
-            long percentageId = ((HierarchiesTracker.SplitCellPercentage) ((HierarchiesTracker) cell.getHiersTracker()).getPercentages().values().stream().findFirst().get()).getSplitCellPercentageId();
-            if (metadataId != null && ((Long) metadataId) == percentageId) {
+
+                    if (metadataId == null || ((Long) metadataId) != splitId) {
+                        allMatch = false;
+                        break;
+                    }
+                }
+                if (allMatch) {
                 percentage.set(new BigDecimal(1));
             }
+            }
+
             BigDecimal toAdd = ((NumberedCell) cell.getCell()).getAmount().multiply(percentage.get());
             res = res.add(toAdd);
         }
         return new NiAmountCell(res, precision, isScalableByUnits);
+    }
+
+    /**
+     * Determines which {@link MetaCategory} to compare against for a given {@link NiDimensionUsage}
+     * when computing indicator measure percentages.
+     * <ul>
+     *   <li>Splits by {@link AmpReportsSchema#INDICATOR_DISAGG_DIM_USG} (backed by amp_category_value)
+     *       must be matched against {@link MetaCategory#CATEGORY_VALUE_ID}.</li>
+     *   <li>All other indicator splits (program / theme hierarchies) are matched against
+     *       {@link MetaCategory#INDICATOR_PROGRAM_ID}.</li>
+     * </ul>
+     */
+    private MetaCategory resolveMetaCategory(NiDimensionUsage dimUsage) {
+        if (dimUsage == AmpReportsSchema.INDICATOR_DISAGG_DIM_USG) {
+            return CATEGORY_VALUE_ID;
+        }
+        return INDICATOR_PROGRAM_ID;
     }
 
     @Override

@@ -19,9 +19,11 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
+                DROP VIEW IF EXISTS v_indicator_outcome;
 				CREATE OR REPLACE VIEW v_indicator_outcome AS
 				SELECT con.activity_id AS amp_activity_id,
 				   ao.name,
+
 				   ind.indicator_id AS me_indicator_id,
 				   ind.outcome_id,
 				   ao.description,

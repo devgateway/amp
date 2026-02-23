@@ -34,6 +34,7 @@ import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 import static org.dgfoundation.amp.nireports.amp.MetaCategory.CATEGORY_VALUE_ID;
+import static org.dgfoundation.amp.nireports.amp.MetaCategory.INDICATOR_ID;
 import static org.dgfoundation.amp.nireports.amp.MetaCategory.INDICATOR_PROGRAM_ID;
 
 /**
@@ -119,7 +120,7 @@ public class IndicatorMeasureBehaviour implements Behaviour<NiAmountCell> {
 
                     MetaCategory metaKey = resolveMetaCategory(dimUsage);
                     MetaInfo metaInfo = cell.getCell().getMetaInfo().getMetaInfo(metaKey.category);
-            Object metadataId = metaInfo != null ? metaInfo.getValue() : null;
+                    Object metadataId = metaInfo != null ? metaInfo.getValue() : null;
 
                     if (metadataId == null || ((Long) metadataId) != splitId) {
                         allMatch = false;
@@ -127,8 +128,8 @@ public class IndicatorMeasureBehaviour implements Behaviour<NiAmountCell> {
                     }
                 }
                 if (allMatch) {
-                percentage.set(new BigDecimal(1));
-            }
+                    percentage.set(new BigDecimal(1));
+                }
             }
 
             BigDecimal toAdd = ((NumberedCell) cell.getCell()).getAmount().multiply(percentage.get());
@@ -150,6 +151,8 @@ public class IndicatorMeasureBehaviour implements Behaviour<NiAmountCell> {
     private MetaCategory resolveMetaCategory(NiDimensionUsage dimUsage) {
         if (dimUsage == AmpReportsSchema.INDICATOR_DISAGG_DIM_USG) {
             return CATEGORY_VALUE_ID;
+        } else if (dimUsage == AmpReportsSchema.INDICATOR_DIM_USG) {
+            return INDICATOR_ID;
         }
         return INDICATOR_PROGRAM_ID;
     }

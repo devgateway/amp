@@ -19,11 +19,13 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
+                DROP VIEW IF EXISTS v_indicator_output;
 				CREATE OR REPLACE VIEW v_indicator_output AS
 				  SELECT con.activity_id AS amp_activity_id,
 				    ao.name,
 				    ind.indicator_id AS me_indicator_id,
-                    ind.outcome_id,
+				    ind.output_id,
+
                     ao.description,
                     CASE ind.type WHEN 'A' THEN 1 :: BIGINT WHEN 'D' THEN 2 :: BIGINT ELSE 3 :: BIGINT END AS me_indicator_type_id,
                     con.ind_val_category AS me_indicator_logframe_id,

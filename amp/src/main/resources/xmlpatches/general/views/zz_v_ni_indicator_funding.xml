@@ -28,7 +28,9 @@
 				iv.value_date   as value_date,
 				ic.indicator_id as me_indicator_id,
 				t.amp_theme_id  AS program_id,
-				NULL::integer AS category_value_id
+				NULL::integer AS category_value_id,
+				ind.output_id,
+				ind.outcome_id
 				from amp_indicator i
 				join amp_indicator_connection ic ON i.indicator_id = ic.indicator_id and ic.sub_clazz = 'a'
 				join amp_indicator_values iv ON ic.id = iv.ind_connect_id
@@ -46,7 +48,9 @@
 				aigv.original_value_date as value_date,
 				ic.indicator_id          as me_indicator_id,
 				t.amp_theme_id           AS program_id,
-				NULL::integer AS category_value_id
+				NULL::integer AS category_value_id,
+				ind.output_id,
+				ind.outcome_id
 				from amp_indicator i
 				join amp_indicator_connection ic ON i.indicator_id = ic.indicator_id and ic.sub_clazz = 'a'
 				join amp_indicator_global_value aigv ON ic.indicator_id = aigv.indicator_id
@@ -64,7 +68,9 @@
 				COALESCE(aigv.original_value_date,iv.value_date)  as value_date,
 				ind.indicator_id          as me_indicator_id,
 				t.amp_theme_id           AS program_id,
-				acv.id             AS category_value_id
+				acv.id             AS category_value_id,
+				ind.output_id,
+				ind.outcome_id
 				FROM amp_indicator_connection con
 				JOIN amp_indicator ind ON ind.indicator_id = con.indicator_id
 				JOIN amp_indicator_disaggregation_values aidv ON ind.indicator_id = aidv.indicator_id
@@ -84,7 +90,9 @@
 				COALESCE(aigv.original_value_date,iv.value_date)  as value_date,
 				ind.indicator_id          as me_indicator_id,
 				t.amp_theme_id           AS program_id,
-				acv.id             AS category_value_id
+				acv.id             AS category_value_id,
+				ind.output_id,
+				ind.outcome_id
 				FROM amp_indicator_connection con
 				JOIN amp_indicator ind ON ind.indicator_id = con.indicator_id
 				JOIN amp_indicator_disaggregation_values aidv ON ind.indicator_id = aidv.indicator_id

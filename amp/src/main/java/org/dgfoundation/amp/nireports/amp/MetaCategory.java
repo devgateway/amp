@@ -2,11 +2,12 @@ package org.dgfoundation.amp.nireports.amp;
 
 /**
  * category keys which can be found in the AmpReportsSchema metaInfo
+ *
  * @author Dolghier Constantin
  *
  */
 public enum MetaCategory {
-    
+
     TRANSACTION_TYPE("transaction_type"),
     ADJUSTMENT_TYPE("adjustment_type"),
     CAPITAL_SPEND_PERCENT("capital_spend_percent"),
@@ -26,9 +27,12 @@ public enum MetaCategory {
     INDICATOR_VALUE_TYPE("value_type"),
     INDICATOR_PROGRAM_ID("program_id"),
     CATEGORY_VALUE_ID("category_value_id"),
-    INDICATOR_ID("me_indicator_id");
-    
+    INDICATOR_ID("me_indicator_id"),
+    OUTPUT_ID("output_id"),
+    OUTCOME_ID("outcome_id");
+
     public final String category;
+
     private MetaCategory(String category) {
         this.category = category;
     }

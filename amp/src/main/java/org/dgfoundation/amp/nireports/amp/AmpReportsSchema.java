@@ -300,7 +300,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             IndicatorTextualTokenBehaviour.forText(INDICATOR_DIM_USG, false);
 
     private IndicatorTextualTokenBehaviour indicatorThemeTokenBehaviour =
-            IndicatorTextualTokenBehaviour.forText(INDICATOR_DIM_USG, true);
+            IndicatorTextualTokenBehaviour.forText(INDICATOR_DIM_USG, false);
 
     private IndicatorDisaggregationTextualTokenBehaviour indicatorDisaggregationTokenBehaviour =
             IndicatorDisaggregationTextualTokenBehaviour.forText(INDICATOR_DIM_USG, false);
@@ -375,8 +375,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             .put(ColumnConstants.VULNERABLE_GROUP, "vulnerable_group_id")
             .put(ColumnConstants.DONOR_COUNTRY, "donor_org_country_id")
             .put(ColumnConstants.PROCUREMENT_SYSTEM, "procurement_system_id")
-            .put(ColumnConstants.INDICATOR_OUTCOME, "outcome_id")
+            .put(ColumnConstants.INDICATOR_OUTCOME, "me_indicator_id")
             .put(ColumnConstants.INDICATOR_OUTPUT, "me_indicator_id")
+
             // INDICATOR_DISAGGREGATION_LEVEL_0 maps to "category_value_id" in the views.
             // After initialize(), this becomes "category_value_id" -> INDICATOR_DISAGG_LEVEL_COLUMN
             // (catsDimension-backed), so funding cells get the correct INDICATOR_DISAGG_DIM_USG

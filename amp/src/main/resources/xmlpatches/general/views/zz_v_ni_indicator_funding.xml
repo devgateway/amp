@@ -49,6 +49,7 @@
 				ic.indicator_id          as me_indicator_id,
 				t.amp_theme_id           AS program_id,
 				NULL::integer AS category_value_id,
+				/* TODO: we need to return the category_value_id for actual values added in the AF to disaggregation categories!!! (right now it fails even in the AF) */
 				ind.output_id,
 				ind.outcome_id
 				from amp_indicator i

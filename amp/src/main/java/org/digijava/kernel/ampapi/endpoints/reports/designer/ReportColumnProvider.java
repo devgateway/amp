@@ -27,6 +27,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.dgfoundation.amp.ar.ColumnConstants.*;
+import static org.dgfoundation.amp.ar.MeasureConstants.ACTUAL_COMMITMENTS;
+import static org.dgfoundation.amp.ar.MeasureConstants.ACTUAL_DISBURSEMENTS;
 import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportType.*;
 
 /**
@@ -128,8 +130,7 @@ public class ReportColumnProvider extends ReportEntityProvider {
 
     private static final List<String> MEASURELESS_ONLY_HIERARCHIES = ImmutableList.of(
             INDICATOR_LOGFRAME_CATEGORY, INDICATOR_RISK, INDICATOR_SECTOR, INDICATOR_TYPE,
-            INDICATOR_NAME, INDICATOR_LOGFRAME_CATEGORY, INDICATOR_RISK, INDICATOR_SECTOR, INDICATOR_TYPE,
-            INDICATOR_THEME, INDICATOR_DISAGGREGATION_LEVEL_0, INDICATOR_DISAGGREGATION_LEVEL_1);
+            INDICATOR_THEME, ACTUAL_COMMITMENTS, ACTUAL_DISBURSEMENTS);
 
     private static final Map<ReportType, List<String>> REPORT_TYPE_HIERARCHIES =
             new ImmutableMap.Builder<ReportType, List<String>>()

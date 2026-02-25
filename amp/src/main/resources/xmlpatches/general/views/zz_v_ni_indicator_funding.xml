@@ -45,7 +45,7 @@
 				select DISTINCT ic.activity_id           as amp_activity_id,
 				aigv.original_value,
 				aigv.type                as value_type,
-				aigv.original_value_date as value_date,
+				COALESCE(aigv.original_value_date, iv.value_date)  as value_date,
 				ic.indicator_id          as me_indicator_id,
 				t.amp_theme_id           AS program_id,
 				NULL::integer AS category_value_id,
@@ -58,6 +58,7 @@
 				left JOIN amp_indicator ind ON ind.indicator_id = ic.indicator_id
 				LEFT JOIN amp_theme t ON ind.program_id = t.amp_theme_id
 				LEFT JOIN amp_theme t2 ON t.parent_theme_id = t2.amp_theme_id
+				join amp_indicator_values iv ON ic.id = iv.ind_connect_id
 
 				UNION ALL
 

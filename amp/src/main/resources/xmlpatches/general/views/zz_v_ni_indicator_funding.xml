@@ -22,7 +22,7 @@
 				DROP VIEW IF EXISTS v_ni_indicator_funding CASCADE;
 				create view v_ni_indicator_funding AS
 
-				select ic.activity_id  as amp_activity_id,
+				select DISTINCT ic.activity_id  as amp_activity_id,
 				iv.value,
 				iv.value_type,
 				iv.value_date   as value_date,
@@ -42,7 +42,7 @@
 				UNION ALL
 
 				/* indicator's base/target values from admin section (basic, not disaggregated) */
-				select ic.activity_id           as amp_activity_id,
+				select DISTINCT ic.activity_id           as amp_activity_id,
 				aigv.original_value,
 				aigv.type                as value_type,
 				aigv.original_value_date as value_date,
@@ -61,7 +61,7 @@
 				UNION ALL
 
 				/* indicator's values from admin section (disaggregated) - base values */
-				select con.activity_id           as amp_activity_id,
+				select DISTINCT con.activity_id           as amp_activity_id,
 				aigv.original_value AS value,
 				/*aigv.type                as value_type,*/
 				4::integer AS value_type,
@@ -83,7 +83,7 @@
 				UNION ALL
 
 				/* indicator's values from admin section (disaggregated) - target values */
-				select con.activity_id           as amp_activity_id,
+				select DISTINCT con.activity_id           as amp_activity_id,
 				aigv.original_value AS value,
 				/*aigv.type                as value_type,*/
 				5::integer AS value_type,

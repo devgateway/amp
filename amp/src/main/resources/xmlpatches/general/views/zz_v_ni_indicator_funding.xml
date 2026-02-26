@@ -49,7 +49,6 @@
 				ic.indicator_id          as me_indicator_id,
 				t.amp_theme_id           AS program_id,
 				NULL::integer AS category_value_id,
-				/* TODO: we need to return the category_value_id for actual values added in the AF to disaggregation categories!!! (right now it fails even in the AF) */
 				ind.output_id,
 				ind.outcome_id
 				from amp_indicator i
@@ -65,8 +64,8 @@
 				/* indicator's values from admin section (disaggregated) - base values */
 				select DISTINCT con.activity_id           as amp_activity_id,
 				aigv.original_value AS value,
-				/*aigv.type                as value_type,*/
-				4::integer AS value_type,
+				aigv.type                as value_type,
+				/*4::integer AS value_type,*/
 				COALESCE(aigv.original_value_date,iv.value_date)  as value_date,
 				ind.indicator_id          as me_indicator_id,
 				t.amp_theme_id           AS program_id,
@@ -87,8 +86,8 @@
 				/* indicator's values from admin section (disaggregated) - target values */
 				select DISTINCT con.activity_id           as amp_activity_id,
 				aigv.original_value AS value,
-				/*aigv.type                as value_type,*/
-				5::integer AS value_type,
+				aigv.type                as value_type,
+				/*5::integer AS value_type,*/
 				COALESCE(aigv.original_value_date,iv.value_date)  as value_date,
 				ind.indicator_id          as me_indicator_id,
 				t.amp_theme_id           AS program_id,
@@ -102,7 +101,8 @@
 				JOIN amp_category_value acv ON acv.id = aidv.parent_category_id
 				LEFT JOIN amp_theme t ON ind.program_id = t.amp_theme_id
 				join amp_indicator_values iv ON con.id = iv.ind_connect_id
-				WHERE con.activity_id IS NOT NULL;
+				WHERE con.activity_id IS NOT NULL
+				order by amp_activity_id, me_indicator_id, value_type, value;
         	</lang>
 		</script>
 	</apply>

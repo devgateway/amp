@@ -64,6 +64,7 @@ import org.dgfoundation.amp.nireports.*;
 import org.dgfoundation.amp.nireports.amp.dimensions.*;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDateTokenBehaviour;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDisaggregationTextualTokenBehaviour;
+import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDisaggregationLevel1TextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorTextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.*;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
@@ -227,11 +228,26 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      * distinguish a split-by-disaggregation-category from a split-by-program.
      * This allows {@link org.dgfoundation.amp.nireports.behaviours.IndicatorMeasureBehaviour}
      * to compare the correct metadata key (CATEGORY_VALUE_ID) when computing percentages.
+     * Corresponds to {@code aidv.parent_category_id} in {@code amp_indicator_disaggregation_values}.
+     * The funding view exposes this as the {@code category_value_id} column.
      */
     public final static NiDimensionUsage INDICATOR_DISAGG_DIM_USG =
             catsDimension.getDimensionUsage("Indicator Disaggregation Category");
     public final static LevelColumn INDICATOR_DISAGG_LEVEL_COLUMN =
             INDICATOR_DISAGG_DIM_USG.getLevelColumn(CategoriesDimension.LEVEL_CAT_VALUE);
+
+    /**
+     * A dedicated NiDimensionUsage for "Indicator Disaggregation Level 1" (child category) columns.
+     * Uses a different instance name from {@link #INDICATOR_DISAGG_DIM_USG} so that filtering by
+     * Level 0 and Level 1 are independent — using one as a hierarchy does not contaminate the other.
+     * Corresponds to {@code aidv.child_category_id} in {@code amp_indicator_disaggregation_values}.
+     * The funding view exposes this as the {@code child_category_value_id} column.
+     * The value may be NULL when no child disaggregation category is assigned.
+     */
+    public final static NiDimensionUsage INDICATOR_DISAGG_LEVEL_1_DIM_USG =
+            catsDimension.getDimensionUsage("Indicator Disaggregation Child Category");
+    public final static LevelColumn INDICATOR_DISAGG_LEVEL_1_COLUMN =
+            INDICATOR_DISAGG_LEVEL_1_DIM_USG.getLevelColumn(CategoriesDimension.LEVEL_CAT_VALUE);
 
     // the organisation-based NiDimensionUsage's
     public final static NiDimensionUsage DONOR_DIM_USG = orgsDimension.getDimensionUsage(Constants.FUNDING_AGENCY);
@@ -304,6 +320,15 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
     private IndicatorDisaggregationTextualTokenBehaviour indicatorDisaggregationTokenBehaviour =
             IndicatorDisaggregationTextualTokenBehaviour.forText(INDICATOR_DIM_USG, false);
+
+    /**
+     * Token behaviour for "Indicator Disaggregation Level 1" (child category).
+     * Uses the same {@code INDICATOR_DIM_USG} as Level 0 for cell ordering/deduplication by
+     * indicator, but is a separate instance so it can be swapped out independently if Level 1
+     * ever needs distinct display logic.
+     */
+    private IndicatorDisaggregationLevel1TextualTokenBehaviour indicatorDisaggregationLevel1TokenBehaviour =
+            IndicatorDisaggregationLevel1TextualTokenBehaviour.forText(INDICATOR_DIM_USG, false);
 
     private IndicatorTextualTokenBehaviour indicatorDoubleTokenBehaviour =
             IndicatorTextualTokenBehaviour.forDouble(INDICATOR_DIM_USG);
@@ -383,6 +408,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             // (catsDimension-backed), so funding cells get the correct INDICATOR_DISAGG_DIM_USG
             // coordinate for filtering, and doHorizontalReduce can compare CATEGORY_VALUE_ID metadata.
             .put(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_0, "category_value_id")
+
+            // INDICATOR_DISAGGREGATION_LEVEL_1 maps to "child_category_value_id" in the views.
+            // After initialize(), this becomes "child_category_value_id" -> INDICATOR_DISAGG_LEVEL_1_COLUMN
+            // (catsDimension-backed, distinct instance name from Level 0), so funding cells are tagged
+            // with the child disaggregation category coordinate independently from the parent (Level 0).
+            .put(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_1, "child_category_value_id")
             .build());
 
     /**
@@ -790,7 +821,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         indicator_single_dimension(ColumnConstants.INDICATOR_OUTPUT, "v_indicator_output", INDICATOR_LEVEL_COLUMN);
 
         indicator_disaggregation_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_0, "v_indicator_disaggregation_level_0", INDICATOR_DISAGG_LEVEL_COLUMN);
-        // indicator_single_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_1, "v_indicator_disaggregation_level_1", IND_DIM_USG, LEVEL_1);
+
+        // Level 1 (child disaggregation category): uses v_indicator_disaggregation_level_1 which joins
+        // on aidv.child_category_id, and its own INDICATOR_DISAGG_LEVEL_1_COLUMN so filtering by
+        // Level 1 is fully independent from Level 0.
+        indicator_disaggregation_level1_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_1, "v_indicator_disaggregation_level_1", INDICATOR_DISAGG_LEVEL_1_COLUMN);
+
         // indicator_degenerate_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_BASE_VALUE, "v_indicator_disaggregation_basevalue", indicatorsDimension);
         // indicator_degenerate_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_TARGET_VALUE, "v_indicator_disaggregation_targetvalue", indicatorsDimension);
 
@@ -1392,6 +1428,16 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
     private AmpReportsSchema indicator_disaggregation_dimension(String columnName, String view, LevelColumn levelColumn) {
         return indicator_single_dimension(columnName, view, levelColumn, indicatorDisaggregationTokenBehaviour);
+    }
+
+    /**
+     * Registers a "Indicator Disaggregation Level 1" (child category) column.
+     * Uses {@link #indicatorDisaggregationLevel1TokenBehaviour} which shares the same display
+     * logic as Level 0 but is a separate instance, keeping Level 0 and Level 1 independently
+     * configurable.
+     */
+    private AmpReportsSchema indicator_disaggregation_level1_dimension(String columnName, String view, LevelColumn levelColumn) {
+        return indicator_single_dimension(columnName, view, levelColumn, indicatorDisaggregationLevel1TokenBehaviour);
     }
 
     private AmpReportsSchema indicator_single_dimension(String columnName, String view, LevelColumn levelColumn, Behaviour<NiTextCell> behaviour) {

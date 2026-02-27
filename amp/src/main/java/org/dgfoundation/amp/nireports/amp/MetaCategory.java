@@ -27,6 +27,12 @@ public enum MetaCategory {
     INDICATOR_VALUE_TYPE("value_type"),
     INDICATOR_PROGRAM_ID("program_id"),
     CATEGORY_VALUE_ID("category_value_id"),
+    /**
+     * Stores the child disaggregation category ID (Level 1) from {@code child_category_value_id}
+     * in {@code v_ni_indicator_funding}. Corresponds to {@code aidv.child_category_id} in
+     * {@code amp_indicator_disaggregation_values}. NULL when no child category is assigned.
+     */
+    CHILD_CATEGORY_VALUE_ID("child_category_value_id"),
     INDICATOR_ID("me_indicator_id"),
     OUTPUT_ID("output_id"),
     OUTCOME_ID("outcome_id");

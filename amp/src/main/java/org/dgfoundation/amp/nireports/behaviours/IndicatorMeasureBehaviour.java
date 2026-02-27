@@ -34,6 +34,7 @@ import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 import static org.dgfoundation.amp.nireports.amp.MetaCategory.CATEGORY_VALUE_ID;
+import static org.dgfoundation.amp.nireports.amp.MetaCategory.CHILD_CATEGORY_VALUE_ID;
 import static org.dgfoundation.amp.nireports.amp.MetaCategory.INDICATOR_ID;
 import static org.dgfoundation.amp.nireports.amp.MetaCategory.INDICATOR_PROGRAM_ID;
 
@@ -142,8 +143,14 @@ public class IndicatorMeasureBehaviour implements Behaviour<NiAmountCell> {
      * Determines which {@link MetaCategory} to compare against for a given {@link NiDimensionUsage}
      * when computing indicator measure percentages.
      * <ul>
-     *   <li>Splits by {@link AmpReportsSchema#INDICATOR_DISAGG_DIM_USG} (backed by amp_category_value)
-     *       must be matched against {@link MetaCategory#CATEGORY_VALUE_ID}.</li>
+     *   <li>Splits by {@link AmpReportsSchema#INDICATOR_DISAGG_DIM_USG} (Level 0, parent category,
+     *       backed by amp_category_value.id via parent_category_id) are matched against
+     *       {@link MetaCategory#CATEGORY_VALUE_ID}.</li>
+     *   <li>Splits by {@link AmpReportsSchema#INDICATOR_DISAGG_LEVEL_1_DIM_USG} (Level 1, child
+     *       category, backed by amp_category_value.id via child_category_id) are matched against
+     *       {@link MetaCategory#CHILD_CATEGORY_VALUE_ID}.</li>
+     *   <li>Splits by {@link AmpReportsSchema#INDICATOR_DIM_USG} (indicator identity) are matched
+     *       against {@link MetaCategory#INDICATOR_ID}.</li>
      *   <li>All other indicator splits (program / theme hierarchies) are matched against
      *       {@link MetaCategory#INDICATOR_PROGRAM_ID}.</li>
      * </ul>
@@ -151,6 +158,10 @@ public class IndicatorMeasureBehaviour implements Behaviour<NiAmountCell> {
     private MetaCategory resolveMetaCategory(NiDimensionUsage dimUsage) {
         if (dimUsage == AmpReportsSchema.INDICATOR_DISAGG_DIM_USG) {
             return CATEGORY_VALUE_ID;
+        } else if (dimUsage == AmpReportsSchema.INDICATOR_DISAGG_LEVEL_1_DIM_USG) {
+            // Level 1 (child) disaggregation category — stored separately from Level 0
+            // so that both can be used as hierarchies simultaneously without conflicts.
+            return CHILD_CATEGORY_VALUE_ID;
         } else if (dimUsage == AmpReportsSchema.INDICATOR_DIM_USG) {
             return INDICATOR_ID;
         }

@@ -125,12 +125,19 @@ public class AmpIndicatorColumn extends AmpAmountColumn {
     }
 
     /**
-     * columns of type long which are optional
+     * columns of type long which are optional.
+     * Each pair maps a {@link MetaCategory} key to the view column name it reads from.
+     * If a view does not have the column, it is automatically added to {@link #ignoredColumns}
+     * at construction time and safely skipped during fetching.
      */
     protected static List<ImmutablePair<MetaCategory, String>> longColumnsToFetch = Arrays.asList(
             new ImmutablePair<>(MetaCategory.INDICATOR_VALUE_TYPE, "value_type"),
             new ImmutablePair<>(MetaCategory.INDICATOR_PROGRAM_ID, "program_id"),
             new ImmutablePair<>(MetaCategory.CATEGORY_VALUE_ID, "category_value_id"),
+            // child_category_value_id is the Level 1 (child) disaggregation category ID.
+            // It is only present in v_ni_indicator_funding; for other funding views it is
+            // absent and will be placed in ignoredColumns, so no read is attempted.
+            new ImmutablePair<>(MetaCategory.CHILD_CATEGORY_VALUE_ID, "child_category_value_id"),
             new ImmutablePair<>(MetaCategory.INDICATOR_ID, "me_indicator_id"),
             new ImmutablePair<>(MetaCategory.OUTPUT_ID, "output_id"),
             new ImmutablePair<>(MetaCategory.OUTCOME_ID, "outcome_id")

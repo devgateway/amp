@@ -22,6 +22,7 @@
 				DROP VIEW IF EXISTS v_ni_indicator_funding CASCADE;
 				create view v_ni_indicator_funding AS
 
+				/* indicator's base/target values from activity section (basic, not disaggregated) */
 				select DISTINCT ic.activity_id  as amp_activity_id,
 				iv.value,
 				iv.value_type,
@@ -29,6 +30,7 @@
 				ic.indicator_id as me_indicator_id,
 				t.amp_theme_id  AS program_id,
 				NULL::integer AS category_value_id,
+				NULL::integer AS child_category_value_id,
 				ind.output_id,
 				ind.outcome_id
 				from amp_indicator i
@@ -49,6 +51,7 @@
 				ic.indicator_id          as me_indicator_id,
 				t.amp_theme_id           AS program_id,
 				NULL::integer AS category_value_id,
+				NULL::integer AS child_category_value_id,
 				ind.output_id,
 				ind.outcome_id
 				from amp_indicator i
@@ -61,7 +64,8 @@
 
 				UNION ALL
 
-				/* indicator's values from admin section (disaggregated) - base values */
+				/* indicator's values from admin section (disaggregated) - base values
+				   category_value_id = Level 0 (parent_category_id), child_category_value_id = Level 1 (child_category_id, may be NULL) */
 				select DISTINCT con.activity_id           as amp_activity_id,
 				aigv.original_value AS value,
 				aigv.type                as value_type,
@@ -70,6 +74,7 @@
 				ind.indicator_id          as me_indicator_id,
 				t.amp_theme_id           AS program_id,
 				acv.id             AS category_value_id,
+				aidv.child_category_id AS child_category_value_id,
 				ind.output_id,
 				ind.outcome_id
 				FROM amp_indicator_connection con
@@ -83,7 +88,8 @@
 
 				UNION ALL
 
-				/* indicator's values from admin section (disaggregated) - target values */
+				/* indicator's values from admin section (disaggregated) - target values
+				   category_value_id = Level 0 (parent_category_id), child_category_value_id = Level 1 (child_category_id, may be NULL) */
 				select DISTINCT con.activity_id           as amp_activity_id,
 				aigv.original_value AS value,
 				aigv.type                as value_type,
@@ -92,6 +98,7 @@
 				ind.indicator_id          as me_indicator_id,
 				t.amp_theme_id           AS program_id,
 				acv.id             AS category_value_id,
+				aidv.child_category_id AS child_category_value_id,
 				ind.output_id,
 				ind.outcome_id
 				FROM amp_indicator_connection con

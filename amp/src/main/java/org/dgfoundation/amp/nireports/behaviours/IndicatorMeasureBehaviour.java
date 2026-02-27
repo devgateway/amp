@@ -31,6 +31,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 import static org.dgfoundation.amp.nireports.amp.MetaCategory.CATEGORY_VALUE_ID;
@@ -123,7 +124,17 @@ public class IndicatorMeasureBehaviour implements Behaviour<NiAmountCell> {
                     MetaInfo metaInfo = cell.getCell().getMetaInfo().getMetaInfo(metaKey.category);
                     Object metadataId = metaInfo != null ? metaInfo.getValue() : null;
 
-                    if (metadataId == null || ((Long) metadataId) != splitId) {
+                    if (metadataId == null) {
+                        // The funding cell has no value for this dimension (e.g. child_category_value_id
+                        // is NULL because this indicator has no Level 1 disaggregation category).
+                        // It should only match the "unallocated" hierarchy row (UNALLOCATED_ID).
+                        // If the current hierarchy row is a specific category, this cell does not belong there.
+                        if (splitId != ColumnReportData.UNALLOCATED_ID) {
+                            allMatch = false;
+                            break;
+                        }
+                        // splitId == UNALLOCATED_ID → this IS the "no value" bucket → matches
+                    } else if (((Long) metadataId) != splitId) {
                         allMatch = false;
                         break;
                     }

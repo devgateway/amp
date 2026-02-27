@@ -294,7 +294,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             PerformanceRuleManager::getAlertDescriptionFromMatcher;
 
     private IndicatorTextualTokenBehaviour indicatorTextualTokenBehaviour =
-            IndicatorTextualTokenBehaviour.forText(INDICATOR_DIM_USG, true);
+            IndicatorTextualTokenBehaviour.forText(INDICATOR_DIM_USG, false);
 
     private IndicatorTextualTokenBehaviour indicatorSectorTokenBehaviour =
             IndicatorTextualTokenBehaviour.forText(INDICATOR_DIM_USG, false);
@@ -1300,6 +1300,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         //addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_TARGET_VALUE, AmpIndicatorValue.TARGET_DISAGGREGATED_LEVEL_0));
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_BASE_VALUE, AmpIndicatorValue.BASE_DISAGGREGATED_LEVEL_0));
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_TARGET_VALUE, AmpIndicatorValue.TARGET_DISAGGREGATED_LEVEL_0));
+        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_SECONDARY_DISAGGREGATION_BASE_VALUE, AmpIndicatorValue.BASE_DISAGGREGATED_LEVEL_1));
+        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_SECONDARY_DISAGGREGATION_TARGET_VALUE, AmpIndicatorValue.TARGET_DISAGGREGATED_LEVEL_1));
 
         return this;
     }

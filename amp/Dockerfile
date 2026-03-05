@@ -183,9 +183,15 @@ COPY TEMPLATE/reampv2/lerna.json ./
 COPY TEMPLATE/reampv2/nx.json ./
 # Copy packages directory structure (needed for workspaces to resolve properly)
 COPY TEMPLATE/reampv2/packages ./packages
+# Patch github: references to local file: paths so npm install does not need SSH access
+RUN find packages -maxdepth 2 -name "package.json" | xargs sed -i \
+    -e 's|github:devgateway/amp-boilerplate|file:../../../ampTemplate/node_modules/amp-boilerplate|g' \
+    -e 's|github:devgateway/amp-filter|file:../../../ampTemplate/node_modules/amp-filter|g' \
+    -e 's|github:devgateway/amp-settings|file:../../../ampTemplate/node_modules/amp-settings|g'
+# Remove lockfile so npm regenerates it using the patched file: references
+RUN rm -f package-lock.json
 RUN --mount=type=cache,target=/root/.npm \
-    --mount=type=ssh \
-    npm-install-with-retry.sh
+    npm install
 # Copy remaining source code after dependencies are installed
 COPY TEMPLATE/reampv2 .
 RUN npm run build \

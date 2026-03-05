@@ -176,12 +176,16 @@ WORKDIR /tmp/amp/TEMPLATE/reampv2
 COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../ampTemplate/node_modules/amp-boilerplate
 COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter ../ampTemplate/node_modules/amp-filter
 COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings ../ampTemplate/node_modules/amp-settings
-# Copy package files for dependency installation
+# Copy package files for dependency installation - needed for npm workspaces
 COPY TEMPLATE/reampv2/package*.json ./
+COPY TEMPLATE/reampv2/lerna.json ./
+COPY TEMPLATE/reampv2/nx.json ./
+# Copy packages directory structure (needed for workspaces to resolve properly)
+COPY TEMPLATE/reampv2/packages ./packages
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
     npm-install-with-retry.sh
-# Copy source code after dependencies are installed
+# Copy remaining source code after dependencies are installed
 COPY TEMPLATE/reampv2 .
 RUN npm run build \
     && rm -rf node_modules

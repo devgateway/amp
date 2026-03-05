@@ -12,6 +12,15 @@ public class DataImporterForm extends ActionForm {
 
 
     private boolean internal;
+    private boolean skipExisting;
+
+    public boolean isSkipExisting() {
+        return skipExisting;
+    }
+
+    public void setSkipExisting(boolean skipExisting) {
+        this.skipExisting = skipExisting;
+    }
 
     public Set<String> getFileHeaders() {
         return fileHeaders;

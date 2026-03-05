@@ -40,7 +40,7 @@ public class TxtDataImporter {
     private static final Logger logger = LoggerFactory.getLogger(TxtDataImporter.class);
 
 
-    public static int processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal)
+    public static int processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting)
     {
         logger.info("Processing txt file: " + file.getName());
         CSVParser parser = new CSVParserBuilder().withSeparator(request.getParameter("dataSeparator").charAt(0)).build();
@@ -59,7 +59,7 @@ public class TxtDataImporter {
                     logger.info("Batch number here: {}",batchNumber);
 
                     // Process the batch
-                    processBatch(batch, request,config,importedFilesRecord);
+                    processBatch(batch, request,config,importedFilesRecord, skipExisting);
                     // Clear the batch for the next set of rows
                     batch.clear();
                     batchNumber+=1;
@@ -69,7 +69,7 @@ public class TxtDataImporter {
             // Process any remaining rows in the batch
             if (!batch.isEmpty()) {
                 logger.info("Processing last batch of size {}", batch.size());
-                processBatch(batch, request,config,importedFilesRecord);
+                processBatch(batch, request,config,importedFilesRecord, skipExisting);
             }
         } catch (IOException | CsvValidationException e) {
             logger.error("Error processing txt file "+e.getMessage(),e);
@@ -79,7 +79,7 @@ public class TxtDataImporter {
     }
 
 
-    private static void processBatch(List<Map<String, String>> batch,  HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord) throws JsonProcessingException {
+    private static void processBatch(List<Map<String, String>> batch,  HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting) throws JsonProcessingException {
         logger.info("Processing txt batch");
         SessionUtil.extendSessionIfNeeded(request);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
@@ -117,8 +117,8 @@ public class TxtDataImporter {
                     
                     AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
                     existingActivityIdHolder[0] = existing != null ? existing.getAmpActivityId() : null;
-                    if (existing != null && SKIP_EXISTING) {
-                        logger.info("Instructed to skip existing activities");
+                    if (existing != null && skipExisting) {
+                        logger.info("Skipping existing activity: {}", existing.getAmpActivityId());
                         importedProject.setImportStatus(ImportStatus.SKIPPED);
                         return;
                     }
@@ -224,11 +224,13 @@ public class TxtDataImporter {
 
             // Phase 2: Activity import - DO NOT wrap in transaction, let ActivityGatekeeper handle it
             // This avoids nested transaction issues when ActivityGatekeeper.doWithLock creates its own transaction
-            try {
-                // Pass only the ID, not the entity - importTheData will re-fetch in its own transaction context
-                importTheData(importDataModel, null, importedProject, componentName, componentCode, responsibleOrgIdHolder[0], fundings, existingActivityIdHolder[0]);
-            } catch (JsonProcessingException e) {
-                throw e;
+            if (importedProject.getImportStatus() != ImportStatus.SKIPPED) {
+                try {
+                    // Pass only the ID, not the entity - importTheData will re-fetch in its own transaction context
+                    importTheData(importDataModel, null, importedProject, componentName, componentCode, responsibleOrgIdHolder[0], fundings, existingActivityIdHolder[0]);
+                } catch (JsonProcessingException e) {
+                    throw e;
+                }
             }
         }
 

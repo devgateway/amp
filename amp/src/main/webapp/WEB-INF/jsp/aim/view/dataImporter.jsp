@@ -358,7 +358,9 @@
       var formData = new FormData();
       var fileType = $('#file-type').val();
       var internal = $('#internal').prop('checked');
+      var skipExisting = $('#skipExisting').prop('checked');
       console.log("Internal", internal);
+      console.log("Skip existing", skipExisting);
       var dataSeparator = $('#data-separator').val();
       var currentConfigName = $('#current-config-name').val();
       var existingConfig = (currentConfigName && currentConfigName.trim() !== '') ? currentConfigName.trim() : $('#existing-config').val();
@@ -377,6 +379,7 @@
       }
       formData.append('dataFile', fileInput.files[0]);
       formData.append('internal', internal);
+      formData.append('skipExisting', skipExisting);
       formData.append('action',"uploadDataFile");
       formData.append('fileType', fileType);
       formData.append('dataSeparator', dataSeparator);
@@ -548,6 +551,8 @@
   <br><br>
   <input type="text" id="existing-config" hidden="hidden"/>
   <label for="internal">Internal</label>: <input type="checkbox" id="internal" name="internal">
+  <br>
+  <label for="skipExisting">Skip existing activities (only insert new)</label>: <input type="checkbox" id="skipExisting" name="skipExisting">
   <br><br>
 
   <input type="button" value="Upload" onclick="uploadDataFile()">

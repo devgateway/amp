@@ -334,7 +334,9 @@ public class DataImporter extends Action {
                     ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile, fileName);
                     logger.info("Saved file record: {}",importedFilesRecord);
                     boolean isInternal= dataImporterForm.isInternal();
+                    boolean skipExisting = dataImporterForm.isSkipExisting();
                     logger.info("Internal: "+ isInternal);
+                    logger.info("Skip existing: "+ skipExisting);
                     if (isInternal) {
                         columnPairsToUse = new HashMap<>(columnPairsToUse);
                         columnPairsToUse.put("Donor Agency", "Donor Agency");
@@ -345,9 +347,9 @@ public class DataImporter extends Action {
                         String dataSheetName = request.getParameter("dataSheetName");
                         boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
                         // Process the file in batches
-                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, useSpecificSheet ? dataSheetName : null);
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal);
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting);
                     }
                     if (res != 1) {
                         // Handle error

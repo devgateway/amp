@@ -55,10 +55,10 @@ public class ExcelImporter {
     private static final int BATCH_SIZE = 1000;
 
     public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal) {
-        return processExcelFileInBatches(importedFilesRecord, file, request, config, isInternal, null);
+        return processExcelFileInBatches(importedFilesRecord, file, request, config, isInternal, false, null);
     }
 
-    public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, String sheetNameToProcess) {
+    public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting, String sheetNameToProcess) {
         int res = 0;
         ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.IN_PROGRESS);
         try (Workbook workbook = new XSSFWorkbook(file)) {
@@ -75,7 +75,7 @@ public class ExcelImporter {
                 if (isInternal) {
                     addDonorAgencyColumn(sheet, FeaturesUtil.getGlobalSettingValue("Internal Ecowas Donor"));
                 }
-                processSheetInBatches(sheet, request, config, importedFilesRecord);
+                processSheetInBatches(sheet, request, config, importedFilesRecord, skipExisting);
             } else {
                 // Process each sheet in the workbook
                 for (int i = 0; i < numberOfSheets; i++) {
@@ -84,7 +84,7 @@ public class ExcelImporter {
                     if (isInternal) {
                         addDonorAgencyColumn(sheet, FeaturesUtil.getGlobalSettingValue("Internal Ecowas Donor"));
                     }
-                    processSheetInBatches(sheet, request, config, importedFilesRecord);
+                    processSheetInBatches(sheet, request, config, importedFilesRecord, skipExisting);
                 }
             }
 
@@ -128,7 +128,7 @@ public class ExcelImporter {
     }
 
 
-    public static void processSheetInBatches(Sheet sheet, HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord) throws JsonProcessingException {
+    public static void processSheetInBatches(Sheet sheet, HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting) throws JsonProcessingException {
         // Get the number of rows in the sheet
         int rowCount = sheet.getPhysicalNumberOfRows();
         logger.info("There are {} rows in sheet {} " , rowCount, sheet.getSheetName());
@@ -150,12 +150,12 @@ public class ExcelImporter {
             }
 
             // Process the batch
-            processBatch(batch, sheet, request,config, importedFilesRecord);
+            processBatch(batch, sheet, request,config, importedFilesRecord, skipExisting);
         }
     }
 
 
-    public static void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord) throws JsonProcessingException {
+    public static void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting) throws JsonProcessingException {
         // Process the batch of rows
         SessionUtil.extendSessionIfNeeded(request);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
@@ -229,6 +229,11 @@ public class ExcelImporter {
 
                         AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
                         existingActivityIdHolder[0] = existing != null ? existing.getAmpActivityId() : null;
+                        if (existing != null && skipExisting) {
+                            logger.info("Skipping existing activity: {}", existing.getAmpActivityId());
+                            importedProject.setImportStatus(ImportStatus.SKIPPED);
+                            return;
+                        }
 
                         logger.info("Row Number: {}, Sheet Name: {}", rowRef.getRowNum(), sheet.getSheetName());
                         for (Map.Entry<String, String> entry : config.entrySet()) {
@@ -322,12 +327,14 @@ public class ExcelImporter {
 
                 // Phase 2: Activity import - DO NOT wrap in transaction, let ActivityGatekeeper handle it
                 // This avoids nested transaction issues when ActivityGatekeeper.doWithLock creates its own transaction
-                Long activityId;
-                try {
-                    // Pass only the ID, not the entity - importTheData will re-fetch in its own transaction context
-                    activityId = importTheData(importDataModel, null, importedProject, componentName, componentCode, responsibleOrgIdHolder[0], fundings, existingActivityIdHolder[0]);
-                } catch (JsonProcessingException e) {
-                    throw e;
+                Long activityId = null;
+                if (importedProject.getImportStatus() != ImportStatus.SKIPPED) {
+                    try {
+                        // Pass only the ID, not the entity - importTheData will re-fetch in its own transaction context
+                        activityId = importTheData(importDataModel, null, importedProject, componentName, componentCode, responsibleOrgIdHolder[0], fundings, existingActivityIdHolder[0]);
+                    } catch (JsonProcessingException e) {
+                        throw e;
+                    }
                 }
 
                 // Phase 3: Indicator import - use separate transaction

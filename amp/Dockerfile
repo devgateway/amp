@@ -174,6 +174,7 @@ RUN chmod +x /usr/local/bin/npm-install-with-retry.sh
 WORKDIR /tmp/amp/TEMPLATE/reampv2
 # Copy dependencies first
 COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../ampTemplate/node_modules/amp-boilerplate
+COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../ampTemplate/node_modules/amp-translate
 COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter ../ampTemplate/node_modules/amp-filter
 COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings ../ampTemplate/node_modules/amp-settings
 # Copy package files for dependency installation - needed for npm workspaces

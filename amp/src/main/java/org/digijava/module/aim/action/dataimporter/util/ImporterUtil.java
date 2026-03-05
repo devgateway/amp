@@ -602,18 +602,17 @@ public class ImporterUtil {
     }
 
     private static Long getCurrencyId(Session session, String currencyCode) {
-
-        if (ConstantsMap.containsKey("currencyId")) {
-            Long val = ConstantsMap.get("currencyId");
+        if (currencyCode == null) {
+            currencyCode = "USD";
+        }
+        String cacheKey = "currencyId_" + currencyCode;
+        if (ConstantsMap.containsKey(cacheKey)) {
+            Long val = ConstantsMap.get(cacheKey);
             logger.info("In cache... currency: " + val);
             return val;
-
         }
         if (!session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
-        }
-        if (currencyCode == null) {
-            currencyCode = "USD";
         }
         String hql = "SELECT ac.ampCurrencyId FROM " + AmpCurrency.class.getName() + " ac " +
                 "WHERE ac.currencyCode = :currencyCode";
@@ -621,7 +620,22 @@ public class ImporterUtil {
         Query query = session.createQuery(hql);
         query.setString("currencyCode", currencyCode);
         Long currencyId = (Long) query.uniqueResult();
-        ConstantsMap.put("currencyId", currencyId);
+        
+        // If currency not found, create it
+        if (currencyId == null) {
+            logger.info("Currency not found: {}. Creating new currency.", currencyCode);
+            AmpCurrency newCurrency = new AmpCurrency();
+            newCurrency.setCurrencyCode(currencyCode);
+            newCurrency.setCurrencyName(currencyCode); // Use code as name if not specified
+            newCurrency.setActiveFlag(1); // Active by default
+            newCurrency.setVirtual(false);
+            session.save(newCurrency);
+            session.flush();
+            currencyId = newCurrency.getAmpCurrencyId();
+            logger.info("Created new currency: {} (id={})", currencyCode, currencyId);
+        }
+        
+        ConstantsMap.put(cacheKey, currencyId);
         return currencyId;
     }
 

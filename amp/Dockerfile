@@ -191,7 +191,7 @@ RUN find packages -maxdepth 2 -name "package.json" | xargs sed -i \
 # Remove lockfile so npm regenerates it using the patched file: references
 RUN rm -f package-lock.json
 RUN --mount=type=cache,target=/root/.npm \
-    npm install
+    npm install --legacy-peer-deps
 # Copy remaining source code after dependencies are installed
 COPY TEMPLATE/reampv2 .
 RUN npm run build \

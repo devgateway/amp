@@ -1307,6 +1307,12 @@ public class ImporterUtil {
         {
             name = subSector;
         }
+        for (String sectorName : splitMultiValues(name)) {
+            updateSingleSector(importDataModel, sectorName, session, primary);
+        }
+    }
+
+    private static void updateSingleSector(ImportDataModel importDataModel, String name, Session session, boolean primary) {
         if (ConstantsMap.containsKey("sector_" + name)) {
             Long sectorId = ConstantsMap.get("sector_" + name);
             logger.info("In cache... sector " + "sector_" + name + ":" + sectorId);
@@ -1337,13 +1343,19 @@ public class ImporterUtil {
                 }
             });
         }
-
-
     }
 
-    /**
-     * Splits a comma- or semicolon-separated string into non-empty trimmed parts.
-     */
+    private static List<String> splitMultiValues(String value) {
+        if (value == null || value.trim().isEmpty()) return Collections.emptyList();
+        List<String> result = new ArrayList<>();
+        for (String part : value.split(";")) {
+            String trimmed = part.trim();
+            if (!trimmed.isEmpty()) result.add(trimmed);
+        }
+        return result;
+    }
+
+
     private static List<String> splitLocationNames(String locationNames) {
         if (locationNames == null || locationNames.trim().isEmpty()) return Collections.emptyList();
         List<String> result = new ArrayList<>();
@@ -1529,23 +1541,56 @@ public class ImporterUtil {
 
     public static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type)
     {
-        Long orgId;
+        List<String> names = splitMultiValues(name);
+        List<String> codes = splitMultiValues(code);
+        Long lastOrgId = null;
+        for (int i = 0; i < names.size(); i++) {
+            String singleName = names.get(i);
+            String singleCode = i < codes.size() ? codes.get(i) : null;
+            lastOrgId = updateSingleOrg(importDataModel, singleName, singleCode, session, type);
+        }
+        return lastOrgId;
+    }
 
-        if (ConstantsMap.containsKey("org_"+name+"_"+code)) {
-            orgId = ConstantsMap.get("org_"+name+"_"+code);
-            logger.info("In cache... organisation "+"org_"+name+"_"+code+":"+orgId);
+    /**
+     * Strips any parenthetical suffix and percentage annotation from a name.
+     * e.g. "World Bank (IDA)" → "World Bank"
+     *      "IsDB (BID) - 92%" → "IsDB"
+     *      "State of Senegal - 8%" → "State of Senegal"
+     */
+    private static String stripParenthetical(String value) {
+        if (value == null) return null;
+        String trimmed = value.trim();
+        int parenIdx = trimmed.indexOf('(');
+        if (parenIdx > 0) {
+            trimmed = trimmed.substring(0, parenIdx).trim();
+        }
+        // Strip percentage suffix (e.g. "- 8%") for names without parentheses
+        return trimmed.replaceAll("\\s*-\\s*\\d+(\\.\\d+)?%\\s*$", "").trim();
+    }
+
+    private static Long updateSingleOrg(ImportDataModel importDataModel, String name, String code, Session session, String type)
+    {
+        Long orgId;
+        String cleanName = stripParenthetical(name);
+
+        if (ConstantsMap.containsKey("org_"+cleanName+"_"+code)) {
+            orgId = ConstantsMap.get("org_"+cleanName+"_"+code);
+            logger.info("In cache... organisation "+"org_"+cleanName+"_"+code+":"+orgId);
         }
         else {
             if (!session.isOpen()) {
                 session = PersistenceManager.getRequestDBSession();
             }
-            String hql = "";
+
+            String hql;
             Query query;
             List<Long> organisations= new ArrayList<>();
-            if (name!=null) {
+
+            if (cleanName!=null) {
                 hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name)=LOWER(:name) OR LOWER(o.acronym)=LOWER(:name)";
                  query = session.createQuery(hql);
-                query.setParameter("name",  name);
+                query.setParameter("name",  cleanName);
                 organisations = query.list();
             }
             if (organisations.isEmpty() && (code!=null)) {
@@ -1558,12 +1603,19 @@ public class ImporterUtil {
             if (!organisations.isEmpty()) {
                 orgId = organisations.get(0);
             } else {
-                hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o where o.name= :name";
-
-                query = session.createQuery(hql).setParameter("name", "Undefined Agency", StringType.INSTANCE).setMaxResults(1);
-                orgId = (Long) query.uniqueResult();
+                // Create the organisation if it does not exist
+                logger.info("Organisation not found, creating new: " + cleanName);
+                AmpOrganisation newOrg = new AmpOrganisation();
+                newOrg.setName(cleanName);
+                if (code != null) {
+                    newOrg.setOrgCode(code);
+                }
+                session.save(newOrg);
+                session.flush();
+                orgId = newOrg.getAmpOrgId();
+                logger.info("Created new organisation: " + cleanName + " with id: " + orgId);
             }
-            ConstantsMap.put("org_"+name+"_"+code, orgId);
+            ConstantsMap.put("org_"+cleanName+"_"+code, orgId);
         }
         logger.info("Organisation: " + orgId);
 
@@ -1585,9 +1637,6 @@ public class ImporterUtil {
 
         }
         return orgId;
-
-
-
     }
 
     public static Map<Integer, Float> divide100(int n) {

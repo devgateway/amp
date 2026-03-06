@@ -64,6 +64,7 @@ public class ImportDataModel {
     private ActivityGroup activity_group;
     private Long modified_by;
     private Long activity_type;
+    private Long procurement_system;
 
     public Long getInternal_id() {
         return internal_id;
@@ -502,6 +503,14 @@ public class ImportDataModel {
         this.activity_type = activity_type;
     }
 
+    public Long getProcurement_system() {
+        return procurement_system;
+    }
+
+    public void setProcurement_system(Long procurement_system) {
+        this.procurement_system = procurement_system;
+    }
+
     @Override
     public String toString() {
         return "ImportDataModel{" +
@@ -559,6 +568,7 @@ public class ImportDataModel {
                 ", activity_group=" + activity_group +
                 ", modified_by=" + modified_by +
                 ", activity_type=" + activity_type +
+                ", procurement_system=" + procurement_system +
                 '}';
     }
 

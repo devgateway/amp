@@ -669,6 +669,37 @@ public class ImporterUtil {
     }
 
     /**
+     * Looks up a category value ID by its category key and value name.
+     * @param categoryKey the category class key (e.g. "procurement_system")
+     * @param valueName the value name from the file (e.g. "National Competitive Bidding")
+     * @param session current Hibernate session
+     * @return category value id, or null if not found
+     */
+    public static Long getCategoryValueByName(String categoryKey, String valueName, Session session) {
+        if (valueName == null || valueName.trim().isEmpty()) {
+            return null;
+        }
+        String cacheKey = "catVal_" + categoryKey + "_" + valueName;
+        if (ConstantsMap.containsKey(cacheKey)) {
+            return ConstantsMap.get(cacheKey);
+        }
+        String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
+        Query query = session.createQuery(hql);
+        query.setParameter("categoryKey", categoryKey);
+        List<?> values = query.list();
+        for (Object val : values) {
+            AmpCategoryValue cv = (AmpCategoryValue) val;
+            if (cv.getValue() != null && cv.getValue().trim().equalsIgnoreCase(valueName.trim())) {
+                ConstantsMap.put(cacheKey, cv.getId());
+                logger.info("Found category value: " + cv.getValue() + " (id=" + cv.getId() + ") for key=" + categoryKey);
+                return cv.getId();
+            }
+        }
+        logger.warn("Category value not found for key=" + categoryKey + ", value=" + valueName);
+        return null;
+    }
+
+    /**
      * Resolves activity (project) status by value: looks up existing category value for ACTIVITY_STATUS_KEY;
      * if not found in DB, creates a new category value and returns its id.
      * @param statusValue value from the file (e.g. "Ongoing", "Completed")

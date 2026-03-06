@@ -16,6 +16,7 @@ import org.digijava.module.aim.action.dataimporter.util.ImporterConstants;
 import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
 import org.digijava.module.aim.action.dataimporter.util.ImporterUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Session;
@@ -105,6 +106,7 @@ public class TxtDataImporter {
             String primarySubSector= rowRef.get(getKey(config, ImporterConstants.PRIMARY_SUBSECTOR));
             String secondarySubSector= rowRef.get(getKey(config, ImporterConstants.SECONDARY_SUBSECTOR));
             String projectStatusStr = rowRef.get(getKey(config, ImporterConstants.PROJECT_STATUS));
+            String procurementSystemStr = rowRef.get(getKey(config, ImporterConstants.PROCUREMENT_SYSTEM));
 
             // Use holder arrays to capture values from lambda (for effectively final requirement)
             final Long[] existingActivityIdHolder = new Long[1];  // Store only the ID, not the entity
@@ -132,6 +134,12 @@ public class TxtDataImporter {
                         Long statusId = getOrCreateActivityStatusCategoryValue(projectStatusStr.trim(), session);
                         if (statusId != null) {
                             importDataModel.setActivity_status(statusId);
+                        }
+                    }
+                    if (procurementSystemStr != null && !procurementSystemStr.trim().isEmpty()) {
+                        Long procId = ImporterUtil.getCategoryValueByName(CategoryConstants.PROCUREMENT_SYSTEM_KEY, procurementSystemStr.trim(), session);
+                        if (procId != null) {
+                            importDataModel.setProcurement_system(procId);
                         }
                     }
                     setStatus(importDataModel);
@@ -198,6 +206,8 @@ public class TxtDataImporter {
                             case ImporterConstants.MEASURE_TYPE:
                                 break;
                             case ImporterConstants.PROJECT_STATUS:
+                                break;
+                            case ImporterConstants.PROCUREMENT_SYSTEM:
                                 break;
                             default:
                                 logger.error("Unexpected value: " + entry.getValue());

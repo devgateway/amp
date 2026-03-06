@@ -572,6 +572,7 @@ public class DataImporter extends Action {
         fieldsInfos.add(ImporterConstants.COMPONENT_CODE);
         fieldsInfos.add(ImporterConstants.BENEFICIARY_AGENCY);
         fieldsInfos.add(ImporterConstants.PROJECT_STATUS);
+        fieldsInfos.add(ImporterConstants.PROCUREMENT_SYSTEM);
         // Indicator columns for M&E import
         fieldsInfos.add(ImporterConstants.INDICATOR_NAME);
         fieldsInfos.add(ImporterConstants.PROGRAM_NAME);

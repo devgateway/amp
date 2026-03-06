@@ -42,6 +42,7 @@ import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.upda
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.updateOrgs;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.updateSectors;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Session;
@@ -225,6 +226,15 @@ public class ExcelImporter {
                                 }
                             }
                         }
+                        if (config.containsValue(ImporterConstants.PROCUREMENT_SYSTEM)) {
+                            String procurementSystemStr = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PROCUREMENT_SYSTEM);
+                            if (procurementSystemStr != null && !procurementSystemStr.trim().isEmpty()) {
+                                Long procId = ImporterUtil.getCategoryValueByName(CategoryConstants.PROCUREMENT_SYSTEM_KEY, procurementSystemStr.trim(), session);
+                                if (procId != null) {
+                                    importDataModel.setProcurement_system(procId);
+                                }
+                            }
+                        }
                         setStatus(importDataModel);
 
                         AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
@@ -300,6 +310,8 @@ public class ExcelImporter {
                                     case ImporterConstants.MEASURE_TYPE:
                                         break;
                                     case ImporterConstants.PROJECT_STATUS:
+                                        break;
+                                    case ImporterConstants.PROCUREMENT_SYSTEM:
                                         break;
                                     case ImporterConstants.REPORTING_DATE:
                                     default:

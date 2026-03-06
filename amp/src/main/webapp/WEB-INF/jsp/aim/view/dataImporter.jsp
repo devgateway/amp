@@ -360,9 +360,15 @@
       var internal = $('#internal').prop('checked');
       var skipExisting = $('#skipExisting').prop('checked');
       var createMissingOrgs = $('#createMissingOrgs').prop('checked');
+      var orgGroupId = $('#orgGroupId').val();
       console.log("Internal", internal);
       console.log("Skip existing", skipExisting);
       console.log("Create missing orgs", createMissingOrgs);
+      console.log("Org group id", orgGroupId);
+      if (createMissingOrgs && !orgGroupId) {
+        alert("Please select an Organization Group for newly created organizations.");
+        return;
+      }
       var dataSeparator = $('#data-separator').val();
       var currentConfigName = $('#current-config-name').val();
       var existingConfig = (currentConfigName && currentConfigName.trim() !== '') ? currentConfigName.trim() : $('#existing-config').val();
@@ -383,6 +389,9 @@
       formData.append('internal', internal);
       formData.append('skipExisting', skipExisting);
       formData.append('createMissingOrgs', createMissingOrgs);
+      if (createMissingOrgs && orgGroupId) {
+        formData.append('orgGroupId', orgGroupId);
+      }
       formData.append('action',"uploadDataFile");
       formData.append('fileType', fileType);
       formData.append('dataSeparator', dataSeparator);
@@ -558,6 +567,15 @@
   <label for="skipExisting">Skip existing activities (only insert new)</label>: <input type="checkbox" id="skipExisting" name="skipExisting">
   <br>
   <label for="createMissingOrgs">Create missing organizations</label>: <input type="checkbox" id="createMissingOrgs" name="createMissingOrgs">
+  <div id="orgGroupDiv" style="display:none; margin-top:5px; margin-left:20px;">
+    <label for="orgGroupId">Organization Group for new organizations:</label>
+    <select id="orgGroupId" name="orgGroupId">
+      <option value="">-- Select Organization Group --</option>
+      <c:forEach var="orgGroup" items="${orgGroups}">
+        <option value="${orgGroup.ampOrgGrpId}">${orgGroup.orgGrpName}</option>
+      </c:forEach>
+    </select>
+  </div>
   <br><br>
 
   <input type="button" value="Upload" onclick="uploadDataFile()">
@@ -569,7 +587,18 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/js/select2.min.js"></script>
-
+<script>
+  $(document).ready(function() {
+    $('#createMissingOrgs').change(function() {
+      if ($(this).is(':checked')) {
+        $('#orgGroupDiv').show();
+      } else {
+        $('#orgGroupDiv').hide();
+        $('#orgGroupId').val('');
+      }
+    });
+  });
+</script>
 
 </body>
 </html:html>

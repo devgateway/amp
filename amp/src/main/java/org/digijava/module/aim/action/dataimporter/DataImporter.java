@@ -51,7 +51,9 @@ import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.isFi
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.removeMapItem;
 
 import org.digijava.module.aim.action.dataimporter.util.ImporterConstants;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.form.DataImporterForm;
+import org.digijava.module.aim.util.DbUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.type.StringType;
@@ -75,6 +77,8 @@ public class DataImporter extends Action {
         request.setAttribute("fieldsInfo", fieldsInfo);
         List<String> configNames= getConfigNames();
         request.setAttribute("configNames", configNames);
+        List<AmpOrgGroup> orgGroups = DbUtil.getAllOrgGroups();
+        request.setAttribute("orgGroups", orgGroups);
         DataImporterForm dataImporterForm = (DataImporterForm) form;
 
         if (Objects.equals(request.getParameter("action"), "configByName")) {
@@ -336,9 +340,11 @@ public class DataImporter extends Action {
                     boolean isInternal= dataImporterForm.isInternal();
                     boolean skipExisting = dataImporterForm.isSkipExisting();
                     boolean createMissingOrgs = dataImporterForm.isCreateMissingOrgs();
+                    Long orgGroupId = dataImporterForm.getOrgGroupId();
                     logger.info("Internal: "+ isInternal);
                     logger.info("Skip existing: "+ skipExisting);
                     logger.info("Create missing orgs: "+ createMissingOrgs);
+                    logger.info("Org group id: "+ orgGroupId);
                     if (isInternal) {
                         columnPairsToUse = new HashMap<>(columnPairsToUse);
                         columnPairsToUse.put("Donor Agency", "Donor Agency");
@@ -349,9 +355,9 @@ public class DataImporter extends Action {
                         String dataSheetName = request.getParameter("dataSheetName");
                         boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
                         // Process the file in batches
-                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs);
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, orgGroupId);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs);
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, orgGroupId);
                     }
                     if (res != 1) {
                         // Handle error

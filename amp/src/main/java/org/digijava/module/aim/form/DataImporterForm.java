@@ -14,6 +14,7 @@ public class DataImporterForm extends ActionForm {
     private boolean internal;
     private boolean skipExisting;
     private boolean createMissingOrgs;
+    private Long orgGroupId;
 
     public boolean isSkipExisting() {
         return skipExisting;
@@ -29,6 +30,14 @@ public class DataImporterForm extends ActionForm {
 
     public void setCreateMissingOrgs(boolean createMissingOrgs) {
         this.createMissingOrgs = createMissingOrgs;
+    }
+
+    public Long getOrgGroupId() {
+        return orgGroupId;
+    }
+
+    public void setOrgGroupId(Long orgGroupId) {
+        this.orgGroupId = orgGroupId;
     }
 
     public Set<String> getFileHeaders() {

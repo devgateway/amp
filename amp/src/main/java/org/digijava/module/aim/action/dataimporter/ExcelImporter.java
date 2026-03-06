@@ -55,10 +55,10 @@ public class ExcelImporter {
     private static final int BATCH_SIZE = 1000;
 
     public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal) {
-        return processExcelFileInBatches(importedFilesRecord, file, request, config, isInternal, false, null, false);
+        return processExcelFileInBatches(importedFilesRecord, file, request, config, isInternal, false, null, false, null);
     }
 
-    public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting, String sheetNameToProcess, boolean createMissingOrgs) {
+    public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting, String sheetNameToProcess, boolean createMissingOrgs, Long orgGroupId) {
         int res = 0;
         ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.IN_PROGRESS);
         try (Workbook workbook = new XSSFWorkbook(file)) {
@@ -75,7 +75,7 @@ public class ExcelImporter {
                 if (isInternal) {
                     addDonorAgencyColumn(sheet, FeaturesUtil.getGlobalSettingValue("Internal Ecowas Donor"));
                 }
-                processSheetInBatches(sheet, request, config, importedFilesRecord, skipExisting, createMissingOrgs);
+                processSheetInBatches(sheet, request, config, importedFilesRecord, skipExisting, createMissingOrgs, orgGroupId);
             } else {
                 // Process each sheet in the workbook
                 for (int i = 0; i < numberOfSheets; i++) {
@@ -84,7 +84,7 @@ public class ExcelImporter {
                     if (isInternal) {
                         addDonorAgencyColumn(sheet, FeaturesUtil.getGlobalSettingValue("Internal Ecowas Donor"));
                     }
-                    processSheetInBatches(sheet, request, config, importedFilesRecord, skipExisting, createMissingOrgs);
+                    processSheetInBatches(sheet, request, config, importedFilesRecord, skipExisting, createMissingOrgs, orgGroupId);
                 }
             }
 
@@ -128,7 +128,7 @@ public class ExcelImporter {
     }
 
 
-    public static void processSheetInBatches(Sheet sheet, HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs) throws JsonProcessingException {
+    public static void processSheetInBatches(Sheet sheet, HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, Long orgGroupId) throws JsonProcessingException {
         // Get the number of rows in the sheet
         int rowCount = sheet.getPhysicalNumberOfRows();
         logger.info("There are {} rows in sheet {} " , rowCount, sheet.getSheetName());
@@ -150,12 +150,12 @@ public class ExcelImporter {
             }
 
             // Process the batch
-            processBatch(batch, sheet, request,config, importedFilesRecord, skipExisting, createMissingOrgs);
+            processBatch(batch, sheet, request,config, importedFilesRecord, skipExisting, createMissingOrgs, orgGroupId);
         }
     }
 
 
-    public static void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs) throws JsonProcessingException {
+    public static void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, Long orgGroupId) throws JsonProcessingException {
         // Process the batch of rows
         SessionUtil.extendSessionIfNeeded(request);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
@@ -255,13 +255,13 @@ public class ExcelImporter {
                                         break;
                                     case ImporterConstants.DONOR_AGENCY:
                                         logger.info("Getting donor");
-                                        updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), donorAgencyCode, session, ImporterConstants.ORG_TYPE_DONOR, createMissingOrgs);
+                                        updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), donorAgencyCode, session, ImporterConstants.ORG_TYPE_DONOR, createMissingOrgs, orgGroupId);
                                         break;
                                     case ImporterConstants.RESPONSIBLE_ORGANIZATION:
-                                        responsibleOrgIdHolder[0] = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, ImporterConstants.ORG_TYPE_RESPONSIBLE_ORG, createMissingOrgs);
+                                        responsibleOrgIdHolder[0] = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, ImporterConstants.ORG_TYPE_RESPONSIBLE_ORG, createMissingOrgs, orgGroupId);
                                         break;
                                     case ImporterConstants.BENEFICIARY_AGENCY:
-                                        responsibleOrgIdHolder[0] = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, ImporterConstants.ORG_TYPE_BENEFICIARY_AGENCY, createMissingOrgs);
+                                        responsibleOrgIdHolder[0] = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, ImporterConstants.ORG_TYPE_BENEFICIARY_AGENCY, createMissingOrgs, orgGroupId);
                                         break;
                                     case ImporterConstants.TRANSACTION_AMOUNT: {
                                         boolean commitment = true, disbursement = true, expenditure = false;
@@ -276,26 +276,26 @@ public class ExcelImporter {
                                                 adjustmentType = parsed.adjustmentType;
                                             }
                                         }
-                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, commitment, disbursement, expenditure, adjustmentType, fundingItem, null, createMissingOrgs);
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, commitment, disbursement, expenditure, adjustmentType, fundingItem, null, createMissingOrgs, orgGroupId);
                                         break;
                                     }
                                     case ImporterConstants.PLANNED_COMMITMENT:
-                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false,false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null, createMissingOrgs);
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false,false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null, createMissingOrgs, orgGroupId);
                                         break;
                                     case ImporterConstants.PLANNED_DISBURSEMENT:
-                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null, createMissingOrgs);
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null, createMissingOrgs, orgGroupId);
                                         break;
                                     case ImporterConstants.PLANNED_EXPENDITURE:
-                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null, createMissingOrgs);
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null, createMissingOrgs, orgGroupId);
                                         break;
                                     case ImporterConstants.ACTUAL_COMMITMENT:
-                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null, createMissingOrgs);
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null, createMissingOrgs, orgGroupId);
                                         break;
                                     case ImporterConstants.ACTUAL_DISBURSEMENT:
-                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null, createMissingOrgs);
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null, createMissingOrgs, orgGroupId);
                                         break;
                                     case ImporterConstants.ACTUAL_EXPENDITURE:
-                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null, createMissingOrgs);
+                                        setAFundingItemForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null, createMissingOrgs, orgGroupId);
                                         break;
                                     case ImporterConstants.MEASURE_TYPE:
                                         break;

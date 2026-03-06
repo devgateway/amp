@@ -335,8 +335,10 @@ public class DataImporter extends Action {
                     logger.info("Saved file record: {}",importedFilesRecord);
                     boolean isInternal= dataImporterForm.isInternal();
                     boolean skipExisting = dataImporterForm.isSkipExisting();
+                    boolean createMissingOrgs = dataImporterForm.isCreateMissingOrgs();
                     logger.info("Internal: "+ isInternal);
                     logger.info("Skip existing: "+ skipExisting);
+                    logger.info("Create missing orgs: "+ createMissingOrgs);
                     if (isInternal) {
                         columnPairsToUse = new HashMap<>(columnPairsToUse);
                         columnPairsToUse.put("Donor Agency", "Donor Agency");
@@ -347,9 +349,9 @@ public class DataImporter extends Action {
                         String dataSheetName = request.getParameter("dataSheetName");
                         boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
                         // Process the file in batches
-                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null);
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting);
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs);
                     }
                     if (res != 1) {
                         // Handle error

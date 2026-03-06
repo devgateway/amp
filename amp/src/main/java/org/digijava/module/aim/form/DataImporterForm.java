@@ -13,6 +13,7 @@ public class DataImporterForm extends ActionForm {
 
     private boolean internal;
     private boolean skipExisting;
+    private boolean createMissingOrgs;
 
     public boolean isSkipExisting() {
         return skipExisting;
@@ -20,6 +21,14 @@ public class DataImporterForm extends ActionForm {
 
     public void setSkipExisting(boolean skipExisting) {
         this.skipExisting = skipExisting;
+    }
+
+    public boolean isCreateMissingOrgs() {
+        return createMissingOrgs;
+    }
+
+    public void setCreateMissingOrgs(boolean createMissingOrgs) {
+        this.createMissingOrgs = createMissingOrgs;
     }
 
     public Set<String> getFileHeaders() {

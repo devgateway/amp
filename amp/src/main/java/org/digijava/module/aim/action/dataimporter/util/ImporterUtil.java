@@ -1539,7 +1539,7 @@ public class ImporterUtil {
 
     }
 
-    public static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type)
+    public static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type, boolean createMissingOrgs)
     {
         List<String> names = splitMultiValues(name);
         List<String> codes = splitMultiValues(code);
@@ -1547,7 +1547,7 @@ public class ImporterUtil {
         for (int i = 0; i < names.size(); i++) {
             String singleName = names.get(i);
             String singleCode = i < codes.size() ? codes.get(i) : null;
-            lastOrgId = updateSingleOrg(importDataModel, singleName, singleCode, session, type);
+            lastOrgId = updateSingleOrg(importDataModel, singleName, singleCode, session, type, createMissingOrgs);
         }
         return lastOrgId;
     }
@@ -1569,7 +1569,7 @@ public class ImporterUtil {
         return trimmed.replaceAll("\\s*-\\s*\\d+(\\.\\d+)?%\\s*$", "").trim();
     }
 
-    private static Long updateSingleOrg(ImportDataModel importDataModel, String name, String code, Session session, String type)
+    private static Long updateSingleOrg(ImportDataModel importDataModel, String name, String code, Session session, String type, boolean createMissingOrgs)
     {
         Long orgId;
         String cleanName = stripParenthetical(name);
@@ -1588,22 +1588,15 @@ public class ImporterUtil {
             List<Long> organisations= new ArrayList<>();
 
             if (cleanName!=null) {
-                hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name)=LOWER(:name) OR LOWER(o.acronym)=LOWER(:name)";
+                hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name)=LOWER(:name) OR LOWER(o.acronym)=LOWER(:name) OR LOWER(o.orgCode)=LOWER(:name)";
                  query = session.createQuery(hql);
                 query.setParameter("name",  cleanName);
                 organisations = query.list();
             }
-            if (organisations.isEmpty() && (code!=null)) {
-                    hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.orgCode)=LOWER(:code)";
-                    query = session.createQuery(hql);
-                    query.setParameter("code", code);
-                    organisations = query.list();
-
-            }
             if (!organisations.isEmpty()) {
                 orgId = organisations.get(0);
-            } else {
-                // Create the organisation if it does not exist
+            } else if (createMissingOrgs) {
+                // Create the organisation if it does not exist and the user opted in
                 logger.info("Organisation not found, creating new: " + cleanName);
                 AmpOrganisation newOrg = new AmpOrganisation();
                 newOrg.setName(cleanName);
@@ -1614,6 +1607,12 @@ public class ImporterUtil {
                 session.flush();
                 orgId = newOrg.getAmpOrgId();
                 logger.info("Created new organisation: " + cleanName + " with id: " + orgId);
+            } else {
+                // Fallback to "Undefined Agency"
+                hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o where o.name= :name";
+                query = session.createQuery(hql).setParameter("name", "Undefined Agency", StringType.INSTANCE).setMaxResults(1);
+                orgId = (Long) query.uniqueResult();
+                logger.info("Organisation not found, using Undefined Agency for: " + cleanName);
             }
             ConstantsMap.put("org_"+cleanName+"_"+code, orgId);
         }

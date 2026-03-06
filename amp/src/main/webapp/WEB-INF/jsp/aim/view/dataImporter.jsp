@@ -359,8 +359,10 @@
       var fileType = $('#file-type').val();
       var internal = $('#internal').prop('checked');
       var skipExisting = $('#skipExisting').prop('checked');
+      var createMissingOrgs = $('#createMissingOrgs').prop('checked');
       console.log("Internal", internal);
       console.log("Skip existing", skipExisting);
+      console.log("Create missing orgs", createMissingOrgs);
       var dataSeparator = $('#data-separator').val();
       var currentConfigName = $('#current-config-name').val();
       var existingConfig = (currentConfigName && currentConfigName.trim() !== '') ? currentConfigName.trim() : $('#existing-config').val();
@@ -380,6 +382,7 @@
       formData.append('dataFile', fileInput.files[0]);
       formData.append('internal', internal);
       formData.append('skipExisting', skipExisting);
+      formData.append('createMissingOrgs', createMissingOrgs);
       formData.append('action',"uploadDataFile");
       formData.append('fileType', fileType);
       formData.append('dataSeparator', dataSeparator);
@@ -553,6 +556,8 @@
   <label for="internal">Internal</label>: <input type="checkbox" id="internal" name="internal">
   <br>
   <label for="skipExisting">Skip existing activities (only insert new)</label>: <input type="checkbox" id="skipExisting" name="skipExisting">
+  <br>
+  <label for="createMissingOrgs">Create missing organizations</label>: <input type="checkbox" id="createMissingOrgs" name="createMissingOrgs">
   <br><br>
 
   <input type="button" value="Upload" onclick="uploadDataFile()">

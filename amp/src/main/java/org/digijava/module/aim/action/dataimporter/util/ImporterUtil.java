@@ -109,11 +109,21 @@ public class ImporterUtil {
                 int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
                 String donorAgencyCode = donorAgencyCodeColumn >= 0 ? getStringValueFromCell(row.getCell(donorAgencyCodeColumn), true) : null;
                 updateOrgs(importDataModel, columnIndex1 >= 0 ? Objects.requireNonNull(getStringValueFromCell(row.getCell(columnIndex1), false)).trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId);
-                funding = updateFunding(fundingItem, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
+                funding = updateFunding(fundingItem, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                for (int i = 1; i < donors.size(); i++) {
+                    Funding extraFunding = new Funding();
+                    updateFunding(extraFunding, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                }
             }
 
         } else {
-            funding = updateFunding(fundingItem, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+            List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
+            funding = updateFunding(fundingItem, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+            for (int i = 1; i < donors.size(); i++) {
+                Funding extraFunding = new Funding();
+                updateFunding(extraFunding, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+            }
         }
         return funding;
     }
@@ -159,11 +169,21 @@ public class ImporterUtil {
                 String donorAgencyCode = row.get(getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
 
                 updateOrgs(importDataModel, donorColumn != null && !donorColumn.isEmpty() ? donorColumn.trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId);
-                funding = updateFunding(fundingItem, importDataModel, value, entry.getKey(), separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
+                funding = updateFunding(fundingItem, importDataModel, value, entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                for (int i = 1; i < donors.size(); i++) {
+                    Funding extraFunding = new Funding();
+                    updateFunding(extraFunding, importDataModel, value, entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                }
             }
 
         } else {
-            funding = updateFunding(fundingItem, importDataModel, value, entry.getKey(), separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+            List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
+            funding = updateFunding(fundingItem, importDataModel, value, entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+            for (int i = 1; i < donors.size(); i++) {
+                Funding extraFunding = new Funding();
+                updateFunding(extraFunding, importDataModel, value, entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+            }
         }
         return funding;
     }

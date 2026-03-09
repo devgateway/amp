@@ -142,7 +142,6 @@
                     throw new Error("Network response was not ok");
                   }
                   console.log("Response: ",response);
-                  $("#templateUploadForm").hide();
                   $('#existing-config').val('0');
                   $('#current-config-name').val(configName);
                   return response.json();

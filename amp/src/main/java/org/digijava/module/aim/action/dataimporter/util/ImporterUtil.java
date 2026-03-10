@@ -110,19 +110,21 @@ public class ImporterUtil {
                 String donorAgencyCode = donorAgencyCodeColumn >= 0 ? getStringValueFromCell(row.getCell(donorAgencyCodeColumn), true) : null;
                 updateOrgs(importDataModel, columnIndex1 >= 0 ? Objects.requireNonNull(getStringValueFromCell(row.getCell(columnIndex1), false)).trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId);
                 List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
-                funding = updateFunding(fundingItem, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
+                funding = updateFunding(fundingItem, importDataModel, splits.get(0), entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
                 for (int i = 1; i < donors.size(); i++) {
                     Funding extraFunding = new Funding();
-                    updateFunding(extraFunding, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                    updateFunding(extraFunding, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
                 }
             }
 
         } else {
             List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
-            funding = updateFunding(fundingItem, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+            List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
+            funding = updateFunding(fundingItem, importDataModel, splits.get(0), entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
             for (int i = 1; i < donors.size(); i++) {
                 Funding extraFunding = new Funding();
-                updateFunding(extraFunding, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                updateFunding(extraFunding, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
             }
         }
         return funding;
@@ -170,19 +172,21 @@ public class ImporterUtil {
 
                 updateOrgs(importDataModel, donorColumn != null && !donorColumn.isEmpty() ? donorColumn.trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId);
                 List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
-                funding = updateFunding(fundingItem, importDataModel, value, entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
+                funding = updateFunding(fundingItem, importDataModel, splits.get(0), entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
                 for (int i = 1; i < donors.size(); i++) {
                     Funding extraFunding = new Funding();
-                    updateFunding(extraFunding, importDataModel, value, entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                    updateFunding(extraFunding, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
                 }
             }
 
         } else {
             List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
-            funding = updateFunding(fundingItem, importDataModel, value, entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+            List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
+            funding = updateFunding(fundingItem, importDataModel, splits.get(0), entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
             for (int i = 1; i < donors.size(); i++) {
                 Funding extraFunding = new Funding();
-                updateFunding(extraFunding, importDataModel, value, entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                updateFunding(extraFunding, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
             }
         }
         return funding;
@@ -1704,6 +1708,26 @@ public class ImporterUtil {
 
         }
         return orgId;
+    }
+
+    /**
+     * Splits a total amount evenly across n donors, using the same whole-number percentages
+     * as {@link #divide100}. The last donor absorbs any floating-point remainder so the
+     * individual amounts always sum exactly to totalAmount.
+     */
+    private static List<Double> splitAmounts(double totalAmount, int n) {
+        if (n <= 0) return Collections.emptyList();
+        if (n == 1) return Collections.singletonList(totalAmount);
+        Map<Integer, Float> percentages = divide100(n);
+        List<Double> amounts = new ArrayList<>();
+        double allocated = 0;
+        for (int i = 0; i < n - 1; i++) {
+            double share = totalAmount * percentages.get(i) / 100.0;
+            amounts.add(share);
+            allocated += share;
+        }
+        amounts.add(totalAmount - allocated);
+        return amounts;
     }
 
     public static Map<Integer, Float> divide100(int n) {

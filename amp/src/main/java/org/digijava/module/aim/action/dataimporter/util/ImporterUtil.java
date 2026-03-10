@@ -75,7 +75,7 @@ public class ImporterUtil {
     }
 
     public static List<Funding> setFundingItemsForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, boolean expenditure, String
-            adjustmentType, Funding fundingItem, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId, boolean addDisbursementForCommitment) {
+            adjustmentType, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId, boolean addDisbursementForCommitment) {
         int detailColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.FINANCING_INSTRUMENT));
         String finInstrument = detailColumn >= 0 ? getStringValueFromCell(row.getCell(detailColumn), false) : "";
 
@@ -153,7 +153,7 @@ public class ImporterUtil {
 
 
     public static List<Funding> setFundingItemsForTxt(Map<String, String> row, Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Number value, boolean commitment, boolean disbursement, boolean expenditure, String
-            adjustmentType, Funding fundingItem, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId, boolean addDisbursementForCommitment) {
+            adjustmentType, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId, boolean addDisbursementForCommitment) {
         String finInstrument = row.get(getKey(config, ImporterConstants.FINANCING_INSTRUMENT));
         finInstrument = finInstrument != null ? finInstrument : "";
 
@@ -927,7 +927,7 @@ public class ImporterUtil {
     }
 
     /** @return activity ID on success, null on skip or failure */
-    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities, boolean addDisbursementForCommitment) throws JsonProcessingException {
+    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities) throws JsonProcessingException {
         if (session == null || !session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }

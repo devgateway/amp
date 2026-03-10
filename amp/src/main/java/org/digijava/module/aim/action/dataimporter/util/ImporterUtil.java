@@ -75,7 +75,7 @@ public class ImporterUtil {
     }
 
     public static List<Funding> setFundingItemsForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, boolean expenditure, String
-            adjustmentType, Funding fundingItem, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId) {
+            adjustmentType, Funding fundingItem, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId, boolean addDisbursementForCommitment) {
         int detailColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.FINANCING_INSTRUMENT));
         String finInstrument = detailColumn >= 0 ? getStringValueFromCell(row.getCell(detailColumn), false) : "";
 
@@ -104,6 +104,12 @@ public class ImporterUtil {
             if (!config.containsValue(ImporterConstants.DONOR_AGENCY)) {
                 Funding f = new Funding();
                 updateFunding(f, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                
+                // If this is a commitment and addDisbursementForCommitment is enabled, create a corresponding disbursement
+                if (addDisbursementForCommitment && commitment && !disbursement) {
+                    createCorrespondingDisbursement(f, adjustmentType);
+                }
+                
                 fundings.add(f);
 
             } else {
@@ -116,6 +122,12 @@ public class ImporterUtil {
                 for (int i = 0; i < donors.size(); i++) {
                     Funding f = new Funding();
                     updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                    
+                    // If this is a commitment and addDisbursementForCommitment is enabled, create a corresponding disbursement
+                    if (addDisbursementForCommitment && commitment && !disbursement) {
+                        createCorrespondingDisbursement(f, adjustmentType);
+                    }
+                    
                     fundings.add(f);
                 }
 
@@ -127,6 +139,12 @@ public class ImporterUtil {
             for (int i = 0; i < donors.size(); i++) {
                 Funding f = new Funding();
                 updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                
+                // If this is a commitment and addDisbursementForCommitment is enabled, create a corresponding disbursement
+                if (addDisbursementForCommitment && commitment && !disbursement) {
+                    createCorrespondingDisbursement(f, adjustmentType);
+                }
+                
                 fundings.add(f);
             }
         }
@@ -135,7 +153,7 @@ public class ImporterUtil {
 
 
     public static List<Funding> setFundingItemsForTxt(Map<String, String> row, Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Number value, boolean commitment, boolean disbursement, boolean expenditure, String
-            adjustmentType, Funding fundingItem, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId) {
+            adjustmentType, Funding fundingItem, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId, boolean addDisbursementForCommitment) {
         String finInstrument = row.get(getKey(config, ImporterConstants.FINANCING_INSTRUMENT));
         finInstrument = finInstrument != null ? finInstrument : "";
 
@@ -169,6 +187,12 @@ public class ImporterUtil {
             if (!config.containsValue(ImporterConstants.DONOR_AGENCY)) {
                 Funding f = new Funding();
                 updateFunding(f, importDataModel, value, entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                
+                // If this is a commitment and addDisbursementForCommitment is enabled, create a corresponding disbursement
+                if (addDisbursementForCommitment && commitment && !disbursement) {
+                    createCorrespondingDisbursement(f, adjustmentType);
+                }
+                
                 fundings.add(f);
 
             } else {
@@ -181,6 +205,12 @@ public class ImporterUtil {
                 for (int i = 0; i < donors.size(); i++) {
                     Funding f = new Funding();
                     updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                    
+                    // If this is a commitment and addDisbursementForCommitment is enabled, create a corresponding disbursement
+                    if (addDisbursementForCommitment && commitment && !disbursement) {
+                        createCorrespondingDisbursement(f, adjustmentType);
+                    }
+                    
                     fundings.add(f);
                 }
             }
@@ -605,8 +635,41 @@ public class ImporterUtil {
         return transactions.stream().anyMatch(existing -> 
             existing.getCurrency() != null && existing.getCurrency().equals(newTransaction.getCurrency()) &&
             Double.compare(existing.getTransaction_amount(), newTransaction.getTransaction_amount()) == 0 &&
-            existing.getTransaction_date() != null && existing.getTransaction_date().equals(newTransaction.getTransaction_date())
+            existing.getTransaction_date() != null && existing.getTransaction_date().equals(newTransaction.getTransaction_date()) &&
+            Objects.equals(existing.getAdjustment_type(), newTransaction.getAdjustment_type())
         );
+    }
+
+    /**
+     * Creates a corresponding disbursement transaction for each commitment transaction.
+     * The disbursement will have the same amount, currency, and date as the commitment.
+     * @param funding The funding object containing commitments
+     * @param adjustmentType The adjustment type ("actual" or "planned")
+     */
+    private static void createCorrespondingDisbursement(Funding funding, String adjustmentType) {
+        if (funding == null || funding.getCommitments() == null || funding.getCommitments().isEmpty()) {
+            return;
+        }
+        
+        for (Transaction commitment : funding.getCommitments()) {
+            Transaction disbursement = new Transaction();
+            disbursement.setCurrency(commitment.getCurrency());
+            disbursement.setTransaction_amount(commitment.getTransaction_amount());
+            disbursement.setTransaction_date(commitment.getTransaction_date());
+            disbursement.setFixed_exchange_rate(commitment.getFixed_exchange_rate());
+            
+            // Set the adjustment type for disbursement
+            Session session = getSession();
+            Long adjType = getCategoryValue("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY, adjustmentType);
+            disbursement.setAdjustment_type(adjType);
+            
+            // Add the disbursement if it doesn't already exist
+            if (!transactionExists(funding.getDisbursements(), disbursement)) {
+                funding.getDisbursements().add(disbursement);
+                logger.info("Created corresponding disbursement transaction: amount={}, date={}, currency={}", 
+                    disbursement.getTransaction_amount(), disbursement.getTransaction_date(), disbursement.getCurrency());
+            }
+        }
     }
 
     private static Long getOrganizationRole(Session session) {
@@ -864,7 +927,7 @@ public class ImporterUtil {
     }
 
     /** @return activity ID on success, null on skip or failure */
-    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities) throws JsonProcessingException {
+    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities, boolean addDisbursementForCommitment) throws JsonProcessingException {
         if (session == null || !session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }

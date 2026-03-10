@@ -359,11 +359,13 @@
       var internal = $('#internal').prop('checked');
       var skipExisting = $('#skipExisting').prop('checked');
       var validateActivities = $('#validateActivities').prop('checked');
+      var addDisbursementForCommitment = $('#addDisbursementForCommitment').prop('checked');
       var createMissingOrgs = $('#createMissingOrgs').prop('checked');
       var orgGroupId = $('#orgGroupId').val();
       console.log("Internal", internal);
       console.log("Skip existing", skipExisting);
       console.log("Validate activities", validateActivities);
+      console.log("Add disbursement for commitment", addDisbursementForCommitment);
       console.log("Create missing orgs", createMissingOrgs);
       console.log("Org group id", orgGroupId);
       if (createMissingOrgs && !orgGroupId) {
@@ -390,6 +392,7 @@
       formData.append('internal', internal);
       formData.append('skipExisting', skipExisting);
       formData.append('validateActivities', validateActivities);
+      formData.append('addDisbursementForCommitment', addDisbursementForCommitment);
       formData.append('createMissingOrgs', createMissingOrgs);
       if (createMissingOrgs && orgGroupId) {
         formData.append('orgGroupId', orgGroupId);
@@ -569,6 +572,8 @@
   <label for="skipExisting">Skip existing activities (only insert new)</label>: <input type="checkbox" id="skipExisting" name="skipExisting">
   <br>
   <label for="validateActivities">Validate imported activities (set as approved, non-draft)</label>: <input type="checkbox" id="validateActivities" name="validateActivities">
+  <br>
+  <label for="addDisbursementForCommitment">Add Disbursement for any Commitment</label>: <input type="checkbox" id="addDisbursementForCommitment" name="addDisbursementForCommitment">
   <br>
   <label for="createMissingOrgs">Create missing organizations</label>: <input type="checkbox" id="createMissingOrgs" name="createMissingOrgs">
   <div id="orgGroupDiv" style="display:none; margin-top:5px; margin-left:20px;">

@@ -39,6 +39,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import static org.digijava.module.aim.action.dataimporter.ExcelImporter.processExcelFileInBatches;
 import org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfig;
 import org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfigValues;
@@ -340,11 +341,13 @@ public class DataImporter extends Action {
                     boolean isInternal= dataImporterForm.isInternal();
                     boolean skipExisting = dataImporterForm.isSkipExisting();
                     boolean validateActivities = dataImporterForm.isValidateActivities();
+                    boolean addDisbursementForCommitment = dataImporterForm.isAddDisbursementForCommitment();
                     boolean createMissingOrgs = dataImporterForm.isCreateMissingOrgs();
                     Long orgGroupId = dataImporterForm.getOrgGroupId();
                     logger.info("Internal: "+ isInternal);
                     logger.info("Skip existing: "+ skipExisting);
                     logger.info("Validate activities: "+ validateActivities);
+                    logger.info("Add disbursement for commitment: "+ addDisbursementForCommitment);
                     logger.info("Create missing orgs: "+ createMissingOrgs);
                     logger.info("Org group id: "+ orgGroupId);
                     if (isInternal) {
@@ -357,9 +360,9 @@ public class DataImporter extends Action {
                         String dataSheetName = request.getParameter("dataSheetName");
                         boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
                         // Process the file in batches
-                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, orgGroupId, validateActivities);
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, orgGroupId, validateActivities, addDisbursementForCommitment);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, orgGroupId, validateActivities);
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, orgGroupId, validateActivities, addDisbursementForCommitment);
                     }
                     if (res != 1) {
                         // Handle error
@@ -590,7 +593,15 @@ public class DataImporter extends Action {
         fieldsInfos.add(ImporterConstants.ACTUAL_VALUE);
         fieldsInfos.add(ImporterConstants.ACTUAL_VALUE_DATE);
         fieldsInfos.add(ImporterConstants.UNIT_OF_MEASURE);
-        return fieldsInfos.stream().sorted().collect(Collectors.toList());
+        
+        // Translate field names if translation is available
+        List<String> translatedFields = new ArrayList<>();
+        for (String field : fieldsInfos) {
+            String translated = org.digijava.kernel.translator.TranslatorWorker.translateText(field);
+            translatedFields.add(translated);
+        }
+        
+        return translatedFields.stream().sorted().collect(Collectors.toList());
     }
 
 }

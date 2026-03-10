@@ -16,6 +16,7 @@ public class DataImporterForm extends ActionForm {
     private boolean createMissingOrgs;
     private Long orgGroupId;
     private boolean validateActivities;
+    private boolean addDisbursementForCommitment;
 
     public boolean isSkipExisting() {
         return skipExisting;
@@ -31,6 +32,14 @@ public class DataImporterForm extends ActionForm {
 
     public void setValidateActivities(boolean validateActivities) {
         this.validateActivities = validateActivities;
+    }
+
+    public boolean isAddDisbursementForCommitment() {
+        return addDisbursementForCommitment;
+    }
+
+    public void setAddDisbursementForCommitment(boolean addDisbursementForCommitment) {
+        this.addDisbursementForCommitment = addDisbursementForCommitment;
     }
 
     public boolean isCreateMissingOrgs() {

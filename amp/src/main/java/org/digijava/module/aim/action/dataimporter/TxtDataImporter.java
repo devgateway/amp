@@ -41,7 +41,7 @@ public class TxtDataImporter {
     private static final Logger logger = LoggerFactory.getLogger(TxtDataImporter.class);
 
 
-    public static int processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting, boolean createMissingOrgs, Long orgGroupId, boolean validateActivities)
+    public static int processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting, boolean createMissingOrgs, Long orgGroupId, boolean validateActivities, boolean addDisbursementForCommitment)
     {
         logger.info("Processing txt file: " + file.getName());
         CSVParser parser = new CSVParserBuilder().withSeparator(request.getParameter("dataSeparator").charAt(0)).build();
@@ -60,7 +60,7 @@ public class TxtDataImporter {
                     logger.info("Batch number here: {}",batchNumber);
 
                     // Process the batch
-                    processBatch(batch, request,config,importedFilesRecord, skipExisting, createMissingOrgs, orgGroupId, validateActivities);
+                    processBatch(batch, request,config,importedFilesRecord, skipExisting, createMissingOrgs, orgGroupId, validateActivities, addDisbursementForCommitment);
                     // Clear the batch for the next set of rows
                     batch.clear();
                     batchNumber+=1;
@@ -70,7 +70,7 @@ public class TxtDataImporter {
             // Process any remaining rows in the batch
             if (!batch.isEmpty()) {
                 logger.info("Processing last batch of size {}", batch.size());
-                processBatch(batch, request,config,importedFilesRecord, skipExisting, createMissingOrgs, orgGroupId, validateActivities);
+                processBatch(batch, request,config,importedFilesRecord, skipExisting, createMissingOrgs, orgGroupId, validateActivities, addDisbursementForCommitment);
             }
         } catch (IOException | CsvValidationException e) {
             logger.error("Error processing txt file "+e.getMessage(),e);
@@ -80,7 +80,7 @@ public class TxtDataImporter {
     }
 
 
-    private static void processBatch(List<Map<String, String>> batch,  HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, Long orgGroupId, boolean validateActivities) throws JsonProcessingException {
+    private static void processBatch(List<Map<String, String>> batch,  HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, Long orgGroupId, boolean validateActivities, boolean addDisbursementForCommitment) throws JsonProcessingException {
         logger.info("Processing txt batch");
         SessionUtil.extendSessionIfNeeded(request);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
@@ -182,26 +182,26 @@ public class TxtDataImporter {
                                         adjustmentType = parsed.adjustmentType;
                                     }
                                 }
-                                fundings.addAll(setFundingItemsForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), commitment, disbursement, expenditure, adjustmentType, fundingItem, null, createMissingOrgs, orgGroupId));
+                                fundings.addAll(setFundingItemsForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), commitment, disbursement, expenditure, adjustmentType, fundingItem, null, createMissingOrgs, orgGroupId, addDisbursementForCommitment));
                                 break;
                             }
                             case ImporterConstants.PLANNED_COMMITMENT:
-                                fundings.addAll(setFundingItemsForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null, createMissingOrgs, orgGroupId));
+                                fundings.addAll(setFundingItemsForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null, createMissingOrgs, orgGroupId, addDisbursementForCommitment));
                                 break;
                             case ImporterConstants.PLANNED_DISBURSEMENT:
-                                fundings.addAll(setFundingItemsForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null, createMissingOrgs, orgGroupId));
+                                fundings.addAll(setFundingItemsForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null, createMissingOrgs, orgGroupId, addDisbursementForCommitment));
                                 break;
                             case ImporterConstants.PLANNED_EXPENDITURE:
-                                fundings.addAll(setFundingItemsForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null, createMissingOrgs, orgGroupId));
+                                fundings.addAll(setFundingItemsForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null, createMissingOrgs, orgGroupId, addDisbursementForCommitment));
                                 break;
                             case ImporterConstants.ACTUAL_COMMITMENT:
-                                fundings.addAll(setFundingItemsForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null, createMissingOrgs, orgGroupId));
+                                fundings.addAll(setFundingItemsForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null, createMissingOrgs, orgGroupId, addDisbursementForCommitment));
                                 break;
                             case ImporterConstants.ACTUAL_DISBURSEMENT:
-                                fundings.addAll(setFundingItemsForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null, createMissingOrgs, orgGroupId));
+                                fundings.addAll(setFundingItemsForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null, createMissingOrgs, orgGroupId, addDisbursementForCommitment));
                                 break;
                             case ImporterConstants.ACTUAL_EXPENDITURE:
-                                fundings.addAll(setFundingItemsForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null, createMissingOrgs, orgGroupId));
+                                fundings.addAll(setFundingItemsForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null, createMissingOrgs, orgGroupId, addDisbursementForCommitment));
                                 break;
                             case ImporterConstants.MEASURE_TYPE:
                                 break;
@@ -236,7 +236,7 @@ public class TxtDataImporter {
             if (importedProject.getImportStatus() != ImportStatus.SKIPPED) {
                 try {
                     // Pass only the ID, not the entity - importTheData will re-fetch in its own transaction context
-                    importTheData(importDataModel, null, importedProject, componentName, componentCode, responsibleOrgIdHolder[0], fundings, existingActivityIdHolder[0], validateActivities);
+                    importTheData(importDataModel, null, importedProject, componentName, componentCode, responsibleOrgIdHolder[0], fundings, existingActivityIdHolder[0], validateActivities, addDisbursementForCommitment);
                 } catch (JsonProcessingException e) {
                     throw e;
                 }

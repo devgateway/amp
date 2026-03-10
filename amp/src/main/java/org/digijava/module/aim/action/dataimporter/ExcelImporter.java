@@ -29,18 +29,6 @@ import org.digijava.module.aim.action.dataimporter.model.ImportDataModel;
 import org.digijava.module.aim.action.dataimporter.util.ImporterConstants;
 import org.digijava.module.aim.action.dataimporter.util.ImportedFileUtil;
 import org.digijava.module.aim.action.dataimporter.util.ImporterUtil;
-import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.existingActivity;
-import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.getColumnIndexByName;
-import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.getKey;
-import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.getStringValueFromCell;
-import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.parseMeasureType;
-import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.addIndicatorDataToActivity;
-import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.importTheData;
-import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.setAFundingItemForExcel;
-import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.setStatus;
-import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.updateLocations;
-import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.updateOrgs;
-import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.updateSectors;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -50,6 +38,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.*;
 
 public class ExcelImporter {
     static Logger logger = LoggerFactory.getLogger(ExcelImporter.class);

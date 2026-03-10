@@ -828,7 +828,7 @@ public class ImporterUtil {
         }
         if (validateActivities) {
             logger.info("validateActivities=true: setting approval_status=approved in setStatus");
-            importDataModel.setApproval_status(ApprovalStatus.APPROVED.getId());
+            importDataModel.setApproval_status(ApprovalStatus.approved.getId());
         } else {
             importDataModel.setApproval_status(ApprovalStatus.started.getId());
         }

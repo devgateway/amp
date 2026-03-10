@@ -94,7 +94,7 @@ public class TxtDataImporter {
             ImportDataModel importDataModel = new ImportDataModel();
             importDataModel.setModified_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
             importDataModel.setTeam(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeam().getAmpTeamId());
-            importDataModel.setIs_draft(true);
+            importDataModel.setIs_draft(!validateActivities);
             OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             importDataModel.setCreation_date(now.format(formatter));
             String componentName= rowRef.get(getKey(config, ImporterConstants.COMPONENT_NAME));
@@ -142,7 +142,7 @@ public class TxtDataImporter {
                             importDataModel.setProcurement_system(procId);
                         }
                     }
-                    setStatus(importDataModel);
+                    setStatus(importDataModel, validateActivities);
 
                     String donorAgencyCode = rowRef.get(getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
                     String responsibleOrgCode = rowRef.get(getKey(config, ImporterConstants.RESPONSIBLE_ORGANIZATION_CODE));

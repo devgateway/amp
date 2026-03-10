@@ -821,12 +821,17 @@ public class ImporterUtil {
      * Sets default activity status and approval status on the import model.
      * If activity_status is already set (e.g. from Project Status column), it is left unchanged.
      */
-    public static void setStatus(ImportDataModel importDataModel) {
+    public static void setStatus(ImportDataModel importDataModel, boolean validateActivities) {
         if (importDataModel.getActivity_status() == null) {
             Long statusId = getCategoryValue("statusId", CategoryConstants.ACTIVITY_STATUS_KEY, "");
             importDataModel.setActivity_status(statusId);
         }
-        importDataModel.setApproval_status(ApprovalStatus.started.getId());
+        if (validateActivities) {
+            logger.info("validateActivities=true: setting approval_status=approved in setStatus");
+            importDataModel.setApproval_status(ApprovalStatus.APPROVED.getId());
+        } else {
+            importDataModel.setApproval_status(ApprovalStatus.started.getId());
+        }
     }
 
     private static final String CREATED_BY_KEY = "created_by";
@@ -895,9 +900,9 @@ public class ImporterUtil {
         if (existing == null) {
             ensureCreatedBySet(map, null);
             if (validateActivities) {
-                logger.info("validateActivities=true: setting approval_status=approved and draft=false for new activity");
+                logger.info("validateActivities=true: setting approval_status=approved and is_draft=false for new activity");
                 map.put("approval_status", "approved");
-                map.put("draft", false);
+                map.put("is_draft", false);
             }
             logger.info("New activity");
             importedProject.setNewProject(true);
@@ -943,9 +948,9 @@ public class ImporterUtil {
             evictActivityFromSecondLevelCache(existing.getAmpActivityId());
             ensureCreatedBySet(map, existing);
             if (validateActivities) {
-                logger.info("validateActivities=true: setting approval_status=approved and draft=false for existing activity");
+                logger.info("validateActivities=true: setting approval_status=approved and is_draft=false for existing activity");
                 map.put("approval_status", "approved");
-                map.put("draft", false);
+                map.put("is_draft", false);
             }
             try {
                 response = ActivityInterchangeUtils.importActivity(map, true, rules, "activity/update");

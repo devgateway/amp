@@ -161,7 +161,7 @@ public class ExcelImporter {
                 importDataModel.setModified_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
                 // created_by is set in ensureCreatedBySet when building the API map (correct for new vs existing)
                 importDataModel.setTeam(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeam().getAmpTeamId());
-                importDataModel.setIs_draft(true);
+                importDataModel.setIs_draft(!validateActivities);
                 OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
                 importDataModel.setCreation_date(now.format(formatter));
 
@@ -225,7 +225,7 @@ public class ExcelImporter {
                                 }
                             }
                         }
-                        setStatus(importDataModel);
+                        setStatus(importDataModel, validateActivities);
 
                         AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
                         existingActivityIdHolder[0] = existing != null ? existing.getAmpActivityId() : null;

@@ -339,10 +339,12 @@ public class DataImporter extends Action {
                     logger.info("Saved file record: {}",importedFilesRecord);
                     boolean isInternal= dataImporterForm.isInternal();
                     boolean skipExisting = dataImporterForm.isSkipExisting();
+                    boolean validateActivities = dataImporterForm.isValidateActivities();
                     boolean createMissingOrgs = dataImporterForm.isCreateMissingOrgs();
                     Long orgGroupId = dataImporterForm.getOrgGroupId();
                     logger.info("Internal: "+ isInternal);
                     logger.info("Skip existing: "+ skipExisting);
+                    logger.info("Validate activities: "+ validateActivities);
                     logger.info("Create missing orgs: "+ createMissingOrgs);
                     logger.info("Org group id: "+ orgGroupId);
                     if (isInternal) {
@@ -355,9 +357,9 @@ public class DataImporter extends Action {
                         String dataSheetName = request.getParameter("dataSheetName");
                         boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
                         // Process the file in batches
-                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, orgGroupId);
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, orgGroupId, validateActivities);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, orgGroupId);
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, orgGroupId, validateActivities);
                     }
                     if (res != 1) {
                         // Handle error

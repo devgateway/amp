@@ -15,6 +15,7 @@ public class DataImporterForm extends ActionForm {
     private boolean skipExisting;
     private boolean createMissingOrgs;
     private Long orgGroupId;
+    private boolean validateActivities;
 
     public boolean isSkipExisting() {
         return skipExisting;
@@ -22,6 +23,14 @@ public class DataImporterForm extends ActionForm {
 
     public void setSkipExisting(boolean skipExisting) {
         this.skipExisting = skipExisting;
+    }
+
+    public boolean isValidateActivities() {
+        return validateActivities;
+    }
+
+    public void setValidateActivities(boolean validateActivities) {
+        this.validateActivities = validateActivities;
     }
 
     public boolean isCreateMissingOrgs() {

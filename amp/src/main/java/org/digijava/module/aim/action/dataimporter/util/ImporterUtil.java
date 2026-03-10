@@ -850,7 +850,7 @@ public class ImporterUtil {
     }
 
     /** @return activity ID on success, null on skip or failure */
-    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId) throws JsonProcessingException {
+    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities) throws JsonProcessingException {
         if (session == null || !session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
@@ -885,6 +885,11 @@ public class ImporterUtil {
         }
         if (existing == null) {
             ensureCreatedBySet(map, null);
+            if (validateActivities) {
+                logger.info("validateActivities=true: setting approval_status=approved and draft=false for new activity");
+                map.put("approval_status", "approved");
+                map.put("draft", false);
+            }
             logger.info("New activity");
             importedProject.setNewProject(true);
             response = ActivityInterchangeUtils.importActivity(map, false, rules, "activity/new");
@@ -928,6 +933,11 @@ public class ImporterUtil {
             map.remove("implementing_executing_agency_contact_information");
             evictActivityFromSecondLevelCache(existing.getAmpActivityId());
             ensureCreatedBySet(map, existing);
+            if (validateActivities) {
+                logger.info("validateActivities=true: setting approval_status=approved and draft=false for existing activity");
+                map.put("approval_status", "approved");
+                map.put("draft", false);
+            }
             try {
                 response = ActivityInterchangeUtils.importActivity(map, true, rules, "activity/update");
             } catch (Exception e) {

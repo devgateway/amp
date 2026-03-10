@@ -8,7 +8,25 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-  <script>
+  <%
+  // Prepare fields info as JSON for JavaScript
+  java.util.Map<String, String> fieldsInfo = (java.util.Map<String, String>) request.getAttribute("fieldsInfo");
+  StringBuilder jsonBuilder = new StringBuilder("{");
+  boolean first = true;
+  for (java.util.Map.Entry<String, String> entry : fieldsInfo.entrySet()) {
+    if (!first) jsonBuilder.append(",");
+    jsonBuilder.append("\"").append(entry.getKey().replace("\"", "\\\"")).append("\":")
+               .append("\"").append(entry.getValue().replace("\"", "\\\"")).append("\"");
+    first = false;
+  }
+  jsonBuilder.append("}");
+  request.setAttribute("fieldsInfoJson", jsonBuilder.toString());
+%>
+
+<script>
+    // Store the field translations for JavaScript use
+    var fieldsInfoMap = JSON.parse('${fieldsInfoJson}');
+    
     function replaceLastOccurrence(inputString, search, replacement) {
       var lastIndex = inputString.lastIndexOf(search);
       if (lastIndex === -1) {
@@ -239,7 +257,8 @@
       columnNameCell.textContent = columnName;
       var selectedFieldCell = document.createElement("td");
       selectedFieldCell.className="selected-field"
-      selectedFieldCell.textContent=selectedField;
+      // Get the translated text from fieldsInfoMap
+      selectedFieldCell.textContent = fieldsInfoMap[selectedField] || selectedField;
 
 
       // Create a checkbox cell
@@ -517,11 +536,9 @@
   <label for="selected-field">Select Entity Field:</label>
   <select id="selected-field"  class="select2" style="width: 300px;">
     <!-- Populate dropdown with entity field names -->
-    <jsp:useBean id="fieldsInfo" scope="request" type="java.util.List"/>
-    <c:forEach items="${fieldsInfo}" var="fieldInfo" varStatus="loop">
-
-      <option>${fieldInfo}</option>
-      <br>
+    <jsp:useBean id="fieldsInfo" scope="request" type="java.util.Map"/>
+    <c:forEach items="${fieldsInfo}" var="fieldEntry">
+      <option value="${fieldEntry.key}">${fieldEntry.value}</option>
     </c:forEach>
   </select>
   <br><br>

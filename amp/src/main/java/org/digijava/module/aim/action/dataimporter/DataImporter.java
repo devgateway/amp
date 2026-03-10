@@ -73,9 +73,10 @@ public class DataImporter extends Action {
 
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // List of fields
-        List<String> fieldsInfo = getEntityFieldsInfo();
+        // List of fields - map of original to translated
+        Map<String, String> fieldsInfo = getEntityFieldsInfo();
         request.setAttribute("fieldsInfo", fieldsInfo);
+        request.setAttribute("fieldsInfoList", new ArrayList<>(fieldsInfo.values()));
         List<String> configNames= getConfigNames();
         request.setAttribute("configNames", configNames);
         List<AmpOrgGroup> orgGroups = DbUtil.getAllOrgGroups();
@@ -541,7 +542,7 @@ public class DataImporter extends Action {
 
 
 
-    private List<String> getEntityFieldsInfo() {
+    private Map<String, String> getEntityFieldsInfo() {
         List<String> fieldsInfos = new ArrayList<>();
         fieldsInfos.add(ImporterConstants.PROJECT_TITLE);
         fieldsInfos.add(ImporterConstants.PROJECT_CODE);
@@ -594,14 +595,14 @@ public class DataImporter extends Action {
         fieldsInfos.add(ImporterConstants.ACTUAL_VALUE_DATE);
         fieldsInfos.add(ImporterConstants.UNIT_OF_MEASURE);
         
-        // Translate field names if translation is available
-        List<String> translatedFields = new ArrayList<>();
+        // Create map of original field names to translated field names
+        Map<String, String> fieldMap = new LinkedHashMap<>();
         for (String field : fieldsInfos) {
             String translated = org.digijava.kernel.translator.TranslatorWorker.translateText(field);
-            translatedFields.add(translated);
+            fieldMap.put(field, translated);
         }
         
-        return translatedFields.stream().sorted().collect(Collectors.toList());
+        return fieldMap;
     }
 
 }

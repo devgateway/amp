@@ -74,7 +74,7 @@ public class ImporterUtil {
 
     }
 
-    public static Funding setAFundingItemForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, boolean expenditure, String
+    public static List<Funding> setFundingItemsForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, boolean expenditure, String
             adjustmentType, Funding fundingItem, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId) {
         int detailColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.FINANCING_INSTRUMENT));
         String finInstrument = detailColumn >= 0 ? getStringValueFromCell(row.getCell(detailColumn), false) : "";
@@ -97,12 +97,13 @@ public class ImporterUtil {
             }
         }
         saveCurrencyCode(currencyCode, importDataModel.getProject_title());
-        Funding funding;
+        List<Funding> fundings = new ArrayList<>();
         int componentNameColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.COMPONENT_NAME));
         String componentName = componentNameColumn >= 0 ? getStringValueFromCell(row.getCell(componentNameColumn), true) : null;
         if (importDataModel.getDonor_organization() == null || importDataModel.getDonor_organization().isEmpty()) {
             if (!config.containsValue(ImporterConstants.DONOR_AGENCY)) {
-                funding = updateFunding(fundingItem, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                updateFunding(fundingItem, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                fundings.add(fundingItem);
 
             } else {
                 int columnIndex1 = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY));
@@ -111,34 +112,34 @@ public class ImporterUtil {
                 updateOrgs(importDataModel, columnIndex1 >= 0 ? Objects.requireNonNull(getStringValueFromCell(row.getCell(columnIndex1), false)).trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId);
                 List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
                 List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
-                funding = updateFunding(fundingItem, importDataModel, splits.get(0), entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
-                for (int i = 1; i < donors.size(); i++) {
-                    Funding extraFunding = new Funding();
-                    updateFunding(extraFunding, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                for (int i = 0; i < donors.size(); i++) {
+                    Funding f = (i == 0) ? fundingItem : new Funding();
+                    updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                    fundings.add(f);
                 }
             }
 
         } else {
             List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
             List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
-            funding = updateFunding(fundingItem, importDataModel, splits.get(0), entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
-            for (int i = 1; i < donors.size(); i++) {
-                Funding extraFunding = new Funding();
-                updateFunding(extraFunding, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+            for (int i = 0; i < donors.size(); i++) {
+                Funding f = (i == 0) ? fundingItem : new Funding();
+                updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                fundings.add(f);
             }
         }
-        return funding;
+        return fundings;
     }
 
 
-    public static Funding setAFundingItemForTxt(Map<String, String> row, Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Number value, boolean commitment, boolean disbursement, boolean expenditure, String
+    public static List<Funding> setFundingItemsForTxt(Map<String, String> row, Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Number value, boolean commitment, boolean disbursement, boolean expenditure, String
             adjustmentType, Funding fundingItem, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId) {
         String finInstrument = row.get(getKey(config, ImporterConstants.FINANCING_INSTRUMENT));
         finInstrument = finInstrument != null ? finInstrument : "";
 
         String typeOfAss = row.get(getKey(config, ImporterConstants.TYPE_OF_ASSISTANCE));
         typeOfAss = typeOfAss != null ? typeOfAss : "";
-        Funding funding;
+        List<Funding> fundings = new ArrayList<>();
 
         String separateFundingDate = row.get(getKey(config, ImporterConstants.TRANSACTION_DATE));
         separateFundingDate = separateFundingDate != null ? separateFundingDate : "";
@@ -164,7 +165,8 @@ public class ImporterUtil {
 
         if (importDataModel.getDonor_organization() == null || importDataModel.getDonor_organization().isEmpty()) {
             if (!config.containsValue(ImporterConstants.DONOR_AGENCY)) {
-                funding = updateFunding(fundingItem, importDataModel, value, entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                updateFunding(fundingItem, importDataModel, value, entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                fundings.add(fundingItem);
 
             } else {
                 String donorColumn = row.get(getKey(config, ImporterConstants.DONOR_AGENCY));
@@ -173,23 +175,23 @@ public class ImporterUtil {
                 updateOrgs(importDataModel, donorColumn != null && !donorColumn.isEmpty() ? donorColumn.trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId);
                 List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
                 List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
-                funding = updateFunding(fundingItem, importDataModel, splits.get(0), entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
-                for (int i = 1; i < donors.size(); i++) {
-                    Funding extraFunding = new Funding();
-                    updateFunding(extraFunding, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                for (int i = 0; i < donors.size(); i++) {
+                    Funding f = (i == 0) ? fundingItem : new Funding();
+                    updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                    fundings.add(f);
                 }
             }
 
         } else {
             List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
             List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
-            funding = updateFunding(fundingItem, importDataModel, splits.get(0), entry.getKey(), separateFundingDate, donors.get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
-            for (int i = 1; i < donors.size(); i++) {
-                Funding extraFunding = new Funding();
-                updateFunding(extraFunding, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+            for (int i = 0; i < donors.size(); i++) {
+                Funding f = (i == 0) ? fundingItem : new Funding();
+                updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                fundings.add(f);
             }
         }
-        return funding;
+        return fundings;
     }
 
     public static String getStringValueFromCell(Cell cell, boolean nullable) {

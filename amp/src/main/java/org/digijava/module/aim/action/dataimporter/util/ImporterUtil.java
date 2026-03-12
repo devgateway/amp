@@ -1015,6 +1015,12 @@ public class ImporterUtil {
                 map.put("approval_status", "approved");
                 map.put("is_draft", false);
             }
+            // All data from 'existing' has been extracted into 'map'. Clear the session first-level
+            // cache before handing off to ActivityGatekeeper so its internal doInTransaction starts
+            // with a clean context. Without this, entities loaded above remain in the session action
+            // queue and Hibernate raises HHH000099 (possible non-threadsafe access to session) when
+            // EntityInsertAction.execute() checks the persistence context during flush.
+            session.clear();
             try {
                 response = ActivityInterchangeUtils.importActivity(map, true, rules, "activity/update");
             } catch (Exception e) {

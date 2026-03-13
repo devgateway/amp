@@ -608,9 +608,16 @@ public class DataImporter extends Action {
         for (String field : fieldsInfos) {
             String translated = org.digijava.kernel.translator.TranslatorWorker.translateText(field);
             fieldMap.put(field, translated);
+
         }
 
-        return fieldMap;
+
+        return fieldMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new));
     }
 
 }

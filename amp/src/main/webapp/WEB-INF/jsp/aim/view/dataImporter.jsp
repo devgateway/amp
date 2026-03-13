@@ -2,9 +2,10 @@
 <%@ taglib prefix="html" uri="http://struts.apache.org/tags-html" %>
 <%@ taglib prefix="bean" uri="http://struts.apache.org/tags-bean" %>
 <%@ taglib prefix="logic" uri="http://struts.apache.org/tags-logic" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <html:html>
 <head>
-  <title>Data Importer</title>
+  <title><digi:trn>Data Importer</digi:trn></title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -32,45 +33,56 @@
         return;
       }
 
+      function applySelect2(selector, options) {
+        var $element = $(selector);
+        if (!$element.length) {
+          return;
+        }
+        if ($element.hasClass('select2-hidden-accessible')) {
+          $element.select2('destroy');
+        }
+        $element.select2(options);
+      }
+
       if ($('#configuration').length) {
-        $('#configuration').select2({
+        applySelect2('#configuration', {
           width: '100%',
-          placeholder: 'Choose an existing configuration'
+          placeholder: '<digi:trn jsFriendly="true">Choose an existing configuration</digi:trn>'
         });
       }
 
       if ($('#selected-field').length) {
-        $('#selected-field').select2({
+        applySelect2('#selected-field', {
           width: '100%',
-          placeholder: 'Search entity fields'
+          placeholder: '<digi:trn jsFriendly="true">Search entity fields</digi:trn>'
         });
       }
 
       if ($('#orgGroupId').length) {
-        $('#orgGroupId').select2({
+        applySelect2('#orgGroupId', {
           width: '100%',
-          placeholder: 'Select organization group'
+          placeholder: '<digi:trn jsFriendly="true">Select organization group</digi:trn>'
         });
       }
 
       if ($('#data-sheet').length) {
-        $('#data-sheet').select2({
+        applySelect2('#data-sheet', {
           width: '100%',
-          placeholder: 'Select sheet'
+          placeholder: '<digi:trn jsFriendly="true">Select sheet</digi:trn>'
         });
       }
 
       if ($('#template-sheet').length) {
-        $('#template-sheet').select2({
+        applySelect2('#template-sheet', {
           width: '100%',
-          placeholder: 'Select sheet'
+          placeholder: '<digi:trn jsFriendly="true">Select sheet</digi:trn>'
         });
       }
 
       if ($('#columnName').length) {
-        $('#columnName').select2({
+        applySelect2('#columnName', {
           width: '100%',
-          placeholder: 'Search template columns'
+          placeholder: '<digi:trn jsFriendly="true">Search template columns</digi:trn>'
         });
       }
     }
@@ -114,18 +126,14 @@
       }
     }
     function addField() {
-      var columnName = ($('#current-config-name').val())
-        ? $('#column-name-edit').val()
-        : document.getElementById("columnName").value;
+      var columnNameElement = document.getElementById("columnName");
+      var columnName = columnNameElement ? columnNameElement.value : '';
       var selectedField = document.getElementById("selected-field").value;
       if (!columnName || !selectedField) {
-        alert("Please enter column name and select a field.");
+        alert("<digi:trn jsFriendly='true'>Please select a column name and entity field.</digi:trn>");
         return;
       }
       sendValuesToBackend(columnName, selectedField, "addField");
-      if ($('#current-config-name').val()) {
-        $('#column-name-edit').val('');
-      }
     }
     $(document).ready(function() {
       $('#existing-config').val('0');
@@ -195,7 +203,7 @@
       $('#load-sheets-btn').click(function() {
         var fileInput = document.getElementById('data-file');
         if (!fileInput.files || !fileInput.files.length) {
-          alert("Please select a data file first.");
+          alert("<digi:trn jsFriendly='true'>Please select a data file first.</digi:trn>");
           return;
         }
         var formData = new FormData();
@@ -217,7 +225,7 @@
           })
           .catch(function() {
             $select.empty().append('<option value="">-- Error loading sheets --</option>').prop('disabled', false);
-            alert("Could not load sheets from file.");
+            alert("<digi:trn jsFriendly='true'>Could not load sheets from file.</digi:trn>");
           });
       });
 
@@ -247,8 +255,6 @@
 
                   repopulateSelectedPairs(updatedMap);
                   revealConfigWorkspace();
-                  $('#add-pair-edit-section').show();
-                  $('#column-name-edit').val('');
 
                 })
                 .catch(error => {
@@ -257,7 +263,6 @@
         }else
         {
           $('#current-config-name').val('');
-          $('#add-pair-edit-section').hide();
           $("#templateUploadForm").show();
           toggleUploadSection();
         }
@@ -358,21 +363,21 @@
                 renderTemplateSheetAndColumns(data);
               } catch (e) {
                 console.error("Invalid JSON response", e);
-                alert("Unable to parse template. Please try again.");
+                alert("<digi:trn jsFriendly='true'>Unable to parse template. Please try again.</digi:trn>");
                 return;
               }
             } else {
               document.getElementById('headers').innerHTML = xhr.responseText;
             }
-            alert("The template has been successfully uploaded.");
+            alert("<digi:trn jsFriendly='true'>The template has been successfully uploaded.</digi:trn>");
             revealConfigWorkspace();
           } else {
             console.error("Unable to extract headers. Please check the file format and try again.");
-            alert("Unable to extract headers. Please check the file format and try again.");
+            alert("<digi:trn jsFriendly='true'>Unable to extract headers. Please check the file format and try again.</digi:trn>");
           }
         } else {
           console.error('Error:', xhr.status);
-          alert("File upload failed. Please try again.");
+          alert("<digi:trn jsFriendly='true'>File upload failed. Please try again.</digi:trn>");
         }
       };
 
@@ -385,17 +390,17 @@
       var columnsBySheet = data.columnsBySheet || {};
       var headersDiv = document.getElementById('headers');
       if (sheetNames.length === 0) {
-        headersDiv.innerHTML = '<p>No sheets found in the template.</p>';
+        headersDiv.innerHTML = '<p><digi:trn>No sheets found in the template.</digi:trn></p>';
         return;
       }
       var firstSheet = sheetNames[0];
-      var html = '<label for="template-sheet">Select Sheet:</label><br>';
+      var html = '<label for="template-sheet"><digi:trn>Select Sheet</digi:trn>:</label><br>';
       html += '<select class="select2" style="width: 300px;" id="template-sheet">';
       for (var i = 0; i < sheetNames.length; i++) {
         html += '<option value="' + escapeHtml(sheetNames[i]) + '">' + escapeHtml(sheetNames[i]) + '</option>';
       }
       html += '</select><br><br>';
-      html += '<label for="columnName">Select Column Name:</label><br>';
+      html += '<label for="columnName"><digi:trn>Select Column Name</digi:trn>:</label><br>';
       html += '<select class="select2" style="width: 300px;" id="columnName">';
       var firstCols = columnsBySheet[firstSheet] || [];
       for (var j = 0; j < firstCols.length; j++) {
@@ -439,7 +444,7 @@
       console.log("Create missing orgs", createMissingOrgs);
       console.log("Org group id", orgGroupId);
       if (createMissingOrgs && !orgGroupId) {
-        alert("Please select an Organization Group for newly created organizations.");
+        alert("<digi:trn jsFriendly='true'>Please select an Organization Group for newly created organizations.</digi:trn>");
         return;
       }
       var dataSeparator = $('#data-separator').val();
@@ -449,13 +454,13 @@
       var fileInput = document.getElementById('data-file');
       // Check if a file is selected
       if (!fileInput.files.length) {
-        alert("Please select a file to upload.");
+        alert("<digi:trn jsFriendly='true'>Please select a file to upload.</digi:trn>");
         return;
       }
       var dataSheetChoice = $('input[name="dataSheetChoice"]:checked').val();
       var dataSheetName = $('#data-sheet').val() || '';
       if (fileType === 'excel' && dataSheetChoice === 'sheet' && !dataSheetName) {
-        alert("Please load sheets and select a sheet, or choose 'Whole file'.");
+        alert("<digi:trn jsFriendly='true'>Please load sheets and select a sheet, or choose 'Whole file'.</digi:trn>");
         return;
       }
       formData.append('dataFile', fileInput.files[0]);
@@ -479,7 +484,7 @@
 
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
-      alert("File is uploading and will be parsed shortly.");
+      alert("<digi:trn jsFriendly='true'>File is uploading and will be parsed shortly.</digi:trn>");
       xhr.onload = function () {
         console.log("Status: " + xhr.status);
         if (xhr.status === 400) {
@@ -783,47 +788,47 @@
 <div class="importer-page">
   <div class="hero-card">
     <span class="section-label">Import Workspace</span>
-    <h1>Import Data</h1>
-    <p>Prepare a template, map source columns to AMP entity fields, and upload your data only after the configuration table is ready.</p>
+    <h1><digi:trn>Import Data</digi:trn></h1>
+    <p><digi:trn>Prepare a template, map source columns to AMP entity fields, and upload your data only after the configuration table is ready.</digi:trn></p>
   </div>
 
   <div class="panel-grid">
     <div class="panel-card">
       <span class="section-label">Step 1</span>
-      <h2>Choose File Settings</h2>
-      <p class="section-copy">Pick the source format and optionally load an existing configuration before uploading a template.</p>
+      <h2><digi:trn>Choose File Settings</digi:trn></h2>
+      <p class="section-copy"><digi:trn>Pick the source format and optionally load an existing configuration before uploading a template.</digi:trn></p>
 
       <div class="inline-field">
-        <label class="file-type-label" for="file-type">Select file type</label>
+        <label class="file-type-label" for="file-type"><digi:trn>Select file type</digi:trn></label>
         <select id="file-type" class="file_type">
-          <option value="excel">Excel</option>
-          <option value="csv">CSV</option>
-          <option value="text">Text</option>
-          <option value="json">JSON</option>
-          <option value="xml">XML</option>
+          <option value="excel"><digi:trn>Excel</digi:trn></option>
+          <option value="csv"><digi:trn>CSV</digi:trn></option>
+          <option value="text"><digi:trn>Text</digi:trn></option>
+          <option value="json"><digi:trn>JSON</digi:trn></option>
+          <option value="xml"><digi:trn>XML</digi:trn></option>
         </select>
       </div>
 
       <div id="separator-div" class="inline-field" hidden="hidden">
-        <label for="data-separator">Column Separator</label>
+        <label for="data-separator"><digi:trn>Column Separator</digi:trn></label>
         <select id="data-separator">
-          <option value=",">Comma(,)</option>
-          <option value="|">Vertical Line(|)</option>
-          <option value="||">Pipe(||)</option>
-          <option value=" ">Space</option>
+          <option value=","><digi:trn>Comma(,)</digi:trn></option>
+          <option value="|"><digi:trn>Vertical Line(|)</digi:trn></option>
+          <option value="||"><digi:trn>Pipe(||)</digi:trn></option>
+          <option value=" "><digi:trn>Space</digi:trn></option>
         </select>
       </div>
     </div>
 
     <div class="panel-card">
       <span class="section-label">Step 2</span>
-      <h2>Load Configuration</h2>
-      <p class="section-copy">Resume from a saved mapping or start with a fresh template upload.</p>
+      <h2><digi:trn>Load Configuration</digi:trn></h2>
+      <p class="section-copy"><digi:trn>Resume from a saved mapping or start with a fresh template upload.</digi:trn></p>
 
       <div class="inline-field">
-        <label for="configuration">Select Existing Configuration by name</label>
+        <label for="configuration"><digi:trn>Select Existing Configuration by name</digi:trn></label>
         <select id="configuration" class="existing-config" style="width: 100%;">
-          <option value="none">None</option>
+          <option value="none"><digi:trn>None</digi:trn></option>
           <jsp:useBean id="configNames" scope="request" type="java.util.List"/>
           <c:forEach items="${configNames}" var="configName" varStatus="loop">
             <option value="${configName}">${configName}</option>
@@ -833,10 +838,10 @@
       </div>
 
       <form id="templateUploadForm" enctype="multipart/form-data" class="inline-field">
-        <label for="template-file">Select Template File</label>
+        <label for="template-file"><digi:trn>Select Template File</digi:trn></label>
         <input id="template-file" type="file" accept=".xls,.xlsx,.csv" name="templateFile" />
         <div class="mapping-actions">
-          <input type="button" value="Upload Template" onclick="uploadTemplateFile()" />
+          <input type="button" value="<digi:trn>Upload Template</digi:trn>" onclick="uploadTemplateFile()" />
         </div>
       </form>
     </div>
@@ -847,19 +852,19 @@
       <input type="hidden" id="current-config-name" value="">
 
       <span class="section-label">Step 3</span>
-      <h2>Build Your Mapping</h2>
-      <p class="section-copy">Search entity fields, add mappings, and review the configuration table before uploading the actual data file.</p>
+      <h2><digi:trn>Build Your Mapping</digi:trn></h2>
+      <p class="section-copy"><digi:trn>Search entity fields, add mappings, and review the configuration table before uploading the actual data file.</digi:trn></p>
 
       <div id="headers" class="inline-field"></div>
 
       <div class="mapping-toolbar">
-        <div id="add-pair-edit-section" style="display: none;">
-          <label for="column-name-edit">Column name for new pair</label>
-          <input type="text" id="column-name-edit" placeholder="e.g. Column A">
+        <div>
+          <label for="columnName"><digi:trn>Select Column Name</digi:trn></label>
+          <div class="helper-note" style="margin-bottom: 10px;"><digi:trn>Upload a template or load its sheet columns, then choose a source column from the searchable list.</digi:trn></div>
         </div>
 
         <div>
-          <label for="selected-field">Select Entity Field</label>
+          <label for="selected-field"><digi:trn>Select Entity Field</digi:trn></label>
           <select id="selected-field" class="select2" style="width: 100%;">
             <jsp:useBean id="fieldsInfo" scope="request" type="java.util.Map"/>
             <c:forEach items="${fieldsInfo}" var="fieldEntry">
@@ -870,16 +875,16 @@
       </div>
 
       <div class="mapping-actions">
-        <input type="button" id="add-field" value="Add Field" onclick="addField()">
-        <input type="button" value="Remove Selected Rows" class="remove-row">
+        <input type="button" id="add-field" value="<digi:trn>Add Field</digi:trn>" onclick="addField()">
+        <input type="button" value="<digi:trn>Remove Selected Rows</digi:trn>" class="remove-row">
       </div>
 
       <table class="fields-table">
         <thead>
         <tr>
-          <th>Column Name</th>
-          <th>Selected Field</th>
-          <th>Action</th>
+          <th><digi:trn>Column Name</digi:trn></th>
+          <th><digi:trn>Selected Field</digi:trn></th>
+          <th><digi:trn>Action</digi:trn></th>
         </tr>
         </thead>
         <tbody id="selected-pairs-table-body">
@@ -887,25 +892,25 @@
       </table>
 
       <div id="config-empty-note" class="helper-note">
-        Add at least one column-to-field pair to unlock data file upload.
+        <digi:trn>Add at least one column-to-field pair to unlock data file upload.</digi:trn>
       </div>
 
       <div id="data-upload-section" class="upload-stage" style="display: none;">
         <span class="section-label">Step 4</span>
-        <h3>Upload Data File</h3>
-        <p class="section-copy">This section appears only when the configuration table contains mappings.</p>
+        <h3><digi:trn>Upload Data File</digi:trn></h3>
+        <p class="section-copy"><digi:trn>This section appears only when the configuration table contains mappings.</digi:trn></p>
 
-        <label id="select-file-label" for="data-file">Select Excel File</label>
+        <label id="select-file-label" for="data-file"><digi:trn>Select Excel File</digi:trn></label>
         <input id="data-file" type="file" accept=".xls,.xlsx,.csv" name="dataFile" />
 
         <div id="data-sheet-choice-div" class="sheet-choice-card" style="display: none;">
-          <label>Process data from</label><br>
-          <input type="radio" name="dataSheetChoice" id="data-sheet-choice-all" value="all" checked> <label for="data-sheet-choice-all">Whole file (all sheets)</label><br>
-          <input type="radio" name="dataSheetChoice" id="data-sheet-choice-sheet" value="sheet"> <label for="data-sheet-choice-sheet">Specific sheet</label><br>
+          <label><digi:trn>Process data from</digi:trn></label><br>
+          <input type="radio" name="dataSheetChoice" id="data-sheet-choice-all" value="all" checked> <label for="data-sheet-choice-all"><digi:trn>Whole file (all sheets)</digi:trn></label><br>
+          <input type="radio" name="dataSheetChoice" id="data-sheet-choice-sheet" value="sheet"> <label for="data-sheet-choice-sheet"><digi:trn>Specific sheet</digi:trn></label><br>
           <div id="data-sheet-select-wrap" style="display: none; margin-top: 8px;">
-            <input type="button" id="load-sheets-btn" value="Load sheets from file">
-            <select id="data-sheet" style="width: 100%; margin-top: 10px;" disabled title="Select a file and click Load sheets">
-              <option value="">-- Select sheet --</option>
+            <input type="button" id="load-sheets-btn" value="<digi:trn>Load sheets from file</digi:trn>">
+            <select id="data-sheet" style="width: 100%; margin-top: 10px;" disabled title="<digi:trn>Select a file and click Load sheets</digi:trn>">
+              <option value=""><digi:trn>-- Select sheet --</digi:trn></option>
             </select>
           </div>
         </div>
@@ -913,17 +918,17 @@
         <input type="text" id="existing-config" hidden="hidden"/>
 
         <div class="toggle-grid">
-          <label class="toggle-item" for="internal"><input type="checkbox" id="internal" name="internal"> Internal</label>
-          <label class="toggle-item" for="skipExisting"><input type="checkbox" id="skipExisting" name="skipExisting"> Skip existing activities (only insert new)</label>
-          <label class="toggle-item" for="validateActivities"><input type="checkbox" id="validateActivities" name="validateActivities"> Validate imported activities (set as approved, non-draft)</label>
-          <label class="toggle-item" for="addDisbursementForCommitment"><input type="checkbox" id="addDisbursementForCommitment" name="addDisbursementForCommitment"> Add Disbursement for any Commitment</label>
-          <label class="toggle-item" for="createMissingOrgs"><input type="checkbox" id="createMissingOrgs" name="createMissingOrgs"> Create missing organizations</label>
+          <label class="toggle-item" for="internal"><input type="checkbox" id="internal" name="internal"> <digi:trn>Internal</digi:trn></label>
+          <label class="toggle-item" for="skipExisting"><input type="checkbox" id="skipExisting" name="skipExisting"> <digi:trn>Skip existing activities (only insert new)</digi:trn></label>
+          <label class="toggle-item" for="validateActivities"><input type="checkbox" id="validateActivities" name="validateActivities"> <digi:trn>Validate imported activities (set as approved, non-draft)</digi:trn></label>
+          <label class="toggle-item" for="addDisbursementForCommitment"><input type="checkbox" id="addDisbursementForCommitment" name="addDisbursementForCommitment"> <digi:trn>Add Disbursement for any Commitment</digi:trn></label>
+          <label class="toggle-item" for="createMissingOrgs"><input type="checkbox" id="createMissingOrgs" name="createMissingOrgs"> <digi:trn>Create missing organizations</digi:trn></label>
         </div>
 
         <div id="orgGroupDiv" style="display:none; margin-top:16px;">
-          <label for="orgGroupId">Organization Group for new organizations</label>
+          <label for="orgGroupId"><digi:trn>Organization Group for new organizations</digi:trn></label>
           <select id="orgGroupId" name="orgGroupId" style="width: 100%;">
-            <option value="">-- Select Organization Group --</option>
+            <option value=""><digi:trn>-- Select Organization Group --</digi:trn></option>
             <c:forEach var="orgGroup" items="${orgGroups}">
               <option value="${orgGroup.ampOrgGrpId}">${orgGroup.orgGrpName}</option>
             </c:forEach>
@@ -931,7 +936,7 @@
         </div>
 
         <div class="mapping-actions">
-          <input type="button" value="Upload" onclick="uploadDataFile()">
+          <input type="button" value="<digi:trn>Upload</digi:trn>" onclick="uploadDataFile()">
         </div>
       </div>
     </html:form>
@@ -942,6 +947,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/js/select2.min.js"></script>
 <script>
   $(document).ready(function() {
+    initializeSelectControls();
     $('#createMissingOrgs').change(function() {
       if ($(this).is(':checked')) {
         $('#orgGroupDiv').show();

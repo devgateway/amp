@@ -2,9 +2,10 @@
 <%@ taglib prefix="html" uri="http://struts.apache.org/tags-html" %>
 <%@ taglib prefix="bean" uri="http://struts.apache.org/tags-bean" %>
 <%@ taglib prefix="logic" uri="http://struts.apache.org/tags-logic" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
 <html:html>
     <head>
-        <title>Imported Files</title>
+        <title><digi:trn>Imported Files</digi:trn></title>
         <style>
             :root {
                 --page-bg: linear-gradient(180deg, #eef6f7 0%, #f7f3ea 50%, #fcfcfb 100%);
@@ -239,12 +240,12 @@
                     var fullResponse = $row.data('hiddenData');
                     var $btn = $(this);
 
-                    if ($btn.text() === "View More") {
+                    if ($btn.text() === "<digi:trn jsFriendly='true'>View More</digi:trn>") {
                         $responseCell.text(fullResponse);
-                        $btn.text("View Less");
+                        $btn.text("<digi:trn jsFriendly='true'>View Less</digi:trn>");
                     } else {
                         $responseCell.text(fullResponse.substring(0, 50) + "...");
-                        $btn.text("View More");
+                        $btn.text("<digi:trn jsFriendly='true'>View More</digi:trn>");
                     }
                 });
 
@@ -263,9 +264,9 @@
                             var data = JSON.parse(JSON.stringify(response));
                             $(".countRecords").html(
                                 '<div class="status-summary">' +
-                                '<div class="status-pill all">All Records: ' + data.totalProjects + '</div>' +
-                                '<div class="status-pill success">Successful Records: ' + data.successfulProjects + '</div>' +
-                                '<div class="status-pill failed">Failed Records: ' + data.failedProjects + '</div>' +
+                                '<div class="status-pill all"><digi:trn>All Records</digi:trn>: ' + data.totalProjects + '</div>' +
+                                '<div class="status-pill success"><digi:trn>Successful Records</digi:trn>: ' + data.successfulProjects + '</div>' +
+                                '<div class="status-pill failed"><digi:trn>Failed Records</digi:trn>: ' + data.failedProjects + '</div>' +
                                 '</div>'
                             );
                             var importProjects = data.importedProjects;
@@ -273,7 +274,7 @@
 
                             $.each(importProjects, function(index, project) {
                                 var truncatedResponse = JSON.stringify(project.importResponse).substring(0, 50) + "...";
-                                var importResponseHtml = '<span class="truncated-response">' + truncatedResponse + '</span><p></p><br><button class="view-more-btn">View More</button>';
+                                var importResponseHtml = '<span class="truncated-response">' + truncatedResponse + '</span><p></p><br><button class="view-more-btn"><digi:trn>View More</digi:trn></button>';
                                 var rowData = [
                                     project.id,
                                     project.importStatus,
@@ -304,23 +305,23 @@
     <body>
     <div class="progress-page">
         <div class="hero-card">
-            <span class="section-label">Import Tracking</span>
-            <h1>View Progress</h1>
-            <p class="section-copy">Open any imported file to inspect record-by-record status, success counts, and detailed responses.</p>
+            <span class="section-label"><digi:trn>Import Tracking</digi:trn></span>
+            <h1><digi:trn>View Progress</digi:trn></h1>
+            <p class="section-copy"><digi:trn>Open any imported file to inspect record-by-record status, success counts, and detailed responses.</digi:trn></p>
         </div>
 
         <div class="panel-card">
-            <span class="section-label">Imported Files</span>
-            <h2>Recent Uploads</h2>
-            <p class="section-copy">Click a file to load its records and jump directly to the detailed results table.</p>
+            <span class="section-label"><digi:trn>Imported Files</digi:trn></span>
+            <h2><digi:trn>Recent Uploads</digi:trn></h2>
+            <p class="section-copy"><digi:trn>Click a file to load its records and jump directly to the detailed results table.</digi:trn></p>
 
             <table>
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>File Name</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <th><digi:trn>ID</digi:trn></th>
+                    <th><digi:trn>File Name</digi:trn></th>
+                    <th><digi:trn>Status</digi:trn></th>
+                    <th><digi:trn>Action</digi:trn></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -332,7 +333,7 @@
                         <td>${record.fileName}</td>
                         <td>${record.importStatus}</td>
                         <td>
-                            <button class="view-progress-btn" data-file-record-id="${record.id}">View Progress</button>
+                            <button class="view-progress-btn" data-file-record-id="${record.id}"><digi:trn>View Progress</digi:trn></button>
                         </td>
                     </tr>
                 </c:forEach>
@@ -341,15 +342,15 @@
         </div>
 
         <div class="records-card file-projects" id="records-section">
-            <span class="section-label">Record Details</span>
-            <h2>Imported Records</h2>
+            <span class="section-label"><digi:trn>Record Details</digi:trn></span>
+            <h2><digi:trn>Imported Records</digi:trn></h2>
 
             <div class="filter-div">
-                <label for="all-projects">All:</label>
+                <label for="all-projects"><digi:trn>All</digi:trn>:</label>
                 <input type="radio" id="all-projects" name="project-filter" value="ALL" checked>
-                <label for="success-projects">Success:</label>
+                <label for="success-projects"><digi:trn>Success</digi:trn>:</label>
                 <input type="radio" id="success-projects" name="project-filter" value="SUCCESS">
-                <label for="failed-projects">Failed:</label>
+                <label for="failed-projects"><digi:trn>Failed</digi:trn>:</label>
                 <input type="radio" id="failed-projects" name="project-filter" value="FAILED">
             </div>
 
@@ -358,10 +359,10 @@
             <table id="import-projects-table">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Project Status</th>
-                    <th>Is New?</th>
-                    <th>Response String</th>
+                    <th><digi:trn>ID</digi:trn></th>
+                    <th><digi:trn>Project Status</digi:trn></th>
+                    <th><digi:trn>Is New?</digi:trn></th>
+                    <th><digi:trn>Response String</digi:trn></th>
                 </tr>
                 </thead>
                 <tbody>

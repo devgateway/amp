@@ -5,6 +5,9 @@
 <html:html>
 <head>
   <title>Data Importer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -26,6 +29,39 @@
 <script>
     // Store the field translations for JavaScript use
     var fieldsInfoMap = JSON.parse('${fieldsInfoJson}');
+
+    function initEnhancedSelects(scope) {
+      var $scope = scope ? $(scope) : $(document);
+      $scope.find('#selected-field, #configuration, #template-sheet, #columnName, #data-sheet, #orgGroupId').each(function() {
+        var $element = $(this);
+        if ($element.hasClass('select2-hidden-accessible')) {
+          return;
+        }
+        $element.select2({
+          width: '100%',
+          placeholder: $element.attr('data-placeholder') || 'Search and select',
+          allowClear: false
+        });
+      });
+    }
+
+    function hasMappedPairs() {
+      return $('#selected-pairs-table-body tr').length > 0;
+    }
+
+    function refreshImporterVisibility() {
+      var hasPairs = hasMappedPairs();
+      if (hasPairs || $('#headers').html().trim().length > 0 || $('#current-config-name').val()) {
+        $('#otherComponents').removeAttr('hidden');
+      }
+      if (hasPairs) {
+        $('#data-upload-panel').show();
+        $('#mapping-status').text($('#selected-pairs-table-body tr').length + ' mapped column pairs ready for import.');
+      } else {
+        $('#data-upload-panel').hide();
+        $('#mapping-status').text('Add at least one column pair to enable data upload.');
+      }
+    }
     
     function replaceLastOccurrence(inputString, search, replacement) {
       var lastIndex = inputString.lastIndexOf(search);
@@ -53,9 +89,11 @@
     }
     $(document).ready(function() {
       $('#existing-config').val('0');
+      initEnhancedSelects();
       if ($('#file-type').val() === 'excel') {
         $('#data-sheet-choice-div').show();
       }
+      refreshImporterVisibility();
       $('.remove-row').click(function() {
         var selectedRows = $('.fields-table tbody').find('.remove-checkbox:checked').closest('tr');
 
@@ -71,6 +109,7 @@
           // Remove the row from the table
           $(this).remove();
         });
+        refreshImporterVisibility();
         });
 
       $('.file_type').change(function() {
@@ -183,6 +222,7 @@
                   $('#selected-field').show();
                   $('#add-pair-edit-section').show();
                   $('#column-name-edit').val('');
+                  refreshImporterVisibility();
 
                 })
                 .catch(error => {
@@ -193,6 +233,7 @@
           $('#current-config-name').val('');
           $('#add-pair-edit-section').hide();
           $("#templateUploadForm").show();
+          refreshImporterVisibility();
         }
       });
       });
@@ -239,6 +280,7 @@
                     console.log('Key:', key, 'Value:', value);
                   }
                 }
+                refreshImporterVisibility();
               })
               .catch(error => {
                 console.error("There was a problem with the fetch operation:", error);
@@ -316,7 +358,8 @@
             $('#add-field').show();
             $('.remove-row').show();
             $('#selected-field').show();
-            $(".fields-table").load(location.href + " .fields-table");
+            initEnhancedSelects('#headers');
+            refreshImporterVisibility();
           } else {
             console.error("Unable to extract headers. Please check the file format and try again.");
             alert("Unable to extract headers. Please check the file format and try again.");
@@ -353,6 +396,7 @@
       }
       html += '</select>';
       headersDiv.innerHTML = html;
+      initEnhancedSelects('#headers');
 
       window._templateColumnsBySheet = columnsBySheet;
       $('#template-sheet').off('change.templateColumns').on('change.templateColumns', function() {
@@ -363,6 +407,7 @@
         for (var k = 0; k < cols.length; k++) {
           $colSelect.append($('<option></option>').text(cols[k]));
         }
+        $colSelect.trigger('change.select2');
       });
     }
 
@@ -446,169 +491,588 @@
     }
   </script>
   <style>
-    table {
-      font-family: arial, sans-serif;
-      border-collapse: collapse;
+    :root {
+      --page-bg: linear-gradient(135deg, #f4efe4 0%, #eef6f4 52%, #f9fbfd 100%);
+      --panel-bg: rgba(255, 255, 255, 0.88);
+      --panel-border: rgba(17, 64, 79, 0.12);
+      --panel-shadow: 0 18px 40px rgba(24, 56, 62, 0.12);
+      --ink-strong: #17343b;
+      --ink-soft: #4e666c;
+      --accent: #0d7a6f;
+      --accent-deep: #0b5f57;
+      --accent-warm: #d38b3b;
+      --line: #d9e5e6;
+      --danger: #a33f3f;
+      --success: #2b7a59;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 36px 24px 56px;
+      font-family: 'Source Sans 3', sans-serif;
+      color: var(--ink-strong);
+      background: var(--page-bg);
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: -0.03em;
+      margin-top: 0;
+    }
+
+    .page-shell {
+      max-width: 1220px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.35fr 0.9fr;
+      gap: 24px;
+      align-items: stretch;
+      margin-bottom: 26px;
+    }
+
+    .hero-card,
+    .panel,
+    .table-panel,
+    .upload-panel {
+      background: var(--panel-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--panel-shadow);
+    }
+
+    .hero-card {
+      padding: 30px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: '';
+      position: absolute;
+      inset: auto -80px -80px auto;
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(211, 139, 59, 0.18) 0%, rgba(211, 139, 59, 0) 68%);
+      pointer-events: none;
+    }
+
+    .hero-title {
+      font-size: 2.3rem;
+      margin-bottom: 10px;
+    }
+
+    .hero-copy {
+      color: var(--ink-soft);
+      font-size: 1.06rem;
+      line-height: 1.55;
+      max-width: 62ch;
+      margin-bottom: 0;
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .metric {
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(180deg, rgba(13, 122, 111, 0.08), rgba(13, 122, 111, 0.02));
+      border: 1px solid rgba(13, 122, 111, 0.12);
+    }
+
+    .metric-label {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+
+    .metric-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+    }
+
+    .layout-grid {
+      display: grid;
+      gap: 22px;
+    }
+
+    .panel,
+    .table-panel,
+    .upload-panel {
+      padding: 24px;
+    }
+
+    .panel-title {
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+    }
+
+    .panel-copy,
+    .status-copy,
+    .helper-copy {
+      color: var(--ink-soft);
+      margin: 0 0 18px;
+      line-height: 1.5;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      align-items: end;
+    }
+
+    .field-block {
+      min-width: 0;
+    }
+
+    .field-block label,
+    .toggle-stack label:first-child,
+    .headers-panel label,
+    #add-pair-edit-section label,
+    .sheet-choice label {
+      display: inline-block;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .field-block input[type="text"],
+    .field-block input[type="file"],
+    .field-block select,
+    #column-name-edit,
+    #data-file,
+    #template-file,
+    #orgGroupId,
+    #data-sheet {
       width: 100%;
+      min-height: 46px;
+      padding: 11px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.96);
+      color: var(--ink-strong);
     }
 
-    td, th {
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 8px;
+    .inline-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
     }
 
-    tr:nth-child(even) {
-      background-color: #dddddd;
+    .btn,
+    input[type="button"],
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
+    }
+
+    .btn-primary,
+    #add-field,
+    input[value="Upload Template"],
+    input[value="Upload"],
+    #load-sheets-btn {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+      color: #fff;
+      box-shadow: 0 14px 22px rgba(11, 95, 87, 0.22);
+    }
+
+    .btn-secondary,
+    .remove-row {
+      background: rgba(23, 52, 59, 0.08);
+      color: var(--ink-strong);
+    }
+
+    .btn-warm {
+      background: linear-gradient(135deg, #f2b562 0%, var(--accent-warm) 100%);
+      color: #fff;
+      box-shadow: 0 14px 22px rgba(211, 139, 59, 0.22);
+    }
+
+    .btn:hover,
+    input[type="button"]:hover,
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .mapping-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .headers-panel {
+      min-height: 100%;
+      padding: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(247,250,250,0.92));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+    }
+
+    .table-panel table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+
+    .table-panel thead th {
+      background: #17343b;
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      border: 0;
+      padding: 14px 16px;
+    }
+
+    .table-panel tbody td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #e8efef;
+      background: rgba(255, 255, 255, 0.94);
+    }
+
+    .table-panel tbody tr:nth-child(even) td {
+      background: rgba(242, 248, 248, 0.94);
+    }
+
+    .table-panel tbody tr:hover td {
+      background: rgba(225, 241, 239, 0.94);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(13, 122, 111, 0.08);
+      color: var(--accent-deep);
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .toggle-stack {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .toggle-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 13px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: rgba(252, 253, 253, 0.94);
+    }
+
+    .toggle-item strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .toggle-item span {
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+    }
+
+    .toggle-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--accent);
+      flex: 0 0 auto;
+    }
+
+    .sheet-choice {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: rgba(248, 251, 251, 0.92);
+    }
+
+    .sheet-choice .inline-actions {
+      margin-top: 10px;
+    }
+
+    #orgGroupDiv {
+      margin: 12px 0 0;
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      background: rgba(13, 122, 111, 0.06);
+      border: 1px solid rgba(13, 122, 111, 0.12);
+    }
+
+    .select2-container--default .select2-selection--single {
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.96);
+    }
+
+    .select2-container .select2-selection__rendered {
+      line-height: 28px !important;
+      color: var(--ink-strong) !important;
+    }
+
+    .select2-container .select2-selection__arrow {
+      height: 44px !important;
+    }
+
+    .select2-dropdown {
+      border: 1px solid var(--line) !important;
+      border-radius: 12px !important;
+      overflow: hidden;
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .mapping-layout {
+        grid-template-columns: 1fr;
+      }
+
+      body {
+        padding: 24px 16px 40px;
+      }
     }
   </style>
 </head>
 <body>
-<h2>Data Importer</h2>
-
-
-
-
-<h2>Upload File</h2>
-<h3>Data file configuration</h3>
-
-<label>Select file type</label>
-<br>
-<label class="file-type-label" for="file-type"></label>
-<select id="file-type" class="file_type">
-  <option value="excel">Excel</option>
-  <option value="csv">CSV</option>
-  <option value="text">Text</option>
-  <option value="json">JSON</option>
-  <option value="xml">XML</option>
-</select>
-
-<div id="separator-div" hidden="hidden">
-  <label for="data-separator">Column Separator:</label>
-  <br>
-  <select id="data-separator">
-    <option value=",">Comma(,)</option>
-    <option value="|">Vertical Line(|)</option>
-    <option value="||">Pipe(||)</option>
-    <option value=" ">Space</option>
-  </select>
-</div>
-
-<br>
-<label for="configuration">Select Existing Configuration by name:</label>
-<select id="configuration"  class="existing-config" style="width: 300px;">
-  <option value="none">None</option>
-  <jsp:useBean id="configNames" scope="request" type="java.util.List"/>
-  <c:forEach items="${configNames}" var="configName" varStatus="loop">
-    <option value="${configName}">${configName}</option>
-    <br>
-  </c:forEach>
-</select>
-
-
-
-<form id="templateUploadForm" enctype="multipart/form-data">
-  <label>Select Template File:</label>
-
-  <br>
-  <input id="template-file" type="file" accept=".xls,.xlsx,.csv" name="templateFile" />
- <br><br>
-  <input type="button" value="Upload Template" onclick="uploadTemplateFile()" />
-</form>
-
-
-
-
-
-
-<div id="otherComponents" hidden>
-<html:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
-  <input type="hidden" id="current-config-name" value="">
-
-    <br><br>
-    <div id="headers"></div>
-
-    <br><br>
-  <div id="add-pair-edit-section" style="display: none; margin-bottom: 12px;">
-    <label for="column-name-edit">Column name (for new pair):</label>
-    <input type="text" id="column-name-edit" placeholder="e.g. Column A" style="width: 200px; margin-right: 12px;">
-  </div>
-  <label for="selected-field">Select Entity Field:</label>
-  <select id="selected-field"  class="select2" style="width: 300px;">
-    <!-- Populate dropdown with entity field names -->
-    <jsp:useBean id="fieldsInfo" scope="request" type="java.util.Map"/>
-    <c:forEach items="${fieldsInfo}" var="fieldEntry">
-      <option value="${fieldEntry.key}">${fieldEntry.value}</option>
-    </c:forEach>
-  </select>
-  <br><br>
-
-  <input type="button" id="add-field" value="Add Field" onclick="addField()">
-  <br><br>
-
-  <!-- Table to display selected pairs -->
-  <table class="fields-table">
-    <thead>
-    <tr>
-      <th>Column Name</th>
-      <th>Selected Field</th>
-      <th>Action</th>
-    </tr>
-    </thead>
-    <tbody id="selected-pairs-table-body">
-    <!-- Selected pairs will be dynamically added here -->
-    </tbody>
-  </table>
-  <br>
-  <br>
-  <input type="button" value="Remove Selected Rows" class="remove-row">
-
-  <br><br>
-
-  <label id="select-file-label">Select Excel File:</label>
-<%--  <html:file property="uploadedFile" name="dataImporterForm"   />--%>
-  <input id="data-file" type="file" accept=".xls,.xlsx,.csv" name="dataFile" />
-
-  <div id="data-sheet-choice-div" style="display: none;">
-    <br>
-    <label>Process data from:</label><br>
-    <input type="radio" name="dataSheetChoice" id="data-sheet-choice-all" value="all" checked> <label for="data-sheet-choice-all">Whole file (all sheets)</label><br>
-    <input type="radio" name="dataSheetChoice" id="data-sheet-choice-sheet" value="sheet"> <label for="data-sheet-choice-sheet">Specific sheet</label><br>
-    <div id="data-sheet-select-wrap" style="display: none; margin-top: 8px;">
-      <input type="button" id="load-sheets-btn" value="Load sheets from file">
-      <select id="data-sheet" style="width: 300px; margin-left: 8px;" disabled title="Select a file and click Load sheets">
-        <option value="">-- Select sheet --</option>
-      </select>
+<div class="page-shell">
+  <section class="hero">
+    <div class="hero-card">
+      <h1 class="hero-title">Import Data</h1>
+      <p class="hero-copy">Configure a template, map source columns to AMP entity fields, and launch imports from a cleaner workspace built for high-volume data handling.</p>
+      <div class="hero-metrics">
+        <div class="metric">
+          <span class="metric-label">Step 1</span>
+          <span class="metric-value">Choose file type and configuration</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Step 2</span>
+          <span class="metric-value">Map template columns to entity fields</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Step 3</span>
+          <span class="metric-value">Upload source data when mappings are ready</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Built for</span>
+          <span class="metric-value">Excel, CSV, text, JSON and XML workflows</span>
+        </div>
+      </div>
     </div>
-  </div>
+    <div class="panel">
+      <h3 class="panel-title">Import Setup</h3>
+      <p class="panel-copy">This page now keeps configuration work visible and only enables the data upload panel once column mappings exist.</p>
+      <div class="form-grid">
+        <div class="field-block">
+          <label class="file-type-label" for="file-type">Select file type</label>
+          <select id="file-type" class="file_type" data-placeholder="Choose file type">
+            <option value="excel">Excel</option>
+            <option value="csv">CSV</option>
+            <option value="text">Text</option>
+            <option value="json">JSON</option>
+            <option value="xml">XML</option>
+          </select>
+        </div>
+        <div id="separator-div" class="field-block" hidden="hidden">
+          <label for="data-separator">Column Separator</label>
+          <select id="data-separator" data-placeholder="Choose separator">
+            <option value=",">Comma(,)</option>
+            <option value="|">Vertical Line(|)</option>
+            <option value="||">Pipe(||)</option>
+            <option value=" ">Space</option>
+          </select>
+        </div>
+        <div class="field-block">
+          <label for="configuration">Select Existing Configuration by name</label>
+          <select id="configuration" class="existing-config" data-placeholder="Search configuration">
+            <option value="none">None</option>
+            <jsp:useBean id="configNames" scope="request" type="java.util.List"/>
+            <c:forEach items="${configNames}" var="configName" varStatus="loop">
+              <option value="${configName}">${configName}</option>
+              <br>
+            </c:forEach>
+          </select>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <br><br>
-  <input type="text" id="existing-config" hidden="hidden"/>
-  <label for="internal">Internal</label>: <input type="checkbox" id="internal" name="internal">
-  <br>
-  <label for="skipExisting">Skip existing activities (only insert new)</label>: <input type="checkbox" id="skipExisting" name="skipExisting">
-  <br>
-  <label for="validateActivities">Validate imported activities (set as approved, non-draft)</label>: <input type="checkbox" id="validateActivities" name="validateActivities">
-  <br>
-  <label for="addDisbursementForCommitment">Add Disbursement for any Commitment</label>: <input type="checkbox" id="addDisbursementForCommitment" name="addDisbursementForCommitment">
-  <br>
-  <label for="createMissingOrgs">Create missing organizations</label>: <input type="checkbox" id="createMissingOrgs" name="createMissingOrgs">
-  <div id="orgGroupDiv" style="display:none; margin-top:5px; margin-left:20px;">
-    <label for="orgGroupId">Organization Group for new organizations:</label>
-    <select id="orgGroupId" name="orgGroupId">
-      <option value="">-- Select Organization Group --</option>
-      <c:forEach var="orgGroup" items="${orgGroups}">
-        <option value="${orgGroup.ampOrgGrpId}">${orgGroup.orgGrpName}</option>
-      </c:forEach>
-    </select>
-  </div>
-  <br><br>
+  <section class="layout-grid">
+    <div class="panel">
+      <h3 class="panel-title">Template Mapping</h3>
+      <p class="panel-copy">Upload a template to inspect its headers, then pair each source column with an AMP entity field. The entity field selector is searchable.</p>
+      <form id="templateUploadForm" enctype="multipart/form-data">
+        <div class="form-grid">
+          <div class="field-block">
+            <label for="template-file">Select Template File</label>
+            <input id="template-file" type="file" accept=".xls,.xlsx,.csv" name="templateFile" />
+          </div>
+          <div class="field-block inline-actions">
+            <input type="button" class="btn btn-primary" value="Upload Template" onclick="uploadTemplateFile()" />
+          </div>
+        </div>
+      </form>
+    </div>
 
-  <input type="button" value="Upload" onclick="uploadDataFile()">
+    <div id="otherComponents" hidden>
+      <html:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
+        <input type="hidden" id="current-config-name" value="">
 
-  <%--  </logic:notEmpty>--%>
+        <div class="mapping-layout">
+          <div class="headers-panel">
+            <h3 class="panel-title">Detected Template Columns</h3>
+            <p class="helper-copy">Choose the source column you want to bind. When working from an existing configuration, you can keep adding new pairs without losing the old ones.</p>
+            <div id="headers"></div>
+          </div>
 
-</html:form>
+          <div class="table-panel">
+            <span class="status-pill">Mapping Workspace</span>
+            <p id="mapping-status" class="status-copy">Add at least one column pair to enable data upload.</p>
+            <div id="add-pair-edit-section" style="display: none; margin-bottom: 12px;">
+              <label for="column-name-edit">Column name (for new pair)</label>
+              <input type="text" id="column-name-edit" placeholder="e.g. Column A">
+            </div>
+
+            <div class="form-grid">
+              <div class="field-block">
+                <label for="selected-field">Select Entity Field</label>
+                <select id="selected-field" class="select2" data-placeholder="Search entity field">
+                  <jsp:useBean id="fieldsInfo" scope="request" type="java.util.Map"/>
+                  <c:forEach items="${fieldsInfo}" var="fieldEntry">
+                    <option value="${fieldEntry.key}">${fieldEntry.value}</option>
+                  </c:forEach>
+                </select>
+              </div>
+              <div class="field-block inline-actions">
+                <input type="button" id="add-field" class="btn btn-primary" value="Add Field" onclick="addField()">
+              </div>
+            </div>
+
+            <table class="fields-table">
+              <thead>
+              <tr>
+                <th>Column Name</th>
+                <th>Selected Field</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody id="selected-pairs-table-body">
+              </tbody>
+            </table>
+
+            <div class="inline-actions" style="margin-top: 18px;">
+              <input type="button" value="Remove Selected Rows" class="btn btn-secondary remove-row">
+            </div>
+          </div>
+        </div>
+
+        <div id="data-upload-panel" class="upload-panel" style="display: none; margin-top: 22px;">
+          <h3 class="panel-title">Upload Data File</h3>
+          <p class="panel-copy">Once mappings are present, upload the data file using the same configuration. This section stays hidden until the mapping table has entries.</p>
+
+          <div class="field-block" style="margin-bottom: 18px;">
+            <label id="select-file-label" for="data-file">Select Excel File</label>
+            <input id="data-file" type="file" accept=".xls,.xlsx,.csv" name="dataFile" />
+          </div>
+
+          <div id="data-sheet-choice-div" class="sheet-choice" style="display: none;">
+            <label>Process data from</label><br>
+            <input type="radio" name="dataSheetChoice" id="data-sheet-choice-all" value="all" checked> <label for="data-sheet-choice-all">Whole file (all sheets)</label><br>
+            <input type="radio" name="dataSheetChoice" id="data-sheet-choice-sheet" value="sheet"> <label for="data-sheet-choice-sheet">Specific sheet</label><br>
+            <div id="data-sheet-select-wrap" class="inline-actions" style="display: none; margin-top: 8px;">
+              <input type="button" id="load-sheets-btn" class="btn btn-secondary" value="Load sheets from file">
+              <select id="data-sheet" data-placeholder="Select sheet" disabled title="Select a file and click Load sheets">
+                <option value="">-- Select sheet --</option>
+              </select>
+            </div>
+          </div>
+
+          <input type="text" id="existing-config" hidden="hidden"/>
+
+          <div class="toggle-stack">
+            <div class="toggle-item">
+              <div>
+                <strong>Internal</strong>
+                <span>Use internal donor handling for the uploaded file.</span>
+              </div>
+              <input type="checkbox" id="internal" name="internal">
+            </div>
+            <div class="toggle-item">
+              <div>
+                <strong>Skip existing activities</strong>
+                <span>Only insert new activities.</span>
+              </div>
+              <input type="checkbox" id="skipExisting" name="skipExisting">
+            </div>
+            <div class="toggle-item">
+              <div>
+                <strong>Validate imported activities</strong>
+                <span>Set imported activities as approved and non-draft.</span>
+              </div>
+              <input type="checkbox" id="validateActivities" name="validateActivities">
+            </div>
+            <div class="toggle-item">
+              <div>
+                <strong>Add disbursement for commitment</strong>
+                <span>Create a matching disbursement where commitment rows require it.</span>
+              </div>
+              <input type="checkbox" id="addDisbursementForCommitment" name="addDisbursementForCommitment">
+            </div>
+            <div class="toggle-item">
+              <div>
+                <strong>Create missing organizations</strong>
+                <span>Allow the importer to create organizations that do not already exist.</span>
+              </div>
+              <input type="checkbox" id="createMissingOrgs" name="createMissingOrgs">
+            </div>
+          </div>
+
+          <div id="orgGroupDiv" style="display:none;">
+            <label for="orgGroupId">Organization Group for new organizations</label>
+            <select id="orgGroupId" name="orgGroupId" data-placeholder="Search organization group">
+              <option value="">-- Select Organization Group --</option>
+              <c:forEach var="orgGroup" items="${orgGroups}">
+                <option value="${orgGroup.ampOrgGrpId}">${orgGroup.orgGrpName}</option>
+              </c:forEach>
+            </select>
+          </div>
+
+          <div class="inline-actions" style="margin-top: 22px;">
+            <input type="button" class="btn btn-warm" value="Upload" onclick="uploadDataFile()">
+          </div>
+        </div>
+      </html:form>
+    </div>
+  </section>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

@@ -483,13 +483,28 @@
       formData.append('dataSheetName', dataSheetName);
 
       var xhr = new XMLHttpRequest();
+      var redirectedToProgress = false;
+      function redirectToProgressPage() {
+        if (redirectedToProgress) {
+          return;
+        }
+        redirectedToProgress = true;
+        window.location.href = '${pageContext.request.contextPath}/aim/viewImportProgress.do';
+      }
+
       xhr.open('POST', '${pageContext.request.contextPath}/aim/dataImporter.do', true);
       alert("<digi:trn jsFriendly='true'>File is uploading and will be parsed shortly.</digi:trn>");
+      if (xhr.upload) {
+        xhr.upload.onload = function () {
+          redirectToProgressPage();
+        };
+      }
       xhr.onload = function () {
         console.log("Status: " + xhr.status);
         if (xhr.status === 400) {
           console.error("Unable to parse the file. Please check the file format and try again.");
           alert( xhr.getResponseHeader('errorMessage'));
+          redirectedToProgress = false;
         }
         if (xhr.status === 200) {
           console.log("File Parsed successfully")
@@ -498,7 +513,6 @@
         }
       };
       xhr.send(formData);
-      // window.location.href = "/aim/showDesktop.do";
     }
   </script>
   <style>

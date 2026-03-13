@@ -103,12 +103,7 @@ public class ImporterUtil {
         if (importDataModel.getDonor_organization() == null || importDataModel.getDonor_organization().isEmpty()) {
             if (!config.containsValue(ImporterConstants.DONOR_AGENCY)) {
                 Funding f = new Funding();
-                updateFunding(f, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
-                
-                // If this is a commitment and addDisbursementForCommitment is enabled, create a corresponding disbursement
-                if (addDisbursementForCommitment && commitment && !disbursement) {
-                    createCorrespondingDisbursement(f, adjustmentType);
-                }
+                updateFunding(f, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
                 
                 fundings.add(f);
 
@@ -121,12 +116,7 @@ public class ImporterUtil {
                 List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
                 for (int i = 0; i < donors.size(); i++) {
                     Funding f = new Funding();
-                    updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
-                    
-                    // If this is a commitment and addDisbursementForCommitment is enabled, create a corresponding disbursement
-                    if (addDisbursementForCommitment && commitment && !disbursement) {
-                        createCorrespondingDisbursement(f, adjustmentType);
-                    }
+                    updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
                     
                     fundings.add(f);
                 }
@@ -138,12 +128,7 @@ public class ImporterUtil {
             List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
             for (int i = 0; i < donors.size(); i++) {
                 Funding f = new Funding();
-                updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
-                
-                // If this is a commitment and addDisbursementForCommitment is enabled, create a corresponding disbursement
-                if (addDisbursementForCommitment && commitment && !disbursement) {
-                    createCorrespondingDisbursement(f, adjustmentType);
-                }
+                updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
                 
                 fundings.add(f);
             }
@@ -186,12 +171,7 @@ public class ImporterUtil {
         if (importDataModel.getDonor_organization() == null || importDataModel.getDonor_organization().isEmpty()) {
             if (!config.containsValue(ImporterConstants.DONOR_AGENCY)) {
                 Funding f = new Funding();
-                updateFunding(f, importDataModel, value, entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
-                
-                // If this is a commitment and addDisbursementForCommitment is enabled, create a corresponding disbursement
-                if (addDisbursementForCommitment && commitment && !disbursement) {
-                    createCorrespondingDisbursement(f, adjustmentType);
-                }
+                updateFunding(f, importDataModel, value, entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
                 
                 fundings.add(f);
 
@@ -204,12 +184,7 @@ public class ImporterUtil {
                 List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
                 for (int i = 0; i < donors.size(); i++) {
                     Funding f = new Funding();
-                    updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
-                    
-                    // If this is a commitment and addDisbursementForCommitment is enabled, create a corresponding disbursement
-                    if (addDisbursementForCommitment && commitment && !disbursement) {
-                        createCorrespondingDisbursement(f, adjustmentType);
-                    }
+                    updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
                     
                     fundings.add(f);
                 }
@@ -220,7 +195,7 @@ public class ImporterUtil {
             List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
             for (int i = 0; i < donors.size(); i++) {
                 Funding f = new Funding();
-                updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
                 fundings.add(f);
             }
         }
@@ -562,8 +537,8 @@ public class ImporterUtil {
     }
 
 
-    private static Funding updateFunding(Funding fundingItem, ImportDataModel importDataModel, Number amount, String columnHeaderContainingYear, String separateFundingDate, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, boolean expenditure, String
-            adjustmentType, String currencyCode, String componentName, Double exchangeRate) {
+        private static Funding updateFunding(Funding fundingItem, ImportDataModel importDataModel, Number amount, String columnHeaderContainingYear, String separateFundingDate, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, boolean expenditure, String
+            adjustmentType, String currencyCode, String componentName, Double exchangeRate, boolean addDisbursementForCommitment) {
         // TODO: 27/06/2024 pick Month from file and use it in funding
         Session session = getSession();
         Long currencyId = getCurrencyId(session, currencyCode);
@@ -617,6 +592,10 @@ public class ImporterUtil {
                 fundingItem.getExpenditures().add(transaction);
             }
 
+        }
+
+        if (addDisbursementForCommitment && commitment && !disbursement) {
+            createCorrespondingDisbursement(fundingItem, adjustmentType);
         }
 
 

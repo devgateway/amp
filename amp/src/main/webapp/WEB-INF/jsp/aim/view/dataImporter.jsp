@@ -45,6 +45,20 @@
       });
     }
 
+    function showMappingWorkspace() {
+      $('#otherComponents').prop('hidden', false).show();
+      $('.table-panel').show();
+      $('#add-field').show();
+      $('.remove-row').show();
+      $('#selected-field').show();
+    }
+
+    function hideMappingWorkspaceIfEmpty() {
+      if (!hasMappedPairs() && !$('#headers').html().trim().length && !$('#current-config-name').val()) {
+        $('#otherComponents').prop('hidden', true).hide();
+      }
+    }
+
     function hasMappedPairs() {
       return $('#selected-pairs-table-body tr').length > 0;
     }
@@ -52,7 +66,7 @@
     function refreshImporterVisibility() {
       var hasPairs = hasMappedPairs();
       if (hasPairs || $('#headers').html().trim().length > 0 || $('#current-config-name').val()) {
-        $('#otherComponents').removeAttr('hidden');
+        showMappingWorkspace();
       }
       if (hasPairs) {
         $('#data-upload-panel').show();
@@ -60,6 +74,7 @@
       } else {
         $('#data-upload-panel').hide();
         $('#mapping-status').text('Add at least one column pair to enable data upload.');
+        hideMappingWorkspaceIfEmpty();
       }
     }
     
@@ -216,7 +231,7 @@
                       console.log('Key:', key, 'Value:', value);
                     }
                   }
-                  document.getElementById("otherComponents").removeAttribute("hidden");
+                  showMappingWorkspace();
                   $('#add-field').show();
                   $('.remove-row').show();
                   $('#selected-field').show();
@@ -354,7 +369,7 @@
               document.getElementById('headers').innerHTML = xhr.responseText;
             }
             alert("The template has been successfully uploaded.");
-            document.getElementById("otherComponents").removeAttribute("hidden");
+            showMappingWorkspace();
             $('#add-field').show();
             $('.remove-row').show();
             $('#selected-field').show();

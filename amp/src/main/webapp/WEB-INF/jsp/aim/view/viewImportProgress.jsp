@@ -304,6 +304,13 @@
                             });
                             datatable.draw(); // Draw the table after adding all rows
 
+                            var $target = $('.file-projects');
+                            if ($target.length) {
+                                $('html, body').animate({
+                                    scrollTop: $target.offset().top - 24
+                                }, 500);
+                            }
+
                             // Handle "View More" button click event
                             $('#import-projects-table tbody').on('click', '.view-more-btn', function() {
                                 var $row = $(this).closest('tr');
@@ -335,7 +342,7 @@
         <section class="hero">
             <div class="hero-grid">
                 <div>
-                    <h1>View Progress</h1>
+                    <h1>View Import Progress</h1>
                     <p class="hero-copy">Review recent import files, inspect record-level outcomes, and filter the imported rows without changing the underlying import workflow.</p>
                 </div>
                 <div class="summary-grid">

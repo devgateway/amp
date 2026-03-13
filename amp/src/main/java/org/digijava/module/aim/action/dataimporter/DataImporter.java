@@ -383,8 +383,10 @@ public class DataImporter extends Action {
                     logger.info("File path is " + tempFilePath + " and size is " + tempFile.length() / (1024 * 1024) + " mb");
                     logger.info("Start time: " + start);
                     Instant finish = Instant.now();
-                    long timeElapsed = Duration.between(start, finish).toMillis();
-                    logger.info("Time Elapsed: " + timeElapsed);
+                    long timeElapsedMillis = Duration.between(start, finish).toMillis();
+                    long minutes = timeElapsedMillis / 60000;
+                    long seconds = (timeElapsedMillis % 60000) / 1000;
+                    logger.info("Time Elapsed: " + minutes + "m " + seconds + "s");
 
                     // Send response
                     response.setHeader("updatedMap", "");
@@ -414,26 +416,19 @@ public class DataImporter extends Action {
         logger.info("Getting import config for configName: {}", configName);
         Session session = PersistenceManager.getRequestDBSession();
         Map<String, String> configValues = new HashMap<>();
-
-            String hql = "FROM DataImporterConfig WHERE configName = :configName";
-            Query query = session.createQuery(hql);
-            query.setParameter("configName", configName, StringType.INSTANCE);
-            query.setMaxResults(1);
-
-            List<DataImporterConfig> resultList = query.list();
-            logger.info("Configs found: {}",resultList);
-
-
-            if (!resultList.isEmpty()) {
-                Set<DataImporterConfigValues> values = resultList.get(0).getConfigValues();
-                logger.info("Config Values found: {}",values);
-
-                if (!values.isEmpty())
-                {
-                    values.forEach(value-> configValues.put(value.getConfigKey(),value.getConfigValue()));
-                }
-            }
-
+        // Query DataImporterConfigValues directly to bypass Hibernate first-level cache
+        // (querying through the parent entity's collection returns stale cached results
+        // when new pairs were added in the same session via addColumnPairToConfig)
+        String hql = "SELECT cv.configKey, cv.configValue FROM "
+                + DataImporterConfigValues.class.getName()
+                + " cv WHERE cv.dataImporterConfig.configName = :configName";
+        Query query = session.createQuery(hql);
+        query.setParameter("configName", configName, StringType.INSTANCE);
+        List<Object[]> rows = query.list();
+        logger.info("Config rows found for '{}': {}", configName, rows.size());
+        for (Object[] row : rows) {
+            configValues.put((String) row[0], (String) row[1]);
+        }
         return configValues;
     }
 

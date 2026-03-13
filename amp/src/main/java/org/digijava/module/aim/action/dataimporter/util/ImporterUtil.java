@@ -247,6 +247,13 @@ public class ImporterUtil {
 
     public static Number getNumericValueFromCell(Cell cell) {
         try {
+            if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+                String raw = cell.getStringCellValue().trim().replace(",", "");
+                if (!raw.isEmpty()) {
+                    return Double.parseDouble(raw);
+                }
+                return 0;
+            }
             return cell.getNumericCellValue();
         } catch (Exception e) {
             logger.error("Error getting cell {} value: ", cell, e);

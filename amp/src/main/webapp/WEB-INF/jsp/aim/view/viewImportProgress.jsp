@@ -117,7 +117,8 @@
             }
 
             .view-progress-btn,
-            .view-more-btn {
+            .view-more-btn,
+            .nav-action-btn {
                 border: none;
                 border-radius: 999px;
                 padding: 10px 16px;
@@ -132,6 +133,12 @@
                 margin-top: 8px;
                 padding: 8px 14px;
                 font-size: 12px;
+            }
+
+            .hero-actions {
+                margin-top: 18px;
+                display: flex;
+                justify-content: flex-end;
             }
 
             .status-summary {
@@ -330,8 +337,11 @@
     <div class="progress-page">
         <div class="hero-card">
             <span class="section-label"><digi:trn>Import Tracking</digi:trn></span>
-            <h1><digi:trn>View Progress</digi:trn></h1>
+            <h1><digi:trn>View Import Progress</digi:trn></h1>
             <p class="section-copy"><digi:trn>Open any imported file to inspect record-by-record status, success counts, and detailed responses.</digi:trn></p>
+            <div class="hero-actions">
+                <button type="button" class="nav-action-btn" onclick="window.location.href='${pageContext.request.contextPath}/aim/dataImporter.do';"><digi:trn>Import More Data</digi:trn></button>
+            </div>
         </div>
 
         <div class="panel-card">

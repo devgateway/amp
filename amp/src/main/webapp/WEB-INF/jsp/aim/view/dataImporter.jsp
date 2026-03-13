@@ -162,6 +162,11 @@
       $('.file_type').change(function() {
         var fileType = $(this).val();
         console.log("File type selected: " + fileType==='excel');
+        if (fileType === "json" || fileType === "xml") {
+          alert("<digi:trn jsFriendly='true'>JSON and XML import are coming soon. Excel has been reselected.</digi:trn>");
+          $(this).val('excel');
+          fileType = 'excel';
+        }
         if (fileType === "csv") {
           $('#select-file-label').html("Select csv file");
           $('#data-file').attr("accept", ".csv");
@@ -181,13 +186,6 @@
           $('#template-file').attr("accept", ".xls,.xlsx");
           $('#separator-div').hide();
           $('#data-sheet-choice-div').show();
-        }
-        else if(fileType==="json") {
-          $('#select-file-label').html("Select json file");
-          $('#data-file').attr("accept", ".json");
-          $('#template-file').attr("accept", ".json");
-          $('#separator-div').hide();
-          $('#data-sheet-choice-div').hide();
         }
       });
 

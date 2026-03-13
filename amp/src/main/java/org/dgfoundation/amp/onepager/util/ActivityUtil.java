@@ -216,7 +216,7 @@ public class ActivityUtil {
                 // validateAndImport executes queries with FlushMode.AUTO which can cascade-save new child entities
                 // (fundings, etc.) into the action queue. The subsequent session.evict(oldA) then cascade-evicts
                 // those children from the persistence context while they remain in the action queue.  The flush
-                // below would find them in the queue but not in the persistence context → HHH000099.
+                // below would find them in the queue but not in the persistence context.
                 // Clearing the session here discards those stale queued actions; downstream session.save()/
                 // saveOrUpdate() re-registers everything cleanly before the real INSERTs are flushed.
                 session.clear();

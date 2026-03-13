@@ -263,6 +263,15 @@ public class ExcelImporter {
                                     case ImporterConstants.BENEFICIARY_AGENCY:
                                         responsibleOrgIdHolder[0] = updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), responsibleOrgCode, session, ImporterConstants.ORG_TYPE_BENEFICIARY_AGENCY, createMissingOrgs, orgGroupId);
                                         break;
+                                    case ImporterConstants.EXECUTING_AGENCY:
+                                        updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), null, session, ImporterConstants.ORG_TYPE_EXECUTING_AGENCY, createMissingOrgs, orgGroupId);
+                                        break;
+                                    case ImporterConstants.IMPLEMENTING_AGENCY:
+                                        updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), null, session, ImporterConstants.ORG_TYPE_IMPLEMENTING_AGENCY, createMissingOrgs, orgGroupId);
+                                        break;
+                                    case ImporterConstants.CONTRACTING_AGENCY:
+                                        updateOrgs(importDataModel, Objects.requireNonNull(getStringValueFromCell(cell, false)).trim(), null, session, ImporterConstants.ORG_TYPE_CONTRACTING_AGENCY, createMissingOrgs, orgGroupId);
+                                        break;
                                     case ImporterConstants.TRANSACTION_AMOUNT: {
                                         boolean commitment = true, disbursement = true, expenditure = false;
                                         String adjustmentType = ImporterConstants.ADJUSTMENT_TYPE_ACTUAL;

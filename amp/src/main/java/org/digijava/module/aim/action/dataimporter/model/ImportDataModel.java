@@ -28,6 +28,8 @@ public class ImportDataModel {
     private Set<Organization> responsible_organization=new HashSet<>();
     private Set<Organization> beneficiary_agency=new HashSet<>();
     private Set<Organization> executing_agency=new HashSet<>();
+    private Set<Organization> contracting_agency = new HashSet<>();
+    private Set<Organization> implementing_agency = new HashSet<>();
     private Set<Object> activity_internal_ids;
     private Set<Funding> fundings= new HashSet<>();
     private Set<Object> issues;
@@ -569,7 +571,24 @@ public class ImportDataModel {
                 ", modified_by=" + modified_by +
                 ", activity_type=" + activity_type +
                 ", procurement_system=" + procurement_system +
+                ", implementing_agency=" + implementing_agency +
                 '}';
+    }
+
+    public Set<Organization> getContracting_agency() {
+        return contracting_agency;
+    }
+
+    public void setContracting_agency(Set<Organization> contracting_agency) {
+        this.contracting_agency = contracting_agency;
+    }
+
+    public Set<Organization> getImplementing_agency() {
+        return implementing_agency;
+    }
+
+    public void setImplementing_agency(Set<Organization> implementing_agency) {
+        this.implementing_agency = implementing_agency;
     }
 
     // Getters and setters

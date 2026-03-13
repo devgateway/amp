@@ -17,6 +17,9 @@ public final class ImporterConstants {
     public static final String ORG_TYPE_DONOR = "donor";
     public static final String ORG_TYPE_RESPONSIBLE_ORG = "responsibleOrg";
     public static final String ORG_TYPE_BENEFICIARY_AGENCY = "beneficiaryAgency";
+    public static final String ORG_TYPE_EXECUTING_AGENCY = "executingAgency";
+    public static final String ORG_TYPE_IMPLEMENTING_AGENCY = "implementingAgency";
+    public static final String ORG_TYPE_CONTRACTING_AGENCY = "contractingAgency";
 
     // ----- Entity / column field names (template mapping) -----
     public static final String PROJECT_TITLE = "Project Title";
@@ -35,6 +38,7 @@ public final class ImporterConstants {
     public static final String RESPONSIBLE_ORGANIZATION_CODE = "Responsible Organization Code";
     public static final String EXECUTING_AGENCY = "Executing Agency";
     public static final String IMPLEMENTING_AGENCY = "Implementing Agency";
+    public static final String CONTRACTING_AGENCY = "Contracting Agency";
     public static final String BENEFICIARY_AGENCY = "Beneficiary Agency";
 
     public static final String ACTUAL_DISBURSEMENT = "Actual Disbursement";

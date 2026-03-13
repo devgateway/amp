@@ -1077,12 +1077,74 @@ public class ImporterUtil {
             Long finInstrument = getCategoryValue("finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, "");
             if (importDataModel.getFundings() == null) importDataModel.setFundings(new HashSet<>());
             for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
+                Long existingId = ampFunding.getAmpFundingId();
+                Long donorOrgId = ampFunding.getAmpDonorOrgId().getAmpOrgId();
+                Long typeOfAssistance = ampFunding.getTypeOfAssistance() != null ? ampFunding.getTypeOfAssistance().getId() : assType;
+                Long financingInstrument = ampFunding.getFinancingInstrument() != null ? ampFunding.getFinancingInstrument().getId() : finInstrument;
+                Long sourceRole = ampFunding.getSourceRole().getAmpRoleId();
+
+                // Check if the Excel importer already added a new funding entry (no ID yet) for the same
+                // donor+role+type combination. If so, mark it with the existing funding_id so the API
+                // updates the existing DB record instead of inserting a duplicate.
+                Funding matchedNewFunding = null;
+                for (Funding newFunding : importDataModel.getFundings()) {
+                    if (newFunding.getFunding_id() == null
+                            && Objects.equals(donorOrgId, newFunding.getDonor_organization_id())
+                            && Objects.equals(sourceRole, newFunding.getSource_role())
+                            && Objects.equals(typeOfAssistance, newFunding.getType_of_assistance())
+                            && Objects.equals(financingInstrument, newFunding.getFinancing_instrument())) {
+                        matchedNewFunding = newFunding;
+                        break;
+                    }
+                }
+
+                if (matchedNewFunding != null) {
+                    // Stamp the existing DB funding_id so the API updates the existing record instead of inserting.
+                    matchedNewFunding.setFunding_id(existingId);
+                    // Also merge the existing DB transactions into the Excel entry so the API's
+                    // removeByIdExcept doesn't delete them (DB transactions carry transaction_id;
+                    // the Excel transactions have none, so they'd be the only ones in jsonIds={null},
+                    // causing all DB transactions to be removed on flush).
+                    // transactionExists guards against re-adding a transaction already supplied by Excel.
+                    if (ampFunding.getFundingDetails() != null) {
+                        Hibernate.initialize(ampFunding.getFundingDetails());
+                        for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
+                            Transaction transaction = new Transaction();
+                            if (ampFundingDetail.getAmpFundDetailId() != null) transaction.setTransaction_id(ampFundingDetail.getAmpFundDetailId());
+                            transaction.setCurrency(ampFundingDetail.getAmpCurrencyId().getAmpCurrencyId());
+                            transaction.setAdjustment_type(ampFundingDetail.getAdjustmentType() != null ? ampFundingDetail.getAdjustmentType().getId() : adjType);
+                            transaction.setTransaction_amount(ampFundingDetail.getTransactionAmount());
+                            if (ampFundingDetail.getTransactionDate() != null) {
+                                transaction.setTransaction_date(getFundingDate(ampFundingDetail.getTransactionDate().toInstant()
+                                        .atZone(ZoneId.systemDefault())
+                                        .toLocalDate().toString()));
+                            }
+                            transaction.setFixed_exchange_rate(ampFundingDetail.getFixedExchangeRate());
+                            if (ampFundingDetail.getTransactionType() == 0) {
+                                if (!transactionExists(matchedNewFunding.getCommitments(), transaction)) {
+                                    matchedNewFunding.getCommitments().add(transaction);
+                                }
+                            } else if (ampFundingDetail.getTransactionType() == 1) {
+                                if (!transactionExists(matchedNewFunding.getDisbursements(), transaction)) {
+                                    matchedNewFunding.getDisbursements().add(transaction);
+                                }
+                            } else if (ampFundingDetail.getTransactionType() == 2) {
+                                if (!transactionExists(matchedNewFunding.getExpenditures(), transaction)) {
+                                    matchedNewFunding.getExpenditures().add(transaction);
+                                }
+                            }
+                        }
+                    }
+                    continue;
+                }
+
+                // No Excel entry for this existing funding — preserve it so it is not deleted.
                 Funding funding = new Funding();
-                if (ampFunding.getAmpFundingId() != null) funding.setFunding_id(ampFunding.getAmpFundingId());
-                funding.setDonor_organization_id(ampFunding.getAmpDonorOrgId().getAmpOrgId());
-                funding.setType_of_assistance(ampFunding.getTypeOfAssistance() != null ? ampFunding.getTypeOfAssistance().getId() : assType);
-                funding.setFinancing_instrument(ampFunding.getFinancingInstrument() != null ? ampFunding.getFinancingInstrument().getId() : finInstrument);
-                funding.setSource_role(ampFunding.getSourceRole().getAmpRoleId());
+                if (existingId != null) funding.setFunding_id(existingId);
+                funding.setDonor_organization_id(donorOrgId);
+                funding.setType_of_assistance(typeOfAssistance);
+                funding.setFinancing_instrument(financingInstrument);
+                funding.setSource_role(sourceRole);
                 if (ampFunding.getFundingDetails() != null) {
                     Hibernate.initialize(ampFunding.getFundingDetails());
                     for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
@@ -1101,6 +1163,8 @@ public class ImporterUtil {
                             funding.getCommitments().add(transaction);
                         } else if (ampFundingDetail.getTransactionType() == 1) {
                             funding.getDisbursements().add(transaction);
+                        } else if (ampFundingDetail.getTransactionType() == 2) {
+                            funding.getExpenditures().add(transaction);
                         }
                     }
                 }
@@ -1112,18 +1176,35 @@ public class ImporterUtil {
                 if (ampOrgRole.getRole() == null) continue;
                 String roleCode = ampOrgRole.getRole().getRoleCode();
                 if (roleCode == null) continue;
+                Long orgId = ampOrgRole.getOrganisation().getAmpOrgId();
+                Long orgRoleId = ampOrgRole.getAmpOrgRoleId();
                 if (roleCode.equalsIgnoreCase("DN")) {
-                    createDonorOrg(importDataModel, ampOrgRole.getOrganisation().getAmpOrgId(), ampOrgRole.getAmpOrgRoleId());
-                } else if (roleCode.equalsIgnoreCase("EA")) {
-                    Organization responsibleOrg = new Organization();
-                    responsibleOrg.setOrganization(ampOrgRole.getOrganisation().getAmpOrgId());
-                    if (ampOrgRole.getAmpOrgRoleId() != null) responsibleOrg.setId(ampOrgRole.getAmpOrgRoleId());
-                    importDataModel.getResponsible_organization().add(responsibleOrg);
+                    createDonorOrg(importDataModel, orgId, orgRoleId);
+                } else if (roleCode.equalsIgnoreCase("RO")) {
+                    Organization org = new Organization();
+                    org.setOrganization(orgId);
+                    if (orgRoleId != null) org.setId(orgRoleId);
+                    importDataModel.getResponsible_organization().add(org);
                 } else if (roleCode.equalsIgnoreCase("BA")) {
-                    Organization beneficiaryAgency = new Organization();
-                    beneficiaryAgency.setOrganization(ampOrgRole.getOrganisation().getAmpOrgId());
-                    if (ampOrgRole.getAmpOrgRoleId() != null) beneficiaryAgency.setId(ampOrgRole.getAmpOrgRoleId());
-                    importDataModel.getBeneficiary_agency().add(beneficiaryAgency);
+                    Organization org = new Organization();
+                    org.setOrganization(orgId);
+                    if (orgRoleId != null) org.setId(orgRoleId);
+                    importDataModel.getBeneficiary_agency().add(org);
+                } else if (roleCode.equalsIgnoreCase("EA")) {
+                    Organization org = new Organization();
+                    org.setOrganization(orgId);
+                    if (orgRoleId != null) org.setId(orgRoleId);
+                    importDataModel.getExecuting_agency().add(org);
+                } else if (roleCode.equalsIgnoreCase("IA")) {
+                    Organization org = new Organization();
+                    org.setOrganization(orgId);
+                    if (orgRoleId != null) org.setId(orgRoleId);
+                    importDataModel.getImplementing_agency().add(org);
+                } else if (roleCode.equalsIgnoreCase("CA")) {
+                    Organization org = new Organization();
+                    org.setOrganization(orgId);
+                    if (orgRoleId != null) org.setId(orgRoleId);
+                    importDataModel.getContracting_agency().add(org);
                 }
             }
         }
@@ -1683,6 +1764,10 @@ public class ImporterUtil {
 
     }
 
+    public static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type) {
+        return updateOrgs(importDataModel, name, code, session, type, false, null);
+    }
+
     public static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type, boolean createMissingOrgs, Long orgGroupId)
     {
         List<String> names = splitMultiValues(name);
@@ -1772,19 +1857,36 @@ public class ImporterUtil {
         if (Objects.equals(type, "donor")) {
             createDonorOrg(importDataModel, orgId);
         }
-        else if (Objects.equals(type, "responsibleOrg"))
+        else if (Objects.equals(type, ImporterConstants.ORG_TYPE_RESPONSIBLE_ORG))
         {
             Organization responsibleOrg = new Organization();
             responsibleOrg.setOrganization(orgId);
             importDataModel.getResponsible_organization().add(responsibleOrg);
 
         }
-        else if (Objects.equals(type, "beneficiaryAgency"))
+        else if (Objects.equals(type, ImporterConstants.ORG_TYPE_BENEFICIARY_AGENCY))
         {
             Organization beneficiaryAgency = new Organization();
             beneficiaryAgency.setOrganization(orgId);
             importDataModel.getBeneficiary_agency().add(beneficiaryAgency);
-
+        }
+        else if (Objects.equals(type, ImporterConstants.ORG_TYPE_EXECUTING_AGENCY))
+        {
+            Organization executingAgency = new Organization();
+            executingAgency.setOrganization(orgId);
+            importDataModel.getExecuting_agency().add(executingAgency);
+        }
+        else if (Objects.equals(type, ImporterConstants.ORG_TYPE_IMPLEMENTING_AGENCY))
+        {
+            Organization implementingAgency = new Organization();
+            implementingAgency.setOrganization(orgId);
+            importDataModel.getImplementing_agency().add(implementingAgency);
+        }
+        else if (Objects.equals(type, ImporterConstants.ORG_TYPE_CONTRACTING_AGENCY))
+        {
+            Organization contractingAgency = new Organization();
+            contractingAgency.setOrganization(orgId);
+            importDataModel.getContracting_agency().add(contractingAgency);
         }
         return orgId;
     }

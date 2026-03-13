@@ -6,6 +6,7 @@ public class ImportedFilesRecord implements Serializable {
 private Long id;
 private String fileName;
 private String fileHash;
+private Long processingTimeMillis;
 
 private ImportStatus importStatus;
 
@@ -33,6 +34,23 @@ private ImportStatus importStatus;
         this.fileHash = fileHash;
     }
 
+    public Long getProcessingTimeMillis() {
+        return processingTimeMillis;
+    }
+
+    public void setProcessingTimeMillis(Long processingTimeMillis) {
+        this.processingTimeMillis = processingTimeMillis;
+    }
+
+    public String getFormattedProcessingTime() {
+        if (processingTimeMillis == null) {
+            return "-";
+        }
+        long minutes = processingTimeMillis / 60000;
+        long seconds = (processingTimeMillis % 60000) / 1000;
+        return minutes + "m " + seconds + "s";
+    }
+
     public ImportStatus getImportStatus() {
         return importStatus;
     }
@@ -47,6 +65,7 @@ private ImportStatus importStatus;
                 "id=" + id +
                 ", fileName='" + fileName + '\'' +
                 ", fileHash='" + fileHash + '\'' +
+            ", processingTimeMillis=" + processingTimeMillis +
                 ", importStatus=" + importStatus +
                 '}';
     }

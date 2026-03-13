@@ -222,38 +222,24 @@
 
         <script>
 
+            var currentViewedFileRecordId = null;
+
             $(document).ready(function() {
 
                 var  datatable = $('#import-projects-table').DataTable();
-                $("input[name='project-filter']").off('change.projectFilter').on('change.projectFilter', function() {
-                    var filterValue = $(this).val();
-                    if (filterValue === 'ALL') {
-                        datatable.column(1).search('').draw();
-                    } else {
-                        datatable.column(1).search(filterValue).draw();
+
+                function loadFileProgress(fileRecordId, currentRow) {
+                    if (!fileRecordId) {
+                        return;
                     }
-                });
 
-                $('#import-projects-table tbody').off('click.viewMore').on('click.viewMore', '.view-more-btn', function() {
-                    var $row = $(this).closest('tr');
-                    var $responseCell = $row.find('.truncated-response');
-                    var fullResponse = $row.data('hiddenData');
-                    var $btn = $(this);
+                    currentViewedFileRecordId = fileRecordId;
+                    $('#refresh-progress-btn').prop('disabled', false);
 
-                    if ($btn.text() === "<digi:trn jsFriendly='true'>View More</digi:trn>") {
-                        $responseCell.text(fullResponse);
-                        $btn.text("<digi:trn jsFriendly='true'>View Less</digi:trn>");
-                    } else {
-                        $responseCell.text(fullResponse.substring(0, 50) + "...");
-                        $btn.text("<digi:trn jsFriendly='true'>View More</digi:trn>");
+                    if (currentRow && currentRow.length) {
+                        $(".highlighted-row").removeClass("highlighted-row");
+                        currentRow.addClass("highlighted-row");
                     }
-                });
-
-                $(".view-progress-btn").click(function() {
-                    var fileRecordId = $(this).data("file-record-id");
-                    var currentRow = $(this).closest("tr");
-                    $(".highlighted-row").removeClass("highlighted-row");
-                    currentRow.addClass("highlighted-row");
 
                     $.ajax({
                         url: "${pageContext.request.contextPath}/aim/viewImportProgress.do",
@@ -297,7 +283,45 @@
                             console.error("Error: " + error);
                         }
                     });
+                }
 
+                $("input[name='project-filter']").off('change.projectFilter').on('change.projectFilter', function() {
+                    var filterValue = $(this).val();
+                    if (filterValue === 'ALL') {
+                        datatable.column(1).search('').draw();
+                    } else {
+                        datatable.column(1).search(filterValue).draw();
+                    }
+                });
+
+                $('#import-projects-table tbody').off('click.viewMore').on('click.viewMore', '.view-more-btn', function() {
+                    var $row = $(this).closest('tr');
+                    var $responseCell = $row.find('.truncated-response');
+                    var fullResponse = $row.data('hiddenData');
+                    var $btn = $(this);
+
+                    if ($btn.text() === "<digi:trn jsFriendly='true'>View More</digi:trn>") {
+                        $responseCell.text(fullResponse);
+                        $btn.text("<digi:trn jsFriendly='true'>View Less</digi:trn>");
+                    } else {
+                        $responseCell.text(fullResponse.substring(0, 50) + "...");
+                        $btn.text("<digi:trn jsFriendly='true'>View More</digi:trn>");
+                    }
+                });
+
+                $(".view-progress-btn").click(function() {
+                    var fileRecordId = $(this).data("file-record-id");
+                    var currentRow = $(this).closest("tr");
+                    loadFileProgress(fileRecordId, currentRow);
+                });
+
+                $('#refresh-progress-btn').click(function() {
+                    if (!currentViewedFileRecordId) {
+                        return;
+                    }
+
+                    var currentRow = $('.view-progress-btn[data-file-record-id="' + currentViewedFileRecordId + '"]').closest('tr');
+                    loadFileProgress(currentViewedFileRecordId, currentRow);
                 });
             });
         </script>
@@ -321,6 +345,7 @@
                     <th><digi:trn>ID</digi:trn></th>
                     <th><digi:trn>File Name</digi:trn></th>
                     <th><digi:trn>Status</digi:trn></th>
+                    <th><digi:trn>Processing Time</digi:trn></th>
                     <th><digi:trn>Action</digi:trn></th>
                 </tr>
                 </thead>
@@ -332,6 +357,7 @@
                         <td>${record.id}</td>
                         <td>${record.fileName}</td>
                         <td>${record.importStatus}</td>
+                        <td>${record.formattedProcessingTime}</td>
                         <td>
                             <button class="view-progress-btn" data-file-record-id="${record.id}"><digi:trn>View Progress</digi:trn></button>
                         </td>
@@ -352,6 +378,7 @@
                 <input type="radio" id="success-projects" name="project-filter" value="SUCCESS">
                 <label for="failed-projects"><digi:trn>Failed</digi:trn>:</label>
                 <input type="radio" id="failed-projects" name="project-filter" value="FAILED">
+                <button type="button" id="refresh-progress-btn" disabled><digi:trn>Refresh Records</digi:trn></button>
             </div>
 
             <div class="countRecords"></div>

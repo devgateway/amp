@@ -90,6 +90,24 @@ public class ImportedFileUtil {
             logger.error("Error updating file status", e);
         }
     }
+
+    public static void updateFileProcessingTime(ImportedFilesRecord importedFilesRecord, long processingTimeMillis) {
+        logger.info("Updating file processing time to {} ms", processingTimeMillis);
+
+        Session session = PersistenceManager.getRequestDBSession();
+
+        try {
+            String sql = "UPDATE IMPORTED_FILES_RECORD SET processing_time_millis = :processingTimeMillis WHERE id = :fileId";
+            Query query = session.createNativeQuery(sql);
+            query.setParameter("processingTimeMillis", processingTimeMillis);
+            query.setParameter("fileId", importedFilesRecord.getId());
+            query.executeUpdate();
+            session.getTransaction().commit();
+            importedFilesRecord.setProcessingTimeMillis(processingTimeMillis);
+        } catch (Exception e) {
+            logger.error("Error updating file processing time", e);
+        }
+    }
     public static List<ImportedFilesRecord> getSimilarFiles(File file) throws IOException, NoSuchAlgorithmException {
         String hash = generateSHA256Hash(file);
         logger.info("Checking File hash is {}", hash);

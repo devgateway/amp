@@ -369,18 +369,30 @@ public class DataImporter extends Action {
                     columnPairsToUse.put("Donor Agency", "Donor Agency");
                 }
                 logger.info("Configuration: {}", columnPairsToUse);
-                if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
-                    String dataSheetChoice = request.getParameter("dataSheetChoice");
-                    String dataSheetName = request.getParameter("dataSheetName");
-                    boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
-                    // Process the file in batches
-                    res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, orgGroupId, validateActivities, addDisbursementForCommitment);
-                } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                    res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, orgGroupId, validateActivities, addDisbursementForCommitment);
+                try {
+                    if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
+                        String dataSheetChoice = request.getParameter("dataSheetChoice");
+                        String dataSheetName = request.getParameter("dataSheetName");
+                        boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, orgGroupId, validateActivities, addDisbursementForCommitment);
+                    } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, orgGroupId, validateActivities, addDisbursementForCommitment);
+                    }
+                } catch (Exception e) {
+                    ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
+                    throw e;
+                } finally {
+                    Instant finish = Instant.now();
+                    long timeElapsedMillis = Duration.between(start, finish).toMillis();
+                    ImportedFileUtil.updateFileProcessingTime(importedFilesRecord, timeElapsedMillis);
+                    long minutes = timeElapsedMillis / 60000;
+                    long seconds = (timeElapsedMillis % 60000) / 1000;
+                    logger.info("Time Elapsed: " + minutes + "m " + seconds + "s");
                 }
                 if (res != 1) {
                     // Handle error
                     logger.info("Error processing file  " + tempFile);
+                    ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
                     response.setHeader("errorMessage", "Unable to parse the file. Please check the file format/content and try again.");
                     response.setStatus(400);
                     return mapping.findForward("importData");
@@ -394,11 +406,6 @@ public class DataImporter extends Action {
                 ConstantsMap.clear();
                 logger.info("File path is " + tempFilePath + " and size is " + tempFile.length() / (1024 * 1024) + " mb");
                 logger.info("Start time: " + start);
-                Instant finish = Instant.now();
-                long timeElapsedMillis = Duration.between(start, finish).toMillis();
-                long minutes = timeElapsedMillis / 60000;
-                long seconds = (timeElapsedMillis % 60000) / 1000;
-                logger.info("Time Elapsed: " + minutes + "m " + seconds + "s");
 
                 // Send response
                 response.setHeader("updatedMap", "");

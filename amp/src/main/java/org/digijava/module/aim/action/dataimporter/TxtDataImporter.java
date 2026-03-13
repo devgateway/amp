@@ -141,7 +141,6 @@ public class TxtDataImporter {
 
                     logger.info("Configuration: " + config);
                     for (Map.Entry<String, String> entry : config.entrySet()) {
-                        Funding fundingItem = new Funding();
                         switch (entry.getValue()) {
                             case ImporterConstants.PROJECT_LOCATION:
                                 updateLocations(importDataModel, rowRef.get(entry.getKey().trim()), session);
@@ -183,26 +182,26 @@ public class TxtDataImporter {
                                         adjustmentType = parsed.adjustmentType;
                                     }
                                 }
-                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), commitment, disbursement, expenditure, adjustmentType, fundingItem, null);
+                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), commitment, disbursement, expenditure, adjustmentType, null, false, null, false));
                                 break;
                             }
                             case ImporterConstants.PLANNED_COMMITMENT:
-                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null);
+                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, null, false, null, false));
                                 break;
                             case ImporterConstants.PLANNED_DISBURSEMENT:
-                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null);
+                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, null, false, null, false));
                                 break;
                             case ImporterConstants.PLANNED_EXPENDITURE:
-                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, fundingItem, null);
+                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, null, false, null, false));
                                 break;
                             case ImporterConstants.ACTUAL_COMMITMENT:
-                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null);
+                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, null, false, null, false));
                                 break;
                             case ImporterConstants.ACTUAL_DISBURSEMENT:
-                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null);
+                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, null, false, null, false));
                                 break;
                             case ImporterConstants.ACTUAL_EXPENDITURE:
-                                setAFundingItemForTxt(config, rowRef, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, fundingItem, null);
+                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, null, false, null, false));
                                 break;
                             case ImporterConstants.MEASURE_TYPE:
                                 break;
@@ -212,9 +211,8 @@ public class TxtDataImporter {
                                 logger.error("Unexpected value: " + entry.getValue());
                                 break;
                         }
-                        fundings.add(fundingItem);
-                        logger.info("Funding items :{}", fundings);
                     }
+                    logger.info("Funding items :{}", fundings);
                 });
             } catch (RuntimeException e) {
                 Throwable cause = e.getCause();

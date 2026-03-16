@@ -154,7 +154,7 @@ public class ViewImportProgress extends Action {
     public List<ImportedFilesRecord> getAllImportFileRecords() {
         Session session = PersistenceManager.getRequestDBSession();
 
-        String hql = "FROM ImportedFilesRecord";
+        String hql = "FROM ImportedFilesRecord ORDER BY uploadedAt DESC, id DESC";
         Query query = session.createQuery(hql);
         List<ImportedFilesRecord> importedFilesRecords = query.list();
         logger.info("importedFilesRecords: " + importedFilesRecords);

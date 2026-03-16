@@ -197,6 +197,36 @@
                 background: #fff;
             }
 
+            .uploads-filter-bar {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                align-items: end;
+                margin: 16px 0 18px;
+                padding: 14px 16px;
+                border-radius: 18px;
+                background: #f1f3f5;
+                border: 1px solid var(--panel-border);
+            }
+
+            .uploads-filter-field {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                min-width: 180px;
+            }
+
+            .uploads-filter-field label {
+                font-weight: 700;
+            }
+
+            .uploads-filter-field input {
+                border: 1px solid rgba(22, 53, 67, 0.18);
+                border-radius: 10px;
+                padding: 8px 10px;
+                background: #fff;
+            }
+
             .truncated-response {
                 display: inline-block;
                 max-width: 100%;
@@ -232,7 +262,53 @@
 
             $(document).ready(function() {
 
-                var  datatable = $('#import-projects-table').DataTable();
+                var datatable = $('#import-projects-table').DataTable();
+                var recentUploadsTable = $('#recent-uploads-table').DataTable({
+                    pageLength: 10,
+                    order: [[4, 'desc'], [0, 'desc']],
+                    columnDefs: [
+                        { targets: 4, visible: false, searchable: false }
+                    ]
+                });
+
+                $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                    if (settings.nTable.id !== 'recent-uploads-table') {
+                        return true;
+                    }
+
+                    var minDateValue = $('#upload-date-from').val();
+                    var maxDateValue = $('#upload-date-to').val();
+                    var rowNode = recentUploadsTable.row(dataIndex).node();
+                    var uploadedAtEpoch = parseInt($(rowNode).find('.uploaded-at-cell').attr('data-epoch'), 10);
+
+                    if (isNaN(uploadedAtEpoch)) {
+                        return true;
+                    }
+
+                    var uploadedAtDate = new Date(uploadedAtEpoch);
+                    uploadedAtDate.setHours(0, 0, 0, 0);
+
+                    var minDate = minDateValue ? new Date(minDateValue) : null;
+                    var maxDate = maxDateValue ? new Date(maxDateValue) : null;
+                    if (minDate) {
+                        minDate.setHours(0, 0, 0, 0);
+                    }
+                    if (maxDate) {
+                        maxDate.setHours(23, 59, 59, 999);
+                    }
+
+                    if (minDate && uploadedAtDate < minDate) {
+                        return false;
+                    }
+                    if (maxDate && uploadedAtEpoch > maxDate.getTime()) {
+                        return false;
+                    }
+                    return true;
+                });
+
+                $('#upload-date-from, #upload-date-to').on('change', function() {
+                    recentUploadsTable.draw();
+                });
 
                 function loadFileProgress(fileRecordId, currentRow) {
                     if (!fileRecordId) {
@@ -348,13 +424,26 @@
             <h2><digi:trn>Recent Uploads</digi:trn></h2>
             <p class="section-copy"><digi:trn>Click a file to load its records and jump directly to the detailed results table.</digi:trn></p>
 
-            <table>
+            <div class="uploads-filter-bar">
+                <div class="uploads-filter-field">
+                    <label for="upload-date-from"><digi:trn>Uploaded From</digi:trn></label>
+                    <input type="date" id="upload-date-from">
+                </div>
+                <div class="uploads-filter-field">
+                    <label for="upload-date-to"><digi:trn>Uploaded To</digi:trn></label>
+                    <input type="date" id="upload-date-to">
+                </div>
+            </div>
+
+            <table id="recent-uploads-table">
                 <thead>
                 <tr>
                     <th><digi:trn>ID</digi:trn></th>
                     <th><digi:trn>File Name</digi:trn></th>
                     <th><digi:trn>Status</digi:trn></th>
                     <th><digi:trn>Processing Time</digi:trn></th>
+                    <th><digi:trn>Upload Date</digi:trn></th>
+                    <th><digi:trn>Upload Date Sort</digi:trn></th>
                     <th><digi:trn>Action</digi:trn></th>
                 </tr>
                 </thead>
@@ -367,6 +456,8 @@
                         <td>${record.fileName}</td>
                         <td>${record.importStatus}</td>
                         <td>${record.formattedProcessingTime}</td>
+                        <td class="uploaded-at-cell" data-epoch="${record.uploadedAtEpochMillis}">${record.formattedUploadedAt}</td>
+                        <td>${record.uploadedAtEpochMillis}</td>
                         <td>
                             <button class="view-progress-btn" data-file-record-id="${record.id}"><digi:trn>View Progress</digi:trn></button>
                         </td>

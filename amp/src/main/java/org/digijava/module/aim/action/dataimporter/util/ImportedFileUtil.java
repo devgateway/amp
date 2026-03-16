@@ -43,7 +43,7 @@ public class ImportedFileUtil {
         String generatedHash = generateSHA256Hash(file);
         logger.info("Saving File hash is " + generatedHash);
         long generatedId=0l;
-        String sql = "INSERT INTO IMPORTED_FILES_RECORD (id, file_name, file_hash, import_status) VALUES (nextval('IMPORTED_FILES_RECORD_SEQ'), ?, ?, ?) RETURNING id";
+        String sql = "INSERT INTO IMPORTED_FILES_RECORD (id, file_name, file_hash, import_status, uploaded_at) VALUES (nextval('IMPORTED_FILES_RECORD_SEQ'), ?, ?, ?, CURRENT_TIMESTAMP) RETURNING id";
 
         try (Connection connection = PersistenceManager.getJdbcConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

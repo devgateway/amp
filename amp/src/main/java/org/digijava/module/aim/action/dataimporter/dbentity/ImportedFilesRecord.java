@@ -1,12 +1,15 @@
 package org.digijava.module.aim.action.dataimporter.dbentity;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ImportedFilesRecord implements Serializable {
 private Long id;
 private String fileName;
 private String fileHash;
 private Long processingTimeMillis;
+private Date uploadedAt;
 
 private ImportStatus importStatus;
 
@@ -42,6 +45,25 @@ private ImportStatus importStatus;
         this.processingTimeMillis = processingTimeMillis;
     }
 
+    public Date getUploadedAt() {
+        return uploadedAt;
+    }
+
+    public void setUploadedAt(Date uploadedAt) {
+        this.uploadedAt = uploadedAt;
+    }
+
+    public String getFormattedUploadedAt() {
+        if (uploadedAt == null) {
+            return "-";
+        }
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(uploadedAt);
+    }
+
+    public Long getUploadedAtEpochMillis() {
+        return uploadedAt != null ? uploadedAt.getTime() : null;
+    }
+
     public String getFormattedProcessingTime() {
         if (processingTimeMillis == null) {
             return "-";
@@ -65,7 +87,8 @@ private ImportStatus importStatus;
                 "id=" + id +
                 ", fileName='" + fileName + '\'' +
                 ", fileHash='" + fileHash + '\'' +
-            ", processingTimeMillis=" + processingTimeMillis +
+                ", processingTimeMillis=" + processingTimeMillis +
+                ", uploadedAt=" + uploadedAt +
                 ", importStatus=" + importStatus +
                 '}';
     }

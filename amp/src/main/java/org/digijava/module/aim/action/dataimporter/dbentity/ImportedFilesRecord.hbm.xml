@@ -19,6 +19,8 @@
 
 		<property name="processingTimeMillis" column="processing_time_millis" type="java.lang.Long" />
 
+		<property name="uploadedAt" column="uploaded_at" type="timestamp" />
+
 		<property name="importStatus" column="import_status">
 			<type name="org.hibernate.type.EnumType">
 				<param name="enumClass">org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus</param>

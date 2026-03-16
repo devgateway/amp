@@ -8,18 +8,18 @@
         <title><digi:trn>Imported Files</digi:trn></title>
         <style>
             :root {
-                --page-bg: linear-gradient(180deg, #eef6f7 0%, #f7f3ea 50%, #fcfcfb 100%);
-                --panel-bg: rgba(255, 255, 255, 0.92);
-                --panel-border: rgba(22, 53, 67, 0.12);
-                --text-strong: #163543;
-                --text-soft: #647b86;
-                --accent: #0d7c86;
-                --accent-deep: #0a5c66;
-                --success: #2a7d57;
-                --danger: #a63f3f;
-                --warning: #c7772f;
-                --row-alt: #f8fbfb;
-                --shadow: 0 24px 60px rgba(19, 42, 53, 0.12);
+                --page-bg: #f4f5f7;
+                --panel-bg: #ffffff;
+                --panel-border: #d7dde3;
+                --text-strong: #22313a;
+                --text-soft: #667784;
+                --accent: #40606f;
+                --accent-deep: #314b57;
+                --success: #4a6b58;
+                --danger: #7a5555;
+                --warning: #7d6a53;
+                --row-alt: #f8f9fa;
+                --shadow: 0 8px 20px rgba(25, 39, 52, 0.06);
             }
 
             html {
@@ -51,10 +51,7 @@
             .hero-card {
                 padding: 34px;
                 margin-bottom: 22px;
-                background:
-                    radial-gradient(circle at top right, rgba(13, 124, 134, 0.16), transparent 34%),
-                    radial-gradient(circle at top left, rgba(199, 119, 47, 0.16), transparent 30%),
-                    rgba(255, 255, 255, 0.92);
+                background: var(--panel-bg);
             }
 
             .hero-card h1,
@@ -102,7 +99,7 @@
             }
 
             th {
-                background: linear-gradient(180deg, #f3faf9 0%, #eaf4f5 100%);
+                background: #eef1f3;
                 font-size: 12px;
                 letter-spacing: 0.12em;
                 text-transform: uppercase;
@@ -113,20 +110,20 @@
             }
 
             tr.highlighted-row {
-                background: rgba(42, 125, 87, 0.16) !important;
+                background: #e8eef0 !important;
             }
 
             .view-progress-btn,
             .view-more-btn,
             .nav-action-btn {
-                border: none;
+                border: 1px solid #506673;
                 border-radius: 999px;
                 padding: 10px 16px;
                 font-weight: 700;
                 cursor: pointer;
                 color: #fff;
-                background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
-                box-shadow: 0 14px 28px rgba(13, 124, 134, 0.18);
+                background: var(--accent);
+                box-shadow: none;
             }
 
             .view-more-btn {
@@ -152,7 +149,8 @@
                 padding: 14px 16px;
                 border-radius: 18px;
                 font-weight: 700;
-                background: rgba(13, 124, 134, 0.08);
+                background: #f1f3f5;
+                border: 1px solid var(--panel-border);
             }
 
             .status-pill.all {
@@ -175,7 +173,8 @@
                 margin-bottom: 18px;
                 padding: 14px 16px;
                 border-radius: 18px;
-                background: linear-gradient(180deg, rgba(13, 124, 134, 0.06), rgba(13, 124, 134, 0.02));
+                background: #f1f3f5;
+                border: 1px solid var(--panel-border);
             }
 
             .filter-div label {

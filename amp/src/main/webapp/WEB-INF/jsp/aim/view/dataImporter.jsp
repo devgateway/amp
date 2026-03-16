@@ -515,20 +515,20 @@
   </script>
   <style>
     :root {
-      --page-bg: linear-gradient(180deg, #f7f2e8 0%, #eef6f5 50%, #f8fbff 100%);
-      --panel-bg: rgba(255, 255, 255, 0.9);
-      --panel-border: rgba(25, 57, 71, 0.12);
-      --text-strong: #163543;
-      --text-soft: #58707c;
-      --accent: #0d7c86;
-      --accent-deep: #0a5c66;
-      --accent-warm: #d77a35;
-      --surface-muted: #eef5f6;
-      --row-alt: #f8fbfb;
-      --shadow: 0 24px 60px rgba(19, 42, 53, 0.12);
-      --radius-lg: 24px;
-      --radius-md: 16px;
-      --radius-sm: 12px;
+      --page-bg: #f4f5f7;
+      --panel-bg: #ffffff;
+      --panel-border: #d7dde3;
+      --text-strong: #22313a;
+      --text-soft: #667784;
+      --accent: #40606f;
+      --accent-deep: #314b57;
+      --accent-warm: #8a6f56;
+      --surface-muted: #f0f2f4;
+      --row-alt: #f8f9fa;
+      --shadow: 0 8px 20px rgba(25, 39, 52, 0.06);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
     }
 
     html {
@@ -555,17 +555,13 @@
       background: var(--panel-bg);
       border: 1px solid var(--panel-border);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(6px);
     }
 
     .hero-card {
-      border-radius: 32px;
+      border-radius: 24px;
       padding: 36px;
       margin-bottom: 24px;
-      background:
-        radial-gradient(circle at top right, rgba(13, 124, 134, 0.16), transparent 34%),
-        radial-gradient(circle at top left, rgba(215, 122, 53, 0.14), transparent 32%),
-        rgba(255, 255, 255, 0.92);
+      background: var(--panel-bg);
     }
 
     .hero-card h1,
@@ -639,26 +635,26 @@
 
     input[type="button"],
     button {
-      border: none;
+      border: 1px solid #506673;
       border-radius: 999px;
       padding: 12px 18px;
       font-weight: 700;
       cursor: pointer;
       color: #fff;
-      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
-      box-shadow: 0 14px 28px rgba(13, 124, 134, 0.18);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+      background: var(--accent);
+      box-shadow: none;
+      transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
     }
 
     input[type="button"]:hover,
     button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 18px 34px rgba(13, 124, 134, 0.22);
+      background: var(--accent-deep);
+      border-color: var(--accent-deep);
     }
 
     .remove-row {
-      background: linear-gradient(135deg, #b24747 0%, #8b2e2e 100%);
-      box-shadow: 0 14px 28px rgba(139, 46, 46, 0.18);
+      background: #6f5a5a;
+      border-color: #6f5a5a;
     }
 
     .inline-field,
@@ -673,7 +669,8 @@
       margin-top: 18px;
       padding: 18px;
       border-radius: var(--radius-md);
-      background: linear-gradient(180deg, rgba(13, 124, 134, 0.06), rgba(13, 124, 134, 0.02));
+      background: var(--surface-muted);
+      border: 1px solid var(--panel-border);
     }
 
     .toggle-item {
@@ -708,7 +705,7 @@
     }
 
     table th {
-      background: linear-gradient(180deg, #f3faf9 0%, #eaf4f5 100%);
+      background: #eef1f3;
       color: var(--text-strong);
       font-size: 12px;
       letter-spacing: 0.12em;
@@ -720,7 +717,7 @@
     }
 
     table tr:hover {
-      background: rgba(13, 124, 134, 0.06);
+      background: #f2f5f6;
     }
 
     .mapping-toolbar {
@@ -746,8 +743,9 @@
       margin-top: 18px;
       padding: 16px 18px;
       border-radius: var(--radius-md);
-      background: linear-gradient(180deg, rgba(215, 122, 53, 0.12), rgba(215, 122, 53, 0.06));
-      color: #75431f;
+      background: #f3efe9;
+      color: #6a5a48;
+      border: 1px solid #dfd6cb;
     }
 
     .select2-container--default .select2-selection--single {

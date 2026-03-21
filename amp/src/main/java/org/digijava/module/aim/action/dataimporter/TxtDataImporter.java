@@ -105,12 +105,16 @@ public class TxtDataImporter {
             String primarySubSector= rowRef.get(getKey(config, ImporterConstants.PRIMARY_SUBSECTOR));
             String secondarySubSector= rowRef.get(getKey(config, ImporterConstants.SECONDARY_SUBSECTOR));
             String projectStatusStr = rowRef.get(getKey(config, ImporterConstants.PROJECT_STATUS));
-            String importedOrgGroupName = null;
+            String importedOrgGroupName;
             if (config.containsValue(ImporterConstants.ORG_GROUP)) {
                 String configuredOrgGroupName = rowRef.get(getKey(config, ImporterConstants.ORG_GROUP));
                 if (configuredOrgGroupName != null && !configuredOrgGroupName.trim().isEmpty()) {
                     importedOrgGroupName = configuredOrgGroupName.trim();
+                } else {
+                    importedOrgGroupName = null;
                 }
+            } else {
+                importedOrgGroupName = null;
             }
 
             // Use holder arrays to capture values from lambda (for effectively final requirement)

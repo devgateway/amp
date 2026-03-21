@@ -306,6 +306,7 @@
 
       // Create a new table row
       var row = document.createElement("tr");
+      row.setAttribute('data-selected-field', selectedField);
       //
       // // Create table cells for column name and selected field
       var columnNameCell = document.createElement("td");
@@ -332,6 +333,12 @@
 
       // Append the row to the table body
       tbody.appendChild(row);
+    }
+
+    function hasMappedOrgGroupField() {
+      return $('#selected-pairs-table-body tr').filter(function() {
+        return $(this).attr('data-selected-field') === 'Organization Group';
+      }).length > 0;
     }
 
     function uploadTemplateFile() {
@@ -431,18 +438,23 @@
       var fileType = $('#file-type').val();
       var internal = $('#internal').prop('checked');
       var skipExisting = $('#skipExisting').prop('checked');
+      var skipRecordsWithoutTransactions = $('#skipRecordsWithoutTransactions').prop('checked');
       var validateActivities = $('#validateActivities').prop('checked');
       var addDisbursementForCommitment = $('#addDisbursementForCommitment').prop('checked');
       var createMissingOrgs = $('#createMissingOrgs').prop('checked');
+      var createMissingOrgGroups = $('#createMissingOrgGroups').prop('checked');
       var orgGroupId = $('#orgGroupId').val();
+      var hasOrgGroupMapping = hasMappedOrgGroupField();
       console.log("Internal", internal);
       console.log("Skip existing", skipExisting);
+      console.log("Skip records without transactions", skipRecordsWithoutTransactions);
       console.log("Validate activities", validateActivities);
       console.log("Add disbursement for commitment", addDisbursementForCommitment);
       console.log("Create missing orgs", createMissingOrgs);
+      console.log("Create missing org groups", createMissingOrgGroups);
       console.log("Org group id", orgGroupId);
-      if (createMissingOrgs && !orgGroupId) {
-        alert("<digi:trn jsFriendly='true'>Please select an Organization Group for newly created organizations.</digi:trn>");
+      if (createMissingOrgs && !orgGroupId && !hasOrgGroupMapping && !createMissingOrgGroups) {
+        alert("<digi:trn jsFriendly='true'>Please select an Organization Group, map the Organization Group column, or enable organization group creation for newly created organizations.</digi:trn>");
         return;
       }
       var dataSeparator = $('#data-separator').val();
@@ -464,9 +476,11 @@
       formData.append('dataFile', fileInput.files[0]);
       formData.append('internal', internal);
       formData.append('skipExisting', skipExisting);
+      formData.append('skipRecordsWithoutTransactions', skipRecordsWithoutTransactions);
       formData.append('validateActivities', validateActivities);
       formData.append('addDisbursementForCommitment', addDisbursementForCommitment);
       formData.append('createMissingOrgs', createMissingOrgs);
+      formData.append('createMissingOrgGroups', createMissingOrgGroups);
       if (createMissingOrgs && orgGroupId) {
         formData.append('orgGroupId', orgGroupId);
       }
@@ -930,9 +944,11 @@
         <div class="toggle-grid">
           <label class="toggle-item" for="internal"><input type="checkbox" id="internal" name="internal"> <digi:trn>Internal</digi:trn></label>
           <label class="toggle-item" for="skipExisting"><input type="checkbox" id="skipExisting" name="skipExisting"> <digi:trn>Skip existing activities (only insert new)</digi:trn></label>
+          <label class="toggle-item" for="skipRecordsWithoutTransactions"><input type="checkbox" id="skipRecordsWithoutTransactions" name="skipRecordsWithoutTransactions"> <digi:trn>Skip records with no transactions</digi:trn></label>
           <label class="toggle-item" for="validateActivities"><input type="checkbox" id="validateActivities" name="validateActivities"> <digi:trn>Validate imported activities (set as approved, non-draft)</digi:trn></label>
           <label class="toggle-item" for="addDisbursementForCommitment"><input type="checkbox" id="addDisbursementForCommitment" name="addDisbursementForCommitment"> <digi:trn>Add Disbursement for any Commitment</digi:trn></label>
           <label class="toggle-item" for="createMissingOrgs"><input type="checkbox" id="createMissingOrgs" name="createMissingOrgs"> <digi:trn>Create missing organizations</digi:trn></label>
+          <label class="toggle-item" for="createMissingOrgGroups"><input type="checkbox" id="createMissingOrgGroups" name="createMissingOrgGroups"> <digi:trn>Create missing organization groups for new organizations</digi:trn></label>
         </div>
 
         <div id="orgGroupDiv" style="display:none; margin-top:16px;">

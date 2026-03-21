@@ -34,6 +34,7 @@ public final class ImporterConstants {
     public static final String DONOR_AGENCY = "Donor Agency";
     public static final String DONOR_AGENCY_CODE = "Donor Agency Code";
     public static final String EXCHANGE_RATE = "Exchange Rate";
+    public static final String ORG_GROUP = "Organization Group";
     public static final String RESPONSIBLE_ORGANIZATION = "Responsible Organization";
     public static final String RESPONSIBLE_ORGANIZATION_CODE = "Responsible Organization Code";
     public static final String EXECUTING_AGENCY = "Executing Agency";

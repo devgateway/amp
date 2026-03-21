@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
@@ -23,6 +24,7 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProjectCurre
 import org.digijava.module.aim.action.dataimporter.model.*;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -74,8 +76,8 @@ public class ImporterUtil {
 
     }
 
-    public static List<Funding> setFundingItemsForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, boolean expenditure, String
-            adjustmentType, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId, boolean addDisbursementForCommitment) {
+        public static List<Funding> setFundingItemsForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, boolean expenditure, String
+            adjustmentType, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId, String importedOrgGroupName, boolean createMissingOrgGroups, boolean addDisbursementForCommitment) {
         int detailColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.FINANCING_INSTRUMENT));
         String finInstrument = detailColumn >= 0 ? getStringValueFromCell(row.getCell(detailColumn), false) : "";
 
@@ -111,7 +113,7 @@ public class ImporterUtil {
                 int columnIndex1 = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY));
                 int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
                 String donorAgencyCode = donorAgencyCodeColumn >= 0 ? getStringValueFromCell(row.getCell(donorAgencyCodeColumn), true) : null;
-                updateOrgs(importDataModel, columnIndex1 >= 0 ? Objects.requireNonNull(getStringValueFromCell(row.getCell(columnIndex1), false)).trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId);
+                updateOrgs(importDataModel, columnIndex1 >= 0 ? Objects.requireNonNull(getStringValueFromCell(row.getCell(columnIndex1), false)).trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
                 List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
                 List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
                 for (int i = 0; i < donors.size(); i++) {
@@ -137,8 +139,8 @@ public class ImporterUtil {
     }
 
 
-    public static List<Funding> setFundingItemsForTxt(Map<String, String> row, Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Number value, boolean commitment, boolean disbursement, boolean expenditure, String
-            adjustmentType, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId, boolean addDisbursementForCommitment) {
+        public static List<Funding> setFundingItemsForTxt(Map<String, String> row, Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Number value, boolean commitment, boolean disbursement, boolean expenditure, String
+            adjustmentType, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId, String importedOrgGroupName, boolean createMissingOrgGroups, boolean addDisbursementForCommitment) {
         String finInstrument = row.get(getKey(config, ImporterConstants.FINANCING_INSTRUMENT));
         finInstrument = finInstrument != null ? finInstrument : "";
 
@@ -179,7 +181,7 @@ public class ImporterUtil {
                 String donorColumn = row.get(getKey(config, ImporterConstants.DONOR_AGENCY));
                 String donorAgencyCode = row.get(getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
 
-                updateOrgs(importDataModel, donorColumn != null && !donorColumn.isEmpty() ? donorColumn.trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId);
+                updateOrgs(importDataModel, donorColumn != null && !donorColumn.isEmpty() ? donorColumn.trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
                 List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
                 List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
                 for (int i = 0; i < donors.size(); i++) {
@@ -1751,10 +1753,10 @@ public class ImporterUtil {
     }
 
     public static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type) {
-        return updateOrgs(importDataModel, name, code, session, type, false, null);
+        return updateOrgs(importDataModel, name, code, session, type, false, null, null, false);
     }
 
-    public static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type, boolean createMissingOrgs, Long orgGroupId)
+    public static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type, boolean createMissingOrgs, Long orgGroupId, String importedOrgGroupName, boolean createMissingOrgGroups)
     {
         List<String> names = splitMultiValues(name);
         List<String> codes = splitMultiValues(code);
@@ -1762,7 +1764,7 @@ public class ImporterUtil {
         for (int i = 0; i < names.size(); i++) {
             String singleName = names.get(i);
             String singleCode = i < codes.size() ? codes.get(i) : null;
-            lastOrgId = updateSingleOrg(importDataModel, singleName, singleCode, session, type, createMissingOrgs, orgGroupId);
+            lastOrgId = updateSingleOrg(importDataModel, singleName, singleCode, session, type, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
         }
         return lastOrgId;
     }
@@ -1784,7 +1786,7 @@ public class ImporterUtil {
         return trimmed.replaceAll("\\s*-\\s*\\d+(\\.\\d+)?%\\s*$", "").trim();
     }
 
-    private static Long updateSingleOrg(ImportDataModel importDataModel, String name, String code, Session session, String type, boolean createMissingOrgs, Long orgGroupId)
+    private static Long updateSingleOrg(ImportDataModel importDataModel, String name, String code, Session session, String type, boolean createMissingOrgs, Long orgGroupId, String importedOrgGroupName, boolean createMissingOrgGroups)
     {
         Long orgId;
         String cleanName = stripParenthetical(name);
@@ -1818,13 +1820,12 @@ public class ImporterUtil {
                 if (code != null) {
                     newOrg.setOrgCode(code);
                 }
-                if (orgGroupId != null) {
-                    AmpOrgGroup orgGroup = (AmpOrgGroup) session.get(AmpOrgGroup.class, orgGroupId);
-                    logger.info("Group being set for the new org is: "+orgGroup.getName());
-                    if (orgGroup != null) {
-                        newOrg.setOrgGrpId(orgGroup);
-                    }
+                AmpOrgGroup orgGroup = resolveOrgGroup(session, orgGroupId, importedOrgGroupName, createMissingOrgGroups, cleanName);
+                if (orgGroup == null) {
+                    throw new IllegalStateException("Unable to resolve an organization group for new organization '" + cleanName + "'");
                 }
+                logger.info("Group being set for the new org is: " + orgGroup.getName());
+                newOrg.setOrgGrpId(orgGroup);
                 session.save(newOrg);
                 session.flush();
                 orgId = newOrg.getAmpOrgId();
@@ -1875,6 +1876,133 @@ public class ImporterUtil {
             importDataModel.getContracting_agency().add(contractingAgency);
         }
         return orgId;
+    }
+
+    public static boolean hasTransactions(List<Funding> fundings) {
+        if (fundings == null || fundings.isEmpty()) {
+            return false;
+        }
+        for (Funding funding : fundings) {
+            if (funding == null) {
+                continue;
+            }
+            if ((funding.getCommitments() != null && !funding.getCommitments().isEmpty())
+                    || (funding.getDisbursements() != null && !funding.getDisbursements().isEmpty())
+                    || (funding.getExpenditures() != null && !funding.getExpenditures().isEmpty())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void persistImportedProjectStatus(ImportedProject importedProject) {
+        if (importedProject == null) {
+            return;
+        }
+        Session session = PersistenceManager.getRequestDBSession();
+        try {
+            if (session == null || !session.isOpen()) {
+                PersistenceManager.doInTransaction(s -> {
+                    s.saveOrUpdate(importedProject);
+                    s.flush();
+                });
+                return;
+            }
+            session.saveOrUpdate(importedProject);
+            session.flush();
+        } catch (Exception e) {
+            logger.warn("Could not save imported project status: {}", e.getMessage());
+        }
+    }
+
+    private static AmpOrgGroup resolveOrgGroup(Session session, Long orgGroupId, String importedOrgGroupName, boolean createMissingOrgGroups, String organizationName) {
+        AmpOrgGroup importedOrgGroup = findOrgGroupByNameOrCode(session, importedOrgGroupName);
+        if (importedOrgGroup != null) {
+            return importedOrgGroup;
+        }
+
+        if (importedOrgGroupName != null && createMissingOrgGroups) {
+            return getOrCreateOrgGroup(session, importedOrgGroupName, orgGroupId);
+        }
+
+        if (orgGroupId != null) {
+            return (AmpOrgGroup) session.get(AmpOrgGroup.class, orgGroupId);
+        }
+
+        if (createMissingOrgGroups && organizationName != null && !organizationName.trim().isEmpty()) {
+            return getOrCreateOrgGroup(session, organizationName.trim(), null);
+        }
+
+        return null;
+    }
+
+    private static AmpOrgGroup findOrgGroupByNameOrCode(Session session, String orgGroupValue) {
+        if (orgGroupValue == null || orgGroupValue.trim().isEmpty()) {
+            return null;
+        }
+
+        String normalizedValue = orgGroupValue.trim();
+        String orgGroupNameHql = AmpOrgGroup.hqlStringForName("grp");
+        String hql = "SELECT grp FROM " + AmpOrgGroup.class.getName() + " grp WHERE (grp.deleted IS NULL OR grp.deleted = false) "
+                + "AND (LOWER(" + orgGroupNameHql + ") = LOWER(:value) OR LOWER(grp.orgGrpCode) = LOWER(:value))";
+        return (AmpOrgGroup) session.createQuery(hql)
+                .setParameter("value", normalizedValue, StringType.INSTANCE)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
+
+    private static AmpOrgGroup getOrCreateOrgGroup(Session session, String orgGroupName, Long fallbackOrgGroupId) {
+        AmpOrgGroup existingGroup = findOrgGroupByNameOrCode(session, orgGroupName);
+        if (existingGroup != null) {
+            return existingGroup;
+        }
+
+        AmpOrgGroup newOrgGroup = new AmpOrgGroup();
+        newOrgGroup.setOrgGrpName(orgGroupName.trim());
+
+        AmpOrgType orgType = null;
+        if (fallbackOrgGroupId != null) {
+            AmpOrgGroup fallbackGroup = (AmpOrgGroup) session.get(AmpOrgGroup.class, fallbackOrgGroupId);
+            if (fallbackGroup != null) {
+                orgType = fallbackGroup.getOrgType();
+            }
+        }
+        if (orgType == null) {
+            orgType = getDefaultOrgType();
+        }
+
+        newOrgGroup.setOrgType(orgType);
+        ARUtil.clearOrgGroupTypeDimensions();
+        DbUtil.add(newOrgGroup);
+        session.flush();
+        return newOrgGroup;
+    }
+
+    private static AmpOrgType getDefaultOrgType() {
+        List<AmpOrgType> allAmpOrgTypes = DbUtil.getAmpOrgTypes();
+        AmpOrgType otherOrgType = null;
+        AmpOrgType bilateralOrgType = null;
+
+        if (allAmpOrgTypes == null || allAmpOrgTypes.isEmpty()) {
+            throw new IllegalStateException("No organization types are available to create a new organization group");
+        }
+
+        for (AmpOrgType type : allAmpOrgTypes) {
+            if (type.getOrgType() != null && type.getOrgType().equalsIgnoreCase("other")) {
+                otherOrgType = type;
+            }
+            if (type.getOrgType() != null && type.getOrgType().equalsIgnoreCase("bilateral")) {
+                bilateralOrgType = type;
+            }
+        }
+
+        if (otherOrgType != null) {
+            return otherOrgType;
+        }
+        if (bilateralOrgType != null) {
+            return bilateralOrgType;
+        }
+        return allAmpOrgTypes.get(0);
     }
 
     /**

@@ -40,7 +40,7 @@ public class TxtDataImporter {
     private static final Logger logger = LoggerFactory.getLogger(TxtDataImporter.class);
 
 
-    public static int processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting, boolean createMissingOrgs, Long orgGroupId, boolean validateActivities, boolean addDisbursementForCommitment)
+    public static int processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting, boolean createMissingOrgs, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment)
     {
         logger.info("Processing txt file: " + file.getName());
         CSVParser parser = new CSVParserBuilder().withSeparator(request.getParameter("dataSeparator").charAt(0)).build();
@@ -59,7 +59,7 @@ public class TxtDataImporter {
                     logger.info("Batch number here: {}",batchNumber);
 
                     // Process the batch
-                    processBatch(batch, request, config, importedFilesRecord, createMissingOrgs, orgGroupId, validateActivities, addDisbursementForCommitment);
+                    processBatch(batch, request, config, importedFilesRecord, skipExisting, createMissingOrgs, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment);
                     // Clear the batch for the next set of rows
                     batch.clear();
                     batchNumber+=1;
@@ -69,7 +69,7 @@ public class TxtDataImporter {
             // Process any remaining rows in the batch
             if (!batch.isEmpty()) {
                 logger.info("Processing last batch of size {}", batch.size());
-                processBatch(batch, request, config, importedFilesRecord, createMissingOrgs, orgGroupId, validateActivities, addDisbursementForCommitment);
+                processBatch(batch, request, config, importedFilesRecord, skipExisting, createMissingOrgs, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment);
             }
         } catch (IOException | CsvValidationException e) {
             logger.error("Error processing txt file "+e.getMessage(),e);
@@ -79,7 +79,7 @@ public class TxtDataImporter {
     }
 
 
-    private static void processBatch(List<Map<String, String>> batch, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean createMissingOrgs, Long orgGroupId, boolean validateActivities, boolean addDisbursementForCommitment) throws JsonProcessingException {
+    private static void processBatch(List<Map<String, String>> batch, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment) throws JsonProcessingException {
         logger.info("Processing txt batch");
         SessionUtil.extendSessionIfNeeded(request);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
@@ -93,7 +93,7 @@ public class TxtDataImporter {
             ImportDataModel importDataModel = new ImportDataModel();
             importDataModel.setModified_by(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeamMemId());
             importDataModel.setTeam(TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeam().getAmpTeamId());
-            importDataModel.setIs_draft(true);
+            importDataModel.setIs_draft(!validateActivities);
             OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             importDataModel.setCreation_date(now.format(formatter));
             String componentName= rowRef.get(getKey(config, ImporterConstants.COMPONENT_NAME));
@@ -105,6 +105,13 @@ public class TxtDataImporter {
             String primarySubSector= rowRef.get(getKey(config, ImporterConstants.PRIMARY_SUBSECTOR));
             String secondarySubSector= rowRef.get(getKey(config, ImporterConstants.SECONDARY_SUBSECTOR));
             String projectStatusStr = rowRef.get(getKey(config, ImporterConstants.PROJECT_STATUS));
+            String importedOrgGroupName = null;
+            if (config.containsValue(ImporterConstants.ORG_GROUP)) {
+                String configuredOrgGroupName = rowRef.get(getKey(config, ImporterConstants.ORG_GROUP));
+                if (configuredOrgGroupName != null && !configuredOrgGroupName.trim().isEmpty()) {
+                    importedOrgGroupName = configuredOrgGroupName.trim();
+                }
+            }
 
             // Use holder arrays to capture values from lambda (for effectively final requirement)
             final Long[] existingActivityIdHolder = new Long[1];  // Store only the ID, not the entity
@@ -117,7 +124,7 @@ public class TxtDataImporter {
                     
                     AmpActivityVersion existing = existingActivity(projectTitle, projectCode, session);
                     existingActivityIdHolder[0] = existing != null ? existing.getAmpActivityId() : null;
-                    if (existing != null && SKIP_EXISTING) {
+                    if (existing != null && skipExisting) {
                         logger.info("Instructed to skip existing activities");
                         importedProject.setImportStatus(ImportStatus.SKIPPED);
                         return;
@@ -152,22 +159,22 @@ public class TxtDataImporter {
                                 updateSectors(importDataModel, rowRef.get(entry.getKey().trim()), session, false, secondarySubSector);
                                 break;
                             case ImporterConstants.DONOR_AGENCY:
-                                updateOrgs(importDataModel, rowRef.get(entry.getKey().trim()), donorAgencyCode, session, ImporterConstants.ORG_TYPE_DONOR, createMissingOrgs, orgGroupId);
+                                updateOrgs(importDataModel, rowRef.get(entry.getKey().trim()), donorAgencyCode, session, ImporterConstants.ORG_TYPE_DONOR, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
                                 break;
                             case ImporterConstants.RESPONSIBLE_ORGANIZATION:
-                                responsibleOrgIdHolder[0] = updateOrgs(importDataModel, rowRef.get(entry.getKey().trim()), responsibleOrgCode, session, ImporterConstants.ORG_TYPE_RESPONSIBLE_ORG, createMissingOrgs, orgGroupId);
+                                responsibleOrgIdHolder[0] = updateOrgs(importDataModel, rowRef.get(entry.getKey().trim()), responsibleOrgCode, session, ImporterConstants.ORG_TYPE_RESPONSIBLE_ORG, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
                                 break;
                             case ImporterConstants.BENEFICIARY_AGENCY:
-                                responsibleOrgIdHolder[0] = updateOrgs(importDataModel, rowRef.get(entry.getKey().trim()), responsibleOrgCode, session, ImporterConstants.ORG_TYPE_BENEFICIARY_AGENCY, createMissingOrgs, orgGroupId);
+                                responsibleOrgIdHolder[0] = updateOrgs(importDataModel, rowRef.get(entry.getKey().trim()), responsibleOrgCode, session, ImporterConstants.ORG_TYPE_BENEFICIARY_AGENCY, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
                                 break;
                             case ImporterConstants.EXECUTING_AGENCY:
-                                updateOrgs(importDataModel, rowRef.get(entry.getKey().trim()), null, session, ImporterConstants.ORG_TYPE_EXECUTING_AGENCY, createMissingOrgs, orgGroupId);
+                                updateOrgs(importDataModel, rowRef.get(entry.getKey().trim()), null, session, ImporterConstants.ORG_TYPE_EXECUTING_AGENCY, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
                                 break;
                             case ImporterConstants.IMPLEMENTING_AGENCY:
-                                updateOrgs(importDataModel, rowRef.get(entry.getKey().trim()), null, session, ImporterConstants.ORG_TYPE_IMPLEMENTING_AGENCY, createMissingOrgs, orgGroupId);
+                                updateOrgs(importDataModel, rowRef.get(entry.getKey().trim()), null, session, ImporterConstants.ORG_TYPE_IMPLEMENTING_AGENCY, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
                                 break;
                             case ImporterConstants.CONTRACTING_AGENCY:
-                                updateOrgs(importDataModel, rowRef.get(entry.getKey().trim()), null, session, ImporterConstants.ORG_TYPE_CONTRACTING_AGENCY, createMissingOrgs, orgGroupId);
+                                updateOrgs(importDataModel, rowRef.get(entry.getKey().trim()), null, session, ImporterConstants.ORG_TYPE_CONTRACTING_AGENCY, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
                                 break;
                             case ImporterConstants.TRANSACTION_AMOUNT: {
                                 boolean commitment = true, disbursement = true, expenditure = false;
@@ -182,28 +189,30 @@ public class TxtDataImporter {
                                         adjustmentType = parsed.adjustmentType;
                                     }
                                 }
-                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), commitment, disbursement, expenditure, adjustmentType, null, createMissingOrgs, orgGroupId, addDisbursementForCommitment));
+                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), commitment, disbursement, expenditure, adjustmentType, null, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
                                 break;
                             }
                             case ImporterConstants.PLANNED_COMMITMENT:
-                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, null, createMissingOrgs, orgGroupId, addDisbursementForCommitment));
+                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, null, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
                                 break;
                             case ImporterConstants.PLANNED_DISBURSEMENT:
-                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, null, createMissingOrgs, orgGroupId, addDisbursementForCommitment));
+                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, null, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
                                 break;
                             case ImporterConstants.PLANNED_EXPENDITURE:
-                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, null, createMissingOrgs, orgGroupId, addDisbursementForCommitment));
+                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, null, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
                                 break;
                             case ImporterConstants.ACTUAL_COMMITMENT:
-                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, null, createMissingOrgs, orgGroupId, addDisbursementForCommitment));
+                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, null, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
                                 break;
                             case ImporterConstants.ACTUAL_DISBURSEMENT:
-                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, null, createMissingOrgs, orgGroupId, addDisbursementForCommitment));
+                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, null, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
                                 break;
                             case ImporterConstants.ACTUAL_EXPENDITURE:
-                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, null, createMissingOrgs, orgGroupId, addDisbursementForCommitment));
+                                fundings.addAll(setFundingItemsForTxt(rowRef, config, entry, importDataModel, session, Double.parseDouble(rowRef.get(entry.getKey().trim())), false, false, true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, null, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
                                 break;
                             case ImporterConstants.MEASURE_TYPE:
+                                break;
+                            case ImporterConstants.ORG_GROUP:
                                 break;
                             case ImporterConstants.PROJECT_STATUS:
                                 break;
@@ -219,7 +228,22 @@ public class TxtDataImporter {
                 if (cause instanceof JsonProcessingException) {
                     throw (JsonProcessingException) cause;
                 }
-                throw e;
+                importedProject.setImportStatus(ImportStatus.FAILED);
+                persistImportedProjectStatus(importedProject);
+                logger.error("Error preparing txt row for project {}: {}", projectCode, e.getMessage(), e);
+                continue;
+            }
+
+            if (importedProject.getImportStatus() == ImportStatus.SKIPPED) {
+                persistImportedProjectStatus(importedProject);
+                continue;
+            }
+
+            if (skipRecordsWithoutTransactions && !hasTransactions(fundings)) {
+                importedProject.setImportStatus(ImportStatus.SKIPPED);
+                persistImportedProjectStatus(importedProject);
+                logger.info("Skipping txt row for project {} because no transactions were found", projectCode);
+                continue;
             }
 
             // Clear session after Phase 1 to avoid contamination of Phase 2's transaction

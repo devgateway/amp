@@ -13,7 +13,9 @@ public class DataImporterForm extends ActionForm {
 
     private boolean internal;
     private boolean skipExisting;
+    private boolean skipRecordsWithoutTransactions;
     private boolean createMissingOrgs;
+    private boolean createMissingOrgGroups;
     private Long orgGroupId;
     private boolean validateActivities;
     private boolean addDisbursementForCommitment;
@@ -24,6 +26,14 @@ public class DataImporterForm extends ActionForm {
 
     public void setSkipExisting(boolean skipExisting) {
         this.skipExisting = skipExisting;
+    }
+
+    public boolean isSkipRecordsWithoutTransactions() {
+        return skipRecordsWithoutTransactions;
+    }
+
+    public void setSkipRecordsWithoutTransactions(boolean skipRecordsWithoutTransactions) {
+        this.skipRecordsWithoutTransactions = skipRecordsWithoutTransactions;
     }
 
     public boolean isValidateActivities() {
@@ -48,6 +58,14 @@ public class DataImporterForm extends ActionForm {
 
     public void setCreateMissingOrgs(boolean createMissingOrgs) {
         this.createMissingOrgs = createMissingOrgs;
+    }
+
+    public boolean isCreateMissingOrgGroups() {
+        return createMissingOrgGroups;
+    }
+
+    public void setCreateMissingOrgGroups(boolean createMissingOrgGroups) {
+        this.createMissingOrgGroups = createMissingOrgGroups;
     }
 
     public Long getOrgGroupId() {

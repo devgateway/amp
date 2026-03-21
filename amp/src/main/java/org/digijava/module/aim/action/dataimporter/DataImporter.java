@@ -356,14 +356,25 @@ public class DataImporter extends Action {
                 boolean skipExisting = dataImporterForm.isSkipExisting();
                 boolean validateActivities = dataImporterForm.isValidateActivities();
                 boolean addDisbursementForCommitment = dataImporterForm.isAddDisbursementForCommitment();
+                boolean skipRecordsWithoutTransactions = dataImporterForm.isSkipRecordsWithoutTransactions();
                 boolean createMissingOrgs = dataImporterForm.isCreateMissingOrgs();
+                boolean createMissingOrgGroups = dataImporterForm.isCreateMissingOrgGroups();
                 Long orgGroupId = dataImporterForm.getOrgGroupId();
                 logger.info("Internal: "+ isInternal);
                 logger.info("Skip existing: "+ skipExisting);
                 logger.info("Validate activities: "+ validateActivities);
                 logger.info("Add disbursement for commitment: "+ addDisbursementForCommitment);
+                logger.info("Skip records without transactions: " + skipRecordsWithoutTransactions);
                 logger.info("Create missing orgs: "+ createMissingOrgs);
+                logger.info("Create missing org groups: " + createMissingOrgGroups);
                 logger.info("Org group id: "+ orgGroupId);
+                if (createMissingOrgs && orgGroupId == null && !createMissingOrgGroups
+                        && !columnPairsToUse.containsValue(ImporterConstants.ORG_GROUP)) {
+                    response.setHeader("errorMessage",
+                            "Creating missing organizations requires a fallback Organization Group, the 'Create missing org groups' option, or an 'Organization Group' column mapping.");
+                    response.setStatus(400);
+                    return mapping.findForward("importData");
+                }
                 if (isInternal) {
                     columnPairsToUse = new HashMap<>(columnPairsToUse);
                     columnPairsToUse.put("Donor Agency", "Donor Agency");
@@ -374,9 +385,9 @@ public class DataImporter extends Action {
                         String dataSheetChoice = request.getParameter("dataSheetChoice");
                         String dataSheetName = request.getParameter("dataSheetName");
                         boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
-                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, orgGroupId, validateActivities, addDisbursementForCommitment);
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, orgGroupId, validateActivities, addDisbursementForCommitment);
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment);
                     }
                 } catch (Exception e) {
                     ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
@@ -571,6 +582,7 @@ public class DataImporter extends Action {
         fieldsInfos.add(ImporterConstants.DONOR_AGENCY);
         fieldsInfos.add(ImporterConstants.EXCHANGE_RATE);
         fieldsInfos.add(ImporterConstants.DONOR_AGENCY_CODE);
+        fieldsInfos.add(ImporterConstants.ORG_GROUP);
         fieldsInfos.add(ImporterConstants.RESPONSIBLE_ORGANIZATION);
         fieldsInfos.add(ImporterConstants.RESPONSIBLE_ORGANIZATION_CODE);
         fieldsInfos.add(ImporterConstants.EXECUTING_AGENCY);

@@ -198,12 +198,16 @@ public class ExcelImporter {
                 String projectDesc = projectDescColumn >= 0 ? getStringValueFromCell(rowRef.getCell(projectDescColumn),false) : null;
                 importDataModel.setDescription(projectDesc);
 
-                String importedOrgGroupName = null;
+                String importedOrgGroupName;
                 if (config.containsValue(ImporterConstants.ORG_GROUP)) {
                     String configuredOrgGroupName = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.ORG_GROUP);
                     if (configuredOrgGroupName != null && !configuredOrgGroupName.trim().isEmpty()) {
                         importedOrgGroupName = configuredOrgGroupName.trim();
+                    } else {
+                        importedOrgGroupName = null;
                     }
+                } else {
+                    importedOrgGroupName = null;
                 }
 
                 // Use holder arrays to capture values from lambda (for effectively final requirement)

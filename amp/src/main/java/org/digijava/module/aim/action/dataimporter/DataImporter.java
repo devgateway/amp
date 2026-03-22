@@ -363,6 +363,7 @@ public class DataImporter extends Action {
                 boolean addDisbursementForCommitment = dataImporterForm.isAddDisbursementForCommitment();
                 boolean skipRecordsWithoutTransactions = dataImporterForm.isSkipRecordsWithoutTransactions();
                 boolean createMissingOrgs = dataImporterForm.isCreateMissingOrgs();
+                boolean createMissingSectors = dataImporterForm.isCreateMissingSectors();
                 boolean createMissingOrgGroups = dataImporterForm.isCreateMissingOrgGroups();
                 Long orgGroupId = dataImporterForm.getOrgGroupId();
                 Long defaultActivityStatusId = dataImporterForm.getDefaultActivityStatusId();
@@ -372,6 +373,7 @@ public class DataImporter extends Action {
                 logger.info("Add disbursement for commitment: "+ addDisbursementForCommitment);
                 logger.info("Skip records without transactions: " + skipRecordsWithoutTransactions);
                 logger.info("Create missing orgs: "+ createMissingOrgs);
+                logger.info("Create missing sectors: {}", createMissingSectors);
                 logger.info("Create missing org groups: " + createMissingOrgGroups);
                 logger.info("Org group id: "+ orgGroupId);
                 logger.info("Default activity status id: {}", defaultActivityStatusId);
@@ -392,9 +394,9 @@ public class DataImporter extends Action {
                         String dataSheetChoice = request.getParameter("dataSheetChoice");
                         String dataSheetName = request.getParameter("dataSheetName");
                         boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
-                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId);
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId);
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId);
                     }
                 } catch (Exception e) {
                     ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);

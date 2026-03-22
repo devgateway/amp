@@ -449,6 +449,7 @@
       var validateActivities = $('#validateActivities').prop('checked');
       var addDisbursementForCommitment = $('#addDisbursementForCommitment').prop('checked');
       var createMissingOrgs = $('#createMissingOrgs').prop('checked');
+      var createMissingSectors = $('#createMissingSectors').prop('checked');
       var createMissingOrgGroups = $('#createMissingOrgGroups').prop('checked');
       var orgGroupId = $('#orgGroupId').val();
       var defaultActivityStatusId = $('#defaultActivityStatusId').val();
@@ -459,6 +460,7 @@
       console.log("Validate activities", validateActivities);
       console.log("Add disbursement for commitment", addDisbursementForCommitment);
       console.log("Create missing orgs", createMissingOrgs);
+      console.log("Create missing sectors", createMissingSectors);
       console.log("Create missing org groups", createMissingOrgGroups);
       console.log("Org group id", orgGroupId);
       console.log("Default activity status id", defaultActivityStatusId);
@@ -489,6 +491,7 @@
       formData.append('validateActivities', validateActivities);
       formData.append('addDisbursementForCommitment', addDisbursementForCommitment);
       formData.append('createMissingOrgs', createMissingOrgs);
+      formData.append('createMissingSectors', createMissingSectors);
       formData.append('createMissingOrgGroups', createMissingOrgGroups);
       if (createMissingOrgs && orgGroupId) {
         formData.append('orgGroupId', orgGroupId);
@@ -960,6 +963,7 @@
           <label class="toggle-item" for="validateActivities"><input type="checkbox" id="validateActivities" name="validateActivities"> <digi:trn>Validate imported activities (set as approved, non-draft)</digi:trn></label>
           <label class="toggle-item" for="addDisbursementForCommitment"><input type="checkbox" id="addDisbursementForCommitment" name="addDisbursementForCommitment"> <digi:trn>Add Disbursement for any Commitment</digi:trn></label>
           <label class="toggle-item" for="createMissingOrgs"><input type="checkbox" id="createMissingOrgs" name="createMissingOrgs"> <digi:trn>Create missing organizations</digi:trn></label>
+          <label class="toggle-item" for="createMissingSectors"><input type="checkbox" id="createMissingSectors" name="createMissingSectors"> <digi:trn>Create missing sectors</digi:trn></label>
           <label class="toggle-item" for="createMissingOrgGroups"><input type="checkbox" id="createMissingOrgGroups" name="createMissingOrgGroups"> <digi:trn>Create missing organization groups for new organizations</digi:trn></label>
         </div>
 

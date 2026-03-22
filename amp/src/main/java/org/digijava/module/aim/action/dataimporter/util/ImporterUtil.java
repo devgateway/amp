@@ -27,6 +27,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -1525,17 +1526,19 @@ public class ImporterUtil {
     }
 
 
-    public static void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary, String subSector) {
+    public static void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary,
+                                     String subSector, boolean createMissingSectors, String importerSectorField) {
         if (subSector!=null && !subSector.isEmpty())
         {
             name = subSector;
         }
         for (String sectorName : splitMultiValues(name)) {
-            updateSingleSector(importDataModel, sectorName, session, primary);
+            updateSingleSector(importDataModel, sectorName, session, primary, createMissingSectors, importerSectorField);
         }
     }
 
-    private static void updateSingleSector(ImportDataModel importDataModel, String name, Session session, boolean primary) {
+    private static void updateSingleSector(ImportDataModel importDataModel, String name, Session session, boolean primary,
+                                           boolean createMissingSectors, String importerSectorField) {
         if (ConstantsMap.containsKey("sector_" + name)) {
             Long sectorId = ConstantsMap.get("sector_" + name);
             logger.info("In cache... sector " + "sector_" + name + ":" + sectorId);
@@ -1546,21 +1549,31 @@ public class ImporterUtil {
             }
 
             String finalName = name;
+            String classificationName = getClassificationNameForImporterField(importerSectorField, primary);
+            final Long[] foundSectorId = new Long[1];
             session.doWork(connection -> {
                 String query = primary
-                        ? "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.primary = TRUE"
-                        : "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND LOWER(acc.name) = LOWER(?)";
+                        ? "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name " +
+                        "FROM amp_sector ams " +
+                        "JOIN amp_classification_config acc ON ams.amp_sec_scheme_id = acc.classification_id " +
+                        "WHERE LOWER(ams.name) = LOWER(?) " +
+                        "AND (acc.primary = TRUE OR LOWER(acc.name) = LOWER(?))"
+                        : "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name " +
+                        "FROM amp_sector ams " +
+                        "JOIN amp_classification_config acc ON ams.amp_sec_scheme_id = acc.classification_id " +
+                        "WHERE LOWER(ams.name) = LOWER(?) " +
+                        "AND LOWER(acc.name) = LOWER(?)";
                 try (PreparedStatement statement = connection.prepareStatement(query)) {
                     // Set the name as a parameter to the prepared statement
                     statement.setString(1, finalName);
-                    if (!primary) {
-                        statement.setString(2, AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME);
-                    }
+                    statement.setString(2, classificationName);
+
 
                     // Execute the query and process the results
                     try (ResultSet resultSet = statement.executeQuery()) {
                         while (resultSet.next()) {
                             Long ampSectorId = resultSet.getLong("amp_sector_id");
+                            foundSectorId[0] = ampSectorId;
                             createSector(importDataModel, primary, ampSectorId);
                             ConstantsMap.put("sector_" + finalName, ampSectorId);
                         }
@@ -1570,7 +1583,77 @@ public class ImporterUtil {
                     logger.error("Error getting sectors", e);
                 }
             });
+
+            if (foundSectorId[0] == null && createMissingSectors) {
+                Long createdSectorId = createMissingSector(finalName, session, primary, importerSectorField);
+                if (createdSectorId != null) {
+                    createSector(importDataModel, primary, createdSectorId);
+                    ConstantsMap.put("sector_" + finalName, createdSectorId);
+                }
+            }
         }
+    }
+
+    private static Long createMissingSector(String name, Session session, boolean primary, String importerSectorField) {
+        if (name == null || name.trim().isEmpty()) {
+            return null;
+        }
+        String classificationName = getClassificationNameForImporterField(importerSectorField, primary);
+        AmpClassificationConfiguration classificationConfig = resolveClassificationConfig(session, primary, classificationName);
+        if (classificationConfig == null || classificationConfig.getClassification() == null) {
+            logger.warn("No classification configuration found for {} sector; cannot create '{}'.",
+                    classificationName, name);
+            return null;
+        }
+
+        try {
+            AmpSector newSector = new AmpSector();
+            newSector.setParentSectorId(null);
+            newSector.setAmpOrgId(null);
+            newSector.setAmpSecSchemeId(SectorUtil.getAmpSectorScheme(
+                    classificationConfig.getClassification().getAmpSecSchemeId()));
+            newSector.setSectorCode("101");
+            newSector.setSectorCodeOfficial(name);
+            newSector.setName(name);
+            newSector.setDescription(" ");
+            // Keep the source sector type (Primary/Secondary/etc.) based on the mapped import column.
+            newSector.setType(classificationConfig.getName());
+            newSector.setLanguage(null);
+            newSector.setVersion(null);
+            newSector.setDeleted(false);
+            DbUtil.add(newSector);
+            logger.info("Created missing {} sector '{}' with id={}",
+                    classificationConfig.getName(), name, newSector.getAmpSectorId());
+            return newSector.getAmpSectorId();
+        } catch (Exception e) {
+            logger.error("Failed creating missing sector '{}': {}", name, e.getMessage(), e);
+            return null;
+        }
+    }
+
+    private static AmpClassificationConfiguration resolveClassificationConfig(Session session, boolean primary,
+                                                                              String classificationName) {
+        String hql = primary
+                ? "FROM " + AmpClassificationConfiguration.class.getName() + " c WHERE c.primary = true"
+                : "FROM " + AmpClassificationConfiguration.class.getName() + " c WHERE LOWER(c.name) = LOWER(:name)";
+        Query query = session.createQuery(hql);
+        if (!primary) {
+            query.setParameter("name", classificationName, StringType.INSTANCE);
+        }
+        query.setMaxResults(1);
+        return (AmpClassificationConfiguration) query.uniqueResult();
+    }
+
+    private static String getClassificationNameForImporterField(String importerSectorField, boolean primary) {
+        if (ImporterConstants.PRIMARY_SECTOR.equals(importerSectorField)) {
+            return AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME;
+        }
+        if (ImporterConstants.SECONDARY_SECTOR.equals(importerSectorField)) {
+            return AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME;
+        }
+        return primary
+                ? AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME
+                : AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME;
     }
 
     private static List<String> splitMultiValues(String value) {

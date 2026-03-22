@@ -1659,8 +1659,12 @@ public class ImporterUtil {
     private static List<String> splitMultiValues(String value) {
         if (value == null || value.trim().isEmpty()) return Collections.emptyList();
         List<String> result = new ArrayList<>();
-        for (String part : value.split(";")) {
+        // Support standard and locale-specific semicolons used in spreadsheet exports.
+        for (String part : value.split("[;\\u061B\\uFF1B]")) {
             String trimmed = part.trim();
+            if (trimmed.length() >= 2 && trimmed.startsWith("\"") && trimmed.endsWith("\"")) {
+                trimmed = trimmed.substring(1, trimmed.length() - 1).trim();
+            }
             if (!trimmed.isEmpty()) result.add(trimmed);
         }
         return result;

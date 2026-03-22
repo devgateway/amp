@@ -873,8 +873,18 @@ public class ImporterUtil {
      * If activity_status is already set (e.g. from Project Status column), it is left unchanged.
      */
     public static void setStatus(ImportDataModel importDataModel, boolean validateActivities) {
+        setStatus(importDataModel, validateActivities, null);
+    }
+
+    /**
+     * Sets default activity status and approval status on the import model.
+     * If activity_status is already set (e.g. from Project Status column), it is left unchanged.
+     */
+    public static void setStatus(ImportDataModel importDataModel, boolean validateActivities, Long defaultActivityStatusId) {
         if (importDataModel.getActivity_status() == null) {
-            Long statusId = getCategoryValue("statusId", CategoryConstants.ACTIVITY_STATUS_KEY, "");
+            Long statusId = defaultActivityStatusId != null
+                    ? defaultActivityStatusId
+                    : getCategoryValue("statusId", CategoryConstants.ACTIVITY_STATUS_KEY, "");
             importDataModel.setActivity_status(statusId);
         }
         if (validateActivities) {
@@ -1201,7 +1211,7 @@ public class ImporterUtil {
             Hibernate.initialize(ampActivityVersion.getSectors());
             for (AmpActivitySector ampActivitySector : ampActivityVersion.getSectors()) {
                 if (ampActivitySector.getSectorId() == null) continue;
-                boolean primary = ampActivitySector.getClassificationConfig() != null && "primary".equalsIgnoreCase(ampActivitySector.getClassificationConfig().getName());
+                boolean primary = ampActivitySector.getClassificationConfig() != null && ampActivitySector.getClassificationConfig().isPrimary();
                 createSector(importDataModel, primary, ampActivitySector.getSectorId().getAmpSectorId(), ampActivitySector.getAmpActivitySectorId());
             }
         }
@@ -1537,10 +1547,15 @@ public class ImporterUtil {
 
             String finalName = name;
             session.doWork(connection -> {
-                String query = primary ? "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Primary'" : "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Secondary'";
+                String query = primary
+                        ? "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.primary = TRUE"
+                        : "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND LOWER(acc.name) = LOWER(?)";
                 try (PreparedStatement statement = connection.prepareStatement(query)) {
                     // Set the name as a parameter to the prepared statement
                     statement.setString(1, finalName);
+                    if (!primary) {
+                        statement.setString(2, AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME);
+                    }
 
                     // Execute the query and process the results
                     try (ResultSet resultSet = statement.executeQuery()) {

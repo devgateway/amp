@@ -17,6 +17,7 @@ public class DataImporterForm extends ActionForm {
     private boolean createMissingOrgs;
     private boolean createMissingOrgGroups;
     private Long orgGroupId;
+    private Long defaultActivityStatusId;
     private boolean validateActivities;
     private boolean addDisbursementForCommitment;
 
@@ -74,6 +75,14 @@ public class DataImporterForm extends ActionForm {
 
     public void setOrgGroupId(Long orgGroupId) {
         this.orgGroupId = orgGroupId;
+    }
+
+    public Long getDefaultActivityStatusId() {
+        return defaultActivityStatusId;
+    }
+
+    public void setDefaultActivityStatusId(Long defaultActivityStatusId) {
+        this.defaultActivityStatusId = defaultActivityStatusId;
     }
 
     public Set<String> getFileHeaders() {

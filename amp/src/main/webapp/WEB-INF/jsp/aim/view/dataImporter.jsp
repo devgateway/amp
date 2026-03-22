@@ -65,6 +65,13 @@
         });
       }
 
+      if ($('#defaultActivityStatusId').length) {
+        applySelect2('#defaultActivityStatusId', {
+          width: '100%',
+          placeholder: '<digi:trn jsFriendly="true">Use system default activity status</digi:trn>'
+        });
+      }
+
       if ($('#data-sheet').length) {
         applySelect2('#data-sheet', {
           width: '100%',
@@ -444,6 +451,7 @@
       var createMissingOrgs = $('#createMissingOrgs').prop('checked');
       var createMissingOrgGroups = $('#createMissingOrgGroups').prop('checked');
       var orgGroupId = $('#orgGroupId').val();
+      var defaultActivityStatusId = $('#defaultActivityStatusId').val();
       var hasOrgGroupMapping = hasMappedOrgGroupField();
       console.log("Internal", internal);
       console.log("Skip existing", skipExisting);
@@ -453,6 +461,7 @@
       console.log("Create missing orgs", createMissingOrgs);
       console.log("Create missing org groups", createMissingOrgGroups);
       console.log("Org group id", orgGroupId);
+      console.log("Default activity status id", defaultActivityStatusId);
       if (createMissingOrgs && !orgGroupId && !hasOrgGroupMapping && !createMissingOrgGroups) {
         alert("<digi:trn jsFriendly='true'>Please select an Organization Group, map the Organization Group column, or enable organization group creation for newly created organizations.</digi:trn>");
         return;
@@ -483,6 +492,9 @@
       formData.append('createMissingOrgGroups', createMissingOrgGroups);
       if (createMissingOrgs && orgGroupId) {
         formData.append('orgGroupId', orgGroupId);
+      }
+      if (defaultActivityStatusId) {
+        formData.append('defaultActivityStatusId', defaultActivityStatusId);
       }
       formData.append('action',"uploadDataFile");
       formData.append('fileType', fileType);
@@ -957,6 +969,16 @@
             <option value=""><digi:trn>-- Select Organization Group --</digi:trn></option>
             <c:forEach var="orgGroup" items="${orgGroups}">
               <option value="${orgGroup.ampOrgGrpId}">${orgGroup.orgGrpName}</option>
+            </c:forEach>
+          </select>
+        </div>
+
+        <div style="margin-top:16px;">
+          <label for="defaultActivityStatusId"><digi:trn>Default Activity Status</digi:trn></label>
+          <select id="defaultActivityStatusId" name="defaultActivityStatusId" style="width: 100%;">
+            <option value=""><digi:trn>-- Use system default --</digi:trn></option>
+            <c:forEach var="activityStatus" items="${activityStatuses}">
+              <option value="${activityStatus.id}">${activityStatus.label}</option>
             </c:forEach>
           </select>
         </div>

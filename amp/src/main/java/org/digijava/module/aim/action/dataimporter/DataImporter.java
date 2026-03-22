@@ -56,6 +56,9 @@ import org.digijava.module.aim.action.dataimporter.util.ImporterConstants;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.type.StringType;
@@ -82,6 +85,7 @@ public class DataImporter extends Action {
         request.setAttribute("configNames", configNames);
         List<AmpOrgGroup> orgGroups = DbUtil.getAllOrgGroups();
         request.setAttribute("orgGroups", orgGroups);
+        request.setAttribute("activityStatuses", getActivityStatuses());
         DataImporterForm dataImporterForm = (DataImporterForm) form;
 
         if (Objects.equals(request.getParameter("action"), "configByName")) {
@@ -360,6 +364,7 @@ public class DataImporter extends Action {
                 boolean createMissingOrgs = dataImporterForm.isCreateMissingOrgs();
                 boolean createMissingOrgGroups = dataImporterForm.isCreateMissingOrgGroups();
                 Long orgGroupId = dataImporterForm.getOrgGroupId();
+                Long defaultActivityStatusId = dataImporterForm.getDefaultActivityStatusId();
                 logger.info("Internal: "+ isInternal);
                 logger.info("Skip existing: "+ skipExisting);
                 logger.info("Validate activities: "+ validateActivities);
@@ -368,6 +373,7 @@ public class DataImporter extends Action {
                 logger.info("Create missing orgs: "+ createMissingOrgs);
                 logger.info("Create missing org groups: " + createMissingOrgGroups);
                 logger.info("Org group id: "+ orgGroupId);
+                logger.info("Default activity status id: {}", defaultActivityStatusId);
                 if (createMissingOrgs && orgGroupId == null && !createMissingOrgGroups
                         && !columnPairsToUse.containsValue(ImporterConstants.ORG_GROUP)) {
                     response.setHeader("errorMessage",
@@ -385,9 +391,9 @@ public class DataImporter extends Action {
                         String dataSheetChoice = request.getParameter("dataSheetChoice");
                         String dataSheetName = request.getParameter("dataSheetName");
                         boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
-                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment);
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment);
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId);
                     }
                 } catch (Exception e) {
                     ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
@@ -637,6 +643,15 @@ public class DataImporter extends Action {
                         Map.Entry::getValue,
                         (e1, e2) -> e1,
                         LinkedHashMap::new));
+    }
+
+    private List<AmpCategoryValue> getActivityStatuses() {
+        List<AmpCategoryValue> activityStatuses = new ArrayList<>(
+                CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY));
+        activityStatuses.sort(Comparator
+                .comparing(AmpCategoryValue::getIndex, Comparator.nullsLast(Integer::compareTo))
+                .thenComparing(AmpCategoryValue::getValue, String.CASE_INSENSITIVE_ORDER));
+        return activityStatuses;
     }
 
 }

@@ -1557,7 +1557,7 @@ public class ImporterUtil {
                         "FROM amp_sector ams " +
                         "JOIN amp_classification_config acc ON ams.amp_sec_scheme_id = acc.classification_id " +
                         "WHERE LOWER(ams.name) = LOWER(?) " +
-                        "AND (acc.primary = TRUE OR LOWER(acc.name) = LOWER(?))"
+                    "AND (acc.is_primary_sector = TRUE OR LOWER(acc.name) = LOWER(?))"
                         : "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name " +
                         "FROM amp_sector ams " +
                         "JOIN amp_classification_config acc ON ams.amp_sec_scheme_id = acc.classification_id " +

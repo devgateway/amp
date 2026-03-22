@@ -165,6 +165,10 @@
                 color: var(--danger);
             }
 
+            .status-pill.skipped {
+                color: var(--warning);
+            }
+
             .filter-div {
                 display: flex;
                 flex-wrap: wrap;
@@ -335,6 +339,7 @@
                                 '<div class="status-pill all"><digi:trn>All Records</digi:trn>: ' + data.totalProjects + '</div>' +
                                 '<div class="status-pill success"><digi:trn>Successful Records</digi:trn>: ' + data.successfulProjects + '</div>' +
                                 '<div class="status-pill failed"><digi:trn>Failed Records</digi:trn>: ' + data.failedProjects + '</div>' +
+                                '<div class="status-pill skipped"><digi:trn>Skipped Records</digi:trn>: ' + data.skippedProjects + '</div>' +
                                 '</div>'
                             );
                             var importProjects = data.importedProjects;
@@ -478,6 +483,8 @@
                 <input type="radio" id="success-projects" name="project-filter" value="SUCCESS">
                 <label for="failed-projects"><digi:trn>Failed</digi:trn>:</label>
                 <input type="radio" id="failed-projects" name="project-filter" value="FAILED">
+                <label for="skipped-projects"><digi:trn>Skipped</digi:trn>:</label>
+                <input type="radio" id="skipped-projects" name="project-filter" value="SKIPPED">
                 <button type="button" id="refresh-progress-btn" disabled><digi:trn>Refresh Records</digi:trn></button>
             </div>
 

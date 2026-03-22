@@ -250,7 +250,7 @@ public class TxtDataImporter {
             if (skipRecordsWithoutTransactions && !hasTransactions(fundings)) {
                 importedProject.setImportStatus(ImportStatus.SKIPPED);
                 persistImportedProjectStatus(importedProject);
-                logger.info("Skipping txt row for project {} because no transactions were found", projectCode);
+                logger.info("Skipping txt row for project {} because no non-zero transactions were found", projectCode);
                 continue;
             }
 

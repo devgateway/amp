@@ -356,7 +356,7 @@ public class ExcelImporter {
                 if (skipRecordsWithoutTransactions && !hasTransactions(fundings)) {
                     importedProject.setImportStatus(ImportStatus.SKIPPED);
                     persistImportedProjectStatus(importedProject);
-                    logger.info("Skipping row {} in sheet {} because no transactions were found", rowRef.getRowNum(), sheet.getSheetName());
+                    logger.info("Skipping row {} in sheet {} because no non-zero transactions were found", rowRef.getRowNum(), sheet.getSheetName());
                     continue;
                 }
 

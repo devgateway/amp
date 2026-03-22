@@ -1984,9 +1984,21 @@ public class ImporterUtil {
             if (funding == null) {
                 continue;
             }
-            if ((funding.getCommitments() != null && !funding.getCommitments().isEmpty())
-                    || (funding.getDisbursements() != null && !funding.getDisbursements().isEmpty())
-                    || (funding.getExpenditures() != null && !funding.getExpenditures().isEmpty())) {
+            if (hasNonZeroTransaction(funding.getCommitments())
+                    || hasNonZeroTransaction(funding.getDisbursements())
+                    || hasNonZeroTransaction(funding.getExpenditures())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasNonZeroTransaction(List<Transaction> transactions) {
+        if (transactions == null || transactions.isEmpty()) {
+            return false;
+        }
+        for (Transaction transaction : transactions) {
+            if (transaction != null && Double.compare(transaction.getTransaction_amount(), 0.0d) != 0) {
                 return true;
             }
         }

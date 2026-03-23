@@ -479,7 +479,9 @@
       var createMissingOrgGroups = $('#createMissingOrgGroups').prop('checked');
       var orgGroupId = $('#orgGroupId').val();
       var defaultActivityStatusId = $('#defaultActivityStatusId').val();
+      var defaultLocationId = $('#defaultLocationId').val() || $('#defaultLocationId').attr('data-default-location-id') || '';
       var hasOrgGroupMapping = hasMappedOrgGroupField();
+      var hasProjectLocationMapping = hasMappedProjectLocationField();
       console.log("Internal", internal);
       console.log("Skip existing", skipExisting);
       console.log("Skip records without transactions", skipRecordsWithoutTransactions);
@@ -490,8 +492,13 @@
       console.log("Create missing org groups", createMissingOrgGroups);
       console.log("Org group id", orgGroupId);
       console.log("Default activity status id", defaultActivityStatusId);
+      console.log("Default location id", defaultLocationId);
       if (createMissingOrgs && !orgGroupId && !hasOrgGroupMapping && !createMissingOrgGroups) {
         alert("<digi:trn jsFriendly='true'>Please select an Organization Group, map the Organization Group column, or enable organization group creation for newly created organizations.</digi:trn>");
+        return;
+      }
+      if (!hasProjectLocationMapping && !defaultLocationId) {
+        alert("<digi:trn jsFriendly='true'>Please select a fallback location when no Project Location column is mapped.</digi:trn>");
         return;
       }
       var dataSeparator = $('#data-separator').val();
@@ -524,6 +531,9 @@
       }
       if (defaultActivityStatusId) {
         formData.append('defaultActivityStatusId', defaultActivityStatusId);
+      }
+      if (defaultLocationId) {
+        formData.append('defaultLocationId', defaultLocationId);
       }
       formData.append('action',"uploadDataFile");
       formData.append('fileType', fileType);

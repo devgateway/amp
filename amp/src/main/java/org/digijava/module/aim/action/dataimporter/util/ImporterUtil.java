@@ -553,17 +553,28 @@ public class ImporterUtil {
 
         String yearString;
         String fundingDate;
+        boolean inferredFundingDate = false;
         if (separateFundingDate != null) {
             if (isCommonDateFormat(separateFundingDate)) {
                 fundingDate = getFundingDate(separateFundingDate);
             } else {
                 yearString = findYearSubstring(separateFundingDate);
-                fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate(null);
+                if (yearString != null) {
+                    fundingDate = getFundingDate(yearString);
+                } else {
+                    fundingDate = getFundingDate(null);
+                    inferredFundingDate = true;
+                }
 
             }
         } else {
             yearString = findYearSubstring(columnHeaderContainingYear);
-            fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate(null);
+            if (yearString != null) {
+                fundingDate = getFundingDate(yearString);
+            } else {
+                fundingDate = getFundingDate(null);
+                inferredFundingDate = true;
+            }
 
         }
 
@@ -577,6 +588,7 @@ public class ImporterUtil {
         transaction.setAdjustment_type(adjType);
         transaction.setTransaction_amount(amount != null ? amount.doubleValue() : 0.0);
         transaction.setTransaction_date(fundingDate);
+        transaction.setInferredTransactionDate(inferredFundingDate);
         transaction.setFixed_exchange_rate(exchangeRate);
         
         // Check for duplicate transactions by currency, amount, and date before adding
@@ -624,7 +636,8 @@ public class ImporterUtil {
         return transactions.stream().anyMatch(existing -> 
             existing.getCurrency() != null && existing.getCurrency().equals(newTransaction.getCurrency()) &&
             Double.compare(existing.getTransaction_amount(), newTransaction.getTransaction_amount()) == 0 &&
-            existing.getTransaction_date() != null && existing.getTransaction_date().equals(newTransaction.getTransaction_date()) &&
+            ((existing.isInferredTransactionDate() || newTransaction.isInferredTransactionDate())
+                    || Objects.equals(existing.getTransaction_date(), newTransaction.getTransaction_date())) &&
             Objects.equals(existing.getAdjustment_type(), newTransaction.getAdjustment_type())
         );
     }
@@ -645,6 +658,7 @@ public class ImporterUtil {
             disbursement.setCurrency(commitment.getCurrency());
             disbursement.setTransaction_amount(commitment.getTransaction_amount());
             disbursement.setTransaction_date(commitment.getTransaction_date());
+            disbursement.setInferredTransactionDate(commitment.isInferredTransactionDate());
             disbursement.setFixed_exchange_rate(commitment.getFixed_exchange_rate());
             
             // Set the adjustment type for disbursement

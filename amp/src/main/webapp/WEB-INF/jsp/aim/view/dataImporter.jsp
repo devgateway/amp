@@ -600,9 +600,16 @@
 
     body {
       margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
+      font-family: Arial, Helvetica, sans-serif;
       color: var(--text-strong);
       background: var(--page-bg);
+    }
+
+    input,
+    select,
+    textarea,
+    button {
+      font-family: inherit;
     }
 
     .importer-page {

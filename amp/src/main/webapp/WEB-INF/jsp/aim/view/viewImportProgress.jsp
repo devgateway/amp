@@ -28,9 +28,18 @@
 
             body {
                 margin: 0;
-                font-family: Georgia, "Times New Roman", serif;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 14px;
+                line-height: 1.5;
                 color: var(--text-strong);
                 background: var(--page-bg);
+            }
+
+            input,
+            select,
+            textarea,
+            button {
+                font-family: inherit;
             }
 
             .progress-page {
@@ -58,12 +67,13 @@
             .panel-card h2,
             .records-card h2 {
                 margin: 0 0 10px;
+                font-size: 1.5rem;
             }
 
             .section-label {
                 display: inline-block;
                 margin-bottom: 8px;
-                font-size: 12px;
+                font-size: 13px;
                 letter-spacing: 0.18em;
                 text-transform: uppercase;
                 color: var(--accent);
@@ -95,12 +105,13 @@
             td, th {
                 text-align: left;
                 padding: 14px 16px;
+                font-size: 14px;
                 border-bottom: 1px solid rgba(22, 53, 67, 0.08);
             }
 
             th {
                 background: #eef1f3;
-                font-size: 12px;
+                font-size: 13px;
                 letter-spacing: 0.12em;
                 text-transform: uppercase;
             }
@@ -119,6 +130,7 @@
                 border: 1px solid #506673;
                 border-radius: 999px;
                 padding: 10px 16px;
+                font-size: 14px;
                 font-weight: 700;
                 cursor: pointer;
                 color: #fff;
@@ -129,7 +141,7 @@
             .view-more-btn {
                 margin-top: 8px;
                 padding: 8px 14px;
-                font-size: 12px;
+                font-size: 13px;
             }
 
             .hero-actions {
@@ -182,6 +194,7 @@
             }
 
             .filter-div label {
+                font-size: 14px;
                 font-weight: 700;
             }
 
@@ -199,6 +212,7 @@
                 border-radius: 10px;
                 padding: 6px 10px;
                 background: #fff;
+                font-size: 14px;
             }
 
             .uploads-filter-bar {
@@ -221,6 +235,7 @@
             }
 
             .uploads-filter-field label {
+                font-size: 14px;
                 font-weight: 700;
             }
 
@@ -229,6 +244,7 @@
                 border-radius: 10px;
                 padding: 8px 10px;
                 background: #fff;
+                font-size: 14px;
             }
 
             .truncated-response {

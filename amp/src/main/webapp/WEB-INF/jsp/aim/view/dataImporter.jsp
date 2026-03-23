@@ -600,9 +600,18 @@
 
     body {
       margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
       color: var(--text-strong);
       background: var(--page-bg);
+    }
+
+    input,
+    select,
+    textarea,
+    button {
+      font-family: inherit;
     }
 
     .importer-page {
@@ -631,6 +640,7 @@
     .workspace-card h2,
     .upload-stage h3 {
       margin: 0 0 10px;
+      font-size: 1.5rem;
       font-weight: 700;
       letter-spacing: 0.02em;
     }
@@ -664,7 +674,7 @@
     .section-label {
       display: inline-block;
       margin-bottom: 8px;
-      font-size: 12px;
+      font-size: 13px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--accent);
@@ -674,6 +684,7 @@
     label {
       display: inline-block;
       margin-bottom: 6px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--text-strong);
     }
@@ -689,6 +700,7 @@
       border: 1px solid rgba(22, 53, 67, 0.18);
       background: #fff;
       color: var(--text-strong);
+      font-size: 14px;
     }
 
     input[type="file"] {
@@ -705,6 +717,7 @@
       cursor: pointer;
       color: #fff;
       background: var(--accent);
+      font-size: 14px;
       box-shadow: none;
       transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
     }
@@ -764,13 +777,14 @@
     table td {
       text-align: left;
       padding: 14px 16px;
+      font-size: 14px;
       border-bottom: 1px solid rgba(22, 53, 67, 0.08);
     }
 
     table th {
       background: #eef1f3;
       color: var(--text-strong);
-      font-size: 12px;
+      font-size: 13px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
     }
@@ -823,6 +837,7 @@
 
     .select2-container--default .select2-selection--single .select2-selection__rendered {
       color: var(--text-strong);
+      font-size: 14px;
       line-height: 28px;
       padding-left: 0;
     }

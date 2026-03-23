@@ -65,15 +65,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60  # Add timeout to prevent hanging jobs
     steps:
-      - name: Setup SSH agent for Docker build
+      - name: Setup SSH agent with build and deploy keys
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.DOCKER_BUILD_SSH_KEY || '' }}
-
-      - name: Add deployment SSH key to agent
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          ssh-private-key: |
+            ${{ secrets.DOCKER_BUILD_SSH_KEY }}
+            ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
 
       - name: Configure git to use SSH for submodules
         run: |
@@ -520,6 +517,13 @@ jobs:
             echo "IMAGE=$IMAGE_BY_TAG" >> $GITHUB_ENV
           fi
 
+      - name: Debug SSH agent
+        if: steps.check_image.outputs.SKIP_BUILD == 'false'
+        run: |
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
+          ssh-add -l || echo "No keys in agent"
+          ssh -o StrictHostKeyChecking=no -T git@github.com 2>&1 || true
+
       - name: Build Docker image
         if: steps.check_image.outputs.SKIP_BUILD == 'false'
         env:
@@ -533,7 +537,7 @@ jobs:
           # Build SSH args - only add if SSH_AUTH_SOCK is available (from ssh-agent)
           SSH_ARGS=""
           if [ -n "$SSH_AUTH_SOCK" ]; then
-            SSH_ARGS="--ssh default"
+            SSH_ARGS="--ssh default=$SSH_AUTH_SOCK"
           fi
           
           # Collect cache sources for better layer reuse

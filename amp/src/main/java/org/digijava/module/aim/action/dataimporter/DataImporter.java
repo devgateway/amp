@@ -1,11 +1,36 @@
 package org.digijava.module.aim.action.dataimporter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-import com.opencsv.exceptions.CsvValidationException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -16,45 +41,59 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
+import static org.digijava.module.aim.action.dataimporter.ExcelImporter.processExcelFileInBatches;
 import org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfig;
 import org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfigValues;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.digijava.module.aim.action.dataimporter.util.ImportedFileUtil;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.ConstantsMap;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.isFileContentValid;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.isFileReadable;
+import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.removeMapItem;
+
+import org.digijava.module.aim.action.dataimporter.util.ImporterConstants;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.form.DataImporterForm;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.type.StringType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.nio.file.Files;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.digijava.module.aim.action.dataimporter.ExcelImporter.processExcelFileInBatches;
-import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvValidationException;
 
 public class DataImporter extends Action {
     static Logger logger = LoggerFactory.getLogger(DataImporter.class);
 
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // List of fields
-        List<String> fieldsInfo = getEntityFieldsInfo();
+        // List of fields - map of original to translated
+        Map<String, String> fieldsInfo = getEntityFieldsInfo();
         request.setAttribute("fieldsInfo", fieldsInfo);
+        request.setAttribute("fieldsInfoList", new ArrayList<>(fieldsInfo.values()));
         List<String> configNames= getConfigNames();
         request.setAttribute("configNames", configNames);
+        List<AmpOrgGroup> orgGroups = DbUtil.getAllOrgGroups();
+        request.setAttribute("orgGroups", orgGroups);
+        request.setAttribute("activityStatuses", getActivityStatuses());
+        List<AmpCategoryValueLocations> availableLocations = getAvailableLocations();
+        request.setAttribute("availableLocations", availableLocations);
+        AmpCategoryValueLocations defaultLocation = DynLocationManagerUtil.getDefaultCountry();
+        request.setAttribute("defaultLocationId", defaultLocation != null ? defaultLocation.getId() : null);
         DataImporterForm dataImporterForm = (DataImporterForm) form;
 
         if (Objects.equals(request.getParameter("action"), "configByName")) {
@@ -77,208 +116,340 @@ public class DataImporter extends Action {
         }
 
 
-            if (Objects.equals(request.getParameter("action"), "uploadTemplate")) {
+        if (Objects.equals(request.getParameter("action"), "uploadTemplate")) {
             logger.info(" this is the action " + request.getParameter("action"));
             if (request.getParameter("uploadTemplate") != null) {
                 logger.info(" this is the action " + request.getParameter("uploadTemplate"));
-                Set<String> headersSet = new HashSet<>();
+                response.setCharacterEncoding("UTF-8");
+
+                // Only clear in-memory column pairs when no existing named config is active.
+                // If the user has a configName selected, preserve its pairs so uploading a new
+                // template just lets them add more column mappings without losing existing ones.
+                String uploadConfigName = request.getParameter("configName");
+                if (uploadConfigName == null || uploadConfigName.trim().isEmpty()) {
+                    dataImporterForm.getColumnPairs().clear();
+                } else {
+                    // Reload from DB so the in-memory map reflects the latest saved state
+                    Map<String, String> savedPairs = getConfigByName(uploadConfigName.trim());
+                    dataImporterForm.getColumnPairs().clear();
+                    dataImporterForm.getColumnPairs().putAll(savedPairs);
+                }
 
                 if (request.getParameter("fileType") != null) {
                     InputStream fileInputStream = dataImporterForm.getTemplateFile().getInputStream();
-                    if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
-                        Workbook workbook = new XSSFWorkbook(fileInputStream);
-                        int numberOfSheets = workbook.getNumberOfSheets();
-                        for (int i = 0; i < numberOfSheets; i++) {
-                            Sheet sheet = workbook.getSheetAt(i);
-                            Row headerRow = sheet.getRow(0);
-                            Iterator<Cell> cellIterator = headerRow.cellIterator();
-                            while (cellIterator.hasNext()) {
-                                Cell cell = cellIterator.next();
-                                headersSet.add(cell.getStringCellValue());
+                    if (Objects.equals(request.getParameter("fileType"), "excel")) {
+                        // Excel: return sheet names and columns per sheet for template configuration
+                        List<String> sheetNames = new ArrayList<>();
+                        Map<String, List<String>> columnsBySheet = new HashMap<>();
+                        try (Workbook workbook = new XSSFWorkbook(fileInputStream)) {
+                            int numberOfSheets = workbook.getNumberOfSheets();
+                            for (int i = 0; i < numberOfSheets; i++) {
+                                Sheet sheet = workbook.getSheetAt(i);
+                                String sheetName = sheet.getSheetName();
+                                sheetNames.add(sheetName);
+                                List<String> columns = new ArrayList<>();
+                                Row headerRow = sheet.getRow(0);
+                                if (headerRow != null) {
+                                    Iterator<Cell> cellIterator = headerRow.cellIterator();
+                                    while (cellIterator.hasNext()) {
+                                        Cell cell = cellIterator.next();
+                                        String val = cell.getStringCellValue();
+                                        if (val != null && !val.trim().isEmpty()) {
+                                            columns.add(val.trim());
+                                        }
+                                    }
+                                }
+                                columnsBySheet.put(sheetName, columns.stream().sorted().collect(Collectors.toList()));
                             }
-
                         }
-                        workbook.close();
-
-
-                    } else if (Objects.equals(request.getParameter("fileType"), "text")) {
-                        CSVParser parser = new CSVParserBuilder().withSeparator(request.getParameter("dataSeparator").charAt(0)).build();
-
-                        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(fileInputStream)).withCSVParser(parser).build()) {
-                            String[] headers = reader.readNext(); // Read the first line which contains headers
-
+                        Map<String, Object> jsonResponse = new HashMap<>();
+                        jsonResponse.put("sheetNames", sheetNames);
+                        jsonResponse.put("columnsBySheet", columnsBySheet);
+                        response.setContentType("application/json");
+                        new ObjectMapper().writeValue(response.getWriter(), jsonResponse);
+                    } else if (Objects.equals(request.getParameter("fileType"), "csv")) {
+                        Set<String> headersSet = new HashSet<>();
+                        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(fileInputStream)).build()) {
+                            String[] headers = reader.readNext();
                             if (headers != null) {
-                                // Print each header
+                                headersSet.addAll(Arrays.asList(headers));
+                            }
+                        } catch (IOException | CsvValidationException e) {
+                            logger.error("An error occurred during extraction of headers.", e);
+                        }
+                        headersSet = headersSet.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+                        StringBuilder headers = new StringBuilder();
+                        headers.append("  <label for=\"columnName\">Select Column Name:</label>\n<select  class=\"select2\" style=\"width: 300px;\" id=\"columnName\">");
+                        for (String option : headersSet) {
+                            headers.append("<option>").append(option).append("</option>");
+                        }
+                        headers.append("</select>");
+                        response.setContentType("text/html;charset=UTF-8");
+                        response.getWriter().write(headers.toString());
+                    } else if (Objects.equals(request.getParameter("fileType"), "text")) {
+                        Set<String> headersSet = new HashSet<>();
+                        String sep = request.getParameter("dataSeparator");
+                        char separator = (sep != null && !sep.isEmpty()) ? sep.charAt(0) : ',';
+                        CSVParser parser = new CSVParserBuilder().withSeparator(separator).build();
+                        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(fileInputStream)).withCSVParser(parser).build()) {
+                            String[] headers = reader.readNext();
+                            if (headers != null) {
                                 headersSet.addAll(Arrays.asList(headers));
                             } else {
                                 logger.info("File is empty or does not contain headers.");
                             }
                         } catch (IOException | CsvValidationException e) {
-                            logger.error("An error occurred during extraction of headers.",e);
+                            logger.error("An error occurred during extraction of headers.", e);
                         }
-
+                        headersSet = headersSet.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+                        StringBuilder headers = new StringBuilder();
+                        headers.append("  <label for=\"columnName\">Select Column Name:</label>\n<select  class=\"select2\" style=\"width: 300px;\" id=\"columnName\">");
+                        for (String option : headersSet) {
+                            headers.append("<option>").append(option).append("</option>");
+                        }
+                        headers.append("</select>");
+                        response.setContentType("text/html;charset=UTF-8");
+                        response.getWriter().write(headers.toString());
                     }
                 }
-                headersSet = headersSet.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
-                StringBuilder headers = new StringBuilder();
-                headers.append("  <label for=\"columnName\">Select Column Name:</label>\n<select  class=\"select2\" style=\"width: 300px;\" id=\"columnName\">");
-                for (String option : headersSet) {
-                    headers.append("<option>").append(option).append("</option>");
-                }
-                headers.append("</select>");
-                response.setCharacterEncoding("UTF-8");
-                response.setContentType("text/html;charset=UTF-8");
-
-                response.getWriter().write(headers.toString());
                 response.setHeader("updatedMap", "");
-
-                dataImporterForm.getColumnPairs().clear();
-
             }
             return null;
         }
 
 
-            if (Objects.equals(request.getParameter("action"), "addField")) {
-                logger.info(" this is the action " + request.getParameter("action"));
+        if (Objects.equals(request.getParameter("action"), "addField")) {
+            logger.info(" this is the action " + request.getParameter("action"));
 
-                String columnName = request.getParameter("columnName");
-                String selectedField = request.getParameter("selectedField");
-                dataImporterForm.getColumnPairs().put(columnName, selectedField);
-                logger.info("Column Pairs:" + dataImporterForm.getColumnPairs());
+            String columnName = request.getParameter("columnName");
+            String selectedField = request.getParameter("selectedField");
+            String configName = request.getParameter("configName");
+            Map<String, String> columnPairs = dataImporterForm.getColumnPairs();
 
-                ObjectMapper objectMapper = new ObjectMapper();
-                String json = objectMapper.writeValueAsString(dataImporterForm.getColumnPairs());
+            if (configName != null && !configName.trim().isEmpty()) {
+                addColumnPairToConfig(configName.trim(), columnName, selectedField);
+                columnPairs = getConfigByName(configName.trim());
+            } else {
+                columnPairs.put(columnName, selectedField);
+            }
+            logger.info("Column Pairs:" + columnPairs);
 
-                // Send response
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(columnPairs);
+
+            response.setContentType("application/json");
+            response.getWriter().write(json);
+            response.setCharacterEncoding("UTF-8");
+
+            return null;
+
+        }
+
+
+        if (Objects.equals(request.getParameter("action"), "removeField")) {
+            logger.info(" this is the action " + request.getParameter("action"));
+
+            String columnName = request.getParameter("columnName");
+            String selectedField = request.getParameter("selectedField");
+            String configName = request.getParameter("configName");
+            Map<String, String> columnPairs = dataImporterForm.getColumnPairs();
+
+            if (configName != null && !configName.trim().isEmpty()) {
+                removeColumnPairFromConfig(configName.trim(), columnName);
+                columnPairs = getConfigByName(configName.trim());
+            } else {
+                removeMapItem(columnPairs, columnName, selectedField);
+            }
+            logger.info("Column Pairs:" + columnPairs);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(columnPairs);
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json);
+
+            return null;
+
+        }
+
+        if (Objects.equals(request.getParameter("action"), "getDataFileSheets")) {
+            logger.info("This is the action getDataFileSheets");
+            if (dataImporterForm.getDataFile() == null || dataImporterForm.getDataFile().getFileSize() == 0) {
+                response.setStatus(400);
                 response.setContentType("application/json");
-                response.getWriter().write(json);
-                response.setCharacterEncoding("UTF-8");
-
+                response.getWriter().write("{\"error\":\"No file provided\"}");
                 return null;
+            }
+            String fileType = request.getParameter("fileType");
+            if (!Objects.equals(fileType, "excel")) {
+                response.setContentType("application/json");
+                new ObjectMapper().writeValue(response.getWriter(), Collections.emptyList());
+                return null;
+            }
+            List<String> sheetNames = new ArrayList<>();
+            try (InputStream is = dataImporterForm.getDataFile().getInputStream();
+                 Workbook workbook = new XSSFWorkbook(is)) {
+                int n = workbook.getNumberOfSheets();
+                for (int i = 0; i < n; i++) {
+                    sheetNames.add(workbook.getSheetAt(i).getSheetName());
+                }
+            }
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            new ObjectMapper().writeValue(response.getWriter(), sheetNames);
+            return null;
+        }
 
+        if (Objects.equals(request.getParameter("action"), "uploadDataFile")) {
+            logger.info("This is the action " + request.getParameter("action"));
+            Instant start = Instant.now();
+            String fileName = dataImporterForm.getDataFile().getFileName();
+            String tempDirPath = System.getProperty("java.io.tmpdir");
+            File tempDir = new File(tempDirPath);
+            if (!tempDir.exists()) {
+                tempDir.mkdirs();
+            }
+            String tempFilePath = tempDirPath + File.separator + fileName;
+            try (InputStream inputStream = dataImporterForm.getDataFile().getInputStream();
+                 FileOutputStream outputStream = new FileOutputStream(tempFilePath)) {
+                byte[] buffer = new byte[8192];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
             }
 
-
-            if (Objects.equals(request.getParameter("action"), "removeField")) {
-                logger.info(" this is the action " + request.getParameter("action"));
-
-                String columnName = request.getParameter("columnName");
-                String selectedField = request.getParameter("selectedField");
-                dataImporterForm.getColumnPairs().put(columnName, selectedField);
-                removeMapItem(dataImporterForm.getColumnPairs(), columnName, selectedField);
-                logger.info("Column Pairs:" + dataImporterForm.getColumnPairs());
-
-                ObjectMapper objectMapper = new ObjectMapper();
-                String json = objectMapper.writeValueAsString(dataImporterForm.getColumnPairs());
-
-                // Send response
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(json);
-
-                return null;
-
-            }
-
-            if (Objects.equals(request.getParameter("action"), "uploadDataFile")) {
-                logger.info("This is the action " + request.getParameter("action"));
-                Instant start = Instant.now();
-                String fileName = dataImporterForm.getDataFile().getFileName();
-                String tempDirPath = System.getProperty("java.io.tmpdir");
-                File tempDir = new File(tempDirPath);
-                if (!tempDir.exists()) {
-                    tempDir.mkdirs();
-                }
-                String tempFilePath = tempDirPath + File.separator + fileName;
-                try (InputStream inputStream = dataImporterForm.getDataFile().getInputStream();
-                     FileOutputStream outputStream = new FileOutputStream(tempFilePath)) {
-                    byte[] buffer = new byte[8192];
-                    int bytesRead;
-                    while ((bytesRead = inputStream.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, bytesRead);
-                    }
-                }
-
-                // Check if the file is readable and has correct content
-                File tempFile = new File(tempFilePath);
-                List<ImportedFilesRecord> similarFiles = ImportedFileUtil.getSimilarFiles(tempFile);
-                if (similarFiles != null && !similarFiles.isEmpty()) {
-                    for (ImportedFilesRecord similarFilesRecord : similarFiles) {
-                        logger.info("Similar file: " + similarFilesRecord);
-                        if (similarFilesRecord.getImportStatus().equals(ImportStatus.IN_PROGRESS)) {
-                            response.setHeader("errorMessage", "You have a similar file in progress. Please try again later.");
-                            response.setStatus(400);
-                            return mapping.findForward("importData");
-                        }
-                    }
-                }
-                if (dataImporterForm.getColumnPairs().isEmpty() ||(!dataImporterForm.getColumnPairs().containsValue("Project Title") && !dataImporterForm.getColumnPairs().containsValue("Project Code"))) {
-
-                    response.setHeader("errorMessage", "You must have at least the 'Project Title' or 'Project Code' column in your config.");
-                    response.setStatus(400);
-                    return mapping.findForward("importData");
-                }
-                if (!isFileReadable(tempFile) || !isFileContentValid(tempFile)) {
-                    // Handle invalid file
-                    logger.error("Invalid file or content.");
-                    response.setHeader("errorMessage", "Unable to parse the file. Please check the file format/content and try again.");
-                    response.setStatus(400);
-                    return mapping.findForward("importData");
-
-                } else {
-                    // Proceed with processing the file
-                    String existingConfig = request.getParameter("existingConfig");
-                    logger.info("Existing configuration: {}",existingConfig);
-                    if (!Objects.equals(existingConfig, "1")) {
-                        saveImportConfig(request, fileName, dataImporterForm.getColumnPairs());
-                    }
-
-                    int res = 0;
-                    ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile, fileName);
-                    logger.info("Saved file record: {}",importedFilesRecord);
-                    boolean isInternal= dataImporterForm.isInternal();
-                    logger.info("Internal: "+ isInternal);
-                    if (isInternal)
-                    {
-                        dataImporterForm.getColumnPairs().put("Donor Agency", "Donor Agency");
-                    }
-                    logger.info("Configuration"+ dataImporterForm.getColumnPairs());
-                    if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
-
-                        // Process the file in batches
-                         res = processExcelFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs(), isInternal);
-                    } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res=TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, dataImporterForm.getColumnPairs(), isInternal);
-                    }
-                    if (res != 1) {
-                        // Handle error
-                        logger.info("Error processing file  " + tempFile);
-                        response.setHeader("errorMessage", "Unable to parse the file. Please check the file format/content and try again.");
+            // Check if the file is readable and has correct content
+            File tempFile = new File(tempFilePath);
+            List<ImportedFilesRecord> similarFiles = ImportedFileUtil.getSimilarFiles(tempFile);
+            if (similarFiles != null && !similarFiles.isEmpty()) {
+                for (ImportedFilesRecord similarFilesRecord : similarFiles) {
+                    logger.info("Similar file: " + similarFilesRecord);
+                    if (similarFilesRecord.getImportStatus().equals(ImportStatus.IN_PROGRESS)) {
+                        response.setHeader("errorMessage", "You have a similar file in progress. Please try again later.");
                         response.setStatus(400);
                         return mapping.findForward("importData");
                     }
-
-
-                    // Clean up
-                    ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.SUCCESS);
-                    Files.delete(tempFile.toPath());
-                    logger.info("Cache map size: " + ConstantsMap.size());
-                    ConstantsMap.clear();
-                    logger.info("File path is " + tempFilePath + " and size is " + tempFile.length() / (1024 * 1024) + " mb");
-                    logger.info("Start time: " + start);
-                    Instant finish = Instant.now();
-                    long timeElapsed = Duration.between(start, finish).toMillis();
-                    logger.info("Time Elapsed: " + timeElapsed);
-
-                    // Send response
-                    response.setHeader("updatedMap", "");
-                    dataImporterForm.getColumnPairs().clear();
                 }
-                return null;
             }
+            // Resolve which config to use: saved config by name (from load/edit) or form's column pairs
+            String existingConfig = request.getParameter("existingConfig");
+            String configNameParam = request.getParameter("configName");
+            String configNameToUse = (configNameParam != null && !configNameParam.trim().isEmpty())
+                    ? configNameParam.trim()
+                    : (existingConfig != null && !existingConfig.isEmpty() && !"0".equals(existingConfig) && !"1".equals(existingConfig) ? existingConfig.trim() : null);
+            Map<String, String> columnPairsToUse = (configNameToUse != null)
+                    ? getConfigByName(configNameToUse)
+                    : dataImporterForm.getColumnPairs();
 
-            return mapping.findForward("importData");
+            if (columnPairsToUse.isEmpty() || (!columnPairsToUse.containsValue(ImporterConstants.PROJECT_TITLE) && !columnPairsToUse.containsValue(ImporterConstants.PROJECT_CODE))) {
+                response.setHeader("errorMessage", "You must have at least the 'Project Title' or 'Project Code' column in your config.");
+                response.setStatus(400);
+                return mapping.findForward("importData");
+            }
+            if (!isFileReadable(tempFile) || !isFileContentValid(tempFile)) {
+                // Handle invalid file
+                logger.error("Invalid file or content.");
+                response.setHeader("errorMessage", "Unable to parse the file. Please check the file format/content and try again.");
+                response.setStatus(400);
+                return mapping.findForward("importData");
+
+            } else {
+                logger.info("Existing configuration: {}", existingConfig);
+                if (configNameToUse == null) {
+                    saveImportConfig(request, fileName, dataImporterForm.getColumnPairs());
+                }
+
+                int res = 0;
+                ImportedFilesRecord importedFilesRecord = ImportedFileUtil.saveFile(tempFile, fileName);
+                logger.info("Saved file record: {}",importedFilesRecord);
+                boolean isInternal= dataImporterForm.isInternal();
+                boolean skipExisting = dataImporterForm.isSkipExisting();
+                boolean validateActivities = dataImporterForm.isValidateActivities();
+                boolean addDisbursementForCommitment = dataImporterForm.isAddDisbursementForCommitment();
+                boolean skipRecordsWithoutTransactions = dataImporterForm.isSkipRecordsWithoutTransactions();
+                boolean createMissingOrgs = dataImporterForm.isCreateMissingOrgs();
+                boolean createMissingSectors = dataImporterForm.isCreateMissingSectors();
+                boolean createMissingOrgGroups = dataImporterForm.isCreateMissingOrgGroups();
+                Long orgGroupId = dataImporterForm.getOrgGroupId();
+                Long defaultActivityStatusId = dataImporterForm.getDefaultActivityStatusId();
+                Long defaultLocationId = dataImporterForm.getDefaultLocationId();
+                logger.info("Internal: "+ isInternal);
+                logger.info("Skip existing: "+ skipExisting);
+                logger.info("Validate activities: "+ validateActivities);
+                logger.info("Add disbursement for commitment: "+ addDisbursementForCommitment);
+                logger.info("Skip records without transactions: " + skipRecordsWithoutTransactions);
+                logger.info("Create missing orgs: "+ createMissingOrgs);
+                logger.info("Create missing sectors: {}", createMissingSectors);
+                logger.info("Create missing org groups: " + createMissingOrgGroups);
+                logger.info("Org group id: "+ orgGroupId);
+                logger.info("Default activity status id: {}", defaultActivityStatusId);
+                logger.info("Default location id: {}", defaultLocationId);
+                if (createMissingOrgs && orgGroupId == null && !createMissingOrgGroups
+                        && !columnPairsToUse.containsValue(ImporterConstants.ORG_GROUP)) {
+                    response.setHeader("errorMessage",
+                            "Creating missing organizations requires a fallback Organization Group, the 'Create missing org groups' option, or an 'Organization Group' column mapping.");
+                    response.setStatus(400);
+                    return mapping.findForward("importData");
+                }
+                if (isInternal) {
+                    columnPairsToUse = new HashMap<>(columnPairsToUse);
+                    columnPairsToUse.put("Donor Agency", "Donor Agency");
+                }
+                if (!columnPairsToUse.containsValue(ImporterConstants.PROJECT_LOCATION)
+                        && defaultLocationId == null) {
+                    response.setHeader("errorMessage", "Please select a fallback location when no 'Project Location' column is mapped.");
+                    response.setStatus(400);
+                    return mapping.findForward("importData");
+                }
+                logger.info("Configuration: {}", columnPairsToUse);
+                try {
+                    if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
+                        String dataSheetChoice = request.getParameter("dataSheetChoice");
+                        String dataSheetName = request.getParameter("dataSheetName");
+                        boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId);
+                    } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId);
+                    }
+                } catch (Exception e) {
+                    ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
+                    throw e;
+                } finally {
+                    Instant finish = Instant.now();
+                    long timeElapsedMillis = Duration.between(start, finish).toMillis();
+                    ImportedFileUtil.updateFileProcessingTime(importedFilesRecord, timeElapsedMillis);
+                    long minutes = timeElapsedMillis / 60000;
+                    long seconds = (timeElapsedMillis % 60000) / 1000;
+                    logger.info("Time Elapsed: " + minutes + "m " + seconds + "s");
+                }
+                if (res != 1) {
+                    // Handle error
+                    logger.info("Error processing file  " + tempFile);
+                    ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
+                    response.setHeader("errorMessage", "Unable to parse the file. Please check the file format/content and try again.");
+                    response.setStatus(400);
+                    return mapping.findForward("importData");
+                }
+
+
+                // Clean up
+                ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.SUCCESS);
+                Files.delete(tempFile.toPath());
+                logger.info("Cache map size: " + ConstantsMap.size());
+                ConstantsMap.clear();
+                logger.info("File path is " + tempFilePath + " and size is " + tempFile.length() / (1024 * 1024) + " mb");
+                logger.info("Start time: " + start);
+
+                // Send response
+                response.setHeader("updatedMap", "");
+                dataImporterForm.getColumnPairs().clear();
+            }
+            return null;
+        }
+
+        return mapping.findForward("importData");
     }
     private static List<String> getConfigNames()
     {
@@ -295,31 +466,76 @@ public class DataImporter extends Action {
 
     }
 
+    private static List<AmpCategoryValueLocations> getAvailableLocations() {
+        return LocationUtil.getAllCountriesAndRegions().stream()
+                .filter(Objects::nonNull)
+                .filter(location -> !location.isSoftDeleted())
+                .sorted(Comparator.comparing(AmpCategoryValueLocations::getHierarchicalName, String.CASE_INSENSITIVE_ORDER))
+                .collect(Collectors.toList());
+    }
+
     private static Map<String, String> getConfigByName(String configName) {
         logger.info("Getting import config for configName: {}", configName);
         Session session = PersistenceManager.getRequestDBSession();
         Map<String, String> configValues = new HashMap<>();
-
-            String hql = "FROM DataImporterConfig WHERE configName = :configName";
-            Query query = session.createQuery(hql);
-            query.setParameter("configName", configName, StringType.INSTANCE);
-            query.setMaxResults(1);
-
-            List<DataImporterConfig> resultList = query.list();
-            logger.info("Configs found: {}",resultList);
-
-
-            if (!resultList.isEmpty()) {
-                Set<DataImporterConfigValues> values = resultList.get(0).getConfigValues();
-                logger.info("Config Values found: {}",values);
-
-                if (!values.isEmpty())
-                {
-                    values.forEach(value-> configValues.put(value.getConfigKey(),value.getConfigValue()));
-                }
-            }
-
+        // Query DataImporterConfigValues directly to bypass Hibernate first-level cache
+        // (querying through the parent entity's collection returns stale cached results
+        // when new pairs were added in the same session via addColumnPairToConfig)
+        String hql = "SELECT cv.configKey, cv.configValue FROM "
+                + DataImporterConfigValues.class.getName()
+                + " cv WHERE cv.dataImporterConfig.configName = :configName";
+        Query query = session.createQuery(hql);
+        query.setParameter("configName", configName, StringType.INSTANCE);
+        List<Object[]> rows = query.list();
+        logger.info("Config rows found for '{}': {}", configName, rows.size());
+        for (Object[] row : rows) {
+            configValues.put((String) row[0], (String) row[1]);
+        }
         return configValues;
+    }
+
+    private static DataImporterConfig getConfigEntityByName(String configName) {
+        Session session = PersistenceManager.getRequestDBSession();
+        String hql = "FROM DataImporterConfig WHERE configName = :configName";
+        Query query = session.createQuery(hql);
+        query.setParameter("configName", configName, StringType.INSTANCE);
+        query.setMaxResults(1);
+        List<DataImporterConfig> list = query.list();
+        return list.isEmpty() ? null : list.get(0);
+    }
+
+    private static void addColumnPairToConfig(String configName, String columnName, String selectedField) {
+        DataImporterConfig config = getConfigEntityByName(configName);
+        if (config == null) {
+            logger.warn("Config not found for name: {}", configName);
+            return;
+        }
+        Session session = PersistenceManager.getRequestDBSession();
+        DataImporterConfigValues cv = new DataImporterConfigValues(columnName, selectedField, config);
+        session.save(cv);
+        config.getConfigValues().add(cv);
+        session.flush();
+    }
+
+    private static void removeColumnPairFromConfig(String configName, String columnName) {
+        DataImporterConfig config = getConfigEntityByName(configName);
+        if (config == null) {
+            logger.warn("Config not found for name: {}", configName);
+            return;
+        }
+        DataImporterConfigValues toRemove = null;
+        for (DataImporterConfigValues v : config.getConfigValues()) {
+            if (columnName.equals(v.getConfigKey())) {
+                toRemove = v;
+                break;
+            }
+        }
+        if (toRemove != null) {
+            config.getConfigValues().remove(toRemove);
+            Session session = PersistenceManager.getRequestDBSession();
+            session.delete(toRemove);
+            session.flush();
+        }
     }
 
     public static void saveImportConfig(HttpServletRequest request, String fileName, Map<String, String> config) {
@@ -384,40 +600,84 @@ public class DataImporter extends Action {
 
 
 
-    private List<String> getEntityFieldsInfo() {
+    private Map<String, String> getEntityFieldsInfo() {
         List<String> fieldsInfos = new ArrayList<>();
-        fieldsInfos.add("Project Title");
-        fieldsInfos.add("Project Code");
-        fieldsInfos.add("Project Description");
-        fieldsInfos.add("Primary Sector");
-        fieldsInfos.add("Secondary Sector");
-        fieldsInfos.add("Project Location");
-        fieldsInfos.add("Project Start Date");
-        fieldsInfos.add("Project End Date");
-        fieldsInfos.add("Donor Agency");
-        fieldsInfos.add("Exchange Rate");
-        fieldsInfos.add("Donor Agency Code");
-        fieldsInfos.add("Responsible Organization");
-        fieldsInfos.add("Responsible Organization Code");
-        fieldsInfos.add("Executing Agency");
-        fieldsInfos.add("Implementing Agency");
-        fieldsInfos.add("Actual Disbursement");
-        fieldsInfos.add("Actual Commitment");
-        fieldsInfos.add("Actual Expenditure");
-        fieldsInfos.add("Planned Disbursement");
-        fieldsInfos.add("Planned Commitment");
-        fieldsInfos.add("Planned Expenditure");
-        fieldsInfos.add("Funding Item");
-        fieldsInfos.add("Transaction Date");
-        fieldsInfos.add("Financing Instrument");
-        fieldsInfos.add("Type Of Assistance");
-        fieldsInfos.add("Secondary Subsector");
-        fieldsInfos.add("Primary Subsector");
-        fieldsInfos.add("Currency");
-        fieldsInfos.add("Component Name");
-        fieldsInfos.add("Component Code");
-        fieldsInfos.add("Beneficiary Agency");
-        return fieldsInfos.stream().sorted().collect(Collectors.toList());
+        fieldsInfos.add(ImporterConstants.PROJECT_TITLE);
+        fieldsInfos.add(ImporterConstants.PROJECT_CODE);
+        fieldsInfos.add(ImporterConstants.OBJECTIVE);
+        fieldsInfos.add(ImporterConstants.PROJECT_DESCRIPTION);
+        fieldsInfos.add(ImporterConstants.PRIMARY_SECTOR);
+        fieldsInfos.add(ImporterConstants.SECONDARY_SECTOR);
+        fieldsInfos.add(ImporterConstants.PROJECT_LOCATION);
+        fieldsInfos.add(ImporterConstants.PROJECT_START_DATE);
+        fieldsInfos.add(ImporterConstants.PROJECT_END_DATE);
+        fieldsInfos.add(ImporterConstants.DONOR_AGENCY);
+        fieldsInfos.add(ImporterConstants.EXCHANGE_RATE);
+        fieldsInfos.add(ImporterConstants.DONOR_AGENCY_CODE);
+        fieldsInfos.add(ImporterConstants.ORG_GROUP);
+        fieldsInfos.add(ImporterConstants.RESPONSIBLE_ORGANIZATION);
+        fieldsInfos.add(ImporterConstants.RESPONSIBLE_ORGANIZATION_CODE);
+        fieldsInfos.add(ImporterConstants.EXECUTING_AGENCY);
+        fieldsInfos.add(ImporterConstants.IMPLEMENTING_AGENCY);
+        fieldsInfos.add(ImporterConstants.ACTUAL_DISBURSEMENT);
+        fieldsInfos.add(ImporterConstants.ACTUAL_COMMITMENT);
+        fieldsInfos.add(ImporterConstants.ACTUAL_EXPENDITURE);
+        fieldsInfos.add(ImporterConstants.PLANNED_DISBURSEMENT);
+        fieldsInfos.add(ImporterConstants.PLANNED_COMMITMENT);
+        fieldsInfos.add(ImporterConstants.PLANNED_EXPENDITURE);
+        fieldsInfos.add(ImporterConstants.TRANSACTION_AMOUNT);
+        fieldsInfos.add(ImporterConstants.MEASURE_TYPE);
+        fieldsInfos.add(ImporterConstants.TRANSACTION_DATE);
+        fieldsInfos.add(ImporterConstants.FINANCING_INSTRUMENT);
+        fieldsInfos.add(ImporterConstants.TYPE_OF_ASSISTANCE);
+        fieldsInfos.add(ImporterConstants.SECONDARY_SUBSECTOR);
+        fieldsInfos.add(ImporterConstants.PRIMARY_SUBSECTOR);
+        fieldsInfos.add(ImporterConstants.CURRENCY);
+        fieldsInfos.add(ImporterConstants.COMPONENT_NAME);
+        fieldsInfos.add(ImporterConstants.COMPONENT_CODE);
+        fieldsInfos.add(ImporterConstants.BENEFICIARY_AGENCY);
+        fieldsInfos.add(ImporterConstants.PROJECT_STATUS);
+        fieldsInfos.add(ImporterConstants.PROCUREMENT_SYSTEM);
+        // Indicator columns for M&E import
+        fieldsInfos.add(ImporterConstants.INDICATOR_NAME);
+        fieldsInfos.add(ImporterConstants.PROGRAM_NAME);
+        fieldsInfos.add(ImporterConstants.INDICATOR_LOCATION);
+        fieldsInfos.add(ImporterConstants.ORIGINAL_BASE_VALUE);
+        fieldsInfos.add(ImporterConstants.ORIGINAL_BASE_VALUE_DATE);
+        fieldsInfos.add(ImporterConstants.REVISED_BASE_VALUE);
+        fieldsInfos.add(ImporterConstants.REVISED_BASE_VALUE_DATE);
+        fieldsInfos.add(ImporterConstants.ORIGINAL_TARGET_VALUE);
+        fieldsInfos.add(ImporterConstants.ORIGINAL_TARGET_VALUE_DATE);
+        fieldsInfos.add(ImporterConstants.REVISED_TARGET_VALUE);
+        fieldsInfos.add(ImporterConstants.REVISED_TARGET_VALUE_DATE);
+        fieldsInfos.add(ImporterConstants.ACTUAL_VALUE);
+        fieldsInfos.add(ImporterConstants.ACTUAL_VALUE_DATE);
+        fieldsInfos.add(ImporterConstants.UNIT_OF_MEASURE);
+
+        // Create map of original field names to translated field names
+        Map<String, String> fieldMap = new LinkedHashMap<>();
+        for (String field : fieldsInfos) {
+            String translated = org.digijava.kernel.translator.TranslatorWorker.translateText(field);
+            fieldMap.put(field, translated);
+
+        }
+
+
+        return fieldMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new));
+    }
+
+    private List<AmpCategoryValue> getActivityStatuses() {
+        List<AmpCategoryValue> activityStatuses = new ArrayList<>(
+                CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY));
+        activityStatuses.sort(Comparator
+                .comparing(AmpCategoryValue::getIndex, Comparator.nullsLast(Integer::compareTo))
+                .thenComparing(AmpCategoryValue::getValue, String.CASE_INSENSITIVE_ORDER));
+        return activityStatuses;
     }
 
 }

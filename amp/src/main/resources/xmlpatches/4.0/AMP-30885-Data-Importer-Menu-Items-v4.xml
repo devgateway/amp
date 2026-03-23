@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-30885</jira>
+    <keyword>menu</keyword>
+    <author>bmokandu</author>
+    <description>Add menu entry for Data Importer</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                INSERT INTO amp_menu_entry (id, parent_id, name, title, url, position, flags)
+                SELECT nextval('amp_menu_entry_seq'), (SELECT id FROM amp_menu_entry WHERE name = 'Tools'), 'Data Importer', 'Data Importer', NULL, 9, NULL
+                WHERE NOT EXISTS (SELECT 1 FROM amp_menu_entry WHERE name = 'Data Importer');
+
+                INSERT INTO amp_menu_entry_view(menu_id, view_type)
+                SELECT (SELECT id FROM amp_menu_entry WHERE name = 'Data Importer'), 2
+                WHERE NOT EXISTS (SELECT 1 FROM amp_menu_entry_view WHERE menu_id = (SELECT id FROM amp_menu_entry WHERE name = 'Data Importer') AND view_type = 2);
+
+                INSERT INTO amp_visibility_rule (id, parent_id, rule_type)
+                SELECT nextval('amp_visibility_rule_seq'), null, 1
+                WHERE NOT EXISTS (SELECT 1 FROM amp_menu_entry_view WHERE menu_id = (SELECT id FROM amp_menu_entry WHERE name = 'Data Importer') AND view_type = 2 AND rule_id IS NOT NULL);
+                UPDATE amp_menu_entry_view SET rule_id=(SELECT currval('amp_visibility_rule_seq')) WHERE menu_id= (SELECT id FROM amp_menu_entry WHERE name = 'Data Importer') AND view_type=2 AND rule_id IS NULL;
+
+                INSERT INTO amp_features_visibility (id,name,haslevel,parent)
+                SELECT nextval('amp_features_visibility_seq'),'Data Importer',true, (SELECT id FROM amp_modules_visibility WHERE name = 'Tools')
+                WHERE NOT EXISTS (SELECT 1 FROM amp_features_visibility WHERE name = 'Data Importer');
+
+                INSERT INTO amp_visibility_rule_amp_features_visibility(rule_id, feature_id)
+                SELECT (SELECT currval('amp_visibility_rule_seq')), (SELECT id FROM amp_features_visibility WHERE name = 'Data Importer' AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Tools'))
+                WHERE NOT EXISTS (SELECT 1 FROM amp_visibility_rule_amp_features_visibility WHERE feature_id = (SELECT id FROM amp_features_visibility WHERE name = 'Data Importer' AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Tools')));
+
+                INSERT INTO amp_features_templates (template, feature)
+                SELECT (SELECT cast(settingsvalue AS int) FROM amp_global_settings WHERE settingsname = 'Visibility Template' LIMIT 1), (SELECT id FROM amp_features_visibility WHERE name = 'Data Importer' LIMIT 1)
+                WHERE NOT EXISTS (SELECT 1 FROM amp_features_templates WHERE feature = (SELECT id FROM amp_features_visibility WHERE name = 'Data Importer' LIMIT 1));
+
+                INSERT INTO amp_menu_entry (id,parent_id,name,title,url,position,flags)
+                SELECT nextval('amp_menu_entry_seq'),(SELECT id FROM amp_menu_entry WHERE name='Data Importer'),'Import Data','Import Data','/aim/dataImporter.do',1,null
+                WHERE NOT EXISTS (SELECT 1 FROM amp_menu_entry WHERE name = 'Import Data' AND parent_id = (SELECT id FROM amp_menu_entry WHERE name = 'Data Importer'));
+                INSERT INTO amp_menu_entry_view(menu_id, view_type)
+                SELECT (SELECT id FROM amp_menu_entry WHERE name = 'Import Data'), 2
+                WHERE NOT EXISTS (SELECT 1 FROM amp_menu_entry_view WHERE menu_id = (SELECT id FROM amp_menu_entry WHERE name = 'Import Data') AND view_type = 2);
+                INSERT INTO amp_visibility_rule (id, parent_id, rule_type)
+                SELECT nextval('amp_visibility_rule_seq'), null, 1
+                WHERE NOT EXISTS (SELECT 1 FROM amp_menu_entry_view WHERE menu_id = (SELECT id FROM amp_menu_entry WHERE name = 'Import Data') AND view_type = 2 AND rule_id IS NOT NULL);
+                UPDATE amp_menu_entry_view SET rule_id=(SELECT currval('amp_visibility_rule_seq')) WHERE menu_id= (SELECT id FROM amp_menu_entry WHERE name = 'Import Data') AND view_type=2 AND rule_id IS NULL;
+                INSERT INTO amp_visibility_rule_amp_features_visibility(rule_id, feature_id)
+                SELECT (SELECT rule_id FROM amp_menu_entry_view WHERE menu_id = (SELECT id FROM amp_menu_entry WHERE name = 'Import Data') AND view_type = 2 LIMIT 1), (SELECT id FROM amp_features_visibility WHERE name = 'Data Importer' AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Tools'))
+                WHERE NOT EXISTS (SELECT 1 FROM amp_visibility_rule_amp_features_visibility WHERE rule_id = (SELECT rule_id FROM amp_menu_entry_view WHERE menu_id = (SELECT id FROM amp_menu_entry WHERE name = 'Import Data') AND view_type = 2 LIMIT 1));
+
+                INSERT INTO amp_menu_entry (id,parent_id,name,title,url,position,flags)
+                SELECT nextval('amp_menu_entry_seq'),(SELECT id FROM amp_menu_entry WHERE name='Data Importer'),'View Progress','View Progress','/aim/viewImportProgress.do',2,null
+                WHERE NOT EXISTS (SELECT 1 FROM amp_menu_entry WHERE name = 'View Progress' AND parent_id = (SELECT id FROM amp_menu_entry WHERE name = 'Data Importer'));
+                INSERT INTO amp_menu_entry_view(menu_id, view_type)
+                SELECT (SELECT id FROM amp_menu_entry WHERE name = 'View Progress'), 2
+                WHERE NOT EXISTS (SELECT 1 FROM amp_menu_entry_view WHERE menu_id = (SELECT id FROM amp_menu_entry WHERE name = 'View Progress') AND view_type = 2);
+                INSERT INTO amp_visibility_rule (id, parent_id, rule_type)
+                SELECT nextval('amp_visibility_rule_seq'), null, 1
+                WHERE NOT EXISTS (SELECT 1 FROM amp_menu_entry_view WHERE menu_id = (SELECT id FROM amp_menu_entry WHERE name = 'View Progress') AND view_type = 2 AND rule_id IS NOT NULL);
+                UPDATE amp_menu_entry_view SET rule_id=(SELECT currval('amp_visibility_rule_seq')) WHERE menu_id= (SELECT id FROM amp_menu_entry WHERE name = 'View Progress') AND view_type=2 AND rule_id IS NULL;
+                INSERT INTO amp_visibility_rule_amp_features_visibility(rule_id, feature_id)
+                SELECT (SELECT rule_id FROM amp_menu_entry_view WHERE menu_id = (SELECT id FROM amp_menu_entry WHERE name = 'View Progress') AND view_type = 2 LIMIT 1), (SELECT id FROM amp_features_visibility WHERE name = 'Data Importer' AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Tools'))
+                WHERE NOT EXISTS (SELECT 1 FROM amp_visibility_rule_amp_features_visibility WHERE rule_id = (SELECT rule_id FROM amp_menu_entry_view WHERE menu_id = (SELECT id FROM amp_menu_entry WHERE name = 'View Progress') AND view_type = 2 LIMIT 1));
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

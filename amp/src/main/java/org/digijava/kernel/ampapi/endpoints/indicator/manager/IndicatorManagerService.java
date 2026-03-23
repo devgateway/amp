@@ -79,6 +79,88 @@ public class IndicatorManagerService {
         throw new ApiRuntimeException(BAD_REQUEST,
                 ApiError.toError("Indicator with id " + indicatorId + " not found"));
     }
+    public MEIndicatorDTO getMeIndicatorByNameAndProgramName(String name, String programName) {
+        Session session = PersistenceManager.getSession();
+        AmpIndicator indicator;
+        if (programName==null){
+             indicator = (AmpIndicator) session.createCriteria(AmpIndicator.class)
+                    .add(Restrictions.eq("name", name))
+                    .setMaxResults(1)
+                    .uniqueResult();
+        }
+        else {
+            indicator = (AmpIndicator) session.createCriteria(AmpIndicator.class)
+                    .add(Restrictions.eq("name", name))
+                    .createAlias("program", "p")
+                    .add(Restrictions.eq("p.name", programName))
+                    .setMaxResults(1)
+                    .uniqueResult();
+        }
+
+
+
+        if (indicator != null) {
+            return new MEIndicatorDTO(indicator);
+        }
+
+        throw new ApiRuntimeException(BAD_REQUEST,
+                ApiError.toError("Indicator with name " + name + " and program name " + programName + " not found"));
+    }
+
+    /**
+     * Returns the indicator by name and optional program name, or null if not found.
+     * Use this when you need to look up an indicator without throwing (e.g. data import).
+     * Tries exact name match first; if not found, looks for an indicator whose name contains
+     * the given name (e.g. DB "1.2.1 - Number of ... - 1.2.1" matches file "Number of ...").
+     */
+    public MEIndicatorDTO getMeIndicatorByNameAndProgramNameOptional(String name, String programName) {
+        if (name == null || name.trim().isEmpty()) {
+            return null;
+        }
+        String trimmedName = name.trim();
+        String trimmedProgram = programName != null && !programName.trim().isEmpty() ? programName.trim() : null;
+        try {
+            return getMeIndicatorByNameAndProgramName(trimmedName, trimmedProgram);
+        } catch (ApiRuntimeException e) {
+            logger.info("getMeIndicatorByNameAndProgramNameOptional: exact match not found, trying substring match for name='" + trimmedName + "' programName='" + trimmedProgram + "'");
+
+            // exact match not found, try substring match (e.g. DB "1.2.1 - X - 1.2.1" vs file "X")
+        }
+        return getMeIndicatorByNameSubstringOptional(trimmedName, trimmedProgram);
+    }
+
+    /**
+     * Finds an indicator whose stored name contains the given name (e.g. "1.2.1 - X - 1.2.1" contains "X").
+     * Returns null if none or multiple matches (when program not specified), or the match when program is specified.
+     */
+    private MEIndicatorDTO getMeIndicatorByNameSubstringOptional(String name, String programName) {
+        Session session = PersistenceManager.getSession();
+        String escaped = escapeForLike(name);
+        String pattern = "%" + escaped + "%";
+        String hql = "from " + AmpIndicator.class.getName() + " i where i.name like :name escape '\\'";
+        if (programName != null) {
+            hql += " and i.program is not null and i.program.name = :programName";
+        }
+        org.hibernate.query.Query<?> query = session.createQuery(hql);
+        query.setParameter("name", pattern);
+        if (programName != null) {
+            query.setParameter("programName", programName);
+        }
+        @SuppressWarnings("unchecked")
+        List<AmpIndicator> list = (List<AmpIndicator>) query.list();
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        if (list.size() > 1 && programName == null) {
+            logger.warn("getMeIndicatorByNameSubstringOptional: multiple indicators contain name substring '" + name + "', returning first");
+        }
+        return new MEIndicatorDTO(list.get(0));
+    }
+
+    private static String escapeForLike(String s) {
+        if (s == null) return null;
+        return s.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");
+    }
 
     public MEIndicatorDTO createMEIndicator(final MEIndicatorDTO indicatorRequest) {
         Session session = PersistenceManager.getSession();
@@ -167,6 +249,12 @@ public class IndicatorManagerService {
     }
 
     private void validateYearRange(String startYear, String endYear, AmpIndicatorGlobalValue value, String error){
+        if (value == null) {
+            return;
+        }
+        if (startYear == null || endYear == null) {
+            return;
+        }
         String startInString = "01/01/" + startYear;
         DateTime dateTime = DateTime.parse(startInString, formatter);
 

@@ -1,5 +1,7 @@
 package org.digijava.module.aim.action.dataimporter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Transaction {
     private Long transaction_id;
     private Long adjustment_type;
@@ -9,6 +11,8 @@ public class Transaction {
     private double transaction_amount;
     private Long currency;
     private Object fixed_exchange_rate;
+    @JsonIgnore
+    private boolean inferredTransactionDate;
 
     public Long getTransaction_id() {
         return transaction_id;
@@ -72,6 +76,14 @@ public class Transaction {
 
     public void setFixed_exchange_rate(Object fixed_exchange_rate) {
         this.fixed_exchange_rate = fixed_exchange_rate;
+    }
+
+    public boolean isInferredTransactionDate() {
+        return inferredTransactionDate;
+    }
+
+    public void setInferredTransactionDate(boolean inferredTransactionDate) {
+        this.inferredTransactionDate = inferredTransactionDate;
     }
 
     @Override

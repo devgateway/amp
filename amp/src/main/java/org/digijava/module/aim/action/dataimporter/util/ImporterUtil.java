@@ -9,10 +9,14 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
@@ -20,8 +24,16 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProjectCurre
 import org.digijava.module.aim.action.dataimporter.model.*;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.type.StringType;
@@ -33,8 +45,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -67,21 +77,21 @@ public class ImporterUtil {
 
     }
 
-    public static Funding setAFundingItemForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, boolean expenditure, String
-            adjustmentType, Funding fundingItem, AmpActivityVersion existingActivity) {
-        int detailColumn = getColumnIndexByName(sheet, getKey(config, "Financing Instrument"));
+        public static List<Funding> setFundingItemsForExcel(Sheet sheet, Map<String, String> config, Row row, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Cell cell, boolean commitment, boolean disbursement, boolean expenditure, String
+            adjustmentType, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId, String importedOrgGroupName, boolean createMissingOrgGroups, boolean addDisbursementForCommitment) {
+        int detailColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.FINANCING_INSTRUMENT));
         String finInstrument = detailColumn >= 0 ? getStringValueFromCell(row.getCell(detailColumn), false) : "";
 
-        detailColumn = getColumnIndexByName(sheet, getKey(config, "Exchange Rate"));
+        detailColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.EXCHANGE_RATE));
         String exchangeRate = detailColumn >= 0 ? getStringValueFromCell(row.getCell(detailColumn), false) : "";
         Double exchangeRateValue = !exchangeRate.isEmpty() ? parseDouble(exchangeRate) : Double.valueOf(0.0);
 
-        detailColumn = getColumnIndexByName(sheet, getKey(config, "Type Of Assistance"));
+        detailColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.TYPE_OF_ASSISTANCE));
         String typeOfAss = detailColumn >= 0 ? getStringValueFromCell(row.getCell(detailColumn), false) : "";
-        int separateFundingDateColumn = getColumnIndexByName(sheet, getKey(config, "Transaction Date"));
+        int separateFundingDateColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.TRANSACTION_DATE));
         String separateFundingDate = separateFundingDateColumn >= 0 ? getDateFromExcel(row, separateFundingDateColumn) : null;
 
-        int currencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Currency"));
+        int currencyCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.CURRENCY));
         String currencyCode = currencyCodeColumn >= 0 ? getStringValueFromCell(row.getCell(currencyCodeColumn), true) : CurrencyUtil.getDefaultCurrency().getCurrencyCode();
         if (existingActivity != null) {
             String existingActivityCurrencyCode = getCurrencyCodeFromExistingImported(existingActivity.getName());
@@ -90,41 +100,59 @@ public class ImporterUtil {
             }
         }
         saveCurrencyCode(currencyCode, importDataModel.getProject_title());
-        Funding funding;
-        int componentNameColumn = getColumnIndexByName(sheet, getKey(config, "Component Name"));
+        List<Funding> fundings = new ArrayList<>();
+        int componentNameColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.COMPONENT_NAME));
         String componentName = componentNameColumn >= 0 ? getStringValueFromCell(row.getCell(componentNameColumn), true) : null;
         if (importDataModel.getDonor_organization() == null || importDataModel.getDonor_organization().isEmpty()) {
-            if (!config.containsValue("Donor Agency")) {
-                funding = updateFunding(fundingItem, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+            if (!config.containsValue(ImporterConstants.DONOR_AGENCY)) {
+                Funding f = new Funding();
+                updateFunding(f, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
+                
+                fundings.add(f);
 
             } else {
-                int columnIndex1 = getColumnIndexByName(sheet, getKey(config, "Donor Agency"));
-                int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, "Donor Agency Code"));
+                int columnIndex1 = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY));
+                int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
                 String donorAgencyCode = donorAgencyCodeColumn >= 0 ? getStringValueFromCell(row.getCell(donorAgencyCodeColumn), true) : null;
-                updateOrgs(importDataModel, columnIndex1 >= 0 ? Objects.requireNonNull(getStringValueFromCell(row.getCell(columnIndex1), false)).trim() : "no org", donorAgencyCode, session, "donor");
-                funding = updateFunding(fundingItem, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                updateOrgs(importDataModel, columnIndex1 >= 0 ? Objects.requireNonNull(getStringValueFromCell(row.getCell(columnIndex1), false)).trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
+                List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
+                List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
+                for (int i = 0; i < donors.size(); i++) {
+                    Funding f = new Funding();
+                    updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
+                    
+                    fundings.add(f);
+                }
+
             }
 
         } else {
-            funding = updateFunding(fundingItem, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+            List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
+            List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
+            for (int i = 0; i < donors.size(); i++) {
+                Funding f = new Funding();
+                updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
+                
+                fundings.add(f);
+            }
         }
-        return funding;
+        return fundings;
     }
 
 
-    public static Funding setAFundingItemForTxt(Map<String, String> row, Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Number value, boolean commitment, boolean disbursement, boolean expenditure, String
-            adjustmentType, Funding fundingItem, AmpActivityVersion existingActivity) {
-        String finInstrument = row.get(getKey(config, "Financing Instrument"));
+        public static List<Funding> setFundingItemsForTxt(Map<String, String> row, Map<String, String> config, Map.Entry<String, String> entry, ImportDataModel importDataModel, Session session, Number value, boolean commitment, boolean disbursement, boolean expenditure, String
+            adjustmentType, AmpActivityVersion existingActivity, boolean createMissingOrgs, Long orgGroupId, String importedOrgGroupName, boolean createMissingOrgGroups, boolean addDisbursementForCommitment) {
+        String finInstrument = row.get(getKey(config, ImporterConstants.FINANCING_INSTRUMENT));
         finInstrument = finInstrument != null ? finInstrument : "";
 
-        String typeOfAss = row.get(getKey(config, "Type Of Assistance"));
+        String typeOfAss = row.get(getKey(config, ImporterConstants.TYPE_OF_ASSISTANCE));
         typeOfAss = typeOfAss != null ? typeOfAss : "";
-        Funding funding;
+        List<Funding> fundings = new ArrayList<>();
 
-        String separateFundingDate = row.get(getKey(config, "Transaction Date"));
+        String separateFundingDate = row.get(getKey(config, ImporterConstants.TRANSACTION_DATE));
         separateFundingDate = separateFundingDate != null ? separateFundingDate : "";
 
-        String currencyCode = row.get(getKey(config, "Currency"));
+        String currencyCode = row.get(getKey(config, ImporterConstants.CURRENCY));
         currencyCode = currencyCode != null ? currencyCode : CurrencyUtil.getDefaultCurrency().getCurrencyCode();
         if (existingActivity != null) {
             String existingActivityCurrencyCode = getCurrencyCodeFromExistingImported(existingActivity.getName());
@@ -133,32 +161,48 @@ public class ImporterUtil {
             }
         }
         saveCurrencyCode(currencyCode, importDataModel.getProject_title());
-        String componentName = row.get(getKey(config, "Component Name"));
+        String componentName = row.get(getKey(config, ImporterConstants.COMPONENT_NAME));
         componentName = componentName != null ? componentName : "";
 
 
-        String exchangeRate = row.get(getKey(config, "Exchange Rate"));
+        String exchangeRate = row.get(getKey(config, ImporterConstants.EXCHANGE_RATE));
         exchangeRate = exchangeRate != null ? exchangeRate : "";
 
         Double exchangeRateValue = !exchangeRate.isEmpty() ? parseDouble(exchangeRate) : Double.valueOf(0.0);
 
 
         if (importDataModel.getDonor_organization() == null || importDataModel.getDonor_organization().isEmpty()) {
-            if (!config.containsValue("Donor Agency")) {
-                funding = updateFunding(fundingItem, importDataModel, value, entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+            if (!config.containsValue(ImporterConstants.DONOR_AGENCY)) {
+                Funding f = new Funding();
+                updateFunding(f, importDataModel, value, entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
+                
+                fundings.add(f);
 
             } else {
-                String donorColumn = row.get(getKey(config, "Donor Agency"));
-                String donorAgencyCode = row.get(getKey(config, "Donor Agency Code"));
+                String donorColumn = row.get(getKey(config, ImporterConstants.DONOR_AGENCY));
+                String donorAgencyCode = row.get(getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
 
-                updateOrgs(importDataModel, donorColumn != null && !donorColumn.isEmpty() ? donorColumn.trim() : "no org", donorAgencyCode, session, "donor");
-                funding = updateFunding(fundingItem, importDataModel, value, entry.getKey(), separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+                updateOrgs(importDataModel, donorColumn != null && !donorColumn.isEmpty() ? donorColumn.trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
+                List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
+                List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
+                for (int i = 0; i < donors.size(); i++) {
+                    Funding f = new Funding();
+                    updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
+                    
+                    fundings.add(f);
+                }
             }
 
         } else {
-            funding = updateFunding(fundingItem, importDataModel, value, entry.getKey(), separateFundingDate, new ArrayList<>(importDataModel.getDonor_organization()).get(0).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue);
+            List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
+            List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
+            for (int i = 0; i < donors.size(); i++) {
+                Funding f = new Funding();
+                updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
+                fundings.add(f);
+            }
         }
-        return funding;
+        return fundings;
     }
 
     public static String getStringValueFromCell(Cell cell, boolean nullable) {
@@ -181,6 +225,13 @@ public class ImporterUtil {
 
     public static Number getNumericValueFromCell(Cell cell) {
         try {
+            if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+                String raw = cell.getStringCellValue().trim().replace(",", "");
+                if (!raw.isEmpty()) {
+                    return Double.parseDouble(raw);
+                }
+                return 0;
+            }
             return cell.getNumericCellValue();
         } catch (Exception e) {
             logger.error("Error getting cell {} value: ", cell, e);
@@ -209,8 +260,13 @@ public class ImporterUtil {
                 return null;
             }
 
-            if (rawValue.matches("\\d+")) {
+            if (rawValue.matches("\\d+(\\.0+)?")) {
                 double numericValue = Double.parseDouble(rawValue);
+                int intVal = (int) numericValue;
+                // Year-only: whole number in reasonable year range (e.g. 2023 or 2023.0) -> use as calendar year, not Excel serial days
+                if (intVal >= 1800 && intVal <= 2700 && numericValue == Math.floor(numericValue)) {
+                    return intVal + "-12-31";
+                }
                 if (numericValue > 59) {  // Excel bug: after 28 Feb 1900, 60+ is valid
                     Date date = DateUtil.getJavaDate(numericValue);
                     return outputFormat.format(date);
@@ -271,6 +327,13 @@ public class ImporterUtil {
 
 
     private static String getFundingDate(String dateString) {
+        if (dateString == null || dateString.trim().isEmpty()) {
+            return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+        if (dateString != null && dateString.trim().matches("\\d{4}")) {
+            int year = Integer.parseInt(dateString.trim());
+            return LocalDate.of(year, 12, 31).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
         LocalDate date = LocalDate.now();
         if (isCommonDateFormat(dateString)) {
             List<DateTimeFormatter> formatters = Arrays.asList(
@@ -326,9 +389,9 @@ public class ImporterUtil {
         // Check if date is in year-only format (e.g., "2024")
         if (Pattern.matches("\\d{4}", date)) {
             try {
-                // Parse the year and create a Date object for January 1 of that year
-                Date januaryFirst = new SimpleDateFormat("yyyy-MM-dd").parse(date + "-01-01");
-                return new SimpleDateFormat("yyyy-MM-dd").format(januaryFirst); // Return as "yyyy-MM-dd"
+                // Parse the year and create a Date object for December 31 of that year
+                Date decemberLast = new SimpleDateFormat("yyyy-MM-dd").parse(date + "-12-31");
+                return new SimpleDateFormat("yyyy-MM-dd").format(decemberLast); // Return as "yyyy-MM-dd"
             } catch (Exception e) {
                 logger.info("Error parsing date", e);
             }
@@ -387,6 +450,58 @@ public class ImporterUtil {
         return null;
     }
 
+    /**
+     * Result of parsing a Measure Type string (e.g. "PC - Planned Commitment").
+     * Used to set commitment/disbursement/expenditure and Actual/Planned for funding.
+     */
+    public static class MeasureTypeResult {
+        public final boolean commitment;
+        public final boolean disbursement;
+        public final boolean expenditure;
+        public final String adjustmentType; // "Actual" or "Planned"
+
+        public MeasureTypeResult(boolean commitment, boolean disbursement, boolean expenditure, String adjustmentType) {
+            this.commitment = commitment;
+            this.disbursement = disbursement;
+            this.expenditure = expenditure;
+            this.adjustmentType = adjustmentType;
+        }
+    }
+
+    /**
+     * Parses a Measure Type value from the template (e.g. "PC - Planned Commitment", "AC", or "Actual Commitment").
+     * @return MeasureTypeResult or null if not recognized
+     */
+    public static MeasureTypeResult parseMeasureType(String value) {
+        if (value == null) return null;
+        String s = value.trim();
+        if (s.isEmpty()) return null;
+        // AC / PC / AD / PD / AE / PE
+        if (s.equalsIgnoreCase("AC")) return new MeasureTypeResult(true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+        if (s.equalsIgnoreCase("PC")) return new MeasureTypeResult(true, false, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+        if (s.equalsIgnoreCase("AD")) return new MeasureTypeResult(false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+        if (s.equalsIgnoreCase("PD")) return new MeasureTypeResult(false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+        if (s.equalsIgnoreCase("AE")) return new MeasureTypeResult(false, false, true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+        if (s.equalsIgnoreCase("PE")) return new MeasureTypeResult(false, false, true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+        // Full form "PC - Planned Commitment" or label only "Planned Commitment"
+        if (s.contains(" - ")) {
+            String code = s.substring(0, s.indexOf(" - ")).trim();
+            if (code.equalsIgnoreCase("AC")) return new MeasureTypeResult(true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+            if (code.equalsIgnoreCase("PC")) return new MeasureTypeResult(true, false, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+            if (code.equalsIgnoreCase("AD")) return new MeasureTypeResult(false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+            if (code.equalsIgnoreCase("PD")) return new MeasureTypeResult(false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+            if (code.equalsIgnoreCase("AE")) return new MeasureTypeResult(false, false, true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+            if (code.equalsIgnoreCase("PE")) return new MeasureTypeResult(false, false, true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+        }
+        if (s.equalsIgnoreCase(ImporterConstants.ACTUAL_COMMITMENT)) return new MeasureTypeResult(true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+        if (s.equalsIgnoreCase(ImporterConstants.PLANNED_COMMITMENT)) return new MeasureTypeResult(true, false, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+        if (s.equalsIgnoreCase(ImporterConstants.ACTUAL_DISBURSEMENT)) return new MeasureTypeResult(false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+        if (s.equalsIgnoreCase(ImporterConstants.PLANNED_DISBURSEMENT)) return new MeasureTypeResult(false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+        if (s.equalsIgnoreCase(ImporterConstants.ACTUAL_EXPENDITURE)) return new MeasureTypeResult(false, false, true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL);
+        if (s.equalsIgnoreCase(ImporterConstants.PLANNED_EXPENDITURE)) return new MeasureTypeResult(false, false, true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED);
+        return null;
+    }
+
     public static String findYearSubstring(String text) {
         Pattern pattern = Pattern.compile("(?:19|20)\\d{2}");
         Matcher matcher = pattern.matcher(text);
@@ -425,8 +540,8 @@ public class ImporterUtil {
     }
 
 
-    private static Funding updateFunding(Funding fundingItem, ImportDataModel importDataModel, Number amount, String columnHeaderContainingYear, String separateFundingDate, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, boolean expenditure, String
-            adjustmentType, String currencyCode, String componentName, Double exchangeRate) {
+        private static Funding updateFunding(Funding fundingItem, ImportDataModel importDataModel, Number amount, String columnHeaderContainingYear, String separateFundingDate, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, boolean expenditure, String
+            adjustmentType, String currencyCode, String componentName, Double exchangeRate, boolean addDisbursementForCommitment) {
         // TODO: 27/06/2024 pick Month from file and use it in funding
         Session session = getSession();
         Long currencyId = getCurrencyId(session, currencyCode);
@@ -438,17 +553,28 @@ public class ImporterUtil {
 
         String yearString;
         String fundingDate;
+        boolean inferredFundingDate = false;
         if (separateFundingDate != null) {
             if (isCommonDateFormat(separateFundingDate)) {
                 fundingDate = getFundingDate(separateFundingDate);
             } else {
                 yearString = findYearSubstring(separateFundingDate);
-                fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
+                if (yearString != null) {
+                    fundingDate = getFundingDate(yearString);
+                } else {
+                    fundingDate = getFundingDate(null);
+                    inferredFundingDate = true;
+                }
 
             }
         } else {
             yearString = findYearSubstring(columnHeaderContainingYear);
-            fundingDate = yearString != null ? getFundingDate(yearString) : getFundingDate("2000");
+            if (yearString != null) {
+                fundingDate = getFundingDate(yearString);
+            } else {
+                fundingDate = getFundingDate(null);
+                inferredFundingDate = true;
+            }
 
         }
 
@@ -462,22 +588,29 @@ public class ImporterUtil {
         transaction.setAdjustment_type(adjType);
         transaction.setTransaction_amount(amount != null ? amount.doubleValue() : 0.0);
         transaction.setTransaction_date(fundingDate);
+        transaction.setInferredTransactionDate(inferredFundingDate);
         transaction.setFixed_exchange_rate(exchangeRate);
+        
+        // Check for duplicate transactions by currency, amount, and date before adding
         if (commitment) {
-            fundingItem.getCommitments().add(transaction);
+            if (!transactionExists(fundingItem.getCommitments(), transaction)) {
+                fundingItem.getCommitments().add(transaction);
+            }
         }
         if (disbursement) {
-            fundingItem.getDisbursements().add(transaction);
+            if (!transactionExists(fundingItem.getDisbursements(), transaction)) {
+                fundingItem.getDisbursements().add(transaction);
+            }
         }
         if (expenditure) {
-            if (transaction.getTransaction_amount() == 0) {
-                transaction.setTransaction_amount(-1);
+            if (!transactionExists(fundingItem.getExpenditures(), transaction)) {
+                fundingItem.getExpenditures().add(transaction);
             }
-            if (transaction.getTransaction_amount() > 0) {
-                transaction.setTransaction_amount(-transaction.getTransaction_amount());
-            }
-            fundingItem.getCommitments().add(transaction);
 
+        }
+
+        if (addDisbursementForCommitment && commitment && !disbursement) {
+            createCorrespondingDisbursement(fundingItem, adjustmentType);
         }
 
 
@@ -487,6 +620,59 @@ public class ImporterUtil {
 
         }
         return fundingItem;
+    }
+
+    /**
+     * Check if a transaction with the same currency, amount, and date already exists in the list
+     * @param transactions List of existing transactions
+     * @param newTransaction Transaction to check for duplicates
+     * @return true if a duplicate exists, false otherwise
+     */
+    private static boolean transactionExists(List<Transaction> transactions, Transaction newTransaction) {
+        if (transactions == null || newTransaction == null) {
+            return false;
+        }
+        
+        return transactions.stream().anyMatch(existing -> 
+            existing.getCurrency() != null && existing.getCurrency().equals(newTransaction.getCurrency()) &&
+            Double.compare(existing.getTransaction_amount(), newTransaction.getTransaction_amount()) == 0 &&
+            ((existing.isInferredTransactionDate() || newTransaction.isInferredTransactionDate())
+                    || Objects.equals(existing.getTransaction_date(), newTransaction.getTransaction_date())) &&
+            Objects.equals(existing.getAdjustment_type(), newTransaction.getAdjustment_type())
+        );
+    }
+
+    /**
+     * Creates a corresponding disbursement transaction for each commitment transaction.
+     * The disbursement will have the same amount, currency, and date as the commitment.
+     * @param funding The funding object containing commitments
+     * @param adjustmentType The adjustment type ("actual" or "planned")
+     */
+    private static void createCorrespondingDisbursement(Funding funding, String adjustmentType) {
+        if (funding == null || funding.getCommitments() == null || funding.getCommitments().isEmpty()) {
+            return;
+        }
+        
+        for (Transaction commitment : funding.getCommitments()) {
+            Transaction disbursement = new Transaction();
+            disbursement.setCurrency(commitment.getCurrency());
+            disbursement.setTransaction_amount(commitment.getTransaction_amount());
+            disbursement.setTransaction_date(commitment.getTransaction_date());
+            disbursement.setInferredTransactionDate(commitment.isInferredTransactionDate());
+            disbursement.setFixed_exchange_rate(commitment.getFixed_exchange_rate());
+            
+            // Set the adjustment type for disbursement
+            Session session = getSession();
+            Long adjType = getCategoryValue("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY, adjustmentType);
+            disbursement.setAdjustment_type(adjType);
+            
+            // Add the disbursement if it doesn't already exist
+            if (!transactionExists(funding.getDisbursements(), disbursement)) {
+                funding.getDisbursements().add(disbursement);
+                logger.info("Created corresponding disbursement transaction: amount={}, date={}, currency={}", 
+                    disbursement.getTransaction_amount(), disbursement.getTransaction_date(), disbursement.getCurrency());
+            }
+        }
     }
 
     private static Long getOrganizationRole(Session session) {
@@ -511,18 +697,17 @@ public class ImporterUtil {
     }
 
     private static Long getCurrencyId(Session session, String currencyCode) {
-
-        if (ConstantsMap.containsKey("currencyId")) {
-            Long val = ConstantsMap.get("currencyId");
+        if (currencyCode == null) {
+            currencyCode = "USD";
+        }
+        String cacheKey = "currencyId_" + currencyCode;
+        if (ConstantsMap.containsKey(cacheKey)) {
+            Long val = ConstantsMap.get(cacheKey);
             logger.info("In cache... currency: " + val);
             return val;
-
         }
         if (!session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
-        }
-        if (currencyCode == null) {
-            currencyCode = "USD";
         }
         String hql = "SELECT ac.ampCurrencyId FROM " + AmpCurrency.class.getName() + " ac " +
                 "WHERE ac.currencyCode = :currencyCode";
@@ -530,7 +715,22 @@ public class ImporterUtil {
         Query query = session.createQuery(hql);
         query.setString("currencyCode", currencyCode);
         Long currencyId = (Long) query.uniqueResult();
-        ConstantsMap.put("currencyId", currencyId);
+        
+        // If currency not found, create it
+        if (currencyId == null) {
+            logger.info("Currency not found: {}. Creating new currency.", currencyCode);
+            AmpCurrency newCurrency = new AmpCurrency();
+            newCurrency.setCurrencyCode(currencyCode);
+            newCurrency.setCurrencyName(currencyCode); // Use code as name if not specified
+            newCurrency.setActiveFlag(1); // Active by default
+            newCurrency.setVirtual(false);
+            session.save(newCurrency);
+            session.flush();
+            currencyId = newCurrency.getAmpCurrencyId();
+            logger.info("Created new currency: {} (id={})", currencyCode, currencyId);
+        }
+        
+        ConstantsMap.put(cacheKey, currencyId);
         return currencyId;
     }
 
@@ -563,6 +763,95 @@ public class ImporterUtil {
         return categoryId;
     }
 
+    /**
+     * Looks up a category value ID by its category key and value name.
+     * @param categoryKey the category class key (e.g. "procurement_system")
+     * @param valueName the value name from the file (e.g. "National Competitive Bidding")
+     * @param session current Hibernate session
+     * @return category value id, or null if not found
+     */
+    public static Long getCategoryValueByName(String categoryKey, String valueName, Session session) {
+        if (valueName == null || valueName.trim().isEmpty()) {
+            return null;
+        }
+        String cacheKey = "catVal_" + categoryKey + "_" + valueName;
+        if (ConstantsMap.containsKey(cacheKey)) {
+            return ConstantsMap.get(cacheKey);
+        }
+        String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
+        Query query = session.createQuery(hql);
+        query.setParameter("categoryKey", categoryKey);
+        List<?> values = query.list();
+        for (Object val : values) {
+            AmpCategoryValue cv = (AmpCategoryValue) val;
+            if (cv.getValue() != null && cv.getValue().trim().equalsIgnoreCase(valueName.trim())) {
+                ConstantsMap.put(cacheKey, cv.getId());
+                logger.info("Found category value: " + cv.getValue() + " (id=" + cv.getId() + ") for key=" + categoryKey);
+                return cv.getId();
+            }
+        }
+        logger.warn("Category value not found for key=" + categoryKey + ", value=" + valueName);
+        return null;
+    }
+
+    /**
+     * Resolves activity (project) status by value: looks up existing category value for ACTIVITY_STATUS_KEY;
+     * if not found in DB, creates a new category value and returns its id.
+     * @param statusValue value from the file (e.g. "Ongoing", "Completed")
+     * @param session current session (used for create and flush)
+     * @return category value id, or null if statusValue is null/empty
+     */
+    public static Long getOrCreateActivityStatusCategoryValue(String statusValue, Session session) {
+        if (statusValue == null || statusValue.trim().isEmpty()) return null;
+        String trimmed = statusValue.trim();
+        String cacheKey = "statusId_" + trimmed;
+        if (ConstantsMap.containsKey(cacheKey)) {
+            return ConstantsMap.get(cacheKey);
+        }
+        if (!session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
+        String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
+        Query query = session.createQuery(hql);
+        query.setParameter("categoryKey", CategoryConstants.ACTIVITY_STATUS_KEY);
+        @SuppressWarnings("unchecked")
+        List<AmpCategoryValue> values = (List<AmpCategoryValue>) query.list();
+        if (values != null) {
+            for (AmpCategoryValue cv : values) {
+                if (cv.getValue() != null && cv.getValue().equalsIgnoreCase(trimmed)) {
+                    Long id = cv.getId();
+                    ConstantsMap.put(cacheKey, id);
+                    return id;
+                }
+            }
+        }
+        AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
+        if (categoryClass == null) {
+            logger.warn("Activity status category class not found; cannot create value: " + trimmed);
+            return null;
+        }
+        try {
+            AmpCategoryValue newValue = new AmpCategoryValue();
+            newValue.setValue(trimmed);
+            newValue.setAmpCategoryClass(categoryClass);
+            if (categoryClass.getPossibleValues() == null) {
+                categoryClass.setPossibleValues(new java.util.ArrayList<>());
+            }
+            newValue.setIndex(categoryClass.getPossibleValues().size());
+            session.save(newValue);
+            session.flush();
+            Long id = newValue.getId();
+            if (id != null) {
+                ConstantsMap.put(cacheKey, id);
+                logger.info("Created new activity status category value: " + trimmed + " (id=" + id + ")");
+                return id;
+            }
+        } catch (Exception e) {
+            logger.warn("Failed to create activity status value: " + trimmed, e);
+        }
+        return null;
+    }
+
     public static AmpActivityVersion existingActivity(String projectTitle, String projectCode, Session session) {
         if ((projectTitle == null || projectTitle.trim().isEmpty()) &&
                 (projectCode == null || projectCode.trim().isEmpty())) {
@@ -571,25 +860,95 @@ public class ImporterUtil {
         if (!session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
-        String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a " +
-                "WHERE a.name = :name";
-        Query query = session.createQuery(hql);
-        query.setCacheable(true);
-        query.setParameter("name", projectTitle, StringType.INSTANCE);
-//        query.setString("projectCode", projectCode);
-        List<AmpActivityVersion> ampActivityVersions = query.list();
-        return !ampActivityVersions.isEmpty() ? ampActivityVersions.get(ampActivityVersions.size() - 1) : null;
+        // Prefer project code if provided
+        if (projectCode != null && !projectCode.trim().isEmpty()) {
+            String hqlByCode = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a LEFT JOIN FETCH a.activityCreator WHERE a.projectCode = :projectCode";
+            Query queryByCode = session.createQuery(hqlByCode);
+            queryByCode.setCacheable(true);
+            queryByCode.setParameter("projectCode", projectCode.trim(), StringType.INSTANCE);
+            List<AmpActivityVersion> byCode = queryByCode.list();
+            if (!byCode.isEmpty()) {
+                return byCode.get(byCode.size() - 1);
+            }
+        }
+        // Fall back to project title (name)
+        if (projectTitle != null && !projectTitle.trim().isEmpty()) {
+            String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a LEFT JOIN FETCH a.activityCreator WHERE a.name = :name";
+            Query query = session.createQuery(hql);
+            query.setCacheable(true);
+            query.setParameter("name", projectTitle.trim(), StringType.INSTANCE);
+            List<AmpActivityVersion> ampActivityVersions = query.list();
+            return !ampActivityVersions.isEmpty() ? ampActivityVersions.get(ampActivityVersions.size() - 1) : null;
+        }
+        return null;
     }
 
-    public static void setStatus(ImportDataModel importDataModel) {
-        Long statusId = getCategoryValue("statusId", CategoryConstants.ACTIVITY_STATUS_KEY, "");
-        importDataModel.setActivity_status(statusId);
-        importDataModel.setApproval_status(ApprovalStatus.started.getId());
+    /**
+     * Sets default activity status and approval status on the import model.
+     * If activity_status is already set (e.g. from Project Status column), it is left unchanged.
+     */
+    public static void setStatus(ImportDataModel importDataModel, boolean validateActivities) {
+        setStatus(importDataModel, validateActivities, null);
     }
 
-    public static void importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, AmpActivityVersion existing) throws JsonProcessingException {
-        if (!session.isOpen()) {
+    /**
+     * Sets default activity status and approval status on the import model.
+     * If activity_status is already set (e.g. from Project Status column), it is left unchanged.
+     */
+    public static void setStatus(ImportDataModel importDataModel, boolean validateActivities, Long defaultActivityStatusId) {
+        if (importDataModel.getActivity_status() == null) {
+            Long statusId = defaultActivityStatusId != null
+                    ? defaultActivityStatusId
+                    : getCategoryValue("statusId", CategoryConstants.ACTIVITY_STATUS_KEY, "");
+            importDataModel.setActivity_status(statusId);
+        }
+        if (validateActivities) {
+            logger.info("validateActivities=true: setting approval_status=approved in setStatus");
+            importDataModel.setApproval_status(ApprovalStatus.approved.getId());
+        } else {
+            importDataModel.setApproval_status(ApprovalStatus.started.getId());
+        }
+    }
+
+    private static final String CREATED_BY_KEY = "created_by";
+
+    /**
+     * Ensures created_by in the activity map is set to a valid team member id when null,
+     * so the activity API validator does not reject with "(Invalid field value) created_by".
+     * For new activities uses current user; for updates uses existing activity's creator only
+     * when that creator is present (never overwrite with current user for existing activities).
+     */
+    private static void ensureCreatedBySet(Map<String, Object> map, AmpActivityVersion existing) {
+        if (existing != null) {
+            AmpTeamMember creator = existing.getActivityCreator();
+            if (creator == null) {
+                // Existing activity has no creator (legacy); API expects null.
+                map.put(CREATED_BY_KEY, null);
+                return;
+            }
+            map.put(CREATED_BY_KEY, creator.getAmpTeamMemId());
+            return;
+        }
+        Object createdBy = map.get(CREATED_BY_KEY);
+        if (createdBy != null) {
+            return;
+        }
+        AmpTeamMember currentMember = TeamUtil.getCurrentAmpTeamMember();
+        if (currentMember != null) {
+            map.put(CREATED_BY_KEY, currentMember.getAmpTeamMemId());
+        }
+    }
+
+    /** @return activity ID on success, null on skip or failure */
+    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities) throws JsonProcessingException {
+        if (session == null || !session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
+        }
+        
+        // Re-fetch existing activity in this transaction if ID is provided to avoid detached entity issues
+        AmpActivityVersion existing = null;
+        if (existingActivityId != null) {
+            existing = session.get(AmpActivityVersion.class, existingActivityId);
         }
         ActivityImportRules rules = new ActivityImportRules(true, false,
                 true);
@@ -597,17 +956,30 @@ public class ImporterUtil {
         objectMapper.configure(ESCAPE_NON_ASCII, false); // Disable escaping of non-ASCII characters during serialization
         objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 
+        normalizeLocationPercentages(importDataModel);
         Map<String, Object> map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                 });
+        // Remove null values and "null" strings from the map to avoid API validation errors
+        map.entrySet().removeIf(entry -> entry.getValue() == null || "null".equals(String.valueOf(entry.getValue())));
+        
+        // Do not send indicators in the payload so activity/update does not replace or clear existing indicators.
+        // Indicator data is appended separately in addIndicatorDataToActivity.
+        map.remove("indicators");
         JsonApiResponse<ActivitySummary> response;
         logger.info("Data model object: " + importDataModel);
         if (importDataModel.getProject_title().trim().isEmpty() && importDataModel.getProject_code().trim().isEmpty()) {
             logger.info("Project title and code are empty. Skipping import");
             importedProject.setImportStatus(ImportStatus.SKIPPED);
-            return;
+            return null;
         }
         if (existing == null) {
+            ensureCreatedBySet(map, null);
+            if (validateActivities) {
+                logger.info("validateActivities=true: setting approval_status=approved and is_draft=false for new activity");
+                map.put("approval_status", "approved");
+                map.put("is_draft", false);
+            }
             logger.info("New activity");
             importedProject.setNewProject(true);
             response = ActivityInterchangeUtils.importActivity(map, false, rules, "activity/new");
@@ -616,101 +988,319 @@ public class ImporterUtil {
             importedProject.setNewProject(false);
             importDataModel.setInternal_id(existing.getAmpActivityId());
             importDataModel.setAmp_id(existing.getAmpId());
-            ActivityGroup activityGroup = new ActivityGroup();
-            activityGroup.setVersion(existing.getAmpActivityGroup().getVersion());
-            importDataModel.setActivity_group(activityGroup);
-            importDataModel.setProject_title(existing.getName());
-            importDataModel.setProject_code(!Objects.equals(importDataModel.getProject_code(), "") ? importDataModel.getProject_code() : existing.getProjectCode());
+            // Only set activity group if it exists and has the data we need
+            if (existing.getAmpActivityGroup() != null) {
+                ActivityGroup activityGroup = new ActivityGroup();
+                activityGroup.setVersion(existing.getAmpActivityGroup().getVersion());
+                importDataModel.setActivity_group(activityGroup);
+            }
+            importDataModel.setProject_title(existing.getName() != null ? existing.getName() : "");
+            importDataModel.setProject_code(!Objects.equals(importDataModel.getProject_code(), "") ? importDataModel.getProject_code() : (existing.getProjectCode() != null ? existing.getProjectCode() : ""));
             updateFundingOrgsAndSectorsWithAlreadyExisting(existing, importDataModel);
+            // Merge existing activity locations into payload so we only add (row + existing), never remove
+            mergeExistingActivityLocationsIntoImport(existing, importDataModel);
+            ensureImplementationLevelWhenHasLocations(importDataModel, session);
+            normalizeLocationPercentages(importDataModel);
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                     });
-            response = ActivityInterchangeUtils.importActivity(map, true, rules, "activity/update");
+            // Remove null values and "null" strings from the map to avoid API validation errors
+            map.entrySet().removeIf(entry -> entry.getValue() == null || "null".equals(String.valueOf(entry.getValue())));
+            
+            map.remove("indicators"); // preserve existing indicators; we append in addIndicatorDataToActivity
+            // Do not replace programs; avoids StaleStateException when deleting AMP_ACTIVITY_PROGRAM rows
+            map.remove("national_plan_objective");
+            map.remove("primary_programs");
+            map.remove("secondary_programs");
+            map.remove("tertiary_programs");
+            // Avoid triggering merge of contacts/documents that may reference deleted rows (ObjectNotFoundException)
+            map.remove("activity_contacts");
+            map.remove("activityContacts");
+            map.remove("donor_contact_information");
+            map.remove("project_coordinator_contact_information");
+            map.remove("sector_ministry_contact_information");
+            map.remove("mofed_contact_information");
+            map.remove("implementing_executing_agency_contact_information");
+            evictActivityFromSecondLevelCache(existing.getAmpActivityId());
+            ensureCreatedBySet(map, existing);
+            if (validateActivities) {
+                logger.info("validateActivities=true: setting approval_status=approved and is_draft=false for existing activity");
+                map.put("approval_status", "approved");
+                map.put("is_draft", false);
+            }
+            // All data from 'existing' has been extracted into 'map'. Clear the session first-level
+            // cache before handing off to ActivityGatekeeper so its internal doInTransaction starts
+            // with a clean context. Without this, entities loaded above remain in the session action
+            // queue and Hibernate raises HHH000099 (possible non-threadsafe access to session) when
+            // EntityInsertAction.execute() checks the persistence context during flush.
+            session.clear();
+            try {
+                response = ActivityInterchangeUtils.importActivity(map, true, rules, "activity/update");
+            } catch (Exception e) {
+                logger.error("Activity import failed for row", e);
+                importedProject.setImportStatus(ImportStatus.FAILED);
+                Map<String, Collection<Object>> errMap = new LinkedHashMap<>();
+                errMap.put("1", Collections.singletonList("Internal Error : [" + (e.getMessage() != null ? e.getMessage() : "Activity import failed") + "]"));
+                response = new JsonApiResponse<>(errMap, null, null, null);
+            }
         }
+        Long activityId = null;
         if (response != null) {
             if (!response.getErrors().isEmpty()) {
                 importedProject.setImportStatus(ImportStatus.FAILED);
             } else {
                 importedProject.setImportStatus(ImportStatus.SUCCESS);
+                activityId = existing != null ? existing.getAmpActivityId() : (Long) response.getContent().getAmpActivityId();
                 logger.info("Successfully imported the project. Now adding component if present");
                 logger.info("--------------------------------");
                 logger.info("Component name at start: " + componentName);
                 if (componentName != null && !componentName.isEmpty()) {
                     addComponentsAndProjectCode(response, componentName, componentCode, responsibleOrgId, fundings, importDataModel.getProject_code());
                 }
-//                logger.info("Updating expenditures ................");
-//                updateExpendituresIfAny(response);
-
             }
         }
 
         String resp = objectMapper.writeValueAsString(response);
         importedProject.setImportResponse(resp);
-        if (!session.isOpen()) {
-            session = PersistenceManager.getRequestDBSession();
+        try {
+            if (session == null || !session.isOpen()) {
+                // After importActivityInNewSession fails, thread's current session may be closed; use a fresh transaction to save status
+                PersistenceManager.doInTransaction(s -> {
+                    s.saveOrUpdate(importedProject);
+                    s.flush();
+                });
+            } else {
+                session.saveOrUpdate(importedProject);
+                session.flush();
+            }
+        } catch (Exception e) {
+            logger.warn("Could not save import status for imported project (response already set): {}", e.getMessage());
         }
-        session.saveOrUpdate(importedProject);
-        session.flush();
 
         logger.info("Imported project: " + importedProject);
+        return activityId;
     }
 
     private static void updateFundingOrgsAndSectorsWithAlreadyExisting(AmpActivityVersion ampActivityVersion, ImportDataModel importDataModel) {
 
         if (ampActivityVersion.getFunding() != null) {
+            Hibernate.initialize(ampActivityVersion.getFunding());
             Long adjType = getCategoryValue("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY, "");
             Long assType = getCategoryValue("assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "");
             Long finInstrument = getCategoryValue("finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, "");
+            if (importDataModel.getFundings() == null) importDataModel.setFundings(new HashSet<>());
             for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
-                Funding funding = new Funding();
-                funding.setDonor_organization_id(ampFunding.getAmpDonorOrgId().getAmpOrgId());
-                funding.setType_of_assistance(ampFunding.getTypeOfAssistance() != null ? ampFunding.getTypeOfAssistance().getId() : assType);
-                funding.setFinancing_instrument(ampFunding.getFinancingInstrument() != null ? ampFunding.getFinancingInstrument().getId() : finInstrument);
-                funding.setSource_role(ampFunding.getSourceRole().getAmpRoleId());
-                for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
-                    Transaction transaction = new Transaction();
-                    transaction.setCurrency(ampFundingDetail.getAmpCurrencyId().getAmpCurrencyId());
-                    transaction.setAdjustment_type(ampFundingDetail.getAdjustmentType() != null ? ampFundingDetail.getAdjustmentType().getId() : adjType);
-                    transaction.setTransaction_amount(ampFundingDetail.getTransactionAmount());
-                    if (ampFundingDetail.getTransactionDate() != null) {
+                Long existingId = ampFunding.getAmpFundingId();
+                Long donorOrgId = ampFunding.getAmpDonorOrgId().getAmpOrgId();
+                Long typeOfAssistance = ampFunding.getTypeOfAssistance() != null ? ampFunding.getTypeOfAssistance().getId() : assType;
+                Long financingInstrument = ampFunding.getFinancingInstrument() != null ? ampFunding.getFinancingInstrument().getId() : finInstrument;
+                Long sourceRole = ampFunding.getSourceRole().getAmpRoleId();
 
-                        transaction.setTransaction_date(getFundingDate(ampFundingDetail.getTransactionDate().toInstant()
-                                .atZone(ZoneId.systemDefault())
-                                .toLocalDate().toString()));
-                    }
-                    transaction.setFixed_exchange_rate(ampFundingDetail.getFixedExchangeRate());
-                    if (ampFundingDetail.getTransactionType() == 0) {
-                        funding.getCommitments().add(transaction);
-                    } else if (ampFundingDetail.getTransactionType() == 1) {
-                        funding.getDisbursements().add(transaction);
+                // Check if the Excel importer already added a new funding entry (no ID yet) for the same
+                // donor+role+type combination. If so, mark it with the existing funding_id so the API
+                // updates the existing DB record instead of inserting a duplicate.
+                Funding matchedNewFunding = null;
+                for (Funding newFunding : importDataModel.getFundings()) {
+                    if (newFunding.getFunding_id() == null
+                            && Objects.equals(donorOrgId, newFunding.getDonor_organization_id())
+                            && Objects.equals(sourceRole, newFunding.getSource_role())
+                            && Objects.equals(typeOfAssistance, newFunding.getType_of_assistance())
+                            && Objects.equals(financingInstrument, newFunding.getFinancing_instrument())) {
+                        matchedNewFunding = newFunding;
+                        break;
                     }
                 }
 
+                if (matchedNewFunding != null) {
+                    // Stamp the existing DB funding_id so the API updates the existing record instead of inserting.
+                    matchedNewFunding.setFunding_id(existingId);
+                    // Also merge the existing DB transactions into the Excel entry so the API's
+                    // removeByIdExcept doesn't delete them (DB transactions carry transaction_id;
+                    // the Excel transactions have none, so they'd be the only ones in jsonIds={null},
+                    // causing all DB transactions to be removed on flush).
+                    // transactionExists guards against re-adding a transaction already supplied by Excel.
+                    if (ampFunding.getFundingDetails() != null) {
+                        Hibernate.initialize(ampFunding.getFundingDetails());
+                        for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
+                            Transaction transaction = new Transaction();
+                            if (ampFundingDetail.getAmpFundDetailId() != null) transaction.setTransaction_id(ampFundingDetail.getAmpFundDetailId());
+                            transaction.setCurrency(ampFundingDetail.getAmpCurrencyId().getAmpCurrencyId());
+                            transaction.setAdjustment_type(ampFundingDetail.getAdjustmentType() != null ? ampFundingDetail.getAdjustmentType().getId() : adjType);
+                            transaction.setTransaction_amount(ampFundingDetail.getTransactionAmount());
+                            if (ampFundingDetail.getTransactionDate() != null) {
+                                transaction.setTransaction_date(getFundingDate(ampFundingDetail.getTransactionDate().toInstant()
+                                        .atZone(ZoneId.systemDefault())
+                                        .toLocalDate().toString()));
+                            }
+                            transaction.setFixed_exchange_rate(ampFundingDetail.getFixedExchangeRate());
+                            if (ampFundingDetail.getTransactionType() == 0) {
+                                if (!transactionExists(matchedNewFunding.getCommitments(), transaction)) {
+                                    matchedNewFunding.getCommitments().add(transaction);
+                                }
+                            } else if (ampFundingDetail.getTransactionType() == 1) {
+                                if (!transactionExists(matchedNewFunding.getDisbursements(), transaction)) {
+                                    matchedNewFunding.getDisbursements().add(transaction);
+                                }
+                            } else if (ampFundingDetail.getTransactionType() == 2) {
+                                if (!transactionExists(matchedNewFunding.getExpenditures(), transaction)) {
+                                    matchedNewFunding.getExpenditures().add(transaction);
+                                }
+                            }
+                        }
+                    }
+                    continue;
+                }
+
+                // No Excel entry for this existing funding — preserve it so it is not deleted.
+                Funding funding = new Funding();
+                if (existingId != null) funding.setFunding_id(existingId);
+                funding.setDonor_organization_id(donorOrgId);
+                funding.setType_of_assistance(typeOfAssistance);
+                funding.setFinancing_instrument(financingInstrument);
+                funding.setSource_role(sourceRole);
+                if (ampFunding.getFundingDetails() != null) {
+                    Hibernate.initialize(ampFunding.getFundingDetails());
+                    for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
+                        Transaction transaction = new Transaction();
+                        if (ampFundingDetail.getAmpFundDetailId() != null) transaction.setTransaction_id(ampFundingDetail.getAmpFundDetailId());
+                        transaction.setCurrency(ampFundingDetail.getAmpCurrencyId().getAmpCurrencyId());
+                        transaction.setAdjustment_type(ampFundingDetail.getAdjustmentType() != null ? ampFundingDetail.getAdjustmentType().getId() : adjType);
+                        transaction.setTransaction_amount(ampFundingDetail.getTransactionAmount());
+                        if (ampFundingDetail.getTransactionDate() != null) {
+                            transaction.setTransaction_date(getFundingDate(ampFundingDetail.getTransactionDate().toInstant()
+                                    .atZone(ZoneId.systemDefault())
+                                    .toLocalDate().toString()));
+                        }
+                        transaction.setFixed_exchange_rate(ampFundingDetail.getFixedExchangeRate());
+                        if (ampFundingDetail.getTransactionType() == 0) {
+                            funding.getCommitments().add(transaction);
+                        } else if (ampFundingDetail.getTransactionType() == 1) {
+                            funding.getDisbursements().add(transaction);
+                        } else if (ampFundingDetail.getTransactionType() == 2) {
+                            funding.getExpenditures().add(transaction);
+                        }
+                    }
+                }
+                importDataModel.getFundings().add(funding);
             }
         }
         if (ampActivityVersion.getOrgrole() != null && !ampActivityVersion.getOrgrole().isEmpty()) {
             for (AmpOrgRole ampOrgRole : ampActivityVersion.getOrgrole()) {
-                if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("DN")) {
-                    createDonorOrg(importDataModel,ampOrgRole.getOrganisation().getAmpOrgId());
-                } else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("EA")) {
-                    Organization responsibleOrg = new Organization();
-                    responsibleOrg.setOrganization(ampOrgRole.getOrganisation().getAmpOrgId());
-                    importDataModel.getResponsible_organization().add(responsibleOrg);
-                } else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("BA")) {
-                    Organization beneficiaryAgency = new Organization();
-                    beneficiaryAgency.setOrganization(ampOrgRole.getOrganisation().getAmpOrgId());
-                    importDataModel.getBeneficiary_agency().add(beneficiaryAgency);
-
+                if (ampOrgRole.getRole() == null) continue;
+                String roleCode = ampOrgRole.getRole().getRoleCode();
+                if (roleCode == null) continue;
+                Long orgId = ampOrgRole.getOrganisation().getAmpOrgId();
+                Long orgRoleId = ampOrgRole.getAmpOrgRoleId();
+                if (roleCode.equalsIgnoreCase("DN")) {
+                    createDonorOrg(importDataModel, orgId, orgRoleId);
+                } else if (roleCode.equalsIgnoreCase("RO")) {
+                    Organization org = new Organization();
+                    org.setOrganization(orgId);
+                    if (orgRoleId != null) org.setId(orgRoleId);
+                    importDataModel.getResponsible_organization().add(org);
+                } else if (roleCode.equalsIgnoreCase("BA")) {
+                    Organization org = new Organization();
+                    org.setOrganization(orgId);
+                    if (orgRoleId != null) org.setId(orgRoleId);
+                    importDataModel.getBeneficiary_agency().add(org);
+                } else if (roleCode.equalsIgnoreCase("EA")) {
+                    Organization org = new Organization();
+                    org.setOrganization(orgId);
+                    if (orgRoleId != null) org.setId(orgRoleId);
+                    importDataModel.getExecuting_agency().add(org);
+                } else if (roleCode.equalsIgnoreCase("IA")) {
+                    Organization org = new Organization();
+                    org.setOrganization(orgId);
+                    if (orgRoleId != null) org.setId(orgRoleId);
+                    importDataModel.getImplementing_agency().add(org);
+                } else if (roleCode.equalsIgnoreCase("CA")) {
+                    Organization org = new Organization();
+                    org.setOrganization(orgId);
+                    if (orgRoleId != null) org.setId(orgRoleId);
+                    importDataModel.getContracting_agency().add(org);
                 }
             }
         }
 
-
         if (ampActivityVersion.getSectors() != null && !ampActivityVersion.getSectors().isEmpty()) {
+            Hibernate.initialize(ampActivityVersion.getSectors());
             for (AmpActivitySector ampActivitySector : ampActivityVersion.getSectors()) {
-                createSector(importDataModel,ampActivitySector.getClassificationConfig().getName().equalsIgnoreCase("primary"),ampActivitySector.getSectorId().getAmpSectorId());
+                if (ampActivitySector.getSectorId() == null) continue;
+                boolean primary = ampActivitySector.getClassificationConfig() != null && ampActivitySector.getClassificationConfig().isPrimary();
+                createSector(importDataModel, primary, ampActivitySector.getSectorId().getAmpSectorId(), ampActivitySector.getAmpActivitySectorId());
             }
         }
+    }
+
+    /**
+     * For an existing activity, merges its current locations into the import payload so we only add locations
+     * (row locations + existing), never remove. Any existing activity location not already in importDataModel
+     * is added. This avoids activity/update deleting locations (e.g. those referenced by indicator connections).
+     */
+    private static void mergeExistingActivityLocationsIntoImport(AmpActivityVersion existing, ImportDataModel importDataModel) {
+        if (existing == null || importDataModel == null) return;
+        if (existing.getLocations() == null) return;
+        Hibernate.initialize(existing.getLocations());
+        Set<Long> alreadyInImport = new HashSet<>();
+        if (importDataModel.getLocations() != null) {
+            for (Location loc : importDataModel.getLocations()) {
+                if (loc != null && loc.getLocation() != null) alreadyInImport.add(loc.getLocation());
+            }
+        }
+        for (AmpActivityLocation aal : existing.getLocations()) {
+            AmpCategoryValueLocations loc = aal.getLocation();
+            if (loc == null) continue;
+            Long locId = loc.getId();
+            if (locId == null || alreadyInImport.contains(locId)) continue;
+            if (importDataModel.getLocations() == null) importDataModel.setLocations(new HashSet<>());
+            double pct = aal.getLocationPercentage() != null ? aal.getLocationPercentage().doubleValue() : 100.0;
+            // Include aal.getId() (amp_activity_location_id) so the API matches and keeps this row; otherwise removeByIdExcept drops it and Hibernate deletes it (FK violation if referenced by amp_indicator_connection).
+            Long aalId = aal.getId();
+            importDataModel.getLocations().add(aalId != null ? new Location(aalId, locId, pct) : new Location(locId, pct));
+            alreadyInImport.add(locId);
+        }
+    }
+
+    /**
+     * Scales location percentages so they sum to 100, as required by activity validation.
+     * If there are no locations or sum is 0, does nothing.
+     */
+    private static void normalizeLocationPercentages(ImportDataModel importDataModel) {
+        if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty())
+            return;
+        Set<Location> locs = importDataModel.getLocations();
+        double sum = 0;
+        for (Location loc : locs) {
+            Double pct = loc.getLocation_percentage();
+            sum += (pct != null ? pct : 0);
+        }
+        if (sum <= 0) return;
+        if (Math.abs(sum - 100.0) < 0.001) return; // already 100
+        List<Location> list = new ArrayList<>(locs);
+        double scale = 100.0 / sum;
+        double running = 0;
+        for (int i = 0; i < list.size(); i++) {
+            Location loc = list.get(i);
+            double v;
+            if (i == list.size() - 1) {
+                v = 100.0 - running; // last one gets remainder so total is exactly 100
+            } else {
+                Double pct = loc.getLocation_percentage();
+                v = (pct != null ? pct : 0) * scale;
+                running += v;
+            }
+            loc.setLocation_percentage(v);
+        }
+    }
+
+    /**
+     * When the payload has locations, implementation level is required. Sets default if missing (e.g. after merging locations for existing activity).
+     */
+    private static void ensureImplementationLevelWhenHasLocations(ImportDataModel importDataModel, Session session) {
+        if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty())
+            return;
+        if (importDataModel.getImplementation_level() != null) return;
+        updateImpLevels(importDataModel, session);
     }
 
     static void updateExpendituresIfAny(JsonApiResponse<ActivitySummary> response) {
@@ -950,11 +1540,19 @@ public class ImporterUtil {
     }
 
 
-    public static void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary, String subSector) {
+    public static void updateSectors(ImportDataModel importDataModel, String name, Session session, boolean primary,
+                                     String subSector, boolean createMissingSectors, String importerSectorField) {
         if (subSector!=null && !subSector.isEmpty())
         {
             name = subSector;
         }
+        for (String sectorName : splitMultiValues(name)) {
+            updateSingleSector(importDataModel, sectorName, session, primary, createMissingSectors, importerSectorField);
+        }
+    }
+
+    private static void updateSingleSector(ImportDataModel importDataModel, String name, Session session, boolean primary,
+                                           boolean createMissingSectors, String importerSectorField) {
         if (ConstantsMap.containsKey("sector_" + name)) {
             Long sectorId = ConstantsMap.get("sector_" + name);
             logger.info("In cache... sector " + "sector_" + name + ":" + sectorId);
@@ -965,16 +1563,31 @@ public class ImporterUtil {
             }
 
             String finalName = name;
+            String classificationName = getClassificationNameForImporterField(importerSectorField, primary);
+            final Long[] foundSectorId = new Long[1];
             session.doWork(connection -> {
-                String query = primary ? "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Primary'" : "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name FROM amp_sector ams JOIN amp_classification_config acc ON ams.amp_sec_scheme_id=acc.classification_id WHERE LOWER(ams.name) = LOWER(?) AND acc.name='Secondary'";
+                String query = primary
+                        ? "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name " +
+                        "FROM amp_sector ams " +
+                        "JOIN amp_classification_config acc ON ams.amp_sec_scheme_id = acc.classification_id " +
+                        "WHERE LOWER(ams.name) = LOWER(?) " +
+                    "AND (acc.is_primary_sector = TRUE OR LOWER(acc.name) = LOWER(?))"
+                        : "SELECT ams.amp_sector_id AS amp_sector_id, ams.name AS name " +
+                        "FROM amp_sector ams " +
+                        "JOIN amp_classification_config acc ON ams.amp_sec_scheme_id = acc.classification_id " +
+                        "WHERE LOWER(ams.name) = LOWER(?) " +
+                        "AND LOWER(acc.name) = LOWER(?)";
                 try (PreparedStatement statement = connection.prepareStatement(query)) {
                     // Set the name as a parameter to the prepared statement
                     statement.setString(1, finalName);
+                    statement.setString(2, classificationName);
+
 
                     // Execute the query and process the results
                     try (ResultSet resultSet = statement.executeQuery()) {
                         while (resultSet.next()) {
                             Long ampSectorId = resultSet.getLong("amp_sector_id");
+                            foundSectorId[0] = ampSectorId;
                             createSector(importDataModel, primary, ampSectorId);
                             ConstantsMap.put("sector_" + finalName, ampSectorId);
                         }
@@ -984,50 +1597,211 @@ public class ImporterUtil {
                     logger.error("Error getting sectors", e);
                 }
             });
+
+            if (foundSectorId[0] == null && createMissingSectors) {
+                Long createdSectorId = createMissingSector(finalName, session, primary, importerSectorField);
+                if (createdSectorId != null) {
+                    createSector(importDataModel, primary, createdSectorId);
+                    ConstantsMap.put("sector_" + finalName, createdSectorId);
+                }
+            }
         }
-
-
     }
 
-    public static void updateLocations(ImportDataModel importDataModel, String locationName, Session session) {
-        logger.info("Updating locations");
+    private static Long createMissingSector(String name, Session session, boolean primary, String importerSectorField) {
+        if (name == null || name.trim().isEmpty()) {
+            return null;
+        }
+        String classificationName = getClassificationNameForImporterField(importerSectorField, primary);
+        AmpClassificationConfiguration classificationConfig = resolveClassificationConfig(session, primary, classificationName);
+        if (classificationConfig == null || classificationConfig.getClassification() == null) {
+            logger.warn("No classification configuration found for {} sector; cannot create '{}'.",
+                    classificationName, name);
+            return null;
+        }
 
-        if (ConstantsMap.containsKey("location_" + locationName)) {
-            Long location = ConstantsMap.get("location_" + locationName);
-            logger.info("In cache... location " + "location_" + locationName + ":" + location);
-            importDataModel.getLocations().add(new Location(location, 100.00));
+        try {
+            AmpSector newSector = new AmpSector();
+            newSector.setParentSectorId(null);
+            newSector.setAmpOrgId(null);
+            newSector.setAmpSecSchemeId(SectorUtil.getAmpSectorScheme(
+                    classificationConfig.getClassification().getAmpSecSchemeId()));
+            newSector.setSectorCode("101");
+            newSector.setSectorCodeOfficial(name);
+            newSector.setName(name);
+            newSector.setDescription(" ");
+            // Keep the source sector type (Primary/Secondary/etc.) based on the mapped import column.
+            newSector.setType(classificationConfig.getName());
+            newSector.setLanguage(null);
+            newSector.setVersion(null);
+            newSector.setDeleted(false);
+            DbUtil.add(newSector);
+            logger.info("Created missing {} sector '{}' with id={}",
+                    classificationConfig.getName(), name, newSector.getAmpSectorId());
+            return newSector.getAmpSectorId();
+        } catch (Exception e) {
+            logger.error("Failed creating missing sector '{}': {}", name, e.getMessage(), e);
+            return null;
+        }
+    }
 
-        } else {
-            if (!session.isOpen()) {
-                session = PersistenceManager.getRequestDBSession();
+    private static AmpClassificationConfiguration resolveClassificationConfig(Session session, boolean primary,
+                                                                              String classificationName) {
+        String hql = primary
+                ? "FROM " + AmpClassificationConfiguration.class.getName() + " c WHERE c.primary = true"
+                : "FROM " + AmpClassificationConfiguration.class.getName() + " c WHERE LOWER(c.name) = LOWER(:name)";
+        Query query = session.createQuery(hql);
+        if (!primary) {
+            query.setParameter("name", classificationName, StringType.INSTANCE);
+        }
+        query.setMaxResults(1);
+        return (AmpClassificationConfiguration) query.uniqueResult();
+    }
+
+    private static String getClassificationNameForImporterField(String importerSectorField, boolean primary) {
+        if (ImporterConstants.PRIMARY_SECTOR.equals(importerSectorField)) {
+            return AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME;
+        }
+        if (ImporterConstants.SECONDARY_SECTOR.equals(importerSectorField)) {
+            return AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME;
+        }
+        return primary
+                ? AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME
+                : AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME;
+    }
+
+    private static List<String> splitMultiValues(String value) {
+        if (value == null || value.trim().isEmpty()) return Collections.emptyList();
+        List<String> result = new ArrayList<>();
+        // Support standard and locale-specific semicolons used in spreadsheet exports.
+        for (String part : value.split("[;\\u061B\\uFF1B]")) {
+            String trimmed = part.trim();
+            if (trimmed.length() >= 2 && trimmed.startsWith("\"") && trimmed.endsWith("\"")) {
+                trimmed = trimmed.substring(1, trimmed.length() - 1).trim();
             }
+            if (!trimmed.isEmpty()) result.add(trimmed);
+        }
+        return result;
+    }
 
-            session.doWork(connection -> {
-                String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
-                try (PreparedStatement statement = connection.prepareStatement(query)) {
-                    statement.setString(1, locationName);
 
-                    try (ResultSet resultSet = statement.executeQuery()) {
-                        while (resultSet.next()) {
-                            Long location = resultSet.getLong("location_id");
-                            logger.info("Location:" + location);
-                            importDataModel.getLocations().add(new Location(location, 100.00));
-//                            importDataModel.setImplementation_location(location);
-                            ConstantsMap.put("location_" + locationName, location);
-                        }
-                    }
+    private static List<String> splitLocationNames(String locationNames) {
+        if (locationNames == null || locationNames.trim().isEmpty()) return Collections.emptyList();
+        List<String> result = new ArrayList<>();
+        for (String part : locationNames.split("[,;]")) {
+            String trimmed = part.trim();
+            if (!trimmed.isEmpty()) result.add(trimmed);
+        }
+        return result;
+    }
 
-                } catch (SQLException e) {
-                    logger.error("Error getting locations", e);
+    public static void updateLocations(ImportDataModel importDataModel, String locationNames, Session session) {
+        logger.info("Updating locations");
+        if (locationNames == null || locationNames.trim().isEmpty()) return;
+        for (String locationName : splitLocationNames(locationNames)) {
+            if (ConstantsMap.containsKey("location_" + locationName)) {
+                Long location = ConstantsMap.get("location_" + locationName);
+                logger.info("In cache... location " + "location_" + locationName + ":" + location);
+                importDataModel.getLocations().add(new Location(location, 100.00));
+
+            } else {
+                if (!session.isOpen()) {
+                    session = PersistenceManager.getRequestDBSession();
                 }
 
-            });
+                final String locationNameFinal = locationName;
+                session.doWork(connection -> {
+                    String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
+                    try (PreparedStatement statement = connection.prepareStatement(query)) {
+                        statement.setString(1, locationNameFinal);
 
+                        try (ResultSet resultSet = statement.executeQuery()) {
+                            while (resultSet.next()) {
+                                Long location = resultSet.getLong("location_id");
+                                logger.info("Location:" + location);
+                                importDataModel.getLocations().add(new Location(location, 100.00));
+                                ConstantsMap.put("location_" + locationNameFinal, location);
+                            }
+                        }
 
+                    } catch (SQLException e) {
+                        logger.error("Error getting locations", e);
+                    }
+
+                });
+            }
         }
-        updateImpLevels(importDataModel,session);
+        updateImpLevels(importDataModel, session);
+    }
 
+    public static void applyDefaultLocation(ImportDataModel importDataModel, Long locationId, Session session) {
+        if (importDataModel == null || locationId == null) {
+            return;
+        }
+        if (importDataModel.getLocations() == null) {
+            importDataModel.setLocations(new HashSet<>());
+        }
+        boolean alreadyPresent = importDataModel.getLocations().stream()
+                .filter(Objects::nonNull)
+                .anyMatch(location -> Objects.equals(location.getLocation(), locationId));
+        if (!alreadyPresent) {
+            importDataModel.getLocations().add(new Location(locationId, 100.00));
+        }
+        updateImpLevels(importDataModel, session);
+    }
 
+    /**
+     * Ensures the activity has an activity location for the given location name (for indicator location).
+     * If the location is not already on the activity, resolves it by name and adds it.
+     * @return the AmpActivityLocation for the name, or null if the location name cannot be resolved
+     */
+    private static AmpActivityLocation getOrAddActivityLocationForName(AmpActivityVersion activity, String locationName, Session session) {
+        if (activity == null || locationName == null || locationName.trim().isEmpty()) return null;
+        locationName = locationName.trim();
+        if (ConstantsMap.containsKey("location_" + locationName)) {
+            Long locationId = ConstantsMap.get("location_" + locationName);
+            AmpCategoryValueLocations loc = session.get(AmpCategoryValueLocations.class, locationId);
+            if (loc == null) return null;
+            AmpActivityLocation aal = new AmpActivityLocation();
+            aal.setActivity(activity);
+            aal.setLocation(loc);
+            aal.setLocationPercentage(100f);
+            if (activity.getLocations() == null) activity.setLocations(new HashSet<>());
+            activity.getLocations().add(aal);
+            session.save(aal);
+            session.flush();
+            return aal;
+        }
+        if (!session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
+        final String locationNameFinal = locationName;
+        final Long[] foundId = new Long[1];
+        session.doWork(connection -> {
+            String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, locationNameFinal);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        foundId[0] = resultSet.getLong("location_id");
+                        ConstantsMap.put("location_" + locationNameFinal, foundId[0]);
+                    }
+                }
+            } catch (SQLException e) {
+                logger.error("Error resolving location by name: " + locationNameFinal, e);
+            }
+        });
+        if (foundId[0] == null) return null;
+        AmpCategoryValueLocations loc = session.get(AmpCategoryValueLocations.class, foundId[0]);
+        if (loc == null) return null;
+        AmpActivityLocation aal = new AmpActivityLocation();
+        aal.setActivity(activity);
+        aal.setLocation(loc);
+        aal.setLocationPercentage(100f);
+        if (activity.getLocations() == null) activity.setLocations(new HashSet<>());
+        activity.getLocations().add(aal);
+        session.save(aal);
+        return aal;
     }
 
     public static void updateImpLevels(ImportDataModel importDataModel, Session session)
@@ -1063,23 +1837,39 @@ public class ImporterUtil {
     }
 
     private static void createSector(ImportDataModel importDataModel, boolean primary, Long ampSectorId) {
-        Sector sector1 = new Sector();
+        createSector(importDataModel, primary, ampSectorId, null);
+    }
 
+    private static void createSector(ImportDataModel importDataModel, boolean primary, Long ampSectorId, Long sectorPkId) {
+        Sector sector1 = new Sector();
         sector1.setSector(ampSectorId);
+        if (sectorPkId != null) sector1.setId(sectorPkId);
         if (primary) {
-            importDataModel.getPrimary_sectors().add(sector1);
+            boolean added = importDataModel.getPrimary_sectors().add(sector1);
+            if (!added && sectorPkId != null) {
+                // Sector already present from import row (id=null). Stamp the existing
+                // activity-sector PK so the API updates rather than inserts.
+                importDataModel.getPrimary_sectors().stream()
+                        .filter(s -> Objects.equals(s.getSector(), ampSectorId))
+                        .findFirst()
+                        .ifPresent(s -> s.setId(sectorPkId));
+            }
             Map<Integer, Float> percentages = divide100(importDataModel.getPrimary_sectors().size());
-            int index=0;
+            int index = 0;
             for (Sector sec : importDataModel.getPrimary_sectors()) {
                 sec.setSector_percentage(percentages.get(index));
                 index++;
             }
-        }
-        else
-        {
-            importDataModel.getSecondary_sectors().add(sector1);
+        } else {
+            boolean added = importDataModel.getSecondary_sectors().add(sector1);
+            if (!added && sectorPkId != null) {
+                importDataModel.getSecondary_sectors().stream()
+                        .filter(s -> Objects.equals(s.getSector(), ampSectorId))
+                        .findFirst()
+                        .ifPresent(s -> s.setId(sectorPkId));
+            }
             Map<Integer, Float> percentages = divide100(importDataModel.getSecondary_sectors().size());
-            int index=0;
+            int index = 0;
             for (Sector sec : importDataModel.getSecondary_sectors()) {
                 sec.setSector_percentage(percentages.get(index));
                 index++;
@@ -1108,67 +1898,289 @@ public class ImporterUtil {
 
     }
 
-    public static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type)
+    public static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type) {
+        return updateOrgs(importDataModel, name, code, session, type, false, null, null, false);
+    }
+
+    public static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type, boolean createMissingOrgs, Long orgGroupId, String importedOrgGroupName, boolean createMissingOrgGroups)
+    {
+        List<String> names = splitMultiValues(name);
+        List<String> codes = splitMultiValues(code);
+        Long lastOrgId = null;
+        for (int i = 0; i < names.size(); i++) {
+            String singleName = names.get(i);
+            String singleCode = i < codes.size() ? codes.get(i) : null;
+            lastOrgId = updateSingleOrg(importDataModel, singleName, singleCode, session, type, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
+        }
+        return lastOrgId;
+    }
+
+    /**
+     * Strips any parenthetical suffix and percentage annotation from a name.
+     * e.g. "World Bank (IDA)" → "World Bank"
+     *      "IsDB (BID) - 92%" → "IsDB"
+     *      "State of Senegal - 8%" → "State of Senegal"
+     */
+    private static String stripParenthetical(String value) {
+        if (value == null) return null;
+        String trimmed = value.trim();
+        int parenIdx = trimmed.indexOf('(');
+        if (parenIdx > 0) {
+            trimmed = trimmed.substring(0, parenIdx).trim();
+        }
+        // Strip percentage suffix (e.g. "- 8%") for names without parentheses
+        return trimmed.replaceAll("\\s*-\\s*\\d+(\\.\\d+)?%\\s*$", "").trim();
+    }
+
+    private static Long updateSingleOrg(ImportDataModel importDataModel, String name, String code, Session session, String type, boolean createMissingOrgs, Long orgGroupId, String importedOrgGroupName, boolean createMissingOrgGroups)
     {
         Long orgId;
+        String cleanName = stripParenthetical(name);
 
-        if (ConstantsMap.containsKey("org_"+name+"_"+code)) {
-            orgId = ConstantsMap.get("org_"+name+"_"+code);
-            logger.info("In cache... organisation "+"org_"+name+"_"+code+":"+orgId);
+        if (ConstantsMap.containsKey("org_"+cleanName+"_"+code)) {
+            orgId = ConstantsMap.get("org_"+cleanName+"_"+code);
+            logger.info("In cache... organisation "+"org_"+cleanName+"_"+code+":"+orgId);
         }
         else {
             if (!session.isOpen()) {
                 session = PersistenceManager.getRequestDBSession();
             }
-            String hql = "";
+
+            String hql;
             Query query;
             List<Long> organisations= new ArrayList<>();
-            if (name!=null) {
-                hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name)=LOWER(:name) OR LOWER(o.acronym)=LOWER(:name)";
-                 query = session.createQuery(hql);
-                query.setParameter("name",  name);
-                organisations = query.list();
-            }
-            if (organisations.isEmpty() && (code!=null)) {
-                    hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.orgCode)=LOWER(:code)";
-                    query = session.createQuery(hql);
-                    query.setParameter("code", code);
-                    organisations = query.list();
 
+            if (cleanName!=null) {
+                hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o WHERE LOWER(o.name)=LOWER(:name) OR LOWER(o.acronym)=LOWER(:name) OR LOWER(o.orgCode)=LOWER(:name)";
+                 query = session.createQuery(hql);
+                query.setParameter("name",  cleanName);
+                organisations = query.list();
             }
             if (!organisations.isEmpty()) {
                 orgId = organisations.get(0);
+            } else if (createMissingOrgs) {
+                // Create the organisation if it does not exist and the user opted in
+                logger.info("Organisation not found, creating new: " + cleanName);
+                AmpOrganisation newOrg = new AmpOrganisation();
+                newOrg.setName(cleanName);
+                if (code != null) {
+                    newOrg.setOrgCode(code);
+                }
+                AmpOrgGroup orgGroup = resolveOrgGroup(session, orgGroupId, importedOrgGroupName, createMissingOrgGroups, cleanName);
+                if (orgGroup == null) {
+                    throw new IllegalStateException("Unable to resolve an organization group for new organization '" + cleanName + "'");
+                }
+                logger.info("Group being set for the new org is: " + orgGroup.getName());
+                newOrg.setOrgGrpId(orgGroup);
+                session.save(newOrg);
+                session.flush();
+                orgId = newOrg.getAmpOrgId();
+                logger.info("Created new organisation: " + cleanName + " with id: " + orgId);
             } else {
+                // Fallback to "Undefined Agency"
                 hql = "SELECT o.ampOrgId FROM " + AmpOrganisation.class.getName() + " o where o.name= :name";
-
                 query = session.createQuery(hql).setParameter("name", "Undefined Agency", StringType.INSTANCE).setMaxResults(1);
                 orgId = (Long) query.uniqueResult();
+                logger.info("Organisation not found, using Undefined Agency for: " + cleanName);
             }
-            ConstantsMap.put("org_"+name+"_"+code, orgId);
+            ConstantsMap.put("org_"+cleanName+"_"+code, orgId);
         }
         logger.info("Organisation: " + orgId);
 
         if (Objects.equals(type, "donor")) {
             createDonorOrg(importDataModel, orgId);
         }
-        else if (Objects.equals(type, "responsibleOrg"))
+        else if (Objects.equals(type, ImporterConstants.ORG_TYPE_RESPONSIBLE_ORG))
         {
             Organization responsibleOrg = new Organization();
             responsibleOrg.setOrganization(orgId);
             importDataModel.getResponsible_organization().add(responsibleOrg);
 
         }
-        else if (Objects.equals(type, "beneficiaryAgency"))
+        else if (Objects.equals(type, ImporterConstants.ORG_TYPE_BENEFICIARY_AGENCY))
         {
             Organization beneficiaryAgency = new Organization();
             beneficiaryAgency.setOrganization(orgId);
             importDataModel.getBeneficiary_agency().add(beneficiaryAgency);
-
+        }
+        else if (Objects.equals(type, ImporterConstants.ORG_TYPE_EXECUTING_AGENCY))
+        {
+            Organization executingAgency = new Organization();
+            executingAgency.setOrganization(orgId);
+            importDataModel.getExecuting_agency().add(executingAgency);
+        }
+        else if (Objects.equals(type, ImporterConstants.ORG_TYPE_IMPLEMENTING_AGENCY))
+        {
+            Organization implementingAgency = new Organization();
+            implementingAgency.setOrganization(orgId);
+            importDataModel.getImplementing_agency().add(implementingAgency);
+        }
+        else if (Objects.equals(type, ImporterConstants.ORG_TYPE_CONTRACTING_AGENCY))
+        {
+            Organization contractingAgency = new Organization();
+            contractingAgency.setOrganization(orgId);
+            importDataModel.getContracting_agency().add(contractingAgency);
         }
         return orgId;
+    }
 
+    public static boolean hasTransactions(List<Funding> fundings) {
+        if (fundings == null || fundings.isEmpty()) {
+            return false;
+        }
+        for (Funding funding : fundings) {
+            if (funding == null) {
+                continue;
+            }
+            if (hasNonZeroTransaction(funding.getCommitments())
+                    || hasNonZeroTransaction(funding.getDisbursements())
+                    || hasNonZeroTransaction(funding.getExpenditures())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    private static boolean hasNonZeroTransaction(List<Transaction> transactions) {
+        if (transactions == null || transactions.isEmpty()) {
+            return false;
+        }
+        for (Transaction transaction : transactions) {
+            if (transaction != null && Double.compare(transaction.getTransaction_amount(), 0.0d) != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    public static void persistImportedProjectStatus(ImportedProject importedProject) {
+        if (importedProject == null) {
+            return;
+        }
+        Session session = PersistenceManager.getRequestDBSession();
+        try {
+            if (session == null || !session.isOpen()) {
+                PersistenceManager.doInTransaction(s -> {
+                    s.saveOrUpdate(importedProject);
+                    s.flush();
+                });
+                return;
+            }
+            session.saveOrUpdate(importedProject);
+            session.flush();
+        } catch (Exception e) {
+            logger.warn("Could not save imported project status: {}", e.getMessage());
+        }
+    }
+
+    private static AmpOrgGroup resolveOrgGroup(Session session, Long orgGroupId, String importedOrgGroupName, boolean createMissingOrgGroups, String organizationName) {
+        AmpOrgGroup importedOrgGroup = findOrgGroupByNameOrCode(session, importedOrgGroupName);
+        if (importedOrgGroup != null) {
+            return importedOrgGroup;
+        }
+
+        if (importedOrgGroupName != null && createMissingOrgGroups) {
+            return getOrCreateOrgGroup(session, importedOrgGroupName, orgGroupId);
+        }
+
+        if (orgGroupId != null) {
+            return (AmpOrgGroup) session.get(AmpOrgGroup.class, orgGroupId);
+        }
+
+        if (createMissingOrgGroups && organizationName != null && !organizationName.trim().isEmpty()) {
+            return getOrCreateOrgGroup(session, organizationName.trim(), null);
+        }
+
+        return null;
+    }
+
+    private static AmpOrgGroup findOrgGroupByNameOrCode(Session session, String orgGroupValue) {
+        if (orgGroupValue == null || orgGroupValue.trim().isEmpty()) {
+            return null;
+        }
+
+        String normalizedValue = orgGroupValue.trim();
+        String orgGroupNameHql = AmpOrgGroup.hqlStringForName("grp");
+        String hql = "SELECT grp FROM " + AmpOrgGroup.class.getName() + " grp WHERE (grp.deleted IS NULL OR grp.deleted = false) "
+                + "AND (LOWER(" + orgGroupNameHql + ") = LOWER(:value) OR LOWER(grp.orgGrpCode) = LOWER(:value))";
+        return (AmpOrgGroup) session.createQuery(hql)
+                .setParameter("value", normalizedValue, StringType.INSTANCE)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
+
+    private static AmpOrgGroup getOrCreateOrgGroup(Session session, String orgGroupName, Long fallbackOrgGroupId) {
+        AmpOrgGroup existingGroup = findOrgGroupByNameOrCode(session, orgGroupName);
+        if (existingGroup != null) {
+            return existingGroup;
+        }
+
+        AmpOrgGroup newOrgGroup = new AmpOrgGroup();
+        newOrgGroup.setOrgGrpName(orgGroupName.trim());
+
+        AmpOrgType orgType = null;
+        if (fallbackOrgGroupId != null) {
+            AmpOrgGroup fallbackGroup = (AmpOrgGroup) session.get(AmpOrgGroup.class, fallbackOrgGroupId);
+            if (fallbackGroup != null) {
+                orgType = fallbackGroup.getOrgType();
+            }
+        }
+        if (orgType == null) {
+            orgType = getDefaultOrgType();
+        }
+
+        newOrgGroup.setOrgType(orgType);
+        ARUtil.clearOrgGroupTypeDimensions();
+        DbUtil.add(newOrgGroup);
+        session.flush();
+        return newOrgGroup;
+    }
+
+    private static AmpOrgType getDefaultOrgType() {
+        List<AmpOrgType> allAmpOrgTypes = DbUtil.getAmpOrgTypes();
+        AmpOrgType otherOrgType = null;
+        AmpOrgType bilateralOrgType = null;
+
+        if (allAmpOrgTypes == null || allAmpOrgTypes.isEmpty()) {
+            throw new IllegalStateException("No organization types are available to create a new organization group");
+        }
+
+        for (AmpOrgType type : allAmpOrgTypes) {
+            if (type.getOrgType() != null && type.getOrgType().equalsIgnoreCase("other")) {
+                otherOrgType = type;
+            }
+            if (type.getOrgType() != null && type.getOrgType().equalsIgnoreCase("bilateral")) {
+                bilateralOrgType = type;
+            }
+        }
+
+        if (otherOrgType != null) {
+            return otherOrgType;
+        }
+        if (bilateralOrgType != null) {
+            return bilateralOrgType;
+        }
+        return allAmpOrgTypes.get(0);
+    }
+
+    /**
+     * Splits a total amount evenly across n donors, using the same whole-number percentages
+     * as {@link #divide100}. The last donor absorbs any floating-point remainder so the
+     * individual amounts always sum exactly to totalAmount.
+     */
+    private static List<Double> splitAmounts(double totalAmount, int n) {
+        if (n <= 0) return Collections.emptyList();
+        if (n == 1) return Collections.singletonList(totalAmount);
+        Map<Integer, Float> percentages = divide100(n);
+        List<Double> amounts = new ArrayList<>();
+        double allocated = 0;
+        for (int i = 0; i < n - 1; i++) {
+            double share = totalAmount * percentages.get(i) / 100.0;
+            amounts.add(share);
+            allocated += share;
+        }
+        amounts.add(totalAmount - allocated);
+        return amounts;
     }
 
     public static Map<Integer, Float> divide100(int n) {
@@ -1195,11 +2207,16 @@ public class ImporterUtil {
     }
 
     private static void createDonorOrg(ImportDataModel importDataModel, Long orgId) {
+        createDonorOrg(importDataModel, orgId, null);
+    }
+
+    private static void createDonorOrg(ImportDataModel importDataModel, Long orgId, Long orgRoleId) {
         DonorOrganization donorOrganization = new DonorOrganization();
         donorOrganization.setOrganization(orgId);
+        if (orgRoleId != null) donorOrganization.setId(orgRoleId);
         importDataModel.getDonor_organization().add(donorOrganization);
         Map<Integer, Float> percentages = divide100(importDataModel.getDonor_organization().size());
-        int index=0;
+        int index = 0;
         for (DonorOrganization donorOrganization1 : importDataModel.getDonor_organization()) {
             donorOrganization1.setPercentage(percentages.get(index));
             index++;
@@ -1222,5 +2239,574 @@ public class ImporterUtil {
             return -1;
         }
 
+    }
+
+    /** Parse date from Excel cell or string; returns today if null/empty/invalid. */
+    public static Date parseDateDefaultToday(Row row, Sheet sheet, Map<String, String> config, String columnName) {
+        String key = getKey(config, columnName);
+        if (key == null) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        int col = getColumnIndexByName(sheet, key);
+        if (col < 0) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Cell cell = row.getCell(col);
+        if (cell == null) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        String dateStr = extractDateFromStringCell(cell);
+        if (dateStr == null || dateStr.isEmpty()) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        try {
+            return java.sql.Date.valueOf(dateStr);
+        } catch (Exception e) {
+            return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        }
+    }
+
+    /** Add indicator data to an activity from the current row. Called after importTheData when indicator columns are mapped. */
+    public static void addIndicatorDataToActivity(Long activityId, Row row, Sheet sheet, Map<String, String> config, Session session) {
+        logger.info("addIndicatorDataToActivity: activityId={}, row={}", activityId, row != null ? row.getRowNum() : null);
+        if (activityId == null || config == null || row == null || sheet == null) {
+            logger.info("addIndicatorDataToActivity: skipping - activityId, config, row or sheet is null");
+            return;
+        }
+        // importTheData runs inside ActivityGatekeeper.doWithLock which commits and closes the session; use a fresh one if closed
+        if (session == null || !session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+            logger.info("addIndicatorDataToActivity: obtained fresh session");
+        }
+        String locationConfigKey = getKey(config, ImporterConstants.INDICATOR_LOCATION) != null
+                ? ImporterConstants.INDICATOR_LOCATION
+                : ImporterConstants.LOCATION;
+        if (getKey(config, ImporterConstants.INDICATOR_NAME) == null || getKey(config, locationConfigKey) == null || getKey(config, ImporterConstants.ACTUAL_VALUE) == null) {
+            logger.info("addIndicatorDataToActivity: skipping - missing config for indicator name, location or actual value");
+            return;
+        }
+        String indicatorName = getCellValueByConfig(row, sheet, config, ImporterConstants.INDICATOR_NAME);
+        String locationNamesStr = getCellValueByConfig(row, sheet, config, locationConfigKey);
+        if (indicatorName == null || indicatorName.trim().isEmpty() || locationNamesStr == null || locationNamesStr.trim().isEmpty()) {
+            logger.info("addIndicatorDataToActivity: skipping - indicatorName or locationNamesStr empty (indicatorName='{}', locationNamesStr='{}')", indicatorName, locationNamesStr);
+            return;
+        }
+        indicatorName = indicatorName.trim();
+        List<String> locationNames = splitLocationNames(locationNamesStr);
+        logger.info("addIndicatorDataToActivity: indicator='{}', locations(count={}): {}", indicatorName, locationNames.size(), locationNames);
+        if (locationNames.isEmpty()) {
+            logger.debug("addIndicatorDataToActivity: no location names after split");
+            return;
+        }
+
+        String programName = getCellValueByConfig(row, sheet, config, ImporterConstants.PROGRAM_NAME);
+        if (programName != null) programName = programName.trim();
+
+        AmpTheme programTheme = null;
+        if (programName != null && !programName.isEmpty()) {
+            try {
+                programTheme = getOrCreateProgramByName(programName, session);
+            } catch (Exception e) {
+                logger.error("Could not resolve or create program by name: " + programName, e);
+            }
+        }
+
+        IndicatorManagerService indicatorService = new IndicatorManagerService();
+        MEIndicatorDTO indicatorDto = indicatorService.getMeIndicatorByNameAndProgramNameOptional(indicatorName, (programName == null || programName.isEmpty()) ? null : programName);
+        AmpIndicator indicator;
+        if (indicatorDto == null) {
+            logger.info("addIndicatorDataToActivity: creating new indicator '{}' (program={})", indicatorName, programName);
+            MEIndicatorDTO createDto = new MEIndicatorDTO();
+            createDto.setName(indicatorName);
+            createDto.setCode(indicatorName + "_" + System.currentTimeMillis());
+            createDto.setCreationDate(new Date());
+            createDto.setAscending(true);
+            createDto.setSectorIds(new ArrayList<>());
+            if (programTheme != null && programTheme.getAmpThemeId() != null) {
+                createDto.setProgramId(programTheme.getAmpThemeId());
+            }
+            try {
+                indicatorDto = indicatorService.createMEIndicator(createDto);
+            } catch (Exception e) {
+                logger.error("Failed to create indicator: " + indicatorName, e);
+                return;
+            }
+            indicator = session.get(AmpIndicator.class, indicatorDto.getId());
+            logger.info("addIndicatorDataToActivity: created indicator id={}", indicator != null ? indicator.getIndicatorId() : null);
+        } else {
+            indicator = session.get(AmpIndicator.class, indicatorDto.getId());
+            logger.info("addIndicatorDataToActivity: using existing indicator id={} name='{}'", indicator != null ? indicator.getIndicatorId() : null, indicatorName);
+        }
+        if (indicator == null) {
+            logger.info("addIndicatorDataToActivity: indicator is null after lookup/create");
+            return;
+        }
+
+        AmpActivityVersion activity = session.get(AmpActivityVersion.class, activityId);
+        if (activity == null) {
+            logger.info("addIndicatorDataToActivity: activity not found for activityId={}", activityId);
+            return;
+        }
+        // Force-load indicators so we append to existing; avoid replacing due to lazy/uninitialized collection
+        if (activity.getIndicators() != null) {
+            Hibernate.initialize(activity.getIndicators());
+        }
+        int indicatorsCountBefore = activity.getIndicators() == null ? 0 : activity.getIndicators().size();
+        logger.info("addIndicatorDataToActivity: activityId={} existing indicators count={}", activityId, indicatorsCountBefore);
+
+        if (programTheme != null) {
+            addProgramToActivityIfMissing(activity, programTheme, session);
+        }
+
+        AmpIndicatorGlobalValue existingBase = indicator.getBaseValue();
+        double origBase = parseDoubleFromConfig(row, sheet, config, ImporterConstants.ORIGINAL_BASE_VALUE);
+        boolean hasOrigBase = getKey(config, ImporterConstants.ORIGINAL_BASE_VALUE) != null && !Double.isNaN(origBase);
+        double revBase = parseDoubleFromConfig(row, sheet, config, ImporterConstants.REVISED_BASE_VALUE);
+        boolean hasRevBase = getKey(config, ImporterConstants.REVISED_BASE_VALUE) != null && !Double.isNaN(revBase);
+        double origTarget = parseDoubleFromConfig(row, sheet, config, ImporterConstants.ORIGINAL_TARGET_VALUE);
+        double revTarget = parseDoubleFromConfig(row, sheet, config, ImporterConstants.REVISED_TARGET_VALUE);
+        String actualValueConfigKey = getKey(config, ImporterConstants.ACTUAL_VALUE);
+        double actualVal = parseDoubleFromConfig(row, sheet, config, ImporterConstants.ACTUAL_VALUE);
+        if (Double.isNaN(actualVal)) actualVal = 0.0;
+        logger.info("addIndicatorDataToActivity: actual value configKey='{}' parsed actualVal={} (NaN->0)", actualValueConfigKey, actualVal);
+
+        Date origBaseDate = parseDateDefaultToday(row, sheet, config, ImporterConstants.ORIGINAL_BASE_VALUE_DATE);
+        Date revBaseDate = parseDateDefaultToday(row, sheet, config, ImporterConstants.REVISED_BASE_VALUE_DATE);
+        Date origTargetDate = parseDateDefaultToday(row, sheet, config, ImporterConstants.ORIGINAL_TARGET_VALUE_DATE);
+        Date revTargetDate = parseDateDefaultToday(row, sheet, config, ImporterConstants.REVISED_TARGET_VALUE_DATE);
+        Date actualDate = parseDateDefaultToday(row, sheet, config, ImporterConstants.ACTUAL_VALUE_DATE);
+        logger.info("addIndicatorDataToActivity: actualDate={}", actualDate);
+
+        double baseOrigVal = hasOrigBase ? origBase : (existingBase != null && existingBase.getOriginalValue() != null ? existingBase.getOriginalValue() : 0.0);
+        double baseRevVal = hasRevBase ? revBase : (existingBase != null && existingBase.getRevisedValue() != null ? existingBase.getRevisedValue() : 0.0);
+        double targetOrigVal = Double.isNaN(origTarget) ? 0.0 : origTarget;
+        double targetRevVal = Double.isNaN(revTarget) ? 0.0 : revTarget;
+        String unit = getCellValueByConfig(row, sheet, config, ImporterConstants.UNIT_OF_MEASURE);
+        if (unit != null) unit = unit.trim();
+        String actualComment = (unit != null && !unit.isEmpty()) ? "Unit: " + unit : null;
+
+        int merged = 0, created = 0, skipped = 0;
+        for (String locationName : locationNames) {
+            logger.info("addIndicatorDataToActivity: processing location '{}' for activityId={} indicator='{}'", locationName, activityId, indicatorName);
+            AmpActivityLocation activityLocation = null;
+            if (activity.getLocations() != null) {
+                for (AmpActivityLocation aal : activity.getLocations()) {
+                    if (aal.getLocation() != null && locationName.equalsIgnoreCase(aal.getLocation().getName())) {
+                        activityLocation = aal;
+                        break;
+                    }
+                }
+            }
+            if (activityLocation == null) {
+                activityLocation = getOrAddActivityLocationForName(activity, locationName, session);
+            }
+            if (activityLocation == null) {
+                logger.info("addIndicatorDataToActivity: could not resolve or add location '{}' for activityId={}, skipping", locationName, activityId);
+                skipped++;
+                continue;
+            }
+            logger.info("addIndicatorDataToActivity: activityLocation id={} for '{}'", activityLocation.getLocation() != null ? activityLocation.getLocation().getId() : null, locationName);
+
+            IndicatorActivity ia = findExistingIndicatorActivity(activity, indicator, activityLocation);
+            if (ia != null) {
+                logger.info("addIndicatorDataToActivity: merging into existing IndicatorActivity for location '{}' (actual={})", locationName, actualVal);
+                mergeIndicatorValuesIntoExisting(ia, activityLocation, session, config,
+                        baseOrigVal, origBaseDate, baseRevVal, revBaseDate,
+                        targetOrigVal, origTargetDate, targetRevVal, revTargetDate,
+                        actualVal, actualDate, actualComment);
+                session.flush();
+                merged++;
+                continue;
+            }
+
+            logger.info("addIndicatorDataToActivity: creating new IndicatorActivity for activityId={} indicator='{}' location='{}' (actual={})", activityId, indicatorName, locationName, actualVal);
+            ia = new IndicatorActivity();
+            ia.setActivity(activity);
+            ia.setIndicator(indicator);
+            ia.setActivityLocation(activityLocation);
+
+            Set<AmpIndicatorValue> values = new HashSet<>();
+            if (getKey(config, ImporterConstants.ORIGINAL_BASE_VALUE) != null || getKey(config, ImporterConstants.REVISED_BASE_VALUE) != null || existingBase != null) {
+                AmpIndicatorValue baseOrig = new AmpIndicatorValue(AmpIndicatorValue.BASE);
+                baseOrig.setValue(baseOrigVal);
+                baseOrig.setValueDate(origBaseDate);
+                baseOrig.setIndicatorConnection(ia);
+                baseOrig.setActivityLocation(activityLocation);
+                values.add(baseOrig);
+                AmpIndicatorValue baseRev = new AmpIndicatorValue(AmpIndicatorValue.REVISED);
+                baseRev.setValue(baseRevVal);
+                baseRev.setValueDate(revBaseDate);
+                baseRev.setIndicatorConnection(ia);
+                baseRev.setActivityLocation(activityLocation);
+                values.add(baseRev);
+            }
+            if (getKey(config, ImporterConstants.ORIGINAL_TARGET_VALUE) != null || getKey(config, ImporterConstants.REVISED_TARGET_VALUE) != null) {
+                AmpIndicatorValue tOrig = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
+                tOrig.setValue(targetOrigVal);
+                tOrig.setValueDate(origTargetDate);
+                tOrig.setIndicatorConnection(ia);
+                tOrig.setActivityLocation(activityLocation);
+                values.add(tOrig);
+                AmpIndicatorValue tRev = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
+                tRev.setValue(targetRevVal);
+                tRev.setValueDate(revTargetDate);
+                tRev.setIndicatorConnection(ia);
+                tRev.setActivityLocation(activityLocation);
+                values.add(tRev);
+            }
+            AmpIndicatorValue actual = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
+            actual.setValue(actualVal);
+            actual.setValueDate(actualDate);
+            actual.setIndicatorConnection(ia);
+            actual.setActivityLocation(activityLocation); // required for OnePager form to show value (filters by activityLocation)
+            if (actualComment != null) actual.setComment(actualComment);
+            values.add(actual);
+            logger.info("addIndicatorDataToActivity: new IndicatorActivity - created ACTUAL value: value={}, valueDate={}, saving child", actualVal, actualDate);
+
+            ia.setValues(values);
+            if (activity.getIndicators() == null) activity.setIndicators(new HashSet<>());
+            activity.getIndicators().add(ia);
+            session.save(ia);
+            session.save(actual);
+            logger.info("addIndicatorDataToActivity: saved IndicatorActivity id={} and ACTUAL AmpIndicatorValue", ia.getId());
+            created++;
+        }
+        session.flush();
+        int indicatorsCountAfter = activity.getIndicators() == null ? 0 : activity.getIndicators().size();
+        logger.info("addIndicatorDataToActivity: done for activityId={} indicator='{}' - merged={}, created={}, skipped={}, indicatorsCount before={} after={}", activityId, indicatorName, merged, created, skipped, indicatorsCountBefore, indicatorsCountAfter);
+    }
+
+    /**
+     * Finds an existing activity–indicator connection for the same activity, indicator, and location.
+     * Match is by indicator id and activity location (both null or same location).
+     */
+    private static IndicatorActivity findExistingIndicatorActivity(AmpActivityVersion activity, AmpIndicator indicator,
+            AmpActivityLocation activityLocation) {
+        if (activity.getIndicators() == null) return null;
+        Long indicatorId = indicator != null ? indicator.getIndicatorId() : null;
+        Long locationId = activityLocation != null && activityLocation.getLocation() != null
+                ? activityLocation.getLocation().getId() : null;
+        for (IndicatorActivity ia : activity.getIndicators()) {
+            if (ia.getIndicator() == null) continue;
+            if (!Objects.equals(ia.getIndicator().getIndicatorId(), indicatorId)) continue;
+            Long existingLocId = ia.getActivityLocation() != null && ia.getActivityLocation().getLocation() != null
+                    ? ia.getActivityLocation().getLocation().getId() : null;
+            if (Objects.equals(existingLocId, locationId)) return ia;
+        }
+        return null;
+    }
+
+    /**
+     * Merges imported values into an existing indicator connection: updates existing values by type where present,
+     * adds new values only for types that are missing. Sets activityLocation on values so OnePager form can display them.
+     */
+    private static void mergeIndicatorValuesIntoExisting(IndicatorActivity ia, AmpActivityLocation activityLocation, Session session, Map<String, String> config,
+            double baseOrigVal, Date origBaseDate, double baseRevVal, Date revBaseDate,
+            double targetOrigVal, Date origTargetDate, double targetRevVal, Date revTargetDate,
+            double actualVal, Date actualDate, String actualComment) {
+        logger.debug("mergeIndicatorValuesIntoExisting: indicatorConnection id={}, actualVal={}", ia.getId(), actualVal);
+        Set<AmpIndicatorValue> existing = ia.getValues();
+        if (existing == null) {
+            existing = new HashSet<>();
+            ia.setValues(existing);
+        }
+        boolean hasBase = getKey(config, ImporterConstants.ORIGINAL_BASE_VALUE) != null || getKey(config, ImporterConstants.REVISED_BASE_VALUE) != null;
+        boolean hasTarget = getKey(config, ImporterConstants.ORIGINAL_TARGET_VALUE) != null || getKey(config, ImporterConstants.REVISED_TARGET_VALUE) != null;
+
+        // Add a new ACTUAL value only if we don't already have the same value on the same date for this location
+        if (hasActualWithSameValueAndDate(existing, activityLocation, actualVal, actualDate)) {
+            logger.info("mergeIndicatorValuesIntoExisting: skipping ACTUAL - same value {} and date {} already present for this location", actualVal, actualDate);
+        } else {
+            logger.info("mergeIndicatorValuesIntoExisting: adding new ACTUAL value: value={} valueDate={}", actualVal, actualDate);
+            AmpIndicatorValue actual = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
+            actual.setValue(actualVal);
+            actual.setValueDate(actualDate);
+            if (actualComment != null) actual.setComment(actualComment);
+            actual.setIndicatorConnection(ia);
+            actual.setActivityLocation(activityLocation);
+            existing.add(actual);
+            session.save(actual);
+        }
+
+        if (hasBase) {
+            AmpIndicatorValue existingBase = findValueByType(existing, AmpIndicatorValue.BASE);
+            if (existingBase != null) {
+                existingBase.setValue(baseOrigVal);
+                existingBase.setValueDate(origBaseDate);
+                if (activityLocation != null && existingBase.getActivityLocation() == null) existingBase.setActivityLocation(activityLocation);
+            } else {
+                AmpIndicatorValue baseOrig = new AmpIndicatorValue(AmpIndicatorValue.BASE);
+                baseOrig.setValue(baseOrigVal);
+                baseOrig.setValueDate(origBaseDate);
+                baseOrig.setIndicatorConnection(ia);
+                baseOrig.setActivityLocation(activityLocation);
+                existing.add(baseOrig);
+                session.save(baseOrig);
+            }
+            AmpIndicatorValue existingRev = findValueByType(existing, AmpIndicatorValue.REVISED);
+            if (existingRev != null) {
+                existingRev.setValue(baseRevVal);
+                existingRev.setValueDate(revBaseDate);
+                if (activityLocation != null && existingRev.getActivityLocation() == null) existingRev.setActivityLocation(activityLocation);
+            } else {
+                AmpIndicatorValue baseRev = new AmpIndicatorValue(AmpIndicatorValue.REVISED);
+                baseRev.setValue(baseRevVal);
+                baseRev.setValueDate(revBaseDate);
+                baseRev.setIndicatorConnection(ia);
+                baseRev.setActivityLocation(activityLocation);
+                existing.add(baseRev);
+                session.save(baseRev);
+            }
+        }
+
+        if (hasTarget) {
+            List<AmpIndicatorValue> targets = getValuesByType(existing, AmpIndicatorValue.TARGET);
+            if (targets.size() >= 2) {
+                targets.get(0).setValue(targetOrigVal);
+                targets.get(0).setValueDate(origTargetDate);
+                if (activityLocation != null && targets.get(0).getActivityLocation() == null) targets.get(0).setActivityLocation(activityLocation);
+                targets.get(1).setValue(targetRevVal);
+                targets.get(1).setValueDate(revTargetDate);
+                if (activityLocation != null && targets.get(1).getActivityLocation() == null) targets.get(1).setActivityLocation(activityLocation);
+            } else if (targets.size() == 1) {
+                targets.get(0).setValue(targetOrigVal);
+                targets.get(0).setValueDate(origTargetDate);
+                if (activityLocation != null && targets.get(0).getActivityLocation() == null) targets.get(0).setActivityLocation(activityLocation);
+                AmpIndicatorValue tRev = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
+                tRev.setValue(targetRevVal);
+                tRev.setValueDate(revTargetDate);
+                tRev.setIndicatorConnection(ia);
+                tRev.setActivityLocation(activityLocation);
+                existing.add(tRev);
+                session.save(tRev);
+            } else {
+                AmpIndicatorValue tOrig = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
+                tOrig.setValue(targetOrigVal);
+                tOrig.setValueDate(origTargetDate);
+                tOrig.setIndicatorConnection(ia);
+                tOrig.setActivityLocation(activityLocation);
+                existing.add(tOrig);
+                session.save(tOrig);
+                AmpIndicatorValue tRev = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
+                tRev.setValue(targetRevVal);
+                tRev.setValueDate(revTargetDate);
+                tRev.setIndicatorConnection(ia);
+                tRev.setActivityLocation(activityLocation);
+                existing.add(tRev);
+                session.save(tRev);
+            }
+        }
+        evictIndicatorConnectionFromSecondLevelCache(ia);
+    }
+
+    /**
+     * Evicts the activity from the second-level cache before an update. Avoids ObjectNotFoundException
+     * when the cached activity (or its activityContacts) references deleted entities (e.g. AmpActivityDocument).
+     */
+    private static void evictActivityFromSecondLevelCache(Long activityId) {
+        if (activityId == null) return;
+        try {
+            org.hibernate.SessionFactory sessionFactory = org.digijava.kernel.persistence.PersistenceManager.sf();
+            if (sessionFactory == null) return;
+            org.hibernate.Cache cache = sessionFactory.getCache();
+            if (cache == null) return;
+            cache.evictEntityData(AmpActivityVersion.class, activityId);
+        } catch (Exception e) {
+            logger.debug("Could not evict activity from cache: {}", e.getMessage());
+        }
+    }
+
+    /**
+     * Evicts the indicator connection and its values from the second-level cache so the activity form
+     * sees updated values on next load (otherwise cached stale values can be shown).
+     */
+    private static void evictIndicatorConnectionFromSecondLevelCache(IndicatorActivity ia) {
+        try {
+            org.hibernate.SessionFactory sessionFactory = org.digijava.kernel.persistence.PersistenceManager.sf();
+            if (sessionFactory == null) return;
+            org.hibernate.Cache cache = sessionFactory.getCache();
+            if (cache == null) return;
+            if (ia.getId() != null) cache.evictEntityData(IndicatorConnection.class, ia.getId());
+            if (ia.getValues() != null) {
+                for (AmpIndicatorValue v : ia.getValues()) {
+                    if (v != null && v.getIndValId() != null) cache.evictEntityData(AmpIndicatorValue.class, v.getIndValId());
+                }
+            }
+        } catch (Exception e) {
+            logger.debug("Could not evict indicator connection from cache: {}", e.getMessage());
+        }
+    }
+
+    private static AmpIndicatorValue findValueByType(Set<AmpIndicatorValue> values, int valueType) {
+        if (values == null) return null;
+        for (AmpIndicatorValue v : values) {
+            if (v.getValueType() == valueType) return v;
+        }
+        return null;
+    }
+
+    /** Returns true if there is already an ACTUAL value for this location with the same value and same date (calendar day). */
+    private static boolean hasActualWithSameValueAndDate(Set<AmpIndicatorValue> values, AmpActivityLocation activityLocation, double value, Date valueDate) {
+        if (values == null) return false;
+        Long wantLocId = activityLocation != null && activityLocation.getLocation() != null ? activityLocation.getLocation().getId() : null;
+        for (AmpIndicatorValue v : values) {
+            if (v.getValueType() != AmpIndicatorValue.ACTUAL) continue;
+            Long vLocId = v.getActivityLocation() != null && v.getActivityLocation().getLocation() != null
+                    ? v.getActivityLocation().getLocation().getId() : null;
+            if (!Objects.equals(vLocId, wantLocId)) continue;
+            if (Double.compare(v.getValue(), value) != 0) continue;
+            if (!isSameDay(v.getValueDate(), valueDate)) continue;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Converts a Date to LocalDate, handling both java.util.Date and java.sql.Date.
+     * java.sql.Date doesn't support toInstant(), so we use toLocalDate() for it.
+     */
+    private static LocalDate toLocalDate(Date date) {
+        if (date instanceof java.sql.Date) {
+            return ((java.sql.Date) date).toLocalDate();
+        }
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    private static boolean isSameDay(Date a, Date b) {
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
+        return toLocalDate(a).equals(toLocalDate(b));
+    }
+
+    /** Finds ACTUAL value matching this location; falls back to ACTUAL with null location if none match (for backward compat). */
+    private static AmpIndicatorValue findValueByTypeAndLocation(Set<AmpIndicatorValue> values, int valueType, AmpActivityLocation activityLocation) {
+        if (values == null) return null;
+        AmpIndicatorValue fallbackNull = null;
+        Long wantLocId = activityLocation != null && activityLocation.getLocation() != null ? activityLocation.getLocation().getId() : null;
+        for (AmpIndicatorValue v : values) {
+            if (v.getValueType() != valueType) continue;
+            Long vLocId = v.getActivityLocation() != null && v.getActivityLocation().getLocation() != null
+                    ? v.getActivityLocation().getLocation().getId() : null;
+            if (Objects.equals(vLocId, wantLocId)) return v;
+            if (v.getActivityLocation() == null) fallbackNull = v;
+        }
+        return fallbackNull;
+    }
+
+    private static List<AmpIndicatorValue> getValuesByType(Set<AmpIndicatorValue> values, int valueType) {
+        if (values == null) return Collections.emptyList();
+        List<AmpIndicatorValue> list = new ArrayList<>();
+        for (AmpIndicatorValue v : values) {
+            if (v.getValueType() == valueType) list.add(v);
+        }
+        list.sort(Comparator.comparing(AmpIndicatorValue::getValueDate, Comparator.nullsLast(Comparator.naturalOrder())));
+        return list;
+    }
+
+    /**
+     * Adds the program (theme) to the activity's programs if not already present.
+     * When the Program Percentage field is enabled, percentages are recalculated and
+     * divided evenly among all activity programs (including the one just added).
+     */
+    public static void addProgramToActivityIfMissing(AmpActivityVersion activity, AmpTheme program, Session session) {
+        if (activity == null || program == null) return;
+        Set<AmpActivityProgram> actPrograms = activity.getActPrograms();
+        if (actPrograms == null) {
+            actPrograms = new HashSet<>();
+            activity.setActPrograms(actPrograms);
+        }
+        for (AmpActivityProgram ap : actPrograms) {
+            if (ap.getProgram() != null && program.getAmpThemeId() != null
+                    && program.getAmpThemeId().equals(ap.getProgram().getAmpThemeId())) {
+                return;
+            }
+        }
+        AmpActivityProgram activityProgram = new AmpActivityProgram();
+        activityProgram.setActivity(activity);
+        activityProgram.setProgram(program);
+        activityProgram.setProgramPercentage(100f);
+        actPrograms.add(activityProgram);
+        session.save(activityProgram);
+
+        // If Program Percentage field is enabled, distribute 100% evenly among all programs
+        boolean percentageEnabled = false;
+        try {
+            percentageEnabled = FeaturesUtil.isVisibleField(ArConstants.PROGRAM_PERCENTAGE);
+        } catch (Exception e) {
+            // No request/session (e.g. batch) – skip percentage redistribution
+            logger.error("Could not determine if Program Percentage field is enabled; skipping percentage redistribution", e);
+        }
+        if (percentageEnabled && !actPrograms.isEmpty()) {
+            List<AmpActivityProgram> list = new ArrayList<>(actPrograms);
+            int n = list.size();
+            Map<Integer, Float> percentages = divide100(n);
+            for (int i = 0; i < n; i++) {
+                list.get(i).setProgramPercentage(percentages.get(i));
+            }
+        }
+    }
+
+    /**
+     * Returns the program (theme) by name, or creates a new root-level program if it does not exist.
+     * @param programName program name (must be non-empty)
+     * @param session current session (used for create and flush)
+     * @return AmpTheme or null if programName is null/empty or creation fails
+     */
+    public static AmpTheme getOrCreateProgramByName(String programName, Session session) {
+        if (programName == null || programName.trim().isEmpty()) return null;
+        programName = programName.trim();
+        AmpTheme theme = ProgramUtil.getTheme(programName);
+        if (theme != null) return theme;
+        try {
+            AmpTheme newTheme = new AmpTheme();
+            newTheme.setName(programName);
+            String code = programName.replaceAll("[^a-zA-Z0-9_-]", "_").replaceAll("_+", "_").trim();
+            if (code.length() > 45) code = code.substring(0, 45);
+            newTheme.setThemeCode("IMP_" + code + "_" + System.currentTimeMillis());
+            newTheme.setIndlevel(0);
+            newTheme.setParentThemeId(null);
+            session.save(newTheme);
+            session.flush();
+            return newTheme;
+        } catch (Exception e) {
+            logger.warn("Failed to create program: " + programName, e);
+            return null;
+        }
+    }
+
+    public static String getCellValueByConfig(Row row, Sheet sheet, Map<String, String> config, String fieldName) {
+        String key = getKey(config, fieldName);
+        if (key == null) return null;
+        int col = getColumnIndexByName(sheet, key);
+        if (col < 0) return null;
+        return getStringValueFromCell(row.getCell(col), true);
+    }
+
+    private static double parseDoubleFromConfig(Row row, Sheet sheet, Map<String, String> config, String fieldName) {
+        String key = getKey(config, fieldName);
+        if (key == null) {
+            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: no config key for field '{}'", fieldName);
+            return Double.NaN;
+        }
+        int col = getColumnIndexByName(sheet, key);
+        if (col < 0) {
+            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: column not found for key '{}' in sheet", key);
+            return Double.NaN;
+        }
+        Cell cell = row.getCell(col);
+        if (cell == null) {
+            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: cell is null for col={} key='{}'", col, key);
+            return Double.NaN;
+        }
+        try {
+            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                double v = cell.getNumericCellValue();
+                if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE from numeric cell col='{}' value={}", key, v);
+                return v;
+            }
+            String s = getStringValueFromCell(cell, true);
+            if (s == null || s.trim().isEmpty()) {
+                if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE cell empty for col='{}'", key);
+                return Double.NaN;
+            }
+            double v = Double.parseDouble(s.trim());
+            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE from string cell col='{}' raw='{}' parsed={}", key, s, v);
+            return v;
+        } catch (Exception e) {
+            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE parse failed for col='{}' cellType={} error={}", key, cell.getCellType(), e.getMessage());
+            return Double.NaN;
+        }
     }
 }

@@ -178,6 +178,10 @@ COPY --from=compile-amp-filter /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-fi
 COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-settings ../ampTemplate/node_modules/amp-settings
 # Copy package files for dependency installation
 COPY TEMPLATE/reampv2/package*.json ./
+COPY TEMPLATE/reampv2/packages/ampoffline/package.json ./packages/ampoffline/package.json
+COPY TEMPLATE/reampv2/packages/container/package.json ./packages/container/package.json
+COPY TEMPLATE/reampv2/packages/reampv2-app/package.json ./packages/reampv2-app/package.json
+COPY TEMPLATE/reampv2/packages/user-manager/package.json ./packages/user-manager/package.json
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
     npm-install-with-retry.sh

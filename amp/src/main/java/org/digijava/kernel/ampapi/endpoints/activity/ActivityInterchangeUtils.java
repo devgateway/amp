@@ -79,6 +79,7 @@ public final class ActivityInterchangeUtils {
                 .getResult();
     }
 
+
     private static Long getFMTemplateId(Map<String, Object> newJson) {
         if (AmpClientModeHolder.isOfflineClient()) {
             Workspace team = TeamUtil.getWorkspace(Long.parseLong(newJson.get("team").toString()));

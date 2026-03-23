@@ -12,21 +12,19 @@
   <%
   // Prepare fields info as JSON for JavaScript
   java.util.Map<String, String> fieldsInfo = (java.util.Map<String, String>) request.getAttribute("fieldsInfo");
-  StringBuilder jsonBuilder = new StringBuilder("{");
-  boolean first = true;
-  for (java.util.Map.Entry<String, String> entry : fieldsInfo.entrySet()) {
-    if (!first) jsonBuilder.append(",");
-    jsonBuilder.append("\"").append(entry.getKey().replace("\"", "\\\"")).append("\":")
-               .append("\"").append(entry.getValue().replace("\"", "\\\"")).append("\"");
-    first = false;
-  }
-  jsonBuilder.append("}");
-  request.setAttribute("fieldsInfoJson", jsonBuilder.toString());
+  String fieldsInfoJson = new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(fieldsInfo);
+  String fieldsInfoJsonEscaped = fieldsInfoJson
+          .replace("\\", "\\\\")
+          .replace("'", "\\'")
+          .replace("\r", "\\r")
+          .replace("\n", "\\n")
+          .replace("</", "<\\/");
+  request.setAttribute("fieldsInfoJsonEscaped", fieldsInfoJsonEscaped);
 %>
 
 <script>
     // Store the field translations for JavaScript use
-    var fieldsInfoMap = JSON.parse('${fieldsInfoJson}');
+    var fieldsInfoMap = JSON.parse('${fieldsInfoJsonEscaped}');
 
     function initializeSelectControls() {
       if (!window.jQuery || !$.fn || !$.fn.select2) {
@@ -428,17 +426,17 @@
       var columnsBySheet = data.columnsBySheet || {};
       var headersDiv = document.getElementById('headers');
       if (sheetNames.length === 0) {
-        headersDiv.innerHTML = '<p><digi:trn>No sheets found in the template.</digi:trn></p>';
+        headersDiv.innerHTML = '<p><digi:trn jsFriendly="true">No sheets found in the template.</digi:trn></p>';
         return;
       }
       var firstSheet = sheetNames[0];
-      var html = '<label for="template-sheet"><digi:trn>Select Sheet</digi:trn>:</label><br>';
+      var html = '<label for="template-sheet"><digi:trn jsFriendly="true">Select Sheet</digi:trn>:</label><br>';
       html += '<select class="select2" style="width: 300px;" id="template-sheet">';
       for (var i = 0; i < sheetNames.length; i++) {
         html += '<option value="' + escapeHtml(sheetNames[i]) + '">' + escapeHtml(sheetNames[i]) + '</option>';
       }
       html += '</select><br><br>';
-      html += '<label for="columnName"><digi:trn>Select Column Name</digi:trn>:</label><br>';
+      html += '<label for="columnName"><digi:trn jsFriendly="true">Select Column Name</digi:trn>:</label><br>';
       html += '<select class="select2" style="width: 300px;" id="columnName">';
       var firstCols = columnsBySheet[firstSheet] || [];
       for (var j = 0; j < firstCols.length; j++) {

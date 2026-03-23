@@ -1815,7 +1815,15 @@ public class ImporterUtil {
         sector1.setSector(ampSectorId);
         if (sectorPkId != null) sector1.setId(sectorPkId);
         if (primary) {
-            importDataModel.getPrimary_sectors().add(sector1);
+            boolean added = importDataModel.getPrimary_sectors().add(sector1);
+            if (!added && sectorPkId != null) {
+                // Sector already present from import row (id=null). Stamp the existing
+                // activity-sector PK so the API updates rather than inserts.
+                importDataModel.getPrimary_sectors().stream()
+                        .filter(s -> Objects.equals(s.getSector(), ampSectorId))
+                        .findFirst()
+                        .ifPresent(s -> s.setId(sectorPkId));
+            }
             Map<Integer, Float> percentages = divide100(importDataModel.getPrimary_sectors().size());
             int index = 0;
             for (Sector sec : importDataModel.getPrimary_sectors()) {
@@ -1823,7 +1831,13 @@ public class ImporterUtil {
                 index++;
             }
         } else {
-            importDataModel.getSecondary_sectors().add(sector1);
+            boolean added = importDataModel.getSecondary_sectors().add(sector1);
+            if (!added && sectorPkId != null) {
+                importDataModel.getSecondary_sectors().stream()
+                        .filter(s -> Objects.equals(s.getSector(), ampSectorId))
+                        .findFirst()
+                        .ifPresent(s -> s.setId(sectorPkId));
+            }
             Map<Integer, Float> percentages = divide100(importDataModel.getSecondary_sectors().size());
             int index = 0;
             for (Sector sec : importDataModel.getSecondary_sectors()) {

@@ -40,7 +40,7 @@ public class TxtDataImporter {
     private static final Logger logger = LoggerFactory.getLogger(TxtDataImporter.class);
 
 
-    public static int processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId)
+    public static int processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultLocationId)
     {
         logger.info("Processing txt file: " + file.getName());
         CSVParser parser = new CSVParserBuilder().withSeparator(request.getParameter("dataSeparator").charAt(0)).build();
@@ -59,7 +59,7 @@ public class TxtDataImporter {
                     logger.info("Batch number here: {}",batchNumber);
 
                     // Process the batch
-                    processBatch(batch, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId);
+                    processBatch(batch, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId);
                     // Clear the batch for the next set of rows
                     batch.clear();
                     batchNumber+=1;
@@ -69,7 +69,7 @@ public class TxtDataImporter {
             // Process any remaining rows in the batch
             if (!batch.isEmpty()) {
                 logger.info("Processing last batch of size {}", batch.size());
-                processBatch(batch, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId);
+                processBatch(batch, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId);
             }
         } catch (IOException | CsvValidationException e) {
             logger.error("Error processing txt file "+e.getMessage(),e);
@@ -79,7 +79,7 @@ public class TxtDataImporter {
     }
 
 
-    private static void processBatch(List<Map<String, String>> batch, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId) throws JsonProcessingException {
+    private static void processBatch(List<Map<String, String>> batch, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultLocationId) throws JsonProcessingException {
         logger.info("Processing txt batch");
         SessionUtil.extendSessionIfNeeded(request);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
@@ -228,6 +228,9 @@ public class TxtDataImporter {
                                 logger.error("Unexpected value: " + entry.getValue());
                                 break;
                         }
+                    }
+                    if (!config.containsValue(ImporterConstants.PROJECT_LOCATION) && defaultLocationId != null) {
+                        applyDefaultLocation(importDataModel, defaultLocationId, session);
                     }
                     logger.info("Funding items :{}", fundings);
                 });

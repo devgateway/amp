@@ -57,7 +57,10 @@ import org.digijava.module.aim.action.dataimporter.util.ImporterConstants;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Query;
@@ -87,6 +90,10 @@ public class DataImporter extends Action {
         List<AmpOrgGroup> orgGroups = DbUtil.getAllOrgGroups();
         request.setAttribute("orgGroups", orgGroups);
         request.setAttribute("activityStatuses", getActivityStatuses());
+        List<AmpCategoryValueLocations> availableLocations = getAvailableLocations();
+        request.setAttribute("availableLocations", availableLocations);
+        AmpCategoryValueLocations defaultLocation = DynLocationManagerUtil.getDefaultCountry();
+        request.setAttribute("defaultLocationId", defaultLocation != null ? defaultLocation.getId() : null);
         DataImporterForm dataImporterForm = (DataImporterForm) form;
 
         if (Objects.equals(request.getParameter("action"), "configByName")) {
@@ -367,6 +374,7 @@ public class DataImporter extends Action {
                 boolean createMissingOrgGroups = dataImporterForm.isCreateMissingOrgGroups();
                 Long orgGroupId = dataImporterForm.getOrgGroupId();
                 Long defaultActivityStatusId = dataImporterForm.getDefaultActivityStatusId();
+                Long defaultLocationId = dataImporterForm.getDefaultLocationId();
                 logger.info("Internal: "+ isInternal);
                 logger.info("Skip existing: "+ skipExisting);
                 logger.info("Validate activities: "+ validateActivities);
@@ -377,6 +385,7 @@ public class DataImporter extends Action {
                 logger.info("Create missing org groups: " + createMissingOrgGroups);
                 logger.info("Org group id: "+ orgGroupId);
                 logger.info("Default activity status id: {}", defaultActivityStatusId);
+                logger.info("Default location id: {}", defaultLocationId);
                 if (createMissingOrgs && orgGroupId == null && !createMissingOrgGroups
                         && !columnPairsToUse.containsValue(ImporterConstants.ORG_GROUP)) {
                     response.setHeader("errorMessage",
@@ -388,15 +397,21 @@ public class DataImporter extends Action {
                     columnPairsToUse = new HashMap<>(columnPairsToUse);
                     columnPairsToUse.put("Donor Agency", "Donor Agency");
                 }
+                if (!columnPairsToUse.containsValue(ImporterConstants.PROJECT_LOCATION)
+                        && defaultLocationId == null) {
+                    response.setHeader("errorMessage", "Please select a fallback location when no 'Project Location' column is mapped.");
+                    response.setStatus(400);
+                    return mapping.findForward("importData");
+                }
                 logger.info("Configuration: {}", columnPairsToUse);
                 try {
                     if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
                         String dataSheetChoice = request.getParameter("dataSheetChoice");
                         String dataSheetName = request.getParameter("dataSheetName");
                         boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
-                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId);
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId);
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId);
                     }
                 } catch (Exception e) {
                     ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
@@ -449,6 +464,14 @@ public class DataImporter extends Action {
         List< String> configNames = query.list();
         return configNames==null?Collections.emptyList():configNames;
 
+    }
+
+    private static List<AmpCategoryValueLocations> getAvailableLocations() {
+        return LocationUtil.getAllCountriesAndRegions().stream()
+                .filter(Objects::nonNull)
+                .filter(location -> !location.isSoftDeleted())
+                .sorted(Comparator.comparing(AmpCategoryValueLocations::getHierarchicalName, String.CASE_INSENSITIVE_ORDER))
+                .collect(Collectors.toList());
     }
 
     private static Map<String, String> getConfigByName(String configName) {

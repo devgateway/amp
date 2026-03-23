@@ -1734,6 +1734,22 @@ public class ImporterUtil {
         updateImpLevels(importDataModel, session);
     }
 
+    public static void applyDefaultLocation(ImportDataModel importDataModel, Long locationId, Session session) {
+        if (importDataModel == null || locationId == null) {
+            return;
+        }
+        if (importDataModel.getLocations() == null) {
+            importDataModel.setLocations(new HashSet<>());
+        }
+        boolean alreadyPresent = importDataModel.getLocations().stream()
+                .filter(Objects::nonNull)
+                .anyMatch(location -> Objects.equals(location.getLocation(), locationId));
+        if (!alreadyPresent) {
+            importDataModel.getLocations().add(new Location(locationId, 100.00));
+        }
+        updateImpLevels(importDataModel, session);
+    }
+
     /**
      * Ensures the activity has an activity location for the given location name (for indicator location).
      * If the location is not already on the activity, resolves it by name and adds it.

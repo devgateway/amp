@@ -72,6 +72,13 @@
         });
       }
 
+      if ($('#defaultLocationId').length) {
+        applySelect2('#defaultLocationId', {
+          width: '100%',
+          placeholder: '<digi:trn jsFriendly="true">Select fallback location</digi:trn>'
+        });
+      }
+
       if ($('#data-sheet').length) {
         applySelect2('#data-sheet', {
           width: '100%',
@@ -98,6 +105,25 @@
       var hasMappings = $('#selected-pairs-table-body tr').length > 0;
       $('#data-upload-section').toggle(hasMappings);
       $('#config-empty-note').toggle(!hasMappings);
+      toggleDefaultLocationFallback();
+    }
+
+    function hasMappedProjectLocationField() {
+      return $('#selected-pairs-table-body tr').filter(function() {
+        return $(this).attr('data-selected-field') === 'Project Location';
+      }).length > 0;
+    }
+
+    function toggleDefaultLocationFallback() {
+      var hasMappings = $('#selected-pairs-table-body tr').length > 0;
+      var showFallback = hasMappings && !hasMappedProjectLocationField();
+      $('#default-location-fallback').toggle(showFallback);
+      if (!showFallback) {
+        var defaultLocationId = $('#defaultLocationId').attr('data-default-location-id');
+        if (defaultLocationId) {
+          $('#defaultLocationId').val(defaultLocationId).trigger('change.select2');
+        }
+      }
     }
 
     function repopulateSelectedPairs(updatedMap) {
@@ -983,6 +1009,17 @@
             <option value=""><digi:trn>-- Use system default --</digi:trn></option>
             <c:forEach var="activityStatus" items="${activityStatuses}">
               <option value="${activityStatus.id}">${activityStatus.label}</option>
+            </c:forEach>
+          </select>
+        </div>
+
+        <div id="default-location-fallback" style="display:none; margin-top:16px;">
+          <label for="defaultLocationId"><digi:trn>Fallback Location</digi:trn></label>
+          <div class="helper-note" style="margin-bottom: 10px;"><digi:trn>Used only when no Project Location column is mapped. The instance country is preselected by default.</digi:trn></div>
+          <select id="defaultLocationId" name="defaultLocationId" data-default-location-id="${defaultLocationId}" style="width: 100%;">
+            <option value=""><digi:trn>-- Select Location --</digi:trn></option>
+            <c:forEach var="location" items="${availableLocations}">
+              <option value="${location.id}" <c:if test="${defaultLocationId == location.id}">selected="selected"</c:if>>${location.hierarchicalName}</option>
             </c:forEach>
           </select>
         </div>

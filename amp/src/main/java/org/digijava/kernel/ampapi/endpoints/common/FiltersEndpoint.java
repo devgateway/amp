@@ -265,8 +265,8 @@ public class FiltersEndpoint {
     @ApiOperation(value = "Retrieve the data needed for building the 'Approval Status' filter.",
             notes = "The response contains 2 objects - the list definition and the values. \n"
                     + "The filter widget should create a tree for 'Approval Status' values.")
-    public FilterList getActivityApprovalStatus() {
-        return FiltersManager.getInstance().getApprovalStatusFilter();
+    public Response getActivityApprovalStatus() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getApprovalStatusFilter());
     }
 
     /**
@@ -282,8 +282,8 @@ public class FiltersEndpoint {
     @ApiOperation(value = "Retrieve the data needed for building the 'Type           of Assistance' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Type of Assistance' values.")
-    public FilterList getTypeOfAssistance() {
-        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.TYPE_OF_ASSISTANCE);
+    public Response getTypeOfAssistance() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.TYPE_OF_ASSISTANCE));
     }
 
     /**
@@ -299,10 +299,10 @@ public class FiltersEndpoint {
     @ApiOperation(value = "Retrieve the data needed for building the 'Type           of Assistance' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Type of Assistance' values.")
-    public FilterList getModalities(@ApiParam(value = "Force SSC workspace, default false")
+    public Response getModalities(@ApiParam(value = "Force SSC workspace, default false")
                                     @QueryParam("sscWorkspace") @DefaultValue("false") boolean forceSscWorkspace) {
         TLSUtils.getThreadLocalInstance().setForcedSSCWorkspace(forceSscWorkspace);
-        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.MODALITIES);
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.MODALITIES));
     }
 
     /**
@@ -318,8 +318,8 @@ public class FiltersEndpoint {
     @ApiOperation(value = "Retrieve the data needed for building the 'Mode of Payment' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Mode of Payment' values.")
-    public FilterList getModeOfPayment() {
-        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.MODE_OF_PAYMENT);
+    public Response getModeOfPayment() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.MODE_OF_PAYMENT));
     }
 
     /**
@@ -363,8 +363,8 @@ public class FiltersEndpoint {
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Activity Budget' values.")
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.ACTIVITY_BUDGET)
-    public FilterList getActivityBudget() {
-        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.ACTIVITY_BUDGET);
+    public Response getActivityBudget() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.ACTIVITY_BUDGET));
     }
 
     /**
@@ -380,8 +380,8 @@ public class FiltersEndpoint {
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Procurement System' values.")
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROCUREMENT_SYSTEM)
-    public FilterList getProcurementSystem() {
-        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PROCUREMENT_SYSTEM);
+    public Response getProcurementSystem() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PROCUREMENT_SYSTEM));
     }
 
     /**
@@ -389,6 +389,14 @@ public class FiltersEndpoint {
      *
      * @return filter definition and values of 'funding-status' filter.
      */
+    @OPTIONS
+    @Path("/procurementSystem")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeProcurementSystem() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
     @GET
     @Path("/fundingStatus/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -519,8 +527,8 @@ public class FiltersEndpoint {
                     + "The filter widget should create a tree for 'Workspaces' values.")
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.TEAM,
             visibilityCheck = "hasToShowWorkspaceFilter")
-    public FilterList getWorkspaces() {
-        return FiltersManager.getInstance().getWorkspaceFilter();
+    public Response getWorkspaces() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getWorkspaceFilter());
     }
 
     /**
@@ -537,8 +545,8 @@ public class FiltersEndpoint {
                     + "The filter widget should create a tree for 'Computed Year' values.")
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.COMPUTED_YEAR,
             fieldType = FilterFieldType.OPTIONS, multiple = false)
-    public FilterList getComputedYear() {
-        return FiltersManager.getInstance().getComputedYearFilter();
+    public Response getComputedYear() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getComputedYearFilter());
     }
 
     /**
@@ -584,8 +592,8 @@ public class FiltersEndpoint {
             notes = "This endpoint is used for fetching information about 'Date' filter. "
                     + "The items attribute contains information about the startYear and the endYear.")
     @FilterDefinition(tab = EPConstants.TAB_OTHER, dataType = FilterDataType.DATE)
-    public FilterList getDates() {
-        return FiltersManager.getInstance().getDateFilter();
+    public Response getDates() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getDateFilter());
     }
 
     @GET
@@ -723,8 +731,8 @@ public class FiltersEndpoint {
             notes = "The response contains 2 objects - the list definitions and the values. \n"
                     + "The filter widget should create a tree for 'Pledges Donors' values.")
     @FilterDefinition(tab = EPConstants.TAB_ORGANIZATIONS, reportType = FilterReportType.PLEDGE)
-    public FilterList getPledgesDonros() {
-        return FiltersManager.getInstance().getPledgesDonorFilterList();
+    public Response getPledgesDonros() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getPledgesDonorFilterList());
     }
 
     /**
@@ -742,8 +750,8 @@ public class FiltersEndpoint {
             notes = "The response contains 2 objects - the list definitions and the values. \n"
                     + "The filter widget should create a tree for each pledge program settings.")
     @FilterDefinition(tab = EPConstants.TAB_PROGRAMS, reportType = FilterReportType.PLEDGE)
-    public FilterList getPledgesPrograms() {
-        return FiltersManager.getInstance().getPledgesProgramFilterList();
+    public Response getPledgesPrograms() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getPledgesProgramFilterList());
     }
 
     /**
@@ -761,8 +769,8 @@ public class FiltersEndpoint {
             notes = "The response contains 2 objects - the list definitions and the values. \n"
                     + "The filter widget should create a tree for each pledge sector scheme.")
     @FilterDefinition(tab = EPConstants.TAB_SECTORS, reportType = FilterReportType.PLEDGE)
-    public FilterList getPledgesSectors() {
-        return FiltersManager.getInstance().getPledgesSectorFilterList();
+    public Response getPledgesSectors() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getPledgesSectorFilterList());
 
     }
 
@@ -781,8 +789,8 @@ public class FiltersEndpoint {
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for each country.")
     @FilterDefinition(tab = EPConstants.TAB_LOCATIONS, reportType = FilterReportType.PLEDGE)
-    public FilterList getPledgesLocations() {
-        return FiltersManager.getInstance().getPledgesLocationFilterList();
+    public Response getPledgesLocations() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getPledgesLocationFilterList());
     }
 
     /**
@@ -799,8 +807,8 @@ public class FiltersEndpoint {
                     + "The filter widget should create a tree for 'Pledges Status' values.")
     @FilterDefinition(tab = EPConstants.TAB_PLEDGE, columns = ColumnConstants.PLEDGE_STATUS,
             componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
-    public FilterList getPledgesStatus() {
-        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PLEDGES_STATUS);
+    public Response getPledgesStatus() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PLEDGES_STATUS));
     }
 
     /**
@@ -817,8 +825,8 @@ public class FiltersEndpoint {
                     + "The filter widget should create a tree for 'Pledges Aid of Modality' values.")
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.PLEDGES_AID_MODALITY,
             componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
-    public FilterList getPledgesAidOfModality() {
-        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PLEDGES_AID_MODALITY);
+    public Response getPledgesAidOfModality() {
+        return PublicServices.buildOkResponseWithOriginHeaders(FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PLEDGES_AID_MODALITY));
     }
 
     /**

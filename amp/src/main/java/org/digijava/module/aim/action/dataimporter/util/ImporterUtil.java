@@ -3076,29 +3076,13 @@ public class ImporterUtil {
             return null;
         }
         try {
-            return ProgramUtil.getAmpActivityProgramSettings(normalizeProgramClassificationName(classification));
+            return ProgramUtil.getAmpActivityProgramSettings(classification);
         } catch (Exception e) {
             logger.warn("Could not resolve program setting '{}'", classification, e);
             return null;
         }
     }
 
-    private static String normalizeProgramClassificationName(String programName) {
-        if (programName == null) {
-            return null;
-        }
-        String trimmed = programName.trim();
-        if (Objects.equals(trimmed, ColumnConstants.PRIMARY_PROGRAM)) {
-            return ColumnConstants.PRIMARY_PROGRAM_LEVEL_1;
-        } else if (Objects.equals(trimmed, ColumnConstants.SECONDARY_PROGRAM)) {
-            return ColumnConstants.SECONDARY_PROGRAM_LEVEL_1;
-        } else if (Objects.equals(trimmed, ColumnConstants.TERTIARY_PROGRAM)) {
-            return ColumnConstants.TERTIARY_PROGRAM_LEVEL_1;
-        } else if (Objects.equals(trimmed, ColumnConstants.NATIONAL_PLAN_OBJECTIVE)) {
-            return ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1;
-        }
-        return trimmed;
-    }
 
     /**
      * Returns the program (theme) by name, or creates a new root-level program if it does not exist.

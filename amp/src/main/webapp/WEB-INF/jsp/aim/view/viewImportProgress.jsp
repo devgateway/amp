@@ -281,13 +281,30 @@
         <script>
 
             var currentViewedFileRecordId = null;
+            var dataTableLanguage = {
+                lengthMenu: "<digi:trn jsFriendly='true'>Show _MENU_ entries</digi:trn>",
+                zeroRecords: "<digi:trn jsFriendly='true'>No matching records found</digi:trn>",
+                info: "<digi:trn jsFriendly='true'>Showing _START_ to _END_ of _TOTAL_ entries</digi:trn>",
+                infoEmpty: "<digi:trn jsFriendly='true'>Showing 0 to 0 of 0 entries</digi:trn>",
+                infoFiltered: "<digi:trn jsFriendly='true'>(filtered from _MAX_ total entries)</digi:trn>",
+                search: "<digi:trn jsFriendly='true'>Search:</digi:trn>",
+                paginate: {
+                    first: "<digi:trn jsFriendly='true'>First</digi:trn>",
+                    last: "<digi:trn jsFriendly='true'>Last</digi:trn>",
+                    next: "<digi:trn jsFriendly='true'>Next</digi:trn>",
+                    previous: "<digi:trn jsFriendly='true'>Previous</digi:trn>"
+                }
+            };
 
             $(document).ready(function() {
 
-                var datatable = $('#import-projects-table').DataTable();
+                var datatable = $('#import-projects-table').DataTable({
+                    language: dataTableLanguage
+                });
                 var recentUploadsTable = $('#recent-uploads-table').DataTable({
                     pageLength: 10,
                     order: [[4, 'desc'], [0, 'desc']],
+                    language: dataTableLanguage,
                     columnDefs: [
                         { targets: 4, visible: false, searchable: false }
                     ]

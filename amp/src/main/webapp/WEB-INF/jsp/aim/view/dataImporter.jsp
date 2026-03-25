@@ -228,20 +228,20 @@
           fileType = 'excel';
         }
         if (fileType === "csv") {
-          $('#select-file-label').html("Select csv file");
+          $('#select-file-label').html("<digi:trn jsFriendly='true'>Select CSV File</digi:trn>");
           $('#data-file').attr("accept", ".csv");
           $('#template-file').attr("accept", ".csv");
           $('#separator-div').hide();
           $('#data-sheet-choice-div').hide();
         } else if(fileType==="text") {
-          $('#select-file-label').html("Select text file");
+          $('#select-file-label').html("<digi:trn jsFriendly='true'>Select Text File</digi:trn>");
           $('#data-file').attr("accept", ".txt");
           $('#template-file').attr("accept", ".txt");
           $('#separator-div').show();
           $('#data-sheet-choice-div').hide();
         }
         else if(fileType==="excel") {
-          $('#select-file-label').html("Select excel file");
+          $('#select-file-label').html("<digi:trn jsFriendly='true'>Select Excel File</digi:trn>");
           $('#data-file').attr("accept", ".xls,.xlsx");
           $('#template-file').attr("accept", ".xls,.xlsx");
           $('#separator-div').hide();
@@ -269,11 +269,11 @@
         formData.append('action', 'getDataFileSheets');
         formData.append('fileType', $('#file-type').val());
         var $select = $('#data-sheet');
-        $select.prop('disabled', true).empty().append('<option value="">-- Loading... --</option>');
+        $select.prop('disabled', true).empty().append('<option value=""><digi:trn jsFriendly="true">-- Loading... --</digi:trn></option>');
         fetch("${pageContext.request.contextPath}/aim/dataImporter.do", { method: "POST", body: formData })
           .then(function(r) { return r.json(); })
           .then(function(names) {
-            $select.empty().append('<option value="">-- Select sheet --</option>');
+            $select.empty().append('<option value=""><digi:trn jsFriendly="true">-- Select Sheet --</digi:trn></option>');
             if (Array.isArray(names)) {
               names.forEach(function(name) {
                 $select.append($('<option></option>').attr('value', name).text(name));
@@ -282,7 +282,7 @@
             }
           })
           .catch(function() {
-            $select.empty().append('<option value="">-- Error loading sheets --</option>').prop('disabled', false);
+            $select.empty().append('<option value=""><digi:trn jsFriendly="true">-- Error Loading Sheets --</digi:trn></option>').prop('disabled', false);
             alert("<digi:trn jsFriendly='true'>Could not load sheets from file.</digi:trn>");
           });
       });
@@ -919,14 +919,14 @@
 <body>
 <div class="importer-page">
   <div class="hero-card">
-    <span class="section-label">Import Workspace</span>
+    <span class="section-label"><digi:trn>Import Workspace</digi:trn></span>
     <h1><digi:trn>Import Data</digi:trn></h1>
     <p><digi:trn>Prepare a template, map source columns to AMP entity fields, and upload your data only after the configuration table is ready.</digi:trn></p>
   </div>
 
   <div class="panel-grid">
     <div class="panel-card">
-      <span class="section-label">Step 1</span>
+      <span class="section-label"><digi:trn>Step 1</digi:trn></span>
       <h2><digi:trn>Choose File Settings</digi:trn></h2>
       <p class="section-copy"><digi:trn>Pick the source format and optionally load an existing configuration before uploading a template.</digi:trn></p>
 
@@ -953,7 +953,7 @@
     </div>
 
     <div class="panel-card">
-      <span class="section-label">Step 2</span>
+      <span class="section-label"><digi:trn>Step 2</digi:trn></span>
       <h2><digi:trn>Load Configuration</digi:trn></h2>
       <p class="section-copy"><digi:trn>Resume from a saved mapping or start with a fresh template upload.</digi:trn></p>
 
@@ -983,7 +983,7 @@
     <html:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
       <input type="hidden" id="current-config-name" value="">
 
-      <span class="section-label">Step 3</span>
+      <span class="section-label"><digi:trn>Step 3</digi:trn></span>
       <h2><digi:trn>Build Your Mapping</digi:trn></h2>
       <p class="section-copy"><digi:trn>Search entity fields, add mappings, and review the configuration table before uploading the actual data file.</digi:trn></p>
 
@@ -1028,7 +1028,7 @@
       </div>
 
       <div id="data-upload-section" class="upload-stage" style="display: none;">
-        <span class="section-label">Step 4</span>
+        <span class="section-label"><digi:trn>Step 4</digi:trn></span>
         <h3><digi:trn>Upload Data File</digi:trn></h3>
         <p class="section-copy"><digi:trn>This section appears only when the configuration table contains mappings.</digi:trn></p>
 

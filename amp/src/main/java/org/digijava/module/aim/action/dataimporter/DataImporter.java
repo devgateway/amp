@@ -696,7 +696,11 @@ public class DataImporter extends Action {
     }
 
     private List<String> getProgramClassificationNames() {
-        return ProgramUtil.getEnabledProgramSettings().stream()
+        List<AmpActivityProgramSettings> settings = ProgramUtil.getEnabledProgramSettings();
+        if (settings == null || settings.isEmpty()) {
+            settings = ProgramUtil.getAmpActivityProgramSettingsList(true);
+        }
+        return settings.stream()
                 .filter(Objects::nonNull)
                 .map(AmpActivityProgramSettings::getName)
                 .filter(Objects::nonNull)

@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
@@ -113,8 +114,11 @@ public class ImporterUtil {
             } else {
                 int columnIndex1 = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY));
                 int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
+                int donorOrgGroupColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_ORGANIZATION_GROUP));
                 String donorAgencyCode = donorAgencyCodeColumn >= 0 ? getStringValueFromCell(row.getCell(donorAgencyCodeColumn), true) : null;
-                updateOrgs(importDataModel, columnIndex1 >= 0 ? Objects.requireNonNull(getStringValueFromCell(row.getCell(columnIndex1), false)).trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
+                String donorOrgGroupNames = donorOrgGroupColumn >= 0 ? getStringValueFromCell(row.getCell(donorOrgGroupColumn), false) : null;
+                String resolvedDonorOrgGroups = StringUtils.isNotBlank(donorOrgGroupNames) ? donorOrgGroupNames.trim() : importedOrgGroupName;
+                updateOrgs(importDataModel, columnIndex1 >= 0 ? Objects.requireNonNull(getStringValueFromCell(row.getCell(columnIndex1), false)).trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
                 List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
                 List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
                 for (int i = 0; i < donors.size(); i++) {
@@ -181,8 +185,10 @@ public class ImporterUtil {
             } else {
                 String donorColumn = row.get(getKey(config, ImporterConstants.DONOR_AGENCY));
                 String donorAgencyCode = row.get(getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
+                String donorOrgGroupNames = row.get(getKey(config, ImporterConstants.DONOR_ORGANIZATION_GROUP));
+                String resolvedDonorOrgGroups = StringUtils.isNotBlank(donorOrgGroupNames) ? donorOrgGroupNames.trim() : importedOrgGroupName;
 
-                updateOrgs(importDataModel, donorColumn != null && !donorColumn.isEmpty() ? donorColumn.trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
+                updateOrgs(importDataModel, donorColumn != null && !donorColumn.isEmpty() ? donorColumn.trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
                 List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
                 List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
                 for (int i = 0; i < donors.size(); i++) {
@@ -940,7 +946,7 @@ public class ImporterUtil {
     }
 
     /** @return activity ID on success, null on skip or failure */
-    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities) throws JsonProcessingException {
+    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities, boolean replaceExistingTransactions) throws JsonProcessingException {
         if (session == null || !session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
@@ -996,7 +1002,7 @@ public class ImporterUtil {
             }
             importDataModel.setProject_title(existing.getName() != null ? existing.getName() : "");
             importDataModel.setProject_code(!Objects.equals(importDataModel.getProject_code(), "") ? importDataModel.getProject_code() : (existing.getProjectCode() != null ? existing.getProjectCode() : ""));
-            updateFundingOrgsAndSectorsWithAlreadyExisting(existing, importDataModel);
+            updateFundingOrgsAndSectorsWithAlreadyExisting(existing, importDataModel, replaceExistingTransactions);
             // Merge existing activity locations into payload so we only add (row + existing), never remove
             mergeExistingActivityLocationsIntoImport(existing, importDataModel);
             ensureImplementationLevelWhenHasLocations(importDataModel, session);
@@ -1081,9 +1087,9 @@ public class ImporterUtil {
         return activityId;
     }
 
-    private static void updateFundingOrgsAndSectorsWithAlreadyExisting(AmpActivityVersion ampActivityVersion, ImportDataModel importDataModel) {
+    private static void updateFundingOrgsAndSectorsWithAlreadyExisting(AmpActivityVersion ampActivityVersion, ImportDataModel importDataModel, boolean replaceExistingTransactions) {
 
-        if (ampActivityVersion.getFunding() != null) {
+        if (!replaceExistingTransactions && ampActivityVersion.getFunding() != null) {
             Hibernate.initialize(ampActivityVersion.getFunding());
             Long adjType = getCategoryValue("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY, "");
             Long assType = getCategoryValue("assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "");
@@ -1546,7 +1552,7 @@ public class ImporterUtil {
         {
             name = subSector;
         }
-        for (String sectorName : splitMultiValues(name)) {
+        for (String sectorName : splitMultipleValues(name)) {
             updateSingleSector(importDataModel, sectorName, session, primary, createMissingSectors, importerSectorField);
         }
     }
@@ -1670,11 +1676,15 @@ public class ImporterUtil {
                 : AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME;
     }
 
-    private static List<String> splitMultiValues(String value) {
+    private static List<String> splitMultipleValues(String value) {
+        return splitMultipleValues(value, "[;\\u061B\\uFF1B]");
+    }
+
+    private static List<String> splitMultipleValues(String value, String separatorRegex) {
         if (value == null || value.trim().isEmpty()) return Collections.emptyList();
         List<String> result = new ArrayList<>();
         // Support standard and locale-specific semicolons used in spreadsheet exports.
-        for (String part : value.split("[;\\u061B\\uFF1B]")) {
+        for (String part : value.split(separatorRegex)) {
             String trimmed = part.trim();
             if (trimmed.length() >= 2 && trimmed.startsWith("\"") && trimmed.endsWith("\"")) {
                 trimmed = trimmed.substring(1, trimmed.length() - 1).trim();
@@ -1684,21 +1694,10 @@ public class ImporterUtil {
         return result;
     }
 
-
-    private static List<String> splitLocationNames(String locationNames) {
-        if (locationNames == null || locationNames.trim().isEmpty()) return Collections.emptyList();
-        List<String> result = new ArrayList<>();
-        for (String part : locationNames.split("[,;]")) {
-            String trimmed = part.trim();
-            if (!trimmed.isEmpty()) result.add(trimmed);
-        }
-        return result;
-    }
-
     public static void updateLocations(ImportDataModel importDataModel, String locationNames, Session session) {
         logger.info("Updating locations");
         if (locationNames == null || locationNames.trim().isEmpty()) return;
-        for (String locationName : splitLocationNames(locationNames)) {
+        for (String locationName : splitMultipleValues(locationNames, "[,;\\u061B\\uFF1B]")) {
             if (ConstantsMap.containsKey("location_" + locationName)) {
                 Long location = ConstantsMap.get("location_" + locationName);
                 logger.info("In cache... location " + "location_" + locationName + ":" + location);
@@ -1904,13 +1903,18 @@ public class ImporterUtil {
 
     public static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type, boolean createMissingOrgs, Long orgGroupId, String importedOrgGroupName, boolean createMissingOrgGroups)
     {
-        List<String> names = splitMultiValues(name);
-        List<String> codes = splitMultiValues(code);
+        List<String> names = splitMultipleValues(name);
+        List<String> codes = splitMultipleValues(code);
+        List<String> importedOrgGroups = splitMultipleValues(importedOrgGroupName);
+        String fallbackOrgGroup = importedOrgGroups.isEmpty() ? null : importedOrgGroups.get(importedOrgGroups.size() - 1);
         Long lastOrgId = null;
         for (int i = 0; i < names.size(); i++) {
             String singleName = names.get(i);
             String singleCode = i < codes.size() ? codes.get(i) : null;
-            lastOrgId = updateSingleOrg(importDataModel, singleName, singleCode, session, type, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
+            String singleOrgGroupName = importedOrgGroups.isEmpty()
+                    ? null
+                    : (i < importedOrgGroups.size() ? importedOrgGroups.get(i) : fallbackOrgGroup);
+            lastOrgId = updateSingleOrg(importDataModel, singleName, singleCode, session, type, createMissingOrgs, orgGroupId, singleOrgGroupName, createMissingOrgGroups);
         }
         return lastOrgId;
     }
@@ -2284,7 +2288,7 @@ public class ImporterUtil {
             return;
         }
         indicatorName = indicatorName.trim();
-        List<String> locationNames = splitLocationNames(locationNamesStr);
+        List<String> locationNames = splitMultipleValues(locationNamesStr, "[,;\\u061B\\uFF1B]");
         logger.info("addIndicatorDataToActivity: indicator='{}', locations(count={}): {}", indicatorName, locationNames.size(), locationNames);
         if (locationNames.isEmpty()) {
             logger.debug("addIndicatorDataToActivity: no location names after split");
@@ -2774,7 +2778,7 @@ public class ImporterUtil {
             return;
         }
 
-        for (String programName : splitMultiValues(rawProgramNames)) {
+        for (String programName : splitMultipleValues(rawProgramNames)) {
             AmpTheme program = createMissingPrograms
                     ? getOrCreateProgramByName(programName, resolvedClassification, session)
                     : getProgramByNameAndClassification(programName, resolvedClassification, session);
@@ -2849,11 +2853,28 @@ public class ImporterUtil {
             return null;
         }
         try {
-            return ProgramUtil.getAmpActivityProgramSettings(classification.trim());
+            return ProgramUtil.getAmpActivityProgramSettings(normalizeProgramClassificationName(classification));
         } catch (Exception e) {
             logger.warn("Could not resolve program setting '{}'", classification, e);
             return null;
         }
+    }
+
+    private static String normalizeProgramClassificationName(String programName) {
+        if (programName == null) {
+            return null;
+        }
+        String trimmed = programName.trim();
+        if (Objects.equals(trimmed, ColumnConstants.PRIMARY_PROGRAM)) {
+            return ColumnConstants.PRIMARY_PROGRAM_LEVEL_1;
+        } else if (Objects.equals(trimmed, ColumnConstants.SECONDARY_PROGRAM)) {
+            return ColumnConstants.SECONDARY_PROGRAM_LEVEL_1;
+        } else if (Objects.equals(trimmed, ColumnConstants.TERTIARY_PROGRAM)) {
+            return ColumnConstants.TERTIARY_PROGRAM_LEVEL_1;
+        } else if (Objects.equals(trimmed, ColumnConstants.NATIONAL_PLAN_OBJECTIVE)) {
+            return ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1;
+        }
+        return trimmed;
     }
 
     /**

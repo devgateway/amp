@@ -395,10 +395,32 @@
       tbody.appendChild(row);
     }
 
-    function hasMappedOrgGroupField() {
+    function hasMappedField(fieldName) {
       return $('#selected-pairs-table-body tr').filter(function() {
-        return $(this).attr('data-selected-field') === 'Organization Group';
+        return $(this).attr('data-selected-field') === fieldName;
       }).length > 0;
+    }
+
+    function hasAnyMappedOrgMissingGroupMapping() {
+      if (hasMappedField('Organization Group')) {
+        return false;
+      }
+      var roleMappings = [
+        ['Donor Agency', 'Donor Organization Group'],
+        ['Responsible Organization', 'Responsible Organization Group'],
+        ['Beneficiary Agency', 'Beneficiary Agency Group'],
+        ['Executing Agency', 'Executing Agency Group'],
+        ['Implementing Agency', 'Implementing Agency Group'],
+        ['Contracting Agency', 'Contracting Agency Group']
+      ];
+      for (var i = 0; i < roleMappings.length; i++) {
+        var orgField = roleMappings[i][0];
+        var groupField = roleMappings[i][1];
+        if (hasMappedField(orgField) && !hasMappedField(groupField)) {
+          return true;
+        }
+      }
+      return false;
     }
 
     function uploadTemplateFile() {
@@ -505,11 +527,12 @@
       var createMissingSectors = $('#createMissingSectors').prop('checked');
       var createMissingOrgGroups = $('#createMissingOrgGroups').prop('checked');
       var createMissingPrograms = $('#createMissingPrograms').prop('checked');
+      var replaceExistingTransactions = $('#replaceExistingTransactions').prop('checked');
       var orgGroupId = $('#orgGroupId').val();
       var defaultActivityStatusId = $('#defaultActivityStatusId').val();
       var defaultLocationId = $('#defaultLocationId').val() || $('#defaultLocationId').attr('data-default-location-id') || '';
       var defaultProgramClassification = $('#defaultProgramClassification').val();
-      var hasOrgGroupMapping = hasMappedOrgGroupField();
+      var hasAnyMappedOrgMissingGroupMapping = hasAnyMappedOrgMissingGroupMapping();
       var hasProjectLocationMapping = hasMappedProjectLocationField();
       var hasProgramMapping = hasMappedProgramField();
       var hasProgramClassificationMapping = hasMappedProgramClassificationField();
@@ -522,12 +545,13 @@
       console.log("Create missing sectors", createMissingSectors);
       console.log("Create missing org groups", createMissingOrgGroups);
       console.log("Create missing programs", createMissingPrograms);
+      console.log("Replace existing transactions", replaceExistingTransactions);
       console.log("Org group id", orgGroupId);
       console.log("Default activity status id", defaultActivityStatusId);
       console.log("Default location id", defaultLocationId);
       console.log("Default program classification", defaultProgramClassification);
-      if (createMissingOrgs && !orgGroupId && !hasOrgGroupMapping && !createMissingOrgGroups) {
-        alert("<digi:trn jsFriendly='true'>Please select an Organization Group, map the Organization Group column, or enable organization group creation for newly created organizations.</digi:trn>");
+      if (createMissingOrgs && !orgGroupId && !createMissingOrgGroups && hasAnyMappedOrgMissingGroupMapping) {
+        alert("<digi:trn jsFriendly='true'>Please select a fallback Organization Group (or enable organization-group creation) when any mapped organization field has no corresponding group mapping.</digi:trn>");
         return;
       }
       if (!hasProjectLocationMapping && !defaultLocationId) {
@@ -564,6 +588,7 @@
       formData.append('createMissingSectors', createMissingSectors);
       formData.append('createMissingOrgGroups', createMissingOrgGroups);
       formData.append('createMissingPrograms', createMissingPrograms);
+      formData.append('replaceExistingTransactions', replaceExistingTransactions);
       if (createMissingOrgs && orgGroupId) {
         formData.append('orgGroupId', orgGroupId);
       }
@@ -1059,6 +1084,7 @@
           <label class="toggle-item" for="createMissingSectors"><input type="checkbox" id="createMissingSectors" name="createMissingSectors"> <digi:trn>Create missing sectors</digi:trn></label>
           <label class="toggle-item" for="createMissingOrgGroups"><input type="checkbox" id="createMissingOrgGroups" name="createMissingOrgGroups"> <digi:trn>Create missing organization groups for new organizations</digi:trn></label>
           <label class="toggle-item" for="createMissingPrograms"><input type="checkbox" id="createMissingPrograms" name="createMissingPrograms"> <digi:trn>Create missing programs</digi:trn></label>
+          <label class="toggle-item" for="replaceExistingTransactions"><input type="checkbox" id="replaceExistingTransactions" name="replaceExistingTransactions"> <digi:trn>Replace existing transactions</digi:trn></label>
         </div>
 
         <div id="orgGroupDiv" style="display:none; margin-top:16px;">

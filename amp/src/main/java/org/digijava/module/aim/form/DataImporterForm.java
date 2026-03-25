@@ -18,6 +18,7 @@ public class DataImporterForm extends ActionForm {
     private boolean createMissingSectors;
     private boolean createMissingOrgGroups;
     private boolean createMissingPrograms;
+    private boolean replaceExistingTransactions;
     private Long orgGroupId;
     private Long defaultActivityStatusId;
     private Long defaultLocationId;
@@ -87,6 +88,14 @@ public class DataImporterForm extends ActionForm {
 
     public void setCreateMissingPrograms(boolean createMissingPrograms) {
         this.createMissingPrograms = createMissingPrograms;
+    }
+
+    public boolean isReplaceExistingTransactions() {
+        return replaceExistingTransactions;
+    }
+
+    public void setReplaceExistingTransactions(boolean replaceExistingTransactions) {
+        this.replaceExistingTransactions = replaceExistingTransactions;
     }
 
     public Long getOrgGroupId() {

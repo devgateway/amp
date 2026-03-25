@@ -35,12 +35,18 @@ public final class ImporterConstants {
     public static final String DONOR_AGENCY_CODE = "Donor Agency Code";
     public static final String EXCHANGE_RATE = "Exchange Rate";
     public static final String ORG_GROUP = "Organization Group";
+    public static final String DONOR_ORGANIZATION_GROUP = "Donor Organization Group";
     public static final String RESPONSIBLE_ORGANIZATION = "Responsible Organization";
+    public static final String RESPONSIBLE_ORGANIZATION_GROUP = "Responsible Organization Group";
     public static final String RESPONSIBLE_ORGANIZATION_CODE = "Responsible Organization Code";
     public static final String EXECUTING_AGENCY = "Executing Agency";
+    public static final String EXECUTING_AGENCY_GROUP = "Executing Agency Group";
     public static final String IMPLEMENTING_AGENCY = "Implementing Agency";
+    public static final String IMPLEMENTING_AGENCY_GROUP = "Implementing Agency Group";
     public static final String CONTRACTING_AGENCY = "Contracting Agency";
+    public static final String CONTRACTING_AGENCY_GROUP = "Contracting Agency Group";
     public static final String BENEFICIARY_AGENCY = "Beneficiary Agency";
+    public static final String BENEFICIARY_AGENCY_GROUP = "Beneficiary Agency Group";
 
     public static final String ACTUAL_DISBURSEMENT = "Actual Disbursement";
     public static final String ACTUAL_COMMITMENT = "Actual Commitment";
@@ -67,6 +73,10 @@ public final class ImporterConstants {
     public static final String INDICATOR_NAME = "Indicator Name";
     public static final String PROGRAM_NAME = "Program Name";
     public static final String PROGRAM_CLASSIFICATION = "Program Classification";
+    public static final String PRIMARY_PROGRAM = "Primary Program";
+    public static final String SECONDARY_PROGRAM = "Secondary Program";
+    public static final String TERTIARY_PROGRAM = "Tertiary Program";
+    public static final String NATIONAL_PLAN_OBJECTIVE = "National Plan Objective";
     /** Used for project-level location (e.g. Project Location). */
     public static final String LOCATION = "Location";
     /** Used for matching indicator value to activity location; distinct from project Location. */

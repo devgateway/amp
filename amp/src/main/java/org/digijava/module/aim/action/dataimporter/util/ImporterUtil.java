@@ -3062,6 +3062,12 @@ public class ImporterUtil {
             } else {
                 newTheme.setParentThemeId(null);
             }
+            // Set typeCategoryValue from classification's category value
+            if (setting != null && setting.getTypeCategoryValue() != null) {
+                newTheme.setTypeCategoryValue(setting.getTypeCategoryValue());
+            } else {
+                throw new IllegalStateException("Cannot create program: classification '" + classification + "' does not resolve to a valid typeCategoryValue (required for DB constraint)");
+            }
             session.save(newTheme);
             session.flush();
             return newTheme;

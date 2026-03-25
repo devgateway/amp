@@ -1352,7 +1352,6 @@ public class ImporterUtil {
     private static void ensureImplementationLevelWhenHasLocations(ImportDataModel importDataModel, Session session) {
         if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty())
             return;
-        if (importDataModel.getImplementation_level() != null) return;
         updateImpLevels(importDataModel, session);
     }
 
@@ -1852,34 +1851,109 @@ public class ImporterUtil {
 
     public static void updateImpLevels(ImportDataModel importDataModel, Session session)
     {
+        if (importDataModel == null) {
+            return;
+        }
+        if (session == null || !session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
+
+        Long resolved = resolveImplementationLevelForLocations(importDataModel, session);
+        if (resolved != null) {
+            importDataModel.setImplementation_level(resolved);
+            return;
+        }
+
+        // Fallback when no locations are present: keep previous default behavior (National).
         if (ConstantsMap.containsKey("implementation_level_")) {
             Long implementationLevel = ConstantsMap.get("implementation_level_");
-            logger.info("In cache... imp level "+"implementation_level:"+implementationLevel);
+            logger.info("In cache... imp level " + "implementation_level:" + implementationLevel);
             importDataModel.setImplementation_level(implementationLevel);
-        }else {
-            if (!session.isOpen()) {
-                session = PersistenceManager.getRequestDBSession();
-            }
-
+        } else {
             session.doWork(connection -> {
-            String query2 = "SELECT acv.id as implementation_level FROM amp_category_value acv JOIN amp_category_class acc ON acv.amp_category_class_id=acc.id WHERE LOWER(acv.category_value)=? AND LOWER(acc.keyname)=?";
-            try (PreparedStatement statement = connection.prepareStatement(query2)) {
-                statement.setString(1, "national");
-                statement.setString(2, "implementation_level");
+                String query2 = "SELECT acv.id as implementation_level FROM amp_category_value acv JOIN amp_category_class acc ON acv.amp_category_class_id=acc.id WHERE LOWER(acv.category_value)=? AND LOWER(acc.keyname)=?";
+                try (PreparedStatement statement = connection.prepareStatement(query2)) {
+                    statement.setString(1, "national");
+                    statement.setString(2, "implementation_level");
 
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    while (resultSet.next()) {
-                        Long implementationLevel = resultSet.getLong("implementation_level");
-                        logger.info("Imp level:" + implementationLevel);
-                        importDataModel.setImplementation_level(implementationLevel);
-                        ConstantsMap.put("implementation_level_", implementationLevel);
+                    try (ResultSet resultSet = statement.executeQuery()) {
+                        while (resultSet.next()) {
+                            Long implementationLevel = resultSet.getLong("implementation_level");
+                            logger.info("Imp level:" + implementationLevel);
+                            importDataModel.setImplementation_level(implementationLevel);
+                            ConstantsMap.put("implementation_level_", implementationLevel);
+                        }
                     }
-                }
 
-            } catch (SQLException e) {
-                logger.error("Error getting imp levels", e);
-            }});
+                } catch (SQLException e) {
+                    logger.error("Error getting imp levels", e);
+                }
+            });
         }
+    }
+
+    private static Long resolveImplementationLevelForLocations(ImportDataModel importDataModel, Session session) {
+        if (importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty()) {
+            return null;
+        }
+
+        Set<Long> commonAllowedLevels = null;
+        for (Location loc : importDataModel.getLocations()) {
+            if (loc == null || loc.getLocation() == null) {
+                continue;
+            }
+            Set<Long> allowedForLocation = getAllowedImplementationLevelsForLocation(loc.getLocation(), session);
+            if (allowedForLocation.isEmpty()) {
+                continue;
+            }
+            if (commonAllowedLevels == null) {
+                commonAllowedLevels = new HashSet<>(allowedForLocation);
+            } else {
+                commonAllowedLevels.retainAll(allowedForLocation);
+            }
+        }
+
+        if (commonAllowedLevels == null || commonAllowedLevels.isEmpty()) {
+            return null;
+        }
+
+        Long existingImplementationLevel = importDataModel.getImplementation_level();
+        if (existingImplementationLevel != null && commonAllowedLevels.contains(existingImplementationLevel)) {
+            return existingImplementationLevel;
+        }
+
+        // Prefer common hard-coded levels if available to keep behavior predictable.
+        Long national = CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.getIdInDatabase();
+        if (national != null && commonAllowedLevels.contains(national)) {
+            return national;
+        }
+        Long regional = CategoryConstants.IMPLEMENTATION_LEVEL_REGIONAL.getIdInDatabase();
+        if (regional != null && commonAllowedLevels.contains(regional)) {
+            return regional;
+        }
+        Long international = CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.getIdInDatabase();
+        if (international != null && commonAllowedLevels.contains(international)) {
+            return international;
+        }
+
+        return commonAllowedLevels.iterator().next();
+    }
+
+    private static Set<Long> getAllowedImplementationLevelsForLocation(Long locationId, Session session) {
+        Set<Long> allowed = new HashSet<>();
+        if (locationId == null) {
+            return allowed;
+        }
+        AmpCategoryValueLocations location = session.get(AmpCategoryValueLocations.class, locationId);
+        if (location == null || location.getParentCategoryValue() == null || location.getParentCategoryValue().getUsedValues() == null) {
+            return allowed;
+        }
+        for (AmpCategoryValue level : location.getParentCategoryValue().getUsedValues()) {
+            if (level != null && level.getId() != null) {
+                allowed.add(level.getId());
+            }
+        }
+        return allowed;
     }
 
     private static void createSector(ImportDataModel importDataModel, boolean primary, Long ampSectorId) {

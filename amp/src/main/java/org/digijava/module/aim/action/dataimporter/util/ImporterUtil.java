@@ -1744,9 +1744,17 @@ public class ImporterUtil {
         logger.info("Updating locations");
         if (locationNames == null || locationNames.trim().isEmpty()) return;
         for (String locationName : splitMultipleValues(locationNames, "[,;\\u061B\\uFF1B]")) {
-            if (ConstantsMap.containsKey("location_" + locationName)) {
-                Long location = ConstantsMap.get("location_" + locationName);
-                logger.info("In cache... location " + "location_" + locationName + ":" + location);
+            String normalizedLocationName = normalizeLocationNameForLookup(locationName);
+            if (normalizedLocationName.isEmpty()) {
+                continue;
+            }
+            Long cachedLocationId = ConstantsMap.get("location_" + normalizedLocationName);
+            if (cachedLocationId == null) {
+                cachedLocationId = ConstantsMap.get("location_" + locationName);
+            }
+            if (cachedLocationId != null) {
+                Long location = cachedLocationId;
+                logger.info("In cache... location " + "location_" + normalizedLocationName + ":" + location);
                 importDataModel.getLocations().add(new Location(location, 100.00));
 
             } else {
@@ -1754,29 +1762,100 @@ public class ImporterUtil {
                     session = PersistenceManager.getRequestDBSession();
                 }
 
-                final String locationNameFinal = locationName;
-                session.doWork(connection -> {
-                    String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
-                    try (PreparedStatement statement = connection.prepareStatement(query)) {
-                        statement.setString(1, locationNameFinal);
-
-                        try (ResultSet resultSet = statement.executeQuery()) {
-                            while (resultSet.next()) {
-                                Long location = resultSet.getLong("location_id");
-                                logger.info("Location:" + location);
-                                importDataModel.getLocations().add(new Location(location, 100.00));
-                                ConstantsMap.put("location_" + locationNameFinal, location);
-                            }
-                        }
-
-                    } catch (SQLException e) {
-                        logger.error("Error getting locations", e);
-                    }
-
-                });
+                Set<Long> resolvedLocationIds = resolveLocationIdsByName(session, normalizedLocationName);
+                if (resolvedLocationIds.isEmpty()) {
+                    logger.warn("Location not found for importer value '{}'", normalizedLocationName);
+                    continue;
+                }
+                for (Long location : resolvedLocationIds) {
+                    logger.info("Location:" + location);
+                    importDataModel.getLocations().add(new Location(location, 100.00));
+                    ConstantsMap.put("location_" + locationName, location);
+                    ConstantsMap.put("location_" + normalizedLocationName, location);
+                }
             }
         }
         updateImpLevels(importDataModel, session);
+    }
+
+    private static String normalizeLocationNameForLookup(String rawLocationName) {
+        if (rawLocationName == null) {
+            return "";
+        }
+        String normalized = rawLocationName
+                .replace('\u00A0', ' ')
+                .replace('\u202F', ' ')
+                .trim();
+        normalized = normalized.replaceAll("\\.{2,}$", "").trim();
+        return normalized;
+    }
+
+    private static Set<Long> resolveLocationIdsByName(Session session, String locationName) {
+        Set<Long> result = new LinkedHashSet<>();
+        if (locationName == null || locationName.trim().isEmpty()) {
+            return result;
+        }
+
+        if (session == null || !session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
+
+        final String exactName = locationName.trim();
+        final String likeName = "%" + exactName + "%";
+
+        session.doWork(connection -> {
+            // 1) Exact match (fast path)
+            String exactQuery = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
+            try (PreparedStatement statement = connection.prepareStatement(exactQuery)) {
+                statement.setString(1, exactName);
+                try (ResultSet rs = statement.executeQuery()) {
+                    while (rs.next()) {
+                        result.add(rs.getLong("location_id"));
+                    }
+                }
+            } catch (SQLException e) {
+                logger.error("Error resolving location by exact name", e);
+            }
+
+            if (!result.isEmpty()) {
+                return;
+            }
+
+            // 2) Normalized match (ignore punctuation/spacing differences, e.g. "Saint Louis" vs "Saint-Louis")
+            String normalizedQuery = "SELECT acvl.id AS location_id "
+                    + "FROM amp_category_value_location acvl "
+                    + "WHERE LOWER(regexp_replace(acvl.location_name, '[^[:alnum:]]', '', 'g')) "
+                    + "= LOWER(regexp_replace(?, '[^[:alnum:]]', '', 'g'))";
+            try (PreparedStatement statement = connection.prepareStatement(normalizedQuery)) {
+                statement.setString(1, exactName);
+                try (ResultSet rs = statement.executeQuery()) {
+                    while (rs.next()) {
+                        result.add(rs.getLong("location_id"));
+                    }
+                }
+            } catch (SQLException e) {
+                logger.error("Error resolving location by normalized name", e);
+            }
+
+            if (!result.isEmpty()) {
+                return;
+            }
+
+            // 3) Loose contains match as last fallback.
+            String containsQuery = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) LIKE LOWER(?)";
+            try (PreparedStatement statement = connection.prepareStatement(containsQuery)) {
+                statement.setString(1, likeName);
+                try (ResultSet rs = statement.executeQuery()) {
+                    while (rs.next()) {
+                        result.add(rs.getLong("location_id"));
+                    }
+                }
+            } catch (SQLException e) {
+                logger.error("Error resolving location by contains search", e);
+            }
+        });
+
+        return result;
     }
 
     public static void applyDefaultLocation(ImportDataModel importDataModel, Long locationId, Session session) {

@@ -1282,22 +1282,45 @@ public class ImporterUtil {
             Double pct = loc.getLocation_percentage();
             sum += (pct != null ? pct : 0);
         }
-        if (sum <= 0) return;
-        if (Math.abs(sum - 100.0) < 0.001) return; // already 100
+        if (sum <= 0) {
+            // If there is no usable input percentage, split 100 as whole numbers (e.g. 33,33,34).
+            List<Location> list = new ArrayList<>(locs);
+            Map<Integer, Float> percentages = divide100(list.size());
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).setLocation_percentage((double) percentages.get(i));
+            }
+            return;
+        }
         List<Location> list = new ArrayList<>(locs);
+
+        // Convert scaled shares to whole numbers summing exactly to 100 via largest remainder.
         double scale = 100.0 / sum;
-        double running = 0;
+        int allocated = 0;
+        List<Double> remainders = new ArrayList<>(Collections.nCopies(list.size(), 0.0));
+        List<Integer> wholeParts = new ArrayList<>(Collections.nCopies(list.size(), 0));
         for (int i = 0; i < list.size(); i++) {
             Location loc = list.get(i);
-            double v;
-            if (i == list.size() - 1) {
-                v = 100.0 - running; // last one gets remainder so total is exactly 100
-            } else {
-                Double pct = loc.getLocation_percentage();
-                v = (pct != null ? pct : 0) * scale;
-                running += v;
-            }
-            loc.setLocation_percentage(v);
+            Double pct = loc.getLocation_percentage();
+            double scaled = (pct != null ? pct : 0) * scale;
+            int whole = (int) Math.floor(scaled);
+            wholeParts.set(i, whole);
+            remainders.set(i, scaled - whole);
+            allocated += whole;
+        }
+
+        int remaining = 100 - allocated;
+        List<Integer> indices = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            indices.add(i);
+        }
+        indices.sort((a, b) -> Double.compare(remainders.get(b), remainders.get(a)));
+        for (int i = 0; i < remaining && i < indices.size(); i++) {
+            int idx = indices.get(i);
+            wholeParts.set(idx, wholeParts.get(idx) + 1);
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).setLocation_percentage((double) wholeParts.get(i));
         }
     }
 

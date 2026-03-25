@@ -66,6 +66,7 @@ public final class ImporterConstants {
     // ----- Indicator (M&E) columns -----
     public static final String INDICATOR_NAME = "Indicator Name";
     public static final String PROGRAM_NAME = "Program Name";
+    public static final String PROGRAM_CLASSIFICATION = "Program Classification";
     /** Used for project-level location (e.g. Project Location). */
     public static final String LOCATION = "Location";
     /** Used for matching indicator value to activity location; distinct from project Location. */

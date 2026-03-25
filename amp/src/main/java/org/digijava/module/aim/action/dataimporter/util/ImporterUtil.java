@@ -2701,6 +2701,11 @@ public class ImporterUtil {
      * divided evenly among all activity programs (including the one just added).
      */
     public static void addProgramToActivityIfMissing(AmpActivityVersion activity, AmpTheme program, Session session) {
+        addProgramToActivityIfMissing(activity, program, session, null);
+    }
+
+    public static void addProgramToActivityIfMissing(AmpActivityVersion activity, AmpTheme program, Session session,
+                                                     AmpActivityProgramSettings programSetting) {
         if (activity == null || program == null) return;
         Set<AmpActivityProgram> actPrograms = activity.getActPrograms();
         if (actPrograms == null) {
@@ -2710,12 +2715,17 @@ public class ImporterUtil {
         for (AmpActivityProgram ap : actPrograms) {
             if (ap.getProgram() != null && program.getAmpThemeId() != null
                     && program.getAmpThemeId().equals(ap.getProgram().getAmpThemeId())) {
+                if (ap.getProgramSetting() == null && programSetting != null) {
+                    ap.setProgramSetting(programSetting);
+                    session.saveOrUpdate(ap);
+                }
                 return;
             }
         }
         AmpActivityProgram activityProgram = new AmpActivityProgram();
         activityProgram.setActivity(activity);
         activityProgram.setProgram(program);
+        activityProgram.setProgramSetting(programSetting);
         activityProgram.setProgramPercentage(100f);
         actPrograms.add(activityProgram);
         session.save(activityProgram);
@@ -2735,6 +2745,114 @@ public class ImporterUtil {
             for (int i = 0; i < n; i++) {
                 list.get(i).setProgramPercentage(percentages.get(i));
             }
+        }
+    }
+
+    public static void addProgramsToActivity(Long activityId, String rawProgramNames, String rowProgramClassification,
+                                             String fallbackProgramClassification, boolean createMissingPrograms,
+                                             Session session) {
+        if (activityId == null || rawProgramNames == null || rawProgramNames.trim().isEmpty()) {
+            return;
+        }
+        String resolvedClassification = (rowProgramClassification != null && !rowProgramClassification.trim().isEmpty())
+                ? rowProgramClassification.trim()
+                : (fallbackProgramClassification != null ? fallbackProgramClassification.trim() : null);
+        if (resolvedClassification == null || resolvedClassification.isEmpty()) {
+            logger.info("Skipping programs because program classification could not be resolved");
+            return;
+        }
+        AmpActivityVersion activity = session.get(AmpActivityVersion.class, activityId);
+        if (activity == null) {
+            logger.info("Skipping programs because activity {} was not found", activityId);
+            return;
+        }
+
+        AmpActivityProgramSettings programSetting = resolveProgramSettingByName(resolvedClassification);
+        if (programSetting == null) {
+            logger.warn("Program classification '{}' not found; skipping programs for activity {}",
+                    resolvedClassification, activityId);
+            return;
+        }
+
+        for (String programName : splitMultiValues(rawProgramNames)) {
+            AmpTheme program = createMissingPrograms
+                    ? getOrCreateProgramByName(programName, resolvedClassification, session)
+                    : getProgramByNameAndClassification(programName, resolvedClassification, session);
+            if (program == null) {
+                logger.info("Program '{}' not found and createMissingPrograms is disabled; skipping", programName);
+                continue;
+            }
+            addProgramToActivityIfMissing(activity, program, session, programSetting);
+        }
+        session.flush();
+    }
+
+    private static AmpTheme getProgramByNameAndClassification(String programName, String classification,
+                                                               Session session) {
+        if (programName == null || programName.trim().isEmpty()) {
+            return null;
+        }
+        AmpActivityProgramSettings setting = resolveProgramSettingByName(classification);
+        if (setting == null) {
+            return ProgramUtil.getTheme(programName.trim());
+        }
+        String hql = "SELECT t FROM " + AmpTheme.class.getName() + " t WHERE LOWER(t.name) = LOWER(:name)";
+        Query query;
+        if (setting.getDefaultHierarchy() != null && setting.getDefaultHierarchy().getAmpThemeId() != null) {
+            hql += " AND t.parentThemeId.ampThemeId = :parentId";
+            query = session.createQuery(hql);
+            query.setParameter("parentId", setting.getDefaultHierarchy().getAmpThemeId());
+        } else {
+            query = session.createQuery(hql);
+        }
+        query.setParameter("name", programName.trim(), StringType.INSTANCE);
+        query.setMaxResults(1);
+        AmpTheme theme = (AmpTheme) query.uniqueResult();
+        return theme != null ? theme : ProgramUtil.getTheme(programName.trim());
+    }
+
+    public static AmpTheme getOrCreateProgramByName(String programName, String classification, Session session) {
+        AmpTheme existing = getProgramByNameAndClassification(programName, classification, session);
+        if (existing != null) {
+            return existing;
+        }
+        if (programName == null || programName.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            AmpTheme newTheme = new AmpTheme();
+            String trimmedName = programName.trim();
+            newTheme.setName(trimmedName);
+            String code = trimmedName.replaceAll("[^a-zA-Z0-9_-]", "_").replaceAll("_+", "_").trim();
+            if (code.length() > 45) code = code.substring(0, 45);
+            newTheme.setThemeCode("IMP_" + code + "_" + System.currentTimeMillis());
+            newTheme.setIndlevel(0);
+            AmpActivityProgramSettings setting = resolveProgramSettingByName(classification);
+            if (setting != null && setting.getDefaultHierarchy() != null) {
+                newTheme.setParentThemeId(setting.getDefaultHierarchy());
+                Integer rootLevel = setting.getDefaultHierarchy().getIndlevel();
+                newTheme.setIndlevel(rootLevel != null ? rootLevel + 1 : 1);
+            } else {
+                newTheme.setParentThemeId(null);
+            }
+            session.save(newTheme);
+            session.flush();
+            return newTheme;
+        } catch (Exception e) {
+            logger.warn("Failed to create program '{}' for classification '{}'", programName, classification, e);
+            return null;
+        }
+    }
+
+    private static AmpActivityProgramSettings resolveProgramSettingByName(String classification) {
+        if (classification == null || classification.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            return ProgramUtil.getAmpActivityProgramSettings(classification.trim());
+        } catch (Exception e) {
+            logger.warn("Could not resolve program setting '{}'", classification, e);
+            return null;
         }
     }
 

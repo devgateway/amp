@@ -77,6 +77,13 @@
         });
       }
 
+      if ($('#defaultProgramClassification').length) {
+        applySelect2('#defaultProgramClassification', {
+          width: '100%',
+          placeholder: '<digi:trn jsFriendly="true">Select fallback program classification</digi:trn>'
+        });
+      }
+
       if ($('#data-sheet').length) {
         applySelect2('#data-sheet', {
           width: '100%',
@@ -121,6 +128,28 @@
         if (defaultLocationId) {
           $('#defaultLocationId').val(defaultLocationId).trigger('change.select2');
         }
+      }
+      toggleProgramClassificationFallback();
+    }
+
+    function hasMappedProgramField() {
+      return $('#selected-pairs-table-body tr').filter(function() {
+        return $(this).attr('data-selected-field') === 'Program Name';
+      }).length > 0;
+    }
+
+    function hasMappedProgramClassificationField() {
+      return $('#selected-pairs-table-body tr').filter(function() {
+        return $(this).attr('data-selected-field') === 'Program Classification';
+      }).length > 0;
+    }
+
+    function toggleProgramClassificationFallback() {
+      var hasMappings = $('#selected-pairs-table-body tr').length > 0;
+      var showFallback = hasMappings && hasMappedProgramField() && !hasMappedProgramClassificationField();
+      $('#program-classification-fallback').toggle(showFallback);
+      if (!showFallback) {
+        $('#defaultProgramClassification').val('').trigger('change.select2');
       }
     }
 
@@ -475,11 +504,15 @@
       var createMissingOrgs = $('#createMissingOrgs').prop('checked');
       var createMissingSectors = $('#createMissingSectors').prop('checked');
       var createMissingOrgGroups = $('#createMissingOrgGroups').prop('checked');
+      var createMissingPrograms = $('#createMissingPrograms').prop('checked');
       var orgGroupId = $('#orgGroupId').val();
       var defaultActivityStatusId = $('#defaultActivityStatusId').val();
       var defaultLocationId = $('#defaultLocationId').val() || $('#defaultLocationId').attr('data-default-location-id') || '';
+      var defaultProgramClassification = $('#defaultProgramClassification').val();
       var hasOrgGroupMapping = hasMappedOrgGroupField();
       var hasProjectLocationMapping = hasMappedProjectLocationField();
+      var hasProgramMapping = hasMappedProgramField();
+      var hasProgramClassificationMapping = hasMappedProgramClassificationField();
       console.log("Internal", internal);
       console.log("Skip existing", skipExisting);
       console.log("Skip records without transactions", skipRecordsWithoutTransactions);
@@ -488,15 +521,21 @@
       console.log("Create missing orgs", createMissingOrgs);
       console.log("Create missing sectors", createMissingSectors);
       console.log("Create missing org groups", createMissingOrgGroups);
+      console.log("Create missing programs", createMissingPrograms);
       console.log("Org group id", orgGroupId);
       console.log("Default activity status id", defaultActivityStatusId);
       console.log("Default location id", defaultLocationId);
+      console.log("Default program classification", defaultProgramClassification);
       if (createMissingOrgs && !orgGroupId && !hasOrgGroupMapping && !createMissingOrgGroups) {
         alert("<digi:trn jsFriendly='true'>Please select an Organization Group, map the Organization Group column, or enable organization group creation for newly created organizations.</digi:trn>");
         return;
       }
       if (!hasProjectLocationMapping && !defaultLocationId) {
         alert("<digi:trn jsFriendly='true'>Please select a fallback location when no Project Location column is mapped.</digi:trn>");
+        return;
+      }
+      if (hasProgramMapping && !hasProgramClassificationMapping && !defaultProgramClassification) {
+        alert("<digi:trn jsFriendly='true'>Please select a default program classification when no Program Classification column is mapped.</digi:trn>");
         return;
       }
       var dataSeparator = $('#data-separator').val();
@@ -524,6 +563,7 @@
       formData.append('createMissingOrgs', createMissingOrgs);
       formData.append('createMissingSectors', createMissingSectors);
       formData.append('createMissingOrgGroups', createMissingOrgGroups);
+      formData.append('createMissingPrograms', createMissingPrograms);
       if (createMissingOrgs && orgGroupId) {
         formData.append('orgGroupId', orgGroupId);
       }
@@ -532,6 +572,9 @@
       }
       if (defaultLocationId) {
         formData.append('defaultLocationId', defaultLocationId);
+      }
+      if (defaultProgramClassification) {
+        formData.append('defaultProgramClassification', defaultProgramClassification);
       }
       formData.append('action',"uploadDataFile");
       formData.append('fileType', fileType);
@@ -1014,6 +1057,7 @@
           <label class="toggle-item" for="createMissingOrgs"><input type="checkbox" id="createMissingOrgs" name="createMissingOrgs"> <digi:trn>Create missing organizations</digi:trn></label>
           <label class="toggle-item" for="createMissingSectors"><input type="checkbox" id="createMissingSectors" name="createMissingSectors"> <digi:trn>Create missing sectors</digi:trn></label>
           <label class="toggle-item" for="createMissingOrgGroups"><input type="checkbox" id="createMissingOrgGroups" name="createMissingOrgGroups"> <digi:trn>Create missing organization groups for new organizations</digi:trn></label>
+          <label class="toggle-item" for="createMissingPrograms"><input type="checkbox" id="createMissingPrograms" name="createMissingPrograms"> <digi:trn>Create missing programs</digi:trn></label>
         </div>
 
         <div id="orgGroupDiv" style="display:none; margin-top:16px;">
@@ -1043,6 +1087,17 @@
             <option value=""><digi:trn>-- Select Location --</digi:trn></option>
             <c:forEach var="location" items="${availableLocations}">
               <option value="${location.id}" <c:if test="${defaultLocationId == location.id}">selected="selected"</c:if>>${location.hierarchicalName}</option>
+            </c:forEach>
+          </select>
+        </div>
+
+        <div id="program-classification-fallback" style="display:none; margin-top:16px;">
+          <label for="defaultProgramClassification"><digi:trn>Fallback Program Classification</digi:trn></label>
+          <div class="helper-note" style="margin-bottom: 10px;"><digi:trn>Used only when Program Name is mapped but Program Classification is not.</digi:trn></div>
+          <select id="defaultProgramClassification" name="defaultProgramClassification" style="width: 100%;">
+            <option value=""><digi:trn>-- Select Program Classification --</digi:trn></option>
+            <c:forEach var="programClassification" items="${programClassifications}">
+              <option value="${programClassification}">${programClassification}</option>
             </c:forEach>
           </select>
         </div>

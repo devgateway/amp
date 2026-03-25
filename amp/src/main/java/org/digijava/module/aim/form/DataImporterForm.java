@@ -17,9 +17,11 @@ public class DataImporterForm extends ActionForm {
     private boolean createMissingOrgs;
     private boolean createMissingSectors;
     private boolean createMissingOrgGroups;
+    private boolean createMissingPrograms;
     private Long orgGroupId;
     private Long defaultActivityStatusId;
     private Long defaultLocationId;
+    private String defaultProgramClassification;
     private boolean validateActivities;
     private boolean addDisbursementForCommitment;
 
@@ -79,6 +81,14 @@ public class DataImporterForm extends ActionForm {
         this.createMissingOrgGroups = createMissingOrgGroups;
     }
 
+    public boolean isCreateMissingPrograms() {
+        return createMissingPrograms;
+    }
+
+    public void setCreateMissingPrograms(boolean createMissingPrograms) {
+        this.createMissingPrograms = createMissingPrograms;
+    }
+
     public Long getOrgGroupId() {
         return orgGroupId;
     }
@@ -101,6 +111,14 @@ public class DataImporterForm extends ActionForm {
 
     public void setDefaultLocationId(Long defaultLocationId) {
         this.defaultLocationId = defaultLocationId;
+    }
+
+    public String getDefaultProgramClassification() {
+        return defaultProgramClassification;
+    }
+
+    public void setDefaultProgramClassification(String defaultProgramClassification) {
+        this.defaultProgramClassification = defaultProgramClassification;
     }
 
     public Set<String> getFileHeaders() {

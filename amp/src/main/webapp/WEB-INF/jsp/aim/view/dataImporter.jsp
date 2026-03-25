@@ -532,7 +532,7 @@
       var defaultActivityStatusId = $('#defaultActivityStatusId').val();
       var defaultLocationId = $('#defaultLocationId').val() || $('#defaultLocationId').attr('data-default-location-id') || '';
       var defaultProgramClassification = $('#defaultProgramClassification').val();
-      var hasAnyMappedOrgMissingGroupMapping = hasAnyMappedOrgMissingGroupMapping();
+      var anyMappedOrgMissingGroupMapping = hasAnyMappedOrgMissingGroupMapping();
       var hasProjectLocationMapping = hasMappedProjectLocationField();
       var hasProgramMapping = hasMappedProgramField();
       var hasProgramClassificationMapping = hasMappedProgramClassificationField();
@@ -550,7 +550,7 @@
       console.log("Default activity status id", defaultActivityStatusId);
       console.log("Default location id", defaultLocationId);
       console.log("Default program classification", defaultProgramClassification);
-      if (createMissingOrgs && !orgGroupId && !createMissingOrgGroups && hasAnyMappedOrgMissingGroupMapping) {
+      if (createMissingOrgs && !orgGroupId && !createMissingOrgGroups && anyMappedOrgMissingGroupMapping) {
         alert("<digi:trn jsFriendly='true'>Please select a fallback Organization Group (or enable organization-group creation) when any mapped organization field has no corresponding group mapping.</digi:trn>");
         return;
       }

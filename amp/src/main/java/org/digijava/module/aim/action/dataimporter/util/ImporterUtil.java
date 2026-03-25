@@ -962,6 +962,7 @@ public class ImporterUtil {
         objectMapper.configure(ESCAPE_NON_ASCII, false); // Disable escaping of non-ASCII characters during serialization
         objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 
+        pruneParentLocationsWhenChildPresent(importDataModel, session);
         normalizeLocationPercentages(importDataModel);
         Map<String, Object> map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
@@ -1006,6 +1007,7 @@ public class ImporterUtil {
             // Merge existing activity locations into payload so we only add (row + existing), never remove
             mergeExistingActivityLocationsIntoImport(existing, importDataModel);
             ensureImplementationLevelWhenHasLocations(importDataModel, session);
+            pruneParentLocationsWhenChildPresent(importDataModel, session);
             normalizeLocationPercentages(importDataModel);
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
@@ -1297,6 +1299,51 @@ public class ImporterUtil {
             }
             loc.setLocation_percentage(v);
         }
+    }
+
+    /**
+     * Removes ancestor locations when both ancestor and descendant are present in payload.
+     * AMP validation rejects payloads that contain parent+child in the same locations collection.
+     */
+    private static void pruneParentLocationsWhenChildPresent(ImportDataModel importDataModel, Session session) {
+        if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().size() < 2) {
+            return;
+        }
+        if (session == null || !session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
+
+        Set<Long> selectedLocationIds = new HashSet<>();
+        for (Location loc : importDataModel.getLocations()) {
+            if (loc != null && loc.getLocation() != null) {
+                selectedLocationIds.add(loc.getLocation());
+            }
+        }
+        if (selectedLocationIds.size() < 2) {
+            return;
+        }
+
+        Set<Long> ancestorsToRemove = new HashSet<>();
+        for (Long locId : selectedLocationIds) {
+            AmpCategoryValueLocations current = session.get(AmpCategoryValueLocations.class, locId);
+            while (current != null && current.getParentLocation() != null) {
+                current = current.getParentLocation();
+                if (current != null && current.getId() != null && selectedLocationIds.contains(current.getId())) {
+                    ancestorsToRemove.add(current.getId());
+                }
+            }
+        }
+        if (ancestorsToRemove.isEmpty()) {
+            return;
+        }
+
+        Set<Location> filteredLocations = new HashSet<>();
+        for (Location loc : importDataModel.getLocations()) {
+            if (loc == null || loc.getLocation() == null || !ancestorsToRemove.contains(loc.getLocation())) {
+                filteredLocations.add(loc);
+            }
+        }
+        importDataModel.setLocations(filteredLocations);
     }
 
     /**

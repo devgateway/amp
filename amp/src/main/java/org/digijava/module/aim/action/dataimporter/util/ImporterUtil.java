@@ -3062,9 +3062,9 @@ public class ImporterUtil {
             } else {
                 newTheme.setParentThemeId(null);
             }
-            // Set typeCategoryValue from classification's category value
-            if (setting != null && setting.getTypeCategoryValue() != null) {
-                newTheme.setTypeCategoryValue(setting.getTypeCategoryValue());
+            // Set typeCategoryValue from classification's defaultHierarchy's category value
+            if (setting != null && setting.getDefaultHierarchy() != null && setting.getDefaultHierarchy().getTypeCategoryValue() != null) {
+                newTheme.setTypeCategoryValue(setting.getDefaultHierarchy().getTypeCategoryValue());
             } else {
                 throw new IllegalStateException("Cannot create program: classification '" + classification + "' does not resolve to a valid typeCategoryValue (required for DB constraint)");
             }

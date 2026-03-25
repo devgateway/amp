@@ -19,7 +19,7 @@
                 --danger: #7a5555;
                 --warning: #7d6a53;
                 --row-alt: #f8f9fa;
-                --shadow: 0 8px 20px rgba(25, 39, 52, 0.06);
+                --shadow: 0 4px 12px rgba(25, 39, 52, 0.05);
             }
 
             html {
@@ -29,8 +29,8 @@
             body {
                 margin: 0;
                 font-family: Arial, Helvetica, sans-serif;
-                font-size: 14px;
-                line-height: 1.5;
+                font-size: 12px;
+                line-height: 1.4;
                 color: var(--text-strong);
                 background: var(--page-bg);
             }
@@ -45,7 +45,7 @@
             .progress-page {
                 max-width: 1220px;
                 margin: 0 auto;
-                padding: 40px 20px 56px;
+                padding: 22px 16px 34px;
             }
 
             .hero-card,
@@ -54,27 +54,27 @@
                 background: var(--panel-bg);
                 border: 1px solid var(--panel-border);
                 box-shadow: var(--shadow);
-                border-radius: 28px;
+                border-radius: 14px;
             }
 
             .hero-card {
-                padding: 34px;
-                margin-bottom: 22px;
+                padding: 20px;
+                margin-bottom: 14px;
                 background: var(--panel-bg);
             }
 
             .hero-card h1,
             .panel-card h2,
             .records-card h2 {
-                margin: 0 0 10px;
-                font-size: 1.5rem;
+                margin: 0 0 8px;
+                font-size: 18px;
             }
 
             .section-label {
                 display: inline-block;
-                margin-bottom: 8px;
-                font-size: 13px;
-                letter-spacing: 0.18em;
+                margin-bottom: 6px;
+                font-size: 11px;
+                letter-spacing: 0.12em;
                 text-transform: uppercase;
                 color: var(--accent);
                 font-weight: 700;
@@ -83,13 +83,14 @@
             .section-copy {
                 margin: 0;
                 color: var(--text-soft);
-                line-height: 1.6;
+                line-height: 1.45;
+                font-size: 12px;
             }
 
             .panel-card,
             .records-card {
-                padding: 24px;
-                margin-bottom: 22px;
+                padding: 16px;
+                margin-bottom: 14px;
             }
 
             table {
@@ -104,15 +105,15 @@
 
             td, th {
                 text-align: left;
-                padding: 14px 16px;
-                font-size: 14px;
+                padding: 10px 12px;
+                font-size: 12px;
                 border-bottom: 1px solid rgba(22, 53, 67, 0.08);
             }
 
             th {
                 background: #eef1f3;
-                font-size: 13px;
-                letter-spacing: 0.12em;
+                font-size: 11px;
+                letter-spacing: 0.08em;
                 text-transform: uppercase;
             }
 
@@ -129,8 +130,8 @@
             .nav-action-btn {
                 border: 1px solid #506673;
                 border-radius: 999px;
-                padding: 10px 16px;
-                font-size: 14px;
+                padding: 8px 14px;
+                font-size: 12px;
                 font-weight: 700;
                 cursor: pointer;
                 color: #fff;
@@ -139,13 +140,13 @@
             }
 
             .view-more-btn {
-                margin-top: 8px;
-                padding: 8px 14px;
-                font-size: 13px;
+                margin-top: 6px;
+                padding: 6px 12px;
+                font-size: 11px;
             }
 
             .hero-actions {
-                margin-top: 18px;
+                margin-top: 12px;
                 display: flex;
                 justify-content: flex-end;
             }
@@ -153,16 +154,17 @@
             .status-summary {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-                gap: 14px;
-                margin: 18px 0;
+                gap: 10px;
+                margin: 12px 0;
             }
 
             .status-pill {
-                padding: 14px 16px;
-                border-radius: 18px;
+                padding: 10px 12px;
+                border-radius: 10px;
                 font-weight: 700;
                 background: #f1f3f5;
                 border: 1px solid var(--panel-border);
+                font-size: 12px;
             }
 
             .status-pill.all {
@@ -184,17 +186,17 @@
             .filter-div {
                 display: flex;
                 flex-wrap: wrap;
-                gap: 12px;
+                gap: 8px;
                 align-items: center;
-                margin-bottom: 18px;
-                padding: 14px 16px;
-                border-radius: 18px;
+                margin-bottom: 12px;
+                padding: 10px 12px;
+                border-radius: 10px;
                 background: #f1f3f5;
                 border: 1px solid var(--panel-border);
             }
 
             .filter-div label {
-                font-size: 14px;
+                font-size: 12px;
                 font-weight: 700;
             }
 
@@ -209,20 +211,20 @@
             .dataTables_wrapper .dataTables_filter input,
             .dataTables_wrapper .dataTables_length select {
                 border: 1px solid rgba(22, 53, 67, 0.18);
-                border-radius: 10px;
-                padding: 6px 10px;
+                border-radius: 6px;
+                padding: 5px 8px;
                 background: #fff;
-                font-size: 14px;
+                font-size: 12px;
             }
 
             .uploads-filter-bar {
                 display: flex;
                 flex-wrap: wrap;
-                gap: 12px;
+                gap: 8px;
                 align-items: end;
-                margin: 16px 0 18px;
-                padding: 14px 16px;
-                border-radius: 18px;
+                margin: 10px 0 12px;
+                padding: 10px 12px;
+                border-radius: 10px;
                 background: #f1f3f5;
                 border: 1px solid var(--panel-border);
             }
@@ -230,21 +232,21 @@
             .uploads-filter-field {
                 display: flex;
                 flex-direction: column;
-                gap: 6px;
-                min-width: 180px;
+                gap: 4px;
+                min-width: 160px;
             }
 
             .uploads-filter-field label {
-                font-size: 14px;
+                font-size: 12px;
                 font-weight: 700;
             }
 
             .uploads-filter-field input {
                 border: 1px solid rgba(22, 53, 67, 0.18);
-                border-radius: 10px;
-                padding: 8px 10px;
+                border-radius: 6px;
+                padding: 6px 8px;
                 background: #fff;
-                font-size: 14px;
+                font-size: 12px;
             }
 
             .truncated-response {
@@ -263,8 +265,8 @@
                 .hero-card,
                 .panel-card,
                 .records-card {
-                    padding: 18px;
-                    border-radius: 20px;
+                    padding: 14px;
+                    border-radius: 12px;
                 }
 
                 .filter-div {

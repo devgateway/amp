@@ -631,10 +631,10 @@
       --accent-warm: #8a6f56;
       --surface-muted: #f0f2f4;
       --row-alt: #f8f9fa;
-      --shadow: 0 8px 20px rgba(25, 39, 52, 0.06);
-      --radius-lg: 20px;
-      --radius-md: 14px;
-      --radius-sm: 10px;
+      --shadow: 0 4px 12px rgba(25, 39, 52, 0.05);
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
     }
 
     html {
@@ -644,8 +644,8 @@
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      font-size: 14px;
-      line-height: 1.5;
+      font-size: 12px;
+      line-height: 1.4;
       color: var(--text-strong);
       background: var(--page-bg);
     }
@@ -660,7 +660,7 @@
     .importer-page {
       max-width: 1180px;
       margin: 0 auto;
-      padding: 40px 20px 56px;
+      padding: 22px 16px 34px;
     }
 
     .hero-card,
@@ -673,52 +673,53 @@
     }
 
     .hero-card {
-      border-radius: 24px;
-      padding: 36px;
-      margin-bottom: 24px;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 14px;
       background: var(--panel-bg);
     }
 
     .hero-card h1,
     .workspace-card h2,
     .upload-stage h3 {
-      margin: 0 0 10px;
-      font-size: 1.5rem;
+      margin: 0 0 8px;
+      font-size: 18px;
       font-weight: 700;
-      letter-spacing: 0.02em;
+      letter-spacing: 0;
     }
 
     .hero-card p,
     .section-copy,
     .helper-note {
       color: var(--text-soft);
-      line-height: 1.6;
+      line-height: 1.45;
       margin: 0;
+      font-size: 12px;
     }
 
     .panel-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      margin-bottom: 24px;
+      gap: 14px;
+      margin-bottom: 14px;
     }
 
     .panel-card,
     .workspace-card,
     .upload-stage {
       border-radius: var(--radius-lg);
-      padding: 24px;
+      padding: 16px;
     }
 
     .workspace-card {
-      margin-top: 24px;
+      margin-top: 14px;
     }
 
     .section-label {
       display: inline-block;
-      margin-bottom: 8px;
-      font-size: 13px;
-      letter-spacing: 0.18em;
+      margin-bottom: 6px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--accent);
       font-weight: 700;
@@ -726,8 +727,8 @@
 
     label {
       display: inline-block;
-      margin-bottom: 6px;
-      font-size: 14px;
+      margin-bottom: 4px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--text-strong);
     }
@@ -738,16 +739,16 @@
       width: 100%;
       max-width: 100%;
       box-sizing: border-box;
-      padding: 12px 14px;
+      padding: 8px 10px;
       border-radius: var(--radius-sm);
       border: 1px solid rgba(22, 53, 67, 0.18);
       background: #fff;
       color: var(--text-strong);
-      font-size: 14px;
+      font-size: 12px;
     }
 
     input[type="file"] {
-      padding: 10px 12px;
+      padding: 7px 9px;
       background: var(--surface-muted);
     }
 
@@ -755,12 +756,12 @@
     button {
       border: 1px solid #506673;
       border-radius: 999px;
-      padding: 12px 18px;
+      padding: 8px 14px;
       font-weight: 700;
       cursor: pointer;
       color: #fff;
       background: var(--accent);
-      font-size: 14px;
+      font-size: 12px;
       box-shadow: none;
       transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
     }
@@ -779,14 +780,14 @@
     .inline-field,
     .toggle-grid,
     .sheet-choice-card {
-      margin-top: 16px;
+      margin-top: 12px;
     }
 
     .toggle-grid {
       display: grid;
-      gap: 10px;
-      margin-top: 18px;
-      padding: 18px;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 12px;
       border-radius: var(--radius-md);
       background: var(--surface-muted);
       border: 1px solid var(--panel-border);
@@ -819,16 +820,16 @@
     table th,
     table td {
       text-align: left;
-      padding: 14px 16px;
-      font-size: 14px;
+      padding: 10px 12px;
+      font-size: 12px;
       border-bottom: 1px solid rgba(22, 53, 67, 0.08);
     }
 
     table th {
       background: #eef1f3;
       color: var(--text-strong);
-      font-size: 13px;
-      letter-spacing: 0.12em;
+      font-size: 11px;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
@@ -843,25 +844,25 @@
     .mapping-toolbar {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
+      gap: 12px;
       align-items: end;
-      margin-bottom: 18px;
+      margin-bottom: 12px;
     }
 
     .mapping-actions {
       display: flex;
-      gap: 12px;
+      gap: 8px;
       flex-wrap: wrap;
-      margin-top: 16px;
+      margin-top: 10px;
     }
 
     .upload-stage {
-      margin-top: 22px;
+      margin-top: 14px;
     }
 
     #config-empty-note {
-      margin-top: 18px;
-      padding: 16px 18px;
+      margin-top: 12px;
+      padding: 10px 12px;
       border-radius: var(--radius-md);
       background: #f3efe9;
       color: #6a5a48;
@@ -869,10 +870,10 @@
     }
 
     .select2-container--default .select2-selection--single {
-      height: 46px;
+      height: 34px;
       border-radius: var(--radius-sm);
       border: 1px solid rgba(22, 53, 67, 0.18);
-      padding: 8px 12px;
+      padding: 3px 8px;
       display: flex;
       align-items: center;
       background: #fff;
@@ -880,20 +881,20 @@
 
     .select2-container--default .select2-selection--single .select2-selection__rendered {
       color: var(--text-strong);
-      font-size: 14px;
-      line-height: 28px;
+      font-size: 12px;
+      line-height: 24px;
       padding-left: 0;
     }
 
     .select2-dropdown {
-      border-radius: 14px;
+      border-radius: 8px;
       border-color: rgba(22, 53, 67, 0.18);
       overflow: hidden;
     }
 
     .select2-search__field {
-      border-radius: 10px;
-      padding: 8px 10px;
+      border-radius: 6px;
+      padding: 6px 8px;
     }
 
     @media (max-width: 768px) {

@@ -251,7 +251,7 @@ public class ImporterUtil {
 
     }
 
-    private static String extractDateFromStringCell(Cell cell) {
+    public static String extractDateFromStringCell(Cell cell) {
         if (cell == null) {
             return null;
         }

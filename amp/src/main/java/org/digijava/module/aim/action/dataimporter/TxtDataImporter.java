@@ -168,8 +168,6 @@ public class TxtDataImporter {
                                     String formatted = org.digijava.module.aim.action.dataimporter.util.ImporterUtil.formatDateFromDateObject(dateStr.trim());
                                     if (formatted != null) {
                                         importDataModel.setActual_start_date(formatted);
-                                    } else {
-                                        importDataModel.setActual_start_date(dateStr.trim());
                                     }
                                 }
                                 break;
@@ -180,8 +178,6 @@ public class TxtDataImporter {
                                     String formatted = org.digijava.module.aim.action.dataimporter.util.ImporterUtil.formatDateFromDateObject(dateStr.trim());
                                     if (formatted != null) {
                                         importDataModel.setActual_completion_date(formatted);
-                                    } else {
-                                        importDataModel.setActual_completion_date(dateStr.trim());
                                     }
                                 }
                                 break;

@@ -77,6 +77,13 @@
         });
       }
 
+      if ($('#defaultProgramClassification').length) {
+        applySelect2('#defaultProgramClassification', {
+          width: '100%',
+          placeholder: '<digi:trn jsFriendly="true">Select fallback program classification</digi:trn>'
+        });
+      }
+
       if ($('#data-sheet').length) {
         applySelect2('#data-sheet', {
           width: '100%',
@@ -121,6 +128,28 @@
         if (defaultLocationId) {
           $('#defaultLocationId').val(defaultLocationId).trigger('change.select2');
         }
+      }
+      toggleProgramClassificationFallback();
+    }
+
+    function hasMappedProgramField() {
+      return $('#selected-pairs-table-body tr').filter(function() {
+        return $(this).attr('data-selected-field') === 'Program Name';
+      }).length > 0;
+    }
+
+    function hasMappedProgramClassificationField() {
+      return $('#selected-pairs-table-body tr').filter(function() {
+        return $(this).attr('data-selected-field') === 'Program Classification';
+      }).length > 0;
+    }
+
+    function toggleProgramClassificationFallback() {
+      var hasMappings = $('#selected-pairs-table-body tr').length > 0;
+      var showFallback = hasMappings && hasMappedProgramField() && !hasMappedProgramClassificationField();
+      $('#program-classification-fallback').toggle(showFallback);
+      if (!showFallback) {
+        $('#defaultProgramClassification').val('').trigger('change.select2');
       }
     }
 
@@ -199,20 +228,20 @@
           fileType = 'excel';
         }
         if (fileType === "csv") {
-          $('#select-file-label').html("Select csv file");
+          $('#select-file-label').html("<digi:trn jsFriendly='true'>Select CSV File</digi:trn>");
           $('#data-file').attr("accept", ".csv");
           $('#template-file').attr("accept", ".csv");
           $('#separator-div').hide();
           $('#data-sheet-choice-div').hide();
         } else if(fileType==="text") {
-          $('#select-file-label').html("Select text file");
+          $('#select-file-label').html("<digi:trn jsFriendly='true'>Select Text File</digi:trn>");
           $('#data-file').attr("accept", ".txt");
           $('#template-file').attr("accept", ".txt");
           $('#separator-div').show();
           $('#data-sheet-choice-div').hide();
         }
         else if(fileType==="excel") {
-          $('#select-file-label').html("Select excel file");
+          $('#select-file-label').html("<digi:trn jsFriendly='true'>Select Excel File</digi:trn>");
           $('#data-file').attr("accept", ".xls,.xlsx");
           $('#template-file').attr("accept", ".xls,.xlsx");
           $('#separator-div').hide();
@@ -240,11 +269,11 @@
         formData.append('action', 'getDataFileSheets');
         formData.append('fileType', $('#file-type').val());
         var $select = $('#data-sheet');
-        $select.prop('disabled', true).empty().append('<option value="">-- Loading... --</option>');
+        $select.prop('disabled', true).empty().append('<option value=""><digi:trn jsFriendly="true">-- Loading... --</digi:trn></option>');
         fetch("${pageContext.request.contextPath}/aim/dataImporter.do", { method: "POST", body: formData })
           .then(function(r) { return r.json(); })
           .then(function(names) {
-            $select.empty().append('<option value="">-- Select sheet --</option>');
+            $select.empty().append('<option value=""><digi:trn jsFriendly="true">-- Select Sheet --</digi:trn></option>');
             if (Array.isArray(names)) {
               names.forEach(function(name) {
                 $select.append($('<option></option>').attr('value', name).text(name));
@@ -253,7 +282,7 @@
             }
           })
           .catch(function() {
-            $select.empty().append('<option value="">-- Error loading sheets --</option>').prop('disabled', false);
+            $select.empty().append('<option value=""><digi:trn jsFriendly="true">-- Error Loading Sheets --</digi:trn></option>').prop('disabled', false);
             alert("<digi:trn jsFriendly='true'>Could not load sheets from file.</digi:trn>");
           });
       });
@@ -366,10 +395,32 @@
       tbody.appendChild(row);
     }
 
-    function hasMappedOrgGroupField() {
+    function hasMappedField(fieldName) {
       return $('#selected-pairs-table-body tr').filter(function() {
-        return $(this).attr('data-selected-field') === 'Organization Group';
+        return $(this).attr('data-selected-field') === fieldName;
       }).length > 0;
+    }
+
+    function hasAnyMappedOrgMissingGroupMapping() {
+      if (hasMappedField('Organization Group')) {
+        return false;
+      }
+      var roleMappings = [
+        ['Donor Agency', 'Donor Organization Group'],
+        ['Responsible Organization', 'Responsible Organization Group'],
+        ['Beneficiary Agency', 'Beneficiary Agency Group'],
+        ['Executing Agency', 'Executing Agency Group'],
+        ['Implementing Agency', 'Implementing Agency Group'],
+        ['Contracting Agency', 'Contracting Agency Group']
+      ];
+      for (var i = 0; i < roleMappings.length; i++) {
+        var orgField = roleMappings[i][0];
+        var groupField = roleMappings[i][1];
+        if (hasMappedField(orgField) && !hasMappedField(groupField)) {
+          return true;
+        }
+      }
+      return false;
     }
 
     function uploadTemplateFile() {
@@ -475,11 +526,16 @@
       var createMissingOrgs = $('#createMissingOrgs').prop('checked');
       var createMissingSectors = $('#createMissingSectors').prop('checked');
       var createMissingOrgGroups = $('#createMissingOrgGroups').prop('checked');
+      var createMissingPrograms = $('#createMissingPrograms').prop('checked');
+      var replaceExistingTransactions = $('#replaceExistingTransactions').prop('checked');
       var orgGroupId = $('#orgGroupId').val();
       var defaultActivityStatusId = $('#defaultActivityStatusId').val();
       var defaultLocationId = $('#defaultLocationId').val() || $('#defaultLocationId').attr('data-default-location-id') || '';
-      var hasOrgGroupMapping = hasMappedOrgGroupField();
+      var defaultProgramClassification = $('#defaultProgramClassification').val();
+      var anyMappedOrgMissingGroupMapping = hasAnyMappedOrgMissingGroupMapping();
       var hasProjectLocationMapping = hasMappedProjectLocationField();
+      var hasProgramMapping = hasMappedProgramField();
+      var hasProgramClassificationMapping = hasMappedProgramClassificationField();
       console.log("Internal", internal);
       console.log("Skip existing", skipExisting);
       console.log("Skip records without transactions", skipRecordsWithoutTransactions);
@@ -488,15 +544,22 @@
       console.log("Create missing orgs", createMissingOrgs);
       console.log("Create missing sectors", createMissingSectors);
       console.log("Create missing org groups", createMissingOrgGroups);
+      console.log("Create missing programs", createMissingPrograms);
+      console.log("Replace existing transactions", replaceExistingTransactions);
       console.log("Org group id", orgGroupId);
       console.log("Default activity status id", defaultActivityStatusId);
       console.log("Default location id", defaultLocationId);
-      if (createMissingOrgs && !orgGroupId && !hasOrgGroupMapping && !createMissingOrgGroups) {
-        alert("<digi:trn jsFriendly='true'>Please select an Organization Group, map the Organization Group column, or enable organization group creation for newly created organizations.</digi:trn>");
+      console.log("Default program classification", defaultProgramClassification);
+      if (createMissingOrgs && !orgGroupId && !createMissingOrgGroups && anyMappedOrgMissingGroupMapping) {
+        alert("<digi:trn jsFriendly='true'>Please select a fallback Organization Group (or enable organization-group creation) when any mapped organization field has no corresponding group mapping.</digi:trn>");
         return;
       }
       if (!hasProjectLocationMapping && !defaultLocationId) {
         alert("<digi:trn jsFriendly='true'>Please select a fallback location when no Project Location column is mapped.</digi:trn>");
+        return;
+      }
+      if (hasProgramMapping && !hasProgramClassificationMapping && !defaultProgramClassification) {
+        alert("<digi:trn jsFriendly='true'>Please select a default program classification when no Program Classification column is mapped.</digi:trn>");
         return;
       }
       var dataSeparator = $('#data-separator').val();
@@ -524,6 +587,8 @@
       formData.append('createMissingOrgs', createMissingOrgs);
       formData.append('createMissingSectors', createMissingSectors);
       formData.append('createMissingOrgGroups', createMissingOrgGroups);
+      formData.append('createMissingPrograms', createMissingPrograms);
+      formData.append('replaceExistingTransactions', replaceExistingTransactions);
       if (createMissingOrgs && orgGroupId) {
         formData.append('orgGroupId', orgGroupId);
       }
@@ -532,6 +597,9 @@
       }
       if (defaultLocationId) {
         formData.append('defaultLocationId', defaultLocationId);
+      }
+      if (defaultProgramClassification) {
+        formData.append('defaultProgramClassification', defaultProgramClassification);
       }
       formData.append('action',"uploadDataFile");
       formData.append('fileType', fileType);
@@ -588,10 +656,10 @@
       --accent-warm: #8a6f56;
       --surface-muted: #f0f2f4;
       --row-alt: #f8f9fa;
-      --shadow: 0 8px 20px rgba(25, 39, 52, 0.06);
-      --radius-lg: 20px;
-      --radius-md: 14px;
-      --radius-sm: 10px;
+      --shadow: 0 4px 12px rgba(25, 39, 52, 0.05);
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
     }
 
     html {
@@ -601,8 +669,8 @@
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      font-size: 14px;
-      line-height: 1.5;
+      font-size: 12px;
+      line-height: 1.4;
       color: var(--text-strong);
       background: var(--page-bg);
     }
@@ -617,7 +685,7 @@
     .importer-page {
       max-width: 1180px;
       margin: 0 auto;
-      padding: 40px 20px 56px;
+      padding: 22px 16px 34px;
     }
 
     .hero-card,
@@ -630,52 +698,53 @@
     }
 
     .hero-card {
-      border-radius: 24px;
-      padding: 36px;
-      margin-bottom: 24px;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 14px;
       background: var(--panel-bg);
     }
 
     .hero-card h1,
     .workspace-card h2,
     .upload-stage h3 {
-      margin: 0 0 10px;
-      font-size: 1.5rem;
+      margin: 0 0 8px;
+      font-size: 18px;
       font-weight: 700;
-      letter-spacing: 0.02em;
+      letter-spacing: 0;
     }
 
     .hero-card p,
     .section-copy,
     .helper-note {
       color: var(--text-soft);
-      line-height: 1.6;
+      line-height: 1.45;
       margin: 0;
+      font-size: 12px;
     }
 
     .panel-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      margin-bottom: 24px;
+      gap: 14px;
+      margin-bottom: 14px;
     }
 
     .panel-card,
     .workspace-card,
     .upload-stage {
       border-radius: var(--radius-lg);
-      padding: 24px;
+      padding: 16px;
     }
 
     .workspace-card {
-      margin-top: 24px;
+      margin-top: 14px;
     }
 
     .section-label {
       display: inline-block;
-      margin-bottom: 8px;
-      font-size: 13px;
-      letter-spacing: 0.18em;
+      margin-bottom: 6px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--accent);
       font-weight: 700;
@@ -683,8 +752,8 @@
 
     label {
       display: inline-block;
-      margin-bottom: 6px;
-      font-size: 14px;
+      margin-bottom: 4px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--text-strong);
     }
@@ -695,16 +764,16 @@
       width: 100%;
       max-width: 100%;
       box-sizing: border-box;
-      padding: 12px 14px;
+      padding: 8px 10px;
       border-radius: var(--radius-sm);
       border: 1px solid rgba(22, 53, 67, 0.18);
       background: #fff;
       color: var(--text-strong);
-      font-size: 14px;
+      font-size: 12px;
     }
 
     input[type="file"] {
-      padding: 10px 12px;
+      padding: 7px 9px;
       background: var(--surface-muted);
     }
 
@@ -712,12 +781,12 @@
     button {
       border: 1px solid #506673;
       border-radius: 999px;
-      padding: 12px 18px;
+      padding: 8px 14px;
       font-weight: 700;
       cursor: pointer;
       color: #fff;
       background: var(--accent);
-      font-size: 14px;
+      font-size: 12px;
       box-shadow: none;
       transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
     }
@@ -736,14 +805,14 @@
     .inline-field,
     .toggle-grid,
     .sheet-choice-card {
-      margin-top: 16px;
+      margin-top: 12px;
     }
 
     .toggle-grid {
       display: grid;
-      gap: 10px;
-      margin-top: 18px;
-      padding: 18px;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 12px;
       border-radius: var(--radius-md);
       background: var(--surface-muted);
       border: 1px solid var(--panel-border);
@@ -776,16 +845,16 @@
     table th,
     table td {
       text-align: left;
-      padding: 14px 16px;
-      font-size: 14px;
+      padding: 10px 12px;
+      font-size: 12px;
       border-bottom: 1px solid rgba(22, 53, 67, 0.08);
     }
 
     table th {
       background: #eef1f3;
       color: var(--text-strong);
-      font-size: 13px;
-      letter-spacing: 0.12em;
+      font-size: 11px;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
@@ -800,25 +869,25 @@
     .mapping-toolbar {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
+      gap: 12px;
       align-items: end;
-      margin-bottom: 18px;
+      margin-bottom: 12px;
     }
 
     .mapping-actions {
       display: flex;
-      gap: 12px;
+      gap: 8px;
       flex-wrap: wrap;
-      margin-top: 16px;
+      margin-top: 10px;
     }
 
     .upload-stage {
-      margin-top: 22px;
+      margin-top: 14px;
     }
 
     #config-empty-note {
-      margin-top: 18px;
-      padding: 16px 18px;
+      margin-top: 12px;
+      padding: 10px 12px;
       border-radius: var(--radius-md);
       background: #f3efe9;
       color: #6a5a48;
@@ -826,10 +895,10 @@
     }
 
     .select2-container--default .select2-selection--single {
-      height: 46px;
+      height: 34px;
       border-radius: var(--radius-sm);
       border: 1px solid rgba(22, 53, 67, 0.18);
-      padding: 8px 12px;
+      padding: 3px 8px;
       display: flex;
       align-items: center;
       background: #fff;
@@ -837,20 +906,20 @@
 
     .select2-container--default .select2-selection--single .select2-selection__rendered {
       color: var(--text-strong);
-      font-size: 14px;
-      line-height: 28px;
+      font-size: 12px;
+      line-height: 24px;
       padding-left: 0;
     }
 
     .select2-dropdown {
-      border-radius: 14px;
+      border-radius: 8px;
       border-color: rgba(22, 53, 67, 0.18);
       overflow: hidden;
     }
 
     .select2-search__field {
-      border-radius: 10px;
-      padding: 8px 10px;
+      border-radius: 6px;
+      padding: 6px 8px;
     }
 
     @media (max-width: 768px) {
@@ -875,14 +944,14 @@
 <body>
 <div class="importer-page">
   <div class="hero-card">
-    <span class="section-label">Import Workspace</span>
+    <span class="section-label"><digi:trn>Import Workspace</digi:trn></span>
     <h1><digi:trn>Import Data</digi:trn></h1>
     <p><digi:trn>Prepare a template, map source columns to AMP entity fields, and upload your data only after the configuration table is ready.</digi:trn></p>
   </div>
 
   <div class="panel-grid">
     <div class="panel-card">
-      <span class="section-label">Step 1</span>
+      <span class="section-label"><digi:trn>Step 1</digi:trn></span>
       <h2><digi:trn>Choose File Settings</digi:trn></h2>
       <p class="section-copy"><digi:trn>Pick the source format and optionally load an existing configuration before uploading a template.</digi:trn></p>
 
@@ -909,7 +978,7 @@
     </div>
 
     <div class="panel-card">
-      <span class="section-label">Step 2</span>
+      <span class="section-label"><digi:trn>Step 2</digi:trn></span>
       <h2><digi:trn>Load Configuration</digi:trn></h2>
       <p class="section-copy"><digi:trn>Resume from a saved mapping or start with a fresh template upload.</digi:trn></p>
 
@@ -939,7 +1008,7 @@
     <html:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
       <input type="hidden" id="current-config-name" value="">
 
-      <span class="section-label">Step 3</span>
+      <span class="section-label"><digi:trn>Step 3</digi:trn></span>
       <h2><digi:trn>Build Your Mapping</digi:trn></h2>
       <p class="section-copy"><digi:trn>Search entity fields, add mappings, and review the configuration table before uploading the actual data file.</digi:trn></p>
 
@@ -984,7 +1053,7 @@
       </div>
 
       <div id="data-upload-section" class="upload-stage" style="display: none;">
-        <span class="section-label">Step 4</span>
+        <span class="section-label"><digi:trn>Step 4</digi:trn></span>
         <h3><digi:trn>Upload Data File</digi:trn></h3>
         <p class="section-copy"><digi:trn>This section appears only when the configuration table contains mappings.</digi:trn></p>
 
@@ -1014,6 +1083,8 @@
           <label class="toggle-item" for="createMissingOrgs"><input type="checkbox" id="createMissingOrgs" name="createMissingOrgs"> <digi:trn>Create missing organizations</digi:trn></label>
           <label class="toggle-item" for="createMissingSectors"><input type="checkbox" id="createMissingSectors" name="createMissingSectors"> <digi:trn>Create missing sectors</digi:trn></label>
           <label class="toggle-item" for="createMissingOrgGroups"><input type="checkbox" id="createMissingOrgGroups" name="createMissingOrgGroups"> <digi:trn>Create missing organization groups for new organizations</digi:trn></label>
+          <label class="toggle-item" for="createMissingPrograms"><input type="checkbox" id="createMissingPrograms" name="createMissingPrograms"> <digi:trn>Create missing programs</digi:trn></label>
+          <label class="toggle-item" for="replaceExistingTransactions"><input type="checkbox" id="replaceExistingTransactions" name="replaceExistingTransactions"> <digi:trn>Replace existing transactions</digi:trn></label>
         </div>
 
         <div id="orgGroupDiv" style="display:none; margin-top:16px;">
@@ -1043,6 +1114,17 @@
             <option value=""><digi:trn>-- Select Location --</digi:trn></option>
             <c:forEach var="location" items="${availableLocations}">
               <option value="${location.id}" <c:if test="${defaultLocationId == location.id}">selected="selected"</c:if>>${location.hierarchicalName}</option>
+            </c:forEach>
+          </select>
+        </div>
+
+        <div id="program-classification-fallback" style="display:none; margin-top:16px;">
+          <label for="defaultProgramClassification"><digi:trn>Fallback Program Classification</digi:trn></label>
+          <div class="helper-note" style="margin-bottom: 10px;"><digi:trn>Used only when Program Name is mapped but Program Classification is not.</digi:trn></div>
+          <select id="defaultProgramClassification" name="defaultProgramClassification" style="width: 100%;">
+            <option value=""><digi:trn>-- Select Program Classification --</digi:trn></option>
+            <c:forEach var="programClassification" items="${programClassifications}">
+              <option value="${programClassification}">${programClassification}</option>
             </c:forEach>
           </select>
         </div>

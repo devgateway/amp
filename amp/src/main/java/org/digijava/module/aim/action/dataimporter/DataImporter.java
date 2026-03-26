@@ -55,10 +55,12 @@ import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.remo
 
 import org.digijava.module.aim.action.dataimporter.util.ImporterConstants;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -90,6 +92,7 @@ public class DataImporter extends Action {
         List<AmpOrgGroup> orgGroups = DbUtil.getAllOrgGroups();
         request.setAttribute("orgGroups", orgGroups);
         request.setAttribute("activityStatuses", getActivityStatuses());
+        request.setAttribute("programClassifications", getProgramClassificationNames());
         List<AmpCategoryValueLocations> availableLocations = getAvailableLocations();
         request.setAttribute("availableLocations", availableLocations);
         AmpCategoryValueLocations defaultLocation = DynLocationManagerUtil.getDefaultCountry();
@@ -372,9 +375,12 @@ public class DataImporter extends Action {
                 boolean createMissingOrgs = dataImporterForm.isCreateMissingOrgs();
                 boolean createMissingSectors = dataImporterForm.isCreateMissingSectors();
                 boolean createMissingOrgGroups = dataImporterForm.isCreateMissingOrgGroups();
+                boolean createMissingPrograms = dataImporterForm.isCreateMissingPrograms();
+                boolean replaceExistingTransactions = dataImporterForm.isReplaceExistingTransactions();
                 Long orgGroupId = dataImporterForm.getOrgGroupId();
                 Long defaultActivityStatusId = dataImporterForm.getDefaultActivityStatusId();
                 Long defaultLocationId = dataImporterForm.getDefaultLocationId();
+                String defaultProgramClassification = dataImporterForm.getDefaultProgramClassification();
                 logger.info("Internal: "+ isInternal);
                 logger.info("Skip existing: "+ skipExisting);
                 logger.info("Validate activities: "+ validateActivities);
@@ -383,13 +389,41 @@ public class DataImporter extends Action {
                 logger.info("Create missing orgs: "+ createMissingOrgs);
                 logger.info("Create missing sectors: {}", createMissingSectors);
                 logger.info("Create missing org groups: " + createMissingOrgGroups);
+                logger.info("Create missing programs: " + createMissingPrograms);
+                logger.info("Replace existing transactions: " + replaceExistingTransactions);
                 logger.info("Org group id: "+ orgGroupId);
                 logger.info("Default activity status id: {}", defaultActivityStatusId);
                 logger.info("Default location id: {}", defaultLocationId);
+                logger.info("Default program classification: {}", defaultProgramClassification);
+                boolean hasGenericOrgGroupMapping = columnPairsToUse.containsValue(ImporterConstants.ORG_GROUP);
+                boolean donorMissingGroupMapping = columnPairsToUse.containsValue(ImporterConstants.DONOR_AGENCY)
+                    && !hasGenericOrgGroupMapping
+                    && !columnPairsToUse.containsValue(ImporterConstants.DONOR_ORGANIZATION_GROUP);
+                boolean responsibleMissingGroupMapping = columnPairsToUse.containsValue(ImporterConstants.RESPONSIBLE_ORGANIZATION)
+                    && !hasGenericOrgGroupMapping
+                    && !columnPairsToUse.containsValue(ImporterConstants.RESPONSIBLE_ORGANIZATION_GROUP);
+                boolean beneficiaryMissingGroupMapping = columnPairsToUse.containsValue(ImporterConstants.BENEFICIARY_AGENCY)
+                    && !hasGenericOrgGroupMapping
+                    && !columnPairsToUse.containsValue(ImporterConstants.BENEFICIARY_AGENCY_GROUP);
+                boolean executingMissingGroupMapping = columnPairsToUse.containsValue(ImporterConstants.EXECUTING_AGENCY)
+                    && !hasGenericOrgGroupMapping
+                    && !columnPairsToUse.containsValue(ImporterConstants.EXECUTING_AGENCY_GROUP);
+                boolean implementingMissingGroupMapping = columnPairsToUse.containsValue(ImporterConstants.IMPLEMENTING_AGENCY)
+                    && !hasGenericOrgGroupMapping
+                    && !columnPairsToUse.containsValue(ImporterConstants.IMPLEMENTING_AGENCY_GROUP);
+                boolean contractingMissingGroupMapping = columnPairsToUse.containsValue(ImporterConstants.CONTRACTING_AGENCY)
+                    && !hasGenericOrgGroupMapping
+                    && !columnPairsToUse.containsValue(ImporterConstants.CONTRACTING_AGENCY_GROUP);
+                boolean anyMappedOrgMissingGroup = donorMissingGroupMapping
+                    || responsibleMissingGroupMapping
+                    || beneficiaryMissingGroupMapping
+                    || executingMissingGroupMapping
+                    || implementingMissingGroupMapping
+                    || contractingMissingGroupMapping;
                 if (createMissingOrgs && orgGroupId == null && !createMissingOrgGroups
-                        && !columnPairsToUse.containsValue(ImporterConstants.ORG_GROUP)) {
+                    && anyMappedOrgMissingGroup) {
                     response.setHeader("errorMessage",
-                            "Creating missing organizations requires a fallback Organization Group, the 'Create missing org groups' option, or an 'Organization Group' column mapping.");
+                        "Please select a fallback Organization Group (or enable organization-group creation) when any mapped organization field has no corresponding group mapping.");
                     response.setStatus(400);
                     return mapping.findForward("importData");
                 }
@@ -403,15 +437,22 @@ public class DataImporter extends Action {
                     response.setStatus(400);
                     return mapping.findForward("importData");
                 }
+                if (columnPairsToUse.containsValue(ImporterConstants.PROGRAM_NAME)
+                        && !columnPairsToUse.containsValue(ImporterConstants.PROGRAM_CLASSIFICATION)
+                        && (defaultProgramClassification == null || defaultProgramClassification.trim().isEmpty())) {
+                    response.setHeader("errorMessage", "Please select a default program classification when no 'Program Classification' column is mapped.");
+                    response.setStatus(400);
+                    return mapping.findForward("importData");
+                }
                 logger.info("Configuration: {}", columnPairsToUse);
                 try {
                     if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
                         String dataSheetChoice = request.getParameter("dataSheetChoice");
                         String dataSheetName = request.getParameter("dataSheetName");
                         boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
-                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId);
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId);
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions);
                     }
                 } catch (Exception e) {
                     ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
@@ -615,10 +656,16 @@ public class DataImporter extends Action {
         fieldsInfos.add(ImporterConstants.EXCHANGE_RATE);
         fieldsInfos.add(ImporterConstants.DONOR_AGENCY_CODE);
         fieldsInfos.add(ImporterConstants.ORG_GROUP);
+        fieldsInfos.add(ImporterConstants.DONOR_ORGANIZATION_GROUP);
         fieldsInfos.add(ImporterConstants.RESPONSIBLE_ORGANIZATION);
+        fieldsInfos.add(ImporterConstants.RESPONSIBLE_ORGANIZATION_GROUP);
         fieldsInfos.add(ImporterConstants.RESPONSIBLE_ORGANIZATION_CODE);
         fieldsInfos.add(ImporterConstants.EXECUTING_AGENCY);
+        fieldsInfos.add(ImporterConstants.EXECUTING_AGENCY_GROUP);
         fieldsInfos.add(ImporterConstants.IMPLEMENTING_AGENCY);
+        fieldsInfos.add(ImporterConstants.IMPLEMENTING_AGENCY_GROUP);
+        fieldsInfos.add(ImporterConstants.BENEFICIARY_AGENCY_GROUP);
+        fieldsInfos.add(ImporterConstants.CONTRACTING_AGENCY_GROUP);
         fieldsInfos.add(ImporterConstants.ACTUAL_DISBURSEMENT);
         fieldsInfos.add(ImporterConstants.ACTUAL_COMMITMENT);
         fieldsInfos.add(ImporterConstants.ACTUAL_EXPENDITURE);
@@ -641,6 +688,11 @@ public class DataImporter extends Action {
         // Indicator columns for M&E import
         fieldsInfos.add(ImporterConstants.INDICATOR_NAME);
         fieldsInfos.add(ImporterConstants.PROGRAM_NAME);
+        fieldsInfos.add(ImporterConstants.PROGRAM_CLASSIFICATION);
+        fieldsInfos.add(ImporterConstants.PRIMARY_PROGRAM);
+        fieldsInfos.add(ImporterConstants.SECONDARY_PROGRAM);
+        fieldsInfos.add(ImporterConstants.TERTIARY_PROGRAM);
+        fieldsInfos.add(ImporterConstants.NATIONAL_PLAN_OBJECTIVE);
         fieldsInfos.add(ImporterConstants.INDICATOR_LOCATION);
         fieldsInfos.add(ImporterConstants.ORIGINAL_BASE_VALUE);
         fieldsInfos.add(ImporterConstants.ORIGINAL_BASE_VALUE_DATE);
@@ -678,6 +730,19 @@ public class DataImporter extends Action {
                 .comparing(AmpCategoryValue::getIndex, Comparator.nullsLast(Integer::compareTo))
                 .thenComparing(AmpCategoryValue::getValue, String.CASE_INSENSITIVE_ORDER));
         return activityStatuses;
+    }
+
+    private List<String> getProgramClassificationNames() {
+        List<AmpActivityProgramSettings> settings = ProgramUtil.getEnabledProgramSettings();
+        if (settings == null || settings.isEmpty()) {
+            settings = ProgramUtil.getAmpActivityProgramSettingsList(true);
+        }
+        return settings.stream()
+                .filter(Objects::nonNull)
+                .map(AmpActivityProgramSettings::getName)
+                .filter(Objects::nonNull)
+                .sorted(String.CASE_INSENSITIVE_ORDER)
+                .collect(Collectors.toList());
     }
 
 }

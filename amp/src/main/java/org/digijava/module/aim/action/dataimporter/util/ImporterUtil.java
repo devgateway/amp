@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
@@ -113,8 +114,11 @@ public class ImporterUtil {
             } else {
                 int columnIndex1 = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY));
                 int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
+                int donorOrgGroupColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_ORGANIZATION_GROUP));
                 String donorAgencyCode = donorAgencyCodeColumn >= 0 ? getStringValueFromCell(row.getCell(donorAgencyCodeColumn), true) : null;
-                updateOrgs(importDataModel, columnIndex1 >= 0 ? Objects.requireNonNull(getStringValueFromCell(row.getCell(columnIndex1), false)).trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
+                String donorOrgGroupNames = donorOrgGroupColumn >= 0 ? getStringValueFromCell(row.getCell(donorOrgGroupColumn), false) : null;
+                String resolvedDonorOrgGroups = StringUtils.isNotBlank(donorOrgGroupNames) ? donorOrgGroupNames.trim() : importedOrgGroupName;
+                updateOrgs(importDataModel, columnIndex1 >= 0 ? Objects.requireNonNull(getStringValueFromCell(row.getCell(columnIndex1), false)).trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
                 List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
                 List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
                 for (int i = 0; i < donors.size(); i++) {
@@ -181,8 +185,10 @@ public class ImporterUtil {
             } else {
                 String donorColumn = row.get(getKey(config, ImporterConstants.DONOR_AGENCY));
                 String donorAgencyCode = row.get(getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
+                String donorOrgGroupNames = row.get(getKey(config, ImporterConstants.DONOR_ORGANIZATION_GROUP));
+                String resolvedDonorOrgGroups = StringUtils.isNotBlank(donorOrgGroupNames) ? donorOrgGroupNames.trim() : importedOrgGroupName;
 
-                updateOrgs(importDataModel, donorColumn != null && !donorColumn.isEmpty() ? donorColumn.trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
+                updateOrgs(importDataModel, donorColumn != null && !donorColumn.isEmpty() ? donorColumn.trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
                 List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
                 List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
                 for (int i = 0; i < donors.size(); i++) {
@@ -218,7 +224,7 @@ public class ImporterUtil {
             }
             return cell.getStringCellValue();
         } catch (Exception e) {
-            logger.error("Error getting cell {} value: ", cell, e);
+            logger.error("Error getting cell {} value: ", cell);
             return nullable ? null : "";
         }
     }
@@ -234,7 +240,7 @@ public class ImporterUtil {
             }
             return cell.getNumericCellValue();
         } catch (Exception e) {
-            logger.error("Error getting cell {} value: ", cell, e);
+            logger.error("Error getting cell {} value: ", cell);
             return 0;
         }
     }
@@ -245,7 +251,7 @@ public class ImporterUtil {
 
     }
 
-    private static String extractDateFromStringCell(Cell cell) {
+    public static String extractDateFromStringCell(Cell cell) {
         if (cell == null) {
             return null;
         }
@@ -339,6 +345,7 @@ public class ImporterUtil {
             List<DateTimeFormatter> formatters = Arrays.asList(
                     DateTimeFormatter.ofPattern("yyyy-MM-dd"),
                     DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+                    DateTimeFormatter.ofPattern("d/M/yyyy"),
                     DateTimeFormatter.ofPattern("MM/dd/yyyy"),
                     DateTimeFormatter.ofPattern("MM-dd-yyyy"),
                     DateTimeFormatter.ofPattern("yyyy/MM/dd"),
@@ -371,9 +378,10 @@ public class ImporterUtil {
     }
 
 
-    private static String formatDateFromDateObject(String date) {
+    public static String formatDateFromDateObject(String date) {
         List<SimpleDateFormat> formatters = Arrays.asList(
                 new SimpleDateFormat("yyyy-MM-dd"),
+                new SimpleDateFormat("d/M/yyyy"),
                 new SimpleDateFormat("dd/MM/yyyy"),
                 new SimpleDateFormat("MM/dd/yyyy"),
                 new SimpleDateFormat("MM-dd-yyyy"),
@@ -416,6 +424,7 @@ public class ImporterUtil {
     public static boolean isCommonDateFormat(String dateString) {
         List<String> dateFormats = Arrays.asList(
                 "yyyy-MM-dd",
+                "d/M/yyyy",
                 "dd-MM-yyyy",
                 "MM-dd-yyyy",
                 "MM/dd/yyyy",
@@ -940,7 +949,7 @@ public class ImporterUtil {
     }
 
     /** @return activity ID on success, null on skip or failure */
-    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities) throws JsonProcessingException {
+    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities, boolean replaceExistingTransactions) throws JsonProcessingException {
         if (session == null || !session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
@@ -956,6 +965,7 @@ public class ImporterUtil {
         objectMapper.configure(ESCAPE_NON_ASCII, false); // Disable escaping of non-ASCII characters during serialization
         objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 
+        pruneParentLocationsWhenChildPresent(importDataModel, session);
         normalizeLocationPercentages(importDataModel);
         Map<String, Object> map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
@@ -996,10 +1006,14 @@ public class ImporterUtil {
             }
             importDataModel.setProject_title(existing.getName() != null ? existing.getName() : "");
             importDataModel.setProject_code(!Objects.equals(importDataModel.getProject_code(), "") ? importDataModel.getProject_code() : (existing.getProjectCode() != null ? existing.getProjectCode() : ""));
-            updateFundingOrgsAndSectorsWithAlreadyExisting(existing, importDataModel);
+            updateFundingOrgsAndSectorsWithAlreadyExisting(existing, importDataModel, replaceExistingTransactions);
             // Merge existing activity locations into payload so we only add (row + existing), never remove
             mergeExistingActivityLocationsIntoImport(existing, importDataModel);
+            // Preserve existing programs with their DB IDs so the API updates in-place; avoids both
+            // StaleStateException (delete+insert) and SizeValidator failures on re-validation
+            preserveExistingPrograms(existing, importDataModel);
             ensureImplementationLevelWhenHasLocations(importDataModel, session);
+            pruneParentLocationsWhenChildPresent(importDataModel, session);
             normalizeLocationPercentages(importDataModel);
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
@@ -1008,11 +1022,6 @@ public class ImporterUtil {
             map.entrySet().removeIf(entry -> entry.getValue() == null || "null".equals(String.valueOf(entry.getValue())));
             
             map.remove("indicators"); // preserve existing indicators; we append in addIndicatorDataToActivity
-            // Do not replace programs; avoids StaleStateException when deleting AMP_ACTIVITY_PROGRAM rows
-            map.remove("national_plan_objective");
-            map.remove("primary_programs");
-            map.remove("secondary_programs");
-            map.remove("tertiary_programs");
             // Avoid triggering merge of contacts/documents that may reference deleted rows (ObjectNotFoundException)
             map.remove("activity_contacts");
             map.remove("activityContacts");
@@ -1081,9 +1090,9 @@ public class ImporterUtil {
         return activityId;
     }
 
-    private static void updateFundingOrgsAndSectorsWithAlreadyExisting(AmpActivityVersion ampActivityVersion, ImportDataModel importDataModel) {
+    private static void updateFundingOrgsAndSectorsWithAlreadyExisting(AmpActivityVersion ampActivityVersion, ImportDataModel importDataModel, boolean replaceExistingTransactions) {
 
-        if (ampActivityVersion.getFunding() != null) {
+        if (!replaceExistingTransactions && ampActivityVersion.getFunding() != null) {
             Hibernate.initialize(ampActivityVersion.getFunding());
             Long adjType = getCategoryValue("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY, "");
             Long assType = getCategoryValue("assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "");
@@ -1237,6 +1246,29 @@ public class ImporterUtil {
      * (row locations + existing), never remove. Any existing activity location not already in importDataModel
      * is added. This avoids activity/update deleting locations (e.g. those referenced by indicator connections).
      */
+    private static void preserveExistingPrograms(AmpActivityVersion existing, ImportDataModel importDataModel) {
+        if (existing == null || importDataModel == null) return;
+        Set<AmpActivityProgram> actPrograms = existing.getActPrograms();
+        if (actPrograms == null || actPrograms.isEmpty()) return;
+        Hibernate.initialize(actPrograms);
+        for (AmpActivityProgram ap : actPrograms) {
+            if (ap.getProgram() == null || ap.getProgram().getAmpThemeId() == null) continue;
+            Program p = new Program();
+            p.setId(ap.getAmpActivityProgramId());
+            p.setProgram(ap.getProgram().getAmpThemeId());
+            String settingName = ap.getProgramSetting() != null ? ap.getProgramSetting().getName() : null;
+            if (ProgramUtil.NATIONAL_PLAN_OBJECTIVE.equals(settingName)) {
+                importDataModel.getNational_plan_objective().add(p);
+            } else if (ProgramUtil.PRIMARY_PROGRAM.equals(settingName)) {
+                importDataModel.getPrimary_programs().add(p);
+            } else if (ProgramUtil.SECONDARY_PROGRAM.equals(settingName)) {
+                importDataModel.getSecondary_programs().add(p);
+            } else if (ProgramUtil.TERTIARY_PROGRAM.equals(settingName)) {
+                importDataModel.getTertiary_programs().add(p);
+            }
+        }
+    }
+
     private static void mergeExistingActivityLocationsIntoImport(AmpActivityVersion existing, ImportDataModel importDataModel) {
         if (existing == null || importDataModel == null) return;
         if (existing.getLocations() == null) return;
@@ -1269,28 +1301,67 @@ public class ImporterUtil {
         if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty())
             return;
         Set<Location> locs = importDataModel.getLocations();
-        double sum = 0;
+        // Only consider locations that were found (location != null)
+        List<Location> foundLocations = new ArrayList<>();
         for (Location loc : locs) {
-            Double pct = loc.getLocation_percentage();
-            sum += (pct != null ? pct : 0);
-        }
-        if (sum <= 0) return;
-        if (Math.abs(sum - 100.0) < 0.001) return; // already 100
-        List<Location> list = new ArrayList<>(locs);
-        double scale = 100.0 / sum;
-        double running = 0;
-        for (int i = 0; i < list.size(); i++) {
-            Location loc = list.get(i);
-            double v;
-            if (i == list.size() - 1) {
-                v = 100.0 - running; // last one gets remainder so total is exactly 100
-            } else {
-                Double pct = loc.getLocation_percentage();
-                v = (pct != null ? pct : 0) * scale;
-                running += v;
+            if (loc != null && loc.getLocation() != null) {
+                foundLocations.add(loc);
             }
-            loc.setLocation_percentage(v);
         }
+        if (foundLocations.isEmpty()) {
+            return;
+        }
+
+        Map<Integer, Float> percentages = divide100(foundLocations.size());
+        for (int i = 0; i < foundLocations.size(); i++) {
+            foundLocations.get(i).setLocation_percentage((double)percentages.get(i));
+        }
+        importDataModel.setLocations(new HashSet<>(foundLocations));
+    }
+
+    /**
+     * Removes ancestor locations when both ancestor and descendant are present in payload.
+     * AMP validation rejects payloads that contain parent+child in the same locations collection.
+     */
+    private static void pruneParentLocationsWhenChildPresent(ImportDataModel importDataModel, Session session) {
+        if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().size() < 2) {
+            return;
+        }
+        if (session == null || !session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
+
+        Set<Long> selectedLocationIds = new HashSet<>();
+        for (Location loc : importDataModel.getLocations()) {
+            if (loc != null && loc.getLocation() != null) {
+                selectedLocationIds.add(loc.getLocation());
+            }
+        }
+        if (selectedLocationIds.size() < 2) {
+            return;
+        }
+
+        Set<Long> ancestorsToRemove = new HashSet<>();
+        for (Long locId : selectedLocationIds) {
+            AmpCategoryValueLocations current = session.get(AmpCategoryValueLocations.class, locId);
+            while (current != null && current.getParentLocation() != null) {
+                current = current.getParentLocation();
+                if (current != null && current.getId() != null && selectedLocationIds.contains(current.getId())) {
+                    ancestorsToRemove.add(current.getId());
+                }
+            }
+        }
+        if (ancestorsToRemove.isEmpty()) {
+            return;
+        }
+
+        Set<Location> filteredLocations = new HashSet<>();
+        for (Location loc : importDataModel.getLocations()) {
+            if (loc == null || loc.getLocation() == null || !ancestorsToRemove.contains(loc.getLocation())) {
+                filteredLocations.add(loc);
+            }
+        }
+        importDataModel.setLocations(filteredLocations);
     }
 
     /**
@@ -1299,7 +1370,6 @@ public class ImporterUtil {
     private static void ensureImplementationLevelWhenHasLocations(ImportDataModel importDataModel, Session session) {
         if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty())
             return;
-        if (importDataModel.getImplementation_level() != null) return;
         updateImpLevels(importDataModel, session);
     }
 
@@ -1546,7 +1616,7 @@ public class ImporterUtil {
         {
             name = subSector;
         }
-        for (String sectorName : splitMultiValues(name)) {
+        for (String sectorName : splitMultipleValues(name)) {
             updateSingleSector(importDataModel, sectorName, session, primary, createMissingSectors, importerSectorField);
         }
     }
@@ -1670,11 +1740,15 @@ public class ImporterUtil {
                 : AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME;
     }
 
-    private static List<String> splitMultiValues(String value) {
+    private static List<String> splitMultipleValues(String value) {
+        return splitMultipleValues(value, "[;\\u061B\\uFF1B]");
+    }
+
+    private static List<String> splitMultipleValues(String value, String separatorRegex) {
         if (value == null || value.trim().isEmpty()) return Collections.emptyList();
         List<String> result = new ArrayList<>();
         // Support standard and locale-specific semicolons used in spreadsheet exports.
-        for (String part : value.split("[;\\u061B\\uFF1B]")) {
+        for (String part : value.split(separatorRegex)) {
             String trimmed = part.trim();
             if (trimmed.length() >= 2 && trimmed.startsWith("\"") && trimmed.endsWith("\"")) {
                 trimmed = trimmed.substring(1, trimmed.length() - 1).trim();
@@ -1684,24 +1758,21 @@ public class ImporterUtil {
         return result;
     }
 
-
-    private static List<String> splitLocationNames(String locationNames) {
-        if (locationNames == null || locationNames.trim().isEmpty()) return Collections.emptyList();
-        List<String> result = new ArrayList<>();
-        for (String part : locationNames.split("[,;]")) {
-            String trimmed = part.trim();
-            if (!trimmed.isEmpty()) result.add(trimmed);
-        }
-        return result;
-    }
-
     public static void updateLocations(ImportDataModel importDataModel, String locationNames, Session session) {
         logger.info("Updating locations");
         if (locationNames == null || locationNames.trim().isEmpty()) return;
-        for (String locationName : splitLocationNames(locationNames)) {
-            if (ConstantsMap.containsKey("location_" + locationName)) {
-                Long location = ConstantsMap.get("location_" + locationName);
-                logger.info("In cache... location " + "location_" + locationName + ":" + location);
+        for (String locationName : splitMultipleValues(locationNames, "[,;\\u061B\\uFF1B]")) {
+            String normalizedLocationName = normalizeLocationNameForLookup(locationName);
+            if (normalizedLocationName.isEmpty()) {
+                continue;
+            }
+            Long cachedLocationId = ConstantsMap.get("location_" + normalizedLocationName);
+            if (cachedLocationId == null) {
+                cachedLocationId = ConstantsMap.get("location_" + locationName);
+            }
+            if (cachedLocationId != null) {
+                Long location = cachedLocationId;
+                logger.info("In cache... location " + "location_" + normalizedLocationName + ":" + location);
                 importDataModel.getLocations().add(new Location(location, 100.00));
 
             } else {
@@ -1709,29 +1780,100 @@ public class ImporterUtil {
                     session = PersistenceManager.getRequestDBSession();
                 }
 
-                final String locationNameFinal = locationName;
-                session.doWork(connection -> {
-                    String query = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
-                    try (PreparedStatement statement = connection.prepareStatement(query)) {
-                        statement.setString(1, locationNameFinal);
-
-                        try (ResultSet resultSet = statement.executeQuery()) {
-                            while (resultSet.next()) {
-                                Long location = resultSet.getLong("location_id");
-                                logger.info("Location:" + location);
-                                importDataModel.getLocations().add(new Location(location, 100.00));
-                                ConstantsMap.put("location_" + locationNameFinal, location);
-                            }
-                        }
-
-                    } catch (SQLException e) {
-                        logger.error("Error getting locations", e);
-                    }
-
-                });
+                Set<Long> resolvedLocationIds = resolveLocationIdsByName(session, normalizedLocationName);
+                if (resolvedLocationIds.isEmpty()) {
+                    logger.warn("Location not found for importer value '{}'", normalizedLocationName);
+                    continue;
+                }
+                for (Long location : resolvedLocationIds) {
+                    logger.info("Location:" + location);
+                    importDataModel.getLocations().add(new Location(location, 100.00));
+                    ConstantsMap.put("location_" + locationName, location);
+                    ConstantsMap.put("location_" + normalizedLocationName, location);
+                }
             }
         }
         updateImpLevels(importDataModel, session);
+    }
+
+    private static String normalizeLocationNameForLookup(String rawLocationName) {
+        if (rawLocationName == null) {
+            return "";
+        }
+        String normalized = rawLocationName
+                .replace('\u00A0', ' ')
+                .replace('\u202F', ' ')
+                .trim();
+        normalized = normalized.replaceAll("\\.{2,}$", "").trim();
+        return normalized;
+    }
+
+    private static Set<Long> resolveLocationIdsByName(Session session, String locationName) {
+        Set<Long> result = new LinkedHashSet<>();
+        if (locationName == null || locationName.trim().isEmpty()) {
+            return result;
+        }
+
+        if (session == null || !session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
+
+        final String exactName = locationName.trim();
+        final String likeName = "%" + exactName + "%";
+
+        session.doWork(connection -> {
+            // 1) Exact match (fast path)
+            String exactQuery = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) = LOWER(?)";
+            try (PreparedStatement statement = connection.prepareStatement(exactQuery)) {
+                statement.setString(1, exactName);
+                try (ResultSet rs = statement.executeQuery()) {
+                    while (rs.next()) {
+                        result.add(rs.getLong("location_id"));
+                    }
+                }
+            } catch (SQLException e) {
+                logger.error("Error resolving location by exact name", e);
+            }
+
+            if (!result.isEmpty()) {
+                return;
+            }
+
+            // 2) Normalized match (ignore punctuation/spacing differences, e.g. "Saint Louis" vs "Saint-Louis")
+            String normalizedQuery = "SELECT acvl.id AS location_id "
+                    + "FROM amp_category_value_location acvl "
+                    + "WHERE LOWER(regexp_replace(acvl.location_name, '[^[:alnum:]]', '', 'g')) "
+                    + "= LOWER(regexp_replace(?, '[^[:alnum:]]', '', 'g'))";
+            try (PreparedStatement statement = connection.prepareStatement(normalizedQuery)) {
+                statement.setString(1, exactName);
+                try (ResultSet rs = statement.executeQuery()) {
+                    while (rs.next()) {
+                        result.add(rs.getLong("location_id"));
+                    }
+                }
+            } catch (SQLException e) {
+                logger.error("Error resolving location by normalized name", e);
+            }
+
+            if (!result.isEmpty()) {
+                return;
+            }
+
+            // 3) Loose contains match as last fallback.
+            String containsQuery = "SELECT acvl.id AS location_id FROM amp_category_value_location acvl WHERE LOWER(acvl.location_name) LIKE LOWER(?)";
+            try (PreparedStatement statement = connection.prepareStatement(containsQuery)) {
+                statement.setString(1, likeName);
+                try (ResultSet rs = statement.executeQuery()) {
+                    while (rs.next()) {
+                        result.add(rs.getLong("location_id"));
+                    }
+                }
+            } catch (SQLException e) {
+                logger.error("Error resolving location by contains search", e);
+            }
+        });
+
+        return result;
     }
 
     public static void applyDefaultLocation(ImportDataModel importDataModel, Long locationId, Session session) {
@@ -1806,34 +1948,109 @@ public class ImporterUtil {
 
     public static void updateImpLevels(ImportDataModel importDataModel, Session session)
     {
+        if (importDataModel == null) {
+            return;
+        }
+        if (session == null || !session.isOpen()) {
+            session = PersistenceManager.getRequestDBSession();
+        }
+
+        Long resolved = resolveImplementationLevelForLocations(importDataModel, session);
+        if (resolved != null) {
+            importDataModel.setImplementation_level(resolved);
+            return;
+        }
+
+        // Fallback when no locations are present: keep previous default behavior (National).
         if (ConstantsMap.containsKey("implementation_level_")) {
             Long implementationLevel = ConstantsMap.get("implementation_level_");
-            logger.info("In cache... imp level "+"implementation_level:"+implementationLevel);
+            logger.info("In cache... imp level " + "implementation_level:" + implementationLevel);
             importDataModel.setImplementation_level(implementationLevel);
-        }else {
-            if (!session.isOpen()) {
-                session = PersistenceManager.getRequestDBSession();
-            }
-
+        } else {
             session.doWork(connection -> {
-            String query2 = "SELECT acv.id as implementation_level FROM amp_category_value acv JOIN amp_category_class acc ON acv.amp_category_class_id=acc.id WHERE LOWER(acv.category_value)=? AND LOWER(acc.keyname)=?";
-            try (PreparedStatement statement = connection.prepareStatement(query2)) {
-                statement.setString(1, "national");
-                statement.setString(2, "implementation_level");
+                String query2 = "SELECT acv.id as implementation_level FROM amp_category_value acv JOIN amp_category_class acc ON acv.amp_category_class_id=acc.id WHERE LOWER(acv.category_value)=? AND LOWER(acc.keyname)=?";
+                try (PreparedStatement statement = connection.prepareStatement(query2)) {
+                    statement.setString(1, "national");
+                    statement.setString(2, "implementation_level");
 
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    while (resultSet.next()) {
-                        Long implementationLevel = resultSet.getLong("implementation_level");
-                        logger.info("Imp level:" + implementationLevel);
-                        importDataModel.setImplementation_level(implementationLevel);
-                        ConstantsMap.put("implementation_level_", implementationLevel);
+                    try (ResultSet resultSet = statement.executeQuery()) {
+                        while (resultSet.next()) {
+                            Long implementationLevel = resultSet.getLong("implementation_level");
+                            logger.info("Imp level:" + implementationLevel);
+                            importDataModel.setImplementation_level(implementationLevel);
+                            ConstantsMap.put("implementation_level_", implementationLevel);
+                        }
                     }
-                }
 
-            } catch (SQLException e) {
-                logger.error("Error getting imp levels", e);
-            }});
+                } catch (SQLException e) {
+                    logger.error("Error getting imp levels", e);
+                }
+            });
         }
+    }
+
+    private static Long resolveImplementationLevelForLocations(ImportDataModel importDataModel, Session session) {
+        if (importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty()) {
+            return null;
+        }
+
+        Set<Long> commonAllowedLevels = null;
+        for (Location loc : importDataModel.getLocations()) {
+            if (loc == null || loc.getLocation() == null) {
+                continue;
+            }
+            Set<Long> allowedForLocation = getAllowedImplementationLevelsForLocation(loc.getLocation(), session);
+            if (allowedForLocation.isEmpty()) {
+                continue;
+            }
+            if (commonAllowedLevels == null) {
+                commonAllowedLevels = new HashSet<>(allowedForLocation);
+            } else {
+                commonAllowedLevels.retainAll(allowedForLocation);
+            }
+        }
+
+        if (commonAllowedLevels == null || commonAllowedLevels.isEmpty()) {
+            return null;
+        }
+
+        Long existingImplementationLevel = importDataModel.getImplementation_level();
+        if (existingImplementationLevel != null && commonAllowedLevels.contains(existingImplementationLevel)) {
+            return existingImplementationLevel;
+        }
+
+        // Prefer common hard-coded levels if available to keep behavior predictable.
+        Long national = CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.getIdInDatabase();
+        if (national != null && commonAllowedLevels.contains(national)) {
+            return national;
+        }
+        Long regional = CategoryConstants.IMPLEMENTATION_LEVEL_REGIONAL.getIdInDatabase();
+        if (regional != null && commonAllowedLevels.contains(regional)) {
+            return regional;
+        }
+        Long international = CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.getIdInDatabase();
+        if (international != null && commonAllowedLevels.contains(international)) {
+            return international;
+        }
+
+        return commonAllowedLevels.iterator().next();
+    }
+
+    private static Set<Long> getAllowedImplementationLevelsForLocation(Long locationId, Session session) {
+        Set<Long> allowed = new HashSet<>();
+        if (locationId == null) {
+            return allowed;
+        }
+        AmpCategoryValueLocations location = session.get(AmpCategoryValueLocations.class, locationId);
+        if (location == null || location.getParentCategoryValue() == null || location.getParentCategoryValue().getUsedValues() == null) {
+            return allowed;
+        }
+        for (AmpCategoryValue level : location.getParentCategoryValue().getUsedValues()) {
+            if (level != null && level.getId() != null) {
+                allowed.add(level.getId());
+            }
+        }
+        return allowed;
     }
 
     private static void createSector(ImportDataModel importDataModel, boolean primary, Long ampSectorId) {
@@ -1904,13 +2121,18 @@ public class ImporterUtil {
 
     public static Long updateOrgs(ImportDataModel importDataModel, String name, String code, Session session, String type, boolean createMissingOrgs, Long orgGroupId, String importedOrgGroupName, boolean createMissingOrgGroups)
     {
-        List<String> names = splitMultiValues(name);
-        List<String> codes = splitMultiValues(code);
+        List<String> names = splitMultipleValues(name);
+        List<String> codes = splitMultipleValues(code);
+        List<String> importedOrgGroups = splitMultipleValues(importedOrgGroupName);
+        String fallbackOrgGroup = importedOrgGroups.isEmpty() ? null : importedOrgGroups.get(importedOrgGroups.size() - 1);
         Long lastOrgId = null;
         for (int i = 0; i < names.size(); i++) {
             String singleName = names.get(i);
             String singleCode = i < codes.size() ? codes.get(i) : null;
-            lastOrgId = updateSingleOrg(importDataModel, singleName, singleCode, session, type, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups);
+            String singleOrgGroupName = importedOrgGroups.isEmpty()
+                    ? null
+                    : (i < importedOrgGroups.size() ? importedOrgGroups.get(i) : fallbackOrgGroup);
+            lastOrgId = updateSingleOrg(importDataModel, singleName, singleCode, session, type, createMissingOrgs, orgGroupId, singleOrgGroupName, createMissingOrgGroups);
         }
         return lastOrgId;
     }
@@ -2284,7 +2506,7 @@ public class ImporterUtil {
             return;
         }
         indicatorName = indicatorName.trim();
-        List<String> locationNames = splitLocationNames(locationNamesStr);
+        List<String> locationNames = splitMultipleValues(locationNamesStr, "[,;\\u061B\\uFF1B]");
         logger.info("addIndicatorDataToActivity: indicator='{}', locations(count={}): {}", indicatorName, locationNames.size(), locationNames);
         if (locationNames.isEmpty()) {
             logger.debug("addIndicatorDataToActivity: no location names after split");
@@ -2701,6 +2923,11 @@ public class ImporterUtil {
      * divided evenly among all activity programs (including the one just added).
      */
     public static void addProgramToActivityIfMissing(AmpActivityVersion activity, AmpTheme program, Session session) {
+        addProgramToActivityIfMissing(activity, program, session, null);
+    }
+
+    public static void addProgramToActivityIfMissing(AmpActivityVersion activity, AmpTheme program, Session session,
+                                                     AmpActivityProgramSettings programSetting) {
         if (activity == null || program == null) return;
         Set<AmpActivityProgram> actPrograms = activity.getActPrograms();
         if (actPrograms == null) {
@@ -2710,33 +2937,153 @@ public class ImporterUtil {
         for (AmpActivityProgram ap : actPrograms) {
             if (ap.getProgram() != null && program.getAmpThemeId() != null
                     && program.getAmpThemeId().equals(ap.getProgram().getAmpThemeId())) {
+                if (ap.getProgramSetting() == null && programSetting != null) {
+                    ap.setProgramSetting(programSetting);
+                    session.saveOrUpdate(ap);
+                }
                 return;
             }
         }
         AmpActivityProgram activityProgram = new AmpActivityProgram();
         activityProgram.setActivity(activity);
         activityProgram.setProgram(program);
+        activityProgram.setProgramSetting(programSetting);
         activityProgram.setProgramPercentage(100f);
         actPrograms.add(activityProgram);
-        session.save(activityProgram);
+    }
 
-        // If Program Percentage field is enabled, distribute 100% evenly among all programs
-        boolean percentageEnabled = false;
-        try {
-            percentageEnabled = FeaturesUtil.isVisibleField(ArConstants.PROGRAM_PERCENTAGE);
-        } catch (Exception e) {
-            // No request/session (e.g. batch) – skip percentage redistribution
-            logger.error("Could not determine if Program Percentage field is enabled; skipping percentage redistribution", e);
+    public static void addProgramsToActivity(Long activityId, String rawProgramNames, String rowProgramClassification,
+                                             String fallbackProgramClassification, boolean createMissingPrograms,
+                                             Session session) {
+        if (activityId == null || rawProgramNames == null || rawProgramNames.trim().isEmpty()) {
+            return;
         }
-        if (percentageEnabled && !actPrograms.isEmpty()) {
-            List<AmpActivityProgram> list = new ArrayList<>(actPrograms);
-            int n = list.size();
-            Map<Integer, Float> percentages = divide100(n);
-            for (int i = 0; i < n; i++) {
-                list.get(i).setProgramPercentage(percentages.get(i));
+        String resolvedClassification = (rowProgramClassification != null && !rowProgramClassification.trim().isEmpty())
+                ? rowProgramClassification.trim()
+                : (fallbackProgramClassification != null ? fallbackProgramClassification.trim() : null);
+        if (resolvedClassification == null || resolvedClassification.isEmpty()) {
+            logger.info("Skipping programs because program classification could not be resolved");
+            return;
+        }
+        AmpActivityVersion activity = session.get(AmpActivityVersion.class, activityId);
+        if (activity == null) {
+            logger.info("Skipping programs because activity {} was not found", activityId);
+            return;
+        }
+
+        AmpActivityProgramSettings programSetting = resolveProgramSettingByName(resolvedClassification);
+        if (programSetting == null) {
+            logger.warn("Program classification '{}' not found; skipping programs for activity {}",
+                    resolvedClassification, activityId);
+            return;
+        }
+
+        for (String programName : splitMultipleValues(rawProgramNames)) {
+            AmpTheme program = createMissingPrograms
+                    ? getOrCreateProgramByName(programName, resolvedClassification, session)
+                    : getProgramByNameAndClassification(programName, resolvedClassification, session);
+            if (program == null) {
+                logger.info("Program '{}' not found and createMissingPrograms is disabled; skipping", programName);
+                continue;
+            }
+            addProgramToActivityIfMissing(activity, program, session, programSetting);
+        }
+
+        logger.info("Adding percentages to programs");
+        if (activity.getActPrograms() != null && !activity.getActPrograms().isEmpty()) {
+            // Group by programSetting (classification)
+            List<AmpActivityProgram> group = new ArrayList<>();
+            for (AmpActivityProgram ap : activity.getActPrograms()) {
+                if (ap.getProgramSetting() != null && ap.getProgramSetting().equals(programSetting)) {
+                    group.add(ap);
+                }
+            }
+            if (!group.isEmpty()) {
+                Map<Integer, Float> percentages = divide100(group.size());
+                for (int i = 0; i < group.size(); i++) {
+                    group.get(i).setProgramPercentage(percentages.get(i));
+                    session.saveOrUpdate(group.get(i));
+                }
             }
         }
+        session.flush();
     }
+
+    private static AmpTheme getProgramByNameAndClassification(String programName, String classification,
+                                                               Session session) {
+        if (programName == null || programName.trim().isEmpty()) {
+            return null;
+        }
+        AmpActivityProgramSettings setting = resolveProgramSettingByName(classification);
+        if (setting == null) {
+            return ProgramUtil.getTheme(programName.trim());
+        }
+        String hql = "SELECT t FROM " + AmpTheme.class.getName() + " t WHERE LOWER(t.name) = LOWER(:name)";
+        Query query;
+        if (setting.getDefaultHierarchy() != null && setting.getDefaultHierarchy().getAmpThemeId() != null) {
+            hql += " AND t.parentThemeId.ampThemeId = :parentId";
+            query = session.createQuery(hql);
+            query.setParameter("parentId", setting.getDefaultHierarchy().getAmpThemeId());
+        } else {
+            query = session.createQuery(hql);
+        }
+        query.setParameter("name", programName.trim(), StringType.INSTANCE);
+        query.setMaxResults(1);
+        AmpTheme theme = (AmpTheme) query.uniqueResult();
+        return theme != null ? theme : ProgramUtil.getTheme(programName.trim());
+    }
+
+    public static AmpTheme getOrCreateProgramByName(String programName, String classification, Session session) {
+        AmpTheme existing = getProgramByNameAndClassification(programName, classification, session);
+        if (existing != null) {
+            return existing;
+        }
+        if (programName == null || programName.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            AmpTheme newTheme = new AmpTheme();
+            String trimmedName = programName.trim();
+            newTheme.setName(trimmedName);
+            String code = trimmedName.replaceAll("[^a-zA-Z0-9_-]", "_").replaceAll("_+", "_").trim();
+            if (code.length() > 45) code = code.substring(0, 45);
+            newTheme.setThemeCode("IMP_" + code + "_" + System.currentTimeMillis());
+            newTheme.setIndlevel(0);
+            AmpActivityProgramSettings setting = resolveProgramSettingByName(classification);
+            if (setting != null && setting.getDefaultHierarchy() != null) {
+                newTheme.setParentThemeId(setting.getDefaultHierarchy());
+                Integer rootLevel = setting.getDefaultHierarchy().getIndlevel();
+                newTheme.setIndlevel(rootLevel != null ? rootLevel + 1 : 1);
+            } else {
+                newTheme.setParentThemeId(null);
+            }
+            // Set typeCategoryValue from classification's defaultHierarchy's category value
+            if (setting != null && setting.getDefaultHierarchy() != null && setting.getDefaultHierarchy().getTypeCategoryValue() != null) {
+                newTheme.setTypeCategoryValue(setting.getDefaultHierarchy().getTypeCategoryValue());
+            } else {
+                throw new IllegalStateException("Cannot create program: classification '" + classification + "' does not resolve to a valid typeCategoryValue (required for DB constraint)");
+            }
+            session.save(newTheme);
+            session.flush();
+            return newTheme;
+        } catch (Exception e) {
+            logger.warn("Failed to create program '{}' for classification '{}'", programName, classification, e);
+            return null;
+        }
+    }
+
+    private static AmpActivityProgramSettings resolveProgramSettingByName(String classification) {
+        if (classification == null || classification.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            return ProgramUtil.getAmpActivityProgramSettings(classification);
+        } catch (Exception e) {
+            logger.warn("Could not resolve program setting '{}'", classification, e);
+            return null;
+        }
+    }
+
 
     /**
      * Returns the program (theme) by name, or creates a new root-level program if it does not exist.

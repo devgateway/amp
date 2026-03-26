@@ -580,7 +580,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Row>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item} controlId="formIndicatorType">
-                        <Form.Label>Type</Form.Label>
+                        <Form.Label>{translations["amp.indicatormanager:type"]}</Form.Label>
                         <Select
                             name="indicatorType"
                             options={indicatorTypeOptions}
@@ -632,7 +632,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Row>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item} controlId="programScheme">
-                        <Form.Label>Link to Logframe (Program Scheme)</Form.Label>
+                        <Form.Label>{translations["amp.indicatormanager:link-logframe"]}</Form.Label>
                         <Select
                             name="programScheme"
                             options={programSchemes}
@@ -650,7 +650,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       </Form.Group>
                       {programFieldVisible && (
                           <Form.Group className={styles.view_item} controlId="programs">
-                            <Form.Label>Program</Form.Label>
+                            <Form.Label>{translations["amp.indicatormanager:programs"]}</Form.Label>
                             <Select
                                 name="programs"
                                 options={programs}
@@ -668,7 +668,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Row>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_one_item} controlId="formIndicatorSectors">
-                        <Form.Label>Sector</Form.Label>
+                        <Form.Label>{translations["amp.indicatormanager:sectors"]}</Form.Label>
                         <Select
                             isMulti
                             name="sectors"
@@ -714,7 +714,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     <Row className={styles.view_row}>
 
                       <Form.Group className={styles.view_item} controlId="formUnitOfMeasure">
-                        <Form.Label>Unit of Measure</Form.Label>
+                        <Form.Label>{translations["amp.indicatormanager:unit-of-measure"]}</Form.Label>
                         <Select
                             name="unitOfMeasure"
                             options={unitOfMeasureOptions}
@@ -728,20 +728,20 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                         />
                       </Form.Group>
                         <Form.Group className={styles.view_one_item} controlId="formCalculationMethod">
-                            <Form.Label>Calculation Method</Form.Label>
+                            <Form.Label>{translations["amp.indicatormanager:calculation-method"]}</Form.Label>
                             <Form.Control
                                 onChange={props.handleChange}
                                 onBlur={props.handleBlur}
                                 name="calculationMethod"
                                 type="text"
                                 className={styles.input_field}
-                                placeholder="Describe how the indicator's value is calculated"
+                                placeholder={translations["amp.indicatormanager:calculation-method-placeholder"]}
                             />
                         </Form.Group>
                     </Row>
                     <Row className={styles.view_row}>
                         <Form.Group className={styles.view_item} controlId="formDisaggregation">
-                            <Form.Label>Disaggregation</Form.Label>
+                            <Form.Label>{translations["amp.indicatormanager:disaggregation"]}</Form.Label>
                             <Select
                               isMulti
                               name="disaggregation"
@@ -763,7 +763,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       <Row className={styles.view_row}>
                         <Col>
                           <div style={{marginTop: '1rem'}}>
-                            <h6>Disaggregation Values</h6>
+                            <h6>{translations["amp.indicatormanager:disaggregation-values"]}</h6>
                             <Accordion defaultActiveKey="0">
                               {props.values.disaggregation.map((parentId, parentIdx) => (
                                 <Card key={parentId}>
@@ -772,7 +772,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                     eventKey={String(parentIdx)}
                                     className={styles.accordionHeader}
                                     style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', background: '#f7f7f7', fontWeight: 'bold' }}
-                                    aria-label="Click to expand/collapse"
+                                    aria-label={translations["amp.indicatormanager:click-to-expand-collapse"]}
                                   >
                                     <div className={styles.accordionHeaderTitle} style={{ flex: 1 }}>
                                       {disaggregationOptions.find(opt => opt.value === parentId)?.label || `Disaggregation ${parentId}`}
@@ -801,95 +801,95 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                   <Card.Title className={styles.accordionChildTitle}>{child.value}</Card.Title>
                                                   <div style={{display: 'flex', flexWrap: 'wrap', gap: '32px'}}>
                                                     <div style={{minWidth: '300px'}}>
-                                                      <h6 color={"red"}>Base Values</h6>
+                                                      <h6 color={"red"}>{translations["amp.indicatormanager:base-values"]}</h6>
                                                       <Form.Group>
-                                                        <Form.Label>Original Value</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:original-value"]}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.base.originalValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label="Base Original Value"
+                                                          aria-label={translations["amp.indicatormanager:aria-base-original-value"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>Original Value Date</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.base.originalValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label="Base Original Value Date"
+                                                          aria-label={translations["amp.indicatormanager:aria-base-original-value-date"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>Revised Value</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.base.revisedValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label="Base Revised Value"
+                                                          aria-label={translations["amp.indicatormanager:aria-base-revised-value"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>Revised Value Date</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.base.revisedValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label="Base Revised Value Date"
+                                                          aria-label={translations["amp.indicatormanager:aria-base-revised-value-date"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                     </div>
                                                     <div style={{minWidth: '300px'}}>
-                                                      <h6 color={"red"}>Target Values</h6>
+                                                      <h6 color={"red"}>{translations["amp.indicatormanager:target-values"]}</h6>
                                                       <Form.Group>
-                                                        <Form.Label>Original Value</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:original-value"]}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.target.originalValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label="Target Original Value"
+                                                          aria-label={translations["amp.indicatormanager:aria-target-original-value"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>Original Value Date</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.target.originalValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label="Target Original Value Date"
+                                                          aria-label={translations["amp.indicatormanager:aria-target-original-value-date"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>Revised Value</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.target.revisedValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label="Target Revised Value"
+                                                          aria-label={translations["amp.indicatormanager:aria-target-revised-value"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>Revised Value Date</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.target.revisedValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label="Target Revised Value Date"
+                                                          aria-label={translations["amp.indicatormanager:aria-target-revised-value-date"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
@@ -902,7 +902,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                         </div>
                                       ) : (
                                         <div style={{color: '#888', padding: '1rem', textAlign: 'center', border: '1px solid #eee', borderRadius: '4px'}}>
-                                          No children found for this disaggregation.
+                                          {translations["amp.indicatormanager:no-disaggregation-children"]}
                                         </div>
                                       )}
                                     </Card.Body>
@@ -918,7 +918,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       <Row className={styles.view_row}>
                         <Col>
                           <div style={{marginTop: '1rem'}}>
-                            <h6>Disaggregation Values</h6>
+                            <h6>{translations["amp.indicatormanager:disaggregation-values"]}</h6>
                             <Accordion defaultActiveKey="0">
                               {disaggregationChildren[props.values.disaggregation[0]]?.map((parentChild: any, parentIdx: number) => (
                                 <Card key={parentChild.id}>
@@ -927,7 +927,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                     eventKey={String(parentIdx)}
                                     className={styles.accordionHeader}
                                     style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', background: '#f7f7f7', fontWeight: 'bold' }}
-                                    aria-label="Click to expand/collapse"
+                                    aria-label={translations["amp.indicatormanager:click-to-expand-collapse"]}
                                   >
                                     <div className={styles.accordionHeaderTitle} style={{ flex: 1 }}>
                                       {parentChild.value}
@@ -955,95 +955,95 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                   <Card.Title className={styles.accordionChildTitle}>{child.value}</Card.Title>
                                                   <div style={{display: 'flex', flexWrap: 'wrap', gap: '32px'}}>
                                                     <div style={{minWidth: '300px'}}>
-                                                      <h6 color={"red"}>Base Values</h6>
+                                                      <h6 color={"red"}>{translations["amp.indicatormanager:base-values"]}</h6>
                                                       <Form.Group>
-                                                        <Form.Label>Original Value</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:original-value"]}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.base.originalValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label="Base Original Value"
+                                                          aria-label={translations["amp.indicatormanager:aria-base-original-value"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>Original Value Date</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.base.originalValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label="Base Original Value Date"
+                                                          aria-label={translations["amp.indicatormanager:aria-base-original-value-date"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>Revised Value</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.base.revisedValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label="Base Revised Value"
+                                                          aria-label={translations["amp.indicatormanager:aria-base-revised-value"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>Revised Value Date</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.base.revisedValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label="Base Revised Value Date"
+                                                          aria-label={translations["amp.indicatormanager:aria-base-revised-value-date"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                     </div>
                                                     <div style={{minWidth: '300px'}}>
-                                                      <h6 color={"red"}>Target Values</h6>
+                                                      <h6 color={"red"}>{translations["amp.indicatormanager:target-values"]}</h6>
                                                       <Form.Group>
-                                                        <Form.Label>Original Value</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:original-value"]}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.target.originalValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label="Target Original Value"
+                                                          aria-label={translations["amp.indicatormanager:aria-target-original-value"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>Original Value Date</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.target.originalValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label="Target Original Value Date"
+                                                          aria-label={translations["amp.indicatormanager:aria-target-original-value-date"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>Revised Value</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.target.revisedValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label="Target Revised Value"
+                                                          aria-label={translations["amp.indicatormanager:aria-target-revised-value"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>Revised Value Date</Form.Label>
+                                                        <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.target.revisedValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label="Target Revised Value Date"
+                                                          aria-label={translations["amp.indicatormanager:aria-target-revised-value-date"]}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
@@ -1056,7 +1056,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                         </div>
                                       ) : (
                                         <div style={{color: '#888', padding: '1rem', textAlign: 'center', border: '1px solid #eee', borderRadius: '4px'}}>
-                                          No children found for this disaggregation.
+                                          {translations["amp.indicatormanager:no-disaggregation-children"]}
                                         </div>
                                       )}
                                     </Card.Body>
@@ -1070,11 +1070,11 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     )}
                   </div>
                   {/* Responsibility and Frequency */}
-                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>Responsibility and Frequency</h5></Col></Row>
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{translations["amp.indicatormanager:responsibility-frequency-info"]}</h5></Col></Row>
                   <div className={styles.sectionContainer}>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item} controlId="formResponsibleOrganizations">
-                        <Form.Label>Responsible Organization(s)</Form.Label>
+                        <Form.Label>{translations["amp.indicatormanager:responsible-organizations"]}</Form.Label>
                         <Select
                             isMulti
                             name="responsibleOrganizations"
@@ -1089,7 +1089,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                         />
                       </Form.Group>
                       <Form.Group className={styles.view_item} controlId="formFrequency">
-                        <Form.Label>Frequency</Form.Label>
+                        <Form.Label>{translations["amp.indicatormanager:frequency"]}</Form.Label>
                         <Select
                             name="frequency"
                             options={frequencyOptions}
@@ -1105,7 +1105,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Row>
                   </div>
                   {/* Value Tracking */}
-                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>Value Tracking</h5></Col></Row>
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{translations["amp.indicatormanager:value-tracking"]}</h5></Col></Row>
                   <div className={styles.sectionContainer}>
                     <Form.Group as={Col}>
                       <Form.Label>

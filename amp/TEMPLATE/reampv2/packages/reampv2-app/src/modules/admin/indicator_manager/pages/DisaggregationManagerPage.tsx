@@ -83,7 +83,7 @@ const DisaggregationManagerPage: React.FC = () => {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
         <h2 style={{ margin: 0 }}>{translations['amp.disaggregationmanager:title'] || 'Disaggregation Manager'}</h2>
         <Button variant="secondary" onClick={() => navigate('/admin/indicator_manager')} style={{ marginLeft: '10px' }}>
-          <i className="fa fa-arrow-left" /> Back
+          <i className="fa fa-arrow-left" /> {translations['amp.disaggregationmanager:back']}
         </Button>
       </div>
       <Table bordered hover>

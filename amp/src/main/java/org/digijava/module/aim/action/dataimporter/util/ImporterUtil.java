@@ -1311,45 +1311,10 @@ public class ImporterUtil {
         if (foundLocations.isEmpty()) {
             return;
         }
-        double sum = 0;
-        for (Location loc : foundLocations) {
-            Double pct = loc.getLocation_percentage();
-            sum += (pct != null ? pct : 0);
-        }
-        if (sum <= 0) {
-            // If there is no usable input percentage, split 100 as whole numbers (e.g. 33,33,34).
-            Map<Integer, Float> percentages = divide100(foundLocations.size());
-            for (int i = 0; i < foundLocations.size(); i++) {
-                foundLocations.get(i).setLocation_percentage((double) percentages.get(i));
-            }
-            return;
-        }
-        // Convert scaled shares to whole numbers summing exactly to 100 via largest remainder.
-        double scale = 100.0 / sum;
-        int allocated = 0;
-        List<Double> remainders = new ArrayList<>(Collections.nCopies(foundLocations.size(), 0.0));
-        List<Integer> wholeParts = new ArrayList<>(Collections.nCopies(foundLocations.size(), 0));
+
+        Map<Integer, Float> percentages = divide100(foundLocations.size());
         for (int i = 0; i < foundLocations.size(); i++) {
-            Location loc = foundLocations.get(i);
-            Double pct = loc.getLocation_percentage();
-            double scaled = (pct != null ? pct : 0) * scale;
-            int whole = (int) Math.floor(scaled);
-            wholeParts.set(i, whole);
-            remainders.set(i, scaled - whole);
-            allocated += whole;
-        }
-        int remaining = 100 - allocated;
-        List<Integer> indices = new ArrayList<>();
-        for (int i = 0; i < foundLocations.size(); i++) {
-            indices.add(i);
-        }
-        indices.sort((a, b) -> Double.compare(remainders.get(b), remainders.get(a)));
-        for (int i = 0; i < remaining && i < indices.size(); i++) {
-            int idx = indices.get(i);
-            wholeParts.set(idx, wholeParts.get(idx) + 1);
-        }
-        for (int i = 0; i < foundLocations.size(); i++) {
-            foundLocations.get(i).setLocation_percentage((double) wholeParts.get(i));
+            foundLocations.get(i).setLocation_percentage((double)percentages.get(i));
         }
         importDataModel.setLocations(new HashSet<>(foundLocations));
     }

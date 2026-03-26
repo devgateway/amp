@@ -1009,6 +1009,9 @@ public class ImporterUtil {
             updateFundingOrgsAndSectorsWithAlreadyExisting(existing, importDataModel, replaceExistingTransactions);
             // Merge existing activity locations into payload so we only add (row + existing), never remove
             mergeExistingActivityLocationsIntoImport(existing, importDataModel);
+            // Preserve existing programs with their DB IDs so the API updates in-place; avoids both
+            // StaleStateException (delete+insert) and SizeValidator failures on re-validation
+            preserveExistingPrograms(existing, importDataModel);
             ensureImplementationLevelWhenHasLocations(importDataModel, session);
             pruneParentLocationsWhenChildPresent(importDataModel, session);
             normalizeLocationPercentages(importDataModel);
@@ -1019,11 +1022,6 @@ public class ImporterUtil {
             map.entrySet().removeIf(entry -> entry.getValue() == null || "null".equals(String.valueOf(entry.getValue())));
             
             map.remove("indicators"); // preserve existing indicators; we append in addIndicatorDataToActivity
-            // Do not replace programs; avoids StaleStateException when deleting AMP_ACTIVITY_PROGRAM rows
-            map.remove("national_plan_objective");
-            map.remove("primary_programs");
-            map.remove("secondary_programs");
-            map.remove("tertiary_programs");
             // Avoid triggering merge of contacts/documents that may reference deleted rows (ObjectNotFoundException)
             map.remove("activity_contacts");
             map.remove("activityContacts");
@@ -1248,6 +1246,29 @@ public class ImporterUtil {
      * (row locations + existing), never remove. Any existing activity location not already in importDataModel
      * is added. This avoids activity/update deleting locations (e.g. those referenced by indicator connections).
      */
+    private static void preserveExistingPrograms(AmpActivityVersion existing, ImportDataModel importDataModel) {
+        if (existing == null || importDataModel == null) return;
+        Set<AmpActivityProgram> actPrograms = existing.getActPrograms();
+        if (actPrograms == null || actPrograms.isEmpty()) return;
+        Hibernate.initialize(actPrograms);
+        for (AmpActivityProgram ap : actPrograms) {
+            if (ap.getProgram() == null || ap.getProgram().getAmpThemeId() == null) continue;
+            Program p = new Program();
+            p.setId(ap.getAmpActivityProgramId());
+            p.setProgram(ap.getProgram().getAmpThemeId());
+            String settingName = ap.getProgramSetting() != null ? ap.getProgramSetting().getName() : null;
+            if (ProgramUtil.NATIONAL_PLAN_OBJECTIVE.equals(settingName)) {
+                importDataModel.getNational_plan_objective().add(p);
+            } else if (ProgramUtil.PRIMARY_PROGRAM.equals(settingName)) {
+                importDataModel.getPrimary_programs().add(p);
+            } else if (ProgramUtil.SECONDARY_PROGRAM.equals(settingName)) {
+                importDataModel.getSecondary_programs().add(p);
+            } else if (ProgramUtil.TERTIARY_PROGRAM.equals(settingName)) {
+                importDataModel.getTertiary_programs().add(p);
+            }
+        }
+    }
+
     private static void mergeExistingActivityLocationsIntoImport(AmpActivityVersion existing, ImportDataModel importDataModel) {
         if (existing == null || importDataModel == null) return;
         if (existing.getLocations() == null) return;

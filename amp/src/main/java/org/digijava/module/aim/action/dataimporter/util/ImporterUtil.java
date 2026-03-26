@@ -1351,6 +1351,7 @@ public class ImporterUtil {
         for (int i = 0; i < foundLocations.size(); i++) {
             foundLocations.get(i).setLocation_percentage((double) wholeParts.get(i));
         }
+        importDataModel.setLocations(new HashSet<>(foundLocations));
     }
 
     /**

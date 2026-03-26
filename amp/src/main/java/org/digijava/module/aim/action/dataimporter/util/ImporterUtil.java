@@ -345,6 +345,7 @@ public class ImporterUtil {
             List<DateTimeFormatter> formatters = Arrays.asList(
                     DateTimeFormatter.ofPattern("yyyy-MM-dd"),
                     DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+                    DateTimeFormatter.ofPattern("d/M/yyyy"),
                     DateTimeFormatter.ofPattern("MM/dd/yyyy"),
                     DateTimeFormatter.ofPattern("MM-dd-yyyy"),
                     DateTimeFormatter.ofPattern("yyyy/MM/dd"),
@@ -377,9 +378,10 @@ public class ImporterUtil {
     }
 
 
-    private static String formatDateFromDateObject(String date) {
+    public static String formatDateFromDateObject(String date) {
         List<SimpleDateFormat> formatters = Arrays.asList(
                 new SimpleDateFormat("yyyy-MM-dd"),
+                new SimpleDateFormat("d/M/yyyy"),
                 new SimpleDateFormat("dd/MM/yyyy"),
                 new SimpleDateFormat("MM/dd/yyyy"),
                 new SimpleDateFormat("MM-dd-yyyy"),
@@ -422,6 +424,7 @@ public class ImporterUtil {
     public static boolean isCommonDateFormat(String dateString) {
         List<String> dateFormats = Arrays.asList(
                 "yyyy-MM-dd",
+                "d/M/yyyy",
                 "dd-MM-yyyy",
                 "MM-dd-yyyy",
                 "MM/dd/yyyy",
@@ -2960,24 +2963,6 @@ public class ImporterUtil {
         activityProgram.setProgramSetting(programSetting);
         activityProgram.setProgramPercentage(100f);
         actPrograms.add(activityProgram);
-        session.save(activityProgram);
-
-        // If Program Percentage field is enabled, distribute 100% evenly among all programs
-        boolean percentageEnabled = false;
-        try {
-            percentageEnabled = FeaturesUtil.isVisibleField(ArConstants.PROGRAM_PERCENTAGE);
-        } catch (Exception e) {
-            // No request/session (e.g. batch) – skip percentage redistribution
-            logger.error("Could not determine if Program Percentage field is enabled; skipping percentage redistribution", e);
-        }
-        if (percentageEnabled && !actPrograms.isEmpty()) {
-            List<AmpActivityProgram> list = new ArrayList<>(actPrograms);
-            int n = list.size();
-            Map<Integer, Float> percentages = divide100(n);
-            for (int i = 0; i < n; i++) {
-                list.get(i).setProgramPercentage(percentages.get(i));
-            }
-        }
     }
 
     public static void addProgramsToActivity(Long activityId, String rawProgramNames, String rowProgramClassification,
@@ -3015,6 +3000,24 @@ public class ImporterUtil {
                 continue;
             }
             addProgramToActivityIfMissing(activity, program, session, programSetting);
+        }
+
+        logger.info("Adding percentages to programs");
+        if (activity.getActPrograms() != null && !activity.getActPrograms().isEmpty()) {
+            // Group by programSetting (classification)
+            List<AmpActivityProgram> group = new ArrayList<>();
+            for (AmpActivityProgram ap : activity.getActPrograms()) {
+                if (ap.getProgramSetting() != null && ap.getProgramSetting().equals(programSetting)) {
+                    group.add(ap);
+                }
+            }
+            if (!group.isEmpty()) {
+                Map<Integer, Float> percentages = divide100(group.size());
+                for (int i = 0; i < group.size(); i++) {
+                    group.get(i).setProgramPercentage(percentages.get(i));
+                    session.saveOrUpdate(group.get(i));
+                }
+            }
         }
         session.flush();
     }

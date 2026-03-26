@@ -162,6 +162,30 @@ public class TxtDataImporter {
                     logger.info("Configuration: " + config);
                     for (Map.Entry<String, String> entry : config.entrySet()) {
                         switch (entry.getValue()) {
+                            case ImporterConstants.PROJECT_START_DATE: {
+                                String dateStr = rowRef.get(entry.getKey().trim());
+                                if (dateStr != null && !dateStr.trim().isEmpty()) {
+                                    String formatted = org.digijava.module.aim.action.dataimporter.util.ImporterUtil.formatDateFromDateObject(dateStr.trim());
+                                    if (formatted != null) {
+                                        importDataModel.setActual_start_date(formatted);
+                                    } else {
+                                        importDataModel.setActual_start_date(dateStr.trim());
+                                    }
+                                }
+                                break;
+                            }
+                            case ImporterConstants.PROJECT_END_DATE: {
+                                String dateStr = rowRef.get(entry.getKey().trim());
+                                if (dateStr != null && !dateStr.trim().isEmpty()) {
+                                    String formatted = org.digijava.module.aim.action.dataimporter.util.ImporterUtil.formatDateFromDateObject(dateStr.trim());
+                                    if (formatted != null) {
+                                        importDataModel.setActual_completion_date(formatted);
+                                    } else {
+                                        importDataModel.setActual_completion_date(dateStr.trim());
+                                    }
+                                }
+                                break;
+                            }
                             case ImporterConstants.PROJECT_LOCATION:
                                 updateLocations(importDataModel, rowRef.get(entry.getKey().trim()), session);
                                 break;

@@ -50,11 +50,11 @@ const OutcomeOutputManagementPage: React.FC = () => {
   const columns = [
     {
       dataField: 'name',
-      text: 'Outcome Name',
+      text: translations['amp.outcomeoutput:outcome-name'],
     },
     {
       dataField: 'actions',
-      text: 'Actions',
+      text: translations['amp.outcomeoutput:actions'],
       formatter: (_: any, row: Outcome) => (
         <>
           <div className={action_style.action_container}
@@ -94,11 +94,11 @@ const OutcomeOutputManagementPage: React.FC = () => {
       if (res.ok) {
         dispatch(getOutcomes());
       } else {
-        alert('Failed to add outcome');
+        alert(translations['amp.outcomeoutput:add-outcome-failed']);
       }
     } catch (e) {
       console.error('Error adding outcome', e);
-      alert('Error adding outcome');
+      alert(translations['amp.outcomeoutput:error-adding-outcome']);
     }
   };
 
@@ -120,11 +120,11 @@ const OutcomeOutputManagementPage: React.FC = () => {
       if (res.ok) {
         dispatch(getOutcomes());
       } else {
-        alert('Failed to update outcome');
+        alert(translations['amp.outcomeoutput:update-outcome-failed']);
       }
     } catch (e) {
       console.error('Error updating outcome', e);
-      alert('Error updating outcome');
+      alert(translations['amp.outcomeoutput:error-updating-outcome']);
     }
     setShowEditOutcomeModal(false);
     setEditingOutcome(null);
@@ -137,11 +137,11 @@ const OutcomeOutputManagementPage: React.FC = () => {
     // Call backend delete endpoint directly, and display any error/warning returned
     const confirm = await Swal.fire({
       icon: 'warning',
-      title: 'Delete Outcome?',
-      html: `<div>Are you sure you want to delete outcome: <b>${outcome.name}</b>?<br/>This action cannot be undone.</div>`,
+      title: translations['amp.outcomeoutput:delete-outcome'],
+      html: `<div>${translations['amp.outcomeoutput:delete-outcome-confirm']} <b>${outcome.name}</b>?<br/>${translations['amp.outcomeoutput:delete-output-warning']}</div>`,
       showCancelButton: true,
-      confirmButtonText: 'Delete',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: translations['amp.outcomeoutput:delete'],
+      cancelButtonText: translations['amp.outcomeoutput:cancel'],
     });
     if (confirm.isConfirmed) {
       try {
@@ -154,7 +154,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
         } else {
           // Show backend error message (alerts/warnings)
           const error = await res.json();
-          let errorMsg = 'An error occurred while deleting the outcome.';
+          let errorMsg = translations['amp.outcomeoutput:error-deleting-outcome'];
           if (error && error.error) {
             const firstKey = Object.keys(error.error)[0];
             if (firstKey && error.error[firstKey] && error.error[firstKey][0]) {
@@ -163,15 +163,15 @@ const OutcomeOutputManagementPage: React.FC = () => {
           }
           await Swal.fire({
             icon: 'error',
-            title: 'Cannot Delete Outcome',
+            title: translations['amp.outcomeoutput:cannot-delete-outcome'],
             html: errorMsg
           });
         }
       } catch (e) {
         await Swal.fire({
           icon: 'error',
-          title: 'Error deleting outcome',
-          text: 'An unexpected error occurred.'
+          title: translations['amp.outcomeoutput:error-deleting-output'],
+          text: translations['amp.outcomeoutput:unexpected-error']
         });
       }
     }
@@ -205,11 +205,11 @@ const OutcomeOutputManagementPage: React.FC = () => {
         if (res.ok) {
           dispatch(getOutcomes());
         } else {
-          alert('Failed to update output');
+          alert(translations['amp.outcomeoutput:update-output-failed']);
         }
       } catch (e) {
         console.error('Error updating output', e);
-        alert('Error updating output');
+        alert(translations['amp.outcomeoutput:error-updating-output']);
       }
     } else if (selectedOutcome) {
       // Add new output
@@ -225,11 +225,11 @@ const OutcomeOutputManagementPage: React.FC = () => {
         if (res.ok) {
           dispatch(getOutcomes());
         } else {
-          alert('Failed to add output');
+          alert(translations['amp.outcomeoutput:add-output-failed']);
         }
       } catch (e) {
         console.error('Error adding output', e);
-        alert('Error adding output');
+        alert(translations['amp.outcomeoutput:error-adding-output']);
       }
     }
     setShowOutputModal(false);
@@ -331,7 +331,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
             size="sm"
             style={{ marginLeft: '8px' }}
             onClick={() => handleAddOutput(row.id)}
-            title="Add Outputs"
+            title={translations['amp.outcomeoutput:add-outputs']}
             onMouseOver={e => {
               e.currentTarget.setAttribute('data-bs-toggle', 'tooltip');
               e.currentTarget.setAttribute('data-bs-placement', 'top');
@@ -345,13 +345,13 @@ const OutcomeOutputManagementPage: React.FC = () => {
             {row.description}
           </div>
         )}
-        <strong>Outputs:</strong>
+        <strong>{translations['amp.outcomeoutput:outputs']}:</strong>
         <table style={{ marginLeft: '1.5rem', width: '100%' }}>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Actions</th>
+              <th>{translations['amp.outcomeoutput:name']}</th>
+              <th>{translations['amp.outcomeoutput:description']}</th>
+              <th>{translations['amp.outcomeoutput:actions']}</th>
             </tr>
           </thead>
           <tbody>
@@ -365,7 +365,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
                     size="sm"
                     style={{ marginRight: '6px' }}
                     onClick={() => handleEditOutput(output, row)}
-                    title="Edit Output"
+                    title={translations['amp.outcomeoutput:edit-output']}
                   >
                     <i className="fa fa-pencil" />
                   </Button>
@@ -373,13 +373,13 @@ const OutcomeOutputManagementPage: React.FC = () => {
                     variant="outline-danger"
                     size="sm"
                     onClick={() => handleDeleteOutput(output)}
-                    title="Delete Output"
+                    title={translations['amp.outcomeoutput:delete-output']}
                   >
                     <i className="fa fa-trash" />
                   </Button>
                 </td>
               </tr>
-            )) : <tr><td colSpan={3}>No outputs</td></tr>}
+            )) : <tr><td colSpan={3}>{translations['amp.outcomeoutput:no-outputs']}</td></tr>}
           </tbody>
         </table>
       </div>
@@ -399,7 +399,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
       { text: '10', value: 10 },
       { text: '25', value: 25 },
       { text: '50', value: 50 },
-      { text: 'All', value: outcomes.length }
+      { text: translations['amp.indicatormanager:all'], value: outcomes.length }
     ],
     sizePerPage: 10
   };
@@ -432,7 +432,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
       <Col sm={12}>
         <Row className={styles.table_header}>
           <Col sm={6}>
-            <h3>Outcome Management</h3>
+            <h3>{translations['amp.outcomeoutput:outcome-management']}</h3>
           </Col>
           <Col sm={6}>
           </Col>
@@ -451,7 +451,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
                   <div className={styles.table_header_bottom_left}>
                     {' '}
                     <Button variant="primary" onClick={() => setShowAddNewOutcomeModal(true)}>
-                      <i className="fa fa-plus" /> Add New Outcome
+                      <i className="fa fa-plus" /> {translations['amp.outcomeoutput:add-new-outcome']}
                     </Button>
                     {' '}
                     <ExportCSVButton {...props.csvProps} className={styles.export_button}>
@@ -464,7 +464,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
                       <SearchBar {...props.searchProps} placeholder={translations['amp.outcomeoutput:search-placeholder']} />
                     </div>
                   <Button variant="secondary" onClick={() => navigate('/admin/indicator_manager')} style={{ float: 'right', marginLeft: '10px' }}>
-                    <i className="fa fa-arrow-left" /> Back
+                    <i className="fa fa-arrow-left" /> {translations['amp.outcomeoutput:back']}
                   </Button>
                 </Col>
               </Row>

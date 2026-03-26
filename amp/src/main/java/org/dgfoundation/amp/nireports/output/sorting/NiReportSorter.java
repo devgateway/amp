@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports.output.sorting;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
@@ -20,6 +21,8 @@ import static java.util.stream.Collectors.toMap;
  * @author Dolghier Constantin
  */
 public class NiReportSorter implements NiReportDataVisitor<NiReportData> {
+
+    public static final Logger logger = Logger.getLogger(NiReportSorter.class);
 
     /**
      * Map<hierarchy-to-sort-on, ascending-or-descending>
@@ -62,6 +65,9 @@ public class NiReportSorter implements NiReportDataVisitor<NiReportData> {
                 if (header != null)
                     colsSorting.put(header, sortItem.ascending);
             }
+        }
+        if (hiersSorting.isEmpty() && colsSorting.isEmpty()) {
+            logger.warn("no sorting criteria found for report");
         }
         return new NiReportSorter(hiersSorting, colsSorting);
     }

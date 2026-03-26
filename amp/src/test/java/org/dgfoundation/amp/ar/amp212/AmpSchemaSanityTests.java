@@ -2872,7 +2872,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                         ColumnConstants.INDICATOR_REVISED_TARGET_VALUE,
                         ColumnConstants.INDICATOR_REVISED_TARGET_DATE,
                         ColumnConstants.INDICATOR_REVISED_TARGET_COMMENT,
-                        ColumnConstants.INDICATOR_ACTUAL_VALUE,
+                        ColumnConstants.INDICATOR_CURRENT_VALUE,
                         ColumnConstants.INDICATOR_ACTUAL_DATE,
                         ColumnConstants.INDICATOR_ACTUAL_COMMENT),
                 null,

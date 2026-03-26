@@ -222,9 +222,8 @@ public class AmpTheme implements Serializable, SoftDeletable, Identifiable, ARDi
     }
 
     @Override
-    public int hashCode()
-    {
-        return this.ampThemeId == null ? null : this.ampThemeId.hashCode();
+    public int hashCode() {
+        return ampThemeId != null ? ampThemeId.hashCode() : 0;
     }
 
     public void setLeadAgency (String leadAgency) {

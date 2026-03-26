@@ -31,7 +31,7 @@ public class ReportMeasurelessHierarchiesValidator implements ReportValidator {
 
             measurelessHierarchies = columnProvider.getMeasurelessColumns()
                     .stream().filter(c -> reportRequest.getHierarchies().contains(c.getColumnId()))
-                    .map(c -> String.valueOf(c.getColumnId()))
+                    .map(c -> String.valueOf(c.getColumnId() + " - " + c.getColumnName()))
                     .collect(Collectors.toList());
 
             return measurelessHierarchies.isEmpty();

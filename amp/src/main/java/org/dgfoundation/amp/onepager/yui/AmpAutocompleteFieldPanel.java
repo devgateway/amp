@@ -298,7 +298,6 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
                         ","+disableControl+","+ rtll +");"
                         + "});";
 
-                logger.info("Script js: "+script);
                 response.render(OnDomReadyHeaderItem.forScript(script));
             }
         });

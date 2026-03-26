@@ -1,7 +1,8 @@
 import {lazy, Suspense} from "react";
 import NavigationManager from "../NavigationManager";
 import { Outlet } from "react-router-dom";
-
+import {Provider} from "react-redux";
+import {store} from "../modules/admin/indicator_manager/reducers/store";
 const SSCDashboardApp = lazy(() => import('../modules/sscdashboard'));
 const AdminApps = lazy(() => import('../modules/admin/Admin.routes'));
 const NDDDashboardApp = lazy(() => import('../modules/ndddashboard'));
@@ -9,6 +10,7 @@ const NewReportApp = lazy(() => import('../modules/new_report'));
 const GeocoderApp = lazy(() => import('../modules/geocoder'));
 const AmpOfflineApp = lazy(() => import('../modules/ampoffline/Download'));
 const ReportGeneratorApp = lazy(() => import('../modules/report_generator'));
+const OutcomeOutputManagementPage = lazy(() => import('../modules/admin/indicator_manager/pages/OutcomeOutputManagementPage'));
 
 /** @type {import('react-router-dom').RouteObject[]} */
 const routes = [
@@ -73,7 +75,9 @@ const routes = [
                 path: "admin/*",
                 element: (
                     <Suspense fallback={<div>Loading...</div>}>
+                        <Provider store={store}>
                         <AdminApps />
+                        </Provider>
                     </Suspense>
                 )
             }

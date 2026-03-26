@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../../schemas/xmlpatcher.xsd ">
+	<jira>AMP-31050</jira>
+	<keyword>Views</keyword>
+	<author>ginchauspe</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_indicator_disaggregation_level_0 CASCADE;
+				CREATE OR REPLACE VIEW v_indicator_disaggregation_level_0 AS
+				SELECT
+					con.activity_id AS amp_activity_id,
+					acv.category_value AS name,
+					acv.id AS category_value_id,
+					ind.indicator_id AS me_indicator_id,
+					t.amp_theme_id AS me_npo_id/*,
+					aidv.id as disaggregation_value_id*/
+				FROM amp_indicator_connection con
+					JOIN amp_indicator ind ON ind.indicator_id = con.indicator_id
+					JOIN amp_indicator_disaggregation_values aidv ON ind.indicator_id = aidv.indicator_id
+					JOIN amp_indicator_global_value aigv ON aidv.base_value_id = aigv.id
+					JOIN amp_category_value acv ON acv.id = aidv.parent_category_id
+					LEFT JOIN amp_theme t ON ind.program_id = t.amp_theme_id
+				WHERE con.activity_id IS NOT NULL
+					AND aigv.type = 2
+				GROUP BY con.activity_id, acv.category_value, acv.id, ind.indicator_id, t.amp_theme_id/*, aidv.id*/
+				ORDER BY activity_id/*, acv.id*/;
+         	</lang>
+		</script>
+	</apply>
+</tns:patch>

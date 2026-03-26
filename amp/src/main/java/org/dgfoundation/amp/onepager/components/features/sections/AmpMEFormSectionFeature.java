@@ -19,7 +19,9 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,7 +45,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
     private Map<AmpActivityLocation, AmpMEItemFeaturePanel> locationIndicatorItems = new TreeMap<>();
 
-    private boolean isTabsView = true;
+    private boolean isTabsView = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.IS_ME_TABVIEW);
 
     final List<AmpActivityLocation> locations;
 
@@ -107,19 +109,21 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
             protected void populateItem(org.apache.wicket.markup.html.list.ListItem<AmpActivityLocation> item) {
                 AmpMEItemFeaturePanel indicatorLoc = null;
                 try {
-                    indicatorLoc = new AmpMEItemFeaturePanel("indicatorLocation", "ME Item Location", item.getModel(), am, locations
-                    );
+                    indicatorLoc = new AmpMEItemFeaturePanel("indicatorLocation", "ME Item Location", item.getModel(), am, locations);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 indicatorLoc.setTabIndex(item.getIndex());
 
+                // Apply tab id and data attribute to the ListItem's corresponding markup element (the placeholder div),
+                // because documentReady.js searches for div[data-is_location_tab=true]
                 item.add(new AttributePrepender("data-is_location_tab", new Model<String>("true"), ""));
-                locationIndicatorItems.put(item.getModelObject(), indicatorLoc);
+                item.setOutputMarkupId(true);
+                item.setMarkupId("tab" + (item.getIndex() + 1));
 
+                locationIndicatorItems.put(item.getModelObject(), indicatorLoc);
                 item.add(indicatorLoc);
             }
-
         };
         indicatorLocationList.setOutputMarkupId(true);
         add(indicatorLocationList);

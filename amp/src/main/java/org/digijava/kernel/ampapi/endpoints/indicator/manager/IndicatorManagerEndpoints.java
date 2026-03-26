@@ -9,6 +9,7 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Set;
 
 @Path("indicatorManager")
 @Api("indicatorManager")
@@ -89,6 +90,15 @@ public class IndicatorManagerEndpoints {
     @ApiOperation(value = "Retrieve and provide a list of category values.")
     public List<AmpCategoryValueDTO> getCategoryValues() {
         return new IndicatorManagerService().getCategoryValues();
+    }
+
+    @GET
+    @Path("/responsibleOrgs")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getResponsibleOrgs")
+    @ApiOperation(value = "Retrieve and provide a list of responsible organizations.")
+    public Set<ResponsibleOrgDTO> getResponsibleOrgs() {
+        return new IndicatorManagerService().getResponsibleOrganizations();
     }
 
 }

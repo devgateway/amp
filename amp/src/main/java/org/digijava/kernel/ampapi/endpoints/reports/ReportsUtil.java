@@ -448,7 +448,7 @@ public class ReportsUtil {
             for (String columnName : hierarchies) {
                 ReportColumn column = new ReportColumn(columnName);
                 if (!spec.getHierarchies().contains(column)) {
-                    //add as a column if not present 
+                    //add as a column if not present
                     if (!existingColumns.contains(column)) {
                         existingColumns.add(spec.getHierarchies().size(), column);
                     }
@@ -680,7 +680,7 @@ public class ReportsUtil {
                 if (asc == null) {
                     errors.add("sorting order is not specified, asc = null");
                 }
-                if (errors.size() > 0) {
+                if (!errors.isEmpty()) {
                     logger.error("Ignoring invalid sorting request: " + errors);
                 } else {
                     int rootType = isTotals ? SortingInfo.ROOT_PATH_TOTALS : (isFunding
@@ -923,7 +923,7 @@ public class ReportsUtil {
      * @return JsonBean with saved Api state
      */
     public static AmpApiState getApiState(String reportConfigId) {
-        // TODO: can we safely remove it from session afterwards? 
+        // TODO: can we safely remove it from session afterwards?
         return (AmpApiState) TLSUtils.getRequest().getSession()
                 .getAttribute(EPConstants.API_STATE_REPORT_EXPORT + reportConfigId);
     }

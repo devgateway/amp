@@ -27,6 +27,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.dgfoundation.amp.ar.ColumnConstants.*;
+import static org.dgfoundation.amp.ar.MeasureConstants.ACTUAL_COMMITMENTS;
+import static org.dgfoundation.amp.ar.MeasureConstants.ACTUAL_DISBURSEMENTS;
 import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportType.*;
 
 /**
@@ -65,10 +67,15 @@ public class ReportColumnProvider extends ReportEntityProvider {
             .put(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, 14)
             .put(ColumnConstants.INDICATOR_REVISED_TARGET_DATE, 15)
             .put(ColumnConstants.INDICATOR_REVISED_TARGET_COMMENT, 16)
-            .put(ColumnConstants.INDICATOR_ACTUAL_VALUE, 17)
+            .put(ColumnConstants.INDICATOR_CURRENT_VALUE, 17)
             .put(ColumnConstants.INDICATOR_ACTUAL_DATE, 18)
             .put(ColumnConstants.INDICATOR_ACTUAL_COMMENT, 19)
             .put(ColumnConstants.INDICATOR_RISK, 20)
+            .put(ColumnConstants.INDICATOR_THEME, 21)
+            .put(ColumnConstants.INDICATOR_OUTCOME, 22)
+            .put(ColumnConstants.INDICATOR_OUTPUT, 23)
+            .put(INDICATOR_DISAGGREGATION_LEVEL_0, 24)
+            .put(INDICATOR_DISAGGREGATION_LEVEL_1, 25)
             .build();
 
     private static final List<String> DONOR_HIERARCHIES = ImmutableList.of(
@@ -103,7 +110,8 @@ public class ReportColumnProvider extends ReportEntityProvider {
             PROJECT_IMPLEMENTING_UNIT, TYPE_OF_COOPERATION, TYPE_OF_IMPLEMENTATION, MULTI_STAKEHOLDER_PARTNERSHIP,
             CONCESSIONALITY_LEVEL, DISASTER_RESPONSE_MARKER, PROJECT_CATEGORY, PROJECT_RESULTS_AVAILABLE,
             INDICATOR_NAME, INDICATOR_LOGFRAME_CATEGORY, INDICATOR_RISK, INDICATOR_SECTOR, INDICATOR_TYPE,
-            REPORTING_SYSTEM, INDICATOR_DONOR
+            REPORTING_SYSTEM, INDICATOR_DONOR, INDICATOR_THEME, INDICATOR_OUTCOME, INDICATOR_OUTPUT,
+            INDICATOR_DISAGGREGATION_LEVEL_0, INDICATOR_DISAGGREGATION_LEVEL_1
     );
 
     private static final List<String> COMPONENT_HIERARCHIES = ImmutableList.of(
@@ -121,7 +129,8 @@ public class ReportColumnProvider extends ReportEntityProvider {
             PLEDGES_TERTIARY_PROGRAMS, PLEDGES_LOCATION_ADM_LEVEL_1, PLEDGES_LOCATION_ADM_LEVEL_2);
 
     private static final List<String> MEASURELESS_ONLY_HIERARCHIES = ImmutableList.of(
-            INDICATOR_NAME, INDICATOR_LOGFRAME_CATEGORY, INDICATOR_RISK, INDICATOR_SECTOR, INDICATOR_TYPE);
+            INDICATOR_LOGFRAME_CATEGORY, INDICATOR_RISK, INDICATOR_SECTOR, INDICATOR_TYPE,
+            INDICATOR_THEME, ACTUAL_COMMITMENTS, ACTUAL_DISBURSEMENTS);
 
     private static final Map<ReportType, List<String>> REPORT_TYPE_HIERARCHIES =
             new ImmutableMap.Builder<ReportType, List<String>>()

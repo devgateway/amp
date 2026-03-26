@@ -224,7 +224,7 @@ public class ImporterUtil {
             }
             return cell.getStringCellValue();
         } catch (Exception e) {
-            logger.error("Error getting cell {} value: ", cell, e);
+            logger.error("Error getting cell {} value: ", cell);
             return nullable ? null : "";
         }
     }
@@ -240,7 +240,7 @@ public class ImporterUtil {
             }
             return cell.getNumericCellValue();
         } catch (Exception e) {
-            logger.error("Error getting cell {} value: ", cell, e);
+            logger.error("Error getting cell {} value: ", cell);
             return 0;
         }
     }
@@ -1277,29 +1277,36 @@ public class ImporterUtil {
         if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty())
             return;
         Set<Location> locs = importDataModel.getLocations();
-        double sum = 0;
+        // Only consider locations that were found (location != null)
+        List<Location> foundLocations = new ArrayList<>();
         for (Location loc : locs) {
+            if (loc != null && loc.getLocation() != null) {
+                foundLocations.add(loc);
+            }
+        }
+        if (foundLocations.isEmpty()) {
+            return;
+        }
+        double sum = 0;
+        for (Location loc : foundLocations) {
             Double pct = loc.getLocation_percentage();
             sum += (pct != null ? pct : 0);
         }
         if (sum <= 0) {
             // If there is no usable input percentage, split 100 as whole numbers (e.g. 33,33,34).
-            List<Location> list = new ArrayList<>(locs);
-            Map<Integer, Float> percentages = divide100(list.size());
-            for (int i = 0; i < list.size(); i++) {
-                list.get(i).setLocation_percentage((double) percentages.get(i));
+            Map<Integer, Float> percentages = divide100(foundLocations.size());
+            for (int i = 0; i < foundLocations.size(); i++) {
+                foundLocations.get(i).setLocation_percentage((double) percentages.get(i));
             }
             return;
         }
-        List<Location> list = new ArrayList<>(locs);
-
         // Convert scaled shares to whole numbers summing exactly to 100 via largest remainder.
         double scale = 100.0 / sum;
         int allocated = 0;
-        List<Double> remainders = new ArrayList<>(Collections.nCopies(list.size(), 0.0));
-        List<Integer> wholeParts = new ArrayList<>(Collections.nCopies(list.size(), 0));
-        for (int i = 0; i < list.size(); i++) {
-            Location loc = list.get(i);
+        List<Double> remainders = new ArrayList<>(Collections.nCopies(foundLocations.size(), 0.0));
+        List<Integer> wholeParts = new ArrayList<>(Collections.nCopies(foundLocations.size(), 0));
+        for (int i = 0; i < foundLocations.size(); i++) {
+            Location loc = foundLocations.get(i);
             Double pct = loc.getLocation_percentage();
             double scaled = (pct != null ? pct : 0) * scale;
             int whole = (int) Math.floor(scaled);
@@ -1307,10 +1314,9 @@ public class ImporterUtil {
             remainders.set(i, scaled - whole);
             allocated += whole;
         }
-
         int remaining = 100 - allocated;
         List<Integer> indices = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < foundLocations.size(); i++) {
             indices.add(i);
         }
         indices.sort((a, b) -> Double.compare(remainders.get(b), remainders.get(a)));
@@ -1318,9 +1324,8 @@ public class ImporterUtil {
             int idx = indices.get(i);
             wholeParts.set(idx, wholeParts.get(idx) + 1);
         }
-
-        for (int i = 0; i < list.size(); i++) {
-            list.get(i).setLocation_percentage((double) wholeParts.get(i));
+        for (int i = 0; i < foundLocations.size(); i++) {
+            foundLocations.get(i).setLocation_percentage((double) wholeParts.get(i));
         }
     }
 

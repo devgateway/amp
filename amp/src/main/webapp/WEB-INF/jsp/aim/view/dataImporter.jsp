@@ -167,6 +167,13 @@
       toggleUploadSection();
     }
 
+    function switchImporterTab(tabId) {
+      $('.tab-pane').hide();
+      $('.tab-item').removeClass('active');
+      $('#' + tabId).show();
+      $('[data-tab="' + tabId + '"]').addClass('active');
+    }
+
     function revealConfigWorkspace() {
       document.getElementById('otherComponents').removeAttribute('hidden');
       $('#add-field').show();
@@ -174,6 +181,8 @@
       $('#selected-field').show();
       initializeSelectControls();
       toggleUploadSection();
+      $('#tab-mapping-btn').removeClass('disabled-tab');
+      switchImporterTab('tab-mapping-pane');
     }
     
     function replaceLastOccurrence(inputString, search, replacement) {
@@ -780,13 +789,13 @@
 
     input[type="button"],
     button {
-      border: 1px solid #21587b;
+      border: 1px solid #2480c6;
       border-radius: 999px;
       padding: 8px 14px;
       font-weight: 700;
       cursor: pointer;
       color: #fff;
-      background: var(--accent);
+      background: #2480c6;
       font-size: 12px;
       box-shadow: none;
       transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
@@ -794,8 +803,8 @@
 
     input[type="button"]:hover,
     button:hover {
-      background: var(--accent-deep);
-      border-color: var(--accent-deep);
+      background: #164060;
+      border-color: #164060;
     }
 
     .remove-row {
@@ -923,6 +932,53 @@
       padding: 6px 8px;
     }
 
+    .tabs-nav {
+      display: flex;
+      gap: 4px;
+      border-bottom: 2px solid #2480c6;
+      margin-bottom: 0;
+    }
+
+    .tab-item {
+      padding: 10px 22px;
+      background: #e7f1fd;
+      color: #0b3e6f;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid #c8daea;
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+      font-size: 13px;
+      user-select: none;
+      transition: background 0.15s ease;
+    }
+
+    .tab-item.active {
+      background: #2480c6;
+      color: #fff;
+      border-color: #2480c6;
+    }
+
+    .tab-item:hover:not(.active):not(.disabled-tab) {
+      background: #c5d8f0;
+    }
+
+    .tab-item.disabled-tab {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .tab-pane {
+      border: 1px solid #c8daea;
+      border-top: none;
+      border-radius: 0 0 14px 14px;
+      background: var(--panel-bg);
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+
     @media (max-width: 768px) {
       .importer-page {
         padding: 24px 14px 40px;
@@ -950,6 +1006,12 @@
     <p><digi:trn>Prepare a template, map source columns to AMP entity fields, and upload your data only after the configuration table is ready.</digi:trn></p>
   </div>
 
+  <div class="tabs-nav">
+    <div class="tab-item active" data-tab="tab-configure-pane" id="tab-configure-btn" onclick="switchImporterTab('tab-configure-pane')"><digi:trn>1. File Setup</digi:trn></div>
+    <div class="tab-item disabled-tab" data-tab="tab-mapping-pane" id="tab-mapping-btn" onclick="switchImporterTab('tab-mapping-pane')"><digi:trn>2. Map &amp; Upload</digi:trn></div>
+  </div>
+
+  <div id="tab-configure-pane" class="tab-pane">
   <div class="panel-grid">
     <div class="panel-card">
       <span class="section-label"><digi:trn>Step 1</digi:trn></span>
@@ -1004,7 +1066,9 @@
       </form>
     </div>
   </div>
+  </div>
 
+  <div id="tab-mapping-pane" class="tab-pane" style="display:none">
   <div id="otherComponents" class="workspace-card" hidden>
     <html:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
       <input type="hidden" id="current-config-name" value="">
@@ -1135,6 +1199,7 @@
         </div>
       </div>
     </html:form>
+  </div>
   </div>
 </div>
 

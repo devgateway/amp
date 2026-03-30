@@ -130,14 +130,14 @@
             .view-progress-btn,
             .view-more-btn,
             .nav-action-btn {
-                border: 1px solid #21587b;
+                border: 1px solid #2480c6;
                 border-radius: 999px;
                 padding: 8px 14px;
                 font-size: 12px;
                 font-weight: 700;
                 cursor: pointer;
                 color: #fff;
-                background: var(--accent);
+                background: #2480c6;
                 box-shadow: none;
             }
 
@@ -259,6 +259,47 @@
                 color: var(--text-soft);
             }
 
+            .tabs-nav {
+                display: flex;
+                gap: 4px;
+                border-bottom: 2px solid #2480c6;
+                margin-bottom: 0;
+            }
+
+            .tab-item {
+                padding: 10px 22px;
+                background: #e7f1fd;
+                color: #0b3e6f;
+                font-weight: 700;
+                cursor: pointer;
+                border: 1px solid #c8daea;
+                border-bottom: none;
+                border-radius: 6px 6px 0 0;
+                font-size: 13px;
+                user-select: none;
+                transition: background 0.15s ease;
+            }
+
+            .tab-item.active {
+                background: #2480c6;
+                color: #fff;
+                border-color: #2480c6;
+            }
+
+            .tab-item:hover:not(.active) {
+                background: #c5d8f0;
+            }
+
+            .tab-pane {
+                border: 1px solid #c8daea;
+                border-top: none;
+                border-radius: 0 0 14px 14px;
+                background: var(--panel-bg);
+                padding: 16px;
+                margin-bottom: 14px;
+                box-shadow: var(--shadow);
+            }
+
             @media (max-width: 768px) {
                 .progress-page {
                     padding: 24px 14px 40px;
@@ -297,6 +338,13 @@
                     previous: "<digi:trn jsFriendly='true'>Previous</digi:trn>"
                 }
             };
+
+            function switchProgressTab(tabId) {
+                $('.tab-pane').hide();
+                $('.tab-item').removeClass('active');
+                $('#' + tabId).show();
+                $('[data-tab="' + tabId + '"]').addClass('active');
+            }
 
             $(document).ready(function() {
 
@@ -397,10 +445,7 @@
                             });
                             datatable.draw();
 
-                            var recordsSection = document.getElementById('records-section');
-                            if (recordsSection) {
-                                recordsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            }
+                            switchProgressTab('tab-records-pane');
 
                         },
                         error: function(xhr, status, error) {
@@ -461,9 +506,12 @@
             </div>
         </div>
 
-        <div class="panel-card">
-            <span class="section-label"><digi:trn>Imported Files</digi:trn></span>
-            <h2><digi:trn>Recent Uploads</digi:trn></h2>
+        <div class="tabs-nav">
+            <div class="tab-item active" data-tab="tab-uploads-pane" onclick="switchProgressTab('tab-uploads-pane')"><digi:trn>Recent Uploads</digi:trn></div>
+            <div class="tab-item" data-tab="tab-records-pane" onclick="switchProgressTab('tab-records-pane')"><digi:trn>Record Details</digi:trn></div>
+        </div>
+
+        <div id="tab-uploads-pane" class="tab-pane">
             <p class="section-copy"><digi:trn>Click a file to load its records and jump directly to the detailed results table.</digi:trn></p>
 
             <div class="uploads-filter-bar">
@@ -509,10 +557,7 @@
             </table>
         </div>
 
-        <div class="records-card file-projects" id="records-section">
-            <span class="section-label"><digi:trn>Record Details</digi:trn></span>
-            <h2><digi:trn>Imported Records</digi:trn></h2>
-
+        <div id="tab-records-pane" class="tab-pane" style="display:none">
             <div class="filter-div">
                 <label for="all-projects"><digi:trn>All</digi:trn>:</label>
                 <input type="radio" id="all-projects" name="project-filter" value="ALL" checked>

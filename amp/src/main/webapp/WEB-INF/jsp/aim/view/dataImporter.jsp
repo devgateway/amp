@@ -6,6 +6,7 @@
 <html:html>
 <head>
   <title><digi:trn>Data Importer</digi:trn></title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -646,15 +647,15 @@
   </script>
   <style>
     :root {
-      --page-bg: #f4f5f7;
+      --page-bg: #f5faff;
       --panel-bg: #ffffff;
-      --panel-border: #d7dde3;
+      --panel-border: #c8daea;
       --text-strong: #22313a;
-      --text-soft: #667784;
-      --accent: #40606f;
-      --accent-deep: #314b57;
-      --accent-warm: #8a6f56;
-      --surface-muted: #f0f2f4;
+      --text-soft: #4a6880;
+      --accent: #21587b;
+      --accent-deep: #164060;
+      --accent-warm: #2480c6;
+      --surface-muted: #e7f1fd;
       --row-alt: #f8f9fa;
       --shadow: 0 4px 12px rgba(25, 39, 52, 0.05);
       --radius-lg: 14px;
@@ -668,7 +669,7 @@
 
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
       font-size: 12px;
       line-height: 1.4;
       color: var(--text-strong);
@@ -779,7 +780,7 @@
 
     input[type="button"],
     button {
-      border: 1px solid #506673;
+      border: 1px solid #21587b;
       border-radius: 999px;
       padding: 8px 14px;
       font-weight: 700;
@@ -851,8 +852,8 @@
     }
 
     table th {
-      background: #eef1f3;
-      color: var(--text-strong);
+      background: #d6e7fd;
+      color: #21587b;
       font-size: 11px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -889,9 +890,9 @@
       margin-top: 12px;
       padding: 10px 12px;
       border-radius: var(--radius-md);
-      background: #f3efe9;
-      color: #6a5a48;
-      border: 1px solid #dfd6cb;
+      background: #e7f1fd;
+      color: #21587b;
+      border: 1px solid #a3c4e4;
     }
 
     .select2-container--default .select2-selection--single {

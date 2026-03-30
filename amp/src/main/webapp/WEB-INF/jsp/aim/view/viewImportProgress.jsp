@@ -6,18 +6,19 @@
 <html:html>
     <head>
         <title><digi:trn>Imported Files</digi:trn></title>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
         <style>
             :root {
-                --page-bg: #f4f5f7;
+                --page-bg: #f5faff;
                 --panel-bg: #ffffff;
-                --panel-border: #d7dde3;
+                --panel-border: #c8daea;
                 --text-strong: #22313a;
-                --text-soft: #667784;
-                --accent: #40606f;
-                --accent-deep: #314b57;
-                --success: #4a6b58;
-                --danger: #7a5555;
-                --warning: #7d6a53;
+                --text-soft: #4a6880;
+                --accent: #21587b;
+                --accent-deep: #164060;
+                --success: #21C11C;
+                --danger: #c20000;
+                --warning: #f2711c;
                 --row-alt: #f8f9fa;
                 --shadow: 0 4px 12px rgba(25, 39, 52, 0.05);
             }
@@ -28,7 +29,7 @@
 
             body {
                 margin: 0;
-                font-family: Arial, Helvetica, sans-serif;
+                font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
                 font-size: 12px;
                 line-height: 1.4;
                 color: var(--text-strong);
@@ -111,7 +112,8 @@
             }
 
             th {
-                background: #eef1f3;
+                background: #d6e7fd;
+                color: #21587b;
                 font-size: 11px;
                 letter-spacing: 0.08em;
                 text-transform: uppercase;
@@ -128,7 +130,7 @@
             .view-progress-btn,
             .view-more-btn,
             .nav-action-btn {
-                border: 1px solid #506673;
+                border: 1px solid #21587b;
                 border-radius: 999px;
                 padding: 8px 14px;
                 font-size: 12px;
@@ -162,7 +164,7 @@
                 padding: 10px 12px;
                 border-radius: 10px;
                 font-weight: 700;
-                background: #f1f3f5;
+                background: #e7f1fd;
                 border: 1px solid var(--panel-border);
                 font-size: 12px;
             }
@@ -191,7 +193,7 @@
                 margin-bottom: 12px;
                 padding: 10px 12px;
                 border-radius: 10px;
-                background: #f1f3f5;
+                background: #e7f1fd;
                 border: 1px solid var(--panel-border);
             }
 
@@ -225,7 +227,7 @@
                 margin: 10px 0 12px;
                 padding: 10px 12px;
                 border-radius: 10px;
-                background: #f1f3f5;
+                background: #e7f1fd;
                 border: 1px solid var(--panel-border);
             }
 

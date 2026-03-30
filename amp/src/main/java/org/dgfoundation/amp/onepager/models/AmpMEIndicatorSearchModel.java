@@ -52,7 +52,7 @@ public class AmpMEIndicatorSearchModel extends
 
             Criteria crit = session.createCriteria(AmpIndicator.class);
 
-            Set<Long> activityProgramThemeIds = (Set<Long>) getParam(PARAM.ACTIVITY_PROGRAM);
+            Set<Long> activityProgramThemeIds = toProgramThemeIds(getParam(PARAM.ACTIVITY_PROGRAM));
 
             // Get activity location
             crit.setCacheable(false);
@@ -100,6 +100,25 @@ public class AmpMEIndicatorSearchModel extends
         } catch (HibernateException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Set<Long> toProgramThemeIds(Object param) {
+        if (param == null) return Collections.emptySet();
+        Set<?> raw = (Set<?>) param;
+        if (raw.isEmpty()) return Collections.emptySet();
+        Object first = raw.iterator().next();
+        if (first instanceof Long) {
+            return (Set<Long>) raw;
+        }
+        // Legacy: stale Wicket session still holds Set<AmpActivityProgram>
+        Set<Long> ids = new HashSet<>();
+        for (AmpActivityProgram ap : (Set<AmpActivityProgram>) raw) {
+            if (ap.getProgram() != null && ap.getProgram().getAmpThemeId() != null) {
+                ids.add(ap.getProgram().getAmpThemeId());
+            }
+        }
+        return ids;
     }
 
 }

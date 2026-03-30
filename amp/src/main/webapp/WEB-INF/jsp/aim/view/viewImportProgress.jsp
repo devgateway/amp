@@ -30,7 +30,7 @@
             body {
                 margin: 0;
                 font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
-                font-size: 12px;
+                font-size: 13px;
                 line-height: 1.4;
                 color: var(--text-strong);
                 background: var(--page-bg);
@@ -64,28 +64,35 @@
                 background: var(--panel-bg);
             }
 
-            .hero-card h1,
+            .hero-card h1 {
+                margin: 0 0 8px;
+                font-size: 16px;
+                font-weight: 700;
+                letter-spacing: 0;
+            }
+
             .panel-card h2,
             .records-card h2 {
-                margin: 0 0 8px;
-                font-size: 18px;
+                margin: 0 0 6px;
+                font-size: 13px;
+                font-weight: 700;
+                letter-spacing: 0;
             }
 
             .section-label {
                 display: inline-block;
                 margin-bottom: 6px;
                 font-size: 11px;
-                letter-spacing: 0.12em;
-                text-transform: uppercase;
+                letter-spacing: 0.04em;
                 color: var(--accent);
-                font-weight: 700;
+                font-weight: 600;
             }
 
             .section-copy {
                 margin: 0;
                 color: var(--text-soft);
-                line-height: 1.45;
-                font-size: 12px;
+                line-height: 1.55;
+                font-size: 13px;
             }
 
             .panel-card,
@@ -107,7 +114,7 @@
             td, th {
                 text-align: left;
                 padding: 10px 12px;
-                font-size: 12px;
+                font-size: 13px;
                 border-bottom: 1px solid rgba(22, 53, 67, 0.08);
             }
 
@@ -131,10 +138,10 @@
             .view-more-btn,
             .nav-action-btn {
                 border: 1px solid #2480c6;
-                border-radius: 999px;
-                padding: 8px 14px;
-                font-size: 12px;
-                font-weight: 700;
+                border-radius: 6px;
+                padding: 8px 16px;
+                font-size: 13px;
+                font-weight: 600;
                 cursor: pointer;
                 color: #fff;
                 background: #2480c6;
@@ -311,6 +318,19 @@
 
             .tab-nav-actions .prev-btn {
                 margin-right: auto;
+                background: #20bb45;
+                border-color: #20bb45;
+            }
+
+            .tab-nav-actions .next-btn {
+                background: #20bb45;
+                border-color: #20bb45;
+            }
+
+            .tab-nav-actions .prev-btn:hover,
+            .tab-nav-actions .next-btn:hover {
+                background: #179e39;
+                border-color: #179e39;
             }
 
             button:disabled {
@@ -575,7 +595,7 @@
                 </tbody>
             </table>
             <div class="tab-nav-actions">
-                <button type="button" class="next-btn" onclick="switchProgressTab('tab-records-pane')"><digi:trn>Next</digi:trn> &#8594;</button>
+                <button type="button" class="next-btn" onclick="switchProgressTab('tab-records-pane')"><digi:trn>Next</digi:trn> &gt;&gt;</button>
             </div>
         </div>
 
@@ -608,7 +628,7 @@
             </table>
             <div class="pagination"></div>
             <div class="tab-nav-actions">
-                <button type="button" class="prev-btn" onclick="switchProgressTab('tab-uploads-pane')">&#8592; <digi:trn>Previous</digi:trn></button>
+                <button type="button" class="prev-btn" onclick="switchProgressTab('tab-uploads-pane')">&lt;&lt; <digi:trn>Previous</digi:trn></button>
             </div>
         </div>
     </div>

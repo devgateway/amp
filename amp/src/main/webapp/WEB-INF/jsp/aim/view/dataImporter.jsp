@@ -685,7 +685,7 @@
     body {
       margin: 0;
       font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 12px;
+      font-size: 13px;
       line-height: 1.4;
       color: var(--text-strong);
       background: var(--page-bg);
@@ -720,11 +720,18 @@
       background: var(--panel-bg);
     }
 
-    .hero-card h1,
+    .hero-card h1 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .panel-card h2,
     .workspace-card h2,
     .upload-stage h3 {
-      margin: 0 0 8px;
-      font-size: 18px;
+      margin: 0 0 6px;
+      font-size: 13px;
       font-weight: 700;
       letter-spacing: 0;
     }
@@ -733,9 +740,9 @@
     .section-copy,
     .helper-note {
       color: var(--text-soft);
-      line-height: 1.45;
+      line-height: 1.55;
       margin: 0;
-      font-size: 12px;
+      font-size: 13px;
     }
 
     .panel-grid {
@@ -760,17 +767,16 @@
       display: inline-block;
       margin-bottom: 6px;
       font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      letter-spacing: 0.04em;
       color: var(--accent);
-      font-weight: 700;
+      font-weight: 600;
     }
 
     label {
       display: inline-block;
       margin-bottom: 4px;
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 600;
       color: var(--text-strong);
     }
 
@@ -785,7 +791,7 @@
       border: 1px solid rgba(22, 53, 67, 0.18);
       background: #fff;
       color: var(--text-strong);
-      font-size: 12px;
+      font-size: 13px;
     }
 
     input[type="file"] {
@@ -796,13 +802,13 @@
     input[type="button"],
     button {
       border: 1px solid #2480c6;
-      border-radius: 999px;
-      padding: 8px 14px;
-      font-weight: 700;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-weight: 600;
       cursor: pointer;
       color: #fff;
       background: #2480c6;
-      font-size: 12px;
+      font-size: 13px;
       box-shadow: none;
       transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
     }
@@ -996,6 +1002,19 @@
 
     .tab-nav-actions .prev-btn {
       margin-right: auto;
+      background: #20bb45;
+      border-color: #20bb45;
+    }
+
+    .tab-nav-actions .next-btn {
+      background: #20bb45;
+      border-color: #20bb45;
+    }
+
+    .tab-nav-actions .prev-btn:hover,
+    .tab-nav-actions .next-btn:hover {
+      background: #179e39;
+      border-color: #179e39;
     }
 
     button:disabled {
@@ -1093,7 +1112,7 @@
     </div>
   </div>
   <div class="tab-nav-actions">
-    <button type="button" id="next-to-map-btn" class="next-btn" disabled onclick="switchImporterTab('tab-mapping-pane')"><digi:trn>Next</digi:trn> &#8594;</button>
+    <button type="button" id="next-to-map-btn" class="next-btn" disabled onclick="switchImporterTab('tab-mapping-pane')"><digi:trn>Next</digi:trn> &gt;&gt;</button>
   </div>
   </div>
 
@@ -1146,8 +1165,8 @@
         <digi:trn>Add at least one column-to-field pair to unlock data file upload.</digi:trn>
       </div>
       <div class="tab-nav-actions">
-        <button type="button" class="prev-btn" onclick="switchImporterTab('tab-configure-pane')">&#8592; <digi:trn>Previous</digi:trn></button>
-        <button type="button" id="next-to-upload-btn" class="next-btn" disabled onclick="switchImporterTab('tab-upload-pane')"><digi:trn>Next</digi:trn> &#8594;</button>
+        <button type="button" class="prev-btn" onclick="switchImporterTab('tab-configure-pane')">&lt;&lt; <digi:trn>Previous</digi:trn></button>
+        <button type="button" id="next-to-upload-btn" class="next-btn" disabled onclick="switchImporterTab('tab-upload-pane')"><digi:trn>Next</digi:trn> &gt;&gt;</button>
       </div>
     </html:form>
   </div>
@@ -1235,7 +1254,7 @@
           <input type="button" value="<digi:trn>Upload</digi:trn>" onclick="uploadDataFile()">
         </div>
         <div class="tab-nav-actions">
-          <button type="button" class="prev-btn" onclick="switchImporterTab('tab-mapping-pane')">&#8592; <digi:trn>Previous</digi:trn></button>
+          <button type="button" class="prev-btn" onclick="switchImporterTab('tab-mapping-pane')">&lt;&lt; <digi:trn>Previous</digi:trn></button>
         </div>
       </div>
   </div>

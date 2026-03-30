@@ -49,7 +49,7 @@ public class AmpMEIndicatorSearchModel extends
 
             Criteria crit = session.createCriteria(AmpIndicator.class);
 
-            Set<AmpActivityProgram> ampActivityPrograms = (Set<AmpActivityProgram>) getParam(PARAM.ACTIVITY_PROGRAM);
+            Set<Long> activityProgramThemeIds = (Set<Long>) getParam(PARAM.ACTIVITY_PROGRAM);
 
             // Get activity location
             crit.setCacheable(false);
@@ -67,23 +67,23 @@ public class AmpMEIndicatorSearchModel extends
             filterAmpIndicators = ret;
             // Check if the indicator filter by program is active
             boolean filterByProgram = FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_PROGRAM);
-            if(filterByProgram) {
-                // If not activity programs then do not return any indicator
-                if (ampActivityPrograms != null && !ampActivityPrograms.isEmpty()) {
-                    Set<AmpTheme> programThemes = ampActivityPrograms.stream()
-                            .map(AmpActivityProgram::getProgram)
-                            .collect(Collectors.toSet());
-                    Set<AmpTheme> programThemesClone = new HashSet<>(programThemes);
-                    // Check if program has siblings and add them to themes to get all indicators for objectives in a program
-                    for (AmpTheme program : programThemes) {
-                        if (program.getSiblings() != null) {
-                            programThemesClone.addAll(program.getSiblings());
+            if (filterByProgram) {
+                if (activityProgramThemeIds != null && !activityProgramThemeIds.isEmpty()) {
+                    // Include siblings (children in AMP hierarchy) via fresh session to avoid lazy-load issues
+                    Set<Long> allProgramIds = new HashSet<>(activityProgramThemeIds);
+                    for (Long themeId : activityProgramThemeIds) {
+                        AmpTheme theme = session.get(AmpTheme.class, themeId);
+                        if (theme != null && theme.getSiblings() != null) {
+                            for (AmpTheme sibling : theme.getSiblings()) {
+                                if (sibling.getAmpThemeId() != null) {
+                                    allProgramIds.add(sibling.getAmpThemeId());
+                                }
+                            }
                         }
                     }
-
-
                     filterAmpIndicators = ret.stream()
-                            .filter(indicator -> programThemesClone.contains(indicator.getProgram()))
+                            .filter(ind -> ind.getProgram() != null
+                                    && allProgramIds.contains(ind.getProgram().getAmpThemeId()))
                             .collect(Collectors.toList());
                 }
             }

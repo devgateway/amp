@@ -139,7 +139,15 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         });
         add(indicatorTargetDateLabel);
 
-        AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, "Actual Values", false, 7);
+        final boolean hasDisaggregation = indicator.getObject().getDisaggregation() != null
+                && !indicator.getObject().getDisaggregation().isEmpty();
+        AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, "Actual Values", false, 7) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (isVisible()) setVisible(!hasDisaggregation);
+            }
+        };
         valuesTable.setOutputMarkupPlaceholderTag(true);
         add(valuesTable);
 
@@ -153,6 +161,12 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                 valuesTable.getEditorList().addItem(value);
                 target.add(valuesTable);
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
+            }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (isVisible()) setVisible(!hasDisaggregation);
             }
         };
 
@@ -193,11 +207,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection","Disaggregation Values", indicator);
         disaggPanel.setOutputMarkupId(true);
         disaggPanel.setOutputMarkupPlaceholderTag(true);
-        boolean hasDisaggregation = indicator.getObject().getDisaggregation() != null
-                && !indicator.getObject().getDisaggregation().isEmpty();
         disaggPanel.setVisible(hasDisaggregation);
-        valuesTable.setVisible(!hasDisaggregation);
-        addActualValue.setVisible(!hasDisaggregation);
         add(disaggPanel);
 
 

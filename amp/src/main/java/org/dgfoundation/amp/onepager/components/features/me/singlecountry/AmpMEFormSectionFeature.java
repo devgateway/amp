@@ -25,8 +25,11 @@ import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.util.DbUtil;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
 
 /**
  * M&E section
@@ -126,9 +129,20 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
                 };
 
-        searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM, am.getObject().getActPrograms());
+        searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM, extractProgramThemeIds(am.getObject().getActPrograms()));
         add(UpdateEventBehavior.of(ProgramSelectedEvent.class));
         add(searchIndicators);
+    }
+
+    private static Set<Long> extractProgramThemeIds(Set<AmpActivityProgram> programs) {
+        if (programs == null || programs.isEmpty()) return Collections.emptySet();
+        Set<Long> ids = new HashSet<>();
+        for (AmpActivityProgram ap : programs) {
+            if (ap.getProgram() != null && ap.getProgram().getAmpThemeId() != null) {
+                ids.add(ap.getProgram().getAmpThemeId());
+            }
+        }
+        return ids;
     }
 
     @Override
@@ -136,7 +150,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         super.onBeforeRender();
         searchIndicators.getModelParams().put(
                 AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM,
-                activityModel.getObject().getActPrograms()
+                extractProgramThemeIds(activityModel.getObject().getActPrograms())
         );
     }
 }

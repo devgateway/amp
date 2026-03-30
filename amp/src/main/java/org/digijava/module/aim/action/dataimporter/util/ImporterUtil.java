@@ -335,7 +335,7 @@ public class ImporterUtil {
         }
         if (dateString != null && dateString.trim().matches("\\d{4}")) {
             int year = Integer.parseInt(dateString.trim());
-            return LocalDate.of(year, 12, 31).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return LocalDate.of(year, 1, 1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
         LocalDate date = LocalDate.now();
         if (isCommonDateFormat(dateString)) {

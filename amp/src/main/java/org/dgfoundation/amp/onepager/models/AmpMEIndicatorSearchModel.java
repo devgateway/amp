@@ -15,6 +15,7 @@ import org.hibernate.criterion.Restrictions;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import org.apache.log4j.Logger;
 
 /**
  * @author aartimon@dginternational.org
@@ -31,6 +32,8 @@ public class AmpMEIndicatorSearchModel extends
 
     private static final long serialVersionUID = 8211300754918658832L;
     private Session session;
+    private static final Logger logger = Logger.getLogger(AmpMEIndicatorSearchModel.class);
+
 
     public enum PARAM implements AmpAutoCompleteModelParam {
         ACTIVITY_PROGRAM
@@ -62,11 +65,16 @@ public class AmpMEIndicatorSearchModel extends
             if (maxResults != null && maxResults != 0)
                 crit.setMaxResults(maxResults);
             ret = crit.list();
+            ret.forEach(ind -> logger.info("Indicator: " + ind.getName()
+                    + " | programId: " + (ind.getProgram() != null ? ind.getProgram().getAmpThemeId() : "null")));
 
             // Re assign all indicators as filtered
             filterAmpIndicators = ret;
             // Check if the indicator filter by program is active
             boolean filterByProgram = FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_PROGRAM);
+            logger.info("Filter by program "+filterByProgram);
+            logger.info("All programs :" +activityProgramThemeIds);
+
             if (filterByProgram) {
                 if (activityProgramThemeIds != null && !activityProgramThemeIds.isEmpty()) {
                     // Include siblings (children in AMP hierarchy) via fresh session to avoid lazy-load issues

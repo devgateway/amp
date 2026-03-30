@@ -9,8 +9,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
@@ -26,7 +24,6 @@ import org.digijava.module.aim.action.dataimporter.model.*;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -651,6 +648,32 @@ public class ImporterUtil {
         );
     }
 
+    private static Set<Funding> mergeFundingsByDonor(Set<Funding> fundings) {
+        if (fundings == null || fundings.size() <= 1) return fundings;
+        Map<String, Funding> merged = new LinkedHashMap<>();
+        for (Funding f : fundings) {
+            String key = f.getDonor_organization_id() + "|"
+                    + f.getSource_role() + "|"
+                    + f.getType_of_assistance() + "|"
+                    + f.getFinancing_instrument();
+            Funding existing = merged.get(key);
+            if (existing == null) {
+                merged.put(key, f);
+            } else {
+                for (Transaction t : f.getCommitments()) {
+                    if (!transactionExists(existing.getCommitments(), t)) existing.getCommitments().add(t);
+                }
+                for (Transaction t : f.getDisbursements()) {
+                    if (!transactionExists(existing.getDisbursements(), t)) existing.getDisbursements().add(t);
+                }
+                for (Transaction t : f.getExpenditures()) {
+                    if (!transactionExists(existing.getExpenditures(), t)) existing.getExpenditures().add(t);
+                }
+            }
+        }
+        return new LinkedHashSet<>(merged.values());
+    }
+
     /**
      * Creates a corresponding disbursement transaction for each commitment transaction.
      * The disbursement will have the same amount, currency, and date as the commitment.
@@ -965,6 +988,7 @@ public class ImporterUtil {
         objectMapper.configure(ESCAPE_NON_ASCII, false); // Disable escaping of non-ASCII characters during serialization
         objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 
+        importDataModel.setFundings(mergeFundingsByDonor(importDataModel.getFundings()));
         pruneParentLocationsWhenChildPresent(importDataModel, session);
         normalizeLocationPercentages(importDataModel);
         Map<String, Object> map = objectMapper

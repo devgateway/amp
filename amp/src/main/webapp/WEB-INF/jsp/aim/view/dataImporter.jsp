@@ -662,9 +662,9 @@
   </script>
   <style>
     :root {
-      --page-bg: #f5faff;
+      --page-bg: #f9fafb;
       --panel-bg: #ffffff;
-      --panel-border: #c8daea;
+      --panel-border: rgba(34, 36, 38, 0.15);
       --text-strong: #22313a;
       --text-soft: #4a6880;
       --accent: #21587b;
@@ -672,8 +672,8 @@
       --accent-warm: #2480c6;
       --surface-muted: #e7f1fd;
       --row-alt: #f8f9fa;
-      --shadow: 0 4px 12px rgba(25, 39, 52, 0.05);
-      --radius-lg: 14px;
+      --shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15);
+      --radius-lg: 6px;
       --radius-md: 10px;
       --radius-sm: 6px;
     }
@@ -714,7 +714,7 @@
     }
 
     .hero-card {
-      border-radius: 16px;
+      border-radius: 6px;
       padding: 20px;
       margin-bottom: 14px;
       background: var(--panel-bg);
@@ -818,6 +818,16 @@
     button:hover {
       background: #164060;
       border-color: #164060;
+    }
+
+    .upload-btn {
+      background: #f2711c;
+      border-color: #f2711c;
+    }
+
+    .upload-btn:hover {
+      background: #d45800 !important;
+      border-color: #d45800 !important;
     }
 
     .remove-row {
@@ -1107,7 +1117,7 @@
         <label for="template-file"><digi:trn>Select Template File</digi:trn></label>
         <input id="template-file" type="file" accept=".xls,.xlsx,.csv" name="templateFile" />
         <div class="mapping-actions">
-          <input type="button" value="<digi:trn>Upload Template</digi:trn>" onclick="uploadTemplateFile()" />
+          <input type="button" class="upload-btn" value="<digi:trn>Upload Template</digi:trn>" onclick="uploadTemplateFile()" />
         </div>
       </form>
     </div>
@@ -1252,7 +1262,7 @@
         </div>
 
         <div class="mapping-actions">
-          <input type="button" value="<digi:trn>Upload</digi:trn>" onclick="uploadDataFile()">
+          <input type="button" class="upload-btn" value="<digi:trn>Upload</digi:trn>" onclick="uploadDataFile()">
         </div>
         <div class="tab-nav-actions">
           <button type="button" class="prev-btn" onclick="switchImporterTab('tab-mapping-pane')">&lt;&lt; <digi:trn>Previous</digi:trn></button>

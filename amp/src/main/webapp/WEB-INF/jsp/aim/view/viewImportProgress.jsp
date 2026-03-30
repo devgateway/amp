@@ -9,9 +9,9 @@
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
         <style>
             :root {
-                --page-bg: #f5faff;
+                --page-bg: #f9fafb;
                 --panel-bg: #ffffff;
-                --panel-border: #c8daea;
+                --panel-border: rgba(34, 36, 38, 0.15);
                 --text-strong: #22313a;
                 --text-soft: #4a6880;
                 --accent: #21587b;
@@ -20,7 +20,7 @@
                 --danger: #c20000;
                 --warning: #f2711c;
                 --row-alt: #f8f9fa;
-                --shadow: 0 4px 12px rgba(25, 39, 52, 0.05);
+                --shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15);
             }
 
             html {
@@ -55,7 +55,7 @@
                 background: var(--panel-bg);
                 border: 1px solid var(--panel-border);
                 box-shadow: var(--shadow);
-                border-radius: 14px;
+                border-radius: 6px;
             }
 
             .hero-card {
@@ -108,7 +108,7 @@
                 border-spacing: 0;
                 background: #fff;
                 border: 1px solid rgba(22, 53, 67, 0.1);
-                border-radius: 18px;
+                border-radius: 6px;
                 overflow: hidden;
             }
 

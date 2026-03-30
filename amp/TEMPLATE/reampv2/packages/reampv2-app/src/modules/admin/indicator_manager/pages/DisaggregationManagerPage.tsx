@@ -12,10 +12,10 @@ interface CategoryValue {
   value: string;
   children?: CategoryValue[];
 }
-const translations = initialTranslations;
-
-
 const DisaggregationManagerPage: React.FC = () => {
+  const reduxTranslations = useSelector((state: any) => state.translationsReducer.translations);
+  const translations = (reduxTranslations && Object.keys(reduxTranslations).length > 0) ? reduxTranslations : initialTranslations;
+  const t = (key: string): string => translations[key] ?? initialTranslations[key as keyof typeof initialTranslations] ?? key;
   const [categories, setCategories] = useState<CategoryValue[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<CategoryValue | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -81,17 +81,17 @@ const DisaggregationManagerPage: React.FC = () => {
   return (
     <div style={{ padding: '2rem' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-        <h2 style={{ margin: 0 }}>{translations['amp.disaggregationmanager:title'] || 'Disaggregation Manager'}</h2>
+        <h2 style={{ margin: 0 }}>{t('amp.disaggregationmanager:title')}</h2>
         <Button variant="secondary" onClick={() => navigate('/admin/indicator_manager')} style={{ marginLeft: '10px' }}>
-          <i className="fa fa-arrow-left" /> {translations['amp.disaggregationmanager:back']}
+          <i className="fa fa-arrow-left" /> {t('amp.disaggregationmanager:back')}
         </Button>
       </div>
       <Table bordered hover>
         <thead>
           <tr>
-            <th>{translations['amp.disaggregationmanager:category'] || 'Disaggregation Category'}</th>
-            <th>{translations['amp.disaggregationmanager:options'] || 'Options'}</th>
-            <th>{translations['amp.disaggregationmanager:actions'] || 'Actions'}</th>
+            <th>{t('amp.disaggregationmanager:category')}</th>
+            <th>{t('amp.disaggregationmanager:options')}</th>
+            <th>{t('amp.disaggregationmanager:actions')}</th>
           </tr>
         </thead>
         <tbody>
@@ -108,7 +108,7 @@ const DisaggregationManagerPage: React.FC = () => {
                         size="sm"
                         style={{ marginLeft: 8, color: 'black', padding: '0 6px' }}
                         onClick={() => handleEditChild(category, child)}
-                        title={translations['amp.disaggregationmanager:edit'] || 'Edit'}
+                        title={t('amp.disaggregationmanager:edit')}
                       >
                         <i className="fa fa-pencil" />
                       </Button>
@@ -117,17 +117,17 @@ const DisaggregationManagerPage: React.FC = () => {
                         size="sm"
                         style={{ marginLeft: 4, color: 'red', padding: '0 6px' }}
                         onClick={() => handleDeleteChild(category, child)}
-                        title={translations['amp.disaggregationmanager:delete'] || 'Delete'}
+                        title={t('amp.disaggregationmanager:delete')}
                       >
                         <i className="fa fa-trash" />
                       </Button>
                     </li>
-                  )) : <span>{translations['amp.disaggregationmanager:no-options'] || 'No options'}</span>}
+                  )) : <span>{t('amp.disaggregationmanager:no-options')}</span>}
                 </ul>
               </td>
               <td>
                 <Button variant="success" size="sm" onClick={() => handleAddChild(category)}>
-                  {translations['amp.disaggregationmanager:add-option'] || 'Add Option'}
+                  {t('amp.disaggregationmanager:add-option')}
                 </Button>
               </td>
             </tr>
@@ -146,7 +146,7 @@ const DisaggregationManagerPage: React.FC = () => {
           size='lg'
       >
         <Modal.Header closeButton>
-          <Modal.Title>{modalMode === 'add' ? (translations['amp.disaggregationmanager:add-option'] || 'Add Option' + ':' + selectedCategory?.value) : (translations['amp.disaggregationmanager:edit-option-title'] || 'Edit Option' + ':' + selectedCategory?.value)}</Modal.Title>
+          <Modal.Title>{modalMode === 'add' ? (t('amp.disaggregationmanager:add-option') + ':' + selectedCategory?.value) : (t('amp.disaggregationmanager:edit-option-title') + ':' + selectedCategory?.value)}</Modal.Title>
         </Modal.Header>
         <Form
             onSubmit={async (e) => {
@@ -178,22 +178,22 @@ const DisaggregationManagerPage: React.FC = () => {
           <Modal.Body>
             <Form.Group className="mb-3">
               <Form.Label>
-                {translations['amp.disaggregationmanager:option-value'] || 'Option Value'}
+                {t('amp.disaggregationmanager:option-value')}
               </Form.Label>
               <Form.Control
                   name="childValue"
                   type="text"
                   defaultValue={editingChild ? editingChild.value : ''}
-                  placeholder={translations['amp.disaggregationmanager:option-value-placeholder'] || 'Enter option value'}
+                  placeholder={t('amp.disaggregationmanager:option-value-placeholder')}
               />
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowModal(false)}>
-              {translations['amp.disaggregationmanager:cancel'] || 'Cancel'}
+              {t('amp.disaggregationmanager:cancel')}
             </Button>
             <Button variant="primary" type="submit">
-              {translations['amp.disaggregationmanager:save'] || 'Save'}
+              {t('amp.disaggregationmanager:save')}
             </Button>
           </Modal.Footer>
         </Form>

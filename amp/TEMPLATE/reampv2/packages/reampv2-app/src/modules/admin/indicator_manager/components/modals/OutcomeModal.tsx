@@ -3,6 +3,7 @@ import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { Formik, FormikProps, Form as FormikForm, Field } from 'formik';
 import * as Yup from 'yup';
 import styles from './css/IndicatorModal.module.css';
+import initialTranslations from '../../config/initialTranslations.json';
 
 interface AddNewOutcomeModalProps {
   show: boolean;
@@ -15,8 +16,9 @@ interface AddNewOutcomeModalProps {
 
 const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubmit, initialName = '', initialDescription = '', translations = {} }) => {
   const nodeRef = useRef(null);
+  const t = (key: string): string => translations[key] ?? initialTranslations[key as keyof typeof initialTranslations] ?? key;
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required(translations['amp.outcomeoutput:errors-name-required'] || 'Name is required'),
+    name: Yup.string().required(t('amp.outcomeoutput:errors-name-required')),
     description: Yup.string()
   });
 
@@ -40,7 +42,7 @@ const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubm
       size='lg'
     >
       <Modal.Header closeButton>
-        <Modal.Title>{translations['amp.outcomeoutput:modal-title-outcome'] || 'Add New Outcome'}</Modal.Title>
+        <Modal.Title>{t('amp.outcomeoutput:add-new-outcome')}</Modal.Title>
       </Modal.Header>
       <Formik
         initialValues={initialValues}
@@ -58,7 +60,7 @@ const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubm
               <div className={styles.viewmodal_wrapper}>
                 <Row className={styles.view_row}>
                   <Form.Group as={Col} className={styles.view_item} controlId="formOutcomeName">
-                    <Form.Label>{translations['amp.outcomeoutput:outcome-name'] || 'Outcome Name'}</Form.Label>
+                    <Form.Label>{t('amp.outcomeoutput:outcome-name')}</Form.Label>
                     <Form.Control
                       defaultValue={props.values.name}
                       onChange={props.handleChange}
@@ -68,7 +70,7 @@ const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubm
                       isInvalid={!!props.errors.name}
                       required
                       aria-required type="text"
-                      placeholder={translations['amp.outcomeoutput:outcome-name'] || 'Outcome Name'}
+                      placeholder={t('amp.outcomeoutput:outcome-name')}
                     />
                     <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                       {props.errors.name}
@@ -77,7 +79,7 @@ const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubm
                 </Row>
                 <Row className={styles.view_row}>
                   <Form.Group as={Col} className={styles.view_item} controlId="formOutcomeDescription">
-                    <Form.Label>{translations['amp.outcomeoutput:outcome-description'] || 'Outcome Description'}</Form.Label>
+                    <Form.Label>{t('amp.outcomeoutput:outcome-description')}</Form.Label>
                     <Form.Control
                       defaultValue={props.values.description}
                       onChange={props.handleChange}
@@ -85,7 +87,7 @@ const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubm
                       name="description"
                       type="text"
                       className={`${styles.input_field} ${(props.errors.description && props.touched.description) && styles.text_is_invalid}`}
-                      placeholder={translations['amp.outcomeoutput:outcome-description'] || 'Outcome Description'}
+                      placeholder={t('amp.outcomeoutput:outcome-description')}
                     />
                     <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                       {props.errors.description}
@@ -96,10 +98,10 @@ const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubm
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose}>
-                {translations['amp.outcomeoutput:cancel'] || 'Cancel'}
+                {t('amp.outcomeoutput:cancel')}
               </Button>
               <Button type="submit" variant="success">
-                {translations['amp.outcomeoutput:save-outcome'] || 'Save Outcome'}
+                {t('amp.outcomeoutput:save-outcome')}
               </Button>
             </Modal.Footer>
           </Form>

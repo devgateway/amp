@@ -140,6 +140,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         add(indicatorTargetDateLabel);
 
         AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, "Actual Values", false, 7);
+        valuesTable.setOutputMarkupPlaceholderTag(true);
         add(valuesTable);
 
         AmpAjaxLinkField addActualValue = new AmpAjaxLinkField("addActualValue", "Add Actual Value", "Add Actual Value") {
@@ -155,6 +156,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
             }
         };
 
+        addActualValue.setOutputMarkupPlaceholderTag(true);
         add(addActualValue);
 
         AmpAjaxLinkField setValue = new AmpAjaxLinkField("setValues", "Set Value", "Set Value") {
@@ -191,10 +193,11 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection","Disaggregation Values", indicator);
         disaggPanel.setOutputMarkupId(true);
         disaggPanel.setOutputMarkupPlaceholderTag(true);
-        // Add disaggregation values subsection
-        if (indicator.getObject().getDisaggregation()== null || indicator.getObject().getDisaggregation().isEmpty()){
-            disaggPanel.setVisible(false);
-        }
+        boolean hasDisaggregation = indicator.getObject().getDisaggregation() != null
+                && !indicator.getObject().getDisaggregation().isEmpty();
+        disaggPanel.setVisible(hasDisaggregation);
+        valuesTable.setVisible(!hasDisaggregation);
+        addActualValue.setVisible(!hasDisaggregation);
         add(disaggPanel);
 
 

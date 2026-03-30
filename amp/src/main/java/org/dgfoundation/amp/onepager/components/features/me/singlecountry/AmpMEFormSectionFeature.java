@@ -36,10 +36,13 @@ import java.util.List;
  */
 public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
     private final ListView<IndicatorActivity> list;
+    private final IModel<AmpActivityVersion> activityModel;
+    private AmpAutocompleteFieldPanel<AmpIndicator> searchIndicators;
 
     public AmpMEFormSectionFeature(String id, String fmName,
                                    final IModel<AmpActivityVersion> am) throws Exception {
         super(id, fmName, am);
+        this.activityModel = am;
         this.fmType = AmpFMTypes.MODULE;
 
         if (am.getObject().getIndicators() == null) {
@@ -91,7 +94,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         add(list);
 
 
-        final AmpAutocompleteFieldPanel<AmpIndicator> searchIndicators =
+        searchIndicators =
                 new AmpAutocompleteFieldPanel<AmpIndicator>("search", "Search Indicators",
                         AmpMEIndicatorSearchModel.class) {
 
@@ -126,5 +129,14 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM, am.getObject().getActPrograms());
         add(UpdateEventBehavior.of(ProgramSelectedEvent.class));
         add(searchIndicators);
+    }
+
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();
+        searchIndicators.getModelParams().put(
+                AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM,
+                activityModel.getObject().getActPrograms()
+        );
     }
 }

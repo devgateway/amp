@@ -65,15 +65,10 @@ public class AmpMEIndicatorSearchModel extends
             if (maxResults != null && maxResults != 0)
                 crit.setMaxResults(maxResults);
             ret = crit.list();
-            ret.forEach(ind -> logger.info("Indicator: " + ind.getName()
-                    + " | programId: " + (ind.getProgram() != null ? ind.getProgram().getAmpThemeId() : "null")));
-
             // Re assign all indicators as filtered
             filterAmpIndicators = ret;
             // Check if the indicator filter by program is active
             boolean filterByProgram = FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_PROGRAM);
-            logger.info("Filter by program "+filterByProgram);
-            logger.info("All programs :" +activityProgramThemeIds);
 
             if (filterByProgram) {
                 if (activityProgramThemeIds != null && !activityProgramThemeIds.isEmpty()) {

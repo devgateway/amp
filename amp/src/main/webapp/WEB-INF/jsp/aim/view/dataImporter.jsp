@@ -109,9 +109,12 @@
 
     function toggleUploadSection() {
       var hasMappings = $('#selected-pairs-table-body tr').length > 0;
-      $('#data-upload-section').toggle(hasMappings);
       $('#config-empty-note').toggle(!hasMappings);
-      toggleDefaultLocationFallback();
+      if (hasMappings) {
+        $('#tab-upload-btn').removeClass('disabled-tab');
+      } else {
+        $('#tab-upload-btn').addClass('disabled-tab');
+      }
     }
 
     function hasMappedProjectLocationField() {
@@ -1008,7 +1011,8 @@
 
   <div class="tabs-nav">
     <div class="tab-item active" data-tab="tab-configure-pane" id="tab-configure-btn" onclick="switchImporterTab('tab-configure-pane')"><digi:trn>1. File Setup</digi:trn></div>
-    <div class="tab-item disabled-tab" data-tab="tab-mapping-pane" id="tab-mapping-btn" onclick="switchImporterTab('tab-mapping-pane')"><digi:trn>2. Map &amp; Upload</digi:trn></div>
+    <div class="tab-item disabled-tab" data-tab="tab-mapping-pane" id="tab-mapping-btn" onclick="switchImporterTab('tab-mapping-pane')"><digi:trn>2. Map</digi:trn></div>
+    <div class="tab-item disabled-tab" data-tab="tab-upload-pane" id="tab-upload-btn" onclick="switchImporterTab('tab-upload-pane')"><digi:trn>3. Upload</digi:trn></div>
   </div>
 
   <div id="tab-configure-pane" class="tab-pane">
@@ -1116,8 +1120,12 @@
       <div id="config-empty-note" class="helper-note">
         <digi:trn>Add at least one column-to-field pair to unlock data file upload.</digi:trn>
       </div>
+    </html:form>
+  </div>
+  </div>
 
-      <div id="data-upload-section" class="upload-stage" style="display: none;">
+  <div id="tab-upload-pane" class="tab-pane" style="display:none">
+  <div id="data-upload-section" class="upload-stage">
         <span class="section-label"><digi:trn>Step 4</digi:trn></span>
         <h3><digi:trn>Upload Data File</digi:trn></h3>
         <p class="section-copy"><digi:trn>This section appears only when the configuration table contains mappings.</digi:trn></p>
@@ -1198,8 +1206,6 @@
           <input type="button" value="<digi:trn>Upload</digi:trn>" onclick="uploadDataFile()">
         </div>
       </div>
-    </html:form>
-  </div>
   </div>
 </div>
 

@@ -112,8 +112,10 @@
       $('#config-empty-note').toggle(!hasMappings);
       if (hasMappings) {
         $('#tab-upload-btn').removeClass('disabled-tab');
+        $('#next-to-upload-btn').prop('disabled', false);
       } else {
         $('#tab-upload-btn').addClass('disabled-tab');
+        $('#next-to-upload-btn').prop('disabled', true);
       }
     }
 
@@ -185,6 +187,7 @@
       initializeSelectControls();
       toggleUploadSection();
       $('#tab-mapping-btn').removeClass('disabled-tab');
+      $('#next-to-map-btn').prop('disabled', false);
       switchImporterTab('tab-mapping-pane');
     }
     
@@ -982,6 +985,25 @@
       box-shadow: var(--shadow);
     }
 
+    .tab-nav-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1px solid #c8daea;
+    }
+
+    .tab-nav-actions .prev-btn {
+      margin-right: auto;
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
     @media (max-width: 768px) {
       .importer-page {
         padding: 24px 14px 40px;
@@ -1070,6 +1092,9 @@
       </form>
     </div>
   </div>
+  <div class="tab-nav-actions">
+    <button type="button" id="next-to-map-btn" class="next-btn" disabled onclick="switchImporterTab('tab-mapping-pane')"><digi:trn>Next</digi:trn> &#8594;</button>
+  </div>
   </div>
 
   <div id="tab-mapping-pane" class="tab-pane" style="display:none">
@@ -1119,6 +1144,10 @@
 
       <div id="config-empty-note" class="helper-note">
         <digi:trn>Add at least one column-to-field pair to unlock data file upload.</digi:trn>
+      </div>
+      <div class="tab-nav-actions">
+        <button type="button" class="prev-btn" onclick="switchImporterTab('tab-configure-pane')">&#8592; <digi:trn>Previous</digi:trn></button>
+        <button type="button" id="next-to-upload-btn" class="next-btn" disabled onclick="switchImporterTab('tab-upload-pane')"><digi:trn>Next</digi:trn> &#8594;</button>
       </div>
     </html:form>
   </div>
@@ -1204,6 +1233,9 @@
 
         <div class="mapping-actions">
           <input type="button" value="<digi:trn>Upload</digi:trn>" onclick="uploadDataFile()">
+        </div>
+        <div class="tab-nav-actions">
+          <button type="button" class="prev-btn" onclick="switchImporterTab('tab-mapping-pane')">&#8592; <digi:trn>Previous</digi:trn></button>
         </div>
       </div>
   </div>

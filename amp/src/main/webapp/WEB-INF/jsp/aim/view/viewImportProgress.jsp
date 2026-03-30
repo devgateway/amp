@@ -300,6 +300,25 @@
                 box-shadow: var(--shadow);
             }
 
+            .tab-nav-actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+                margin-top: 20px;
+                padding-top: 14px;
+                border-top: 1px solid #c8daea;
+            }
+
+            .tab-nav-actions .prev-btn {
+                margin-right: auto;
+            }
+
+            button:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+                pointer-events: none;
+            }
+
             @media (max-width: 768px) {
                 .progress-page {
                     padding: 24px 14px 40px;
@@ -555,6 +574,9 @@
                 </c:forEach>
                 </tbody>
             </table>
+            <div class="tab-nav-actions">
+                <button type="button" class="next-btn" onclick="switchProgressTab('tab-records-pane')"><digi:trn>Next</digi:trn> &#8594;</button>
+            </div>
         </div>
 
         <div id="tab-records-pane" class="tab-pane" style="display:none">
@@ -585,6 +607,9 @@
                 </tbody>
             </table>
             <div class="pagination"></div>
+            <div class="tab-nav-actions">
+                <button type="button" class="prev-btn" onclick="switchProgressTab('tab-uploads-pane')">&#8592; <digi:trn>Previous</digi:trn></button>
+            </div>
         </div>
     </div>
 

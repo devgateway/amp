@@ -725,6 +725,7 @@
       font-size: 16px;
       font-weight: 700;
       letter-spacing: 0;
+      text-transform: none;
     }
 
     .panel-card h2,
@@ -739,7 +740,7 @@
     .hero-card p,
     .section-copy,
     .helper-note {
-      color: var(--text-soft);
+      color: var(--text-strong);
       line-height: 1.55;
       margin: 0;
       font-size: 14px;

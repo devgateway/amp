@@ -69,6 +69,7 @@
                 font-size: 16px;
                 font-weight: 700;
                 letter-spacing: 0;
+                text-transform: none;
             }
 
             .panel-card h2,
@@ -90,7 +91,7 @@
 
             .section-copy {
                 margin: 0;
-                color: var(--text-soft);
+                color: var(--text-strong);
                 line-height: 1.55;
                 font-size: 14px;
             }
@@ -135,23 +136,40 @@
             }
 
             .view-progress-btn,
-            .view-more-btn,
             .nav-action-btn {
-                border: 1px solid #2480c6;
+                border: 1px solid #20bb45;
                 border-radius: 6px;
                 padding: 8px 16px;
                 font-size: 13px;
                 font-weight: 600;
                 cursor: pointer;
                 color: #fff;
-                background: #2480c6;
+                background: #20bb45;
                 box-shadow: none;
+            }
+
+            .view-progress-btn:hover,
+            .nav-action-btn:hover {
+                background: #179e39;
+                border-color: #179e39;
             }
 
             .view-more-btn {
                 margin-top: 6px;
                 padding: 6px 12px;
-                font-size: 11px;
+                font-size: 13px;
+                font-weight: 600;
+                cursor: pointer;
+                border: 1px solid #20bb45;
+                border-radius: 6px;
+                background: transparent;
+                color: #20bb45;
+                box-shadow: none;
+            }
+
+            .view-more-btn:hover {
+                background: #20bb45;
+                color: #fff;
             }
 
             .hero-actions {

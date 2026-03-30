@@ -92,7 +92,7 @@
                 margin: 0;
                 color: var(--text-soft);
                 line-height: 1.55;
-                font-size: 13px;
+                font-size: 14px;
             }
 
             .panel-card,

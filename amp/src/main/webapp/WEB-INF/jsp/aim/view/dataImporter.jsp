@@ -742,7 +742,7 @@
       color: var(--text-soft);
       line-height: 1.55;
       margin: 0;
-      font-size: 13px;
+      font-size: 14px;
     }
 
     .panel-grid {

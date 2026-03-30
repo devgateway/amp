@@ -46,7 +46,7 @@ public class IndicatorManagerService {
 
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-    public static final String FILTER_BY_PROGRAM = "Filter By Program";
+    public static final String FILTER_BY_PROGRAM = "Filter by Program";
 
     public static final String FILTER_BY_SECTOR = "Filter By Sector";
 

@@ -36,7 +36,7 @@ public class AmpMEIndicatorSearchModel extends
 
 
     public enum PARAM implements AmpAutoCompleteModelParam {
-        ACTIVITY_PROGRAM
+        ACTIVITY_PROGRAM, ACTIVITY_SECTOR
     }
 
 
@@ -53,10 +53,12 @@ public class AmpMEIndicatorSearchModel extends
             Criteria crit = session.createCriteria(AmpIndicator.class);
 
             Set<Long> activityProgramThemeIds = toProgramThemeIds(getParam(PARAM.ACTIVITY_PROGRAM));
+            Set<Long> activitySectorIds = toSectorIds(getParam(PARAM.ACTIVITY_SECTOR));
+            logger.info("All sectors: " + activitySectorIds);
 
             // Get activity location
             crit.setCacheable(false);
-            if (input.trim().length() > 0) {
+            if (!input.trim().isEmpty()) {
                 Junction junction = Restrictions.conjunction().add(getTextCriterion("name", input));
                 crit.add(junction);
             }
@@ -71,7 +73,7 @@ public class AmpMEIndicatorSearchModel extends
             boolean filterByProgram = FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_PROGRAM);
 
             if (filterByProgram) {
-                if (activityProgramThemeIds != null && !activityProgramThemeIds.isEmpty()) {
+                if (!activityProgramThemeIds.isEmpty()) {
                     // Include siblings (children in AMP hierarchy) via fresh session to avoid lazy-load issues
                     Set<Long> allProgramIds = new HashSet<>(activityProgramThemeIds);
                     for (Long themeId : activityProgramThemeIds) {
@@ -91,10 +93,30 @@ public class AmpMEIndicatorSearchModel extends
                 }
             }
 
+            // Check if the indicator filter by sector is active
+            boolean filterBySector = FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_SECTOR);
+            if (filterBySector) {
+                if (!activitySectorIds.isEmpty()) {
+                    filterAmpIndicators = filterAmpIndicators.stream()
+                            .filter(ind -> ind.getSectors() != null && ind.getSectors().stream()
+                                    .anyMatch(s -> s.getAmpSectorId() != null
+                                            && activitySectorIds.contains(s.getAmpSectorId())))
+                            .collect(Collectors.toList());
+                }
+            }
+
             return filterAmpIndicators;
         } catch (HibernateException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Set<Long> toSectorIds(Object param) {
+        if (param == null) return Collections.emptySet();
+        Set<?> raw = (Set<?>) param;
+        if (raw.isEmpty()) return Collections.emptySet();
+        return (Set<Long>) raw;
     }
 
     @SuppressWarnings("unchecked")

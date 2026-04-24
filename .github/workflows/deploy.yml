@@ -17,6 +17,7 @@ on:
         options:
           - bfaso
           - boad
+          - cameroon
           - chad
           - civ
           - drc

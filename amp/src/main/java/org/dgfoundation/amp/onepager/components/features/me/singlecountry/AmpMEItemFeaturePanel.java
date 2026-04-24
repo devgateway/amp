@@ -14,6 +14,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.items.AmpMEDisaggregationValuesFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
@@ -185,6 +186,20 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
             }
         };
         add(setValue);
+
+
+        AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection","Disaggregation Values", indicator);
+        disaggPanel.setOutputMarkupId(true);
+        disaggPanel.setOutputMarkupPlaceholderTag(true);
+        // Add disaggregation values subsection
+        if (indicator.getObject().getDisaggregation()== null || indicator.getObject().getDisaggregation().isEmpty()){
+            disaggPanel.setVisible(false);
+        }
+        add(disaggPanel);
+
+
+
+
     }
 
 }

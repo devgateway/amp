@@ -9,12 +9,13 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @TranslatableClass (displayName = "Indicator")
 public class AmpIndicator implements Serializable, Identifiable
 {
-    
+
     //IATI-check: to be ignored
     private static final long serialVersionUID = 1L;
 //  @Interchangeable(fieldTitle="Indicator ID")
@@ -51,7 +52,7 @@ public class AmpIndicator implements Serializable, Identifiable
      * Please look carefully in IndicatorConnection.hbm.xml before changing anything, because {@link IndicatorActivity} is subclass of {@link IndicatorConnection}
      * @see IndicatorConnection
      */
-    
+
     private Set<IndicatorActivity> valuesActivity;
 
     /**
@@ -60,7 +61,7 @@ public class AmpIndicator implements Serializable, Identifiable
      * Please look carefully in IndicatorConnection.hbm.xml before changing anything, because {@link IndicatorTheme} is subclass of {@link IndicatorConnection}
      * @see IndicatorConnection
      */
-    
+
     private Set<IndicatorTheme> valuesTheme;
 
     private Set<AmpIndicatorGlobalValue> indicatorValues;
@@ -72,6 +73,21 @@ public class AmpIndicator implements Serializable, Identifiable
 
     @Interchangeable(fieldTitle="Risk")
     private AmpIndicatorRiskRatings risk;
+
+    private AmpOutcome outcome;
+    private AmpOutput output;
+    private Set<AmpIndicatorDisaggregationValue> disaggregationValues= new HashSet<>();
+
+    private String relevanceForClimateChange;
+    private AmpCategoryValue indicatorType;
+    private Set<Long> logframeLinks;
+    private String data;
+    private String dataSource;
+    private Set<AmpCategoryValue> disaggregation;
+    private AmpCategoryValue unitOfMeasure;
+    private String calculationMethod;
+    private Set<AmpOrganisation> responsibleOrganizations;
+    private AmpCategoryValue frequency;
 
     public Long getIndicatorId() {
         return indicatorId;
@@ -210,5 +226,90 @@ public class AmpIndicator implements Serializable, Identifiable
                 .filter(AmpIndicatorGlobalValue::isTargetValue)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public AmpOutcome getOutcome() {
+        return outcome;
+    }
+
+    public void setOutcome(AmpOutcome outcome) {
+        this.outcome = outcome;
+    }
+
+    public AmpOutput getOutput() {
+        return output;
+    }
+
+    public void setOutput(AmpOutput output) {
+        this.output = output;
+    }
+
+    public String getRelevanceForClimateChange() {
+        return relevanceForClimateChange;
+    }
+    public void setRelevanceForClimateChange(String relevanceForClimateChange) {
+        this.relevanceForClimateChange = relevanceForClimateChange;
+    }
+    public AmpCategoryValue getIndicatorType() {
+        return indicatorType;
+    }
+    public void setIndicatorType(AmpCategoryValue indicatorType) {
+        this.indicatorType = indicatorType;
+    }
+    public Set<Long> getLogframeLinks() {
+        return logframeLinks;
+    }
+    public void setLogframeLinks(Set<Long> logframeLinks) {
+        this.logframeLinks = logframeLinks;
+    }
+    public String getData() {
+        return data;
+    }
+    public void setData(String data) {
+        this.data = data;
+    }
+    public String getDataSource() {
+        return dataSource;
+    }
+    public void setDataSource(String dataSource) {
+        this.dataSource = dataSource;
+    }
+    public Set<AmpCategoryValue> getDisaggregation() {
+        return disaggregation;
+    }
+    public void setDisaggregation(Set<AmpCategoryValue> disaggregation) {
+        this.disaggregation = disaggregation;
+    }
+    public AmpCategoryValue getUnitOfMeasure() {
+        return unitOfMeasure;
+    }
+    public void setUnitOfMeasure(AmpCategoryValue unitOfMeasure) {
+        this.unitOfMeasure = unitOfMeasure;
+    }
+    public String getCalculationMethod() {
+        return calculationMethod;
+    }
+    public void setCalculationMethod(String calculationMethod) {
+        this.calculationMethod = calculationMethod;
+    }
+    public Set<AmpOrganisation> getResponsibleOrganizations() {
+        return responsibleOrganizations;
+    }
+    public void setResponsibleOrganizations(Set<AmpOrganisation> responsibleOrganizations) {
+        this.responsibleOrganizations = responsibleOrganizations;
+    }
+    public AmpCategoryValue getFrequency() {
+        return frequency;
+    }
+    public void setFrequency(AmpCategoryValue frequency) {
+        this.frequency = frequency;
+    }
+
+    public Set<AmpIndicatorDisaggregationValue> getDisaggregationValues() {
+        return disaggregationValues;
+    }
+
+    public void setDisaggregationValues(Set<AmpIndicatorDisaggregationValue> disaggregationValues) {
+        this.disaggregationValues = disaggregationValues;
     }
 }

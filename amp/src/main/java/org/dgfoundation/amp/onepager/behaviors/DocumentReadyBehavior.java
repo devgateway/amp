@@ -31,6 +31,7 @@ public class DocumentReadyBehavior extends Behavior {
         variables.put("onepagerMode", activityFormOnePager);
         variables.put("onepagerPath", "/" + OnePagerConst.ONEPAGER_URL_PREFIX + "/" + OnePagerConst.ONEPAGER_URL_PARAMETER_ACTIVITY + "/");
         variables.put("isTabView",FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN));
+        variables.put("isMeTabView",FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.IS_ME_TABVIEW));
         variables.put("isRtl", SiteUtils.isEffectiveLangRTL());
 
         PackageTextTemplate ptt = new PackageTextTemplate(DocumentReadyBehavior.class, JS_FILE_NAME);

@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.indicator.manager;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
@@ -30,7 +31,7 @@ public class AmpCategoryValueDTO {
 
     public AmpCategoryValueDTO(final AmpCategoryValue ampCategoryValue) {
         this.id = ampCategoryValue.getId();
-        this.value = ampCategoryValue.getValue();
+        this.value = TranslatorWorker.translateText(ampCategoryValue.getValue());
         this.ampCategoryClass = ampCategoryValue.getAmpCategoryClass();
         this.index = ampCategoryValue.getIndex();
         this.deleted = ampCategoryValue.getDeleted();

@@ -134,8 +134,12 @@ public class DateFilterUtils {
      */
     public static FilterRule getYearsRangeFilter(Integer start, Integer end, AmpFiscalCalendar fromCalendar,
             AmpFiscalCalendar toCalendar) throws AmpApiException {
-        start = FiscalCalendarUtil.getActualYear(fromCalendar, start, 0, toCalendar);
-        end = FiscalCalendarUtil.getActualYear(fromCalendar, end + 1, -1, toCalendar);
+        if (start != null) {
+            start = FiscalCalendarUtil.getActualYear(fromCalendar, start, 0, toCalendar);
+        }
+        if (end != null) {
+            end = FiscalCalendarUtil.getActualYear(fromCalendar, end + 1, -1, toCalendar);
+        }
         return getDatesRangeFilterRule(ElementType.YEAR, start, end, false);
     }
     

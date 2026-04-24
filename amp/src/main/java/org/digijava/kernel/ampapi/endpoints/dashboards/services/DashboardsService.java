@@ -657,10 +657,11 @@ public final class DashboardsService {
 
     private static String getKMB(String lang, int exp) {
         String ret = "";
+        int normalizedExp = Math.max(EXP_1, Math.min(exp, EXP_6));
         if (lang.equals("en") || lang.equals("sp")) {
-            ret = "kMBTPE".charAt(exp - 1) + "";
+            ret = "kMBTPE".charAt(normalizedExp - 1) + "";
         } else if (lang.equals("fr")) {
-            switch (exp) {
+            switch (normalizedExp) {
                 case EXP_1:
                     ret = "m";
                     break;

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../../schemas/xmlpatcher.xsd ">
+    <jira>AMP-31050</jira>
+    <keyword>Views</keyword>
+    <author>ginchauspe</author>
+    <description>recreate view, this will always be the last version of the view</description>
+    <trigger type="all">
+        <condition type="custom">
+            <script returnVar="val">
+                <lang type="sql">
+                    SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+                </lang>
+            </script>
+            <test>val.equalsIgnoreCase("true")</test>
+        </condition>
+    </trigger>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+                DROP VIEW IF EXISTS v_indicator_outcome;
+				CREATE OR REPLACE VIEW v_indicator_outcome AS
+				SELECT con.activity_id AS amp_activity_id,
+				   ao.name,
+
+				   ind.indicator_id AS me_indicator_id,
+				   ind.outcome_id,
+				   ao.description,
+				   CASE ind.type WHEN 'A' THEN 1 :: BIGINT WHEN 'D' THEN 2 :: BIGINT ELSE 3 :: BIGINT END AS me_indicator_type_id,
+				   con.ind_val_category AS me_indicator_logframe_id,
+				   t.amp_theme_id AS me_npo_id
+				FROM amp_indicator_connection con
+				JOIN amp_indicator ind ON ind.indicator_id = con.indicator_id
+				LEFT JOIN amp_outcome ao ON ao.id = ind.outcome_id
+				LEFT JOIN amp_theme t ON ind.program_id = t.amp_theme_id
+                LEFT JOIN amp_theme t2 ON t.parent_theme_id = t2.amp_theme_id
+				WHERE con.sub_clazz::text = 'a'::text;
+			]]></lang>
+        </script>
+    </apply>
+</tns:patch>

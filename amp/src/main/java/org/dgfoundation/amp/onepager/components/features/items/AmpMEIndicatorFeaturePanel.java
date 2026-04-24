@@ -2,21 +2,18 @@ package org.dgfoundation.amp.onepager.components.features.items;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpMEActualValuesFormTableFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.tables.AmpMEBaseTargetValuesFormTableFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.items.AmpMEDisaggregationValuesFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
-import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -143,6 +140,8 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         valuesTable.setOutputMarkupPlaceholderTag(true);
         add(valuesTable);
 
+
+
         logger.info("Table" + valuesTable.getMarkupId());
         logger.info("Id " + valuesTable.getId());
         AmpAjaxLinkField addActualValue = new AmpAjaxLinkField("addActualValue", "Add Actual Value", "Add Actual Value") {
@@ -158,6 +157,8 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
         };
+
+
         logger.info("Button" + addActualValue.getMarkupId());
         logger.info("Id " + addActualValue.getId());
         addActualValue.setOutputMarkupId(true);
@@ -173,6 +174,15 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             throw new RuntimeException(e);
         }
         add(baseValues);
+        AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection", "Disaggregation Values", indicator);
+        disaggPanel.setOutputMarkupId(true);
+        disaggPanel.setOutputMarkupPlaceholderTag(true);
+        // Add disaggregation values subsection
+        if (indicator.getObject().getDisaggregation()== null || indicator.getObject().getDisaggregation().isEmpty()) {
+            disaggPanel.setVisible(false);
+        }
+        add(disaggPanel);
+
 
     }
 }

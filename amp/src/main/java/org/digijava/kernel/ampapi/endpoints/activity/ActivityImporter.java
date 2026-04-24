@@ -28,6 +28,7 @@ import org.digijava.kernel.ampapi.exception.ImportFailedException;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.DBPersistenceTransactionManager;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.PersistenceTransactionManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
@@ -245,6 +246,16 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 oldActivity = ActivityVersionUtil.cloneActivity(oldActivity);
                 oldActivity.setAmpId(newActivity.getAmpId());
                 oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup().clone());
+
+                // Evict newActivity from the Hibernate session before validateAndImport processes JSON.
+                // loadActivity() eagerly initializes the funding set (Hibernate.initialize), making it a
+                // managed PersistentSet. Without this eviction, validateAndImport replaces newActivity.funding
+                // with JSON-derived objects (different Java identity). Hibernate's all-delete-orphan cascade
+                // then orphan-deletes the original DB fundings during any auto-flush triggered by queries
+                // inside validateAndImport. Evicting detaches newActivity so Hibernate stops tracking those
+                // collection changes, preventing the spurious DELETE that causes StaleStateException later
+                // when saveOrUpdate tries to UPDATE the already-deleted funding rows.
+                PersistenceManager.getRequestDBSession().evict(newActivity);
 
 //                newActivity.getAmpActivityGroup().setVersion(-1L);
                 // TODO AMP-28993: remove explicitly resetting createdBy since it is cleared during init

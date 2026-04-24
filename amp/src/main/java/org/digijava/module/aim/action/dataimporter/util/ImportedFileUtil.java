@@ -43,7 +43,7 @@ public class ImportedFileUtil {
         String generatedHash = generateSHA256Hash(file);
         logger.info("Saving File hash is " + generatedHash);
         long generatedId=0l;
-        String sql = "INSERT INTO IMPORTED_FILES_RECORD (id, file_name, file_hash, import_status) VALUES (nextval('IMPORTED_FILES_RECORD_SEQ'), ?, ?, ?) RETURNING id";
+        String sql = "INSERT INTO IMPORTED_FILES_RECORD (id, file_name, file_hash, import_status, uploaded_at) VALUES (nextval('IMPORTED_FILES_RECORD_SEQ'), ?, ?, ?, CURRENT_TIMESTAMP) RETURNING id";
 
         try (Connection connection = PersistenceManager.getJdbcConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -88,6 +88,24 @@ public class ImportedFileUtil {
             logger.info("Updated {} rows", updatedRows);
         } catch (Exception e) {
             logger.error("Error updating file status", e);
+        }
+    }
+
+    public static void updateFileProcessingTime(ImportedFilesRecord importedFilesRecord, long processingTimeMillis) {
+        logger.info("Updating file processing time to {} ms", processingTimeMillis);
+
+        Session session = PersistenceManager.getRequestDBSession();
+
+        try {
+            String sql = "UPDATE IMPORTED_FILES_RECORD SET processing_time_millis = :processingTimeMillis WHERE id = :fileId";
+            Query query = session.createNativeQuery(sql);
+            query.setParameter("processingTimeMillis", processingTimeMillis);
+            query.setParameter("fileId", importedFilesRecord.getId());
+            query.executeUpdate();
+            session.getTransaction().commit();
+            importedFilesRecord.setProcessingTimeMillis(processingTimeMillis);
+        } catch (Exception e) {
+            logger.error("Error updating file processing time", e);
         }
     }
     public static List<ImportedFilesRecord> getSimilarFiles(File file) throws IOException, NoSuchAlgorithmException {

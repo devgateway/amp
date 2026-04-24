@@ -10,6 +10,8 @@ import { getPrograms } from '../reducers/fetchProgramsReducer';
 import { getSettings } from '../reducers/fetchSettingsReducer';
 import { resetSizePerPage } from '../reducers/fetchIndicatorsReducer';
 import {getAmpCategories} from "../reducers/fetchAmpCategoryReducer";
+import {getOutputs} from "../reducers/fetchOutputsReducer";
+import {getOutcomes} from "../reducers/fetchOutcomesReducer";
 
 export const AdminIndicatorManagerContext = React.createContext({});
 
@@ -43,6 +45,8 @@ const Startup: React.FC<StartupProps> = (props: any) => {
     dispatch(getSectors());
     dispatch(getPrograms());
     dispatch(getAmpCategories());
+    dispatch(getOutputs());
+    dispatch(getOutcomes());
     dispatch(resetSizePerPage());
     // eslint-disable-next-line
   }, []);

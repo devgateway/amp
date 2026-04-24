@@ -216,9 +216,14 @@ public class ActivityUtil {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
 
                 a = ActivityVersionUtil.cloneActivity(a);
-                //keeping session.clear() only for acitivity form as it was before
-                if (isActivityForm)
-                    session.clear();
+                // Always clear the session after cloning. When running in a batch context (e.g. Excel importer),
+                // validateAndImport executes queries with FlushMode.AUTO which can cascade-save new child entities
+                // (fundings, etc.) into the action queue. The subsequent session.evict(oldA) then cascade-evicts
+                // those children from the persistence context while they remain in the action queue.  The flush
+                // below would find them in the queue but not in the persistence context.
+                // Clearing the session here discards those stale queued actions; downstream session.save()/
+                // saveOrUpdate() re-registers everything cleanly before the real INSERTs are flushed.
+                session.clear();
                 a.setMember(new HashSet<>());
                 if (tmpGroup == null) {
                     //we need to create a group for this activity
@@ -299,6 +304,8 @@ public class ActivityUtil {
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
         saveStructures(a, session);
+        // Explicitly save indicator disaggregation values
+        saveIndicatorDisaggregationValues(a, session);
         if (createNewVersion) {
             if (a.getAmpActivityId() == null)
                 session.save(a);
@@ -1849,5 +1856,24 @@ public class ActivityUtil {
         checkSum += checkSum + (item.getDisasterResponse() != null ? item.getDisasterResponse().hashCode() : 0L);
         checkSum += checkSum + (item.getExpenditureClass() != null ? item.getExpenditureClass().hashCode() : 0L);
         return checkSum;
+    }
+
+    private static void saveIndicatorDisaggregationValues(AmpActivityVersion a, Session session) {
+        Set<IndicatorActivity> indicators = a.getIndicators();
+        if (indicators == null) return;
+        for (IndicatorActivity indicatorActivity : indicators) {
+            AmpIndicator indicator = indicatorActivity.getIndicator();
+            if (indicator == null) continue;
+            Set<AmpIndicatorDisaggregationValue> disaggregationValues = indicator.getDisaggregationValues();
+            if (disaggregationValues == null) continue;
+            for (AmpIndicatorDisaggregationValue value : disaggregationValues) {
+                value.setIndicator(indicator);
+                if (value.getId() == null) {
+                    session.saveOrUpdate(value);
+                } else {
+                    session.merge(value);
+                }
+            }
+        }
     }
 }

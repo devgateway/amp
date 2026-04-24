@@ -387,8 +387,7 @@ public final class ArConstants {
 //  public final static String EXECUTING_AGENCY_PERCENTAGE="Eexecuting Agency Percentage";
 
 
-    //burkina
-//  public final static String PROGRAM_PERCENTAGE="Program Percentage";
+ public final static String PROGRAM_PERCENTAGE="Program Percentage";
 
 
 

@@ -5,18 +5,19 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.dto.AmpIndicatorDisaggregationValueDto;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidProgramId;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidSectorIds;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateDeserializer;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateSerializer;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.digijava.module.aim.dbentity.AmpIndicatorValue.BASE;
@@ -25,7 +26,7 @@ import static org.digijava.module.aim.dbentity.AmpIndicatorValue.TARGET;
 /**
  * DTO for AmpIndicator
  */
-@JsonPropertyOrder({"id", "name", "description", "code", "ascending", "creationDate", "sectors", "programId", "indicatorsCategory" })
+@JsonPropertyOrder({"id", "name", "description", "code", "ascending", "creationDate", "sectors", "programId" })
 public class MEIndicatorDTO {
 
     @JsonProperty("id")
@@ -69,6 +70,44 @@ public class MEIndicatorDTO {
     @JsonProperty("indicatorsCategory")
     private Long indicatorsCategory;
 
+    @JsonProperty("outputId")
+    private Long outputId;
+
+    @JsonProperty("outcomeId")
+    private Long outcomeId;
+
+    @JsonProperty("relevanceForClimateChange")
+    private String relevanceForClimateChange;
+
+    @JsonProperty("indicatorType")
+    private Long indicatorType;
+
+    @JsonProperty("logframeLinks")
+    private Set<Long> logframeLinks = new HashSet<>();
+
+    @JsonProperty("data")
+    private String data;
+
+    @JsonProperty("dataSource")
+    private String dataSource;
+
+    @JsonProperty("disaggregation")
+    private Set<Long> disaggregation = new HashSet<>();
+
+    @JsonProperty("unitOfMeasure")
+    private Long unitOfMeasure;
+
+    @JsonProperty("calculationMethod")
+    private String calculationMethod;
+
+    @JsonProperty("responsibleOrganizations")
+    private Set<Long> responsibleOrganizations = new HashSet<>();
+
+    @JsonProperty("frequency")
+    private Long frequency;
+    @JsonProperty("disaggregationValues")
+    private Set<AmpIndicatorDisaggregationValueDto> disaggregationValues = new HashSet<>();
+
     public MEIndicatorDTO() {
 
     }
@@ -85,6 +124,42 @@ public class MEIndicatorDTO {
         this.sectorIds = indicator.getSectors().stream().map(AmpSector::getAmpSectorId).collect(Collectors.toList());
         this.programId = indicator.getProgram() != null ? indicator.getProgram().getAmpThemeId() : null;
         this.indicatorsCategory = indicator.getIndicatorsCategory() != null ? indicator.getIndicatorsCategory().getId() : null;
+        this.outputId = indicator.getOutput() != null ? indicator.getOutput().getId() : null;
+        this.outcomeId = indicator.getOutcome() != null ? indicator.getOutcome().getId() : null;
+        this.relevanceForClimateChange = indicator.getRelevanceForClimateChange();
+        this.indicatorType = indicator.getIndicatorType()!=null ? indicator.getIndicatorType().getId() : null;
+        this.logframeLinks = indicator.getLogframeLinks();
+        this.data = indicator.getData();
+        this.dataSource = indicator.getDataSource();
+        this.disaggregation = indicator.getDisaggregation()!=null ? indicator.getDisaggregation().stream().map(AmpCategoryValue::getId).collect(Collectors.toSet()) : null;
+        this.unitOfMeasure = indicator.getUnitOfMeasure()!=null ? indicator.getUnitOfMeasure().getId() : null;
+        this.calculationMethod = indicator.getCalculationMethod();
+        this.responsibleOrganizations = indicator.getResponsibleOrganizations()!=null ? indicator.getResponsibleOrganizations().stream().map(AmpOrganisation::getAmpOrgId).collect(Collectors.toSet()) : null;
+        this.frequency = indicator.getFrequency()!=null ? indicator.getFrequency().getId() : null;
+        if (indicator.getDisaggregationValues() != null) {
+            this.disaggregationValues = indicator.getDisaggregationValues().stream().map(dv -> {
+                AmpIndicatorDisaggregationValueDto dto = new AmpIndicatorDisaggregationValueDto();
+                dto.setId(dv.getId());
+                dto.setParentCategoryId(dv.getParentCategory() != null ? dv.getParentCategory().getId() : null);
+                dto.setChildCategoryId(dv.getChildCategory() != null ? dv.getChildCategory().getId() : null);
+                dto.setBaseValue(dv.getBaseValue());
+                dto.setTargetValue(dv.getTargetValue());
+                Long parentDisaggregationId = dv.getParentCategory() != null
+                    ? Long.parseLong(
+                        dv.getParentCategory().getAmpCategoryClass().getKeyName().split("_")[dv.getParentCategory().getAmpCategoryClass().getKeyName().split("_").length - 1]
+                    )
+                    : null;
+                Long childDisaggregationId = dv.getChildCategory() != null
+                    ? Long.parseLong(
+                        dv.getChildCategory().getAmpCategoryClass().getKeyName().split("_")[dv.getChildCategory().getAmpCategoryClass().getKeyName().split("_").length - 1]
+                    )
+                    : null;
+                dto.setParentDisaggregationId(parentDisaggregationId);
+                dto.setChildDisaggregationId(childDisaggregationId);
+
+                return dto;
+            }).collect(Collectors.toSet());
+        }
     }
 
     public Long getId() {
@@ -180,5 +255,59 @@ public class MEIndicatorDTO {
 
     public void setIndicatorsCategory(Long indicatorsCategory) {
         this.indicatorsCategory = indicatorsCategory;
+    }
+
+    public Long getOutputId() {
+        return outputId;
+    }
+
+    public void setOutputId(Long outputId) {
+        this.outputId = outputId;
+    }
+
+    public Long getOutcomeId() {
+        return outcomeId;
+    }
+
+    public void setOutcomeId(Long outcomeId) {
+        this.outcomeId = outcomeId;
+    }
+
+    public String getRelevanceForClimateChange() { return relevanceForClimateChange; }
+    public void setRelevanceForClimateChange(String relevanceForClimateChange) { this.relevanceForClimateChange = relevanceForClimateChange; }
+
+    public Long getIndicatorType() { return indicatorType; }
+    public void setIndicatorType(Long indicatorType) { this.indicatorType = indicatorType; }
+
+    public Set<Long> getLogframeLinks() { return logframeLinks; }
+    public void setLogframeLinks(Set<Long> logframeLinks) { this.logframeLinks = logframeLinks; }
+
+    public String getData() { return data; }
+    public void setData(String data) { this.data = data; }
+
+    public String getDataSource() { return dataSource; }
+    public void setDataSource(String dataSource) { this.dataSource = dataSource; }
+
+    public Set<Long> getDisaggregation() { return disaggregation; }
+    public void setDisaggregation(Set<Long> disaggregation) { this.disaggregation = disaggregation; }
+
+    public Long getUnitOfMeasure() { return unitOfMeasure; }
+    public void setUnitOfMeasure(Long unitOfMeasure) { this.unitOfMeasure = unitOfMeasure; }
+
+    public String getCalculationMethod() { return calculationMethod; }
+    public void setCalculationMethod(String calculationMethod) { this.calculationMethod = calculationMethod; }
+
+    public Set<Long> getResponsibleOrganizations() { return responsibleOrganizations; }
+    public void setResponsibleOrganizations(Set<Long> responsibleOrganizations) { this.responsibleOrganizations = responsibleOrganizations; }
+
+    public Long getFrequency() { return frequency; }
+    public void setFrequency(Long frequency) { this.frequency = frequency; }
+
+    public Set<AmpIndicatorDisaggregationValueDto> getDisaggregationValues() {
+        return disaggregationValues;
+    }
+
+    public void setDisaggregationValues(Set<AmpIndicatorDisaggregationValueDto> disaggregationValues) {
+        this.disaggregationValues = disaggregationValues;
     }
 }

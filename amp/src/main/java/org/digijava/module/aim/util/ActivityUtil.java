@@ -449,6 +449,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 Hibernate.initialize(str.getType());
                 Hibernate.initialize(str.getCoordinates());
             }
+            Hibernate.initialize(result.getIndicators());
+            if (result.getIndicators() != null) {
+                for (IndicatorActivity ia : result.getIndicators()) {
+                    Hibernate.initialize(ia.getValues());
+                }
+            }
 
             // AMPOFFLINE-1528
             ActivityUtil.setCurrentWorkspacePrefixIntoRequest(result);

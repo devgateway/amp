@@ -28,6 +28,8 @@ public class ImportDataModel {
     private Set<Organization> responsible_organization=new HashSet<>();
     private Set<Organization> beneficiary_agency=new HashSet<>();
     private Set<Organization> executing_agency=new HashSet<>();
+    private Set<Organization> contracting_agency = new HashSet<>();
+    private Set<Organization> implementing_agency = new HashSet<>();
     private Set<Object> activity_internal_ids;
     private Set<Funding> fundings= new HashSet<>();
     private Set<Object> issues;
@@ -51,8 +53,8 @@ public class ImportDataModel {
     private Object approval_date;
     private Integer approval_status;
     private Object archived;
-    private Set<Object> indicators;
-    private Set<Object> activity_documents;
+//    private Set<Object> indicators;
+//    private Set<Object> activity_documents;
     private Long activity_status;
     private Long activity_budget;
     private Long implementation_location;
@@ -64,6 +66,7 @@ public class ImportDataModel {
     private ActivityGroup activity_group;
     private Long modified_by;
     private Long activity_type;
+    private Long procurement_system;
 
     public Long getInternal_id() {
         return internal_id;
@@ -393,21 +396,21 @@ public class ImportDataModel {
         this.archived = archived;
     }
 
-    public Set<Object> getIndicators() {
-        return indicators;
-    }
+//    public Set<Object> getIndicators() {
+//        return indicators;
+//    }
 
-    public void setIndicators(Set<Object> indicators) {
-        this.indicators = indicators;
-    }
+//    public void setIndicators(Set<Object> indicators) {
+//        this.indicators = indicators;
+//    }
 
-    public Set<Object> getActivity_documents() {
-        return activity_documents;
-    }
+//    public Set<Object> getActivity_documents() {
+//        return activity_documents;
+//    }
 
-    public void setActivity_documents(Set<Object> activity_documents) {
-        this.activity_documents = activity_documents;
-    }
+//    public void setActivity_documents(Set<Object> activity_documents) {
+//        this.activity_documents = activity_documents;
+//    }
 
     public Long getActivity_status() {
         return activity_status;
@@ -502,6 +505,14 @@ public class ImportDataModel {
         this.activity_type = activity_type;
     }
 
+    public Long getProcurement_system() {
+        return procurement_system;
+    }
+
+    public void setProcurement_system(Long procurement_system) {
+        this.procurement_system = procurement_system;
+    }
+
     @Override
     public String toString() {
         return "ImportDataModel{" +
@@ -545,8 +556,8 @@ public class ImportDataModel {
                 ", approval_date=" + approval_date +
                 ", approval_status=" + approval_status +
                 ", archived=" + archived +
-                ", indicators=" + indicators +
-                ", activity_documents=" + activity_documents +
+//                ", indicators=" + indicators +
+//                ", activity_documents=" + activity_documents +
                 ", activity_status=" + activity_status +
                 ", activity_budget=" + activity_budget +
                 ", implementation_level=" + implementation_level +
@@ -559,7 +570,25 @@ public class ImportDataModel {
                 ", activity_group=" + activity_group +
                 ", modified_by=" + modified_by +
                 ", activity_type=" + activity_type +
+                ", procurement_system=" + procurement_system +
+                ", implementing_agency=" + implementing_agency +
                 '}';
+    }
+
+    public Set<Organization> getContracting_agency() {
+        return contracting_agency;
+    }
+
+    public void setContracting_agency(Set<Organization> contracting_agency) {
+        this.contracting_agency = contracting_agency;
+    }
+
+    public Set<Organization> getImplementing_agency() {
+        return implementing_agency;
+    }
+
+    public void setImplementing_agency(Set<Organization> implementing_agency) {
+        this.implementing_agency = implementing_agency;
     }
 
     // Getters and setters

@@ -201,9 +201,25 @@
 																		
 																			
 																				<b><digi:trn key="aim:cannotDeleteOrgGrpMsgRefOrgs"><font color="#FF0000">
-																						Cannot delete the organization group. It is used by one or more organizations.</font>
+																						Cannot delete the organization group. It is used by the following organizations:</font>
 																					</digi:trn>
 																				</b>
+																				<br/><br/>
+																				<logic:notEmpty name="aimAddOrgGroupForm" property="referencingOrgs">
+																					<ul style="margin-left: 20px; color: #FF0000;">
+																						<c:forEach var="org" items="${aimAddOrgGroupForm.referencingOrgs}">
+																							<li>
+																								<c:out value="${org.name}"/>
+																								<c:if test="${not empty org.acronym}">
+																									&nbsp;(<c:out value="${org.acronym}"/>)
+																								</c:if>
+																								<c:if test="${not empty org.orgCode}">
+																									&nbsp;- <c:out value="${org.orgCode}"/>
+																								</c:if>
+																							</li>
+																						</c:forEach>
+																					</ul>
+																				</logic:notEmpty>
 																			
 																		
 																	</logic:equal>

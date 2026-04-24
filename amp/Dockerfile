@@ -212,7 +212,7 @@ COPY . .
 ARG SKIP_TESTS=false
 RUN --mount=type=cache,target=/root/.m2 \
     if [ "$SKIP_TESTS" = "true" ]; then \
-      mvn -B clean compile war:exploded \
+      mvn -B clean compile org.apache.maven.plugins:maven-war-plugin:2.3:exploded \
         -DbuildSource=$BUILD_SOURCE \
         -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
         -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
@@ -220,7 +220,7 @@ RUN --mount=type=cache,target=/root/.m2 \
         && mv target/amp exploded \
         && rm -rf target; \
     else \
-      mvn -B test war:exploded \
+      mvn -B test org.apache.maven.plugins:maven-war-plugin:2.3:exploded \
         -DbuildSource=$BUILD_SOURCE \
         -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
         -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \

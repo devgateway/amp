@@ -69,6 +69,14 @@
             <name>amp</name>
             <url>https://artifactory.dgdev.org/artifactory/amp/</url>
         </repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central-fallback</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -78,6 +86,14 @@
             <id>central</id>
             <name>amp</name>
             <url>https://artifactory.dgdev.org/artifactory/amp/</url>
+        </pluginRepository>
+        <pluginRepository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central-fallback</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2</url>
         </pluginRepository>
     </pluginRepositories>
 

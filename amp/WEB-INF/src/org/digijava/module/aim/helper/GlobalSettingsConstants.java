@@ -2,12 +2,40 @@ package org.digijava.module.aim.helper;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class GlobalSettingsConstants {
 
     public static final String DEFAULT_COUNTRY = "Default Country";
 
+    public static final List<String> ECOWAS_COUNTRIES = Arrays.asList(
+            "BJ", // Benin
+            "CI", // Côte d'Ivoire
+            "GM", // Gambia
+            "GH", // Ghana
+            "GN", // Guinea
+            "GW", // Guinea-Bissau
+            "LR", // Liberia
+            "NG", // Nigeria
+            "SN", // Senegal
+            "SL", // Sierra Leone
+            "TG"  // Togo
+    );
+
+    public static final List<String> GGW_COUNTRIES = Arrays.asList(
+            "BF", // Burkina Faso
+            "MR", // Mauritania
+            "SD", // Sudan
+            "TD", // Chad
+            "DJ", // Djibouti
+            "ER", // Eritrea
+            "ML", // Mali
+            "NE", // Niger
+            "NG", // Nigeria
+            "SN", // Senegal
+            "ET" // Ethiopia
+    );
     public static final String FEATURE_TEMPLATE = "Feature Template";
 
     public static final String YEAR_RANGE_START = "Year Range Start";
@@ -39,6 +67,7 @@ public class GlobalSettingsConstants {
     public static final String GROUP_SEPARATOR = "Default Grouping Separator";
 
     public static final String DEFAULT_DATE_FORMAT = "Default Date Format";
+    public static final String GIS_COUNTRY = "GIS Country";
 
     public static final String SITE_DOMAIN = "Site Domain";
 
@@ -176,6 +205,7 @@ public class GlobalSettingsConstants {
     public static final String COUNTRY_LONGITUDE = "Country Longitude";
 
     public static final String ACTIVITY_FORM_FUNDING_SECTION_DESIGN = "Activity Form - Funding Section - Tab View";
+    public static final String IS_ME_TABVIEW = "Activity Form - M&E is TabView";
 
     public static final String MAX_LOCATIONS_ICONS = "Show icons for Project Sites for locations up to";
 
@@ -246,6 +276,8 @@ public class GlobalSettingsConstants {
     public static final String EXEMPT_ORGANIZATION_DOCUMENTS = "Exempt organization to see documents";
 
     public static final String AMP_DASHBOARD_URL = "AMP Dashboard URL";
+    public static final String DONOR_FUNDING_ADM_LEVEL = "Donor Funding Administrative Level";
+    public static final String DASHBOARD_CURRENCIES = "Dashboard Currencies";
 
     public static final String NUMBER_OF_INDICATORS_IN_DASHBOARD = "Number of indicators in M&E Dashboard";
 

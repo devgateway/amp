@@ -30,6 +30,14 @@
             <name>amp</name>
             <url>https://artifactory.dgdev.org/artifactory/amp/</url>
         </repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central-fallback</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -1076,10 +1084,12 @@
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-translate</artifactId>
+            <version>1.95.3</version>
         </dependency>
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-storage</artifactId>
+            <version>1.111.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

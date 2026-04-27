@@ -134,7 +134,7 @@ COPY --from=compile-reamp /tmp/amp/TEMPLATE/reamp TEMPLATE/reamp
 COPY --from=compile-reampv2 /tmp/amp/TEMPLATE/reampv2 TEMPLATE/reampv2
 ARG BUILD_SOURCE
 RUN --mount=type=cache,target=/root/.m2 \
-    mvn -B test war:exploded \
+      mvn -B test org.apache.maven.plugins:maven-war-plugin:2.3:exploded \
       -DbuildSource=$BUILD_SOURCE \
       -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
       -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \

@@ -48,6 +48,14 @@
             <name>amp</name>
             <url>https://artifactory.dgdev.org/artifactory/amp/</url>
         </pluginRepository>
+        <pluginRepository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central-maven-plugins</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </pluginRepository>
     </pluginRepositories>
 
     <dependencies>

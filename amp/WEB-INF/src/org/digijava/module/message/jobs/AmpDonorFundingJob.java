@@ -182,6 +182,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             // Convert the ampDashboardFunding to JSON using a JSON library (e.g., Gson)
             Gson gson = new Gson();
             String jsonData = gson.toJson(ampDashboardFunding);
+            logger.info("Data sent: "+jsonData);
 
             // Get the output stream of the connection
             try (OutputStream os = connection.getOutputStream()) {

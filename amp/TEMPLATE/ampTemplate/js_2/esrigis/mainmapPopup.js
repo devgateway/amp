@@ -71,18 +71,14 @@ function initMap() {
 function loadBaseMap() {
     map = L.map('map').setView([latitude, longitude], 7);
     // create the tile layer with correct attribution
-    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     if (isOsm) {
-        var subdomains = ['a', 'b', 'c'];
-        if (basemapurl !== undefined && basemapurl.indexOf("mqcdn") != -1) {
-            subdomains = ['otile1', 'otile2', 'otile3', 'otile4'];
-        }
-        var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+        var osmAttrib = 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors';
         tileLayer = new L.TileLayer(osmUrl, {
             minZoom: 0,
             maxZoom: 16,
             attribution: osmAttrib,
-            subdomains: subdomains
+            subdomains: ['a', 'b', 'c']
         });
     } else {
         tileLayer = L.esri.tiledMapLayer({

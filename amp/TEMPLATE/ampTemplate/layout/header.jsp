@@ -1,7 +1,7 @@
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
-<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
 
 <logic:notEmpty name="currentMember" scope="session">
 	<bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />

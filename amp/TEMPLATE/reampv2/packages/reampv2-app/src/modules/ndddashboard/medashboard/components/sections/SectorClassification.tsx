@@ -171,7 +171,7 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                                         boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
                                     }}
                                     className={`form-control like-btn-sm ftype-options ${styles.dropdown}`}>
-                                    {sectorClassification.map((item, index: number) => (<option key={index} value={item.id}>{item.name}</option>))}
+                                    {sectorClassification.map((item, index: number) => (<option key={index} value={item.id}>{translations['amp.ndd.dashboard:me-' + item.name.toLowerCase()]}</option>))}
                                 </select>
                             )}
                             <span className="cheat-lineheight" />

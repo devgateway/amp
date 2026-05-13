@@ -6,7 +6,7 @@ import {
 import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
 import {
-  getCustomColor, formatNumberWithSettings
+  getCustomColor, formatNumberWithSettings, formatNumberAndAppendCurrency
 } from '../utils/Utils';
 import TopChart from './charts/TopChart';
 import { NDDTranslationContext } from './StartUp';
@@ -119,8 +119,7 @@ export default class TopChartContainer extends Component {
                 <div className="legend-title">
                   <span>{titles[0]}</span>
                   <span className="amount">
-                    {formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings,
-                      programLegend[0].total, true)}
+                    {formatNumberAndAppendCurrency(programLegend[0].total,settings[CURRENCY_CODE], translations, globalSettings)}
                   </span>
                 </div>
                 <CustomLegend
@@ -140,8 +139,7 @@ export default class TopChartContainer extends Component {
                         {titles[1] ? titles[1] : null}
                       </span>
                       <span className="amount">
-                        {formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings,
-                          programLegend[1].total, true)}
+                        {formatNumberAndAppendCurrency(programLegend[1].total,settings[CURRENCY_CODE], translations, globalSettings)}
                       </span>
                     </div>
                     <CustomLegend

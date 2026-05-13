@@ -59,11 +59,10 @@ stage('Build') {
         milestone()
     }
 
-    println "Using environment: ${environment}"
 
+    println "Using environment: ${environment}"
     node('ansible') {
         checkout scm
-
 
         // Find AMP version
         codeVersion = readMavenPom(file: 'amp/pom.xml').version
@@ -106,7 +105,6 @@ stage('Build') {
 
         def image = "${dockerRepo}amp/webapp:${tag}"
         def hash = sh(returnStdout: true, script: "git log --pretty=%H -n 1").trim()
-
         docker.withRegistry("https://798366298150.dkr.ecr.us-east-1.amazonaws.com", "ecr:us-east-1:aws-ecr-credentials-id") {
             try {
                 updateGitHubCommitStatus('jenkins/build', 'Build in progress', 'PENDING')

@@ -12,14 +12,52 @@ function addRtlStyle(location) {
     return '';
 }
 
-/**
- * Inline Leaflet tile images as base64 data URLs so Chrome headless does not
- * need to make external network requests when rendering the screenshot.
- * Falls back gracefully when CORS is not supported by the tile server.
- *
- * @param {jQuery} container - cloned map container
- * @param {Function} done - callback invoked after all tiles are processed
- */
+function rewriteCssUrls(cssText, cssFileUrl) {
+    var baseDir = cssFileUrl.substring(0, cssFileUrl.lastIndexOf('/') + 1);
+    var origin = window.location.origin;
+    return cssText.replace(/url\s*\(\s*(['"]?)([^'")\s]+)\1\s*\)/gi, function (match, quote, url) {
+        if (/^(https?:|data:|#|//)/.test(url)) {
+            return match;
+        }
+        if (url.charAt(0) === '/') {
+            return 'url(' + quote + origin + url + quote + ')';
+        }
+        return 'url(' + quote + baseDir + url + quote + ')';
+    });
+}
+
+function fetchAndInlineCSS(url) {
+    if (typeof window.fetch === 'undefined' || !url) {
+        return Promise.resolve(url ? '<link rel="stylesheet" href="' + url + '">' : '');
+    }
+    return window.fetch(url)
+        .then(function (r) {
+            if (!r.ok) { throw new Error('HTTP ' + r.status); }
+            return r.text();
+        })
+        .then(function (css) {
+            return '<style>' + rewriteCssUrls(css, url) + '</style>';
+        })
+        .catch(function () {
+            return '<link rel="stylesheet" href="' + url + '">';
+        });
+}
+
+function fixImagePaths(container) {
+    var origin = window.location.origin;
+    container.find('[src]').each(function () {
+        var src = this.getAttribute('src');
+        if (!src || src.indexOf('data:') === 0) { return; }
+        if (/^\/[^/]/.test(src)) {
+            this.setAttribute('src', origin + src);
+            return;
+        }
+        if (src.indexOf('http://') === 0) {
+            this.setAttribute('src', src.replace('http://', 'https://'));
+        }
+    });
+}
+
 function inlineTileImages(container, done) {
     if (typeof window.fetch === 'undefined') {
         done();
@@ -111,57 +149,63 @@ function printMap(options) {
         }
     });
 
-    // Inline tile images as data URLs, then build and send the HTML.
-    // This ensures Chrome headless does not fail to capture tiles due to
-    // network timing in newer headless mode (Chrome 112+).
-    inlineTileImages(mapContainer, function () {
-        var styleLocation = document.location.href.replace("index.html", "compiled-css/main.css");
-        var styleTabsLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/less/tabs.css");
-        var styleBootstrapLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap.css");
-        var styleBootstrapThemeLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap-theme.css");
-        var fontBaseLocation = document.location.href.replace("index.html", "fonts");
-        // TODO remove this does not work the font wof file should be in the phantom installation path
-        var fontFace = "@font-face {" +
-                        " font-family: 'Open Sans';" +
-                        " src: url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.eot');"+
-                        " src: url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'), url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.woff') format('woff'), url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.ttf') format('truetype'), url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.svg#open_sanslight') format('svg');"+
-                        " font-weight: 300;" +
-                        " font-style: normal;" +
-                        "} " +
-                        "@font-face {" +
-                        " font-family: 'Open Sans';" +
-                        " src: url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot');" +
-                        " src: url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'), url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.woff') format('woff'), url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.ttf') format('truetype'), url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.svg#open_sansextrabold') format('svg');" +
-                        " font-weight: 800;" +
-                        " font-style: normal;" +
-                        "}";
+    fixImagePaths(mapContainer);
+
+    var styleLocation          = document.location.href.replace("index.html", "compiled-css/main.css");
+    var styleTabsLocation      = document.location.href.replace("gisModule/dist/index.html", "tabs/css/less/tabs.css");
+    var styleBootstrapLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap.css");
+    var styleBootstrapThemeLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap-theme.css");
+    var fontBaseLocation       = document.location.href.replace("index.html", "fonts");
+
+    var cssUrls = [styleLocation, styleBootstrapLocation, styleTabsLocation, styleBootstrapThemeLocation];
+    var isRtl = app.data.generalSettings.get("rtl-direction");
+    if (isRtl) {
+        cssUrls.push(document.location.href.replace("gisModule/dist/index.html", "css_2/amp-rtl.css"));
+    }
+
+    // TODO remove this does not work the font wof file should be in the phantom installation path
+    var fontFace = "@font-face {" +
+                    " font-family: 'Open Sans';" +
+                    " src: url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.eot');"+
+                    " src: url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'), url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.woff') format('woff'), url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.ttf') format('truetype'), url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.svg#open_sanslight') format('svg');"+
+                    " font-weight: 300;" +
+                    " font-style: normal;" +
+                    "} " +
+                    "@font-face {" +
+                    " font-family: 'Open Sans';" +
+                    " src: url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot');" +
+                    " src: url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'), url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.woff') format('woff'), url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.ttf') format('truetype'), url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.svg#open_sansextrabold') format('svg');" +
+                    " font-weight: 800;" +
+                    " font-style: normal;" +
+                    "}";
+
+    Promise.all(cssUrls.map(fetchAndInlineCSS)).then(function (inlinedStyles) {
         var headers = '<meta http-equiv="content-type" content="text/html; charset=UTF-8">' +
-                      '<link rel="stylesheet" href="' + styleLocation + '">' +
-                      '<link rel="stylesheet" href="' + styleBootstrapLocation + '">' +
-                      '<link rel="stylesheet" href="' + styleTabsLocation + '">' +
-                      addRtlStyle(document.location.href) +
-                      '<link rel="stylesheet" href="' + styleBootstrapThemeLocation + '">' +
+                      inlinedStyles.join('') +
                       '<style>' + fontFace + '</style>';
-        var html = "<html><head>" + headers + "</head><body onload=\"restoreScroll()\">" +
-            "<script>function restoreScroll() {" + script + "}</script>" +
-            mapContainer[0].outerHTML + "</body></html>";
-        //console.log(html); Only for Debugging
-        $.ajax({
-            data: JSON.stringify({
-                content: html,
-                width: window.innerWidth,
-                height: window.innerHeight
-            }),
-            contentType: 'application/json',
-            headers : {
-                'Accept' : 'image/png',
-                'Content-Type' : 'application/json; charset=utf-8'
-            },
-            method: 'POST',
-            url: '/rest/commons/print',
-            dataType: 'text',
-            success: options.success,
-            error: options.error
+
+        inlineTileImages(mapContainer, function () {
+            var html = "<html><head>" + headers + "</head><body onload=\"restoreScroll()\">" +
+                "<script>function restoreScroll() {" + script + "}</script>" +
+                mapContainer[0].outerHTML + "</body></html>";
+            //console.log(html); Only for Debugging
+            $.ajax({
+                data: JSON.stringify({
+                    content: html,
+                    width: window.innerWidth,
+                    height: window.innerHeight
+                }),
+                contentType: 'application/json',
+                headers : {
+                    'Accept' : 'image/png',
+                    'Content-Type' : 'application/json; charset=utf-8'
+                },
+                method: 'POST',
+                url: '/rest/commons/print',
+                dataType: 'text',
+                success: options.success,
+                error: options.error
+            });
         });
     });
 }

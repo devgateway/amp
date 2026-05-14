@@ -34,13 +34,9 @@ public final class ScreenshotService {
         if ("1".equals(chromeNoSandbox)) {
             cmd.add("--no-sandbox");
         }
-        // Use explicit new headless mode (required for Chrome 112+).
         cmd.add("--headless=new");
         cmd.add("--disable-gpu");
-        // Allow loading stylesheets from the AMP server when it uses an
-        // internal/self-signed TLS certificate inside the container.
         cmd.add("--ignore-certificate-errors");
-        // Allow loading resources from file:// pages (CSS, fonts).
         cmd.add("--allow-file-access-from-files");
         cmd.add(String.format("--window-size=%d,%d", w, h));
         cmd.add("--screenshot=" + outputFile.getAbsolutePath());

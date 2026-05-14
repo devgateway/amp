@@ -226,6 +226,48 @@ public final class FMUtil {
         return false;
     }
 
+    public static boolean isFmVisibleInTemplate(Component c) {
+        try {
+            LinkedList<FMInfo> fmInfoPath = getFmPath(c);
+            String fmPathString = getFmPathString(fmInfoPath);
+            AmpFMConfigurable fmc = (AmpFMConfigurable) c;
+
+            return isFmVisibleInTemplate(fmPathString, fmc.getFMType());
+        } catch (PathException e) {
+            logger.error("Path error", e);
+        }
+        return true;
+    }
+
+    public static boolean isFmVisibleInTemplate(String fmPathString, AmpFMTypes fmType) {
+        try {
+            ServletContext context = ((WebApplication) Application.get()).getServletContext();
+            AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
+            AmpTreeVisibility ampTreeVisibility = FeaturesUtil.getAmpTreeVisibility(context, session.getHttpSession());
+
+            if (ampTreeVisibility == null || ampTreeVisibility.getRoot() == null) {
+                return true;
+            }
+
+            AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility) ampTreeVisibility.getRoot();
+            Set collection = fmType == AmpFMTypes.MODULE ? currentTemplate.getItems() : currentTemplate.getFeatures();
+            if (collection == null) {
+                return false;
+            }
+
+            for (Object o : collection) {
+                AmpObjectVisibility object = (AmpObjectVisibility) o;
+                if (object.getName().compareTo(fmPathString) == 0) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            logger.error("Path error", e);
+        }
+        return true;
+    }
+
 
     private static boolean checkIsEnabled(AmpTreeVisibility atv, String name, AmpFMTypes type){
         AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
@@ -388,14 +430,14 @@ public final class FMUtil {
     }
 
     public static void switchFmVisible(Component c) {
-        Boolean isVisible = isFmVisible(c);
+        Boolean isVisible = isFmVisibleInTemplate(c);
 
         changeFmVisible(c, !isVisible);
     }
 
     public static void changeFmVisible(Component c, boolean visible) {
         AmpFMConfigurable fmc = (AmpFMConfigurable) c;
-        Boolean isVisible = isFmVisible(c);
+        Boolean isVisible = isFmVisibleInTemplate(c);
 
         LinkedList<FMInfo> fmInfoPath = null;
         try {
@@ -438,15 +480,19 @@ public final class FMUtil {
                     break;
                 }
             }
+
             if (found != isVisible){
                 throw new Exception("Current component [" + fmPathString + "] has it's visibility status different from it's presence in the tree!");
             }
 
-            else if (!visible){
+            if (!visible){
                 set.remove(obj);
             }
             else{
                 AmpObjectVisibility newObj = getFromVisibilityTree(ampTreeVisibility, fmPathString, fmc.getFMType());
+                if (newObj == null) {
+                    throw new Exception("Current component [" + fmPathString + "] was not found in the FM tree!");
+                }
                 set.add(newObj);
             }
 

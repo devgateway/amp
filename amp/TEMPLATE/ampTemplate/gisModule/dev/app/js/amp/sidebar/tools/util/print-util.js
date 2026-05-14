@@ -12,6 +12,53 @@ function addRtlStyle(location) {
     return '';
 }
 
+/**
+ * Inline Leaflet tile images as base64 data URLs so Chrome headless does not
+ * need to make external network requests when rendering the screenshot.
+ * Falls back gracefully when CORS is not supported by the tile server.
+ *
+ * @param {jQuery} container - cloned map container
+ * @param {Function} done - callback invoked after all tiles are processed
+ */
+function inlineTileImages(container, done) {
+    if (typeof window.fetch === 'undefined') {
+        done();
+        return;
+    }
+    var imgs = container.find('img.leaflet-tile');
+    var total = imgs.length;
+    if (total === 0) {
+        done();
+        return;
+    }
+    var count = 0;
+    var finish = function () {
+        if (++count >= total) {
+            done();
+        }
+    };
+    imgs.each(function () {
+        var img = this;
+        var src = img.getAttribute('src');
+        if (!src || src.indexOf('data:') === 0) {
+            finish();
+            return;
+        }
+        window.fetch(src, { mode: 'cors' })
+            .then(function (response) { return response.blob(); })
+            .then(function (blob) {
+                var reader = new FileReader();
+                reader.onloadend = function () {
+                    img.src = reader.result;
+                    finish();
+                };
+                reader.onerror = finish;
+                reader.readAsDataURL(blob);
+            })
+            .catch(finish);
+    });
+}
+
 // TODO this should be split into at least two method:
 // 1- html select and transform
 // 2- post of the html
@@ -23,7 +70,7 @@ function printMap(options) {
     _.each(translateEl, function (el) {
         var elem = mapContainer.find(el);
         var original = $(el);
-        var transformRegExp = /^(translate|matrix)\(*/i;
+        var transformRegExp = /^(translate3d|translate|matrix)\(*/i;
         elem.each(function (index, e) {
             e = $(e);
             var position = $(original[index]).position();
@@ -64,54 +111,58 @@ function printMap(options) {
         }
     });
 
-
-    var styleLocation = document.location.href.replace("index.html", "compiled-css/main.css");
-    var styleTabsLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/less/tabs.css");
-    var styleBootstrapLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap.css");
-    var styleBootstrapThemeLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap-theme.css");
-    var fontBaseLocation = document.location.href.replace("index.html", "fonts");
-    // TODO remove this does not work the font wof file should be in the phantom installation path
-    var fontFace = "@font-face {" +
-                    " font-family: 'Open Sans';" +
-                    " src: url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.eot');"+
-                    " src: url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'), url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.woff') format('woff'), url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.ttf') format('truetype'), url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.svg#open_sanslight') format('svg');"+
-                    " font-weight: 300;" +
-                    " font-style: normal;" +
-                    "} " +
-                    "@font-face {" +
-                    " font-family: 'Open Sans';" +
-                    " src: url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot');" +
-                    " src: url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'), url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.woff') format('woff'), url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.ttf') format('truetype'), url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.svg#open_sansextrabold') format('svg');" +
-                    " font-weight: 800;" +
-                    " font-style: normal;" +
-                    "}";
-    var headers = '<meta http-equiv="content-type" content="text/html; charset=UTF-8">' +
-                  '<link rel="stylesheet" href="' + styleLocation + '">' +
-                  '<link rel="stylesheet" href="' + styleBootstrapLocation + '">' +
-                  '<link rel="stylesheet" href="' + styleTabsLocation + '">' +
-                  addRtlStyle(document.location.href) +
-                  '<link rel="stylesheet" href="' + styleBootstrapThemeLocation + '">' +
-                  '<style>' + fontFace + '</style>';
-    var html = "<html><head>" + headers + "</head><body onload=\"restoreScroll()\">" +
-        "<script>function restoreScroll() {" + script + "}</script>" +
-        mapContainer[0].outerHTML + "</body></html>";
-    //console.log(html); Only for Debugging
-    $.ajax({
-        data: JSON.stringify({
-            content: html,
-            width: window.innerWidth,
-            height: window.innerHeight
-        }),
-        contentType: 'application/json',
-        headers : {
-            'Accept' : 'image/png',
-            'Content-Type' : 'application/json; charset=utf-8'
-        },
-        method: 'POST',
-        url: '/rest/commons/print',
-        dataType: '*',
-        success: options.success,
-        error: options.error
+    // Inline tile images as data URLs, then build and send the HTML.
+    // This ensures Chrome headless does not fail to capture tiles due to
+    // network timing in newer headless mode (Chrome 112+).
+    inlineTileImages(mapContainer, function () {
+        var styleLocation = document.location.href.replace("index.html", "compiled-css/main.css");
+        var styleTabsLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/less/tabs.css");
+        var styleBootstrapLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap.css");
+        var styleBootstrapThemeLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap-theme.css");
+        var fontBaseLocation = document.location.href.replace("index.html", "fonts");
+        // TODO remove this does not work the font wof file should be in the phantom installation path
+        var fontFace = "@font-face {" +
+                        " font-family: 'Open Sans';" +
+                        " src: url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.eot');"+
+                        " src: url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'), url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.woff') format('woff'), url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.ttf') format('truetype'), url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.svg#open_sanslight') format('svg');"+
+                        " font-weight: 300;" +
+                        " font-style: normal;" +
+                        "} " +
+                        "@font-face {" +
+                        " font-family: 'Open Sans';" +
+                        " src: url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot');" +
+                        " src: url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'), url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.woff') format('woff'), url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.ttf') format('truetype'), url('" + fontBaseLocation + "/open_sans_extrabold/OpenSans-ExtraBold-webfont.svg#open_sansextrabold') format('svg');" +
+                        " font-weight: 800;" +
+                        " font-style: normal;" +
+                        "}";
+        var headers = '<meta http-equiv="content-type" content="text/html; charset=UTF-8">' +
+                      '<link rel="stylesheet" href="' + styleLocation + '">' +
+                      '<link rel="stylesheet" href="' + styleBootstrapLocation + '">' +
+                      '<link rel="stylesheet" href="' + styleTabsLocation + '">' +
+                      addRtlStyle(document.location.href) +
+                      '<link rel="stylesheet" href="' + styleBootstrapThemeLocation + '">' +
+                      '<style>' + fontFace + '</style>';
+        var html = "<html><head>" + headers + "</head><body onload=\"restoreScroll()\">" +
+            "<script>function restoreScroll() {" + script + "}</script>" +
+            mapContainer[0].outerHTML + "</body></html>";
+        //console.log(html); Only for Debugging
+        $.ajax({
+            data: JSON.stringify({
+                content: html,
+                width: window.innerWidth,
+                height: window.innerHeight
+            }),
+            contentType: 'application/json',
+            headers : {
+                'Accept' : 'image/png',
+                'Content-Type' : 'application/json; charset=utf-8'
+            },
+            method: 'POST',
+            url: '/rest/commons/print',
+            dataType: 'text',
+            success: options.success,
+            error: options.error
+        });
     });
 }
 

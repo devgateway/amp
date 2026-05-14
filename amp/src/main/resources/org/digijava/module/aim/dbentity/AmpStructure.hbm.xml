@@ -31,12 +31,11 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpStructureImg" />
 		</set>
 		
-        <list name="coordinates" table="AMP_STRUCTURE_COORDINATE" lazy="false" cascade="all-delete-orphan" inverse="true">
+        <bag name="coordinates" table="AMP_STRUCTURE_COORDINATE" lazy="false" cascade="all-delete-orphan" inverse="true" order-by="amp_structure_coordinate_id">
            <cache usage="read-write" />
            <key column="amp_structure_id" />
-           <list-index column="index" />
            <one-to-many class="org.digijava.module.aim.dbentity.AmpStructureCoordinate" />
-        </list>
+        </bag>
 
 	</class>
 </hibernate-mapping>

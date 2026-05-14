@@ -9,6 +9,7 @@
   "scripts": {
     "start": "DISABLE_ESLINT=true lerna run start",
     "build": "DISABLE_ESLINT=true lerna run build",
+    "postbuild": "node scripts/sync-build-output.js",
     "graph": "nx graph"
   },
   "author": "",

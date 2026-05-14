@@ -6,9 +6,30 @@ const legacyBuildDir = path.join(rootDir, 'build');
 const containerBuildDir = path.join(rootDir, 'packages', 'container', 'build');
 const ampOfflineBuildDir = path.join(rootDir, 'packages', 'ampoffline', 'build');
 
+const copyDirectory = (sourceDir, targetDir) => {
+  fs.mkdirSync(targetDir, { recursive: true });
+
+  fs.readdirSync(sourceDir, { withFileTypes: true }).forEach((entry) => {
+    const sourcePath = path.join(sourceDir, entry.name);
+    const targetPath = path.join(targetDir, entry.name);
+
+    if (entry.isDirectory()) {
+      copyDirectory(sourcePath, targetPath);
+      return;
+    }
+
+    if (entry.isSymbolicLink()) {
+      fs.symlinkSync(fs.readlinkSync(sourcePath), targetPath);
+      return;
+    }
+
+    fs.copyFileSync(sourcePath, targetPath);
+  });
+};
+
 const syncBuildDirectory = (sourceDir, targetDir) => {
   fs.rmSync(targetDir, { recursive: true, force: true });
-  fs.cpSync(sourceDir, targetDir, { recursive: true, force: true });
+  copyDirectory(sourceDir, targetDir);
 };
 
 if (!fs.existsSync(containerBuildDir)) {

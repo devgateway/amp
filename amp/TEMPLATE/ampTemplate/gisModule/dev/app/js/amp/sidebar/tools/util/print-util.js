@@ -16,7 +16,7 @@ function rewriteCssUrls(cssText, cssFileUrl) {
     var baseDir = cssFileUrl.substring(0, cssFileUrl.lastIndexOf('/') + 1);
     var origin = window.location.origin;
     return cssText.replace(/url\s*\(\s*(['"]?)([^'")\s]+)\1\s*\)/gi, function (match, quote, url) {
-        if (/^(https?:|data:|#|//)/.test(url)) {
+       if (/^(https?:|data:|#|\/\/)/.test(url)) {
             return match;
         }
         if (url.charAt(0) === '/') {

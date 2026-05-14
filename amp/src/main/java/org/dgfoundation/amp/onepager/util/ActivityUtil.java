@@ -300,7 +300,7 @@ public class ActivityUtil {
                 session.save(a);
             else {
                 cleanObjectFromSession(session,AmpActivityVersion.class, a.getAmpActivityId());
-                session.saveOrUpdate(a);
+                session.merge(a);
             }
         } else {
 //            session.saveOrUpdate(a);

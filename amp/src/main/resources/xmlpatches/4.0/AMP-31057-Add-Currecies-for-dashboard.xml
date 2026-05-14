@@ -2,15 +2,15 @@
 <tns:patch closeOnSuccess="true" retryOnFail="true"
            xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-    <jira>GGW-207</jira>
+    <jira>AMP-31057</jira>
     <author>bmokandu</author>
-    <description>Login Required for GIS.</description>
+    <description>Dashboard Currencies</description>
     <apply>
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
-            SELECT setval('amp_global_settings_seq', (SELECT MAX(id) FROM amp_global_settings));
-				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable, internal)
-				VALUES ((select max(id) + 1 FROM amp_global_settings), 'Login Required For GIS', 'true', 't_Boolean', 'Login Required For GIS', 'gis', null, FALSE);
+         INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section) VALUES
+                ((select max(id) + 1 FROM amp_global_settings), 'Dashboard Currencies', 'USD|XOF|EUR', '',
+                'Dashboard Currencies Separated by pipe', 'general');
 			]]></lang>
         </script>
     </apply>

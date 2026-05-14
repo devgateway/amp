@@ -11,15 +11,12 @@ public class GlobalSettingsConstants {
 
     public static final List<String> ECOWAS_COUNTRIES = Arrays.asList(
             "BJ", // Benin
-            "BF", // Burkina Faso
             "CI", // Côte d'Ivoire
             "GM", // Gambia
             "GH", // Ghana
             "GN", // Guinea
             "GW", // Guinea-Bissau
             "LR", // Liberia
-            "ML", // Mali
-            "NE", // Niger
             "NG", // Nigeria
             "SN", // Senegal
             "SL", // Sierra Leone
@@ -278,6 +275,8 @@ public class GlobalSettingsConstants {
     public static final String EXEMPT_ORGANIZATION_DOCUMENTS = "Exempt organization to see documents";
 
     public static final String AMP_DASHBOARD_URL = "AMP Dashboard URL";
+    public static final String DONOR_FUNDING_ADM_LEVEL = "Donor Funding Administrative Level";
+    public static final String DASHBOARD_CURRENCIES = "Dashboard Currencies";
 
     public static final String NUMBER_OF_INDICATORS_IN_DASHBOARD = "Number of indicators in M&E Dashboard";
 

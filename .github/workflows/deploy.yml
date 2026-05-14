@@ -1,0 +1,708 @@
+name: Deploy AMP
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Server to deploy'
+        required: true
+        type: choice
+        options:
+          - staging
+          - de
+      country:
+        description: 'Country to deploy (will be validated against available countries from server)'
+        required: true
+        type: choice
+        options:
+          - bfaso
+          - boad
+          - chad
+          - civ
+          - drc
+          - ecowas
+          - egypt
+          - ethiopia
+          - gambia
+          - ggw
+          - haiti
+          - haitiiati
+          - haititraining
+          - honduras
+          - honduraslight
+          - honduraslightssc
+          - jordan
+          - kosovo
+          - kyrgyzstan
+          - liberia
+          - madagascar
+          - malawi
+          - moldova
+          - nepal
+          - niger
+          - rdidemo
+          - rwanda
+          - rwandatest
+          - senegal
+          - senegalgiz
+          - tanzania
+          - timor
+          - togo
+          - uganda
+          - xchad
+      pr_number:
+        description: 'PR number (optional - if provided, will use pr-{number} format for tag and URL). See workflow logs for available PRs.'
+        required: false
+        type: string
+
+env:
+  PG_VERSION: 14
+  # Reference list from GitHub Repository Variables
+  COMMON_COUNTRIES: ${{ vars.COMMON_COUNTRIES }}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60  # Add timeout to prevent hanging jobs
+    steps:
+      - name: Setup SSH agent with build and deploy keys
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: |
+            ${{ secrets.DOCKER_BUILD_SSH_KEY }}
+            ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+
+      - name: Configure git to use SSH for submodules
+        run: |
+          # Configure git to rewrite HTTPS URLs to SSH for submodules
+          git config --global url."git@github.com:".insteadOf "https://github.com/"
+          # Add GitHub to known hosts
+          mkdir -p ~/.ssh
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Checkout code with submodules (default branch)
+        if: inputs.pr_number == ''
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+          # Use SSH for private submodules
+          ssh-key: ${{ secrets.DOCKER_BUILD_SSH_KEY || '' }}
+
+      - name: List available PRs and validate
+        if: inputs.pr_number != ''
+        id: pr_info
+        run: |
+          set -e
+          echo "📋 Fetching list of open pull requests..."
+          echo ""
+          
+          # Fetch open PRs using GitHub API
+          REPO="${{ github.repository }}"
+          PR_NUMBER="${{ inputs.pr_number }}"
+          
+          # Validate PR number is numeric
+          if ! [[ "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
+            echo "❌ Error: PR number must be numeric, got: ${PR_NUMBER}"
+            exit 1
+          fi
+          
+          # Get list of open PRs (limit to 50 most recent)
+          PRS_RESPONSE=$(curl -s -H "Authorization: token ${{ github.token }}" \
+            "https://api.github.com/repos/${REPO}/pulls?state=open&per_page=50&sort=updated&direction=desc")
+          
+          if [ -z "$PRS_RESPONSE" ] || [ "$PRS_RESPONSE" == "[]" ]; then
+            echo "❌ Error: Could not fetch PR list or no open PRs found"
+            echo "   Cannot validate PR #${PR_NUMBER}"
+            exit 1
+          fi
+          
+          echo "Available open PRs:"
+          echo "$PRS_RESPONSE" | jq -r '.[] | "  #\(.number) - \(.title) (branch: \(.head.ref))"' || echo "Could not parse PR list"
+          echo ""
+          
+          # Validate the provided PR number exists in open PRs
+          PR_EXISTS=$(echo "$PRS_RESPONSE" | jq -r --arg pr "$PR_NUMBER" '.[] | select(.number == ($pr | tonumber)) | .number' || echo "")
+          
+          if [ -z "$PR_EXISTS" ]; then
+            echo "❌ Error: PR #${PR_NUMBER} not found in open PRs list"
+            echo ""
+            echo "The PR might be:"
+            echo "  - Closed or merged"
+            echo "  - Not yet created"
+            echo "  - Incorrect number"
+            echo ""
+            echo "Please verify the PR number and try again."
+            exit 1
+          fi
+          
+          # Get PR details
+          PR_TITLE=$(echo "$PRS_RESPONSE" | jq -r --arg pr "$PR_NUMBER" '.[] | select(.number == ($pr | tonumber)) | .title' || echo "")
+          PR_BRANCH=$(echo "$PRS_RESPONSE" | jq -r --arg pr "$PR_NUMBER" '.[] | select(.number == ($pr | tonumber)) | .head.ref' || echo "")
+          PR_HEAD_REPO=$(echo "$PRS_RESPONSE" | jq -r --arg pr "$PR_NUMBER" '.[] | select(.number == ($pr | tonumber)) | .head.repo.full_name' || echo "")
+          PR_HEAD_SHA=$(echo "$PRS_RESPONSE" | jq -r --arg pr "$PR_NUMBER" '.[] | select(.number == ($pr | tonumber)) | .head.sha' || echo "")
+          
+          echo "✅ PR #${PR_NUMBER} found: ${PR_TITLE}"
+          echo "   Branch: ${PR_BRANCH}"
+          echo "   Repository: ${PR_HEAD_REPO}"
+          echo "   SHA: ${PR_HEAD_SHA}"
+          
+          # Store PR branch info for checkout step
+          echo "PR_BRANCH=${PR_BRANCH}" >> $GITHUB_OUTPUT
+          echo "PR_HEAD_REPO=${PR_HEAD_REPO}" >> $GITHUB_OUTPUT
+          echo "PR_HEAD_SHA=${PR_HEAD_SHA}" >> $GITHUB_OUTPUT
+
+      - name: Checkout PR branch
+        if: inputs.pr_number != ''
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pr_info.outputs.PR_BRANCH }}
+          repository: ${{ steps.pr_info.outputs.PR_HEAD_REPO }}
+          fetch-depth: 0
+          submodules: true
+          # Use SSH for private submodules
+          ssh-key: ${{ secrets.DOCKER_BUILD_SSH_KEY || '' }}
+
+      - name: Set up JDK for Maven
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          # Note: Maven cache is not needed here since Maven runs inside Docker
+          # Docker build uses its own Maven cache via --mount=type=cache,target=/root/.m2
+
+      - name: Read AMP version from pom.xml
+        id: amp_version
+        run: |
+          # Parse version directly from pom.xml (much faster than running Maven)
+          # Try to get project.version property first, then fallback to version tag
+          # This avoids Maven initialization which can take 30+ seconds
+          
+          # Method 1: Try to extract project.version property using sed
+          VERSION=$(sed -n 's/.*<project\.version>\([^<]*\)<\/project\.version>.*/\1/p' amp/pom.xml | head -1)
+          
+          # Method 2: If not found, extract from version tag and remove -SNAPSHOT
+          if [ -z "$VERSION" ]; then
+            VERSION=$(sed -n 's/.*<version>\([^<]*\)<\/version>.*/\1/p' amp/pom.xml | head -1 | sed 's/-SNAPSHOT//')
+          fi
+          
+          # Clean up: trim whitespace
+          VERSION=$(echo "$VERSION" | xargs)
+          
+          # Fallback to default if still empty
+          if [ -z "$VERSION" ]; then
+            echo "⚠️  Could not parse version from amp/pom.xml, using default 4.0"
+            VERSION="4.0"
+          fi
+          
+          echo "AMP_VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "AMP Version: $VERSION (parsed from amp/pom.xml in <1s vs 30s+ for Maven)"
+
+      - name: Generate deployment tag
+        id: tag
+        run: |
+          # Check if PR number is provided
+          if [ -n "${{ inputs.pr_number }}" ]; then
+            PR_NUMBER="${{ inputs.pr_number }}"
+            TAG="pr-${PR_NUMBER}"
+            echo "PR_NUMBER=${PR_NUMBER}" >> $GITHUB_OUTPUT
+            echo "Deployment tag: $TAG (PR #${PR_NUMBER})"
+          else
+            # Handle branch-based deployments
+            BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+            if [[ "$BRANCH_NAME" =~ ^feature/AMP-[0-9]+.* ]]; then
+              JIRA_ID=$(echo "$BRANCH_NAME" | sed -n 's/^feature\/AMP-\([0-9]\+\).*/\1/p')
+              TAG="feature-${JIRA_ID}"
+            else
+              TAG=$(echo "$BRANCH_NAME" | sed 's/[^a-zA-Z0-9_-]/-/g' | tr '[:upper:]' '[:lower:]')
+            fi
+            echo "Deployment tag: $TAG"
+          fi
+          echo "TAG=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Validate AWS credentials
+        run: |
+          if [ -z "${{ secrets.AWS_ACCESS_KEY_ID }}" ]; then
+            echo "❌ Error: AWS_ACCESS_KEY_ID secret is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.AWS_SECRET_ACCESS_KEY }}" ]; then
+            echo "❌ Error: AWS_SECRET_ACCESS_KEY secret is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.ECR_REGISTRY }}" ]; then
+            echo "❌ Error: ECR_REGISTRY secret is not set"
+            exit 1
+          fi
+          echo "✅ AWS credentials and ECR registry are configured"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Verify AWS credentials
+        run: |
+          echo "Verifying AWS credentials..."
+          aws sts get-caller-identity || {
+            echo "❌ Error: Failed to authenticate with AWS"
+            echo "Please verify that AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are correct"
+            exit 1
+          }
+          echo "✅ AWS credentials verified"
+
+      - name: Get ECR login token
+        id: ecr-login
+        run: |
+          set +x  # Avoid command echoing to prevent token exposure
+          echo "Getting ECR login token for ${{ secrets.ECR_REGISTRY }}..."
+          PASSWORD=$(aws ecr get-login-password --region us-east-1) || {
+            echo "❌ Error: Failed to get ECR login token"
+            echo "Please verify:"
+            echo "  1. AWS credentials have ECR permissions"
+            echo "  2. ECR registry exists: ${{ secrets.ECR_REGISTRY }}"
+            echo "  3. Region is correct: us-east-1"
+            exit 1
+          }
+          # Use ::add-mask:: to prevent token from appearing in logs
+          echo "::add-mask::$PASSWORD"
+          echo "password=$PASSWORD" >> $GITHUB_OUTPUT
+          echo "✅ ECR login token obtained"
+
+      - name: Login to Container Registry (ECR)
+        run: |
+          set +x  # Avoid command echoing to prevent token exposure
+          echo "${{ steps.ecr-login.outputs.password }}" | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }} 2>&1 | sed 's/.*password.*/***/g'
+          echo "✅ Successfully logged in to ECR"
+
+      - name: Set deployment hostname and user
+        id: deploy_config
+        run: |
+          # Use inputs from workflow_dispatch
+          ENV="${{ inputs.environment }}"
+          COUNTRY="${{ inputs.country }}"
+          
+          # Store environment and country
+          echo "ENV=${ENV}" >> $GITHUB_OUTPUT
+          echo "COUNTRY=${COUNTRY}" >> $GITHUB_OUTPUT
+          
+          if [[ "$ENV" == "de" ]]; then
+            echo "DEPLOY_HOST=${{ vars.AMP_DE_HOSTNAME }}" >> $GITHUB_OUTPUT
+            # For PRs, use pr-{number} format in URL
+            if [ -n "${{ inputs.pr_number }}" ]; then
+              echo "AMP_URL=http://amp-${COUNTRY}-pr-${{ inputs.pr_number }}.de.ampsite.net/" >> $GITHUB_OUTPUT
+            else
+              echo "AMP_URL=http://amp-${COUNTRY}-${{ steps.tag.outputs.TAG }}.de.ampsite.net/" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "DEPLOY_HOST=${{ vars.AMP_STAGING_HOSTNAME }}" >> $GITHUB_OUTPUT
+            # For PRs, use pr-{number} format in URL
+            if [ -n "${{ inputs.pr_number }}" ]; then
+              echo "AMP_URL=http://amp-${COUNTRY}-pr-${{ inputs.pr_number }}.stg.ampsite.net/" >> $GITHUB_OUTPUT
+            else
+              echo "AMP_URL=http://amp-${COUNTRY}-${{ steps.tag.outputs.TAG }}.stg.ampsite.net/" >> $GITHUB_OUTPUT
+            fi
+          fi
+          
+          # Store PR number if provided
+          if [ -n "${{ inputs.pr_number }}" ]; then
+            echo "PR_NUMBER=${{ inputs.pr_number }}" >> $GITHUB_OUTPUT
+          fi
+          
+          # Set deploy user from vars with fallback to 'jenkins'
+          if [ -n "${{ vars.DEPLOY_USER }}" ]; then
+            echo "DEPLOY_USER=${{ vars.DEPLOY_USER }}" >> $GITHUB_OUTPUT
+          else
+            echo "DEPLOY_USER=jenkins" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup SSH config for bastion
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          
+          DEPLOY_HOST="${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
+          DEPLOY_USER="${{ steps.deploy_config.outputs.DEPLOY_USER }}"
+          BASTION_HOST="${{ secrets.BASTION_HOST }}"
+          BASTION_USER="${{ vars.BASTION_USER }}"
+          
+          # Use default bastion user if not specified
+          if [ -z "$BASTION_USER" ] || [ "$BASTION_USER" = "" ]; then
+            BASTION_USER="jenkins"
+          fi
+          
+          # Create SSH config matching local configuration
+          # Pattern: *.aws uses ProxyCommand ssh -W %h.devgateway.org:%p bastion
+          if [ -n "$BASTION_HOST" ] && [ "$BASTION_HOST" != "" ]; then
+            # Check if deployment host matches *.aws pattern for ProxyCommand
+            if echo "$DEPLOY_HOST" | grep -q "\.aws"; then
+              # Use ProxyCommand pattern for *.aws hosts (matching local SSH config)
+              # Pattern: %h.devgateway.org means if host is "ampdev.aws", target is "ampdev.aws.devgateway.org"
+              if echo "$DEPLOY_HOST" | grep -q "\.aws\.devgateway\.org$"; then
+                # Already in full format: something.aws.devgateway.org
+                TARGET_HOST="$DEPLOY_HOST"
+              elif echo "$DEPLOY_HOST" | grep -q "\.aws$"; then
+                # Transform: something.aws -> something.aws.devgateway.org (matching %h.devgateway.org pattern)
+                TARGET_HOST="${DEPLOY_HOST}.devgateway.org"
+              else
+                # Fallback: use as-is
+                TARGET_HOST="$DEPLOY_HOST"
+              fi
+          
+              cat >> ~/.ssh/config << EOF
+          Host bastion
+            HostName $BASTION_HOST
+            User $BASTION_USER
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+            ControlMaster no
+
+          Host $DEPLOY_HOST
+            HostName $DEPLOY_HOST
+            User $DEPLOY_USER
+            ProxyCommand ssh -W $TARGET_HOST:%p -o ClearAllForwardings=no bastion
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+            ControlMaster no
+          EOF
+            else
+              # Use ProxyJump for non-*.aws hosts
+              cat >> ~/.ssh/config << EOF
+          Host bastion
+            HostName $BASTION_HOST
+            User $BASTION_USER
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+            ControlMaster no
+
+          Host $DEPLOY_HOST
+            HostName $DEPLOY_HOST
+            User $DEPLOY_USER
+            ProxyJump bastion
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+            ControlMaster no
+          EOF
+            fi
+          else
+            # No bastion - direct connection
+            cat >> ~/.ssh/config << EOF
+          Host $DEPLOY_HOST
+            HostName $DEPLOY_HOST
+            User $DEPLOY_USER
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+            ControlMaster no
+          EOF
+          fi
+          
+          chmod 600 ~/.ssh/config
+          echo "✅ Configured SSH to use bastion: ${BASTION_HOST:-'none (direct connection)'}"
+          echo "✅ Using ProxyCommand pattern matching your local config"
+          echo "✅ Bastion user: $BASTION_USER"
+          echo "✅ Deployment host: $DEPLOY_HOST"
+          echo ""
+          echo "SSH configuration:"
+          cat ~/.ssh/config
+
+      - name: Test SSH connection
+        run: |
+          DEPLOY_HOST="${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
+          DEPLOY_USER="${{ steps.deploy_config.outputs.DEPLOY_USER }}"
+          echo "Testing SSH connection through bastion..."
+          ssh $DEPLOY_USER@$DEPLOY_HOST "echo 'SSH connection successful'"
+
+      - name: Get available countries list
+        id: countries_list
+        run: |
+          DEPLOY_HOST="${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
+          DEPLOY_USER="${{ steps.deploy_config.outputs.DEPLOY_USER }}"
+          # Get available countries for this version
+          COUNTRIES=$(ssh $DEPLOY_USER@$DEPLOY_HOST "cd /opt/amp_dbs && amp-db ls ${{ steps.amp_version.outputs.AMP_VERSION }} | sort" || echo "")
+          COUNTRIES=$(echo "$COUNTRIES" | tr '\n' ' ' | xargs)  # Trim whitespace
+          
+          if [ -z "$COUNTRIES" ] || [ "$COUNTRIES" = "" ]; then
+            echo "❌ No database backups compatible with version ${{ steps.amp_version.outputs.AMP_VERSION }}"
+            exit 1
+          fi
+          
+          # Store countries list for later use
+          echo "COUNTRIES<<EOF" >> $GITHUB_OUTPUT
+          echo "$COUNTRIES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "=========================================="
+          echo "Available countries for version ${{ steps.amp_version.outputs.AMP_VERSION }}:"
+          echo "=========================================="
+          echo "$COUNTRIES" | tr ' ' '\n'
+          echo "=========================================="
+
+      - name: Validate selected country
+        run: |
+          # Get country from deploy_config output
+          COUNTRY="${{ steps.deploy_config.outputs.COUNTRY }}"
+          
+          # Convert countries list to newline-separated for validation
+          COUNTRIES=$(echo "${{ steps.countries_list.outputs.COUNTRIES }}" | tr ' ' '\n')
+          
+          # Check if selected country is available
+          if ! echo "$COUNTRIES" | grep -q "^${COUNTRY}$"; then
+            echo "❌ Country '${COUNTRY}' not found in available countries"
+            echo ""
+            echo "Available countries:"
+            echo "$COUNTRIES"
+            exit 1
+          fi
+          
+          echo "✅ Country '${COUNTRY}' is available"
+
+      - name: Get database version
+        id: db_version
+        run: |
+          DEPLOY_HOST="${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
+          DEPLOY_USER="${{ steps.deploy_config.outputs.DEPLOY_USER }}"
+          # Get country from deploy_config output
+          COUNTRY="${{ steps.deploy_config.outputs.COUNTRY }}"
+          DB_VERSION=$(ssh $DEPLOY_USER@$DEPLOY_HOST "cd /opt/amp_dbs && amp-db find ${{ steps.amp_version.outputs.AMP_VERSION }} ${COUNTRY}")
+          echo "DB_VERSION=$DB_VERSION" >> $GITHUB_OUTPUT
+          echo "Database version: $DB_VERSION"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: |
+            image=moby/buildkit:latest
+            network=host
+          buildkitd-flags: --debug
+
+      - name: Get commit hash
+        id: commit_hash
+        run: |
+          if git log --pretty=%an -n 1 | grep -q "GitHub Actions"; then
+            REF="HEAD~1"
+          else
+            REF="HEAD"
+          fi
+          HASH=$(git rev-parse $REF)
+          echo "COMMIT_HASH=$HASH" >> $GITHUB_OUTPUT
+          echo "Commit hash: $HASH"
+
+
+      - name: Check if image with commit hash already exists
+        id: check_image
+        env:
+          DOCKER_BUILDKIT: 1
+        run: |
+          COMMIT_HASH="${{ steps.commit_hash.outputs.COMMIT_HASH }}"
+          # Create a commit-hash-based image tag for content-based lookup
+          IMAGE_BY_HASH="${{ secrets.ECR_REGISTRY }}/amp/webapp:commit-${COMMIT_HASH:0:12}"
+          DEPLOY_TAG="${{ steps.tag.outputs.TAG }}"
+          IMAGE_BY_TAG="${{ secrets.ECR_REGISTRY }}/amp/webapp:${DEPLOY_TAG}"
+          
+          echo "Checking for existing image with commit hash ${COMMIT_HASH:0:12}..."
+          
+          # Try to pull image by commit hash
+          if docker pull "$IMAGE_BY_HASH" 2>/dev/null; then
+            echo "✅ Found existing image for commit ${COMMIT_HASH:0:12}"
+            echo "SKIP_BUILD=true" >> $GITHUB_OUTPUT
+            echo "EXISTING_IMAGE=$IMAGE_BY_HASH" >> $GITHUB_OUTPUT
+            # Tag it with the deployment tag for consistency
+            docker tag "$IMAGE_BY_HASH" "$IMAGE_BY_TAG"
+            echo "IMAGE=$IMAGE_BY_TAG" >> $GITHUB_ENV
+          else
+            echo "ℹ️  No existing image found for commit ${COMMIT_HASH:0:12}, will build new image"
+            echo "SKIP_BUILD=false" >> $GITHUB_OUTPUT
+            echo "IMAGE=$IMAGE_BY_TAG" >> $GITHUB_ENV
+          fi
+
+      - name: Debug SSH agent
+        if: steps.check_image.outputs.SKIP_BUILD == 'false'
+        run: |
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
+          ssh-add -l || echo "No keys in agent"
+          ssh -o StrictHostKeyChecking=no -T git@github.com 2>&1 || true
+
+      - name: Build Docker image
+        if: steps.check_image.outputs.SKIP_BUILD == 'false'
+        env:
+          DOCKER_BUILDKIT: 1
+          BUILDKIT_PROGRESS: plain
+        run: |
+          COMMIT_HASH="${{ steps.commit_hash.outputs.COMMIT_HASH }}"
+          IMAGE_BY_HASH="${{ secrets.ECR_REGISTRY }}/amp/webapp:commit-${COMMIT_HASH:0:12}"
+          IMAGE_BY_TAG="${{ secrets.ECR_REGISTRY }}/amp/webapp:${{ steps.tag.outputs.TAG }}"
+          
+          # Build SSH args - only add if SSH_AUTH_SOCK is available (from ssh-agent)
+          SSH_ARGS=""
+          if [ -n "$SSH_AUTH_SOCK" ]; then
+            SSH_ARGS="--ssh default=$SSH_AUTH_SOCK"
+          fi
+          
+          # Collect cache sources for better layer reuse
+          CACHE_FROM_ARGS=()
+          
+          # Try to use commit-hash-based image as cache (if it exists from a previous build)
+          if docker pull "$IMAGE_BY_HASH" 2>/dev/null; then
+            echo "✅ Using commit-hash-based image as cache"
+            CACHE_FROM_ARGS+=("--cache-from" "$IMAGE_BY_HASH")
+          fi
+          
+          # Try to use deployment tag image as cache
+          if docker pull "$IMAGE_BY_TAG" 2>/dev/null; then
+            echo "✅ Using deployment tag image as cache"
+            CACHE_FROM_ARGS+=("--cache-from" "$IMAGE_BY_TAG")
+          fi
+          
+          # Try to use a recent 'latest' or 'main' branch image as cache (if exists)
+          LATEST_IMAGE="${{ secrets.ECR_REGISTRY }}/amp/webapp:latest"
+          if docker pull "$LATEST_IMAGE" 2>/dev/null; then
+            echo "✅ Using latest image as additional cache source"
+            CACHE_FROM_ARGS+=("--cache-from" "$LATEST_IMAGE")
+          fi
+          
+          if [ ${#CACHE_FROM_ARGS[@]} -eq 0 ]; then
+            echo "ℹ️  No existing image found, building from scratch"
+          fi
+          
+          # Build the image with both tags using cache modes for better optimization
+          # SKIP_TESTS=true to skip Maven and npm tests for faster deployment builds
+          docker buildx build \
+            --progress=plain \
+            $SSH_ARGS \
+            "${CACHE_FROM_ARGS[@]}" \
+            --cache-to type=inline \
+            --cache-from type=registry,ref="$IMAGE_BY_TAG" \
+            --cache-from type=registry,ref="$LATEST_IMAGE" \
+            -t "$IMAGE_BY_HASH" \
+            -t "$IMAGE_BY_TAG" \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            --build-arg BUILD_SOURCE="${{ steps.tag.outputs.TAG }}" \
+            --build-arg AMP_URL="${{ steps.deploy_config.outputs.AMP_URL }}" \
+            --build-arg AMP_PULL_REQUEST="${{ steps.deploy_config.outputs.PR_NUMBER || '' }}" \
+            --build-arg AMP_BRANCH="${GITHUB_REF#refs/heads/}" \
+            --build-arg AMP_REGISTRY_PRIVATE_KEY="${{ secrets.AMP_REGISTRY_PRIVATE_KEY || '' }}" \
+            --build-arg SKIP_TESTS=true \
+            --label git-hash="$COMMIT_HASH" \
+            --load \
+            amp
+          
+          echo "✅ Image built successfully"
+
+      - name: Push Docker image to registry
+        run: |
+          COMMIT_HASH="${{ steps.commit_hash.outputs.COMMIT_HASH }}"
+          IMAGE_BY_HASH="${{ secrets.ECR_REGISTRY }}/amp/webapp:commit-${COMMIT_HASH:0:12}"
+          IMAGE_BY_TAG="${{ secrets.ECR_REGISTRY }}/amp/webapp:${{ steps.tag.outputs.TAG }}"
+          SKIP_BUILD="${{ steps.check_image.outputs.SKIP_BUILD }}"
+          
+          # Push commit-hash-based image (for future reuse) - only if we built it
+          if [ "$SKIP_BUILD" != "true" ]; then
+            echo "Pushing commit-hash-based image (for future reuse)..."
+            docker push "$IMAGE_BY_HASH" > /dev/null
+          fi
+          
+          # Push deployment tag image
+          echo "Pushing deployment tag image..."
+          docker push "$IMAGE_BY_TAG" > /dev/null
+          
+          if [ "$SKIP_BUILD" == "true" ]; then
+            echo "✅ Reused existing image (no build needed) - saved build time!"
+          else
+            echo "✅ Image built and pushed successfully"
+          fi
+          
+          # Set IMAGE for cleanup step
+          echo "IMAGE=$IMAGE_BY_TAG" >> $GITHUB_ENV
+
+      - name: Logout from Container Registry
+        if: always()
+        run: docker logout ${{ secrets.ECR_REGISTRY }} || true
+
+      - name: Update GitHub commit status
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ steps.commit_hash.outputs.COMMIT_HASH }}',
+              state: 'success',
+              target_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}',
+              description: 'Built successfully',
+              context: 'github-actions/build'
+            });
+
+      - name: Deploy to server
+        id: deploy
+        run: |
+          set -eox pipefail
+          
+          DEPLOY_HOST="${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
+          DEPLOY_USER="${{ steps.deploy_config.outputs.DEPLOY_USER }}"
+          
+          # Set variables locally for passing to remote server
+          TAG="${{ steps.tag.outputs.TAG }}"
+          COUNTRY="${{ steps.deploy_config.outputs.COUNTRY }}"
+          DB_VERSION="${{ steps.db_version.outputs.DB_VERSION }}"
+          PG_VERSION="${{ env.PG_VERSION }}"
+          REGISTRY="${{ secrets.ECR_REGISTRY }}"
+          AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID || '' }}"
+          AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY || '' }}"
+          PR_NUMBER="${{ inputs.pr_number || '' }}"
+          
+          # Pass variables as environment variables through SSH
+          ssh $DEPLOY_USER@$DEPLOY_HOST bash -s << DEPLOY_SCRIPT
+            set -eo pipefail
+            TAG="$TAG"
+            COUNTRY="$COUNTRY"
+            DB_VERSION="$DB_VERSION"
+            PG_VERSION="$PG_VERSION"
+            REGISTRY="$REGISTRY"
+            AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
+            AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
+            PR_NUMBER="$PR_NUMBER"
+          
+            # Validate required variables
+            if [ -z "$TAG" ] || [ -z "$COUNTRY" ] || [ -z "$DB_VERSION" ] || [ -z "$PG_VERSION" ]; then
+              echo "❌ Error: One or more required variables are empty!"
+              echo "  TAG: '$TAG'"
+              echo "  COUNTRY: '$COUNTRY'"
+              echo "  DB_VERSION: '$DB_VERSION'"
+              echo "  PG_VERSION: '$PG_VERSION'"
+              exit 1
+            fi
+          
+            # Set image name to match the registry used in the workflow
+            export AMP_WEBAPP_IMAGE_NAME="${REGISTRY}/amp/webapp"
+          
+            # For PRs, log the PR number
+            if [ -n "$PR_NUMBER" ]; then
+              echo "Deploying PR #$PR_NUMBER to ${COUNTRY}"
+            fi
+          
+            # Export AWS credentials for the script to use
+            export AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY
+            export AWS_DEFAULT_REGION=us-east-1
+          
+            # Check if user can access docker without sudo
+            if docker ps > /dev/null 2>&1; then
+              amp-up2 "$TAG" "$COUNTRY" "$DB_VERSION" "$PG_VERSION"
+            elif sudo docker ps > /dev/null 2>&1; then
+              # Use sudo -E to preserve environment variables
+              sudo -E amp-up2 "$TAG" "$COUNTRY" "$DB_VERSION" "$PG_VERSION"
+            else
+              echo "❌ Cannot access Docker daemon. User may need to be added to docker group."
+              echo "Run: sudo usermod -aG docker $USER"
+              exit 1
+            fi
+          DEPLOY_SCRIPT
+          
+          echo "✅ Deployment successful"
+
+      - name: Cleanup Docker image
+        if: always()
+        run: |
+          docker rmi "${{ env.IMAGE }}" || true

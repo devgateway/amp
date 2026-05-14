@@ -86,15 +86,15 @@
 	</span>
 	<div id="basemaps-wrapper" class="leaflet-bar">
 	  <select name="basemaps" id="basemaps">
-	    <option value="None" selected="selected"><digi:trn>Default</digi:trn><options>
-	    <option value="Topographic"><digi:trn>Topographic</digi:trn><options>
+	    <option value="None" selected="selected"><digi:trn>Default</digi:trn><option>
+	    <option value="Topographic"><digi:trn>Topographic</digi:trn><option>
 	    <option value="Streets"><digi:trn>Streets</digi:trn></option>
-	    <option value="NationalGeographic"><digi:trn>National Geographic</digi:trn><options>
-	    <option value="Oceans"><digi:trn>Oceans</digi:trn><options>
-	    <option value="Gray"><digi:trn>Gray</digi:trn><options>
-	    <option value="DarkGray"><digi:trn>Dark Gray</digi:trn><options>
-	    <option value="Imagery"><digi:trn>Imagery</digi:trn><options>
-	    <option value="ShadedRelief"><digi:trn>Shaded Relief</digi:trn><options>
+	    <option value="NationalGeographic"><digi:trn>National Geographic</digi:trn><option>
+	    <option value="Oceans"><digi:trn>Oceans</digi:trn><option>
+	    <option value="Gray"><digi:trn>Gray</digi:trn><option>
+	    <option value="DarkGray"><digi:trn>Dark Gray</digi:trn><option>
+	    <option value="Imagery"><digi:trn>Imagery</digi:trn><option>
+	    <option value="ShadedRelief"><digi:trn>Shaded Relief</digi:trn><option>
 	  </select>
 	</div>
    <span id="custom-menu-wrapper">

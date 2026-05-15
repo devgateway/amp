@@ -1372,8 +1372,6 @@ public class ActivityUtil {
                 structure.setActivity(a);
                 if (structure.getAmpStructureId() == null) {
                     session.saveOrUpdate(structure);
-                } else {
-                    session.merge(structure);
                 }
             }
         }

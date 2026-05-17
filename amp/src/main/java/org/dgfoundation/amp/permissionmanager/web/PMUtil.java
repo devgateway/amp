@@ -177,6 +177,7 @@ public final class PMUtil {
         Iterator<Permission> i = cp.getPermissions().iterator();
         while (i.hasNext()) {
             Permission element = (Permission) i.next();
+            i.remove();
             Object object = session.load(Permission.class, element.getId());
             session.delete(object);
         }
@@ -194,6 +195,7 @@ public final class PMUtil {
         Iterator<Permission> i = cp.getPermissions().iterator();
         while (i.hasNext()) {
             Permission element = (Permission) i.next();
+            i.remove();
             Object object = session.load(Permission.class, element.getId());
             session.delete(object);
         }

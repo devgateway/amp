@@ -212,17 +212,8 @@ public class ActivityUtil {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
 
                 a = ActivityVersionUtil.cloneActivity(a);
-                // A cloned activity must become a new DB row.  Keeping the original id would cause
-                // versioned children (contacts, structures, etc.) to remain linked to the current
-                // version row instead of the new one, so they appear lost on reopen.
                 a.setAmpActivityId(null);
-                // Always clear the session after cloning. When running in a batch context (e.g. Excel importer),
-                // validateAndImport executes queries with FlushMode.AUTO which can cascade-save new child entities
-                // (fundings, etc.) into the action queue. The subsequent session.evict(oldA) then cascade-evicts
-                // those children from the persistence context while they remain in the action queue.  The flush
-                // below would find them in the queue but not in the persistence context.
-                // Clearing the session here discards those stale queued actions; downstream session.save()/
-                // saveOrUpdate() re-registers everything cleanly before the real INSERTs are flushed.
+
                 session.clear();
                 a.setMember(new HashSet<>());
                 if (tmpGroup == null) {
@@ -276,10 +267,7 @@ public class ActivityUtil {
         if (!newActivity) {
             session.clear();
             if (createNewVersion) {
-                // After cloning, the group in 'a' is a stale deep-copy whose
-                // ampActivityLastVersion back-reference points to the clone
-                // (ampActivityId == null).  Reload from DB so the comparison
-                // below uses the real stored last-version id.
+
                 group = session.get(AmpActivityGroup.class, group.getAmpActivityGroupId());
                 a.setAmpActivityGroup(group);
             }
@@ -300,9 +288,6 @@ public class ActivityUtil {
         a.setAmpActivityGroup(group);
         updateMultiStakeholderField(a);
 
-        // When creating a new version, use the managed merged instance for the rest
-        // of the save flow so Hibernate owns the delete-orphan collections on that
-        // instance from the start.
         if (createNewVersion && a.getAmpActivityId() == null) {
             a = (AmpActivityVersion) session.merge(a);
             if (!newActivity) {
@@ -334,8 +319,6 @@ public class ActivityUtil {
         if (createNewVersion) {
             if (a.getAmpActivityId() == null)
                 session.save(a);
-            // else: the managed merged instance above is still tracked in the session,
-            // so dirty-checking at flush() picks up all post-merge mutations.
         } else {
 //            session.saveOrUpdate(a);
             session.merge(a);

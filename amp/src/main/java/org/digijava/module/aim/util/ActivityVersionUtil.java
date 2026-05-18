@@ -226,9 +226,6 @@ public class ActivityVersionUtil {
 
         // Re-initialize every Collection field: calls prepareMerge() on each
         // Versionable child, which nulls its DB id and re-points its activity
-        // reference to the new version.  This MUST run after the deep-copy;
-        // doing it before was a no-op because SerializationUtils.clone(in)
-        // then overwrote all the prepared collections with the originals.
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             if (Collection.class.isAssignableFrom(field.getType())) {

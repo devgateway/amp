@@ -1350,12 +1350,16 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setActivityContacts(Set<AmpActivityContact> activityContacts) {
-            if (this.activityContacts == null) {
+            if (activityContacts instanceof PersistentSet) {
                 this.activityContacts = activityContacts;
             } else {
+                if (this.activityContacts == null) {
+                    this.activityContacts = new HashSet<>();
+                }
                 this.activityContacts.clear();
-                if (activityContacts==null)activityContacts=new HashSet<>();
-                this.activityContacts.addAll(activityContacts);
+                if (activityContacts != null) {
+                    this.activityContacts.addAll(activityContacts);
+                }
             }
         }
 

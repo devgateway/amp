@@ -212,6 +212,10 @@ public class ActivityUtil {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
 
                 a = ActivityVersionUtil.cloneActivity(a);
+                // A cloned activity must become a new DB row.  Keeping the original id would cause
+                // versioned children (contacts, structures, etc.) to remain linked to the current
+                // version row instead of the new one, so they appear lost on reopen.
+                a.setAmpActivityId(null);
                 // Always clear the session after cloning. When running in a batch context (e.g. Excel importer),
                 // validateAndImport executes queries with FlushMode.AUTO which can cascade-save new child entities
                 // (fundings, etc.) into the action queue. The subsequent session.evict(oldA) then cascade-evicts
@@ -271,18 +275,41 @@ public class ActivityUtil {
 
         if (!newActivity) {
             session.clear();
+            if (createNewVersion) {
+                // After cloning, the group in 'a' is a stale deep-copy whose
+                // ampActivityLastVersion back-reference points to the clone
+                // (ampActivityId == null).  Reload from DB so the comparison
+                // below uses the real stored last-version id.
+                group = session.get(AmpActivityGroup.class, group.getAmpActivityGroupId());
+                a.setAmpActivityGroup(group);
+            }
             //existing activity
             //previousVersion for current activity
-            if (group.getAmpActivityLastVersion().getAmpActivityId().equals(a.getAmpActivityId())) {
+            if (group.getAmpActivityLastVersion() != null
+                    && group.getAmpActivityLastVersion().getAmpActivityId() != null
+                    && group.getAmpActivityLastVersion().getAmpActivityId().equals(oldA.getAmpActivityId())) {
                 forceVersionIncrement(session, group);
             }
-            group.setAmpActivityLastVersion(a);
-            session.merge(group);
+            if (!createNewVersion) {
+                group.setAmpActivityLastVersion(a);
+                session.merge(group);
+            }
 
         }
 
         a.setAmpActivityGroup(group);
         updateMultiStakeholderField(a);
+
+        // When creating a new version, use the managed merged instance for the rest
+        // of the save flow so Hibernate owns the delete-orphan collections on that
+        // instance from the start.
+        if (createNewVersion && a.getAmpActivityId() == null) {
+            a = (AmpActivityVersion) session.merge(a);
+            if (!newActivity) {
+                group.setAmpActivityLastVersion(a);
+            }
+        }
+
         if (isActivityForm) {
             saveActivityResources(a, session);
             saveActivityGPINiResources(a, session);
@@ -294,7 +321,9 @@ public class ActivityUtil {
         saveEditors(session, createNewVersion, editorStore, site);
 
         saveAgreements(a, session, isActivityForm);
-        saveContacts(a, session, (draft != draftChange), ampCurrentMember);
+    saveContacts(a, session, (draft != draftChange), ampCurrentMember,
+        createNewVersion ? oldA.getAmpActivityId() : a.getAmpActivityId(),
+        createNewVersion || a.getAmpActivityId() == null);
 
         updateComponentFunding(a, session);
         saveAnnualProjectBudgets(a, session);
@@ -305,10 +334,8 @@ public class ActivityUtil {
         if (createNewVersion) {
             if (a.getAmpActivityId() == null)
                 session.save(a);
-            else {
-                cleanObjectFromSession(session,AmpActivityVersion.class, a.getAmpActivityId());
-                session.saveOrUpdate(a);
-            }
+            // else: the managed merged instance above is still tracked in the session,
+            // so dirty-checking at flush() picks up all post-merge mutations.
         } else {
 //            session.saveOrUpdate(a);
             session.merge(a);
@@ -1291,9 +1318,15 @@ public class ActivityUtil {
 
     public static void saveContacts(AmpActivityVersion a, Session session, boolean checkForContactsRemoval,
                                     AmpTeamMember teamMember) throws Exception {
+        saveContacts(a, session, checkForContactsRemoval, teamMember, a.getAmpActivityId(),
+                a.getAmpActivityId() == null);
+    }
+
+    public static void saveContacts(AmpActivityVersion a, Session session, boolean checkForContactsRemoval,
+                                    AmpTeamMember teamMember, Long oldActivityId,
+                                    boolean newActivity) throws Exception {
         Set<AmpActivityContact> activityContacts = a.getActivityContacts();
         // if activity contains contact,which is not in contact list, we should remove it
-        Long oldActivityId = a.getAmpActivityId();
         if (oldActivityId != null) {
             if (checkForContactsRemoval || !ActivityVersionUtil.isVersioningEnabled()) {
                 //List<AmpActivityContact> activityDbContacts=ContactInfoUtil.getActivityContacts(oldActivityId);
@@ -1310,6 +1343,7 @@ public class ActivityUtil {
                             }
                         }
                         if (count == 0) { //if activity contains contact,which is not in contact list, we should remove it
+                            logger.info("Contact with id " + actContactId + " will be removed");
                             Query qry = session.createQuery("delete from " + AmpActivityContact.class.getName() + " a where a.id=" + actContactId);
                             qry.executeUpdate();
                         }
@@ -1318,8 +1352,6 @@ public class ActivityUtil {
 
             }
         }
-
-        boolean newActivity = a.getAmpActivityId() == null;
 
         //to avoid saving the same contact twice on the same session, we keep track of the
         //already saved ones.
@@ -1330,9 +1362,11 @@ public class ActivityUtil {
         }
         try {
             //add or edit activity contact and amp contact
-            if (activityContacts != null && !activityContacts.isEmpty()) {
+            if (activityContacts != null) {
                 for (AmpActivityContact activityContact : activityContacts) {
+                    activityContact.setActivity(a);
                     Long contactId = activityContact.getContact().getId();
+                    logger.info("Processing contact with id " + contactId);
                     // if the contact already exists on the DB, and was not saved
                     // already
                     if (contactId != null && savedContacts.get(contactId) == null) {
@@ -1340,6 +1374,7 @@ public class ActivityUtil {
                     }
                     // save the contact first, if the contact is new or if it is not
                     // new but has not been saved already.
+                    logger.info("Contact with id " + contactId + " is new: " + (contactId == null) + " and has been saved: " + savedContacts.get(contactId));
                     if (contactId == null || (newActivity && !savedContacts.get(contactId))) {
                         activityContact.getContact().setCreator(creator);
                         session.saveOrUpdate(activityContact.getContact());
@@ -1347,7 +1382,8 @@ public class ActivityUtil {
                     }
                     if (activityContact.getId() == null) {
                         session.saveOrUpdate(activityContact);
-                        if (!newActivity) {
+                        if (!newActivity && activityContact.getId() == null) {
+                            session.saveOrUpdate(activityContact);
                             session.merge(activityContact.getContact());
                         }
                     }

@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.collection.internal.PersistentSet;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -110,7 +111,21 @@ public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
     }
 
     public void setSupportingDocuments(Set<AmpGPINiSurveyResponseDocument> supportingDocuments) {
-        this.supportingDocuments = supportingDocuments;
+        if (supportingDocuments instanceof PersistentSet) {
+            this.supportingDocuments = supportingDocuments;
+        } else {
+            if (this.supportingDocuments == null) {
+                if (supportingDocuments == null) {
+                    supportingDocuments = new HashSet<>();
+                }
+                this.supportingDocuments = new HashSet<>(supportingDocuments);
+            }
+            this.supportingDocuments.clear();
+            if (supportingDocuments == null) {
+                supportingDocuments = new HashSet<>();
+            }
+            this.supportingDocuments.addAll(supportingDocuments);
+        }
     }
 
     public boolean isEmpty() {

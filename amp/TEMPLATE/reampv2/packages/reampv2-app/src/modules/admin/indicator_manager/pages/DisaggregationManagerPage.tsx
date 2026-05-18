@@ -22,6 +22,7 @@ const DisaggregationManagerPage: React.FC = () => {
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
   const [editingChild, setEditingChild] = useState<CategoryValue | null>(null);
   const [optionsMap, setOptionsMap] = useState<{ [key: number]: any[] }>({});
+  const [optionValueError, setOptionValueError] = useState<string>('');
   const dispatch = useDispatch();
 
   const categoriesReducer = useSelector((state: any) => state.fetchAmpCategoryReducer);
@@ -76,7 +77,12 @@ const DisaggregationManagerPage: React.FC = () => {
     refreshCategories();
   };
 
-  const handleClose = () => setShowModal(false);
+  const handleClose = () => {
+    setShowModal(false);
+    setOptionValueError('');
+  };
+
+  const stripHtml = (input: string): string => input.replace(/<[^>]*>/g, '').trim();
   const nodeRef = useRef(null);
   return (
     <div style={{ padding: '2rem' }}>
@@ -155,23 +161,31 @@ const DisaggregationManagerPage: React.FC = () => {
               const formData = new FormData(form);
               const childValue = formData.get('childValue') as string;
 
+              const sanitizedValue = stripHtml(childValue);
+              if (!sanitizedValue) {
+                setOptionValueError(t('amp.disaggregationmanager:option-value-invalid'));
+                return;
+              }
+              setOptionValueError('');
+
               if (!selectedCategory) return;
 
               if (modalMode === 'add') {
                 await fetch(`/rest/indicator_disaggregation/options/${selectedCategory.id}`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ value: childValue })
+                  body: JSON.stringify({ value: sanitizedValue })
                 });
               } else if (modalMode === 'edit' && editingChild) {
                 await fetch(`/rest/indicator_disaggregation/options/${editingChild.id}`, {
                   method: 'PUT',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ value: childValue })
+                  body: JSON.stringify({ value: sanitizedValue })
                 });
               }
               setShowModal(false);
               setEditingChild(null);
+              setOptionValueError('');
               refreshCategories();
             }}
         >
@@ -185,7 +199,12 @@ const DisaggregationManagerPage: React.FC = () => {
                   type="text"
                   defaultValue={editingChild ? editingChild.value : ''}
                   placeholder={t('amp.disaggregationmanager:option-value-placeholder')}
+                  onChange={() => setOptionValueError('')}
+                  isInvalid={!!optionValueError}
               />
+              <Form.Control.Feedback type="invalid">
+                {optionValueError}
+              </Form.Control.Feedback>
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>

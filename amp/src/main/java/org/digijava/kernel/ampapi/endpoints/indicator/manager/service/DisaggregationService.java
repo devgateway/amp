@@ -7,11 +7,18 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import javax.ws.rs.BadRequestException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class DisaggregationService {
+
+    private static String sanitizeOptionValue(String raw) {
+        if (raw == null) return "";
+        // Strip HTML/XML tags
+        return raw.replaceAll("<[^>]*>", "").trim();
+    }
 
     public List<AmpCategoryValueDTO> getDisaggregationOptions(Long categoryValueId) {
         Session session = PersistenceManager.getSession();
@@ -31,6 +38,10 @@ public class DisaggregationService {
     }
 
     public AmpCategoryValueDTO addDisaggregationOption(Long categoryValueId, AmpCategoryValueDTO option) {
+        String sanitizedValue = sanitizeOptionValue(option.getValue());
+        if (sanitizedValue.isEmpty()) {
+            throw new BadRequestException("Option value must not be blank or contain only HTML tags.");
+        }
         Session session = PersistenceManager.getSession();
         String keyName = "indicator_disaggregation_" + categoryValueId;
         AmpCategoryClass optionClass = (AmpCategoryClass) session.createQuery("from AmpCategoryClass where keyName = :key")
@@ -54,7 +65,7 @@ public class DisaggregationService {
         query.setParameter("classId", optionClass.getId());
         Integer maxIndex = Optional.ofNullable(query.uniqueResult()).orElse(0);
         value.setIndex(maxIndex + 1);
-        value.setValue(option.getValue());
+        value.setValue(sanitizedValue);
         value.setDeleted(false);
         session.save(value);
         session.flush();
@@ -62,10 +73,14 @@ public class DisaggregationService {
     }
 
     public AmpCategoryValueDTO updateDisaggregationOption(Long optionId, AmpCategoryValueDTO value) {
+        String sanitizedValue = sanitizeOptionValue(value.getValue());
+        if (sanitizedValue.isEmpty()) {
+            throw new BadRequestException("Option value must not be blank or contain only HTML tags.");
+        }
         Session session = PersistenceManager.getSession();
         AmpCategoryValue existing = session.get(AmpCategoryValue.class, optionId);
         if (existing == null) return null;
-        existing.setValue(value.getValue());
+        existing.setValue(sanitizedValue);
         session.update(existing);
         session.flush();
         return value;

@@ -34,6 +34,38 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		return '/aim/viewActivityPreview.do~activityId=' + id;
 	}
 
+	function normalizeActivityId(activityId) {
+		if (activityId === undefined || activityId === null) {
+			return '';
+		}
+
+		activityId = String(activityId).replace(/\u00a0/g, ' ').trim();
+		if (!/^\d+$/.test(activityId)) {
+			return '';
+		}
+
+		return parseInt(activityId, 10) > 0 ? activityId : '';
+	}
+
+	function getGridCellValue(grid, rowId, columnName) {
+		try {
+			return jQuery(grid).jqGrid('getCell', rowId, columnName);
+		} catch (error) {
+			return '';
+		}
+	}
+
+	function getRowActivityId(grid, rowId) {
+		var activityId = normalizeActivityId(getGridCellValue(grid, rowId, app.TabsApp.COLUMN_ACTIVITY_ID));
+		if (!activityId) {
+			activityId = normalizeActivityId(getGridCellValue(grid, rowId, 'Activity Id'));
+		}
+		if (!activityId) {
+			activityId = normalizeActivityId(getGridCellValue(grid, rowId, app.TabsApp.COLUMNS_WITH_IDS[0]));
+		}
+		return activityId;
+	}
+
 	GridManager.prototype = {
 		constructor : GridManager
 	};
@@ -230,12 +262,17 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								//set default color and link for rows
 								row = this.rows[iRow];
 								className = row.className;
-								var id = row.cells[1].textContent;
-								var iconedit = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
-									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>";
-								var iconvalidated = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
-									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/validate.png'/></a>";
-								var link = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id + "'>";
+								var id = getRowActivityId(grid, row.id);
+								var iconedit = "";
+								var iconvalidated = "";
+								var link = "";
+								if (id) {
+									iconedit = "<a href='/wicket/onepager/" + onePagerParameter + "/" + id
+										+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>";
+									iconvalidated = "<a href='/wicket/onepager/" + onePagerParameter + "/" + id
+										+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/validate.png'/></a>";
+									link = "<a href='/wicket/onepager/" + onePagerParameter + "/" + id + "'>";
+								}
 								
 								
 								row.className = className + ' status_1';
@@ -358,9 +395,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 										colIndex = i;
 									}
 								});
-                                var newContent = "<a class='preview-cell" + statusClass + "' href='" + getPreviewPageURL(id) + "'>"
-									+ jQuery(row.cells[colIndex]).html() + "</a>";
-								jQuery(row.cells[colIndex]).html(newContent);
+								if (id) {
+									var newContent = "<a class='preview-cell" + statusClass + "' href='" + getPreviewPageURL(id) + "'>"
+										+ jQuery(row.cells[colIndex]).html() + "</a>";
+									jQuery(row.cells[colIndex]).html(newContent);
+								}
 							}
 							
 							TranslationManager.searchAndTranslate();

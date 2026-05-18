@@ -23,8 +23,10 @@ const Startup = (props) => {
     _fetchTranslations,
     programConfigurationPending,
     fmReducerPending,
+    fmReducerError,
     sectorClassificationPending,
-    settingsPending
+    settingsPending,
+    settingsError
   } = props;
   const dispatch = useDispatch();
 
@@ -39,6 +41,9 @@ const Startup = (props) => {
 
   if (translationPending || programConfigurationPending || fmReducerPending || sectorClassificationPending || settingsPending) {
     return (<Loading />);
+  } else if (fmReducerError || settingsError) {
+    window.location.replace('/login.do');
+    return null;
   } else {
     document.title = translations['amp.ndd.dashboard:page-title'];
     return (
@@ -54,8 +59,10 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   programConfigurationPending: state.programConfigurationReducer.loading,
   fmReducerPending: state.fetchFmReducer.loading,
+  fmReducerError: state.fetchFmReducer.error,
   sectorClassificationPending: state.fetchSectorClassificationReducer.loading,
   settingsPending: state.fetchSettingsReducer.loading,
+  settingsError: state.fetchSettingsReducer.error,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

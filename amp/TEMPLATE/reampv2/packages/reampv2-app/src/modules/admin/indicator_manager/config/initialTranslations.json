@@ -202,6 +202,7 @@
   "amp.disaggregationmanager:edit-option-title": "Edit Option",
   "amp.disaggregationmanager:option-value": "Option Value",
   "amp.disaggregationmanager:option-value-placeholder": "Enter option value",
+  "amp.disaggregationmanager:option-value-invalid": "Option value must not be empty or contain only spaces/HTML tags.",
   "amp.disaggregationmanager:cancel": "Cancel",
   "amp.disaggregationmanager:save": "Save",
   "amp.dashboard:disaggregation-management": "Disaggregation Management",

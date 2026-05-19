@@ -151,6 +151,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
             }
         };
         valuesTable.setOutputMarkupPlaceholderTag(true);
+        valuesTable.setOutputMarkupId(true);
         add(valuesTable);
 
         AmpAjaxLinkField addActualValue = new AmpAjaxLinkField("addActualValue", "Add Actual Value", "Add Actual Value") {
@@ -172,6 +173,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
             }
         };
 
+        addActualValue.setOutputMarkupId(true);
         addActualValue.setOutputMarkupPlaceholderTag(true);
         add(addActualValue);
 

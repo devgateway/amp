@@ -34,8 +34,10 @@ public final class ScreenshotService {
         if ("1".equals(chromeNoSandbox)) {
             cmd.add("--no-sandbox");
         }
-        cmd.add("--headless");
+        cmd.add("--headless=new");
         cmd.add("--disable-gpu");
+        cmd.add("--ignore-certificate-errors");
+        cmd.add("--allow-file-access-from-files");
         cmd.add(String.format("--window-size=%d,%d", w, h));
         cmd.add("--screenshot=" + outputFile.getAbsolutePath());
         cmd.add(html.getAbsolutePath());

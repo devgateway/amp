@@ -19,6 +19,7 @@ import lodash from 'lodash';
 import { getResponsibleOrgs } from '../../reducers/fetchResponsibleOrgsReducer';
 import axios from 'axios';
 import Accordion from 'react-bootstrap/Accordion';
+import initialTranslations from '../../config/initialTranslations.json';
 
 
 const MySwal = withReactContent(Swal);
@@ -74,10 +75,11 @@ interface IndicatorFormValues {
 
 const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const { show, setShow, translations } = props;
+  const t = (key: string): string => translations[key] ?? initialTranslations[key as keyof typeof initialTranslations] ?? key;
 
   const ascendingOptions = [
-    { value: true, label: translations["amp.indicatormanager:true"] },
-    { value: false, label: translations["amp.indicatormanager:false"] }
+    { value: true, label: t("amp.indicatormanager:true") },
+    { value: false, label: t("amp.indicatormanager:false") }
   ];
 
   const nodeRef = useRef(null);
@@ -246,7 +248,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     if (createIndicatorState.loading) {
       MySwal.fire({
         icon: 'info',
-        title: `${translations["amp.indicatormanager:creating-indicator"]}...`,
+        title: `${t("amp.indicatormanager:creating-indicator")}...`,
         timer: 1000
       });
       return;
@@ -254,10 +256,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 
     if (!createIndicatorState.loading && !createIndicatorState?.error && createIndicatorState?.createdIndicator?.id) {
       MySwal.fire({
-        title: translations["amp.indicatormanager:success"],
-        text: translations["amp.indicatormanager:save-success"],
+        title: t("amp.indicatormanager:success"),
+        text: t("amp.indicatormanager:save-success"),
         icon: 'success',
-        confirmButtonText: translations["amp.indicatormanager:ok"],
+        confirmButtonText: t("amp.indicatormanager:ok"),
       }).then(() => {
         dispatch(getIndicators());
         handleClose();
@@ -267,10 +269,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 
     if (createIndicatorState.error && !createIndicatorState.loading && !createIndicatorState.createdIndicator) {
       MySwal.fire({
-        title: translations["amp.indicatormanager:error"],
-        text: createIndicatorState.loading ? translations["Error creating indicator"] : createIndicatorState.error,
+        title: t("amp.indicatormanager:error"),
+        text: createIndicatorState.loading ? t("Error creating indicator") : createIndicatorState.error,
         icon: 'error',
-        confirmButtonText: translations["amp.indicatormanager:ok"],
+        confirmButtonText: t("amp.indicatormanager:ok"),
       });
     }
 
@@ -339,7 +341,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
       size='lg'
     >
       <Modal.Header closeButton>
-        <Modal.Title>{translations['amp.dashboard:add-new']}</Modal.Title>
+        <Modal.Title>{t('amp.dashboard:add-new')}</Modal.Title>
       </Modal.Header>
       <Formik
         innerRef={formikRef}
@@ -349,10 +351,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
           const { name, description, code, sectors, programId, ascending, creationDate, base, target, indicatorsCategory } = values;
           if (selectedProgramSchemeId && !programId) {
             MySwal.fire({
-              title: translations['amp.indicatormanager:error'],
-              text: translations['amp.indicatormanager:errors-program-is-required'],
+              title: t('amp.indicatormanager:error'),
+              text: t('amp.indicatormanager:errors-program-is-required'),
               icon: 'error',
-              confirmButtonText: translations['amp.indicatormanager:ok'],
+              confirmButtonText: t('amp.indicatormanager:ok'),
             })
 
             return;
@@ -513,11 +515,11 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
               <Modal.Body>
                 <div className={styles.viewmodal_wrapper}>
                   {/* Core Indicator Information */}
-                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{translations["amp.indicatormanager:core-info"]}</h5></Col></Row>
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{t("amp.indicatormanager:core-info")}</h5></Col></Row>
                   <div className={styles.sectionContainer}>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item} controlId="formBasicName">
-                        <Form.Label>{translations["amp.indicatormanager:indicator-name"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:indicator-name")}</Form.Label>
                         <Form.Control
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
@@ -526,14 +528,14 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             isInvalid={!!props.errors.name}
                             required
                             aria-required type="text"
-                            placeholder={translations["amp.indicatormanager:enter-indicator-name"]}
+                            placeholder={t("amp.indicatormanager:enter-indicator-name")}
                         />
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.name && <span>{props.errors.name}</span>}
                         </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group className={styles.view_item} controlId="formIndicatorCode">
-                        <Form.Label>{translations["amp.indicatormanager:indicator-code"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:indicator-code")}</Form.Label>
                         <Form.Control
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
@@ -541,7 +543,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             required
                             type="text"
                             className={`${styles.input_field} ${(props.errors.code && props.touched.code) && styles.text_is_invalid}`}
-                            placeholder={translations["amp.indicatormanager:enter-indicator-code"]}
+                            placeholder={t("amp.indicatormanager:enter-indicator-code")}
                         />
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.code && <span>{props.errors.code}</span>}
@@ -550,7 +552,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Row>
                     <Row className={styles.view_row}>
                       <Form.Group as={Col} className={styles.view_one_item} controlId="formBasicDescription">
-                        <Form.Label>{translations["amp.indicatormanager:indicator-description"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:indicator-description")}</Form.Label>
                         <Form.Control
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
@@ -558,7 +560,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             as="textarea"
                             rows={2}
                             className={`${styles.input_field} ${(props.errors.description && props.touched.description) && styles.text_is_invalid}`}
-                            placeholder={translations["amp.indicatormanager:enter-indicator-description"]}
+                            placeholder={t("amp.indicatormanager:enter-indicator-description")}
                         />
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.description && <span>{props.errors.description}</span>}
@@ -567,7 +569,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Row>
                     <Row className={styles.view_row}>
                       <Form.Group as={Col} className={styles.view_one_item} controlId="formRelevanceForClimateChange">
-                        <Form.Label>{translations["amp.indicatormanager:relevance-for-climate-change"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:relevance-for-climate-change")}</Form.Label>
                         <Form.Control
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
@@ -575,13 +577,13 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             as="textarea"
                             rows={2}
                             className={styles.input_field}
-                            placeholder={translations["amp.indicatormanager:relevance-for-climate-change"]}
+                            placeholder={t("amp.indicatormanager:relevance-for-climate-change")}
                         />
                       </Form.Group>
                     </Row>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item} controlId="formIndicatorType">
-                        <Form.Label>{translations["amp.indicatormanager:type"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:type")}</Form.Label>
                         <Select
                             name="indicatorType"
                             options={indicatorTypeOptions}
@@ -591,17 +593,18 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${(props.errors.indicatorType && props.touched.indicatorType) && styles.text_is_invalid}`}
                             classNamePrefix="select"
+                            placeholder={t("amp.indicatormanager:select-indicator-type")}
                             value={indicatorTypeOptions.find(opt => opt.value === props.values.indicatorType) || null}
                         />
                       </Form.Group>
                     </Row>
                   </div>
                   {/* Categorization and Linkage */}
-                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{translations["amp.indicatormanager:categorization-linkage-info"] || "Categorization and Linkage"}</h5></Col></Row>
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{t("amp.indicatormanager:categorization-linkage-info")}</h5></Col></Row>
                   <div className={styles.sectionContainer}>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item} controlId="formOutcome">
-                        <Form.Label>{translations["amp.indicatormanager:outcome"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:outcome")}</Form.Label>
                         <Select
                             name="outcomeId"
                             options={allOutcomes.map(outcome => ({ value: outcome.id, label: outcome.name }))}
@@ -612,11 +615,12 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${(props.errors.outcomeId && props.touched.outcomeId) && styles.text_is_invalid}`}
                             classNamePrefix="select"
+                            placeholder={t("amp.indicatormanager:select-outcome")}
                             value={allOutcomes.find(outcome => outcome.id === selectedOutcomeId) ? { value: selectedOutcomeId, label: allOutcomes.find(outcome => outcome.id === selectedOutcomeId)?.name } : null}
                         />
                       </Form.Group>
                       <Form.Group className={styles.view_item} controlId="formOutput">
-                        <Form.Label>{translations["amp.indicatormanager:output"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:output")}</Form.Label>
                         <Select
                             name="outputId"
                             options={filteredOutputs.map(output => ({ value: output.id, label: output.name }))}
@@ -626,6 +630,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${(props.errors.outputId && props.touched.outputId) && styles.text_is_invalid}`}
                             classNamePrefix="select"
+                            placeholder={t("amp.indicatormanager:select-output")}
                             value={filteredOutputs.find(output => output.id === props.values.outputId) ? { value: props.values.outputId, label: filteredOutputs.find(output => output.id === props.values.outputId)?.name } : null}
                             isDisabled={!selectedOutcomeId}
                         />
@@ -633,7 +638,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Row>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item} controlId="programScheme">
-                        <Form.Label>{translations["amp.indicatormanager:link-logframe"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:link-logframe")}</Form.Label>
                         <Select
                             name="programScheme"
                             options={programSchemes}
@@ -647,11 +652,12 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${styles.input_field}`}
                             classNamePrefix="select"
+                            placeholder={t("amp.indicatormanager:select-program-scheme")}
                         />
                       </Form.Group>
                       {programFieldVisible && (
                           <Form.Group className={styles.view_item} controlId="programs">
-                            <Form.Label>{translations["amp.indicatormanager:programs"]}</Form.Label>
+                            <Form.Label>{t("amp.indicatormanager:programs")}</Form.Label>
                             <Select
                                 name="programs"
                                 options={programs}
@@ -663,13 +669,14 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                 onBlur={props.handleBlur}
                                 className={`basic-multi-select ${styles.input_field} ${(props.errors.programId && props.touched.programId) && styles.text_is_invalid}`}
                                 classNamePrefix="select"
+                                placeholder={t("amp.indicatormanager:select-program")}
                             />
                           </Form.Group>
                       )}
                     </Row>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_one_item} controlId="formIndicatorSectors">
-                        <Form.Label>{translations["amp.indicatormanager:sectors"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:sectors")}</Form.Label>
                         <Select
                             isMulti
                             name="sectors"
@@ -681,41 +688,42 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
                             classNamePrefix="select"
+                            placeholder={t("amp.indicatormanager:select-sectors")}
                         />
                       </Form.Group>
                     </Row>
                   </div>
                   {/* Data Definition and Sourcing */}
-                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{translations["amp.indicatormanager:data-definition-sourcing-info"] || "Data Definition and Sourcing"}</h5></Col></Row>
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{t("amp.indicatormanager:data-definition-sourcing-info")}</h5></Col></Row>
                   <div className={styles.sectionContainer}>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item} controlId="formData">
-                        <Form.Label>{translations["amp.indicatormanager:data"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:data")}</Form.Label>
                         <Form.Control
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             name="data"
                             type="text"
                             className={styles.input_field}
-                            placeholder={translations["amp.indicatormanager:enter-data"]}
+                            placeholder={t("amp.indicatormanager:enter-data")}
                         />
                       </Form.Group>
                       <Form.Group className={styles.view_item} controlId="formDataSource">
-                        <Form.Label>{translations["amp.indicatormanager:data-source"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:data-source")}</Form.Label>
                         <Form.Control
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             name="dataSource"
                             type="text"
                             className={styles.input_field}
-                            placeholder={translations["amp.indicatormanager:enter-data-source"]}
+                            placeholder={t("amp.indicatormanager:enter-data-source")}
                         />
                       </Form.Group>
                     </Row>
                     <Row className={styles.view_row}>
 
                       <Form.Group className={styles.view_item} controlId="formUnitOfMeasure">
-                        <Form.Label>{translations["amp.indicatormanager:unit-of-measure"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:unit-of-measure")}</Form.Label>
                         <Select
                             name="unitOfMeasure"
                             options={unitOfMeasureOptions}
@@ -725,24 +733,25 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${(props.errors.unitOfMeasure && props.touched.unitOfMeasure) && styles.text_is_invalid}`}
                             classNamePrefix="select"
+                            placeholder={t("amp.indicatormanager:select-unit-of-measure")}
                             value={unitOfMeasureOptions.find(opt => opt.value === props.values.unitOfMeasure) || null}
                         />
                       </Form.Group>
                         <Form.Group className={styles.view_one_item} controlId="formCalculationMethod">
-                            <Form.Label>{translations["amp.indicatormanager:calculation-method"]}</Form.Label>
+                            <Form.Label>{t("amp.indicatormanager:calculation-method")}</Form.Label>
                             <Form.Control
                                 onChange={props.handleChange}
                                 onBlur={props.handleBlur}
                                 name="calculationMethod"
                                 type="text"
                                 className={styles.input_field}
-                                placeholder={translations["amp.indicatormanager:calculation-method-placeholder"]}
+                                placeholder={t("amp.indicatormanager:calculation-method-placeholder")}
                             />
                         </Form.Group>
                     </Row>
                     <Row className={styles.view_row}>
                         <Form.Group className={styles.view_item} controlId="formDisaggregation">
-                            <Form.Label>{translations["amp.indicatormanager:disaggregation"]}</Form.Label>
+                            <Form.Label>{t("amp.indicatormanager:disaggregation")}</Form.Label>
                             <Select
                               isMulti
                               name="disaggregation"
@@ -755,6 +764,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                               onBlur={props.handleBlur}
                               className={`basic-multi-select ${(props.errors.disaggregation && props.touched.disaggregation) && styles.text_is_invalid}`}
                               classNamePrefix="select"
+                              placeholder={t("amp.indicatormanager:select-disaggregation")}
                               value={(props.values.disaggregation || []).map(id => disaggregationOptions.find(opt => opt.value === id)).filter(Boolean)}
                             />
                         </Form.Group>
@@ -764,7 +774,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       <Row className={styles.view_row}>
                         <Col>
                           <div style={{marginTop: '1rem'}}>
-                            <h6>{translations["amp.indicatormanager:disaggregation-values"]}</h6>
+                            <h6>{t("amp.indicatormanager:disaggregation-values")}</h6>
                             <Accordion defaultActiveKey="0">
                               {props.values.disaggregation.map((parentId, parentIdx) => (
                                 <Card key={parentId}>
@@ -773,7 +783,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                     eventKey={String(parentIdx)}
                                     className={styles.accordionHeader}
                                     style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', background: '#f7f7f7', fontWeight: 'bold' }}
-                                    aria-label={translations["amp.indicatormanager:click-to-expand-collapse"]}
+                                    aria-label={t("amp.indicatormanager:click-to-expand-collapse")}
                                   >
                                     <div className={styles.accordionHeaderTitle} style={{ flex: 1 }}>
                                       {disaggregationOptions.find(opt => opt.value === parentId)?.label || `Disaggregation ${parentId}`}
@@ -802,95 +812,95 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                   <Card.Title className={styles.accordionChildTitle}>{child.value}</Card.Title>
                                                   <div style={{display: 'flex', flexWrap: 'wrap', gap: '32px'}}>
                                                     <div style={{minWidth: '300px'}}>
-                                                      <h6 color={"red"}>{translations["amp.indicatormanager:base-values"]}</h6>
+                                                      <h6 color={"red"}>{t("amp.indicatormanager:base-values")}</h6>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:original-value"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:original-value")}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.base.originalValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-base-original-value"]}
+                                                          aria-label={t("amp.indicatormanager:base-original-value")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:original-value-date")}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.base.originalValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-base-original-value-date"]}
+                                                          aria-label={t("amp.indicatormanager:base-original-value-date")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:revised-value")}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.base.revisedValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-base-revised-value"]}
+                                                          aria-label={t("amp.indicatormanager:base-revised-value")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:revised-value-date")}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.base.revisedValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-base-revised-value-date"]}
+                                                          aria-label={t("amp.indicatormanager:base-revised-value-date")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                     </div>
                                                     <div style={{minWidth: '300px'}}>
-                                                      <h6 color={"red"}>{translations["amp.indicatormanager:target-values"]}</h6>
+                                                      <h6 color={"red"}>{t("amp.indicatormanager:target-values")}</h6>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:original-value"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:original-value")}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.target.originalValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-target-original-value"]}
+                                                          aria-label={t("amp.indicatormanager:target-original-value")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:original-value-date")}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.target.originalValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-target-original-value-date"]}
+                                                          aria-label={t("amp.indicatormanager:target-original-value-date")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:revised-value")}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.target.revisedValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-target-revised-value"]}
+                                                          aria-label={t("amp.indicatormanager:target-revised-value")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:revised-value-date")}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.target.revisedValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-target-revised-value-date"]}
+                                                          aria-label={t("amp.indicatormanager:target-revised-value-date")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
@@ -903,7 +913,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                         </div>
                                       ) : (
                                         <div style={{color: '#888', padding: '1rem', textAlign: 'center', border: '1px solid #eee', borderRadius: '4px'}}>
-                                          {translations["amp.indicatormanager:no-disaggregation-children"]}
+                                          {t("amp.indicatormanager:no-disaggregation-children")}
                                         </div>
                                       )}
                                     </Card.Body>
@@ -919,7 +929,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       <Row className={styles.view_row}>
                         <Col>
                           <div style={{marginTop: '1rem'}}>
-                            <h6>{translations["amp.indicatormanager:disaggregation-values"]}</h6>
+                            <h6>{t("amp.indicatormanager:disaggregation-values")}</h6>
                             <Accordion defaultActiveKey="0">
                               {disaggregationChildren[props.values.disaggregation[0]]?.map((parentChild: any, parentIdx: number) => (
                                 <Card key={parentChild.id}>
@@ -928,7 +938,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                     eventKey={String(parentIdx)}
                                     className={styles.accordionHeader}
                                     style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', background: '#f7f7f7', fontWeight: 'bold' }}
-                                    aria-label={translations["amp.indicatormanager:click-to-expand-collapse"]}
+                                    aria-label={t("amp.indicatormanager:click-to-expand-collapse")}
                                   >
                                     <div className={styles.accordionHeaderTitle} style={{ flex: 1 }}>
                                       {parentChild.value}
@@ -956,95 +966,95 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                                   <Card.Title className={styles.accordionChildTitle}>{child.value}</Card.Title>
                                                   <div style={{display: 'flex', flexWrap: 'wrap', gap: '32px'}}>
                                                     <div style={{minWidth: '300px'}}>
-                                                      <h6 color={"red"}>{translations["amp.indicatormanager:base-values"]}</h6>
+                                                      <h6 color={"red"}>{t("amp.indicatormanager:base-values")}</h6>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:original-value"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:original-value")}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.base.originalValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-base-original-value"]}
+                                                          aria-label={t("amp.indicatormanager:base-original-value")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:original-value-date")}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.base.originalValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'originalValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-base-original-value-date"]}
+                                                          aria-label={t("amp.indicatormanager:base-original-value-date")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:revised-value")}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.base.revisedValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-base-revised-value"]}
+                                                          aria-label={t("amp.indicatormanager:base-revised-value")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:revised-value-date")}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.base.revisedValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['base', 'revisedValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-base-revised-value-date"]}
+                                                          aria-label={t("amp.indicatormanager:base-revised-value-date")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                     </div>
                                                     <div style={{minWidth: '300px'}}>
-                                                      <h6 color={"red"}>{translations["amp.indicatormanager:target-values"]}</h6>
+                                                      <h6 color={"red"}>{t("amp.indicatormanager:target-values")}</h6>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:original-value"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:original-value")}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.target.originalValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-target-original-value"]}
+                                                          aria-label={t("amp.indicatormanager:target-original-value")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:original-value-date")}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.target.originalValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'originalValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-target-original-value-date"]}
+                                                          aria-label={t("amp.indicatormanager:target-original-value-date")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:revised-value")}</Form.Label>
                                                         <Form.Control
                                                           type="number"
                                                           value={entry.target.revisedValue || ''}
                                                           onChange={e => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValue'], e.target.value)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-target-revised-value"]}
+                                                          aria-label={t("amp.indicatormanager:target-revised-value")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
                                                       <Form.Group>
-                                                        <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
+                                                        <Form.Label>{t("amp.indicatormanager:revised-value-date")}</Form.Label>
                                                         <DateInput
                                                           translations={translations}
                                                           value={entry.target.revisedValueDate || ''}
                                                           onChange={val => updateDisaggregationField(entryIdx === -1 ? disaggArr.length : entryIdx, ['target', 'revisedValueDate'], val)}
                                                           className={styles.input_field}
-                                                          aria-label={translations["amp.indicatormanager:aria-target-revised-value-date"]}
+                                                          aria-label={t("amp.indicatormanager:target-revised-value-date")}
                                                           disabled={false}
                                                         />
                                                       </Form.Group>
@@ -1057,7 +1067,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                         </div>
                                       ) : (
                                         <div style={{color: '#888', padding: '1rem', textAlign: 'center', border: '1px solid #eee', borderRadius: '4px'}}>
-                                          {translations["amp.indicatormanager:no-disaggregation-children"]}
+                                          {t("amp.indicatormanager:no-disaggregation-children")}
                                         </div>
                                       )}
                                     </Card.Body>
@@ -1071,11 +1081,11 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     )}
                   </div>
                   {/* Responsibility and Frequency */}
-                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{translations["amp.indicatormanager:responsibility-frequency-info"]}</h5></Col></Row>
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{t("amp.indicatormanager:responsibility-frequency-info")}</h5></Col></Row>
                   <div className={styles.sectionContainer}>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item} controlId="formResponsibleOrganizations">
-                        <Form.Label>{translations["amp.indicatormanager:responsible-organizations"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:responsible-organizations")}</Form.Label>
                         <Select
                             isMulti
                             name="responsibleOrganizations"
@@ -1086,11 +1096,12 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${(props.errors.responsibleOrganizations && props.touched.responsibleOrganizations) && styles.text_is_invalid}`}
                             classNamePrefix="select"
+                            placeholder={t("amp.indicatormanager:select-responsible-organizations")}
                             value={responsibleOrgOptions.filter(opt => props.values.responsibleOrganizations?.includes(opt.value))}
                         />
                       </Form.Group>
                       <Form.Group className={styles.view_item} controlId="formFrequency">
-                        <Form.Label>{translations["amp.indicatormanager:frequency"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:frequency")}</Form.Label>
                         <Select
                             name="frequency"
                             options={frequencyOptions}
@@ -1100,13 +1111,14 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${(props.errors.frequency && props.touched.frequency) && styles.text_is_invalid}`}
                             classNamePrefix="select"
+                            placeholder={t("amp.indicatormanager:select-frequency")}
                             value={frequencyOptions.find(opt => opt.value === props.values.frequency) || null}
                         />
                       </Form.Group>
                     </Row>
                   </div>
                   {/* Value Tracking */}
-                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{translations["amp.indicatormanager:value-tracking"]}</h5></Col></Row>
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{t("amp.indicatormanager:value-tracking")}</h5></Col></Row>
                   <div className={styles.sectionContainer}>
                     {props.values.disaggregation?.length > 0 && (
                       <Row className={styles.view_row}>
@@ -1119,12 +1131,12 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     )}
                     <Form.Group as={Col}>
                       <Form.Label>
-                        <h4>{translations["amp.indicatormanager:base-values"]}</h4>
+                        <h4>{t("amp.indicatormanager:base-values")}</h4>
                       </Form.Label>
                       {/* Original Value and Date in one row */}
                       <Row className={styles.view_row}>
                         <Form.Group className={styles.view_item}>
-                          <Form.Label>{translations['amp.indicatormanager:original-value']}</Form.Label>
+                          <Form.Label>{t('amp.indicatormanager:original-value')}</Form.Label>
                           <Form.Control
                               defaultValue={props.values.base?.originalValue}
                               onChange={props.handleChange}
@@ -1133,7 +1145,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                               type="number"
                               disabled={props.values.disaggregation?.length > 0}
                               className={`${styles.input_field} ${(props.errors.base?.originalValue && props.touched.base?.originalValue) && styles.text_is_invalid}`}
-                              placeholder={translations["amp.indicatormanager:enter-original-value"]} />
+                              placeholder={t("amp.indicatormanager:enter-original-value")} />
 
                           <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                             {props.errors.base?.originalValue}
@@ -1141,7 +1153,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                         </Form.Group>
 
                         <Form.Group className={styles.view_item}>
-                          <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
+                          <Form.Label>{t("amp.indicatormanager:original-value-date")}</Form.Label>
                           <DateInput
                               translations={translations}
                               name="base.originalValueDate"
@@ -1166,7 +1178,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       {/* Revised Value and Date in one row */}
                       <Row className={styles.view_row}>
                         <Form.Group className={styles.view_item}>
-                          <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
+                          <Form.Label>{t("amp.indicatormanager:revised-value")}</Form.Label>
                           <Form.Control
                               defaultValue={props.values.base.revisedValue}
                               onChange={props.handleChange}
@@ -1175,7 +1187,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                               type="number"
                               disabled={props.values.disaggregation?.length > 0}
                               className={`${styles.input_field} ${(props.errors.base?.revisedValue && props.touched.base?.revisedValue) && styles.text_is_invalid}`}
-                              placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
+                              placeholder={t("amp.indicatormanager:enter-revised-value")} />
 
                           <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                             {props.errors.base?.revisedValue}
@@ -1183,7 +1195,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                         </Form.Group>
 
                         <Form.Group className={styles.view_item}>
-                          <Form.Label>{translations['amp.indicatormanager:revised-value-date']}</Form.Label>
+                          <Form.Label>{t('amp.indicatormanager:revised-value-date')}</Form.Label>
                           <DateInput
                               translations={translations}
                               value={props.values.base.revisedValueDate}
@@ -1208,11 +1220,11 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Row>
                   </Form.Group>
                   <Form.Group as={Col}>
-                    <Form.Label><h4>{translations["amp.indicatormanager:target-values"]}</h4></Form.Label>
+                    <Form.Label><h4>{t("amp.indicatormanager:target-values")}</h4></Form.Label>
                     {/* Original Value and Date in one row */}
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item}>
-                        <Form.Label>{translations["amp.indicatormanager:target-value"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:target-value")}</Form.Label>
                         <Form.Control
                             defaultValue={props.values.target.originalValue}
                             onChange={props.handleChange}
@@ -1221,14 +1233,14 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             type="number"
                             disabled={props.values.disaggregation?.length > 0}
                             className={`${styles.input_field} ${(props.errors.target?.originalValue && props.touched.target?.originalValue) && styles.text_is_invalid}`}
-                            placeholder={translations["amp.indicatormanager:enter-target-value"]} />
+                            placeholder={t("amp.indicatormanager:enter-target-value")} />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.target?.originalValue}
                         </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group className={styles.view_item}>
-                        <Form.Label>{translations["amp.indicatormanager:target-value-date"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:target-value-date")}</Form.Label>
                         <DateInput translations={translations}
                                    name="target.originalValueDate"
                                    value={props.values.target.originalValueDate}
@@ -1252,7 +1264,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     {/* Revised Value and Date in one row */}
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item}>
-                        <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:revised-value")}</Form.Label>
                         <Form.Control
                             defaultValue={props.values.target.revisedValue}
                             onChange={props.handleChange}
@@ -1261,7 +1273,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             type="number"
                             disabled={props.values.disaggregation?.length > 0}
                             className={`${styles.input_field} ${(props.errors.target?.revisedValue && props.touched.target?.revisedValue) && styles.text_is_invalid}`}
-                            placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
+                            placeholder={t("amp.indicatormanager:enter-revised-value")} />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.target?.revisedValue}
@@ -1269,7 +1281,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       </Form.Group>
 
                       <Form.Group className={styles.view_item}>
-                        <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:revised-value-date")}</Form.Label>
                         <DateInput
                             translations={translations}
                             value={props.values.target.revisedValueDate}
@@ -1294,11 +1306,11 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Row>
                   </Form.Group>
                   {/* Other Considerations */}
-                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>Other Considerations</h5></Col></Row>
+                  <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{t("amp.indicatormanager:other-considerations")}</h5></Col></Row>
                   <div className={styles.sectionContainer}>
                     <Row className={styles.view_row}>
                       <Form.Group className={styles.view_item} controlId="Ascending">
-                        <Form.Label>{translations["amp.indicatormanager:ascending"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:ascending")}</Form.Label>
                         <Select
                             name="ascending"
                             options={ascendingOptions}
@@ -1310,7 +1322,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             }}
                             defaultValue={{
                               value: false,
-                              label: translations["amp.indicatormanager:true"]
+                              label: t("amp.indicatormanager:true")
                             }}
                         />
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
@@ -1319,7 +1331,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       </Form.Group>
 
                       <Form.Group className={styles.view_item} controlId="formCreationDate">
-                        <Form.Label>{translations["amp.indicatormanager:table-header-creation-date"]}</Form.Label>
+                        <Form.Label>{t("amp.indicatormanager:table-header-creation-date")}</Form.Label>
                         <DateInput
                             translations={translations}
                             name="creationDate"
@@ -1337,10 +1349,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
-                  {translations["amp.indicatormanager:close"]}
+                  {t("amp.indicatormanager:close")}
                 </Button>
                 <Button type="submit" variant="success" >
-                  {translations["amp.indicatormanager:save"]}
+                  {t("amp.indicatormanager:save")}
                 </Button>
               </Modal.Footer>
             </Form>

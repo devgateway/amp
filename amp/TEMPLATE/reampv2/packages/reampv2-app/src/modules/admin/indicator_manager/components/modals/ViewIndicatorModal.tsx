@@ -5,6 +5,7 @@ import backdropStyles from './css/IndicatorModal.module.css';
 import styles from './css/ViewIndicatorModal.module.css';
 import { DefaultComponentProps, IndicatorObjectType, ProgramObjectType, SectorObjectType } from '../../types';
 import { useSelector } from 'react-redux';
+import initialTranslations from '../../config/initialTranslations.json';
 
 interface ViewIndicatorModalProps extends DefaultComponentProps {
     show: boolean;
@@ -14,6 +15,7 @@ interface ViewIndicatorModalProps extends DefaultComponentProps {
 
 const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
     const { show, setShow, indicator, translations } = props;
+    const t = (key: string): string => translations[key] ?? initialTranslations[key as keyof typeof initialTranslations] ?? key;
     const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
     const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
     const categoriesReducer = useSelector((state: any) => state.fetchAmpCategoryReducer);
@@ -39,29 +41,29 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
 
     // Helper functions for lookups
     const getCategoryLabel = (id: number | undefined) => {
-        if (!id) return translations["amp.indicatormanager:no-data"];
+        if (!id) return t("amp.indicatormanager:no-data");
         const found = categoriesReducer.categories.find((cat: any) => cat.id === id);
         return found ? found.value : id;
     };
     const getOutcomeLabel = (id: number | undefined) => {
-        if (!id) return translations["amp.indicatormanager:no-data"];
+        if (!id) return t("amp.indicatormanager:no-data");
         const found = outcomesReducer.outcomes.find((o: any) => o.id === id);
         return found ? found.name : id;
     };
     const getOutputLabel = (id: number | undefined) => {
-        if (!id) return translations["amp.indicatormanager:no-data"];
+        if (!id) return t("amp.indicatormanager:no-data");
         const found = outputsReducer.outputs.find((o: any) => o.id === id);
         return found ? found.name : id;
     };
     const getResponsibleOrgLabels = (ids: number[] = []) => {
-        if (!ids.length) return [translations["amp.indicatormanager:no-data"]];
+        if (!ids.length) return [t("amp.indicatormanager:no-data")];
         return ids.map(id => {
             const found = responsibleOrgsReducer.options.find((org: any) => org.value === id);
             return found ? found.label : id;
         });
     };
     const getProgramLabel = (id: number | null) => {
-        if (!id) return translations["amp.indicatormanager:no-data"];
+        if (!id) return t("amp.indicatormanager:no-data");
         const found = programsReducer.programs.find((p: any) => p.id === id);
         return found ? found.name : id;
     };
@@ -80,7 +82,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
             <Modal.Header closeButton className={styles.modal_header}>
                 <Modal.Title className={styles.modal_title}>
                     <i className="fas fa-info-circle me-2"></i>
-                    {translations["amp.indicatormanager:view-indicator"]}
+                    {t("amp.indicatormanager:view-indicator")}
                 </Modal.Title>
             </Modal.Header>
             {indicator ?
@@ -90,24 +92,24 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                         <div className={styles.section} style={{borderBottom: '2px solid #e0e0e0', marginBottom: 24, paddingBottom: 16}}>
                             <h4 className={styles.section_title} style={{color: '#0052CC', fontWeight: 'bold'}}>
                                 <i className="fas fa-info-circle me-2"></i>
-                                {translations["amp.indicatormanager:core-info"] || "Core Indicator Information"}
+                                {t("amp.indicatormanager:core-info")}
                             </h4>
                             <Row className={styles.view_row}>
                                 <Col md={6} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:indicator-name"]}</b></div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:indicator-name")}</b></div>
                                     <div className={`${styles.value} ${styles.important}`}>{indicator.name}</div>
                                 </Col>
                                 <Col md={6} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:indicator-code"]}</b></div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:indicator-code")}</b></div>
                                     <div className={styles.value}>{indicator.code}</div>
                                 </Col>
                             </Row>
                             <Row className={styles.view_row}>
                                 <Col md={12} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:indicator-description"]}</b></div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:indicator-description")}</b></div>
                                     <div className={styles.value} style={{fontStyle: 'italic'}}>
                                         {indicator.description === "" || !indicator.description ?
-                                            <span className={styles.no_data}>{translations["amp.indicatormanager:no-description-available"]}</span> :
+                                            <span className={styles.no_data}>{t("amp.indicatormanager:no-description-available")}</span> :
                                             indicator.description
                                         }
                                     </div>
@@ -115,11 +117,11 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                             </Row>
                             <Row className={styles.view_row}>
                                 <Col md={6} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:relevance-for-climate-change"]}</b></div>
-                                    <div className={styles.value}>{indicator.relevanceForClimateChange || <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:relevance-for-climate-change")}</b></div>
+                                    <div className={styles.value}>{indicator.relevanceForClimateChange || <span className={styles.no_data}>{t("amp.indicatormanager:no-data")}</span>}</div>
                                 </Col>
                                 <Col md={6} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:type"] || "Type"}</b></div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:type")}</b></div>
                                     <div className={styles.value}>{getCategoryLabel(indicator.indicatorType)}</div>
                                 </Col>
                             </Row>
@@ -129,27 +131,27 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                         <div className={styles.section} style={{borderBottom: '2px solid #e0e0e0', marginBottom: 24, paddingBottom: 16}}>
                             <h4 className={styles.section_title} style={{color: '#FF5630', fontWeight: 'bold'}}>
                                 <i className="fas fa-link me-2"></i>
-                                {translations["amp.indicatormanager:categorization-linkage-info"] || "Categorization and Linkage"}
+                                {t("amp.indicatormanager:categorization-linkage-info")}
                             </h4>
                             <Row className={styles.view_row}>
                                 <Col md={6} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:outcome"]}</b></div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:outcome")}</b></div>
                                     <div className={styles.value}>{getOutcomeLabel(indicator.outcomeId)}</div>
                                 </Col>
                                 <Col md={6} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:output"]}</b></div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:output")}</b></div>
                                     <div className={styles.value}>{getOutputLabel(indicator.outputId)}</div>
                                 </Col>
                             </Row>
                             <Row className={styles.view_row}>
                                 <Col md={12} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:logframe-links"] || "Link to Logframe (Program)"}</b></div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:logframe-links")}</b></div>
                                     <div className={styles.value}>{getProgramLabel(indicator.programId)}</div>
                                 </Col>
                             </Row>
                             <Row className={styles.view_row}>
                                 <Col md={12} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:sectors"]}</b></div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:sectors")}</b></div>
                                     <div className={styles.value}>
                                         {sectorData.length > 0 ? (
                                             <ul style={{ paddingLeft: '1.2em', marginBottom: 0 }}>
@@ -158,7 +160,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                                                 ))}
                                             </ul>
                                         ) : (
-                                            <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>
+                                            <span className={styles.no_data}>{t("amp.indicatormanager:no-data")}</span>
                                         )}
                                     </div>
                                 </Col>
@@ -169,21 +171,21 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                         <div className={styles.section} style={{borderBottom: '2px solid #e0e0e0', marginBottom: 24, paddingBottom: 16}}>
                             <h4 className={styles.section_title} style={{color: '#36B37E', fontWeight: 'bold'}}>
                                 <i className="fas fa-database me-2"></i>
-                                {translations["amp.indicatormanager:data"] || "Data Definition and Sourcing"}
+                                {t("amp.indicatormanager:data")}
                             </h4>
                             <Row className={styles.view_row}>
                                 <Col md={6} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:data"]}</b></div>
-                                    <div className={styles.value}>{indicator.data || <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:data")}</b></div>
+                                    <div className={styles.value}>{indicator.data || <span className={styles.no_data}>{t("amp.indicatormanager:no-data")}</span>}</div>
                                 </Col>
                                 <Col md={6} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:data-source"]}</b></div>
-                                    <div className={styles.value}>{indicator.dataSource || <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:data-source")}</b></div>
+                                    <div className={styles.value}>{indicator.dataSource || <span className={styles.no_data}>{t("amp.indicatormanager:no-data")}</span>}</div>
                                 </Col>
                             </Row>
                             <Row className={styles.view_row}>
                                 <Col md={6} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:disaggregation"]}</b></div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:disaggregation")}</b></div>
                                     <div className={styles.value}>
                                         {indicator.disaggregation && indicator.disaggregation.length > 0 ? (
                                             <ul style={{ paddingLeft: '1.2em', marginBottom: 0 }}>
@@ -192,19 +194,19 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                                                 ))}
                                             </ul>
                                         ) : (
-                                            <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>
+                                            <span className={styles.no_data}>{t("amp.indicatormanager:no-data")}</span>
                                         )}
                                     </div>
                                 </Col>
                                 <Col md={6} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:unit-of-measure"]}</b></div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:unit-of-measure")}</b></div>
                                     <div className={styles.value}>{getCategoryLabel(indicator.unitOfMeasure)}</div>
                                 </Col>
                             </Row>
                             <Row className={styles.view_row}>
                                 <Col md={12} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:calculation-method"]}</b></div>
-                                    <div className={styles.value}>{indicator.calculationMethod || <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:calculation-method")}</b></div>
+                                    <div className={styles.value}>{indicator.calculationMethod || <span className={styles.no_data}>{t("amp.indicatormanager:no-data")}</span>}</div>
                                 </Col>
                             </Row>
                         </div>
@@ -213,11 +215,11 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                         <div className={styles.section} style={{borderBottom: '2px solid #e0e0e0', marginBottom: 24, paddingBottom: 16}}>
                             <h4 className={styles.section_title} style={{color: '#FF8B00', fontWeight: 'bold'}}>
                                 <i className="fas fa-table me-2"></i>
-                                {translations["amp.indicatormanager:disaggregation-values"] || "Disaggregation Values"}
+                                {t("amp.indicatormanager:disaggregation-values")}
                             </h4>
                             <Row className={styles.view_row}>
                                 <Col md={12} style={{ width: '100%' }}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:disaggregation-values"] || "Disaggregation Values"}</b></div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:disaggregation-values")}</b></div>
                                     <div className={styles.value} style={{ width: '100%' }}>
                                         {indicator.disaggregationValues && indicator.disaggregationValues.length > 0 ? (
                                             <div style={{ maxHeight: '40vh', overflow: 'auto', width: '100%' }}>
@@ -243,21 +245,21 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                                                         <tr>
                                                           <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>
                                                             {/* Parent disaggregation label for first column */}
-                                                            {parentIds.length > 0 ? getCategoryLabel(parentGroups[parentIds[0]][0].parentDisaggregationId) : translations["amp.indicatormanager:no-parent-category"] || "No Parent"}
+                                                            {parentIds.length > 0 ? getCategoryLabel(parentGroups[parentIds[0]][0].parentDisaggregationId) : t("amp.indicatormanager:no-parent-category")}
                                                           </th>
                                                           {parentIds.map(parentId => {
                                                             const children = getChildren(parentId);
                                                             if (children.length > 0) {
                                                               return (
                                                                 <th key={parentId} colSpan={children.length * 2} style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>
-                                                                  {getCategoryLabel(parentId) || translations["amp.indicatormanager:no-parent-category"] || "No Parent"}
+                                                                  {getCategoryLabel(parentId) || t("amp.indicatormanager:no-parent-category")}
                                                                 </th>
                                                               );
                                                             } else {
                                                               // No children, colSpan=2
                                                               return (
                                                                 <th key={parentId} colSpan={2} style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>
-                                                                  {getCategoryLabel(parentId) || translations["amp.indicatormanager:no-parent-category"] || "No Parent"}
+                                                                  {getCategoryLabel(parentId) || t("amp.indicatormanager:no-parent-category")}
                                                                 </th>
                                                               );
                                                             }
@@ -270,7 +272,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                                                             {/* Child category label for first column */}
                                                             {parentIds.length > 0 && getChildren(parentIds[0]).length > 0
                                                               ? getCategoryLabel(parentGroups[parentIds[0]][0].childDisaggregationId)
-                                                              : translations["amp.indicatormanager:no-child-category"] || "No Child"}
+                                                              : t("amp.indicatormanager:no-child-category")}
                                                           </th>
                                                           {parentIds.map(parentId => {
                                                             const children = getChildren(parentId);
@@ -299,17 +301,17 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                                                             if (children.length > 0) {
                                                               return children.map(child => [
                                                                 <th key={`child-value-${parentId}-${child.childCategoryId}`} style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>
-                                                                  <div style={{ fontSize: '0.9em', color: '#888' }}>{translations["amp.indicatormanager:value"] || "Value"}</div>
+                                                                  <div style={{ fontSize: '0.9em', color: '#888' }}>{t("amp.indicatormanager:value")}</div>
                                                                 </th>,
                                                                 <th key={`child-date-${parentId}-${child.childCategoryId}`} style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>
-                                                                  <div style={{ fontSize: '0.9em', color: '#888' }}>{translations["amp.indicatormanager:date"] || "Date"}</div>
+                                                                  <div style={{ fontSize: '0.9em', color: '#888' }}>{t("amp.indicatormanager:date")}</div>
                                                                 </th>
                                                               ]);
                                                             } else {
                                                               // No children, just Value/Date
                                                               return [
-                                                                <th key={`parent-value-${parentId}`} style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{translations["amp.indicatormanager:value"] || "Value"}</th>,
-                                                                <th key={`parent-date-${parentId}`} style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{translations["amp.indicatormanager:date"] || "Date"}</th>
+                                                                <th key={`parent-value-${parentId}`} style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{t("amp.indicatormanager:value")}</th>,
+                                                                <th key={`parent-date-${parentId}`} style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{t("amp.indicatormanager:date")}</th>
                                                               ];
                                                             }
                                                           })}
@@ -318,7 +320,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                                                       <tbody>
                                                         {/* Original Base Value */}
                                                         <tr>
-                                                          <td style={{ border: '1px solid #ddd', padding: '8px', fontWeight: 'bold' }}>{translations["amp.indicatormanager:original-base-value"] || "Original Base Value"}</td>
+                                                          <td style={{ border: '1px solid #ddd', padding: '8px', fontWeight: 'bold' }}>{t("amp.indicatormanager:original-base-value")}</td>
                                                           {parentIds.map(parentId => {
                                                             const children = getChildren(parentId);
                                                             if (children.length > 0) {
@@ -338,7 +340,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                                                         </tr>
                                                         {/* Revised Base Value */}
                                                         <tr>
-                                                          <td style={{ border: '1px solid #ddd', padding: '8px', fontWeight: 'bold' }}>{translations["amp.indicatormanager:revised-base-value"] || "Revised Base Value"}</td>
+                                                          <td style={{ border: '1px solid #ddd', padding: '8px', fontWeight: 'bold' }}>{t("amp.indicatormanager:revised-base-value")}</td>
                                                           {parentIds.map(parentId => {
                                                             const children = getChildren(parentId);
                                                             if (children.length > 0) {
@@ -357,7 +359,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                                                         </tr>
                                                         {/* Original Target Value */}
                                                         <tr>
-                                                          <td style={{ border: '1px solid #ddd', padding: '8px', fontWeight: 'bold' }}>{translations["amp.indicatormanager:original-target-value"] || "Original Target Value"}</td>
+                                                          <td style={{ border: '1px solid #ddd', padding: '8px', fontWeight: 'bold' }}>{t("amp.indicatormanager:original-target-value")}</td>
                                                           {parentIds.map(parentId => {
                                                             const children = getChildren(parentId);
                                                             if (children.length > 0) {
@@ -376,7 +378,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                                                         </tr>
                                                         {/* Revised Target Value */}
                                                         <tr>
-                                                          <td style={{ border: '1px solid #ddd', padding: '8px', fontWeight: 'bold' }}>{translations["amp.indicatormanager:revised-target-value"] || "Revised Target Value"}</td>
+                                                          <td style={{ border: '1px solid #ddd', padding: '8px', fontWeight: 'bold' }}>{t("amp.indicatormanager:revised-target-value")}</td>
                                                           {parentIds.map(parentId => {
                                                             const children = getChildren(parentId);
                                                             if (children.length > 0) {
@@ -399,7 +401,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                                                 })()}
                                             </div>
                                         ) : (
-                                            <div className={styles.no_data}>{translations["amp.indicatormanager:no-disaggregation-values"] || "No Disaggregation Values"}</div>
+                                            <div className={styles.no_data}>{t("amp.indicatormanager:no-disaggregation-values")}</div>
                                         )}
                                     </div>
                                 </Col>
@@ -410,11 +412,11 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                         <div className={styles.section} style={{borderBottom: '2px solid #e0e0e0', marginBottom: 24, paddingBottom: 16}}>
                             <h4 className={styles.section_title} style={{color: '#5243AA', fontWeight: 'bold'}}>
                                 <i className="fas fa-users me-2"></i>
-                                {translations["amp.indicatormanager:responsibility-frequency-info"] || "Responsibility and Frequency"}
+                                {t("amp.indicatormanager:responsibility-frequency-info")}
                             </h4>
                             <Row className={styles.view_row}>
                                 <Col md={6} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:responsible-organizations"]}</b></div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:responsible-organizations")}</b></div>
                                     <div className={styles.value}>
                                         {indicator.responsibleOrganizations && indicator.responsibleOrganizations.length > 0 ? (
                                             <ul style={{ paddingLeft: '1.2em', marginBottom: 0 }}>
@@ -423,12 +425,12 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                                                 ))}
                                             </ul>
                                         ) : (
-                                            <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>
+                                            <span className={styles.no_data}>{t("amp.indicatormanager:no-data")}</span>
                                         )}
                                     </div>
                                 </Col>
                                 <Col md={6} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:frequency"]}</b></div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:frequency")}</b></div>
                                     <div className={styles.value}>{getCategoryLabel(indicator.frequency)}</div>
                                 </Col>
                             </Row>
@@ -438,51 +440,51 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                         <div className={styles.section} style={{borderBottom: '2px solid #e0e0e0', marginBottom: 24, paddingBottom: 16}}>
                             <h4 className={styles.section_title} style={{color: '#36B37E', fontWeight: 'bold'}}>
                                 <i className="fas fa-chart-line me-2"></i>
-                                {translations["amp.indicatormanager:value-tracking"] || "Value Tracking"}
+                                {t("amp.indicatormanager:value-tracking")}
                             </h4>
                             <Row className={styles.view_row}>
                                 <Col md={6} className={styles.section} style={{borderRight: '1px solid #e0e0e0', paddingRight: 16}}>
                                     <h5 className={styles.section_title} style={{color: '#36B37E', fontWeight: 'bold'}}>
                                         <i className="fas fa-chart-line me-2"></i>
-                                        {translations["amp.indicatormanager:base-values"]}
+                                        {t("amp.indicatormanager:base-values")}
                                     </h5>
                                     <div className={styles.view_item}>
-                                        <div className={styles.label}>{translations["amp.indicatormanager:original-base-value"]}</div>
-                                        <div className={styles.value}>{indicator.base?.originalValue ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                                        <div className={styles.label}>{t("amp.indicatormanager:original-base-value")}</div>
+                                        <div className={styles.value}>{indicator.base?.originalValue ?? <span className={styles.no_data}>{t("amp.indicatormanager:no-data")}</span>}</div>
                                     </div>
                                     <div className={styles.view_item}>
-                                        <div className={styles.label}>{translations["amp.indicatormanager:original-value-date"]}</div>
-                                        <div className={styles.value}>{indicator.base?.originalValueDate ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                                        <div className={styles.label}>{t("amp.indicatormanager:original-value-date")}</div>
+                                        <div className={styles.value}>{indicator.base?.originalValueDate ?? <span className={styles.no_data}>{t("amp.indicatormanager:no-data")}</span>}</div>
                                     </div>
                                     <div className={styles.view_item}>
-                                        <div className={styles.label}>{translations["amp.indicatormanager:revised-value"]}</div>
-                                        <div className={styles.value}>{indicator.base?.revisedValue ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                                        <div className={styles.label}>{t("amp.indicatormanager:revised-value")}</div>
+                                        <div className={styles.value}>{indicator.base?.revisedValue ?? <span className={styles.no_data}>{t("amp.indicatormanager:no-data")}</span>}</div>
                                     </div>
                                     <div className={styles.view_item}>
-                                        <div className={styles.label}>{translations["amp.indicatormanager:revised-value-date"]}</div>
-                                        <div className={styles.value}>{indicator.base?.revisedValueDate ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                                        <div className={styles.label}>{t("amp.indicatormanager:revised-value-date")}</div>
+                                        <div className={styles.value}>{indicator.base?.revisedValueDate ?? <span className={styles.no_data}>{t("amp.indicatormanager:no-data")}</span>}</div>
                                     </div>
                                 </Col>
                                 <Col md={6} className={styles.section} style={{paddingLeft: 16}}>
                                     <h5 className={styles.section_title} style={{color: '#FF8B00', fontWeight: 'bold'}}>
                                         <i className="fas fa-bullseye me-2"></i>
-                                        {translations["amp.indicatormanager:target-values"]}
+                                        {t("amp.indicatormanager:target-values")}
                                     </h5>
                                     <div className={styles.view_item}>
-                                        <div className={styles.label}>{translations["amp.indicatormanager:target-value"]}</div>
-                                        <div className={styles.value}>{indicator.target?.originalValue ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                                        <div className={styles.label}>{t("amp.indicatormanager:target-value")}</div>
+                                        <div className={styles.value}>{indicator.target?.originalValue ?? <span className={styles.no_data}>{t("amp.indicatormanager:no-data")}</span>}</div>
                                     </div>
                                     <div className={styles.view_item}>
-                                        <div className={styles.label}>{translations["amp.indicatormanager:target-value-date"]}</div>
-                                        <div className={styles.value}>{indicator.target?.originalValueDate ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                                        <div className={styles.label}>{t("amp.indicatormanager:target-value-date")}</div>
+                                        <div className={styles.value}>{indicator.target?.originalValueDate ?? <span className={styles.no_data}>{t("amp.indicatormanager:no-data")}</span>}</div>
                                     </div>
                                     <div className={styles.view_item}>
-                                        <div className={styles.label}>{translations["amp.indicatormanager:revised-value"]}</div>
-                                        <div className={styles.value}>{indicator.target?.revisedValue ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                                        <div className={styles.label}>{t("amp.indicatormanager:revised-value")}</div>
+                                        <div className={styles.value}>{indicator.target?.revisedValue ?? <span className={styles.no_data}>{t("amp.indicatormanager:no-data")}</span>}</div>
                                     </div>
                                     <div className={styles.view_item}>
-                                        <div className={styles.label}>{translations["amp.indicatormanager:revised-value-date"]}</div>
-                                        <div className={styles.value}>{indicator.target?.revisedValueDate ?? <span className={styles.no_data}>{translations["amp.indicatormanager:no-data"]}</span>}</div>
+                                        <div className={styles.label}>{t("amp.indicatormanager:revised-value-date")}</div>
+                                        <div className={styles.value}>{indicator.target?.revisedValueDate ?? <span className={styles.no_data}>{t("amp.indicatormanager:no-data")}</span>}</div>
                                     </div>
                                 </Col>
                             </Row>
@@ -492,18 +494,18 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                         <div className={styles.section} style={{marginTop: 24}}>
                             <h4 className={styles.section_title} style={{color: '#FF5630', fontWeight: 'bold'}}>
                                 <i className="fas fa-ellipsis-h me-2"></i>
-                                {translations["amp.indicatormanager:other-considerations"] || "Other Considerations"}
+                                {t("amp.indicatormanager:other-considerations")}
                             </h4>
                             <Row className={styles.view_row}>
                                 <Col md={6} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:table-header-creation-date"]}</b></div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:table-header-creation-date")}</b></div>
                                     <div className={styles.value}>{indicator.creationDate}</div>
                                 </Col>
                                 <Col md={6} className={styles.view_item}>
-                                    <div className={styles.label}><b>{translations["amp.indicatormanager:ascending"]}</b></div>
+                                    <div className={styles.label}><b>{t("amp.indicatormanager:ascending")}</b></div>
                                     <div className={styles.value}>
                                         <Badge content={indicator.ascending ? "success" : "secondary"} style={{fontWeight: 'bold'}}>
-                                            {indicator.ascending ? translations["amp.indicatormanager:yes"] : translations["amp.indicatormanager:no"]}
+                                            {indicator.ascending ? t("amp.indicatormanager:yes") : t("amp.indicatormanager:no")}
                                         </Badge>
                                     </div>
                                 </Col>
@@ -514,7 +516,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                 <Modal.Body>
                     <div className={styles.error_state}>
                         <i className="fas fa-exclamation-triangle"></i>
-                        <h3>{translations["amp.indicatormanager:view-error"]}</h3>
+                        <h3>{t("amp.indicatormanager:view-error")}</h3>
                     </div>
                 </Modal.Body>
             }

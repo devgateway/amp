@@ -6,20 +6,21 @@
 <html:html>
     <head>
         <title><digi:trn>Imported Files</digi:trn></title>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
         <style>
             :root {
-                --page-bg: #f4f5f7;
+                --page-bg: #f9fafb;
                 --panel-bg: #ffffff;
-                --panel-border: #d7dde3;
+                --panel-border: rgba(34, 36, 38, 0.15);
                 --text-strong: #22313a;
-                --text-soft: #667784;
-                --accent: #40606f;
-                --accent-deep: #314b57;
-                --success: #4a6b58;
-                --danger: #7a5555;
-                --warning: #7d6a53;
+                --text-soft: #4a6880;
+                --accent: #21587b;
+                --accent-deep: #164060;
+                --success: #21C11C;
+                --danger: #c20000;
+                --warning: #f2711c;
                 --row-alt: #f8f9fa;
-                --shadow: 0 4px 12px rgba(25, 39, 52, 0.05);
+                --shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15);
             }
 
             html {
@@ -28,8 +29,8 @@
 
             body {
                 margin: 0;
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 12px;
+                font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-size: 13px;
                 line-height: 1.4;
                 color: var(--text-strong);
                 background: var(--page-bg);
@@ -54,7 +55,7 @@
                 background: var(--panel-bg);
                 border: 1px solid var(--panel-border);
                 box-shadow: var(--shadow);
-                border-radius: 14px;
+                border-radius: 6px;
             }
 
             .hero-card {
@@ -63,28 +64,36 @@
                 background: var(--panel-bg);
             }
 
-            .hero-card h1,
+            .hero-card h1 {
+                margin: 0 0 8px;
+                font-size: 16px;
+                font-weight: 700;
+                letter-spacing: 0;
+                text-transform: none;
+            }
+
             .panel-card h2,
             .records-card h2 {
-                margin: 0 0 8px;
-                font-size: 18px;
+                margin: 0 0 6px;
+                font-size: 13px;
+                font-weight: 700;
+                letter-spacing: 0;
             }
 
             .section-label {
                 display: inline-block;
                 margin-bottom: 6px;
                 font-size: 11px;
-                letter-spacing: 0.12em;
-                text-transform: uppercase;
+                letter-spacing: 0.04em;
                 color: var(--accent);
-                font-weight: 700;
+                font-weight: 600;
             }
 
             .section-copy {
                 margin: 0;
-                color: var(--text-soft);
-                line-height: 1.45;
-                font-size: 12px;
+                color: var(--text-strong);
+                line-height: 1.55;
+                font-size: 14px;
             }
 
             .panel-card,
@@ -99,19 +108,20 @@
                 border-spacing: 0;
                 background: #fff;
                 border: 1px solid rgba(22, 53, 67, 0.1);
-                border-radius: 18px;
+                border-radius: 6px;
                 overflow: hidden;
             }
 
             td, th {
                 text-align: left;
                 padding: 10px 12px;
-                font-size: 12px;
+                font-size: 13px;
                 border-bottom: 1px solid rgba(22, 53, 67, 0.08);
             }
 
             th {
-                background: #eef1f3;
+                background: #d6e7fd;
+                color: #21587b;
                 font-size: 11px;
                 letter-spacing: 0.08em;
                 text-transform: uppercase;
@@ -126,23 +136,40 @@
             }
 
             .view-progress-btn,
-            .view-more-btn,
             .nav-action-btn {
-                border: 1px solid #506673;
-                border-radius: 999px;
-                padding: 8px 14px;
-                font-size: 12px;
-                font-weight: 700;
+                border: 1px solid #20bb45;
+                border-radius: 6px;
+                padding: 8px 16px;
+                font-size: 13px;
+                font-weight: 600;
                 cursor: pointer;
                 color: #fff;
-                background: var(--accent);
+                background: #20bb45;
                 box-shadow: none;
+            }
+
+            .view-progress-btn:hover,
+            .nav-action-btn:hover {
+                background: #179e39;
+                border-color: #179e39;
             }
 
             .view-more-btn {
                 margin-top: 6px;
                 padding: 6px 12px;
-                font-size: 11px;
+                font-size: 13px;
+                font-weight: 600;
+                cursor: pointer;
+                border: 1px solid #20bb45;
+                border-radius: 6px;
+                background: transparent;
+                color: #20bb45;
+                box-shadow: none;
+            }
+
+            .view-more-btn:hover {
+                background: #20bb45;
+                color: #fff;
             }
 
             .hero-actions {
@@ -162,7 +189,7 @@
                 padding: 10px 12px;
                 border-radius: 10px;
                 font-weight: 700;
-                background: #f1f3f5;
+                background: #e7f1fd;
                 border: 1px solid var(--panel-border);
                 font-size: 12px;
             }
@@ -191,7 +218,7 @@
                 margin-bottom: 12px;
                 padding: 10px 12px;
                 border-radius: 10px;
-                background: #f1f3f5;
+                background: #e7f1fd;
                 border: 1px solid var(--panel-border);
             }
 
@@ -225,7 +252,7 @@
                 margin: 10px 0 12px;
                 padding: 10px 12px;
                 border-radius: 10px;
-                background: #f1f3f5;
+                background: #e7f1fd;
                 border: 1px solid var(--panel-border);
             }
 
@@ -255,6 +282,79 @@
                 white-space: pre-wrap;
                 word-break: break-word;
                 color: var(--text-soft);
+            }
+
+            .tabs-nav {
+                display: flex;
+                gap: 4px;
+                border-bottom: 2px solid #2480c6;
+                margin-bottom: 0;
+            }
+
+            .tab-item {
+                padding: 10px 22px;
+                background: #e7f1fd;
+                color: #0b3e6f;
+                font-weight: 700;
+                cursor: pointer;
+                border: 1px solid #c8daea;
+                border-bottom: none;
+                border-radius: 6px 6px 0 0;
+                font-size: 13px;
+                user-select: none;
+                transition: background 0.15s ease;
+            }
+
+            .tab-item.active {
+                background: #2480c6;
+                color: #fff;
+                border-color: #2480c6;
+            }
+
+            .tab-item:hover:not(.active) {
+                background: #c5d8f0;
+            }
+
+            .tab-pane {
+                border: 1px solid #c8daea;
+                border-top: none;
+                border-radius: 0 0 14px 14px;
+                background: var(--panel-bg);
+                padding: 16px;
+                margin-bottom: 14px;
+                box-shadow: var(--shadow);
+            }
+
+            .tab-nav-actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+                margin-top: 20px;
+                padding-top: 14px;
+                border-top: 1px solid #c8daea;
+            }
+
+            .tab-nav-actions .prev-btn {
+                margin-right: auto;
+                background: #20bb45;
+                border-color: #20bb45;
+            }
+
+            .tab-nav-actions .next-btn {
+                background: #20bb45;
+                border-color: #20bb45;
+            }
+
+            .tab-nav-actions .prev-btn:hover,
+            .tab-nav-actions .next-btn:hover {
+                background: #179e39;
+                border-color: #179e39;
+            }
+
+            button:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+                pointer-events: none;
             }
 
             @media (max-width: 768px) {
@@ -295,6 +395,13 @@
                     previous: "<digi:trn jsFriendly='true'>Previous</digi:trn>"
                 }
             };
+
+            function switchProgressTab(tabId) {
+                $('.tab-pane').hide();
+                $('.tab-item').removeClass('active');
+                $('#' + tabId).show();
+                $('[data-tab="' + tabId + '"]').addClass('active');
+            }
 
             $(document).ready(function() {
 
@@ -395,10 +502,7 @@
                             });
                             datatable.draw();
 
-                            var recordsSection = document.getElementById('records-section');
-                            if (recordsSection) {
-                                recordsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            }
+                            switchProgressTab('tab-records-pane');
 
                         },
                         error: function(xhr, status, error) {
@@ -459,9 +563,12 @@
             </div>
         </div>
 
-        <div class="panel-card">
-            <span class="section-label"><digi:trn>Imported Files</digi:trn></span>
-            <h2><digi:trn>Recent Uploads</digi:trn></h2>
+        <div class="tabs-nav">
+            <div class="tab-item active" data-tab="tab-uploads-pane" onclick="switchProgressTab('tab-uploads-pane')"><digi:trn>Recent Uploads</digi:trn></div>
+            <div class="tab-item" data-tab="tab-records-pane" onclick="switchProgressTab('tab-records-pane')"><digi:trn>Record Details</digi:trn></div>
+        </div>
+
+        <div id="tab-uploads-pane" class="tab-pane">
             <p class="section-copy"><digi:trn>Click a file to load its records and jump directly to the detailed results table.</digi:trn></p>
 
             <div class="uploads-filter-bar">
@@ -505,12 +612,12 @@
                 </c:forEach>
                 </tbody>
             </table>
+            <div class="tab-nav-actions">
+                <button type="button" class="next-btn" onclick="switchProgressTab('tab-records-pane')"><digi:trn>Next</digi:trn> &gt;&gt;</button>
+            </div>
         </div>
 
-        <div class="records-card file-projects" id="records-section">
-            <span class="section-label"><digi:trn>Record Details</digi:trn></span>
-            <h2><digi:trn>Imported Records</digi:trn></h2>
-
+        <div id="tab-records-pane" class="tab-pane" style="display:none">
             <div class="filter-div">
                 <label for="all-projects"><digi:trn>All</digi:trn>:</label>
                 <input type="radio" id="all-projects" name="project-filter" value="ALL" checked>
@@ -538,6 +645,9 @@
                 </tbody>
             </table>
             <div class="pagination"></div>
+            <div class="tab-nav-actions">
+                <button type="button" class="prev-btn" onclick="switchProgressTab('tab-uploads-pane')">&lt;&lt; <digi:trn>Previous</digi:trn></button>
+            </div>
         </div>
     </div>
 

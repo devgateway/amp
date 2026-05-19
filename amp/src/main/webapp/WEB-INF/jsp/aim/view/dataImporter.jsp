@@ -6,6 +6,7 @@
 <html:html>
 <head>
   <title><digi:trn>Data Importer</digi:trn></title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -108,9 +109,14 @@
 
     function toggleUploadSection() {
       var hasMappings = $('#selected-pairs-table-body tr').length > 0;
-      $('#data-upload-section').toggle(hasMappings);
       $('#config-empty-note').toggle(!hasMappings);
-      toggleDefaultLocationFallback();
+      if (hasMappings) {
+        $('#tab-upload-btn').removeClass('disabled-tab');
+        $('#next-to-upload-btn').prop('disabled', false);
+      } else {
+        $('#tab-upload-btn').addClass('disabled-tab');
+        $('#next-to-upload-btn').prop('disabled', true);
+      }
     }
 
     function hasMappedProjectLocationField() {
@@ -166,6 +172,13 @@
       toggleUploadSection();
     }
 
+    function switchImporterTab(tabId) {
+      $('.tab-pane').hide();
+      $('.tab-item').removeClass('active');
+      $('#' + tabId).show();
+      $('[data-tab="' + tabId + '"]').addClass('active');
+    }
+
     function revealConfigWorkspace() {
       document.getElementById('otherComponents').removeAttribute('hidden');
       $('#add-field').show();
@@ -173,6 +186,9 @@
       $('#selected-field').show();
       initializeSelectControls();
       toggleUploadSection();
+      $('#tab-mapping-btn').removeClass('disabled-tab');
+      $('#next-to-map-btn').prop('disabled', false);
+      switchImporterTab('tab-mapping-pane');
     }
     
     function replaceLastOccurrence(inputString, search, replacement) {
@@ -646,18 +662,18 @@
   </script>
   <style>
     :root {
-      --page-bg: #f4f5f7;
+      --page-bg: #f9fafb;
       --panel-bg: #ffffff;
-      --panel-border: #d7dde3;
+      --panel-border: rgba(34, 36, 38, 0.15);
       --text-strong: #22313a;
-      --text-soft: #667784;
-      --accent: #40606f;
-      --accent-deep: #314b57;
-      --accent-warm: #8a6f56;
-      --surface-muted: #f0f2f4;
+      --text-soft: #4a6880;
+      --accent: #21587b;
+      --accent-deep: #164060;
+      --accent-warm: #2480c6;
+      --surface-muted: #e7f1fd;
       --row-alt: #f8f9fa;
-      --shadow: 0 4px 12px rgba(25, 39, 52, 0.05);
-      --radius-lg: 14px;
+      --shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15);
+      --radius-lg: 6px;
       --radius-md: 10px;
       --radius-sm: 6px;
     }
@@ -668,8 +684,8 @@
 
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 12px;
+      font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 13px;
       line-height: 1.4;
       color: var(--text-strong);
       background: var(--page-bg);
@@ -698,17 +714,25 @@
     }
 
     .hero-card {
-      border-radius: 16px;
+      border-radius: 6px;
       padding: 20px;
       margin-bottom: 14px;
       background: var(--panel-bg);
     }
 
-    .hero-card h1,
+    .hero-card h1 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .panel-card h2,
     .workspace-card h2,
     .upload-stage h3 {
-      margin: 0 0 8px;
-      font-size: 18px;
+      margin: 0 0 6px;
+      font-size: 13px;
       font-weight: 700;
       letter-spacing: 0;
     }
@@ -716,10 +740,10 @@
     .hero-card p,
     .section-copy,
     .helper-note {
-      color: var(--text-soft);
-      line-height: 1.45;
+      color: var(--text-strong);
+      line-height: 1.55;
       margin: 0;
-      font-size: 12px;
+      font-size: 14px;
     }
 
     .panel-grid {
@@ -744,17 +768,16 @@
       display: inline-block;
       margin-bottom: 6px;
       font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      letter-spacing: 0.04em;
       color: var(--accent);
-      font-weight: 700;
+      font-weight: 600;
     }
 
     label {
       display: inline-block;
       margin-bottom: 4px;
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 600;
       color: var(--text-strong);
     }
 
@@ -769,7 +792,7 @@
       border: 1px solid rgba(22, 53, 67, 0.18);
       background: #fff;
       color: var(--text-strong);
-      font-size: 12px;
+      font-size: 13px;
     }
 
     input[type="file"] {
@@ -779,22 +802,32 @@
 
     input[type="button"],
     button {
-      border: 1px solid #506673;
-      border-radius: 999px;
-      padding: 8px 14px;
-      font-weight: 700;
+      border: 1px solid #2480c6;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-weight: 600;
       cursor: pointer;
       color: #fff;
-      background: var(--accent);
-      font-size: 12px;
+      background: #2480c6;
+      font-size: 13px;
       box-shadow: none;
       transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
     }
 
     input[type="button"]:hover,
     button:hover {
-      background: var(--accent-deep);
-      border-color: var(--accent-deep);
+      background: #164060;
+      border-color: #164060;
+    }
+
+    .upload-btn {
+      background: #f2711c;
+      border-color: #f2711c;
+    }
+
+    .upload-btn:hover {
+      background: #d45800 !important;
+      border-color: #d45800 !important;
     }
 
     .remove-row {
@@ -851,8 +884,8 @@
     }
 
     table th {
-      background: #eef1f3;
-      color: var(--text-strong);
+      background: #d6e7fd;
+      color: #21587b;
       font-size: 11px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -889,9 +922,9 @@
       margin-top: 12px;
       padding: 10px 12px;
       border-radius: var(--radius-md);
-      background: #f3efe9;
-      color: #6a5a48;
-      border: 1px solid #dfd6cb;
+      background: #e7f1fd;
+      color: #21587b;
+      border: 1px solid #a3c4e4;
     }
 
     .select2-container--default .select2-selection--single {
@@ -922,6 +955,85 @@
       padding: 6px 8px;
     }
 
+    .tabs-nav {
+      display: flex;
+      gap: 4px;
+      border-bottom: 2px solid #2480c6;
+      margin-bottom: 0;
+    }
+
+    .tab-item {
+      padding: 10px 22px;
+      background: #e7f1fd;
+      color: #0b3e6f;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid #c8daea;
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+      font-size: 13px;
+      user-select: none;
+      transition: background 0.15s ease;
+    }
+
+    .tab-item.active {
+      background: #2480c6;
+      color: #fff;
+      border-color: #2480c6;
+    }
+
+    .tab-item:hover:not(.active):not(.disabled-tab) {
+      background: #c5d8f0;
+    }
+
+    .tab-item.disabled-tab {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .tab-pane {
+      border: 1px solid #c8daea;
+      border-top: none;
+      border-radius: 0 0 14px 14px;
+      background: var(--panel-bg);
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .tab-nav-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1px solid #c8daea;
+    }
+
+    .tab-nav-actions .prev-btn {
+      margin-right: auto;
+      background: #20bb45;
+      border-color: #20bb45;
+    }
+
+    .tab-nav-actions .next-btn {
+      background: #20bb45;
+      border-color: #20bb45;
+    }
+
+    .tab-nav-actions .prev-btn:hover,
+    .tab-nav-actions .next-btn:hover {
+      background: #179e39;
+      border-color: #179e39;
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
     @media (max-width: 768px) {
       .importer-page {
         padding: 24px 14px 40px;
@@ -949,6 +1061,13 @@
     <p><digi:trn>Prepare a template, map source columns to AMP entity fields, and upload your data only after the configuration table is ready.</digi:trn></p>
   </div>
 
+  <div class="tabs-nav">
+    <div class="tab-item active" data-tab="tab-configure-pane" id="tab-configure-btn" onclick="switchImporterTab('tab-configure-pane')"><digi:trn>1. File Setup</digi:trn></div>
+    <div class="tab-item disabled-tab" data-tab="tab-mapping-pane" id="tab-mapping-btn" onclick="switchImporterTab('tab-mapping-pane')"><digi:trn>2. Map</digi:trn></div>
+    <div class="tab-item disabled-tab" data-tab="tab-upload-pane" id="tab-upload-btn" onclick="switchImporterTab('tab-upload-pane')"><digi:trn>3. Upload</digi:trn></div>
+  </div>
+
+  <div id="tab-configure-pane" class="tab-pane">
   <div class="panel-grid">
     <div class="panel-card">
       <span class="section-label"><digi:trn>Step 1</digi:trn></span>
@@ -998,12 +1117,17 @@
         <label for="template-file"><digi:trn>Select Template File</digi:trn></label>
         <input id="template-file" type="file" accept=".xls,.xlsx,.csv" name="templateFile" />
         <div class="mapping-actions">
-          <input type="button" value="<digi:trn>Upload Template</digi:trn>" onclick="uploadTemplateFile()" />
+          <input type="button" class="upload-btn" value="<digi:trn>Upload Template</digi:trn>" onclick="uploadTemplateFile()" />
         </div>
       </form>
     </div>
   </div>
+  <div class="tab-nav-actions">
+    <button type="button" id="next-to-map-btn" class="next-btn" disabled onclick="switchImporterTab('tab-mapping-pane')"><digi:trn>Next</digi:trn> &gt;&gt;</button>
+  </div>
+  </div>
 
+  <div id="tab-mapping-pane" class="tab-pane" style="display:none">
   <div id="otherComponents" class="workspace-card" hidden>
     <html:form action="${pageContext.request.contextPath}/aim/dataImporter.do" method="post" enctype="multipart/form-data">
       <input type="hidden" id="current-config-name" value="">
@@ -1051,8 +1175,16 @@
       <div id="config-empty-note" class="helper-note">
         <digi:trn>Add at least one column-to-field pair to unlock data file upload.</digi:trn>
       </div>
+      <div class="tab-nav-actions">
+        <button type="button" class="prev-btn" onclick="switchImporterTab('tab-configure-pane')">&lt;&lt; <digi:trn>Previous</digi:trn></button>
+        <button type="button" id="next-to-upload-btn" class="next-btn" disabled onclick="switchImporterTab('tab-upload-pane')"><digi:trn>Next</digi:trn> &gt;&gt;</button>
+      </div>
+    </html:form>
+  </div>
+  </div>
 
-      <div id="data-upload-section" class="upload-stage" style="display: none;">
+  <div id="tab-upload-pane" class="tab-pane" style="display:none">
+  <div id="data-upload-section" class="upload-stage">
         <span class="section-label"><digi:trn>Step 4</digi:trn></span>
         <h3><digi:trn>Upload Data File</digi:trn></h3>
         <p class="section-copy"><digi:trn>This section appears only when the configuration table contains mappings.</digi:trn></p>
@@ -1130,10 +1262,12 @@
         </div>
 
         <div class="mapping-actions">
-          <input type="button" value="<digi:trn>Upload</digi:trn>" onclick="uploadDataFile()">
+          <input type="button" class="upload-btn" value="<digi:trn>Upload</digi:trn>" onclick="uploadDataFile()">
+        </div>
+        <div class="tab-nav-actions">
+          <button type="button" class="prev-btn" onclick="switchImporterTab('tab-mapping-pane')">&lt;&lt; <digi:trn>Previous</digi:trn></button>
         </div>
       </div>
-    </html:form>
   </div>
 </div>
 

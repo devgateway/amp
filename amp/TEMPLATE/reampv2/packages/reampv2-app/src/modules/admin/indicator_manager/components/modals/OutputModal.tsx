@@ -3,6 +3,7 @@ import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { Formik, FormikProps } from 'formik';
 import * as Yup from 'yup';
 import styles from './css/IndicatorModal.module.css';
+import initialTranslations from '../../config/initialTranslations.json';
 
 interface Outcome {
   id: number;
@@ -31,12 +32,13 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({
   loading = false
 }) => {
   const nodeRef = useRef(null);
+  const t = (key: string): string => translations[key] ?? initialTranslations[key as keyof typeof initialTranslations] ?? key;
 
   // Only render if selectedOutcome is provided
   if (!selectedOutcome) return null;
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required(translations['amp.outcomeoutput:errors-name-required'] || 'Name is required'),
+    name: Yup.string().required(t('amp.outcomeoutput:errors-name-required')),
     description: Yup.string(),
     outcomeId: Yup.number().required('Outcome is required')
   });
@@ -62,7 +64,7 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({
       size='lg'
     >
       <Modal.Header closeButton>
-        <Modal.Title>{translations['amp.outcomeoutput:modal-title-output'] || 'Add New Output'}</Modal.Title>
+        <Modal.Title>{t('amp.outcomeoutput:add-new-output')}</Modal.Title>
       </Modal.Header>
       <Formik
         initialValues={initialValues}
@@ -80,7 +82,7 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({
               <div className={styles.viewmodal_wrapper}>
                 <Row className={styles.view_row}>
                   <Form.Group as={Col} className={styles.view_item} controlId="formOutputName">
-                    <Form.Label>{translations['amp.outcomeoutput:output-name'] || 'Output Name'}</Form.Label>
+                    <Form.Label>{t('amp.outcomeoutput:output-name')}</Form.Label>
                     <Form.Control
                       defaultValue={props.values.name}
                       onChange={props.handleChange}
@@ -90,7 +92,7 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({
                       isInvalid={!!props.errors.name}
                       required
                       aria-required type="text"
-                      placeholder={translations['amp.outcomeoutput:output-name'] || 'Output Name'}
+                      placeholder={t('amp.outcomeoutput:output-name')}
                     />
                     <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                       {props.errors.name}
@@ -99,7 +101,7 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({
                 </Row>
                 <Row className={styles.view_row}>
                   <Form.Group as={Col} className={styles.view_item} controlId="formOutputDescription">
-                    <Form.Label>{translations['amp.outcomeoutput:output-description'] || 'Output Description'}</Form.Label>
+                    <Form.Label>{t('amp.outcomeoutput:output-description')}</Form.Label>
                     <Form.Control
                       defaultValue={props.values.description}
                       onChange={props.handleChange}
@@ -107,7 +109,7 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({
                       name="description"
                       type="text"
                       className={`${styles.input_field} ${(props.errors.description && props.touched.description) && styles.text_is_invalid}`}
-                      placeholder={translations['amp.outcomeoutput:output-description'] || 'Output Description'}
+                      placeholder={t('amp.outcomeoutput:output-description')}
                     />
                     <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                       {props.errors.description}
@@ -116,7 +118,7 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({
                 </Row>
                 <Row className={styles.view_row}>
                   <Form.Group as={Col} className={styles.view_item} controlId="formOutputOutcome">
-                    <Form.Label>{translations['amp.outcomeoutput:linked-outcome'] || 'Linked Outcome'}</Form.Label>
+                    <Form.Label>{t('amp.outcomeoutput:linked-outcome')}</Form.Label>
                     <Form.Control
                       type="text"
                       value={`${selectedOutcome.id}: ${selectedOutcome.name}`}
@@ -130,10 +132,10 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose} disabled={loading}>
-                {translations['amp.outcomeoutput:cancel'] || 'Cancel'}
+                {t('amp.outcomeoutput:cancel')}
               </Button>
               <Button type="submit" variant="success" disabled={loading}>
-                {translations['amp.outcomeoutput:save-output'] || 'Save Output'}
+                {t('amp.outcomeoutput:save-output')}
               </Button>
             </Modal.Footer>
           </Form>

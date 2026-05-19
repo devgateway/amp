@@ -179,9 +179,11 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
 
         AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection", "Disaggregation Values", indicator);
         disaggPanel.setOutputMarkupId(true);
-        boolean hasDisaggregationValues = indicator.getObject().getDisaggregationValues() != null
-                && !indicator.getObject().getDisaggregationValues().isEmpty();
-        disaggPanel.setVisible(hasDisaggregation && hasDisaggregationValues);
+        disaggPanel.setVisible(hasDisaggregation);
+        // Add disaggregation values subsection
+        if (indicator.getObject().getDisaggregation()== null || indicator.getObject().getDisaggregation().isEmpty()) {
+            disaggPanel.setVisible(false);
+        }
         add(disaggPanel);
 
 

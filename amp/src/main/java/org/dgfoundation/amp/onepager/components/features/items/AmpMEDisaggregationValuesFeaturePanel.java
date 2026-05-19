@@ -29,8 +29,20 @@ import java.util.stream.Collectors;
 public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIndicator> {
     private static final Logger logger = Logger.getLogger(AmpMEDisaggregationValuesFeaturePanel.class);
 
+    private final IModel<AmpIndicator> indicatorModel;
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        AmpIndicator indicator = indicatorModel.getObject();
+        if (indicator == null || indicator.getDisaggregation() == null || indicator.getDisaggregation().isEmpty()) {
+            setVisible(false);
+        }
+    }
+
     public AmpMEDisaggregationValuesFeaturePanel(String id, String fmName, IModel<AmpIndicator> indicatorModel) {
         super(id, fmName, true);
+        this.indicatorModel = indicatorModel;
         logger.info("Initializing AmpMEDisaggregationValuesFeaturePanel for indicator: " + (indicatorModel.getObject() != null ? indicatorModel.getObject().getName() : "null"));
         final Label panelLabel = new Label("panelLabel", Model.of("Disaggregation Values"));
         add(panelLabel);

@@ -1268,7 +1268,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             }}
                             onBlur={props.handleBlur}
                             name="base.originalValueDate"
-                            disabled={baseOriginalValueDateDisabled}
+                            disabled={baseOriginalValueDateDisabled || props.values.disaggregation?.length > 0}
                             className={`${styles.input_field} ${(props.errors.base?.originalValueDate && props.touched.base?.originalValueDate) && styles.text_is_invalid}`}
                             id="baseOriginalValueDate"
                             inputRef={baseOriginalValueDateRef}

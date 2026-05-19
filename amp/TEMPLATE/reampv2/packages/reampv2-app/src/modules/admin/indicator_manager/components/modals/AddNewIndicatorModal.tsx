@@ -376,6 +376,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             }
           }));
 
+          const hasDisagg = values.disaggregation && values.disaggregation.length > 0;
           const indicatorData = {
             name,
             description,
@@ -384,18 +385,18 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             programId: programId ? programId : null,
             ascending,
             creationDate: creationDate ? formatDate(new Date(creationDate)) : null,
-            base: checkObjectIsNull(base) ? null : {
+            base: hasDisagg ? null : (checkObjectIsNull(base) ? null : {
               originalValue: base.originalValue ? lodash.toNumber(base.originalValue): null,
               originalValueDate: base.originalValueDate ? formatDate(base.originalValueDate) : null,
               revisedValue: base.revisedValue ? lodash.toNumber(base.revisedValue) : null,
               revisedValueDate: base.revisedValueDate ? formatDate(base.revisedValueDate) : null,
-            },
-            target: checkObjectIsNull(target) ? null : {
+            }),
+            target: hasDisagg ? null : (checkObjectIsNull(target) ? null : {
               originalValue: target.originalValue ? lodash.toNumber(target.originalValue) : null,
               originalValueDate: target.originalValueDate ? formatDate(target.originalValueDate) : null,
               revisedValue: target.revisedValue ? lodash.toNumber(target.revisedValue) : null,
               revisedValueDate: target.revisedValueDate ? formatDate(target.revisedValueDate) : null,
-            },
+            }),
             indicatorsCategory,
             outputId: values.outputId,
             outcomeId: values.outcomeId,
@@ -409,7 +410,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             calculationMethod: values.calculationMethod,
             responsibleOrganizations: values.responsibleOrganizations,
             frequency: values.frequency,
-            disaggregationValues: formattedDisaggregationValues,
+            disaggregationValues: hasDisagg ? formattedDisaggregationValues : [],
           };
 
           dispatch(createIndicator(indicatorData));
@@ -764,7 +765,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                               className={`basic-multi-select ${(props.errors.disaggregation && props.touched.disaggregation) && styles.text_is_invalid}`}
                               classNamePrefix="select"
                               placeholder={t("amp.indicatormanager:select-disaggregation")}
-                              value={disaggregationOptions.filter(opt => props.values.disaggregation?.includes(opt.value))}
+                              value={(props.values.disaggregation || []).map(id => disaggregationOptions.find(opt => opt.value === id)).filter(Boolean)}
                             />
                         </Form.Group>
                     </Row>
@@ -1119,6 +1120,15 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                   {/* Value Tracking */}
                   <Row className={styles.view_row}><Col><h5 className={styles.sectionTitle}>{t("amp.indicatormanager:value-tracking")}</h5></Col></Row>
                   <div className={styles.sectionContainer}>
+                    {props.values.disaggregation?.length > 0 && (
+                      <Row className={styles.view_row}>
+                        <Col>
+                          <div style={{color: '#856404', background: '#fff3cd', border: '1px solid #ffc107', borderRadius: '4px', padding: '0.5rem 1rem', marginBottom: '0.5rem'}}>
+                            {translations["amp.indicatormanager:value-tracking-disabled-disaggregation"] || "Regular base/target values are disabled when disaggregation is active and will be cleared on save."}
+                          </div>
+                        </Col>
+                      </Row>
+                    )}
                     <Form.Group as={Col}>
                       <Form.Label>
                         <h4>{t("amp.indicatormanager:base-values")}</h4>
@@ -1133,6 +1143,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                               onBlur={props.handleBlur}
                               name="base.originalValue"
                               type="number"
+                              disabled={props.values.disaggregation?.length > 0}
                               className={`${styles.input_field} ${(props.errors.base?.originalValue && props.touched.base?.originalValue) && styles.text_is_invalid}`}
                               placeholder={t("amp.indicatormanager:enter-original-value")} />
 
@@ -1156,7 +1167,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                 props.setFieldValue('base.originalValueDate', null);
                             }}
                             onBlur={props.handleBlur}
-                            disabled={baseOriginalValueDateDisabled}
+                            disabled={props.values.disaggregation?.length > 0 || baseOriginalValueDateDisabled}
                             className={`${styles.input_field} ${(props.errors.base?.originalValueDate && props.touched.base?.originalValueDate) && styles.text_is_invalid}`}/>
 
                           <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
@@ -1174,6 +1185,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                               onBlur={props.handleBlur}
                               name="base.revisedValue"
                               type="number"
+                              disabled={props.values.disaggregation?.length > 0}
                               className={`${styles.input_field} ${(props.errors.base?.revisedValue && props.touched.base?.revisedValue) && styles.text_is_invalid}`}
                               placeholder={t("amp.indicatormanager:enter-revised-value")} />
 
@@ -1197,6 +1209,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             }}
                             onBlur={props.handleBlur}
                             name="base.revisedValueDate"
+                            disabled={props.values.disaggregation?.length > 0}
                             className={`${styles.input_field} ${(props.errors.base?.revisedValueDate && props.touched.base?.revisedValueDate) && styles.text_is_invalid}`}
                         />
 
@@ -1218,6 +1231,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                             name="target.originalValue"
                             type="number"
+                            disabled={props.values.disaggregation?.length > 0}
                             className={`${styles.input_field} ${(props.errors.target?.originalValue && props.touched.target?.originalValue) && styles.text_is_invalid}`}
                             placeholder={t("amp.indicatormanager:enter-target-value")} />
 
@@ -1239,7 +1253,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                                      props.setFieldValue('target.originalValueDate', null);
                                    }}
                                    onBlur={props.handleBlur}
-                                   disabled={targetOriginalValueDateDisabled}
+                                   disabled={props.values.disaggregation?.length > 0 || targetOriginalValueDateDisabled}
                                    className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`} />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
@@ -1257,6 +1271,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                             name="target.revisedValue"
                             type="number"
+                            disabled={props.values.disaggregation?.length > 0}
                             className={`${styles.input_field} ${(props.errors.target?.revisedValue && props.touched.target?.revisedValue) && styles.text_is_invalid}`}
                             placeholder={t("amp.indicatormanager:enter-revised-value")} />
 
@@ -1280,6 +1295,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             }}
                             onBlur={props.handleBlur}
                             name="target.revisedValueDate"
+                            disabled={props.values.disaggregation?.length > 0}
                             className={`${styles.input_field} ${(props.errors.target?.revisedValueDate && props.touched.target?.revisedValueDate) && styles.text_is_invalid}`}
                         />
 

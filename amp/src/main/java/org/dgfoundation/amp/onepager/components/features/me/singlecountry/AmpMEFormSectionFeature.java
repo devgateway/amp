@@ -20,13 +20,17 @@ import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.util.DbUtil;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * M&E section
@@ -36,10 +40,13 @@ import java.util.List;
  */
 public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
     private final ListView<IndicatorActivity> list;
+    private final IModel<AmpActivityVersion> activityModel;
+    private AmpAutocompleteFieldPanel<AmpIndicator> searchIndicators;
 
     public AmpMEFormSectionFeature(String id, String fmName,
                                    final IModel<AmpActivityVersion> am) throws Exception {
         super(id, fmName, am);
+        this.activityModel = am;
         this.fmType = AmpFMTypes.MODULE;
 
         if (am.getObject().getIndicators() == null) {
@@ -91,7 +98,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         add(list);
 
 
-        final AmpAutocompleteFieldPanel<AmpIndicator> searchIndicators =
+        searchIndicators =
                 new AmpAutocompleteFieldPanel<AmpIndicator>("search", "Search Indicators",
                         AmpMEIndicatorSearchModel.class) {
 
@@ -123,8 +130,42 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
                 };
 
-        searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM, am.getObject().getActPrograms());
+        searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM,
+                extractProgramThemeIds(am.getObject().getActPrograms()));
+        searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_SECTOR,
+                extractSectorIds(am.getObject().getSectors()));
         add(UpdateEventBehavior.of(ProgramSelectedEvent.class));
         add(searchIndicators);
+    }
+
+    private static Set<Long> extractProgramThemeIds(Set<AmpActivityProgram> programs) {
+        if (programs == null || programs.isEmpty()) return Collections.emptySet();
+        Set<Long> ids = new HashSet<>();
+        for (AmpActivityProgram ap : programs) {
+            if (ap.getProgram() != null && ap.getProgram().getAmpThemeId() != null) {
+                ids.add(ap.getProgram().getAmpThemeId());
+            }
+        }
+        return ids;
+    }
+
+    private static Set<Long> extractSectorIds(Set<AmpActivitySector> sectors) {
+        if (sectors == null || sectors.isEmpty()) return Collections.emptySet();
+        Set<Long> ids = new HashSet<>();
+        for (AmpActivitySector as : sectors) {
+            if (as.getSectorId() != null && as.getSectorId().getAmpSectorId() != null) {
+                ids.add(as.getSectorId().getAmpSectorId());
+            }
+        }
+        return ids;
+    }
+
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();
+        searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_PROGRAM,
+                extractProgramThemeIds(activityModel.getObject().getActPrograms()));
+        searchIndicators.getModelParams().put(AmpMEIndicatorSearchModel.PARAM.ACTIVITY_SECTOR,
+                extractSectorIds(activityModel.getObject().getSectors()));
     }
 }

@@ -160,6 +160,7 @@
   "amp.indicatormanager:indicator-type": "Indicator Type",
   "amp.indicatormanager:link-logframe": "Link to Logframe (Program Scheme)",
   "amp.indicatormanager:value-tracking": "Value Tracking",
+  "amp.indicatormanager:value-tracking-disabled-disaggregation": "Regular base/target values are disabled when disaggregation is active and will be cleared on save.",
   "amp.indicatormanager:other-considerations": "Other Considerations",
   "amp.indicatormanager:categorization-linkage-info": "Categorization and Linkage",
   "amp.indicatormanager:output": "Output",

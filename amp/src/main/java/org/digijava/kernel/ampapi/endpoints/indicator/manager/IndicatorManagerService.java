@@ -48,7 +48,7 @@ public class IndicatorManagerService {
 
     public static final String FILTER_BY_PROGRAM = "Filter by Program";
 
-    public static final String FILTER_BY_SECTOR = "Filter By Sector";
+    public static final String FILTER_BY_SECTOR = "Filter by Sector";
 
     public static String INDICATOR_CATEGORY_KEY = "core_indicator_type";
 

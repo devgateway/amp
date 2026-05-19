@@ -139,9 +139,14 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         });
         add(indicatorTargetDateLabel);
 
+        boolean hasDisaggregation = indicator.getObject().getDisaggregation() != null
+                && !indicator.getObject().getDisaggregation().isEmpty();
+
         AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, "Actual Values", false, 7);
         valuesTable.setOutputMarkupId(true);
         valuesTable.setOutputMarkupPlaceholderTag(true);
+        // When the indicator has disaggregation, actual values are entered per category — hide the top-level table
+        valuesTable.setVisible(!hasDisaggregation);
         add(valuesTable);
 
         AmpAjaxLinkField addActualValue = new AmpAjaxLinkField("addActualValue", "Add Actual Value", "Add Actual Value") {
@@ -159,6 +164,8 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 
         addActualValue.setOutputMarkupId(true);
         addActualValue.setOutputMarkupPlaceholderTag(true);
+        // Hide the top-level "Add Actual Value" button when disaggregation is present
+        addActualValue.setVisible(!hasDisaggregation);
         add(addActualValue);
 
         AmpAjaxLinkField setValue = new AmpAjaxLinkField("setValues", "Set Value", "Set Value") {
@@ -195,10 +202,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection","Disaggregation Values", indicator);
         disaggPanel.setOutputMarkupId(true);
         disaggPanel.setOutputMarkupPlaceholderTag(true);
-        // Add disaggregation values subsection
-        if (indicator.getObject().getDisaggregation()== null || indicator.getObject().getDisaggregation().isEmpty()){
-            disaggPanel.setVisible(false);
-        }
+        disaggPanel.setVisible(hasDisaggregation);
         add(disaggPanel);
 
 

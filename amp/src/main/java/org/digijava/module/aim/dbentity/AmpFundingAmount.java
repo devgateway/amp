@@ -150,12 +150,12 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
     public boolean equalsForVersioning(Object obj) {
         AmpFundingAmount aux = (AmpFundingAmount) obj;
         String original = getVersionableStr();
-        String copy = aux.funAmount + "-" + aux.currency.getCurrencyCode() + "-" + aux.funDate;
+        String copy = aux.funAmount + "-" + aux.getCurrencyCode() + "-" + aux.funDate;
         return original.equals(copy);
     }
     
     protected String getVersionableStr() {
-        return "" + this.funAmount + "-" + this.currency.getCurrencyCode() + "-" + this.funDate;
+        return "" + this.funAmount + "-" + getCurrencyCode() + "-" + this.funDate;
     }
 
     @Override

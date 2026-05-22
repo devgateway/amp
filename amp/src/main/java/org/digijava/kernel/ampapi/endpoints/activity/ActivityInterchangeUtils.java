@@ -335,8 +335,12 @@ public final class ActivityInterchangeUtils {
                         dvMap.put("id", dv.getId());
                         dvMap.put("parent_category",
                                 dv.getParentCategory() != null ? dv.getParentCategory().getId() : null);
+                        dvMap.put("parent_category_name",
+                                dv.getParentCategory() != null ? dv.getParentCategory().getValue() : null);
                         dvMap.put("child_category",
                                 dv.getChildCategory() != null ? dv.getChildCategory().getId() : null);
+                        dvMap.put("child_category_name",
+                                dv.getChildCategory() != null ? dv.getChildCategory().getValue() : null);
                         dvMap.put("base_value", serializeGlobalValue(dv.getBaseValue()));
                         dvMap.put("target_value", serializeGlobalValue(dv.getTargetValue()));
                         List<Map<String, Object>> actualValues = new ArrayList<>();

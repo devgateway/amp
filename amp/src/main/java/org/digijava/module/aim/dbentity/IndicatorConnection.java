@@ -6,6 +6,7 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableCollect
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.kernel.ampapi.endpoints.common.values.providers.LocationPossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 
 import java.io.Serializable;
@@ -62,6 +63,7 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
      * (see ActivityInterchangeUtils.resolveIndicatorActivityLocations).
      * Null for single-location activities.
      */
+    @PossibleValues(LocationPossibleValuesProvider.class)
     @Interchangeable(fieldTitle = "Activity Location", importable = true, pickIdOnly = true)
     private AmpActivityLocation activityLocation;
 

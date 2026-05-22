@@ -56,9 +56,11 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
     private transient Set<AmpIndicatorDisaggregationValue> disaggregationValues = new HashSet<>();
 
     /**
-     * Activity location (country) for multicountry instances.
-     * When an indicator is added per country in a multicountry activity, this links to the specific
-     * AmpActivityLocation. Null for single-country activities.
+     * Activity location for multi-location instances.
+     * When an indicator is added per location in a multi-location activity, this links to the specific
+     * AmpActivityLocation. The activity API replaces this id with the inner location id at export time
+     * (see ActivityInterchangeUtils.resolveIndicatorActivityLocations).
+     * Null for single-location activities.
      */
     @Interchangeable(fieldTitle = "Activity Location", importable = true, pickIdOnly = true)
     private AmpActivityLocation activityLocation;

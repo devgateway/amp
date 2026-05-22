@@ -306,7 +306,40 @@ public final class ActivityInterchangeUtils {
 
             addActualIndicatorValues(indicatorsObject, projectId);
             addDisaggregationValues(indicatorsObject);
+            resolveIndicatorActivityLocations(indicatorsObject);
         }
+    }
+
+    /**
+     * Replaces each indicator's {@code activity_location} value (an AmpActivityLocation PK)
+     * with the inner AmpCategoryValueLocations id so the frontend can hydrate it to a location name
+     * via the standard locations id-values pipeline
+     */
+    private static void resolveIndicatorActivityLocations(Optional<Object> indicatorsObject) {
+        indicatorsObject.ifPresent(indicators -> {
+            if (!(indicators instanceof ArrayList)) {
+                return;
+            }
+            List<Map<String, Object>> indicatorsList = (ArrayList<Map<String, Object>>) indicators;
+            for (Map<String, Object> indicator : indicatorsList) {
+                Object rawLocId = indicator.get("activity_location");
+                if (rawLocId == null) {
+                    continue;
+                }
+                Long ampActivityLocationId = (rawLocId instanceof Long)
+                        ? (Long) rawLocId : Long.valueOf(rawLocId.toString());
+                try {
+                    AmpActivityLocation aal = (AmpActivityLocation)
+                            PersistenceManager.getSession().get(AmpActivityLocation.class, ampActivityLocationId);
+                    if (aal != null && aal.getLocation() != null) {
+                        indicator.put("activity_location", aal.getLocation().getId());
+                    }
+                } catch (Exception e) {
+                    logger.error("Failed to resolve AmpActivityLocation id=" + ampActivityLocationId
+                            + " to inner location", e);
+                }
+            }
+        });
     }
 
     private static void addDisaggregationValues(Optional<Object> indicatorsObject) {

@@ -48,6 +48,13 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
 //    @VersionableCollection(fieldTitle = "Indicator Values")
     protected Set<AmpIndicatorValue> values = new HashSet<>();
 
+    /**
+     * Activity location (country) for multicountry instances.
+     * When an indicator is added per country in a multicountry activity, this links to the specific
+     * AmpActivityLocation. Null for single-country activities.
+     */
+    @Interchangeable(fieldTitle = "Activity Location", importable = true, pickIdOnly = true,
+            fmPath = "/Activity Form/M&E/ME Item/Country")
     private AmpActivityLocation activityLocation;
 
     public Long getId() {

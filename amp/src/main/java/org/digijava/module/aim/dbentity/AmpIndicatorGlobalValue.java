@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateDeserializer;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateSerializer;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,9 +22,11 @@ public class AmpIndicatorGlobalValue implements Serializable {
     public static final int ACTUAL = 1;
     public static final int BASE = 2;
     public static final int REVISED = 3;
+
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Id")
     @JsonIgnore
     private Long id;
-
 
     @JsonIgnore
     /**
@@ -31,24 +36,33 @@ public class AmpIndicatorGlobalValue implements Serializable {
      */
     private int type;
 
+    @Interchangeable(fieldTitle = "Original Value", importable = true,
+            fmPath = "/Activity Form/M&E/ME Item/Disaggregation Values/Global Value/Original Value")
     @JsonProperty("originalValue")
     private Double originalValue;
 
+    @Interchangeable(fieldTitle = "Original Value Date", importable = true,
+            fmPath = "/Activity Form/M&E/ME Item/Disaggregation Values/Global Value/Original Value Date")
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonDeserialize(using = LocalizedDateDeserializer.class)
     @JsonProperty("originalValueDate")
     @ApiModelProperty(dataType = "java.util.Date", example = "02/02/2023")
     private Date originalValueDate;
 
+    @Interchangeable(fieldTitle = "Revised Value", importable = true,
+            fmPath = "/Activity Form/M&E/ME Item/Disaggregation Values/Global Value/Revised Value")
     @JsonProperty("revisedValue")
     private Double revisedValue;
 
+    @Interchangeable(fieldTitle = "Revised Value Date", importable = true,
+            fmPath = "/Activity Form/M&E/ME Item/Disaggregation Values/Global Value/Revised Value Date")
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonDeserialize(using = LocalizedDateDeserializer.class)
     @JsonProperty("revisedValueDate")
     @ApiModelProperty(dataType = "java.util.Date", example = "02/02/2023")
     private Date revisedValueDate;
 
+    @InterchangeableBackReference
     @JsonIgnore
     private AmpIndicator indicator;
 

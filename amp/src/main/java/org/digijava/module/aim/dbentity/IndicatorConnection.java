@@ -53,8 +53,7 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
      * When an indicator is added per country in a multicountry activity, this links to the specific
      * AmpActivityLocation. Null for single-country activities.
      */
-    @Interchangeable(fieldTitle = "Activity Location", importable = true, pickIdOnly = true,
-            fmPath = "/Activity Form/M&E/ME Item/Country")
+    @Interchangeable(fieldTitle = "Activity Location", importable = true, pickIdOnly = true)
     private AmpActivityLocation activityLocation;
 
     public Long getId() {

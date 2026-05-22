@@ -44,15 +44,6 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
             fmPath = "/Activity Form/M&E/ME Item/Logframe Category")
     private AmpCategoryValue logFrame;
 
-    /**
-     * Disaggregation values for this indicator (read from the linked AmpIndicator).
-     * Exposed read-only via the fields API so consumers can access disaggregated base/target/actual
-     * values without needing to fetch the indicator separately.
-     */
-    @Interchangeable(fieldTitle = "Disaggregation Values", importable = false,
-            fmPath = "/Activity Form/M&E/ME Item/Disaggregation Values")
-    private transient Set<AmpIndicatorDisaggregationValue> disaggregationValues;
-
     public AmpActivityVersion getActivity() {
         return activity;
     }
@@ -75,14 +66,6 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
 
     public void setLogFrame(AmpCategoryValue logFrame) {
         this.logFrame = logFrame;
-    }
-
-    public Set<AmpIndicatorDisaggregationValue> getDisaggregationValues() {
-        return getIndicator() != null ? getIndicator().getDisaggregationValues() : null;
-    }
-
-    public void setDisaggregationValues(Set<AmpIndicatorDisaggregationValue> disaggregationValues) {
-        // read-only projection; actual disaggregation values are managed through AmpIndicator
     }
 
     @Override

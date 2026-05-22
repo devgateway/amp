@@ -305,8 +305,69 @@ public final class ActivityInterchangeUtils {
                     .findFirst();
 
             addActualIndicatorValues(indicatorsObject, projectId);
-            addDisaggregationValues(indicatorsObject, projectId);
+            addDisaggregationValues(indicatorsObject);
         }
+    }
+
+    private static void addDisaggregationValues(Optional<Object> indicatorsObject) {
+        indicatorsObject.ifPresent(indicators -> {
+            if (indicators instanceof ArrayList) {
+                List<Map<String, Object>> indicatorsList = (ArrayList<Map<String, Object>>) indicators;
+                for (Map<String, Object> indicator : indicatorsList) {
+                    Long indicatorId = (Long) indicator.get("indicator");
+                    if (indicatorId == null) {
+                        continue;
+                    }
+                    AmpIndicator ampIndicator;
+                    try {
+                        ampIndicator = IndicatorUtil.getIndicator(indicatorId);
+                    } catch (DgException e) {
+                        logger.error("Failed to load AmpIndicator id=" + indicatorId + " for disaggregation values", e);
+                        continue;
+                    }
+                    if (ampIndicator == null || ampIndicator.getDisaggregationValues() == null) {
+                        indicator.put("disaggregation_values", Collections.emptyList());
+                        continue;
+                    }
+                    List<Map<String, Object>> disaggList = new ArrayList<>();
+                    for (AmpIndicatorDisaggregationValue dv : ampIndicator.getDisaggregationValues()) {
+                        Map<String, Object> dvMap = new LinkedHashMap<>();
+                        dvMap.put("id", dv.getId());
+                        dvMap.put("parent_category",
+                                dv.getParentCategory() != null ? dv.getParentCategory().getId() : null);
+                        dvMap.put("child_category",
+                                dv.getChildCategory() != null ? dv.getChildCategory().getId() : null);
+                        dvMap.put("base_value", serializeGlobalValue(dv.getBaseValue()));
+                        dvMap.put("target_value", serializeGlobalValue(dv.getTargetValue()));
+                        List<Map<String, Object>> actualValues = new ArrayList<>();
+                        if (dv.getActualValues() != null) {
+                            for (AmpIndicatorGlobalValue av : dv.getActualValues()) {
+                                actualValues.add(serializeGlobalValue(av));
+                            }
+                        }
+                        dvMap.put("actual_values", actualValues);
+                        disaggList.add(dvMap);
+                    }
+                    indicator.put("disaggregation_values", disaggList);
+                }
+            }
+        });
+    }
+
+    private static Map<String, Object> serializeGlobalValue(AmpIndicatorGlobalValue gv) {
+        if (gv == null) {
+            return null;
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("id", gv.getId());
+        map.put("original_value", gv.getOriginalValue());
+        map.put("original_value_date",
+                gv.getOriginalValueDate() != null ? dateFormat.format(gv.getOriginalValueDate()) : null);
+        map.put("revised_value", gv.getRevisedValue());
+        map.put("revised_value_date",
+                gv.getRevisedValueDate() != null ? dateFormat.format(gv.getRevisedValueDate()) : null);
+        return map;
     }
 
     private static void addActualIndicatorValues(Optional<Object> indicatorsObject, Long projectId){
@@ -354,76 +415,6 @@ public final class ActivityInterchangeUtils {
                 }
             }
         });
-    }
-
-    /**
-     * Enriches each indicator map in the activity export with its disaggregation values.
-     * Disaggregation values are stored on {@link AmpIndicator} and are not serialized via the
-     * standard interchange path (indicator uses pickIdOnly=true on the connection). This method
-     * manually fetches them and appends a {@code "disaggregation_values"} key so that API consumers
-     * receive the full disaggregated base/target/actual breakdowns alongside each indicator.
-     *
-     * @param indicatorsObject the optional "indicators" value from the exported activity map
-     * @param projectId        the amp_activity_id used to resolve multicountry location context
-     */
-    private static void addDisaggregationValues(Optional<Object> indicatorsObject, Long projectId) {
-        indicatorsObject.ifPresent(indicators -> {
-            if (!(indicators instanceof ArrayList)) {
-                return;
-            }
-            List<Map<String, Object>> indicatorsList = (ArrayList<Map<String, Object>>) indicators;
-            for (Map<String, Object> indicator : indicatorsList) {
-                if (indicator.get("disaggregation_values") != null) {
-                    continue; // already populated
-                }
-                Object indIdObj = indicator.get("indicator");
-                if (!(indIdObj instanceof Long)) {
-                    continue;
-                }
-                Long indicatorId = (Long) indIdObj;
-                AmpIndicator ampIndicator = DbUtil.getObjectOrNull(AmpIndicator.class, indicatorId);
-                if (ampIndicator == null || ampIndicator.getDisaggregationValues() == null
-                        || ampIndicator.getDisaggregationValues().isEmpty()) {
-                    continue;
-                }
-                List<Map<String, Object>> disaggList = new ArrayList<>();
-                for (AmpIndicatorDisaggregationValue dv : ampIndicator.getDisaggregationValues()) {
-                    Map<String, Object> dvMap = new LinkedHashMap<>();
-                    dvMap.put("id", dv.getId());
-                    dvMap.put("parent_category_id",
-                            dv.getParentCategory() != null ? dv.getParentCategory().getId() : null);
-                    dvMap.put("child_category_id",
-                            dv.getChildCategory() != null ? dv.getChildCategory().getId() : null);
-                    dvMap.put("base_value", serializeGlobalValue(dv.getBaseValue()));
-                    dvMap.put("target_value", serializeGlobalValue(dv.getTargetValue()));
-                    List<Map<String, Object>> actualValuesList = new ArrayList<>();
-                    if (dv.getActualValues() != null) {
-                        for (AmpIndicatorGlobalValue av : dv.getActualValues()) {
-                            actualValuesList.add(serializeGlobalValue(av));
-                        }
-                    }
-                    dvMap.put("actual_values", actualValuesList);
-                    disaggList.add(dvMap);
-                }
-                indicator.put("disaggregation_values", disaggList);
-            }
-        });
-    }
-
-    private static Map<String, Object> serializeGlobalValue(AmpIndicatorGlobalValue gv) {
-        if (gv == null) {
-            return null;
-        }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("id", gv.getId());
-        map.put("original_value", gv.getOriginalValue());
-        map.put("original_value_date",
-                gv.getOriginalValueDate() != null ? dateFormat.format(gv.getOriginalValueDate()) : null);
-        map.put("revised_value", gv.getRevisedValue());
-        map.put("revised_value_date",
-                gv.getRevisedValueDate() != null ? dateFormat.format(gv.getRevisedValueDate()) : null);
-        return map;
     }
 
     private static void filterPropertyBasedOnUserPermission(Map<String, Object> activity, Long projectId) {

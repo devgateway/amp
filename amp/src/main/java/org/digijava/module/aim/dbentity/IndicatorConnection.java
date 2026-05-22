@@ -49,6 +49,13 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
     protected Set<AmpIndicatorValue> values = new HashSet<>();
 
     /**
+     * Disaggregation values for this indicator connection.
+     * Transient — not persisted by Hibernate. Populated externally (e.g. via addExtraFieldsToActivity)
+     */
+    @Interchangeable(fieldTitle = "Disaggregation Values", importable = false)
+    private transient Set<AmpIndicatorDisaggregationValue> disaggregationValues = new HashSet<>();
+
+    /**
      * Activity location (country) for multicountry instances.
      * When an indicator is added per country in a multicountry activity, this links to the specific
      * AmpActivityLocation. Null for single-country activities.
@@ -123,5 +130,13 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
             indicatorLocationKey = (indId != null ? indId : "") + "_" + (locId != null ? locId : "");
         }
         return indicatorLocationKey;
+    }
+
+    public Set<AmpIndicatorDisaggregationValue> getDisaggregationValues() {
+        return disaggregationValues;
+    }
+
+    public void setDisaggregationValues(Set<AmpIndicatorDisaggregationValue> disaggregationValues) {
+        this.disaggregationValues = disaggregationValues;
     }
 }

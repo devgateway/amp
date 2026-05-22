@@ -36,26 +36,22 @@ public class AmpIndicatorGlobalValue implements Serializable {
      */
     private int type;
 
-    @Interchangeable(fieldTitle = "Original Value", importable = true,
-            fmPath = "/Activity Form/M&E/ME Item/Disaggregation Values/Global Value/Original Value")
+    @Interchangeable(fieldTitle = "Original Value", importable = true)
     @JsonProperty("originalValue")
     private Double originalValue;
 
-    @Interchangeable(fieldTitle = "Original Value Date", importable = true,
-            fmPath = "/Activity Form/M&E/ME Item/Disaggregation Values/Global Value/Original Value Date")
+    @Interchangeable(fieldTitle = "Original Value Date", importable = true)
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonDeserialize(using = LocalizedDateDeserializer.class)
     @JsonProperty("originalValueDate")
     @ApiModelProperty(dataType = "java.util.Date", example = "02/02/2023")
     private Date originalValueDate;
 
-    @Interchangeable(fieldTitle = "Revised Value", importable = true,
-            fmPath = "/Activity Form/M&E/ME Item/Disaggregation Values/Global Value/Revised Value")
+    @Interchangeable(fieldTitle = "Revised Value", importable = true)
     @JsonProperty("revisedValue")
     private Double revisedValue;
 
-    @Interchangeable(fieldTitle = "Revised Value Date", importable = true,
-            fmPath = "/Activity Form/M&E/ME Item/Disaggregation Values/Global Value/Revised Value Date")
+    @Interchangeable(fieldTitle = "Revised Value Date", importable = true)
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonDeserialize(using = LocalizedDateDeserializer.class)
     @JsonProperty("revisedValueDate")

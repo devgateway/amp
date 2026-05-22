@@ -14,25 +14,20 @@ public class AmpIndicatorDisaggregationValue implements Serializable {
     @Interchangeable(fieldTitle = "Id")
     private Long id;
 
-    @Interchangeable(fieldTitle = "Parent Category", importable = true, pickIdOnly = true,
-            fmPath = "/Activity Form/M&E/ME Item/Disaggregation Values/Parent Category")
+    @Interchangeable(fieldTitle = "Parent Category", importable = true, pickIdOnly = true)
     private AmpCategoryValue parentCategory;
 
-    @Interchangeable(fieldTitle = "Child Category", importable = true, pickIdOnly = true,
-            fmPath = "/Activity Form/M&E/ME Item/Disaggregation Values/Child Category")
+    @Interchangeable(fieldTitle = "Child Category", importable = true, pickIdOnly = true)
     private AmpCategoryValue childCategory;
 
-    @Interchangeable(fieldTitle = "Base Value", importable = true,
-            fmPath = "/Activity Form/M&E/ME Item/Disaggregation Values/Base Value")
+    @Interchangeable(fieldTitle = "Base Value", importable = true)
     private AmpIndicatorGlobalValue baseValue;
 
-    @Interchangeable(fieldTitle = "Target Value", importable = true,
-            fmPath = "/Activity Form/M&E/ME Item/Disaggregation Values/Target Value")
+    @Interchangeable(fieldTitle = "Target Value", importable = true)
     private AmpIndicatorGlobalValue targetValue;
 
     // changed from List to Set and will be mapped via hbm
-    @Interchangeable(fieldTitle = "Actual Values", importable = true,
-            fmPath = "/Activity Form/M&E/ME Item/Disaggregation Values/Actual Values")
+    @Interchangeable(fieldTitle = "Actual Values", importable = true)
     private Set<AmpIndicatorGlobalValue> actualValues; // @OneToMany like mapping in hbm (inverse)
 
     @InterchangeableBackReference

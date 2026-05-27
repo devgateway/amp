@@ -6,6 +6,7 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableCollect
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.kernel.ampapi.endpoints.common.values.providers.LocationPossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 
 import java.io.Serializable;
@@ -48,6 +49,22 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
 //    @VersionableCollection(fieldTitle = "Indicator Values")
     protected Set<AmpIndicatorValue> values = new HashSet<>();
 
+    /**
+     * Disaggregation values for this indicator connection.
+     * Transient — not persisted by Hibernate. Populated externally (e.g. via addExtraFieldsToActivity)
+     */
+    @Interchangeable(fieldTitle = "Disaggregation Values", importable = false)
+    private transient Set<AmpIndicatorDisaggregationValue> disaggregationValues = new HashSet<>();
+
+    /**
+     * Activity location for multi-location instances.
+     * When an indicator is added per location in a multi-location activity, this links to the specific
+     * AmpActivityLocation. The activity API replaces this id with the inner location id at export time
+     * (see ActivityInterchangeUtils.resolveIndicatorActivityLocations).
+     * Null for single-location activities.
+     */
+    @PossibleValues(LocationPossibleValuesProvider.class)
+    @Interchangeable(fieldTitle = "Activity Location", importable = true, pickIdOnly = true)
     private AmpActivityLocation activityLocation;
 
     public Long getId() {
@@ -117,5 +134,13 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
             indicatorLocationKey = (indId != null ? indId : "") + "_" + (locId != null ? locId : "");
         }
         return indicatorLocationKey;
+    }
+
+    public Set<AmpIndicatorDisaggregationValue> getDisaggregationValues() {
+        return disaggregationValues;
+    }
+
+    public void setDisaggregationValues(Set<AmpIndicatorDisaggregationValue> disaggregationValues) {
+        this.disaggregationValues = disaggregationValues;
     }
 }

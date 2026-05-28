@@ -108,7 +108,7 @@ if (typeof DOMParser == "undefined") {
 
             var id = document.getElementById("treeboxbox_tree");
 	 		tree = new dhtmlXTreeObject(id,"100%","100%",0);
-	 		tree.setImagePath("../../jsp/help/view/images/csh_vista/");
+	 		tree.setImagePath("<%=request.getContextPath()%>/resources/images/jsp/help/view/images/csh_vista/");
 	        tree.enableTreeImages(false);
 	        <digi:secure group="Help Administrators">
 	            tree.enableDragAndDrop(true);

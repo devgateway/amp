@@ -5,6 +5,7 @@ import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.*;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.TreeNodeAware;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +21,7 @@ import java.util.Objects;
  *
  */
 public class AmpActivityLocation implements Comparable<AmpActivityLocation>, Versionable, Serializable, Cloneable,
-        TreeNodeAware<AmpCategoryValueLocations> {
+        TreeNodeAware<AmpCategoryValueLocations>, Identifiable {
 
     //IATI-check: should be exported.
     @InterchangeableId
@@ -57,6 +58,11 @@ public class AmpActivityLocation implements Comparable<AmpActivityLocation>, Ver
     }
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public Object getIdentifier() {
+        return id;
     }
     public AmpActivityVersion getActivity() {
         return activity;

@@ -305,7 +305,106 @@ public final class ActivityInterchangeUtils {
                     .findFirst();
 
             addActualIndicatorValues(indicatorsObject, projectId);
+            addDisaggregationValues(indicatorsObject);
+            resolveIndicatorActivityLocations(indicatorsObject);
         }
+    }
+
+    /**
+     * Replaces each indicator's {@code activity_location} value (an AmpActivityLocation PK)
+     * with the inner AmpCategoryValueLocations id so the frontend can hydrate it to a location name
+     * via the standard locations id-values pipeline
+     */
+    private static void resolveIndicatorActivityLocations(Optional<Object> indicatorsObject) {
+        indicatorsObject.ifPresent(indicators -> {
+            if (!(indicators instanceof ArrayList)) {
+                return;
+            }
+            List<Map<String, Object>> indicatorsList = (ArrayList<Map<String, Object>>) indicators;
+            for (Map<String, Object> indicator : indicatorsList) {
+                Object rawLocId = indicator.get("activity_location");
+                if (rawLocId == null) {
+                    continue;
+                }
+                Long ampActivityLocationId = (rawLocId instanceof Long)
+                        ? (Long) rawLocId : Long.valueOf(rawLocId.toString());
+                try {
+                    AmpActivityLocation aal = (AmpActivityLocation)
+                            PersistenceManager.getSession().get(AmpActivityLocation.class, ampActivityLocationId);
+                    if (aal != null && aal.getLocation() != null) {
+                        indicator.put("activity_location", aal.getLocation().getId());
+                    }
+                } catch (Exception e) {
+                    logger.error("Failed to resolve AmpActivityLocation id=" + ampActivityLocationId
+                            + " to inner location", e);
+                }
+            }
+        });
+    }
+
+    private static void addDisaggregationValues(Optional<Object> indicatorsObject) {
+        indicatorsObject.ifPresent(indicators -> {
+            if (indicators instanceof ArrayList) {
+                List<Map<String, Object>> indicatorsList = (ArrayList<Map<String, Object>>) indicators;
+                for (Map<String, Object> indicator : indicatorsList) {
+                    Long indicatorId = (Long) indicator.get("indicator");
+                    if (indicatorId == null) {
+                        continue;
+                    }
+                    AmpIndicator ampIndicator;
+                    try {
+                        ampIndicator = IndicatorUtil.getIndicator(indicatorId);
+                    } catch (DgException e) {
+                        logger.error("Failed to load AmpIndicator id=" + indicatorId + " for disaggregation values", e);
+                        continue;
+                    }
+                    if (ampIndicator == null || ampIndicator.getDisaggregationValues() == null) {
+                        indicator.put("disaggregation_values", Collections.emptyList());
+                        continue;
+                    }
+                    List<Map<String, Object>> disaggList = new ArrayList<>();
+                    for (AmpIndicatorDisaggregationValue dv : ampIndicator.getDisaggregationValues()) {
+                        Map<String, Object> dvMap = new LinkedHashMap<>();
+                        dvMap.put("id", dv.getId());
+                        dvMap.put("parent_category",
+                                dv.getParentCategory() != null ? dv.getParentCategory().getId() : null);
+                        dvMap.put("parent_category_name",
+                                dv.getParentCategory() != null ? dv.getParentCategory().getValue() : null);
+                        dvMap.put("child_category",
+                                dv.getChildCategory() != null ? dv.getChildCategory().getId() : null);
+                        dvMap.put("child_category_name",
+                                dv.getChildCategory() != null ? dv.getChildCategory().getValue() : null);
+                        dvMap.put("base_value", serializeGlobalValue(dv.getBaseValue()));
+                        dvMap.put("target_value", serializeGlobalValue(dv.getTargetValue()));
+                        List<Map<String, Object>> actualValues = new ArrayList<>();
+                        if (dv.getActualValues() != null) {
+                            for (AmpIndicatorGlobalValue av : dv.getActualValues()) {
+                                actualValues.add(serializeGlobalValue(av));
+                            }
+                        }
+                        dvMap.put("actual_values", actualValues);
+                        disaggList.add(dvMap);
+                    }
+                    indicator.put("disaggregation_values", disaggList);
+                }
+            }
+        });
+    }
+
+    private static Map<String, Object> serializeGlobalValue(AmpIndicatorGlobalValue gv) {
+        if (gv == null) {
+            return null;
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("id", gv.getId());
+        map.put("original_value", gv.getOriginalValue());
+        map.put("original_value_date",
+                gv.getOriginalValueDate() != null ? dateFormat.format(gv.getOriginalValueDate()) : null);
+        map.put("revised_value", gv.getRevisedValue());
+        map.put("revised_value_date",
+                gv.getRevisedValueDate() != null ? dateFormat.format(gv.getRevisedValueDate()) : null);
+        return map;
     }
 
     private static void addActualIndicatorValues(Optional<Object> indicatorsObject, Long projectId){

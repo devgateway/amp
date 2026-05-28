@@ -200,8 +200,6 @@ public final class PMUtil {
         List<Permission> toDelete = new ArrayList<>(cp.getPermissions());
         cp.getPermissions().clear();
         for (Permission element : toDelete) {
-            // Remove from every CompositePermission that references this element so
-            // Hibernate does not attempt to re-save a deleted object via cascade on flush
             Iterator<CompositePermission> linkedIt = element.getCompositeLinkedPermissions().iterator();
             while (linkedIt.hasNext()) {
                 CompositePermission linkedCp = linkedIt.next();

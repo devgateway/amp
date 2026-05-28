@@ -328,7 +328,6 @@ public class ColumnConstants {
     public static final String PROPOSED_START_DATE = "Proposed Start Date";
     public static final String PURPOSE = "Purpose";
     public static final String RATIFICATION_DATE = "Loan Ratification Date";
-    public static final String REGIONAL_REGION = "Regional Region";
     public static final String REGIONAL_GROUP = "Regional Group";
     public static final String REGIONAL_GROUP_GROUP = "Regional Group Group";
     public static final String REGIONAL_GROUP_DEPARTMENT_DIVISION = "Regional Group Department/Division";
@@ -336,6 +335,7 @@ public class ColumnConstants {
     public static final String REGIONAL_OBSERVATIONS_ACTORS = "Regional Observations Actors";
     public static final String REGIONAL_OBSERVATIONS_DATE = "Regional Observations Date";
     public static final String REGIONAL_OBSERVATIONS_MEASURES = "Regional Observations Measures Taken";
+    public static final String REGIONAL_REGION = "Regional Region";
 
     public static final String REPORTING_SYSTEM = "Reporting System";
     public static final String RESPONSIBLE_ORGANIZATION = "Responsible Organization";

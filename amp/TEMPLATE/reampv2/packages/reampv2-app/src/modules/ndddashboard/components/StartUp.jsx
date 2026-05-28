@@ -41,8 +41,28 @@ const Startup = (props) => {
 
   if (translationPending || programConfigurationPending || fmReducerPending || sectorClassificationPending || settingsPending) {
     return (<Loading />);
-  } else if (fmReducerError || settingsError) {
-    window.location.replace('/login.do');
+  }
+
+  useEffect(() => {
+    const isAuthError = (error) => {
+      if (!error) return false;
+
+      if (typeof error === 'string') {
+        return error.toLowerCase().includes('auth');
+      }
+      if (error && typeof error === 'object') {
+        if (error.code && String(error.code).toLowerCase().includes('auth')) return true;
+        if (error.message && error.message.toLowerCase().includes('auth')) return true;
+      }
+      return false;
+    };
+
+    if (isAuthError(fmReducerError) || isAuthError(settingsError)) {
+      window.location.replace('/login.do');
+    }
+  }, [fmReducerError, settingsError]);
+
+  if (fmReducerError || settingsError) {
     return null;
   } else {
     document.title = translations['amp.ndd.dashboard:page-title'];

@@ -8,8 +8,10 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @TranslatableClass (displayName = "Indicator")
@@ -83,7 +85,7 @@ public class AmpIndicator implements Serializable, Identifiable
     private Set<Long> logframeLinks;
     private String data;
     private String dataSource;
-    private Set<AmpCategoryValue> disaggregation;
+    private List<AmpCategoryValue> disaggregation = new ArrayList<>();
     private AmpCategoryValue unitOfMeasure;
     private String calculationMethod;
     private Set<AmpOrganisation> responsibleOrganizations;
@@ -274,10 +276,10 @@ public class AmpIndicator implements Serializable, Identifiable
     public void setDataSource(String dataSource) {
         this.dataSource = dataSource;
     }
-    public Set<AmpCategoryValue> getDisaggregation() {
+    public List<AmpCategoryValue> getDisaggregation() {
         return disaggregation;
     }
-    public void setDisaggregation(Set<AmpCategoryValue> disaggregation) {
+    public void setDisaggregation(List<AmpCategoryValue> disaggregation) {
         this.disaggregation = disaggregation;
     }
     public AmpCategoryValue getUnitOfMeasure() {

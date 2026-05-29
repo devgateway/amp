@@ -92,7 +92,7 @@ public class MEIndicatorDTO {
     private String dataSource;
 
     @JsonProperty("disaggregation")
-    private Set<Long> disaggregation = new HashSet<>();
+    private List<Long> disaggregation = new ArrayList<>();
 
     @JsonProperty("unitOfMeasure")
     private Long unitOfMeasure;
@@ -131,7 +131,7 @@ public class MEIndicatorDTO {
         this.logframeLinks = indicator.getLogframeLinks();
         this.data = indicator.getData();
         this.dataSource = indicator.getDataSource();
-        this.disaggregation = indicator.getDisaggregation()!=null ? indicator.getDisaggregation().stream().map(AmpCategoryValue::getId).collect(Collectors.toSet()) : null;
+        this.disaggregation = indicator.getDisaggregation()!=null ? indicator.getDisaggregation().stream().map(AmpCategoryValue::getId).collect(Collectors.toList()) : null;
         this.unitOfMeasure = indicator.getUnitOfMeasure()!=null ? indicator.getUnitOfMeasure().getId() : null;
         this.calculationMethod = indicator.getCalculationMethod();
         this.responsibleOrganizations = indicator.getResponsibleOrganizations()!=null ? indicator.getResponsibleOrganizations().stream().map(AmpOrganisation::getAmpOrgId).collect(Collectors.toSet()) : null;
@@ -288,8 +288,8 @@ public class MEIndicatorDTO {
     public String getDataSource() { return dataSource; }
     public void setDataSource(String dataSource) { this.dataSource = dataSource; }
 
-    public Set<Long> getDisaggregation() { return disaggregation; }
-    public void setDisaggregation(Set<Long> disaggregation) { this.disaggregation = disaggregation; }
+    public List<Long> getDisaggregation() { return disaggregation; }
+    public void setDisaggregation(List<Long> disaggregation) { this.disaggregation = disaggregation; }
 
     public Long getUnitOfMeasure() { return unitOfMeasure; }
     public void setUnitOfMeasure(Long unitOfMeasure) { this.unitOfMeasure = unitOfMeasure; }

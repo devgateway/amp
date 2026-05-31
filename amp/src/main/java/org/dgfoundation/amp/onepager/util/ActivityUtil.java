@@ -300,8 +300,6 @@ public class ActivityUtil {
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
         saveStructures(a, session);
-        // Explicitly save indicator disaggregation values
-        saveIndicatorDisaggregationValues(a, session);
         if (createNewVersion) {
             if (a.getAmpActivityId() == null)
                 session.save(a);
@@ -1563,22 +1561,4 @@ public class ActivityUtil {
         return checkSum;
     }
 
-    private static void saveIndicatorDisaggregationValues(AmpActivityVersion a, Session session) {
-        Set<IndicatorActivity> indicators = a.getIndicators();
-        if (indicators == null) return;
-        for (IndicatorActivity indicatorActivity : indicators) {
-            AmpIndicator indicator = indicatorActivity.getIndicator();
-            if (indicator == null) continue;
-            Set<AmpIndicatorDisaggregationValue> disaggregationValues = indicator.getDisaggregationValues();
-            if (disaggregationValues == null) continue;
-            for (AmpIndicatorDisaggregationValue value : disaggregationValues) {
-                value.setIndicator(indicator);
-                if (value.getId() == null) {
-                    session.saveOrUpdate(value);
-                } else {
-                    session.merge(value);
-                }
-            }
-        }
-    }
 }

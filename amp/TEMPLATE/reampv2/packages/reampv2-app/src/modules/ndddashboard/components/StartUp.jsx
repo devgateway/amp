@@ -63,7 +63,7 @@ const Startup = (props) => {
   }
 
   if (fmReducerError || settingsError) {
-    return null;
+    return <div className="error">An error occurred: {fmReducerError || settingsError}</div>;
   } else {
     document.title = translations['amp.ndd.dashboard:page-title'];
     return (

@@ -1355,9 +1355,16 @@ public class ActivityUtil {
                     }
                     // save the contact first, if the contact is new or if it is not
                     // new but has not been saved already.
-                    if (contactId == null || (newActivity && !savedContacts.get(contactId))) {
-                        activityContact.getContact().setCreator(creator);
-                        session.saveOrUpdate(activityContact.getContact());
+                    if (contactId == null || !Boolean.TRUE.equals(savedContacts.get(contactId))) {
+                        if (contactId == null || newActivity) {
+                            // new contact or first encounter in a new-activity clone: insert
+                            activityContact.getContact().setCreator(creator);
+                            session.saveOrUpdate(activityContact.getContact());
+                        } else {
+                            // existing contact on an existing activity: session was cleared
+                            // earlier so the instance is detached — merge to persist any field changes
+                            session.merge(activityContact.getContact());
+                        }
                         savedContacts.put(activityContact.getContact().getId(), true);
                     }
                     if (activityContact.getId() == null) {

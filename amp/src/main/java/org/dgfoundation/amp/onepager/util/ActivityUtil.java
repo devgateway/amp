@@ -212,7 +212,6 @@ public class ActivityUtil {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
 
                 a = ActivityVersionUtil.cloneActivity(a);
-                a.setAmpActivityId(null);
                 // Always clear the session after cloning. When running in a batch context (e.g. Excel importer),
                 // validateAndImport executes queries with FlushMode.AUTO which can cascade-save new child entities
                 // (fundings, etc.) into the action queue. The subsequent session.evict(oldA) then cascade-evicts
@@ -274,14 +273,7 @@ public class ActivityUtil {
             session.clear();
             //existing activity
             //previousVersion for current activity
-            // When versioning, 'a' is the clone with null id; the group's lastVersion in the in-memory clone also
-            // has null id (circular reference), so we can't rely on id comparison. Always force-increment when
-            // creating a new version. When not versioning, fall back to the original id comparison.
-            boolean shouldForceIncrement = createNewVersion
-                    || (group.getAmpActivityLastVersion() != null
-                        && group.getAmpActivityLastVersion().getAmpActivityId() != null
-                        && group.getAmpActivityLastVersion().getAmpActivityId().equals(a.getAmpActivityId()));
-            if (shouldForceIncrement) {
+            if (group.getAmpActivityLastVersion().getAmpActivityId().equals(a.getAmpActivityId())) {
                 forceVersionIncrement(session, group);
             }
             group.setAmpActivityLastVersion(a);

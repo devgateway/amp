@@ -274,7 +274,14 @@ public class ActivityUtil {
             session.clear();
             //existing activity
             //previousVersion for current activity
-            if (group.getAmpActivityLastVersion().getAmpActivityId().equals(a.getAmpActivityId())) {
+            // When versioning, 'a' is the clone with null id; the group's lastVersion in the in-memory clone also
+            // has null id (circular reference), so we can't rely on id comparison. Always force-increment when
+            // creating a new version. When not versioning, fall back to the original id comparison.
+            boolean shouldForceIncrement = createNewVersion
+                    || (group.getAmpActivityLastVersion() != null
+                        && group.getAmpActivityLastVersion().getAmpActivityId() != null
+                        && group.getAmpActivityLastVersion().getAmpActivityId().equals(a.getAmpActivityId()));
+            if (shouldForceIncrement) {
                 forceVersionIncrement(session, group);
             }
             group.setAmpActivityLastVersion(a);

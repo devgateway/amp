@@ -306,9 +306,9 @@ public class ActivityUtil {
         saveEditors(session, createNewVersion, editorStore, site);
 
         saveAgreements(a, session, isActivityForm);
-    saveContacts(a, session, (draft != draftChange), ampCurrentMember,
-        createNewVersion ? oldA.getAmpActivityId() : a.getAmpActivityId(),
-        createNewVersion || a.getAmpActivityId() == null);
+        saveContacts(a, session, (draft != draftChange), ampCurrentMember,
+                createNewVersion ? oldA.getAmpActivityId() : a.getAmpActivityId(),
+                createNewVersion || a.getAmpActivityId() == null);
 
         updateComponentFunding(a, session);
         saveAnnualProjectBudgets(a, session);
@@ -1326,7 +1326,6 @@ public class ActivityUtil {
                             }
                         }
                         if (count == 0) { //if activity contains contact,which is not in contact list, we should remove it
-                            logger.info("Contact with id " + actContactId + " will be removed");
                             Query qry = session.createQuery("delete from " + AmpActivityContact.class.getName() + " a where a.id=" + actContactId);
                             qry.executeUpdate();
                         }
@@ -1349,7 +1348,6 @@ public class ActivityUtil {
                 for (AmpActivityContact activityContact : activityContacts) {
                     activityContact.setActivity(a);
                     Long contactId = activityContact.getContact().getId();
-                    logger.info("Processing contact with id " + contactId);
                     // if the contact already exists on the DB, and was not saved
                     // already
                     if (contactId != null && savedContacts.get(contactId) == null) {
@@ -1357,7 +1355,6 @@ public class ActivityUtil {
                     }
                     // save the contact first, if the contact is new or if it is not
                     // new but has not been saved already.
-                    logger.info("Contact with id " + contactId + " is new: " + (contactId == null) + " and has been saved: " + savedContacts.get(contactId));
                     if (contactId == null || (newActivity && !savedContacts.get(contactId))) {
                         activityContact.getContact().setCreator(creator);
                         session.saveOrUpdate(activityContact.getContact());
@@ -1365,10 +1362,8 @@ public class ActivityUtil {
                     }
                     if (activityContact.getId() == null) {
                         session.saveOrUpdate(activityContact);
-                        if (!newActivity && activityContact.getId() == null) {
-                            session.saveOrUpdate(activityContact);
-                            session.merge(activityContact.getContact());
-                        }
+                    } else {
+                        session.merge(activityContact);
                     }
                 }
             }

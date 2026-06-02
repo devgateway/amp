@@ -212,6 +212,7 @@ public class ActivityUtil {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
 
                 a = ActivityVersionUtil.cloneActivity(a);
+                a.setAmpActivityId(null);
                 // Always clear the session after cloning. When running in a batch context (e.g. Excel importer),
                 // validateAndImport executes queries with FlushMode.AUTO which can cascade-save new child entities
                 // (fundings, etc.) into the action queue. The subsequent session.evict(oldA) then cascade-evicts

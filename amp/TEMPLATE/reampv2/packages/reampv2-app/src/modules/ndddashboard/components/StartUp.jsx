@@ -39,10 +39,6 @@ const Startup = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (translationPending || programConfigurationPending || fmReducerPending || sectorClassificationPending || settingsPending) {
-    return (<Loading />);
-  }
-
   useEffect(() => {
     const isAuthError = (error) => {
       if (!error) return false;
@@ -61,6 +57,10 @@ const Startup = (props) => {
       window.location.replace('/login.do');
     }
   }, [fmReducerError, settingsError]);
+
+  if (translationPending || programConfigurationPending || fmReducerPending || sectorClassificationPending || settingsPending) {
+    return (<Loading />);
+  }
 
   if (fmReducerError || settingsError) {
     return null;

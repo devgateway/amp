@@ -2,7 +2,7 @@
 <tns:patch closeOnSuccess="true" retryOnFail="true"
            xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-    <jira>AMP-31091</jira>
+    <jira>AMP-31134</jira>
     <author>bmokandu</author>
     <description>Add order_index column to AMP_INDICATOR_DISAGGREGATION table to preserve user-selected disaggregation order. Existing rows get order_index assigned based on category_value_id order.</description>
     <apply>

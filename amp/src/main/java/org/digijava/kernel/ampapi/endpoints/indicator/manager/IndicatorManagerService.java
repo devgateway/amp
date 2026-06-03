@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -193,7 +194,10 @@ public class IndicatorManagerService {
         indicator.setDataSource(indicatorRequest.getDataSource());
         if (indicatorRequest.getDisaggregation() != null && !indicatorRequest.getDisaggregation().isEmpty()) {
             List<AmpCategoryValue> disaggregationCats = indicatorRequest.getDisaggregation().stream()
+                .filter(Objects::nonNull)
+                .distinct()
                 .map(id -> session.get(AmpCategoryValue.class, id))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
             indicator.setDisaggregation(disaggregationCats);
         } else {
@@ -474,7 +478,10 @@ public class IndicatorManagerService {
             // Convert List<Long> disaggregation to List<AmpCategoryValue>
             if (indRequest.getDisaggregation() != null && !indRequest.getDisaggregation().isEmpty()) {
                 List<AmpCategoryValue> disaggregationCats = indRequest.getDisaggregation().stream()
+                    .filter(Objects::nonNull)
+                    .distinct()
                     .map(id -> (AmpCategoryValue) session.get(AmpCategoryValue.class, id))
+                    .filter(Objects::nonNull)
                     .collect(Collectors.toList());
                 indicator.setDisaggregation(disaggregationCats);
             } else {

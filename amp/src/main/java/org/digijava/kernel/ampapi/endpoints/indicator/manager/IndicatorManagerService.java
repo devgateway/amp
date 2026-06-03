@@ -198,6 +198,7 @@ public class IndicatorManagerService {
                 .distinct()
                 .map(id -> session.get(AmpCategoryValue.class, id))
                 .filter(Objects::nonNull)
+                    .distinct()
                 .collect(Collectors.toList());
             indicator.setDisaggregation(disaggregationCats);
         } else {
@@ -482,6 +483,7 @@ public class IndicatorManagerService {
                     .distinct()
                     .map(id -> (AmpCategoryValue) session.get(AmpCategoryValue.class, id))
                     .filter(Objects::nonNull)
+                        .distinct()
                     .collect(Collectors.toList());
                 indicator.setDisaggregation(disaggregationCats);
             } else {

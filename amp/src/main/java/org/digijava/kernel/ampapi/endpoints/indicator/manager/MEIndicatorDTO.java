@@ -131,7 +131,7 @@ public class MEIndicatorDTO {
         this.logframeLinks = indicator.getLogframeLinks();
         this.data = indicator.getData();
         this.dataSource = indicator.getDataSource();
-        this.disaggregation = indicator.getDisaggregation()!=null ? indicator.getDisaggregation().stream().map(AmpCategoryValue::getId).collect(Collectors.toList()) : null;
+        this.disaggregation = indicator.getDisaggregation()!=null ? indicator.getDisaggregation().stream().distinct().map(AmpCategoryValue::getId).collect(Collectors.toList()) : null;
         this.unitOfMeasure = indicator.getUnitOfMeasure()!=null ? indicator.getUnitOfMeasure().getId() : null;
         this.calculationMethod = indicator.getCalculationMethod();
         this.responsibleOrganizations = indicator.getResponsibleOrganizations()!=null ? indicator.getResponsibleOrganizations().stream().map(AmpOrganisation::getAmpOrgId).collect(Collectors.toSet()) : null;

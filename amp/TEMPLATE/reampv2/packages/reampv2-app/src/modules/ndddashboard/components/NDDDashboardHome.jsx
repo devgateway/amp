@@ -53,8 +53,8 @@ const NDDDashboardHome = (props) => {
 
     const fetchFmReducer = useSelector(state => state.fetchFmReducer);
 
-    const nddDashboard = !!fetchFmReducer.data.find(d => d === NDDPath);
-    const meDashboard = !!fetchFmReducer.data.find(d => d === MEPath);
+    const nddDashboard = !!fetchFmReducer.data?.find(d => d === NDDPath);
+    const meDashboard = !!fetchFmReducer.data?.find(d => d === MEPath);
 
     const getSharedDataOrResolve = (id) => {
         if (id) {

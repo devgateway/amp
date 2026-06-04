@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../schemas/xmlpatcher.xsd ">
+    <jira>AMP-31134</jira>
+    <author>bmokandu</author>
+    <description>Add order_index column to AMP_INDICATOR_DISAGGREGATION table to preserve user-selected disaggregation order. Existing rows get order_index assigned based on category_value_id order.</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+
+                ALTER TABLE AMP_INDICATOR_DISAGGREGATION
+                ADD COLUMN IF NOT EXISTS order_index INTEGER;
+
+                UPDATE AMP_INDICATOR_DISAGGREGATION aid
+                SET order_index = sub.rn
+                FROM (
+                    SELECT indicator_id, category_value_id,
+                           ROW_NUMBER() OVER (PARTITION BY indicator_id ORDER BY category_value_id) - 1 AS rn
+                    FROM AMP_INDICATOR_DISAGGREGATION
+                ) sub
+                WHERE aid.indicator_id = sub.indicator_id
+                  AND aid.category_value_id = sub.category_value_id
+                  AND aid.order_index IS NULL
+
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

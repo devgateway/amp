@@ -49,6 +49,8 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
 
         final Label indicatorNameLabel = new Label("indicatorName", new PropertyModel<String>(indicator, "name"));
         add(indicatorNameLabel);
+        final boolean hasDisaggregation = indicator.getObject().getDisaggregation() != null
+                && !indicator.getObject().getDisaggregation().isEmpty();
 
         String indCodeString = "";
         if (indicator.getObject().getCode() != null && indicator.getObject().getCode().trim().compareTo("") != 0) {
@@ -174,9 +176,10 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             throw new RuntimeException(e);
         }
         add(baseValues);
+
         AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection", "Disaggregation Values", indicator);
         disaggPanel.setOutputMarkupId(true);
-        disaggPanel.setOutputMarkupPlaceholderTag(true);
+        disaggPanel.setVisible(hasDisaggregation);
         // Add disaggregation values subsection
         if (indicator.getObject().getDisaggregation()== null || indicator.getObject().getDisaggregation().isEmpty()) {
             disaggPanel.setVisible(false);

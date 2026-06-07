@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -97,15 +98,20 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
             }
         }
 
-        final Label indicatorBaseValueLabel = new Label("base", new LoadableDetachableModel<String>() {
+        final boolean hasDisaggregation = indicator.getObject().getDisaggregation() != null
+                && !indicator.getObject().getDisaggregation().isEmpty();
+
+        WebMarkupContainer baseTargetContainer = new WebMarkupContainer("baseTargetContainer");
+        baseTargetContainer.setVisible(!hasDisaggregation);
+
+        baseTargetContainer.add(new Label("base", new LoadableDetachableModel<String>() {
             @Override
             protected String load() {
                 return globalBaseVal.getOriginalValue() != null ? String.valueOf(globalBaseVal.getOriginalValue()) : "N/A";
             }
-        });
-        add(indicatorBaseValueLabel);
+        }));
 
-        final Label indicatorBaseDateLabel = new Label("baseDate", new LoadableDetachableModel<String>() {
+        baseTargetContainer.add(new Label("baseDate", new LoadableDetachableModel<String>() {
             @Override
             protected String load() {
                 if (globalBaseVal.getOriginalValueDate() != null) {
@@ -115,18 +121,16 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                     return "N/A";
                 }
             }
-        });
-        add(indicatorBaseDateLabel);
+        }));
 
-        final Label indicatorTargetValueLabel = new Label("target", new LoadableDetachableModel<String>() {
+        baseTargetContainer.add(new Label("target", new LoadableDetachableModel<String>() {
             @Override
             protected String load() {
                 return globalTargetVal.getOriginalValue() != null ? String.valueOf(globalTargetVal.getOriginalValue()) : "N/A";
             }
-        });
-        add(indicatorTargetValueLabel);
+        }));
 
-        final Label indicatorTargetDateLabel = new Label("targetDate", new LoadableDetachableModel<String>() {
+        baseTargetContainer.add(new Label("targetDate", new LoadableDetachableModel<String>() {
             @Override
             protected String load() {
                 if (globalTargetVal.getOriginalValueDate() != null) {
@@ -136,10 +140,18 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                     return "N/A";
                 }
             }
-        });
-        add(indicatorTargetDateLabel);
+        }));
 
-        AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, "Actual Values", false, 7);
+        add(baseTargetContainer);
+        AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, "Actual Values", false, 7) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (isVisible()) setVisible(!hasDisaggregation);
+            }
+        };
+        valuesTable.setOutputMarkupPlaceholderTag(true);
+        valuesTable.setOutputMarkupId(true);
         add(valuesTable);
 
         AmpAjaxLinkField addActualValue = new AmpAjaxLinkField("addActualValue", "Add Actual Value", "Add Actual Value") {
@@ -153,8 +165,16 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                 target.add(valuesTable);
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (isVisible()) setVisible(!hasDisaggregation);
+            }
         };
 
+        addActualValue.setOutputMarkupId(true);
+        addActualValue.setOutputMarkupPlaceholderTag(true);
         add(addActualValue);
 
         AmpAjaxLinkField setValue = new AmpAjaxLinkField("setValues", "Set Value", "Set Value") {
@@ -191,10 +211,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection","Disaggregation Values", indicator);
         disaggPanel.setOutputMarkupId(true);
         disaggPanel.setOutputMarkupPlaceholderTag(true);
-        // Add disaggregation values subsection
-        if (indicator.getObject().getDisaggregation()== null || indicator.getObject().getDisaggregation().isEmpty()){
-            disaggPanel.setVisible(false);
-        }
+        disaggPanel.setVisible(hasDisaggregation);
         add(disaggPanel);
 
 

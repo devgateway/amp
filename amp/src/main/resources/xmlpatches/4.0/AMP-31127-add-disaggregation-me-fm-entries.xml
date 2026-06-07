@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-31127</jira>
+    <author>bmokandu</author>
+    <description>Add missing FM entries for Activity Form M&amp;E: Actual Values, Add Actual Value, Add Base Target Values (with children), Disaggregation Values, Disaggregation Actual Values, and Add Actual Value under Disaggregation Actual Values.</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+
+
+                INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent)
+                SELECT nextval('amp_modules_visibility_seq'),
+                       '/Activity Form/M&E/ME Item/Actual Values',
+                       NULL,
+                       true,
+                       (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item')
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item')
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Actual Values');
+
+                INSERT INTO amp_modules_templates (module, template)
+                SELECT (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Actual Values'),
+                       tv.id
+                FROM   amp_templates_visibility tv
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_templates mt
+                               WHERE  mt.template = tv.id
+                                 AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item'))
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_templates mt
+                                  WHERE  mt.template = tv.id
+                                    AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Actual Values'));
+
+                INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent)
+                SELECT nextval('amp_modules_visibility_seq'),
+                       '/Activity Form/M&E/ME Item/Add Actual Value',
+                       NULL,
+                       true,
+                       (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item')
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item')
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Actual Value');
+
+                INSERT INTO amp_modules_templates (module, template)
+                SELECT (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Actual Value'),
+                       tv.id
+                FROM   amp_templates_visibility tv
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_templates mt
+                               WHERE  mt.template = tv.id
+                                 AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item'))
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_templates mt
+                                  WHERE  mt.template = tv.id
+                                    AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Actual Value'));
+
+                INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent)
+                SELECT nextval('amp_modules_visibility_seq'),
+                       '/Activity Form/M&E/ME Item/Add Base Target Values',
+                       NULL,
+                       true,
+                       (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item')
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item')
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values');
+
+                INSERT INTO amp_modules_templates (module, template)
+                SELECT (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values'),
+                       tv.id
+                FROM   amp_templates_visibility tv
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_templates mt
+                               WHERE  mt.template = tv.id
+                                 AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item'))
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_templates mt
+                                  WHERE  mt.template = tv.id
+                                    AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values'));
+
+                INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent)
+                SELECT nextval('amp_modules_visibility_seq'),
+                       '/Activity Form/M&E/ME Item/Add Base Target Values/Base Target Value',
+                       NULL,
+                       true,
+                       (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values')
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values')
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values/Base Target Value');
+
+                INSERT INTO amp_modules_templates (module, template)
+                SELECT (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values/Base Target Value'),
+                       tv.id
+                FROM   amp_templates_visibility tv
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_templates mt
+                               WHERE  mt.template = tv.id
+                                 AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values'))
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_templates mt
+                                  WHERE  mt.template = tv.id
+                                    AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values/Base Target Value'));
+
+                INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent)
+                SELECT nextval('amp_modules_visibility_seq'),
+                       '/Activity Form/M&E/ME Item/Add Base Target Values/Add Base Value',
+                       NULL,
+                       true,
+                       (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values')
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values')
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values/Add Base Value');
+
+                INSERT INTO amp_modules_templates (module, template)
+                SELECT (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values/Add Base Value'),
+                       tv.id
+                FROM   amp_templates_visibility tv
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_templates mt
+                               WHERE  mt.template = tv.id
+                                 AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values'))
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_templates mt
+                                  WHERE  mt.template = tv.id
+                                    AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values/Add Base Value'));
+
+                INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent)
+                SELECT nextval('amp_modules_visibility_seq'),
+                       '/Activity Form/M&E/ME Item/Add Base Target Values/Add Target Value',
+                       NULL,
+                       true,
+                       (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values')
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values')
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values/Add Target Value');
+
+                INSERT INTO amp_modules_templates (module, template)
+                SELECT (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values/Add Target Value'),
+                       tv.id
+                FROM   amp_templates_visibility tv
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_templates mt
+                               WHERE  mt.template = tv.id
+                                 AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values'))
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_templates mt
+                                  WHERE  mt.template = tv.id
+                                    AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Add Base Target Values/Add Target Value'));
+
+                INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent)
+                SELECT nextval('amp_modules_visibility_seq'),
+                       '/Activity Form/M&E/ME Item/Disaggregation Values',
+                       NULL,
+                       true,
+                       (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item')
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item')
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Disaggregation Values');
+
+                INSERT INTO amp_modules_templates (module, template)
+                SELECT (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Disaggregation Values'),
+                       tv.id
+                FROM   amp_templates_visibility tv
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_templates mt
+                               WHERE  mt.template = tv.id
+                                 AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item'))
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_templates mt
+                                  WHERE  mt.template = tv.id
+                                    AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Disaggregation Values'));
+
+                INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent)
+                SELECT nextval('amp_modules_visibility_seq'),
+                       '/Activity Form/M&E/ME Item/Disaggregation Values/Disaggregation Actual Values',
+                       NULL,
+                       true,
+                       (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Disaggregation Values')
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Disaggregation Values')
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Disaggregation Values/Disaggregation Actual Values');
+
+                INSERT INTO amp_modules_templates (module, template)
+                SELECT (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Disaggregation Values/Disaggregation Actual Values'),
+                       tv.id
+                FROM   amp_templates_visibility tv
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_templates mt
+                               WHERE  mt.template = tv.id
+                                 AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Disaggregation Values'))
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_templates mt
+                                  WHERE  mt.template = tv.id
+                                    AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Disaggregation Values/Disaggregation Actual Values'));
+
+
+                INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent)
+                SELECT nextval('amp_modules_visibility_seq'),
+                       '/Activity Form/M&E/ME Item/Disaggregation Values/Disaggregation Actual Values/Add Actual Value',
+                       NULL,
+                       true,
+                       (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Disaggregation Values/Disaggregation Actual Values')
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Disaggregation Values/Disaggregation Actual Values')
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Disaggregation Values/Disaggregation Actual Values/Add Actual Value');
+
+                INSERT INTO amp_modules_templates (module, template)
+                SELECT (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Disaggregation Values/Disaggregation Actual Values/Add Actual Value'),
+                       tv.id
+                FROM   amp_templates_visibility tv
+                WHERE  EXISTS (SELECT 1 FROM amp_modules_templates mt
+                               WHERE  mt.template = tv.id
+                                 AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Disaggregation Values/Disaggregation Actual Values'))
+                  AND NOT EXISTS (SELECT 1 FROM amp_modules_templates mt
+                                  WHERE  mt.template = tv.id
+                                    AND  mt.module   = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/M&E/ME Item/Disaggregation Values/Disaggregation Actual Values/Add Actual Value'))
+
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

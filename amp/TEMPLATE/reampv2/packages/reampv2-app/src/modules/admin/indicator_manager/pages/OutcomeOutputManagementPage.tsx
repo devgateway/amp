@@ -6,7 +6,7 @@ import styles from '../components/table/Table.module.css';
 import OutcomeModal from '../components/modals/OutcomeModal';
 import OutputModal from '../components/modals/OutputModal';
 import action_style from '../components/table/IndicatorTable.module.css';
-import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from '@murasoftware/react-bootstrap-table2-toolkit';
+import ToolkitProvider, { Search, ToolkitContextType } from '@murasoftware/react-bootstrap-table2-toolkit';
 import paginationFactory from '@musicstory/react-bootstrap-table2-paginator';
 import initialTranslations from '../config/initialTranslations.json';
 import './css/ModalZIndexFix.css'; // Add z-index to modal and backdrop to ensure visibility
@@ -56,6 +56,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
     {
       dataField: 'actions',
       text: t('amp.outcomeoutput:actions'),
+      csvExport: false,
       formatter: (_: any, row: Outcome) => (
         <>
           <div className={action_style.action_container}
@@ -390,7 +391,49 @@ const OutcomeOutputManagementPage: React.FC = () => {
   };
 
   const { SearchBar } = Search;
-  const { ExportCSVButton } = CSVExport;
+
+  const escapeCSV = (value: string) => {
+    const str = value == null ? '' : String(value);
+    return str.includes(',') || str.includes('"') || str.includes('\n')
+      ? `"${str.replace(/"/g, '""')}"`
+      : str;
+  };
+
+  const handleExportCSV = () => {
+    const headers = [
+      t('amp.outcomeoutput:outcome-name'),
+      t('amp.outcomeoutput:description'),
+      t('amp.outcomeoutput:output-name'),
+      t('amp.outcomeoutput:output-description'),
+    ];
+    const rows: string[][] = [];
+    (outcomes as Outcome[]).forEach((outcome) => {
+      if (outcome.outputs && outcome.outputs.length > 0) {
+        outcome.outputs.forEach((output) => {
+          rows.push([
+            outcome.name,
+            outcome.description || '',
+            output.name,
+            output.description || '',
+          ]);
+        });
+      } else {
+        rows.push([outcome.name, outcome.description || '', '', '']);
+      }
+    });
+    const csvContent = [headers, ...rows]
+      .map((row) => row.map(escapeCSV).join(','))
+      .join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'outcomes-outputs.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   const paginationOptions: PaginationOptions = {
     paginationSize: 4,
@@ -443,7 +486,6 @@ const OutcomeOutputManagementPage: React.FC = () => {
           data={outcomes}
           columns={columns}
           search
-          exportCSV
         >
           {(props: ToolkitContextType) => (
             <div>
@@ -455,9 +497,9 @@ const OutcomeOutputManagementPage: React.FC = () => {
                       <i className="fa fa-plus" /> {t('amp.outcomeoutput:add-new-outcome')}
                     </Button>
                     {' '}
-                    <ExportCSVButton {...props.csvProps} className={styles.export_button}>
+                    <Button variant="secondary" className={styles.export_button} onClick={handleExportCSV}>
                       <i className="fa fa-download" /> {t('amp.outcomeoutput:export-csv')}
-                    </ExportCSVButton>
+                    </Button>
                   </div>
                 </Col>
                 <Col sm={8}>

@@ -48,7 +48,7 @@ public class IndicatorManagerService {
 
     public static final String FILTER_BY_PROGRAM = "Filter by Program";
 
-    public static final String FILTER_BY_SECTOR = "Filter By Sector";
+    public static final String FILTER_BY_SECTOR = "Filter by Sector";
 
     public static String INDICATOR_CATEGORY_KEY = "core_indicator_type";
 
@@ -348,11 +348,11 @@ public class IndicatorManagerService {
         dateTime = DateTime.parse(endInString, formatter);
 
         if(value.getRevisedValueDate() != null) {
-            if (dateTime.isAfter(value.getRevisedValueDate().getTime())) {
+            if (new DateTime(value.getRevisedValueDate().getTime()).isAfter(dateTime)) {
                 throw new ApiRuntimeException(BAD_REQUEST,
                         ApiError.toError(error + "Revised value date "
                                 + simpleDateFormat.format(value.getRevisedValueDate())
-                                + " should be greater than " + endInString));
+                                + " should be less than " + endInString));
             }
         }
 

@@ -23,9 +23,11 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -191,12 +193,15 @@ public class IndicatorManagerService {
         indicator.setData(indicatorRequest.getData());
         indicator.setDataSource(indicatorRequest.getDataSource());
         if (indicatorRequest.getDisaggregation() != null && !indicatorRequest.getDisaggregation().isEmpty()) {
-            Set<AmpCategoryValue> disaggregationCats = indicatorRequest.getDisaggregation().stream()
+            List<AmpCategoryValue> disaggregationCats = indicatorRequest.getDisaggregation().stream()
+                .filter(Objects::nonNull)
+                .distinct()
                 .map(id -> session.get(AmpCategoryValue.class, id))
-                .collect(Collectors.toSet());
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
             indicator.setDisaggregation(disaggregationCats);
         } else {
-            indicator.setDisaggregation(new HashSet<>());
+            indicator.setDisaggregation(new ArrayList<>());
         }
         if (indicatorRequest.getUnitOfMeasure() != null) {
             AmpCategoryValue unitOfMeasureCat = session.get(AmpCategoryValue.class, indicatorRequest.getUnitOfMeasure());
@@ -470,14 +475,17 @@ public class IndicatorManagerService {
             indicator.setLogframeLinks(indRequest.getLogframeLinks());
             indicator.setData(indRequest.getData());
             indicator.setDataSource(indRequest.getDataSource());
-            // Convert Set<Long> disaggregation to Set<AmpCategoryValue>
+            // Convert List<Long> disaggregation to List<AmpCategoryValue>
             if (indRequest.getDisaggregation() != null && !indRequest.getDisaggregation().isEmpty()) {
-                Set<AmpCategoryValue> disaggregationCats = indRequest.getDisaggregation().stream()
+                List<AmpCategoryValue> disaggregationCats = indRequest.getDisaggregation().stream()
+                    .filter(Objects::nonNull)
+                    .distinct()
                     .map(id -> (AmpCategoryValue) session.get(AmpCategoryValue.class, id))
-                    .collect(Collectors.toSet());
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
                 indicator.setDisaggregation(disaggregationCats);
             } else {
-                indicator.setDisaggregation(new HashSet<>());
+                indicator.setDisaggregation(new ArrayList<>());
             }
             // Convert Long unitOfMeasure to AmpCategoryValue
             if (indRequest.getUnitOfMeasure() != null) {

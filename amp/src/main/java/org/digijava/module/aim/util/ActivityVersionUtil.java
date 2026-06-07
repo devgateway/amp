@@ -219,20 +219,20 @@ public class ActivityVersionUtil {
      * @throws CloneNotSupportedException
      */
     public static AmpActivityVersion cloneActivity(AmpActivityVersion in) throws CloneNotSupportedException {
-        AmpActivityVersion out = (AmpActivityVersion) in.clone();
+        // Deep-copy first so all nested objects are independent instances.
+        AmpActivityVersion out = SerializationUtils.clone(in);
 
-        
         Class clazz = AmpActivityFields.class;
-        
-        Field[] fields = clazz.getDeclaredFields();//clazz.getFields();
+
+        // Re-initialize every Collection field: calls prepareMerge() on each
+        // Versionable child, which nulls its DB id and re-points its activity
+        Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             if (Collection.class.isAssignableFrom(field.getType())) {
                 logger.debug("Init set: " + field.getName());
                 initSet(out, field);
             }
         }
-        out = SerializationUtils.clone(in);
-
 
 //        out.setAmpActivityGroup(null);
 

@@ -8,6 +8,7 @@ package org.digijava.module.aim.dbentity;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
+import org.hibernate.collection.internal.PersistentSet;
 
 import java.io.Serializable;
 import java.util.*;
@@ -61,7 +62,21 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Compar
      * @param responses The responses to set.
      */
     public void setResponses(Set<AmpAhsurveyResponse> responses) {
-        this.responses = responses;
+        if (responses instanceof PersistentSet) {
+            this.responses = responses;
+        } else {
+            if (this.responses == null) {
+                if (responses == null) {
+                    responses = new HashSet<>();
+                }
+                this.responses = new HashSet<>(responses);
+            }
+            this.responses.clear();
+            if (responses == null) {
+                responses = new HashSet<>();
+            }
+            this.responses.addAll(responses);
+        }
     }
     /**
      * @return Returns the ampActivityId.
@@ -179,14 +194,18 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Compar
             Set<AmpAhsurveyResponse> responses = new HashSet<AmpAhsurveyResponse>();
             Iterator<AmpAhsurveyResponse> i = aux.responses.iterator();
             while (i.hasNext()) {
-                AmpAhsurveyResponse newResp = (AmpAhsurveyResponse) i.next().clone();
+                AmpAhsurveyResponse currentResponse = i.next();
+                if (currentResponse == null || currentResponse.getAmpQuestionId() == null) {
+                    continue;
+                }
+                AmpAhsurveyResponse newResp = (AmpAhsurveyResponse) currentResponse.clone();
                 newResp.setAmpAHSurveyId(aux);
                 newResp.setAmpReponseId(null);
                 responses.add(newResp);
             }
-            aux.responses = responses;
+            aux.setResponses(responses.isEmpty() ? null : responses);
         } else {
-            aux.responses = null;
+            aux.setResponses(null);
         }
         return aux;
     }

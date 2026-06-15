@@ -22,6 +22,7 @@
 
 package org.digijava.kernel.taglib.html;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.taglib.html.Constants;
 import org.digijava.kernel.request.Site;
@@ -31,6 +32,7 @@ import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteConfigUtils;
 import org.digijava.kernel.util.SiteUtils;
+import org.springframework.security.web.csrf.CsrfToken;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -161,6 +163,7 @@ public class FormTag
         results.append(this.renderFormStart());
 
         results.append(renderToken());
+        results.append(renderSpringCsrfToken(request));
 
         TagUtils.getInstance().write(pageContext, results.toString());
 
@@ -284,6 +287,30 @@ public class FormTag
         }
         results.append(">");
         return results.toString();
+    }
+
+    protected String renderSpringCsrfToken(HttpServletRequest request) {
+        if (isSafeMethod()) {
+            return "";
+        }
+
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        if (csrfToken == null) {
+            return "";
+        }
+
+        return "<input type=\"hidden\" name=\""
+                + StringEscapeUtils.escapeHtml(csrfToken.getParameterName())
+                + "\" value=\""
+                + StringEscapeUtils.escapeHtml(csrfToken.getToken())
+                + "\" />";
+    }
+
+    private boolean isSafeMethod() {
+        return "get".equalsIgnoreCase(method)
+                || "head".equalsIgnoreCase(method)
+                || "options".equalsIgnoreCase(method)
+                || "trace".equalsIgnoreCase(method);
     }
 
     /**

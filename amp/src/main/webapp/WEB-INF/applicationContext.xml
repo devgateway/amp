@@ -18,6 +18,8 @@
 	<http-firewall ref="customHttpFirewall"/>
 
 	<beans:bean id="gisAuthenticationCheckService" class="org.digijava.kernel.util.GisSecurityUtilService"/>
+	<beans:bean id="csrfTokenRepository" class="org.springframework.security.web.csrf.CookieCsrfTokenRepository" factory-method="withHttpOnlyFalse"/>
+	<beans:bean id="ampWebCsrfRequestMatcher" class="org.digijava.kernel.security.csrf.AmpWebCsrfRequestMatcher"/>
 
 
 	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
@@ -201,22 +203,22 @@
 
     <http pattern="/um/user/showResetForm.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<csrf disabled="true"/>
+		<csrf request-matcher-ref="ampWebCsrfRequestMatcher" token-repository-ref="csrfTokenRepository"/>
 	</http>
 
 	<http pattern="/contentrepository/docFromTemplate.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<csrf disabled="true"/>
+		<csrf request-matcher-ref="ampWebCsrfRequestMatcher" token-repository-ref="csrfTokenRepository"/>
 	</http>
 
 	<http pattern="/contentrepository/publicDocTabManager.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<csrf disabled="true"/>
+		<csrf request-matcher-ref="ampWebCsrfRequestMatcher" token-repository-ref="csrfTokenRepository"/>
 	</http>
 
     <http pattern="/um/userResetPassword.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<csrf disabled="true"/>
+		<csrf request-matcher-ref="ampWebCsrfRequestMatcher" token-repository-ref="csrfTokenRepository"/>
 	</http>
 
     <http pattern="/index.do*"  use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
@@ -250,7 +252,7 @@
 	<http entry-point-ref="digestEntryPoint" realm="AMP-Realm" use-expressions="false">
 		<!-- do not allow anonymous tokens, they are enabled by default ! -->
 		<anonymous enabled="false" />
-		<csrf disabled="true"/>
+		<csrf request-matcher-ref="ampWebCsrfRequestMatcher" token-repository-ref="csrfTokenRepository"/>
 
 		<!-- digest filter reference, as the authentication filter for the security
 			chain -->

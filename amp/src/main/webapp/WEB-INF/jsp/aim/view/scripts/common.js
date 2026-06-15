@@ -1,6 +1,121 @@
  function unload() {
  }
 
+ (function () {
+	 var CSRF_COOKIE = "XSRF-TOKEN";
+	 var CSRF_HEADER = "X-XSRF-TOKEN";
+	 var CSRF_PARAMETER = "_csrf";
+
+	 function getCookie(name) {
+		 var namePrefix = name + "=";
+		 var cookies = document.cookie ? document.cookie.split(";") : [];
+		 for (var index = 0; index < cookies.length; index++) {
+			 var cookie = cookies[index].replace(/^\s+|\s+$/g, "");
+			 if (cookie.indexOf(namePrefix) === 0) {
+				 return decodeURIComponent(cookie.substring(namePrefix.length));
+			 }
+		 }
+		 return null;
+	 }
+
+	 function getCsrfToken() {
+		 return getCookie(CSRF_COOKIE);
+	 }
+
+	 function isUnsafeMethod(method) {
+		 var normalizedMethod = (method || "GET").toUpperCase();
+		 return normalizedMethod !== "GET" && normalizedMethod !== "HEAD"
+			 && normalizedMethod !== "OPTIONS" && normalizedMethod !== "TRACE";
+	 }
+
+	 function isSameOrigin(url) {
+		 if (!url || (url.charAt(0) === "/" && url.charAt(1) !== "/")) {
+			 return true;
+		 }
+		 if (url.indexOf("http://") !== 0 && url.indexOf("https://") !== 0 && url.indexOf("//") !== 0) {
+			 return true;
+		 }
+
+		 var anchor = document.createElement("a");
+		 anchor.href = url;
+		 return anchor.protocol === window.location.protocol && anchor.host === window.location.host;
+	 }
+
+	 function addCsrfToForm(form) {
+		 var token = getCsrfToken();
+		 if (!token || !form || !isUnsafeMethod(form.method) || !isSameOrigin(form.action)) {
+			 return;
+		 }
+
+		 var tokenInput = form.elements[CSRF_PARAMETER];
+		 if (!tokenInput) {
+			 tokenInput = document.createElement("input");
+			 tokenInput.type = "hidden";
+			 tokenInput.name = CSRF_PARAMETER;
+			 form.appendChild(tokenInput);
+		 }
+		 tokenInput.value = token;
+	 }
+
+	 if (document.addEventListener) {
+		 document.addEventListener("submit", function (event) {
+			 addCsrfToForm(event.target);
+		 }, true);
+	 } else if (document.attachEvent) {
+		 document.attachEvent("onsubmit", function () {
+			 addCsrfToForm(window.event.srcElement);
+		 });
+	 }
+
+	 if (window.XMLHttpRequest && window.XMLHttpRequest.prototype) {
+		 var originalOpen = window.XMLHttpRequest.prototype.open;
+		 var originalSend = window.XMLHttpRequest.prototype.send;
+
+		 window.XMLHttpRequest.prototype.open = function (method, url) {
+			 this.ampCsrfMethod = method;
+			 this.ampCsrfUrl = url;
+			 return originalOpen.apply(this, arguments);
+		 };
+
+		 window.XMLHttpRequest.prototype.send = function () {
+			 var token = getCsrfToken();
+			 if (token && isUnsafeMethod(this.ampCsrfMethod) && isSameOrigin(this.ampCsrfUrl)) {
+				 try {
+					 this.setRequestHeader(CSRF_HEADER, token);
+				 } catch (ignored) {
+				 }
+			 }
+			 return originalSend.apply(this, arguments);
+		 };
+	 }
+
+	 if (window.fetch) {
+		 var originalFetch = window.fetch;
+		 window.fetch = function (input, init) {
+			 var options = init || {};
+			 var method = options.method || (input && input.method) || "GET";
+			 var url = typeof input === "string" ? input : (input && input.url);
+			 var token = getCsrfToken();
+
+			 if (token && isUnsafeMethod(method) && isSameOrigin(url)) {
+				 options = init || {};
+				 if (window.Headers && options.headers instanceof window.Headers) {
+					 options.headers = new window.Headers(options.headers);
+					 options.headers.set(CSRF_HEADER, token);
+				 } else if (Object.prototype.toString.call(options.headers) === "[object Array]") {
+					 options.headers.push([CSRF_HEADER, token]);
+				 } else {
+					 options.headers = options.headers || {};
+					 options.headers[CSRF_HEADER] = token;
+				 }
+				 return originalFetch.call(this, input, options);
+			 }
+
+			 return originalFetch.apply(this, arguments);
+		 };
+	 }
+ }());
+
 
  if (!Array.prototype.indexOf) {
      Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {

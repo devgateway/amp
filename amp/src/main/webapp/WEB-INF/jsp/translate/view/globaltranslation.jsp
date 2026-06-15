@@ -115,6 +115,7 @@ if(request.getAttribute("No_rows")!=null){
 	<tr>
 	<td>
 	<form name="form1" method="POST" action="<%=request.getContextPath()%>/translate/global/global.do">
+	<jsp:include page="/WEB-INF/jsp/common/csrfInput.jsp" />
 	<input type="hidden" name="src_locale" value="en">
 	  <input type="hidden" name="target_locale" value="en">
 	  <input type="hidden" name="anc" value="">

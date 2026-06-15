@@ -182,7 +182,6 @@
 
     <http pattern="/contentrepository/documentManager.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<csrf disabled="true"/>
     </http>
 
     <http pattern="/viewTeamReports.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
@@ -196,7 +195,6 @@
 	</http>
 	<http pattern="/aim/reportWizard.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<csrf disabled="true"/>
 	</http>
 
     <http pattern="/um/user/showResetForm.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
@@ -206,18 +204,15 @@
 
 	<http pattern="/contentrepository/docFromTemplate.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<csrf disabled="true"/>
 	</http>
 
 	<http pattern="/contentrepository/publicDocTabManager.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<csrf disabled="true"/>
 	</http>
 
     <http pattern="/um/userResetPassword.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<csrf disabled="true"/>
-	</http>
+    </http>
 
     <http pattern="/index.do*"  use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
@@ -250,7 +245,7 @@
 	<http entry-point-ref="digestEntryPoint" realm="AMP-Realm" use-expressions="false">
 		<!-- do not allow anonymous tokens, they are enabled by default ! -->
 		<anonymous enabled="false" />
-		<csrf disabled="true"/>
+		<csrf token-repository-ref="csrfTokenRepository"/>
 
 		<!-- digest filter reference, as the authentication filter for the security
 			chain -->
@@ -265,6 +260,15 @@
 
 		<custom-filter position="LOGOUT_FILTER" ref="logoutFilter" />
 	</http>
+
+	<!--
+		CSRF token stored in a cookie readable by JavaScript (Double Submit Cookie pattern).
+		Axios (used by reampv2 SPA) reads XSRF-TOKEN and sends X-XSRF-TOKEN automatically
+		for same-origin requests without any SPA-side code changes.
+	-->
+	<beans:bean id="csrfTokenRepository"
+			class="org.springframework.security.web.csrf.CookieCsrfTokenRepository"
+			factory-method="withHttpOnlyFalse"/>
 
 	<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"
 				factory-method="getInstance"/>

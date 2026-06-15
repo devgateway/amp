@@ -184,6 +184,17 @@
 		<url-pattern>/rest/*</url-pattern>
 	</filter-mapping>
 
+	<!-- CSRF protection for the REST layer (Double Submit Cookie pattern).
+	     Must run AFTER ampClientDetector so non-browser clients are correctly identified. -->
+	<filter>
+		<filter-name>restCsrfFilter</filter-name>
+		<filter-class>org.digijava.kernel.ampapi.filters.RestCsrfFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>restCsrfFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
+
 	<filter>
 		<filter-name>apiCompatFilter</filter-name>
 		<filter-class>org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompatFilter</filter-class>

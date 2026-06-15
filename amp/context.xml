@@ -3,6 +3,10 @@
 <Context path="/" debug="0" reloadable="false" unloadDelay="4000" swallowOutput="true"
 allowLinking="true" antiJARLocking="" antiResourceLocking="" clearReferencesStopTimerThreads="true"
 clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTlds="false">
+  <!-- SameSite=Strict prevents browsers from sending JSESSIONID on cross-origin requests,
+       providing defense-in-depth CSRF protection for the /rest/** API layer. -->
+  <CookieProcessor className="org.apache.tomcat.util.http.Rfc6265CookieProcessor"
+                   sameSiteCookies="strict"/>
   <Environment name="hostname" value="" type="java.lang.String"/> 
   
   <!-- PostgreSQL connection -->

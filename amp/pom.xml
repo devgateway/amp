@@ -417,6 +417,10 @@
                     <groupId>org.glassfish.jaxb</groupId>
                     <artifactId>jaxb-runtime</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>javax.activation</groupId>
+                    <artifactId>javax.activation-api</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -1218,12 +1222,12 @@
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-translate</artifactId>
-            <version>2.3.2</version>
+            <version>1.95.3</version>
         </dependency>
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-storage</artifactId>
-            <version>2.6.1</version>
+            <version>1.113.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

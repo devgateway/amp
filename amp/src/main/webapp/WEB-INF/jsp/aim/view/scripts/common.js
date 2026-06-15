@@ -2,6 +2,11 @@
  }
 
  (function () {
+	 if (window.ampCsrfProtectionInstalled) {
+		 return;
+	 }
+	 window.ampCsrfProtectionInstalled = true;
+
 	 var CSRF_COOKIE = "XSRF-TOKEN";
 	 var CSRF_HEADER = "X-XSRF-TOKEN";
 	 var CSRF_PARAMETER = "_csrf";
@@ -65,6 +70,14 @@
 		 document.attachEvent("onsubmit", function () {
 			 addCsrfToForm(window.event.srcElement);
 		 });
+	 }
+
+	 if (window.HTMLFormElement && window.HTMLFormElement.prototype && window.HTMLFormElement.prototype.submit) {
+		 var originalSubmit = window.HTMLFormElement.prototype.submit;
+		 window.HTMLFormElement.prototype.submit = function () {
+			 addCsrfToForm(this);
+			 return originalSubmit.apply(this, arguments);
+		 };
 	 }
 
 	 if (window.XMLHttpRequest && window.XMLHttpRequest.prototype) {

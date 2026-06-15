@@ -32,6 +32,9 @@ public class AmpWebCsrfRequestMatcher implements RequestMatcher {
         if (isPublicDocTabManagerStateChange(request)) {
             return true;
         }
+        if (isContentRepositoryDocumentDelete(request)) {
+            return true;
+        }
 
         String method = request.getMethod();
         if (method != null && SAFE_METHODS.contains(method.toUpperCase(Locale.ROOT))) {
@@ -41,8 +44,26 @@ public class AmpWebCsrfRequestMatcher implements RequestMatcher {
         if (isReadOnlyDocFromTemplatePost(request)) {
             return false;
         }
+        if (isReadOnlyDocumentManagerPost(request)) {
+            return false;
+        }
 
         return !readOnlyPostMatcher.matches(request);
+    }
+
+    private boolean isReadOnlyDocumentManagerPost(HttpServletRequest request) {
+        if (!"POST".equalsIgnoreCase(request.getMethod())
+                || !"/contentrepository/documentManager.do".equals(getRequestPath(request))
+                || isMultipart(request)) {
+            return false;
+        }
+
+        return "true".equalsIgnoreCase(request.getParameter("ajaxDocumentList"));
+    }
+
+    private boolean isMultipart(HttpServletRequest request) {
+        String contentType = request.getContentType();
+        return contentType != null && contentType.toLowerCase(Locale.ROOT).startsWith("multipart/form-data");
     }
 
     private boolean isReadOnlyDocFromTemplatePost(HttpServletRequest request) {
@@ -66,6 +87,10 @@ public class AmpWebCsrfRequestMatcher implements RequestMatcher {
         return "save".equalsIgnoreCase(action)
                 || "savePositions".equalsIgnoreCase(action)
                 || "delete".equalsIgnoreCase(action);
+    }
+
+    private boolean isContentRepositoryDocumentDelete(HttpServletRequest request) {
+        return "/contentrepository/deleteForDocumentManager.do".equals(getRequestPath(request));
     }
 
     private String getRequestPath(HttpServletRequest request) {

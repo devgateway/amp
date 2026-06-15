@@ -428,6 +428,12 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
             <version>5.6.15.Final</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.activation</groupId>
+                    <artifactId>javax.activation-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.hibernate.common</groupId>
@@ -463,6 +469,10 @@
                 <exclusion>
                     <groupId>postgresql</groupId>
                     <artifactId>postgresql</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.activation</groupId>
+                    <artifactId>javax.activation-api</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

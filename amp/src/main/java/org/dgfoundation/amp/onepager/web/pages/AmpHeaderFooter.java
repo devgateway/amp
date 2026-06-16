@@ -86,6 +86,7 @@ public class AmpHeaderFooter extends WebPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         YuiLib.load(response);
+        response.render(JavaScriptHeaderItem.forUrl("/static/aim/view/scripts/common.js"));
         response.render(JavaScriptHeaderItem.forUrl("/ckeditor_4.4.6/ckeditor.js"));
         response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/opentip/opentip-jquery2-4-6.js"));
         response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpStructuresFormSectionFeature.class, "gisPopup.js")));

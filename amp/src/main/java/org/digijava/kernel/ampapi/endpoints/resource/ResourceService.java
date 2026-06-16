@@ -140,7 +140,12 @@ public class ResourceService {
         List<JsonApiResponse> resources = new ArrayList<>();
 
         for (String uuid : uuids) {
-            resources.add(getResource(uuid));
+            Node readNode = DocumentManagerUtil.getReadNode(uuid, TLSUtils.getRequest());
+            if (readNode == null) {
+                resources.add(new JsonApiResponse(ApiError.toError(ResourceErrors.RESOURCE_NOT_FOUND)));
+            } else {
+                resources.add(getResource(uuid));
+            }
         }
 
         return resources;

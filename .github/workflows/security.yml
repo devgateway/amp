@@ -23,8 +23,6 @@ on:
 
 permissions:
   contents: read
-  # Required to upload SARIF results to GitHub Security tab
-  security-events: write
 
 jobs:
   # -----------------------------------------------------------------------
@@ -116,13 +114,6 @@ jobs:
           name: owasp-dependency-check-report
           path: amp/target/dependency-check-report/
           retention-days: 30
-
-      - name: Upload SARIF to GitHub Security tab
-        if: always() && hashFiles('amp/target/dependency-check-report/dependency-check-report.sarif') != ''
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: amp/target/dependency-check-report/dependency-check-report.sarif
-          category: owasp-dependency-check
 
       - name: Fail if OWASP found CVEs
         if: steps.owasp.outcome == 'failure'
@@ -267,13 +258,6 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
         continue-on-error: true
-
-      - name: Upload Trivy SARIF to GitHub Security tab
-        if: always() && hashFiles('trivy-results.sarif') != ''
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: trivy-results.sarif
-          category: trivy-container
 
       - name: Upload Trivy SARIF artifact
         if: always()

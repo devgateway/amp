@@ -10,8 +10,21 @@
 	<!-- ******************************************* -->
 	<!-- * DO NOT ADD ANYTHING BEFORE THIS SEGMENT * -->
 	<!-- ******************************************* -->
+	<!--
+	  Session cookie policy:
+	    HttpOnly  - prevents client-side JavaScript from reading the session token.
+	    Secure    - restricts cookie transmission to HTTPS connections only.
+	                Remove <secure>true</secure> for local development over plain HTTP.
+	    COOKIE    - disables URL-based session tracking so the session ID never
+	                appears in the request URI.
+	-->
 	<session-config>
 		<session-timeout>5</session-timeout>
+		<cookie-config>
+			<http-only>true</http-only>
+			<secure>true</secure>
+		</cookie-config>
+		<tracking-mode>COOKIE</tracking-mode>
 	</session-config>
 	<filter>
 		<filter-name>javamelody</filter-name>
@@ -32,6 +45,18 @@
 			org.springframework.security.web.session.HttpSessionEventPublisher
 		</listener-class>
 	</listener>
+
+	<!-- Browser-hardening response headers (X-Frame-Options, CSP, HSTS, etc.) -->
+	<filter>
+		<filter-name>securityHeadersFilter</filter-name>
+		<filter-class>org.digijava.kernel.web.SecurityHeadersFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>securityHeadersFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
 
 	<filter>
 		<filter-name>gzipRequestFilter</filter-name>

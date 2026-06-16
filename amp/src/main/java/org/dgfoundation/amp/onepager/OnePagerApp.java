@@ -172,22 +172,9 @@ public class OnePagerApp extends AuthenticatedWebApplication {
         addSpringCsrfTokenToWicketAjax();
         addWicketCsrfProtection();
 
-//        getRequestCycleListeners().add(new AbstractRequestCycleListener() {
-//            @Override
-//            public void onBeginRequest(RequestCycle cycle) {
-//                WebResponse response = (WebResponse) cycle.getResponse();
-//                response.setHeader("Content-Security-Policy",
-//                        "default-src 'self'; " +
-//                                "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
-//                                "style-src 'self' 'unsafe-inline'; " +
-//                                "img-src 'self' data:; " +
-//                                "frame-ancestors 'none'; " +
-//                                "object-src 'none';");
-//                response.setHeader("X-Frame-Options", "SAMEORIGIN");
-//            }
-//        });
-
-
+        // Browser hardening headers (X-Frame-Options, Content-Security-Policy, HSTS, etc.)
+        // are now applied globally by SecurityHeadersFilter registered in web.xml, so no
+        // per-cycle header injection is needed here.
 
         setHeaderResponseDecorator(new IHeaderResponseDecorator() {
             @Override

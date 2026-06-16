@@ -15,6 +15,12 @@ public class AmpWebCsrfRequestMatcher implements RequestMatcher {
 
     private static final Set<String> SAFE_METHODS = new HashSet<>(Arrays.asList("GET", "HEAD", "TRACE", "OPTIONS"));
 
+    /**
+     * Wicket paths are protected by Wicket's own CsrfPreventionRequestCycleListener
+     * (Origin/Referer header check) registered in OnePagerApp. Spring CSRF is not needed there.
+     */
+    private final AntPathRequestMatcher wicketMatcher = new AntPathRequestMatcher("/wicket/**");
+
     private final RequestMatcher readOnlyPostMatcher = new OrRequestMatcher(
             new AntPathRequestMatcher("/search/search.do", "POST"),
             new AntPathRequestMatcher("/aim/filterDesktopActivities.do", "POST"),
@@ -29,6 +35,10 @@ public class AmpWebCsrfRequestMatcher implements RequestMatcher {
 
     @Override
     public boolean matches(HttpServletRequest request) {
+        // Wicket paths handled by Wicket's CsrfPreventionRequestCycleListener
+        if (wicketMatcher.matches(request)) {
+            return false;
+        }
         if (isPublicDocTabManagerStateChange(request)) {
             return true;
         }

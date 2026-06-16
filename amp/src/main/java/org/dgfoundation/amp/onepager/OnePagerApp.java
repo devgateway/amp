@@ -17,6 +17,7 @@ import org.apache.wicket.markup.head.*;
 import org.apache.wicket.markup.html.DecoratingHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.http.CsrfPreventionRequestCycleListener;
 import org.apache.wicket.protocol.http.servlet.ResponseIOException;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.protocol.http.servlet.ServletWebResponse;
@@ -169,6 +170,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
         getRequestCycleSettings().setResponseRequestEncoding("UTF-8");
         getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
         addSpringCsrfTokenToWicketAjax();
+        addWicketCsrfProtection();
 
 //        getRequestCycleListeners().add(new AbstractRequestCycleListener() {
 //            @Override
@@ -247,6 +249,18 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 
     private String escapeJavaScript(CharSequence value) {
         return JavaScriptUtils.escapeQuotes(value).toString();
+    }
+
+    /**
+     * Register Wicket's own Origin/Referer-based CSRF protection for all Wicket
+     * action requests. Spring CSRF is exempted for /wicket/** in AmpWebCsrfRequestMatcher;
+     * this listener enforces same-origin policy at the Wicket layer instead.
+     */
+    private void addWicketCsrfProtection() {
+        CsrfPreventionRequestCycleListener csrfListener = new CsrfPreventionRequestCycleListener();
+        // Allow requests that have no Origin/Referer header (curl, server-side calls, old proxies)
+        csrfListener.setNoOriginAction(CsrfPreventionRequestCycleListener.CsrfAction.ALLOW);
+        getRequestCycleListeners().add(csrfListener);
     }
 
 

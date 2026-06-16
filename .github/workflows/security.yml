@@ -6,9 +6,16 @@ on:
   pull_request:
     branches: [ "**" ]
   schedule:
-    # Re-scan every Monday at 06:00 UTC to catch newly published CVEs
+    # Re-scan every Monday at 06:00 UTC to catch newly published CVEs.
+    # Runs on the default branch; push/PR triggers cover all other branches.
     - cron: '0 6 * * 1'
   workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to scan (optional — leave blank to scan the branch selected above)'
+        required: false
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -17,16 +24,57 @@ permissions:
 
 jobs:
   # -----------------------------------------------------------------------
+  # Resolve the exact commit to scan.
+  # - Automatic triggers (push / PR / schedule): use the triggering SHA.
+  # - Manual (workflow_dispatch, no pr_number): use the branch selected in
+  #   the "Run workflow" UI — GitHub checks out that branch automatically.
+  # - Manual (workflow_dispatch + pr_number): fetch the PR head SHA via API.
+  # -----------------------------------------------------------------------
+  setup:
+    name: Resolve target ref
+    runs-on: ubuntu-latest
+    outputs:
+      ref: ${{ steps.resolve.outputs.ref }}
+    steps:
+      - name: Resolve checkout ref
+        id: resolve
+        run: |
+          PR="${{ inputs.pr_number }}"
+          if [ -n "$PR" ]; then
+            if ! [[ "$PR" =~ ^[0-9]+$ ]]; then
+              echo "::error::pr_number must be numeric, got: ${PR}"
+              exit 1
+            fi
+            DATA=$(curl -sf \
+              -H "Authorization: Bearer ${{ github.token }}" \
+              "https://api.github.com/repos/${{ github.repository }}/pulls/${PR}")
+            STATE=$(echo "$DATA" | jq -r '.state')
+            if [ "$STATE" != "open" ]; then
+              echo "::error::PR #${PR} is not open (state: ${STATE})"
+              exit 1
+            fi
+            HEAD_REF=$(echo "$DATA" | jq -r '.head.ref')
+            HEAD_SHA=$(echo "$DATA" | jq -r '.head.sha')
+            echo "Scanning PR #${PR}: branch=${HEAD_REF} sha=${HEAD_SHA}"
+            echo "ref=${HEAD_SHA}" >> $GITHUB_OUTPUT
+          else
+            echo "ref=${{ github.sha }}" >> $GITHUB_OUTPUT
+          fi
+
+  # -----------------------------------------------------------------------
   # Job 1: OWASP Dependency-Check (Java / Maven artifacts)
   # -----------------------------------------------------------------------
   owasp-maven:
     name: OWASP Dependency-Check (Maven)
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    needs: setup
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.setup.outputs.ref }}
 
       - name: Set up JDK 11
         uses: actions/setup-java@v4
@@ -74,6 +122,7 @@ jobs:
     name: npm audit (Frontend)
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    needs: setup
 
     strategy:
       fail-fast: false
@@ -103,6 +152,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.setup.outputs.ref }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -168,6 +219,7 @@ jobs:
     name: Trivy (Container Image)
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    needs: setup
     # Only scan the image on pushes to main/master or on PRs targeting them,
     # to avoid redundant scans on every feature branch push.
     if: |
@@ -180,6 +232,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.setup.outputs.ref }}
 
       - name: Build Docker image (no push)
         working-directory: amp

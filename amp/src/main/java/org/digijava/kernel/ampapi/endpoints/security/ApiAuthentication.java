@@ -27,7 +27,7 @@ import java.util.List;
  */
 public final class ApiAuthentication {
 
-    protected static Logger logger = Logger.getLogger(ApiAuthentication.class);
+    private static final Logger logger = Logger.getLogger(ApiAuthentication.class);
 
     public static ApiErrorMessage login(final User currentUser, final HttpServletRequest request) {
         ApiErrorMessage errorMessage = performSecurityChecks(currentUser, request);

@@ -31,7 +31,7 @@ import java.util.TreeMap;
  */
 public class ActionAuthorizer {
 
-    protected static final Logger logger = Logger.getLogger(ActionAuthorizer.class);
+    private static final Logger logger = Logger.getLogger(ActionAuthorizer.class);
     
     private static RuleHierarchy<AuthRule> ruleHierarchy = new RuleHierarchy.Builder<AuthRule>()
             .addRuleDependency(AuthRule.IN_WORKSPACE, AuthRule.AUTHENTICATED)
@@ -64,7 +64,7 @@ public class ActionAuthorizer {
         }
 
         Collection<AuthRule> authRules = ruleHierarchy.getEffectiveRules(apiMethod.authTypes());
-        logger.info("Authenticated: "+AuthRule.AUTHENTICATED +"User: "+TeamUtil.getCurrentUser());
+        logger.debug("Authenticated: " + AuthRule.AUTHENTICATED + " User: " + TeamUtil.getCurrentUser());
 
         if (authRules.contains(AuthRule.AUTHENTICATED) && TeamUtil.getCurrentUser() == null) {
             ApiErrorResponseService.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);

@@ -38,8 +38,11 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
@@ -203,7 +206,11 @@ public class SecurityService {
         }
     
         User user = UserUtils.getUserByEmailAddress(username);
-        if (user == null || !user.getPassword().equals(password)) {
+        String storedPassword = (user != null && user.getPassword() != null) ? user.getPassword() : "";
+        boolean passwordMatches = MessageDigest.isEqual(
+                storedPassword.toLowerCase(Locale.ROOT).getBytes(StandardCharsets.UTF_8),
+                password.toLowerCase(Locale.ROOT).getBytes(StandardCharsets.UTF_8));
+        if (user == null || !passwordMatches) {
             ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.INVALID_USER_PASSWORD);
         }
     
@@ -219,7 +226,7 @@ public class SecurityService {
             ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.INVALID_TEAM);
         }
     
-        storeInSession(username, password, teamMember, user);
+        storeInSession(username, teamMember, user);
         String ampTeamName = (teamMember == null) ? null : teamMember.getAmpTeam().getName();
         boolean isAdmin = user.isGlobalAdmin();
         return SecurityService.getInstance().createUserSessionInformation(isAdmin, user, ampTeamName, true);
@@ -240,11 +247,13 @@ public class SecurityService {
         return teamMember;
     }
     
-    private void storeInSession(String username, String password, AmpTeamMember teamMember, User user) {
-        final UsernamePasswordAuthenticationToken authRequest =
-                new UsernamePasswordAuthenticationToken(username, password);
-        authRequest.setDetails(new WebAuthenticationDetails(TLSUtils.getRequest()));
-        SecurityContextHolder.getContext().setAuthentication(authRequest);
+    private void storeInSession(String username, AmpTeamMember teamMember, User user) {
+        // Do not pass credentials to the token — the submitted hash must not be
+        // stored in the Spring Security context or serialised into the session.
+        final UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(username, null);
+        authToken.setDetails(new WebAuthenticationDetails(TLSUtils.getRequest()));
+        SecurityContextHolder.getContext().setAuthentication(authToken);
         final HttpSession session = TLSUtils.getRequest().getSession();
         PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
         if (teamMember != null) {

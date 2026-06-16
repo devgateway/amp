@@ -62,6 +62,50 @@
 		 tokenInput.value = token;
 	 }
 
+	 function setCsrfHeader(jqXHR) {
+		 var token = getCsrfToken();
+		 if (token && jqXHR && jqXHR.setRequestHeader) {
+			 try {
+				 jqXHR.setRequestHeader(CSRF_HEADER, token);
+			 } catch (ignored) {
+			 }
+		 }
+	 }
+
+	 function installWicketCsrfProtection() {
+		 if (window.ampWicketCsrfProtectionInstalled) {
+			 return true;
+		 }
+		 if (!window.Wicket || !Wicket.Event || !Wicket.Event.subscribe || !Wicket.Event.Topic) {
+			 return false;
+		 }
+
+		 window.ampWicketCsrfProtectionInstalled = true;
+		 Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_BEFORE_SEND, function (event, attrs, jqXHR, settings) {
+			 var method = settings && settings.type ? settings.type : (attrs && attrs.mp ? "POST" : attrs && attrs.m);
+			 var url = settings && settings.url ? settings.url : attrs && attrs.u;
+			 if (!isUnsafeMethod(method) || !isSameOrigin(url)) {
+				 return;
+			 }
+
+			 setCsrfHeader(jqXHR);
+			 if (attrs && attrs.mp && attrs.f) {
+				 addCsrfToForm(Wicket.$ ? Wicket.$(attrs.f) : document.getElementById(attrs.f));
+			 }
+		 });
+		 return true;
+	 }
+
+	 if (!installWicketCsrfProtection()) {
+		 var wicketInstallRetries = 40;
+		 var wicketInstallTimer = window.setInterval(function () {
+			 wicketInstallRetries--;
+			 if (installWicketCsrfProtection() || wicketInstallRetries <= 0) {
+				 window.clearInterval(wicketInstallTimer);
+			 }
+		 }, 50);
+	 }
+
 	 if (document.addEventListener) {
 		 document.addEventListener("submit", function (event) {
 			 addCsrfToForm(event.target);

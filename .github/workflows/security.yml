@@ -2,7 +2,11 @@ name: Security Scan
 
 on:
   push:
-    branches: [ "**" ]
+    # Scan the default branch directly on merge; feature branches are covered
+    # by the pull_request trigger below, avoiding duplicate runs.
+    branches:
+      - develop
+      - main
   pull_request:
     branches: [ "**" ]
   schedule:

@@ -25,6 +25,7 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -142,7 +143,8 @@ public class ResourceService {
         for (String uuid : uuids) {
             Node readNode = DocumentManagerUtil.getReadNode(uuid, TLSUtils.getRequest());
             if (readNode == null) {
-                resources.add(new JsonApiResponse(ApiError.toError(ResourceErrors.RESOURCE_NOT_FOUND)));
+                resources.add(new JsonApiResponse(
+                        ApiError.format(Collections.singletonList(ResourceErrors.RESOURCE_NOT_FOUND))));
             } else {
                 resources.add(getResource(uuid));
             }

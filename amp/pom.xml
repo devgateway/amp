@@ -201,6 +201,23 @@
                 <antilock>false</antilock>
             </properties>
         </profile>
+
+        <!-- ============================================================== -->
+        <!-- Security profile: mvn verify -P security                        -->
+        <!-- Runs OWASP Dependency-Check against all Maven + bundled assets  -->
+        <!-- ============================================================== -->
+        <profile>
+            <id>security</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.owasp</groupId>
+                        <artifactId>dependency-check-maven</artifactId>
+                        <version>9.2.0</version>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
 
@@ -2323,6 +2340,57 @@
                         <phase>compile</phase>
                         <goals>
                             <goal>process-asciidoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- ========================================================== -->
+            <!-- OWASP Dependency-Check: run via 'security' profile          -->
+            <!-- mvn verify -P security                                       -->
+            <!-- ========================================================== -->
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>9.2.0</version>
+                <configuration>
+                    <!-- Fail the build if any dependency has CVSS >= 7 (high/critical) -->
+                    <failBuildOnCVSS>7</failBuildOnCVSS>
+                    <!-- Suppress known FPs or accepted-risk CVEs -->
+                    <suppressionFile>${project.basedir}/../security/owasp-suppressions.xml</suppressionFile>
+                    <!-- Store NVD data locally to avoid repeated downloads in CI -->
+                    <nvdDatafeedUrl>https://nvd.nist.gov/feeds/json/cve/1.1/</nvdDatafeedUrl>
+                    <autoUpdate>true</autoUpdate>
+                    <!-- Scan bundled JS libraries in addition to Maven jars -->
+                    <scanSet>
+                        <fileSet>
+                            <directory>${project.basedir}/../ckeditor_4.4.6</directory>
+                        </fileSet>
+                        <fileSet>
+                            <directory>${project.basedir}/../ckeditor</directory>
+                        </fileSet>
+                        <fileSet>
+                            <directory>${project.basedir}/../TEMPLATE</directory>
+                            <useDefaultExcludes>true</useDefaultExcludes>
+                            <excludes>
+                                <exclude>**/node_modules/**</exclude>
+                            </excludes>
+                        </fileSet>
+                    </scanSet>
+                    <formats>
+                        <format>HTML</format>
+                        <format>JSON</format>
+                        <format>SARIF</format>
+                    </formats>
+                    <outputDirectory>${project.build.directory}/dependency-check-report</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>dependency-check-verify</id>
+                        <!-- Bound to 'verify' so it runs only when the 'security' profile is active -->
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
                         </goals>
                     </execution>
                 </executions>

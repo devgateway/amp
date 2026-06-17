@@ -2356,8 +2356,6 @@
                 <configuration>
                     <!-- Fail the build if any dependency has CVSS >= 7 (high/critical) -->
                     <failBuildOnCVSS>7</failBuildOnCVSS>
-                    <!-- Always generate a report even if NVD data cannot be downloaded -->
-                    <failOnError>false</failOnError>
                     <!-- Suppress known FPs or accepted-risk CVEs -->
                     <suppressionFile>${project.basedir}/../security/owasp-suppressions.xml</suppressionFile>
                     <!-- Scan bundled JS libraries in addition to Maven jars -->

@@ -233,6 +233,14 @@
                             <!-- Output to target/dependency-check-report/ so GHA can find it -->
                             <outputDirectory>${project.build.directory}/dependency-check-report</outputDirectory>
                         </configuration>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

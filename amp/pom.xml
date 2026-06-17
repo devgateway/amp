@@ -214,6 +214,25 @@
                         <groupId>org.owasp</groupId>
                         <artifactId>dependency-check-maven</artifactId>
                         <version>9.2.0</version>
+                        <configuration>
+                            <!-- Fail the build if any dependency has CVSS >= 7 (high/critical) -->
+                            <failBuildOnCVSS>7</failBuildOnCVSS>
+                            <!-- Suppress known FPs or accepted-risk CVEs -->
+                            <suppressionFile>${project.basedir}/../security/owasp-suppressions.xml</suppressionFile>
+                            <!-- Scan bundled JS libraries in addition to Maven jars -->
+                            <scanSet>
+                                <fileSet>
+                                    <directory>${project.basedir}/../ckeditor_4.4.6</directory>
+                                </fileSet>
+                            </scanSet>
+                            <!-- Report formats: HTML for humans, JSON for CI/automation -->
+                            <formats>
+                                <format>HTML</format>
+                                <format>JSON</format>
+                            </formats>
+                            <!-- Output to target/dependency-check-report/ so GHA can find it -->
+                            <outputDirectory>${project.build.directory}/dependency-check-report</outputDirectory>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>

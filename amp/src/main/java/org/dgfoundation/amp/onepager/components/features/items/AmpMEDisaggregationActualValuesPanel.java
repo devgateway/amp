@@ -3,6 +3,7 @@ package org.dgfoundation.amp.onepager.components.features.items;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.convert.IConverter;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
@@ -31,7 +32,7 @@ public class AmpMEDisaggregationActualValuesPanel extends AmpFeaturePanel<AmpInd
         super(id, model, "Disaggregation Actual Values", true);
         setOutputMarkupId(true);
 
-        // PropertyModel on the backing Set — ListEditor.updateModel() will write items back here on form submit
+        // ListEditor.updateModel() writes submitted rows back into this backing set.
         IModel<Set<AmpIndicatorGlobalValue>> setModel = new PropertyModel<>(model, "actualValues");
 
         listEditor = new ListEditor<AmpIndicatorGlobalValue>("rows", setModel) {
@@ -39,7 +40,7 @@ public class AmpMEDisaggregationActualValuesPanel extends AmpFeaturePanel<AmpInd
             protected void onPopulateItem(ListItem<AmpIndicatorGlobalValue> item) {
                 item.setOutputMarkupId(true);
                 item.add(new AmpTextFieldPanel<Double>("actualValue", new PropertyModel<>(item.getModel(), "originalValue"), "Actual Value") {
-                    public org.apache.wicket.util.convert.IConverter getInternalConverter(java.lang.Class<?> type) {
+                    public IConverter<Double> getInternalConverter(Class<?> type) {
                         return CustomDoubleConverter.INSTANCE;
                     }
                 });

@@ -245,6 +245,7 @@ public class ActivityUtil {
             prepareToSave(a, oldA, ampCurrentMember, draft, context);
         }
         logger.info("Object after prepare :" + a);
+        saveIndicatorDisaggregationActualValues(a, session);
         a.getIndicators().forEach(x->
                 {
                     logger.info("Indicator q: " + x.getIndicator().getIndicatorId() + " - " + x.getIndicator().getName());
@@ -353,6 +354,34 @@ public class ActivityUtil {
 
         return a;
     }
+
+    private static void saveIndicatorDisaggregationActualValues(AmpActivityVersion activity, Session session) {
+        if (activity.getIndicators() == null) {
+            return;
+        }
+
+        boolean hasDisaggregationValues = false;
+        for (IndicatorActivity indicatorActivity : activity.getIndicators()) {
+            AmpIndicator indicator = indicatorActivity.getIndicator();
+            if (indicator == null || indicator.getDisaggregationValues() == null) {
+                continue;
+            }
+
+            for (AmpIndicatorDisaggregationValue disaggregationValue : indicator.getDisaggregationValues()) {
+                hasDisaggregationValues = true;
+                for (AmpIndicatorGlobalValue actualValue : disaggregationValue.getActualValues()) {
+                    actualValue.setType(AmpIndicatorGlobalValue.ACTUAL);
+                    actualValue.setIndicator(indicator);
+                }
+                session.saveOrUpdate(disaggregationValue);
+            }
+        }
+
+        if (hasDisaggregationValues) {
+            session.flush();
+        }
+    }
+
     private static <T> void cleanObjectFromSession(Session session, Class<T> objectClass, Long id)
     {
         T object = session.get(objectClass, id);

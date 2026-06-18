@@ -90,6 +90,14 @@ public class DisaggregationService {
         Session session = PersistenceManager.getSession();
         AmpCategoryValue option = session.get(AmpCategoryValue.class, optionId);
         if (option != null) {
+            // AmpCategoryClass.possibleValues is cascade="all-delete-orphan" + lazy="false".
+            // The parent class is eagerly loaded and its possibleValues list is already in the
+            // session, so we must remove this option from that list BEFORE deleting it —
+            // otherwise Hibernate's cascade will try to re-save the deleted object on flush.
+            AmpCategoryClass categoryClass = option.getAmpCategoryClass();
+            if (categoryClass != null) {
+                categoryClass.getPossibleValues().remove(option);
+            }
             session.delete(option);
             session.flush();
         }

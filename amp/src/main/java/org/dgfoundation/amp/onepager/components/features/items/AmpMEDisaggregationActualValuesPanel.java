@@ -61,6 +61,8 @@ public class AmpMEDisaggregationActualValuesPanel extends AmpFeaturePanel<AmpInd
             @Override
             public void onClick(AjaxRequestTarget target) {
                 AmpIndicatorDisaggregationValue disaggVal = AmpMEDisaggregationActualValuesPanel.this.getModel().getObject();
+                logger.info("Adding new ACTUAL value for disaggregation value: " + disaggVal);
+                logger.info("Current actual values: " + disaggVal.getActualValues());
                 if (disaggVal.getActualValues() == null) {
                     disaggVal.setActualValues(new HashSet<>());
                 }

@@ -245,7 +245,12 @@ public class ActivityUtil {
             prepareToSave(a, oldA, ampCurrentMember, draft, context);
         }
         logger.info("Object after prepare :" + a);
-
+        a.getIndicators().forEach(x->
+                {
+                    logger.info("Indicator q: " + x.getIndicator().getIndicatorId() + " - " + x.getIndicator().getName());
+                    x.getIndicator().getDisaggregationValues().forEach(y -> logger.info("Disaggregation: " + y.getActualValues().size() + " - " + y.getBaseValue().getValue()));
+                }
+        );
         if (a.getAmpActivityGroup() == null) {
             //we need to create a group for this activity
             AmpActivityGroup tmpGroup = new AmpActivityGroup();
@@ -294,7 +299,12 @@ public class ActivityUtil {
                 group.setAmpActivityLastVersion(a);
             }
         }
-
+        a.getIndicators().forEach(x->
+                {
+                    logger.info("Indicator 1: " + x.getIndicator().getIndicatorId() + " - " + x.getIndicator().getName());
+                    x.getIndicator().getDisaggregationValues().forEach(y -> logger.info("Disaggregation: " + y.getActualValues().size() + " - " + y.getBaseValue().getValue()));
+                }
+        );
         if (isActivityForm) {
             saveActivityResources(a, session);
             saveActivityGPINiResources(a, session);
@@ -321,6 +331,12 @@ public class ActivityUtil {
 //            session.saveOrUpdate(a);
             session.merge(a);
         }
+        a.getIndicators().forEach(x->
+                {
+                    logger.info("Indicator x: " + x.getIndicator().getIndicatorId() + " - " + x.getIndicator().getName());
+                    x.getIndicator().getDisaggregationValues().forEach(y -> logger.info("Disaggregation: " + y.getActualValues().size() + " - " + y.getBaseValue().getValue()));
+                }
+                );
         session.flush();
 
         updatePerformanceRules(oldA, a);

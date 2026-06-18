@@ -4,7 +4,7 @@ import {
 import { fetchApiData } from '../../../utils/apiOperations';
 import { SHARING_EP } from '../utils/constants';
 
-export const getShareLink = (filters, settings, fundingType, selectedPrograms) => dispatch => {
+export const getShareLink = (filters, settings, fundingType, selectedPrograms, meState) => dispatch => {
   dispatch(fetchShareLinkPending());
   return fetchApiData({
     url: SHARING_EP,
@@ -12,7 +12,7 @@ export const getShareLink = (filters, settings, fundingType, selectedPrograms) =
       title: '',
       description: '',
       stateBlob: JSON.stringify({
-        filters, settings, fundingType, selectedPrograms
+        filters, settings, fundingType, selectedPrograms, meState
       })
     }
   })

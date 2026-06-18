@@ -321,9 +321,6 @@ public class ActivityUtil {
 //            session.saveOrUpdate(a);
             session.merge(a);
         }
-        if (isActivityForm) {
-            saveIndicatorDisaggregationActualValues(a, session);
-        }
         session.flush();
 
         updatePerformanceRules(oldA, a);
@@ -340,47 +337,6 @@ public class ActivityUtil {
 
         return a;
     }
-
-    private static void saveIndicatorDisaggregationActualValues(AmpActivityVersion activity, Session session) {
-        if (activity.getIndicators() == null) {
-            return;
-        }
-
-        Set<Long> mergedDisaggregationIds = new HashSet<>();
-        for (IndicatorActivity indicatorActivity : activity.getIndicators()) {
-            if (indicatorActivity == null || indicatorActivity.getIndicator() == null) {
-                continue;
-            }
-
-            AmpIndicator indicator = indicatorActivity.getIndicator();
-            if (indicator.getDisaggregationValues() == null) {
-                continue;
-            }
-
-            for (AmpIndicatorDisaggregationValue disaggregationValue : indicator.getDisaggregationValues()) {
-                if (disaggregationValue == null) {
-                    continue;
-                }
-
-                Long disaggregationValueId = disaggregationValue.getId();
-                if (disaggregationValueId != null && !mergedDisaggregationIds.add(disaggregationValueId)) {
-                    continue;
-                }
-
-                for (AmpIndicatorGlobalValue actualValue : disaggregationValue.getActualValues()) {
-                    if (actualValue == null) {
-                        continue;
-                    }
-                    actualValue.setType(AmpIndicatorGlobalValue.ACTUAL);
-                    if (actualValue.getIndicator() == null) {
-                        actualValue.setIndicator(indicator);
-                    }
-                }
-                session.merge(disaggregationValue);
-            }
-        }
-    }
-
     private static <T> void cleanObjectFromSession(Session session, Class<T> objectClass, Long id)
     {
         T object = session.get(objectClass, id);

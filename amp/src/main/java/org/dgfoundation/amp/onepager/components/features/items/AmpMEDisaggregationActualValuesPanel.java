@@ -11,12 +11,12 @@ import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
 import org.digijava.module.aim.dbentity.AmpIndicatorDisaggregationValue;
 import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
-import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
-import org.apache.wicket.util.convert.IConverter;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -31,15 +31,15 @@ public class AmpMEDisaggregationActualValuesPanel extends AmpFeaturePanel<AmpInd
         super(id, model, "Disaggregation Actual Values", true);
         setOutputMarkupId(true);
 
-        IModel<Set<AmpIndicatorGlobalValue>> actualValuesModel = new PropertyModel<>(model, "actualValues");
+        // PropertyModel on the backing Set — ListEditor.updateModel() will write items back here on form submit
+        IModel<Set<AmpIndicatorGlobalValue>> setModel = new PropertyModel<>(model, "actualValues");
 
-        listEditor = new ListEditor<AmpIndicatorGlobalValue>("rows", actualValuesModel) {
+        listEditor = new ListEditor<AmpIndicatorGlobalValue>("rows", setModel) {
             @Override
             protected void onPopulateItem(ListItem<AmpIndicatorGlobalValue> item) {
+                item.setOutputMarkupId(true);
                 item.add(new AmpTextFieldPanel<Double>("actualValue", new PropertyModel<>(item.getModel(), "originalValue"), "Actual Value") {
-                    @Override
-                    @SuppressWarnings("rawtypes")
-                    public IConverter getInternalConverter(Class<?> type) {
+                    public org.apache.wicket.util.convert.IConverter getInternalConverter(java.lang.Class<?> type) {
                         return CustomDoubleConverter.INSTANCE;
                     }
                 });
@@ -54,6 +54,7 @@ public class AmpMEDisaggregationActualValuesPanel extends AmpFeaturePanel<AmpInd
                 });
             }
         };
+        listEditor.setOutputMarkupId(true);
         add(listEditor);
 
         AmpAjaxLinkField addActual = new AmpAjaxLinkField("addDisaggActualValue", "Add Actual Value", "Add Actual Value") {
@@ -61,7 +62,7 @@ public class AmpMEDisaggregationActualValuesPanel extends AmpFeaturePanel<AmpInd
             public void onClick(AjaxRequestTarget target) {
                 AmpIndicatorDisaggregationValue disaggVal = AmpMEDisaggregationActualValuesPanel.this.getModel().getObject();
                 if (disaggVal.getActualValues() == null) {
-                    disaggVal.setActualValues(new java.util.HashSet<>());
+                    disaggVal.setActualValues(new HashSet<>());
                 }
                 AmpIndicatorGlobalValue val = new AmpIndicatorGlobalValue(AmpIndicatorGlobalValue.ACTUAL);
                 val.setIndicator(disaggVal.getIndicator());

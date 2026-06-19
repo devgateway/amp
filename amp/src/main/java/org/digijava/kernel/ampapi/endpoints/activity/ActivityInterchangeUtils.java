@@ -362,6 +362,10 @@ public final class ActivityInterchangeUtils {
                         indicator.put("disaggregation_values", Collections.emptyList());
                         continue;
                     }
+                    Object rawLocId = indicator.get("activity_location");
+                    Long activityLocationId = rawLocId != null
+                            ? (rawLocId instanceof Long ? (Long) rawLocId : Long.valueOf(rawLocId.toString()))
+                            : null;
                     List<Map<String, Object>> disaggList = new ArrayList<>();
                     for (AmpIndicatorDisaggregationValue dv : ampIndicator.getDisaggregationValues()) {
                         Map<String, Object> dvMap = new LinkedHashMap<>();
@@ -379,6 +383,15 @@ public final class ActivityInterchangeUtils {
                         List<Map<String, Object>> actualValues = new ArrayList<>();
                         if (dv.getActualValues() != null) {
                             for (AmpIndicatorGlobalValue av : dv.getActualValues()) {
+                                AmpActivityLocation avLocation = av.getActivityLocation();
+                                if (activityLocationId != null) {
+                                    Long avLocationId = avLocation != null ? avLocation.getId() : null;
+                                    if (!activityLocationId.equals(avLocationId)) {
+                                        continue;
+                                    }
+                                } else if (avLocation != null) {
+                                    continue;
+                                }
                                 actualValues.add(serializeGlobalValue(av));
                             }
                         }

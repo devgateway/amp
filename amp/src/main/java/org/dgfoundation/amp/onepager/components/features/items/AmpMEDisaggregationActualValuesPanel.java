@@ -13,11 +13,14 @@ import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
+import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpIndicatorDisaggregationValue;
 import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -28,12 +31,24 @@ public class AmpMEDisaggregationActualValuesPanel extends AmpFeaturePanel<AmpInd
 
     private final ListEditor<AmpIndicatorGlobalValue> listEditor;
 
-    public AmpMEDisaggregationActualValuesPanel(String id, IModel<AmpIndicatorDisaggregationValue> model) {
+    public AmpMEDisaggregationActualValuesPanel(String id, IModel<AmpIndicatorDisaggregationValue> model,
+                                                IModel<AmpActivityLocation> location) {
         super(id, model, "Disaggregation Actual Values", true);
         setOutputMarkupId(true);
 
         // ListEditor.updateModel() writes submitted rows back into this backing set.
-        IModel<Set<AmpIndicatorGlobalValue>> setModel = new PropertyModel<>(model, "actualValues");
+        IModel<Set<AmpIndicatorGlobalValue>> parentModel = new PropertyModel<>(model, "actualValues");
+        IModel<Set<AmpIndicatorGlobalValue>> setModel = new AbstractMixedSetModel<AmpIndicatorGlobalValue>(parentModel) {
+            @Override
+            public boolean condition(AmpIndicatorGlobalValue item) {
+                AmpActivityLocation currentLocation = location != null ? location.getObject() : null;
+                if (currentLocation == null) {
+                    return item.getActivityLocation() == null;
+                }
+                return item.getActivityLocation() != null
+                        && Objects.equals(item.getActivityLocation().getId(), currentLocation.getId());
+            }
+        };
 
         listEditor = new ListEditor<AmpIndicatorGlobalValue>("rows", setModel) {
             @Override
@@ -69,6 +84,9 @@ public class AmpMEDisaggregationActualValuesPanel extends AmpFeaturePanel<AmpInd
                 }
                 AmpIndicatorGlobalValue val = new AmpIndicatorGlobalValue(AmpIndicatorGlobalValue.ACTUAL);
                 val.setIndicator(disaggVal.getIndicator());
+                if (location != null) {
+                    val.setActivityLocation(location.getObject());
+                }
                 val.setOriginalValueDate(new Date());
                 listEditor.addItem(val);
                 target.add(AmpMEDisaggregationActualValuesPanel.this);

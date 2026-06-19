@@ -188,13 +188,19 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         AmpMEIndicatorBaseFeaturePanel baseValues = null;
 
         try {
-            baseValues = new AmpMEIndicatorBaseFeaturePanel("addBaseTargetValue", "Add Base Target Values", conn, indicator, values, location);
+            baseValues = new AmpMEIndicatorBaseFeaturePanel("addBaseTargetValue", "Add Base Target Values", conn, indicator, values, location) {
+                @Override
+                protected void onConfigure() {
+                    super.onConfigure();
+                    setVisible(isVisible() && !hasDisaggregation);
+                }
+            };
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         add(baseValues);
 
-        AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection", "Disaggregation Values", indicator);
+        AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection", "Disaggregation Values", indicator, location);
         disaggPanel.setOutputMarkupId(true);
         disaggPanel.setVisible(hasDisaggregation);
         add(disaggPanel);

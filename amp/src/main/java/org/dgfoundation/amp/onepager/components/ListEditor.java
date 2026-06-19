@@ -72,6 +72,12 @@ public abstract class ListEditor<T> extends RepeatingView implements IFormModelU
 
     @Override
     public void updateModel(){
+        // items is transient — it is null after page deserialization (e.g. on form submit).
+        // In that case re-populate from the model so we don't wipe the backing collection.
+        if (items == null) {
+            Set<T> current = model.getObject();
+            items = current != null ? new ArrayList<T>(current) : new ArrayList<T>();
+        }
         Set<T> set = model.getObject();
         if (set == null)
             set = new LinkedHashSet<T>();

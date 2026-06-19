@@ -151,8 +151,6 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
 
 
 
-        logger.info("Table" + valuesTable.getMarkupId());
-        logger.info("Id " + valuesTable.getId());
         AmpAjaxLinkField addActualValue = new AmpAjaxLinkField("addActualValue", "Add Actual Value", "Add Actual Value") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -174,15 +172,12 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         };
 
 
-        logger.info("Button" + addActualValue.getMarkupId());
-        logger.info("Id " + addActualValue.getId());
+
         addActualValue.setOutputMarkupId(true);
         addActualValue.setOutputMarkupPlaceholderTag(true);
 
         add(addActualValue);
-        logger.info("Has disaggregation: " + hasDisaggregation);
-        logger.info("Button visble" + addActualValue.isVisible());
-        logger.info("Table visble" + valuesTable.isVisible());
+
 
 
         AmpMEIndicatorBaseFeaturePanel baseValues = null;

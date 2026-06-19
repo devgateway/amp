@@ -142,6 +142,19 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
         aux.activity = newActivity;
         aux.setId(null);
 
+        if (aux.activityLocation != null && newActivity.getLocations() != null) {
+            Long oldInnerLocId = aux.activityLocation.getLocation() != null
+                    ? aux.activityLocation.getLocation().getId() : null;
+            if (oldInnerLocId != null) {
+                for (AmpActivityLocation newLoc : newActivity.getLocations()) {
+                    if (newLoc.getLocation() != null && oldInnerLocId.equals(newLoc.getLocation().getId())) {
+                        aux.activityLocation = newLoc;
+                        break;
+                    }
+                }
+            }
+        }
+
         if (aux.values != null && aux.values.size() > 0){
             HashSet<AmpIndicatorValue> set = new HashSet<AmpIndicatorValue>();
             for (AmpIndicatorValue value : aux.values) {

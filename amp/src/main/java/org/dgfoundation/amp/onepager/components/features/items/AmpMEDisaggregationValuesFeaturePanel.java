@@ -10,7 +10,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpIndicator;
@@ -35,9 +34,10 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
     protected void onConfigure() {
         super.onConfigure();
         AmpIndicator indicator = indicatorModel.getObject();
-        if (indicator == null || indicator.getDisaggregationValues() == null || indicator.getDisaggregationValues().isEmpty()) {
-            setVisible(false);
-        }
+        boolean hasDisaggregationValues = indicator != null
+                && indicator.getDisaggregationValues() != null
+                && !indicator.getDisaggregationValues().isEmpty();
+        setVisible(isVisible() && hasDisaggregationValues);
     }
 
     public AmpMEDisaggregationValuesFeaturePanel(String id, String fmName, IModel<AmpIndicator> indicatorModel) {

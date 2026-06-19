@@ -10,7 +10,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpMEActualValuesFormTableFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.items.AmpMEDisaggregationValuesFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
@@ -72,7 +71,7 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
 
         }
 
-        final AmpSelectFieldPanel<AmpIndicatorRiskRatings> riskSelect = new AmpSelectFieldPanel("risk",
+        final AmpSelectFieldPanel<AmpIndicatorRiskRatings> riskSelect = new AmpSelectFieldPanel<AmpIndicatorRiskRatings>("risk",
                 new PropertyModel<>(conn, "risk"), MEIndicatorsUtil.getAllIndicatorRisks(), "Risk", false, false,
                 new TranslatedChoiceRenderer<AmpIndicatorRiskRatings>(), false);
         add(riskSelect);
@@ -139,10 +138,15 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         });
         add(indicatorTargetDateLabel);
 
-        AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, location,"Actual Values", false, 7);
+        AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, location,"Actual Values", false, 7) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(isVisible() && !hasDisaggregation);
+            }
+        };
         valuesTable.setOutputMarkupId(true);
         valuesTable.setOutputMarkupPlaceholderTag(true);
-        valuesTable.setVisible(!hasDisaggregation);
         add(valuesTable);
 
 
@@ -161,6 +165,12 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                 target.add(valuesTable);
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(isVisible() && !hasDisaggregation);
+            }
         };
 
 
@@ -168,14 +178,8 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         logger.info("Id " + addActualValue.getId());
         addActualValue.setOutputMarkupId(true);
         addActualValue.setOutputMarkupPlaceholderTag(true);
-        addActualValue.setVisible(!hasDisaggregation);
 
         add(addActualValue);
-        if (Boolean.TRUE.equals(hasDisaggregation))
-        {
-            addActualValue.setVisible(false);
-            valuesTable.setVisible(false);
-        }
         logger.info("Has disaggregation: " + hasDisaggregation);
         logger.info("Button visble" + addActualValue.isVisible());
         logger.info("Table visble" + valuesTable.isVisible());

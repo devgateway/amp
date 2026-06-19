@@ -35,7 +35,7 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
     protected void onConfigure() {
         super.onConfigure();
         AmpIndicator indicator = indicatorModel.getObject();
-        if (indicator == null || indicator.getDisaggregation() == null || indicator.getDisaggregation().isEmpty()) {
+        if (indicator == null || indicator.getDisaggregationValues() == null || indicator.getDisaggregationValues().isEmpty()) {
             setVisible(false);
         }
     }

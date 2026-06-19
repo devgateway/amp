@@ -27,6 +27,7 @@ import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.DbUtil;
+import java.util.Objects;
 
 
 import org.apache.log4j.Logger;
@@ -85,7 +86,9 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                 List<IndicatorActivity> filteredIndicators = new ArrayList<>();
 
                 for (IndicatorActivity indicatorActivity : allIndicators) {
-                    if (indicatorActivity.getActivityLocation() != null && indicatorActivity.getActivityLocation() == location.getObject()) {
+                    if (indicatorActivity.getActivityLocation() != null
+                            && Objects.equals(indicatorActivity.getActivityLocation().getId(),
+                                    location.getObject().getId())) {
                         filteredIndicators.add(indicatorActivity);
                     }
                 }
@@ -99,7 +102,8 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         setModel = new AbstractMixedSetModel<IndicatorActivity>(parentModel) {
             @Override
             public boolean condition(IndicatorActivity item) {
-                return item.getActivityLocation() == location.getObject();
+                return item.getActivityLocation() != null
+                        && Objects.equals(item.getActivityLocation().getId(), location.getObject().getId());
             }
         };
 

@@ -49,8 +49,10 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
 
         final Label indicatorNameLabel = new Label("indicatorName", new PropertyModel<String>(indicator, "name"));
         add(indicatorNameLabel);
+        logger.info("Indicator disagg: " + indicator.getObject().getDisaggregationValues());
         final boolean hasDisaggregation = indicator.getObject().getDisaggregationValues() != null
                 && !indicator.getObject().getDisaggregationValues().isEmpty();
+        logger.info("Has disaggregation: " + hasDisaggregation);
 
         String indCodeString = "";
         if (indicator.getObject().getCode() != null && indicator.getObject().getCode().trim().compareTo("") != 0) {

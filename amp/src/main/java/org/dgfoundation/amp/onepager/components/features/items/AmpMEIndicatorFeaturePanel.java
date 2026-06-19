@@ -171,13 +171,15 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         addActualValue.setVisible(!hasDisaggregation);
 
         add(addActualValue);
-        if (Boolean.FALSE.equals(hasDisaggregation))
+        if (Boolean.TRUE.equals(hasDisaggregation))
         {
             addActualValue.setVisible(false);
-            logger.info("Button visble" + addActualValue.isVisible());
             valuesTable.setVisible(false);
-            logger.info("Table visble" + valuesTable.isVisible());
         }
+        logger.info("Has disaggregation: " + hasDisaggregation);
+        logger.info("Button visble" + addActualValue.isVisible());
+        logger.info("Table visble" + valuesTable.isVisible());
+
 
         AmpMEIndicatorBaseFeaturePanel baseValues = null;
 

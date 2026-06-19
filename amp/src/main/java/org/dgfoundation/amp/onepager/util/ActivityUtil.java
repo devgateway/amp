@@ -360,7 +360,12 @@ public class ActivityUtil {
             return;
         }
 
+        // Collect unique disaggregation values across all IndicatorActivity rows (which may share the same
+        // AmpIndicator and therefore the same AmpIndicatorDisaggregationValue instances). Deduplication by
+        // id prevents Hibernate NonUniqueObjectException when the same row appears more than once.
+        Set<Long> processedDisaggIds = new HashSet<>();
         boolean hasDisaggregationValues = false;
+
         for (IndicatorActivity indicatorActivity : activity.getIndicators()) {
             AmpIndicator indicator = indicatorActivity.getIndicator();
             if (indicator == null || indicator.getDisaggregationValues() == null) {
@@ -368,12 +373,20 @@ public class ActivityUtil {
             }
 
             for (AmpIndicatorDisaggregationValue disaggregationValue : indicator.getDisaggregationValues()) {
+                Long dvId = disaggregationValue.getId();
+                if (dvId != null && processedDisaggIds.contains(dvId)) {
+                    continue; // already handled for this indicator
+                }
+                if (dvId != null) {
+                    processedDisaggIds.add(dvId);
+                }
                 hasDisaggregationValues = true;
                 for (AmpIndicatorGlobalValue actualValue : disaggregationValue.getActualValues()) {
                     actualValue.setType(AmpIndicatorGlobalValue.ACTUAL);
                     actualValue.setIndicator(indicator);
                 }
-                session.saveOrUpdate(disaggregationValue);
+                // Use merge instead of saveOrUpdate to handle detached objects safely
+                session.merge(disaggregationValue);
             }
         }
 

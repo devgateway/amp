@@ -11,8 +11,15 @@ public class ListItem<T> extends Item<T>{
 
     private class ListItemModel extends AbstractReadOnlyModel<T>{
         public T getObject(){
-            return ((ListEditor<T>)ListItem.this.getParent())
-            .items.get(getIndex());
+            ListEditor<T> editor = (ListEditor<T>) ListItem.this.getParent();
+            if (editor == null || editor.items == null) {
+                return null;
+            }
+            int idx = getIndex();
+            if (idx < 0 || idx >= editor.items.size()) {
+                return null;
+            }
+            return editor.items.get(idx);
         }
     }
 }

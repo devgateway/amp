@@ -1384,6 +1384,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                 if ("commitments".equals(id)) {
 
                                     AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+                                    if (funding == null) { visit.dontGoDeeper(); return; }
                                     boolean commitmentsRequired = FMUtil.isFmVisible(findComponentById(form, "requireCommitments"));
                                     logger.info("Commitments required: " + commitmentsRequired);
                                     setErrorWHenItemMissing(component, funding, commitmentsRequired, Constants.COMMITMENT, errors, target);
@@ -1391,6 +1392,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                 }
                                 if ("disbursements".equals(id)) {
                                     AmpFunding funding = (AmpFunding) component.getDefaultModel().getObject();
+                                    if (funding == null) { visit.dontGoDeeper(); return; }
                                     boolean disbursementsRequired = FMUtil.isFmVisible(findComponentById(form, "requireDisbursements"));
                                     logger.info("Disbursements required: " + disbursementsRequired);
                                     setErrorWHenItemMissing(component, funding, disbursementsRequired, Constants.DISBURSEMENT, errors, target);

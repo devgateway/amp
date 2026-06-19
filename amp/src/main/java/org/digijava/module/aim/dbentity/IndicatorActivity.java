@@ -161,6 +161,20 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
                 AmpIndicatorValue ampIndicatorValue = (AmpIndicatorValue) value.clone();
                 ampIndicatorValue.setIndValId(null);
                 ampIndicatorValue.setIndicatorConnection(aux);
+                // Re-point the value's activityLocation to the new version's AmpActivityLocation,
+                // matched by the stable inner AmpCategoryValueLocations id.
+                if (ampIndicatorValue.getActivityLocation() != null && newActivity.getLocations() != null) {
+                    Long oldInnerLocId = ampIndicatorValue.getActivityLocation().getLocation() != null
+                            ? ampIndicatorValue.getActivityLocation().getLocation().getId() : null;
+                    if (oldInnerLocId != null) {
+                        for (AmpActivityLocation newLoc : newActivity.getLocations()) {
+                            if (newLoc.getLocation() != null && oldInnerLocId.equals(newLoc.getLocation().getId())) {
+                                ampIndicatorValue.setActivityLocation(newLoc);
+                                break;
+                            }
+                        }
+                    }
+                }
                 set.add(ampIndicatorValue);
             }
             aux.values = set;

@@ -14,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
+import java.util.Objects;
 import java.util.Set;
 
 public abstract class AmpMEValuesFormTableFeaturePanel extends AmpMEFormTableFeaturePanel<AmpIndicator, AmpIndicatorValue> {
@@ -35,14 +36,18 @@ public abstract class AmpMEValuesFormTableFeaturePanel extends AmpMEFormTableFea
         setModel = new AbstractMixedSetModel<AmpIndicatorValue>(parentModel) {
             @Override
             public boolean condition(AmpIndicatorValue item) {
-                return item.getValueType() == AmpIndicatorValue.ACTUAL && item.getActivityLocation() == location.getObject();
+                return item.getValueType() == AmpIndicatorValue.ACTUAL
+                        && item.getActivityLocation() != null
+                        && Objects.equals(item.getActivityLocation().getId(), location.getObject().getId());
             }
         };
 
         setBaseTargetModel = new AbstractMixedSetModel<AmpIndicatorValue>(parentModel) {
             @Override
             public boolean condition(AmpIndicatorValue item) {
-                return (item.getValueType() == AmpIndicatorValue.BASE || item.getValueType() == AmpIndicatorValue.TARGET) && item.getActivityLocation() == location.getObject();
+                return (item.getValueType() == AmpIndicatorValue.BASE || item.getValueType() == AmpIndicatorValue.TARGET)
+                        && item.getActivityLocation() != null
+                        && Objects.equals(item.getActivityLocation().getId(), location.getObject().getId());
             }
         };
     }

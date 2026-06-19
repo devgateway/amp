@@ -49,8 +49,8 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
 
         final Label indicatorNameLabel = new Label("indicatorName", new PropertyModel<String>(indicator, "name"));
         add(indicatorNameLabel);
-        final boolean hasDisaggregation = indicator.getObject().getDisaggregation() != null
-                && !indicator.getObject().getDisaggregation().isEmpty();
+        final boolean hasDisaggregation = indicator.getObject().getDisaggregationValues() != null
+                && !indicator.getObject().getDisaggregationValues().isEmpty();
 
         String indCodeString = "";
         if (indicator.getObject().getCode() != null && indicator.getObject().getCode().trim().compareTo("") != 0) {
@@ -140,6 +140,7 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, location,"Actual Values", false, 7);
         valuesTable.setOutputMarkupId(true);
         valuesTable.setOutputMarkupPlaceholderTag(true);
+        valuesTable.setVisible(!hasDisaggregation);
         add(valuesTable);
 
 
@@ -165,6 +166,7 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         logger.info("Id " + addActualValue.getId());
         addActualValue.setOutputMarkupId(true);
         addActualValue.setOutputMarkupPlaceholderTag(true);
+        addActualValue.setVisible(!hasDisaggregation);
 
         add(addActualValue);
 
@@ -180,10 +182,6 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection", "Disaggregation Values", indicator);
         disaggPanel.setOutputMarkupId(true);
         disaggPanel.setVisible(hasDisaggregation);
-        // Add disaggregation values subsection
-        if (indicator.getObject().getDisaggregation()== null || indicator.getObject().getDisaggregation().isEmpty()) {
-            disaggPanel.setVisible(false);
-        }
         add(disaggPanel);
 
 

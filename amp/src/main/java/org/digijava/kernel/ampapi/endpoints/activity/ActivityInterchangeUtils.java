@@ -432,18 +432,32 @@ public final class ActivityInterchangeUtils {
                         }
                             results = IndicatorUtil.findActivityIndicatorConnections(activity, ind);
 
+                        Object rawLocId = indicator.get("activity_location");
+                        Long activityLocationId = rawLocId != null
+                                ? (rawLocId instanceof Long ? (Long) rawLocId : Long.valueOf(rawLocId.toString()))
+                                : null;
+
                         for (IndicatorActivity result : results) {
-                            if (result != null && result.getValues() != null) {
-                                for (AmpIndicatorValue indicatorValue : result.getValues()) {
-                                    actualValues.add(new HashMap<String, Object>() {{
-                                        put("comment", indicatorValue.getComment());
-                                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Customize format as needed
-                                        Date valueDate = indicatorValue.getValueDate();
-                                        String formattedDate = dateFormat.format(valueDate);
-                                        put("date", formattedDate);
-                                        put("value", indicatorValue.getValue());
-                                    }});
+                            if (result == null || result.getValues() == null) {
+                                continue;
+                            }
+                            // Filter by location when the serialized indicator has one.
+                            if (activityLocationId != null) {
+                                AmpActivityLocation aal = result.getActivityLocation();
+                                Long resultLocId = aal != null ? aal.getId() : null;
+                                if (!activityLocationId.equals(resultLocId)) {
+                                    continue;
                                 }
+                            }
+                            for (AmpIndicatorValue indicatorValue : result.getValues()) {
+                                actualValues.add(new HashMap<String, Object>() {{
+                                    put("comment", indicatorValue.getComment());
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Customize format as needed
+                                    Date valueDate = indicatorValue.getValueDate();
+                                    String formattedDate = dateFormat.format(valueDate);
+                                    put("date", formattedDate);
+                                    put("value", indicatorValue.getValue());
+                                }});
                             }
                         }
 

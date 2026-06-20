@@ -343,6 +343,8 @@ public class ActivityUtil {
     private static void saveIndicatorDisaggregationValues(AmpActivityVersion indicatorSourceActivity,
                                                           AmpActivityVersion activity, boolean createNewVersion,
                                                           Session session) {
+        logger.info("Source activity: "+indicatorSourceActivity);
+        logger.info("Source activity indicators: "+(indicatorSourceActivity != null ? indicatorSourceActivity.getIndicators() : null));
         if (indicatorSourceActivity == null || indicatorSourceActivity.getIndicators() == null) {
             return;
         }
@@ -353,6 +355,7 @@ public class ActivityUtil {
         Map<Long, Set<AmpIndicatorGlobalValue>> actualValuesByDisaggregation = new HashMap<>();
         for (IndicatorActivity indicatorActivity : indicatorSourceActivity.getIndicators()) {
             AmpIndicator submittedIndicator = indicatorActivity.getIndicator();
+            logger.info("Processing indicator with id " + submittedIndicator.getIndicatorId() + " for activity " + indicatorSourceActivity.getAmpActivityId());
             if (submittedIndicator == null || submittedIndicator.getDisaggregationValues() == null) {
                 continue;
             }

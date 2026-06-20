@@ -10,7 +10,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpMEActualValuesFormTableFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.items.AmpMEDisaggregationValuesFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
@@ -177,7 +176,8 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         }
         add(baseValues);
 
-        AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection", "Disaggregation Values", indicator);
+        AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel(
+            "disaggregationValuesSubsection", "Disaggregation Values", indicator, location);
         disaggPanel.setOutputMarkupId(true);
         disaggPanel.setVisible(hasDisaggregation);
         // Add disaggregation values subsection

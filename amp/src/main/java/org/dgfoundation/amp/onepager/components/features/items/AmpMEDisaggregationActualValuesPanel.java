@@ -1,18 +1,19 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.convert.IConverter;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.ListEditor;
+import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.me.singlecountry.AmpMEActualValuesFormTableFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpIndicatorDisaggregationValue;
 import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
 import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
@@ -25,39 +26,42 @@ import java.util.*;
  */
 public class AmpMEDisaggregationActualValuesPanel extends AmpFeaturePanel<AmpIndicatorDisaggregationValue> {
 
-    private final ListView<AmpIndicatorGlobalValue> listView;
+    private final ListEditor<AmpIndicatorGlobalValue> listView;
+    private final IModel<AmpActivityLocation> activityLocationModel;
 
     public AmpMEDisaggregationActualValuesPanel(String id, IModel<AmpIndicatorDisaggregationValue> model) {
+        this(id, model, null);
+    }
+
+    public AmpMEDisaggregationActualValuesPanel(String id, IModel<AmpIndicatorDisaggregationValue> model,
+                                                IModel<AmpActivityLocation> activityLocationModel) {
         super(id, model, "Disaggregation Actual Values", true);
+        this.activityLocationModel = activityLocationModel;
         setOutputMarkupId(true);
 
-        // Use a List model for ListView (was Set, causing type mismatch)
-        IModel<List<AmpIndicatorGlobalValue>> listModel = new LoadableDetachableModel<List<AmpIndicatorGlobalValue>>() {
+        IModel<Set<AmpIndicatorGlobalValue>> actualValuesModel = new PropertyModel<>(model, "actualValues");
+        IModel<Set<AmpIndicatorGlobalValue>> locationActualValuesModel = new AbstractMixedSetModel<AmpIndicatorGlobalValue>(
+                actualValuesModel) {
             @Override
-            protected List<AmpIndicatorGlobalValue> load() {
-                AmpIndicatorDisaggregationValue disagg = AmpMEDisaggregationActualValuesPanel.this.getModel().getObject();
-                if (disagg.getActualValues() == null) {
-                    disagg.setActualValues(new java.util.HashSet<>());
-                }
-                return new java.util.ArrayList<>(disagg.getActualValues());
+            public boolean condition(AmpIndicatorGlobalValue item) {
+                return matchesActivityLocation(item.getActivityLocation());
             }
         };
 
-        listView = new ListView<AmpIndicatorGlobalValue>("rows", listModel) {
+        listView = new ListEditor<AmpIndicatorGlobalValue>("rows", locationActualValuesModel) {
             @Override
-            protected void populateItem(ListItem<AmpIndicatorGlobalValue> item) {
-                AmpIndicatorGlobalValue val = item.getModelObject();
+            protected void onPopulateItem(ListItem<AmpIndicatorGlobalValue> item) {
                 item.setOutputMarkupId(true);
                 item.add(new AmpTextFieldPanel<Double>("actualValue", new PropertyModel<>(item.getModel(), "originalValue"), "Actual Value") {
-                    public org.apache.wicket.util.convert.IConverter getInternalConverter(java.lang.Class<?> type) {
+                    public IConverter<Double> getInternalConverter(java.lang.Class<?> type) {
                         return CustomDoubleConverter.INSTANCE;
                     }
                 });
                 item.add(new AmpDatePickerFieldPanel("actualDate", new PropertyModel<>(item.getModel(), "originalValueDate"), "Actual Date"));
                 item.add(new ListEditorRemoveButton("delActualValue", "Delete", "Delete") {
                     @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        AmpMEDisaggregationActualValuesPanel.this.getModel().getObject().getActualValues().remove(val);
+                    protected void onClick(AjaxRequestTarget target) {
+                        super.onClick(target);
                         target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEDisaggregationActualValuesPanel.this));
                         target.add(AmpMEDisaggregationActualValuesPanel.this);
                     }
@@ -76,12 +80,30 @@ public class AmpMEDisaggregationActualValuesPanel extends AmpFeaturePanel<AmpInd
                 }
                 AmpIndicatorGlobalValue val = new AmpIndicatorGlobalValue(AmpIndicatorGlobalValue.ACTUAL);
                 val.setIndicator(disaggVal.getIndicator());
+                val.setActivityLocation(getActivityLocation());
                 val.setOriginalValueDate(new Date());
-                disaggVal.getActualValues().add(val);
+                listView.addItem(val);
                 target.add(AmpMEDisaggregationActualValuesPanel.this);
             }
         };
         addActual.setOutputMarkupId(true);
         add(addActual);
+    }
+
+    private boolean matchesActivityLocation(AmpActivityLocation itemLocation) {
+        AmpActivityLocation activityLocation = getActivityLocation();
+        return activityLocation == null
+                || itemLocation == activityLocation
+                || (itemLocation != null && (Objects.equals(itemLocation.getId(), activityLocation.getId())
+                || Objects.equals(getLocationId(itemLocation), getLocationId(activityLocation))));
+    }
+
+    private AmpActivityLocation getActivityLocation() {
+        return activityLocationModel != null ? activityLocationModel.getObject() : null;
+    }
+
+    private Long getLocationId(AmpActivityLocation activityLocation) {
+        return activityLocation != null && activityLocation.getLocation() != null
+                ? activityLocation.getLocation().getId() : null;
     }
 }

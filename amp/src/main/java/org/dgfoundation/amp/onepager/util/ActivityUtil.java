@@ -321,6 +321,8 @@ public class ActivityUtil {
 //            session.saveOrUpdate(a);
             session.merge(a);
         }
+        saveIndicatorDisaggregationValues(a, session);
+
         session.flush();
 
         updatePerformanceRules(oldA, a);
@@ -337,6 +339,60 @@ public class ActivityUtil {
 
         return a;
     }
+
+    private static void saveIndicatorDisaggregationValues(AmpActivityVersion activity, Session session) {
+        if (activity.getIndicators() == null) {
+            return;
+        }
+        for (IndicatorActivity indicatorActivity : activity.getIndicators()) {
+            AmpIndicator indicator = indicatorActivity.getIndicator();
+            if (indicator == null || indicator.getDisaggregationValues() == null) {
+                continue;
+            }
+            for (AmpIndicatorDisaggregationValue disaggregationValue : indicator.getDisaggregationValues()) {
+                disaggregationValue.setIndicator(indicator);
+                saveIndicatorGlobalValue(disaggregationValue.getBaseValue(), indicator, session);
+                saveIndicatorGlobalValue(disaggregationValue.getTargetValue(), indicator, session);
+                if (disaggregationValue.getActualValues() != null) {
+                    for (AmpIndicatorGlobalValue actualValue : disaggregationValue.getActualValues()) {
+                        actualValue.setType(AmpIndicatorGlobalValue.ACTUAL);
+                        actualValue.setActivityLocation(resolveActivityLocation(activity,
+                                actualValue.getActivityLocation()));
+                        saveIndicatorGlobalValue(actualValue, indicator, session);
+                    }
+                }
+                session.saveOrUpdate(disaggregationValue);
+            }
+        }
+    }
+
+    private static AmpActivityLocation resolveActivityLocation(AmpActivityVersion activity,
+                                                               AmpActivityLocation activityLocation) {
+        if (activityLocation == null || activity.getLocations() == null) {
+            return activityLocation;
+        }
+        return activity.getLocations().stream()
+                .filter(candidate -> sameActivityLocation(candidate, activityLocation))
+                .findFirst()
+                .orElse(activityLocation);
+    }
+
+    private static boolean sameActivityLocation(AmpActivityLocation first, AmpActivityLocation second) {
+        return first == second
+                || Objects.equals(first.getId(), second.getId())
+                || (first.getLocation() != null && second.getLocation() != null
+                && Objects.equals(first.getLocation().getId(), second.getLocation().getId()));
+    }
+
+    private static void saveIndicatorGlobalValue(AmpIndicatorGlobalValue value, AmpIndicator indicator,
+                                                 Session session) {
+        if (value == null) {
+            return;
+        }
+        value.setIndicator(indicator);
+        session.saveOrUpdate(value);
+    }
+
     private static <T> void cleanObjectFromSession(Session session, Class<T> objectClass, Long id)
     {
         T object = session.get(objectClass, id);

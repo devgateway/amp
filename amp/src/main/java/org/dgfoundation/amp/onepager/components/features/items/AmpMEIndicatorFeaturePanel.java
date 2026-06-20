@@ -136,7 +136,15 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         });
         add(indicatorTargetDateLabel);
 
-        AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, location,"Actual Values", false, 7);
+        AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel(
+                "valuesSubsection", indicator, conn, location,"Actual Values", false, 7) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                boolean fmVisible = isVisible();
+                setVisible(fmVisible && !hasDisaggregation);
+            }
+        };
         valuesTable.setOutputMarkupId(true);
         valuesTable.setOutputMarkupPlaceholderTag(true);
         add(valuesTable);
@@ -157,6 +165,13 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                 target.add(valuesTable);
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                boolean fmVisible = isVisible();
+                setVisible(fmVisible && !hasDisaggregation);
+            }
         };
 
 
@@ -170,7 +185,16 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
         AmpMEIndicatorBaseFeaturePanel baseValues = null;
 
         try {
-            baseValues = new AmpMEIndicatorBaseFeaturePanel("addBaseTargetValue", "Add Base Target Values", conn, indicator, values, location);
+            baseValues = new AmpMEIndicatorBaseFeaturePanel("addBaseTargetValue", "Add Base Target Values", conn, indicator, values, location){
+                @Override
+                protected void onConfigure() {
+                    super.onConfigure();
+                    if (isVisible()) {
+                        boolean fmVisible = isVisible();
+                        setVisible(fmVisible && !hasDisaggregation);
+                    }
+            }
+            };
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

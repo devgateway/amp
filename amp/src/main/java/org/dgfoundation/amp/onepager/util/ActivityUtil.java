@@ -41,9 +41,7 @@ import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.*;
 import org.hibernate.query.Query;
-import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
-import org.hibernate.type.ObjectType;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -344,25 +342,101 @@ public class ActivityUtil {
         if (activity.getIndicators() == null) {
             return;
         }
+        Map<Long, AmpIndicatorDisaggregationValue> disaggregationValues = new LinkedHashMap<>();
+        Map<Long, AmpIndicator> indicators = new HashMap<>();
         for (IndicatorActivity indicatorActivity : activity.getIndicators()) {
             AmpIndicator indicator = indicatorActivity.getIndicator();
             if (indicator == null || indicator.getDisaggregationValues() == null) {
                 continue;
             }
             for (AmpIndicatorDisaggregationValue disaggregationValue : indicator.getDisaggregationValues()) {
-                disaggregationValue.setIndicator(indicator);
-                saveIndicatorGlobalValue(disaggregationValue.getBaseValue(), indicator, session);
-                saveIndicatorGlobalValue(disaggregationValue.getTargetValue(), indicator, session);
-                if (disaggregationValue.getActualValues() != null) {
-                    for (AmpIndicatorGlobalValue actualValue : disaggregationValue.getActualValues()) {
-                        actualValue.setType(AmpIndicatorGlobalValue.ACTUAL);
-                        actualValue.setActivityLocation(resolveActivityLocation(activity,
-                                actualValue.getActivityLocation()));
-                        saveIndicatorGlobalValue(actualValue, indicator, session);
-                    }
+                Long disaggregationValueId = disaggregationValue.getId();
+                if (disaggregationValueId == null) {
+                    continue;
                 }
-                session.saveOrUpdate(disaggregationValue);
+                AmpIndicatorDisaggregationValue mergedValue = disaggregationValues.computeIfAbsent(
+                        disaggregationValueId, ignored -> disaggregationValue);
+                if (mergedValue != disaggregationValue) {
+                    mergeActualValues(mergedValue, disaggregationValue);
+                }
+                indicators.put(disaggregationValueId, indicator);
             }
+        }
+
+        for (Map.Entry<Long, AmpIndicatorDisaggregationValue> entry : disaggregationValues.entrySet()) {
+            AmpIndicator indicator = indicators.get(entry.getKey());
+            AmpIndicatorDisaggregationValue disaggregationValue = entry.getValue();
+            disaggregationValue.setIndicator(indicator);
+            saveIndicatorGlobalValue(disaggregationValue.getBaseValue(), indicator, session);
+            saveIndicatorGlobalValue(disaggregationValue.getTargetValue(), indicator, session);
+            if (disaggregationValue.getActualValues() != null) {
+                for (AmpIndicatorGlobalValue actualValue : disaggregationValue.getActualValues()) {
+                    actualValue.setType(AmpIndicatorGlobalValue.ACTUAL);
+                    actualValue.setActivityLocation(resolveActivityLocation(activity,
+                            actualValue.getActivityLocation()));
+                    saveIndicatorGlobalValue(actualValue, indicator, session);
+                }
+            }
+            session.saveOrUpdate(disaggregationValue);
+        }
+
+        session.flush();
+        Set<Long> activityLocationIds = getActivityLocationIds(activity);
+        for (AmpIndicatorDisaggregationValue disaggregationValue : disaggregationValues.values()) {
+            syncDisaggregationActualValueLinks(disaggregationValue, activityLocationIds, session);
+        }
+    }
+
+    private static void mergeActualValues(AmpIndicatorDisaggregationValue target,
+                                          AmpIndicatorDisaggregationValue source) {
+        if (source.getActualValues() == null || source.getActualValues().isEmpty()) {
+            return;
+        }
+        if (target.getActualValues() == null) {
+            target.setActualValues(new HashSet<>());
+        }
+        target.getActualValues().addAll(source.getActualValues());
+    }
+
+    private static Set<Long> getActivityLocationIds(AmpActivityVersion activity) {
+        if (activity.getLocations() == null) {
+            return Collections.emptySet();
+        }
+        return activity.getLocations().stream()
+                .map(AmpActivityLocation::getId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    private static void syncDisaggregationActualValueLinks(AmpIndicatorDisaggregationValue disaggregationValue,
+                                                           Set<Long> activityLocationIds, Session session) {
+        if (disaggregationValue.getId() == null || activityLocationIds.isEmpty()) {
+            return;
+        }
+
+        Query<?> deleteLinks = session.createNativeQuery("DELETE FROM amp_disagg_actual_values links "
+                + "USING amp_indicator_global_value global_values "
+                + "WHERE links.global_value_id = global_values.id "
+                + "AND links.disagg_value_id = :disaggValueId "
+                + "AND global_values.activity_location IN (:activityLocationIds)");
+        deleteLinks.setParameter("disaggValueId", disaggregationValue.getId(), LongType.INSTANCE);
+        deleteLinks.setParameterList("activityLocationIds", activityLocationIds);
+        deleteLinks.executeUpdate();
+
+        Set<Long> linkedValueIds = new HashSet<>();
+        for (AmpIndicatorGlobalValue actualValue : disaggregationValue.getActualValues()) {
+            if (actualValue.getId() == null || actualValue.getActivityLocation() == null
+                    || actualValue.getActivityLocation().getId() == null
+                    || !activityLocationIds.contains(actualValue.getActivityLocation().getId())
+                    || !linkedValueIds.add(actualValue.getId())) {
+                continue;
+            }
+
+            Query<?> insertLink = session.createNativeQuery("INSERT INTO amp_disagg_actual_values "
+                    + "(disagg_value_id, global_value_id) VALUES (:disaggValueId, :globalValueId)");
+            insertLink.setParameter("disaggValueId", disaggregationValue.getId(), LongType.INSTANCE);
+            insertLink.setParameter("globalValueId", actualValue.getId(), LongType.INSTANCE);
+            insertLink.executeUpdate();
         }
     }
 

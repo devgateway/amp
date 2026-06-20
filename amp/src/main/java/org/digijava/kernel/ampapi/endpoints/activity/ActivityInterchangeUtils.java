@@ -449,8 +449,12 @@ public final class ActivityInterchangeUtils {
         if (expectedActivityLocation == null) {
             return activityLocation == null;
         }
-        return Objects.equals(getAmpActivityLocationId(activityLocation), getAmpActivityLocationId(expectedActivityLocation))
-                || Objects.equals(getLocationId(activityLocation), getLocationId(expectedActivityLocation));
+        Long activityLocationId = getAmpActivityLocationId(activityLocation);
+        Long expectedActivityLocationId = getAmpActivityLocationId(expectedActivityLocation);
+        if (activityLocationId != null || expectedActivityLocationId != null) {
+            return Objects.equals(activityLocationId, expectedActivityLocationId);
+        }
+        return Objects.equals(getLocationId(activityLocation), getLocationId(expectedActivityLocation));
     }
 
     private static Long parseLong(Object value) {

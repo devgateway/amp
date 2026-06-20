@@ -92,10 +92,19 @@ public class AmpMEDisaggregationActualValuesPanel extends AmpFeaturePanel<AmpInd
 
     private boolean matchesActivityLocation(AmpActivityLocation itemLocation) {
         AmpActivityLocation activityLocation = getActivityLocation();
-        return activityLocation == null
-                || itemLocation == activityLocation
-                || (itemLocation != null && (Objects.equals(itemLocation.getId(), activityLocation.getId())
-                || Objects.equals(getLocationId(itemLocation), getLocationId(activityLocation))));
+        if (activityLocation == null) {
+            return itemLocation == null;
+        }
+        if (itemLocation == activityLocation) {
+            return true;
+        }
+        if (itemLocation == null) {
+            return false;
+        }
+        if (itemLocation.getId() != null || activityLocation.getId() != null) {
+            return Objects.equals(itemLocation.getId(), activityLocation.getId());
+        }
+        return Objects.equals(getLocationId(itemLocation), getLocationId(activityLocation));
     }
 
     private AmpActivityLocation getActivityLocation() {

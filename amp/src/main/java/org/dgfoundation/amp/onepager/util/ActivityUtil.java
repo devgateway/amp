@@ -357,7 +357,9 @@ public class ActivityUtil {
                 continue;
             }
             AmpIndicator indicator = getManagedIndicator(submittedIndicator, session);
+            logger.info("Count of disaggregation values for indicator " + indicator.getIndicatorId() + " is " + submittedIndicator.getDisaggregationValues().size());
             for (AmpIndicatorDisaggregationValue disaggregationValue : submittedIndicator.getDisaggregationValues()) {
+                logger.info("Processing disaggregation value with id " + disaggregationValue.getId() + " for indicator " + indicator.getIndicatorId());
                 Long disaggregationValueId = disaggregationValue.getId();
                 if (disaggregationValueId == null) {
                     continue;
@@ -367,7 +369,11 @@ public class ActivityUtil {
                 if (mergedValue != disaggregationValue) {
                     mergeActualValues(mergedValue, disaggregationValue);
                 }
+                logger.info("Indicators with id " + indicator.getIndicatorId() + " and disaggregation value id " + disaggregationValueId
+                        + " has " + mergedValue.getActualValues().size() + " actual values after merge");
                 indicators.put(disaggregationValueId, indicator);
+                logger.info("Values count this far: "+ indicators.size());
+
             }
         }
 

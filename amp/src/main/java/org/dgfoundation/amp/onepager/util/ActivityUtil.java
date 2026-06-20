@@ -387,9 +387,9 @@ public class ActivityUtil {
                     valueToSave.setType(AmpIndicatorGlobalValue.ACTUAL);
                     valueToSave.setActivityLocation(resolveActivityLocation(activity,
                             valueToSave.getActivityLocation()));
-                    saveIndicatorGlobalValue(valueToSave, indicator, session);
+                    AmpIndicatorGlobalValue savedValue = saveIndicatorGlobalValue(valueToSave, indicator, session);
                     actualValuesByDisaggregation.computeIfAbsent(entry.getKey(), ignored -> new LinkedHashSet<>())
-                            .add(valueToSave);
+                            .add(savedValue);
                 }
             }
         }
@@ -513,13 +513,20 @@ public class ActivityUtil {
         return session.load(AmpIndicator.class, indicator.getIndicatorId());
     }
 
-    private static void saveIndicatorGlobalValue(AmpIndicatorGlobalValue value, AmpIndicator indicator,
-                                                 Session session) {
+    private static AmpIndicatorGlobalValue saveIndicatorGlobalValue(AmpIndicatorGlobalValue value, AmpIndicator indicator,
+                                                                    Session session) {
         if (value == null) {
-            return;
+            return null;
         }
         value.setIndicator(indicator);
-        session.saveOrUpdate(value);
+        if (value.getId() == null) {
+            session.save(value);
+            return value;
+        }
+        if (session.contains(value)) {
+            return value;
+        }
+        return (AmpIndicatorGlobalValue) session.merge(value);
     }
 
     private static <T> void cleanObjectFromSession(Session session, Class<T> objectClass, Long id)

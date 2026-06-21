@@ -295,6 +295,8 @@ public class ActivityUtil {
             }
         }
 
+        normalizeIndicatorActivityValues(a);
+
         if (isActivityForm) {
             saveActivityResources(a, session);
             saveActivityGPINiResources(a, session);
@@ -528,10 +530,39 @@ public class ActivityUtil {
     }
 
     private static boolean sameActivityLocation(AmpActivityLocation first, AmpActivityLocation second) {
-        return first == second
-                || Objects.equals(first.getId(), second.getId())
-                || (first.getLocation() != null && second.getLocation() != null
-                && Objects.equals(first.getLocation().getId(), second.getLocation().getId()));
+        if (first == second) {
+            return true;
+        }
+        if (first == null || second == null) {
+            return false;
+        }
+        if (first.getId() != null && second.getId() != null && Objects.equals(first.getId(), second.getId())) {
+            return true;
+        }
+        return first.getLocation() != null && second.getLocation() != null
+                && Objects.equals(first.getLocation().getId(), second.getLocation().getId());
+    }
+
+    private static void normalizeIndicatorActivityValues(AmpActivityVersion activity) {
+        if (activity == null || activity.getIndicators() == null) {
+            return;
+        }
+        for (IndicatorActivity indicatorActivity : activity.getIndicators()) {
+            AmpActivityLocation indicatorLocation = resolveActivityLocation(activity,
+                    indicatorActivity.getActivityLocation());
+            indicatorActivity.setActivityLocation(indicatorLocation);
+            if (indicatorActivity.getValues() == null) {
+                continue;
+            }
+            for (AmpIndicatorValue value : indicatorActivity.getValues()) {
+                value.setIndicatorConnection(indicatorActivity);
+                AmpActivityLocation valueLocation = resolveActivityLocation(activity, value.getActivityLocation());
+                if (valueLocation == null || sameActivityLocation(valueLocation, indicatorLocation)) {
+                    valueLocation = indicatorLocation;
+                }
+                value.setActivityLocation(valueLocation);
+            }
+        }
     }
 
     private static AmpIndicator getManagedIndicator(AmpIndicator indicator, Session session) {

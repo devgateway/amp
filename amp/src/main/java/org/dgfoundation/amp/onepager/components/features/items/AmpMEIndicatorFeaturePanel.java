@@ -99,6 +99,12 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             protected String load() {
                 return globalBaseVal.getOriginalValue() != null ? String.valueOf(globalBaseVal.getOriginalValue()) : "N/A";
             }
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                boolean fmVisible = isVisible();
+                setVisible(fmVisible && !hasDisaggregation);
+            }
         });
         add(indicatorBaseValueLabel);
 
@@ -112,6 +118,12 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                     return "N/A";
                 }
             }
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                boolean fmVisible = isVisible();
+                setVisible(fmVisible && !hasDisaggregation);
+            }
         });
         add(indicatorBaseDateLabel);
 
@@ -119,6 +131,12 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             @Override
             protected String load() {
                 return globalTargetVal.getOriginalValue() != null ? String.valueOf(globalTargetVal.getOriginalValue()) : "N/A";
+            }
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                boolean fmVisible = isVisible();
+                setVisible(fmVisible && !hasDisaggregation);
             }
         });
         add(indicatorTargetValueLabel);
@@ -132,6 +150,12 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                 } else {
                     return "N/A";
                 }
+            }
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                boolean fmVisible = isVisible();
+                setVisible(fmVisible && !hasDisaggregation);
             }
         });
         add(indicatorTargetDateLabel);

@@ -598,6 +598,7 @@ public class IndicatorManagerService {
                 }
             }
 
+            session.flush();
             return new MEIndicatorDTO(indicator);
         }
         throw new ApiRuntimeException(BAD_REQUEST,
@@ -649,16 +650,21 @@ public class IndicatorManagerService {
         } else {
             disaggValue.setChildCategory(null);
         }
-        disaggValue.setBaseValue(saveIndicatorGlobalValue(dto.getBaseValue(), indicator,
+        disaggValue.setBaseValue(updateIndicatorGlobalValue(disaggValue.getBaseValue(), dto.getBaseValue(), indicator,
                 AmpIndicatorGlobalValue.BASE, session));
-        disaggValue.setTargetValue(saveIndicatorGlobalValue(dto.getTargetValue(), indicator,
+        disaggValue.setTargetValue(updateIndicatorGlobalValue(disaggValue.getTargetValue(), dto.getTargetValue(), indicator,
                 AmpIndicatorGlobalValue.TARGET, session));
     }
 
-    private AmpIndicatorGlobalValue saveIndicatorGlobalValue(AmpIndicatorGlobalValue value, AmpIndicator indicator,
-                                                            int type, Session session) {
-        if (value == null) {
+    private AmpIndicatorGlobalValue updateIndicatorGlobalValue(AmpIndicatorGlobalValue currentValue,
+                                                              AmpIndicatorGlobalValue submittedValue,
+                                                              AmpIndicator indicator, int type, Session session) {
+        if (submittedValue == null) {
             return null;
+        }
+        AmpIndicatorGlobalValue value = currentValue != null ? currentValue : submittedValue;
+        if (currentValue != null && currentValue != submittedValue) {
+            copyIndicatorGlobalValue(submittedValue, value);
         }
         value.setType(type);
         value.setIndicator(indicator);
@@ -670,6 +676,14 @@ public class IndicatorManagerService {
             return value;
         }
         return (AmpIndicatorGlobalValue) session.merge(value);
+    }
+
+    private void copyIndicatorGlobalValue(AmpIndicatorGlobalValue source, AmpIndicatorGlobalValue target) {
+        target.setOriginalValue(source.getOriginalValue());
+        target.setOriginalValueDate(source.getOriginalValueDate());
+        target.setRevisedValue(source.getRevisedValue());
+        target.setRevisedValueDate(source.getRevisedValueDate());
+        target.setActivityLocation(source.getActivityLocation());
     }
 
     public void validateProgramSettingsAndGlobalValues(final MEIndicatorDTO indicatorRequest,

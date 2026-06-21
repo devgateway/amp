@@ -518,22 +518,16 @@ public class IndicatorManagerService {
                 indicator.setProgram(program);
             }
 
-            Set <AmpIndicatorGlobalValue> updatedValues = new HashSet<>();
             if (indRequest.getBaseValue() != null) {
-                AmpIndicatorGlobalValue validatedBaseValues = validateBaseValues(indRequest);
-                updatedValues.add(validatedBaseValues);
-                indicator.getIndicatorValues().add(validatedBaseValues);
-                indicator.getBaseValue().setIndicator(indicator);
+                validateBaseValues(indRequest);
+                updateTopLevelIndicatorGlobalValue(indicator, indRequest.getBaseValue(), AmpIndicatorGlobalValue.BASE,
+                        session);
             }
             if (indRequest.getTargetValue() != null) {
-                AmpIndicatorGlobalValue validatedTargetValues = validateTargetValues(indRequest);
-                updatedValues.add(validatedTargetValues);
-                indicator.getIndicatorValues().add(validatedTargetValues);
-                indicator.getTargetValue().setIndicator(indicator);
+                validateTargetValues(indRequest);
+                updateTopLevelIndicatorGlobalValue(indicator, indRequest.getTargetValue(),
+                        AmpIndicatorGlobalValue.TARGET, session);
             }
-            indicator.getIndicatorValues().clear();
-            updatedValues.forEach(value -> value.setIndicator(indicator));
-            indicator.getIndicatorValues().addAll(updatedValues);
 
             Set<AmpSector> sectors = indRequest.getSectorIds().stream()
                     .map(id -> (AmpSector) session.get(AmpSector.class, id))
@@ -578,6 +572,7 @@ public class IndicatorManagerService {
                     if (disaggValue.getId() == null) {
                         session.save(disaggValue);
                     }
+                    addDisaggregationGlobalValues(indicator, disaggValue);
                     indicator.getDisaggregationValues().add(disaggValue);
                     valuesToKeep.add(disaggValue);
                 }
@@ -586,6 +581,7 @@ public class IndicatorManagerService {
                         .collect(Collectors.toSet());
                 for (AmpIndicatorDisaggregationValue valueToRemove : valuesToRemove) {
                     indicator.getDisaggregationValues().remove(valueToRemove);
+                    removeDisaggregationGlobalValues(indicator, valueToRemove);
                     session.delete(valueToRemove);
                 }
             }
@@ -635,6 +631,54 @@ public class IndicatorManagerService {
 
     private Long getCategoryId(AmpCategoryValue categoryValue) {
         return categoryValue != null ? categoryValue.getId() : null;
+    }
+
+    private void updateTopLevelIndicatorGlobalValue(AmpIndicator indicator, AmpIndicatorGlobalValue submittedValue,
+                                                    int type, Session session) {
+        AmpIndicatorGlobalValue currentValue = findTopLevelIndicatorGlobalValue(indicator, type);
+        AmpIndicatorGlobalValue value = updateIndicatorGlobalValue(currentValue, submittedValue, indicator, type,
+                session);
+        if (value != null && !indicator.getIndicatorValues().contains(value)) {
+            indicator.getIndicatorValues().add(value);
+        }
+    }
+
+    private AmpIndicatorGlobalValue findTopLevelIndicatorGlobalValue(AmpIndicator indicator, int type) {
+        return indicator.getIndicatorValues().stream()
+                .filter(value -> value.getType() == type)
+                .filter(value -> isTopLevelIndicatorGlobalValue(indicator, value))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private boolean isTopLevelIndicatorGlobalValue(AmpIndicator indicator, AmpIndicatorGlobalValue value) {
+        return indicator.getDisaggregationValues() == null || indicator.getDisaggregationValues().stream()
+                .noneMatch(disaggregationValue -> value == disaggregationValue.getBaseValue()
+                        || value == disaggregationValue.getTargetValue()
+                        || Objects.equals(value.getId(), getGlobalValueId(disaggregationValue.getBaseValue()))
+                        || Objects.equals(value.getId(), getGlobalValueId(disaggregationValue.getTargetValue())));
+    }
+
+    private Long getGlobalValueId(AmpIndicatorGlobalValue value) {
+        return value != null ? value.getId() : null;
+    }
+
+    private void removeDisaggregationGlobalValues(AmpIndicator indicator,
+                                                  AmpIndicatorDisaggregationValue disaggregationValue) {
+        indicator.getIndicatorValues().remove(disaggregationValue.getBaseValue());
+        indicator.getIndicatorValues().remove(disaggregationValue.getTargetValue());
+    }
+
+    private void addDisaggregationGlobalValues(AmpIndicator indicator,
+                                               AmpIndicatorDisaggregationValue disaggregationValue) {
+        addIndicatorGlobalValue(indicator, disaggregationValue.getBaseValue());
+        addIndicatorGlobalValue(indicator, disaggregationValue.getTargetValue());
+    }
+
+    private void addIndicatorGlobalValue(AmpIndicator indicator, AmpIndicatorGlobalValue value) {
+        if (value != null && !indicator.getIndicatorValues().contains(value)) {
+            indicator.getIndicatorValues().add(value);
+        }
     }
 
     private void updateDisaggregationValue(AmpIndicatorDisaggregationValue disaggValue,

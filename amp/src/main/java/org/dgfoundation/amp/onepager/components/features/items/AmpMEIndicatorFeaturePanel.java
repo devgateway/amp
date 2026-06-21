@@ -2,6 +2,7 @@ package org.dgfoundation.amp.onepager.components.features.items;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -94,12 +95,7 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             }
         }
 
-        final Label indicatorBaseValueLabel = new Label("base", new LoadableDetachableModel<String>() {
-            @Override
-            protected String load() {
-                return globalBaseVal.getOriginalValue() != null ? String.valueOf(globalBaseVal.getOriginalValue()) : "N/A";
-            }
-        }) {
+        final WebMarkupContainer baseTargetSummary = new WebMarkupContainer("baseTargetSummary") {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
@@ -107,7 +103,14 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                 setVisible(fmVisible && !hasDisaggregation);
             }
         };
-        add(indicatorBaseValueLabel);
+
+        final Label indicatorBaseValueLabel = new Label("base", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return globalBaseVal.getOriginalValue() != null ? String.valueOf(globalBaseVal.getOriginalValue()) : "N/A";
+            }
+        });
+        baseTargetSummary.add(indicatorBaseValueLabel);
 
         final Label indicatorBaseDateLabel = new Label("baseDate", new LoadableDetachableModel<String>() {
             @Override
@@ -119,30 +122,16 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                     return "N/A";
                 }
             }
-        }) {
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                boolean fmVisible = isVisible();
-                setVisible(fmVisible && !hasDisaggregation);
-            }
-        };
-        add(indicatorBaseDateLabel);
+        });
+        baseTargetSummary.add(indicatorBaseDateLabel);
 
         final Label indicatorTargetValueLabel = new Label("target", new LoadableDetachableModel<String>() {
             @Override
             protected String load() {
                 return globalTargetVal.getOriginalValue() != null ? String.valueOf(globalTargetVal.getOriginalValue()) : "N/A";
             }
-        }) {
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                boolean fmVisible = isVisible();
-                setVisible(fmVisible && !hasDisaggregation);
-            }
-        };
-        add(indicatorTargetValueLabel);
+        });
+        baseTargetSummary.add(indicatorTargetValueLabel);
 
         final Label indicatorTargetDateLabel = new Label("targetDate", new LoadableDetachableModel<String>() {
             @Override
@@ -154,15 +143,9 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                     return "N/A";
                 }
             }
-        }) {
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                boolean fmVisible = isVisible();
-                setVisible(fmVisible && !hasDisaggregation);
-            }
-        };
-        add(indicatorTargetDateLabel);
+        });
+        baseTargetSummary.add(indicatorTargetDateLabel);
+        add(baseTargetSummary);
 
         AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel(
                 "valuesSubsection", indicator, conn, location,"Actual Values", false, 7) {

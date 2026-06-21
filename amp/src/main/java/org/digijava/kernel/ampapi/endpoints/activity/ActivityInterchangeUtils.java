@@ -430,18 +430,21 @@ public final class ActivityInterchangeUtils {
     }
 
     private static AmpActivityLocation getActivityLocation(Long projectId, Long ampActivityLocationId) {
-        AmpActivityLocation activityLocation = getActivityLocation(ampActivityLocationId);
-        if (activityLocation != null || projectId == null) {
-            return activityLocation;
+        if (projectId == null) {
+            return getActivityLocation(ampActivityLocationId);
         }
         AmpActivityVersion activity = loadActivity(projectId);
+        if (activity.getLocations() != null && ampActivityLocationId != null) {
+            Optional<AmpActivityLocation> activityLocation = activity.getLocations().stream()
+                    .filter(location -> Objects.equals(getAmpActivityLocationId(location), ampActivityLocationId)
+                            || Objects.equals(getLocationId(location), ampActivityLocationId))
+                    .findFirst();
+            if (activityLocation.isPresent()) {
+                return activityLocation.get();
+            }
+        }
         return activity.getLocations() != null && activity.getLocations().size() == 1
                 ? activity.getLocations().iterator().next() : null;
-    }
-
-    private static boolean matchesActivityLocation(AmpActivityLocation activityLocation, Long expectedActivityLocationId) {
-        return expectedActivityLocationId == null
-                || expectedActivityLocationId.equals(getAmpActivityLocationId(activityLocation));
     }
 
     private static boolean matchesActivityLocation(AmpActivityLocation activityLocation,
@@ -475,6 +478,7 @@ public final class ActivityInterchangeUtils {
                 for (Map<String, Object> indicator : indicatorsList) {
                     List<Object> actualValues = new ArrayList<>();
                     Long activityLocationId = parseLong(indicator.get("activity_location"));
+                    AmpActivityLocation activityLocation = getActivityLocation(projectId, activityLocationId);
 
                     AmpIndicator ind = new AmpIndicator();
                     ind.setIndicatorId(parseLong(indicator.get("indicator")));
@@ -493,7 +497,7 @@ public final class ActivityInterchangeUtils {
                         if (result == null) {
                             continue;
                         }
-                        if (!matchesActivityLocation(result.getActivityLocation(), activityLocationId)) {
+                        if (!matchesActivityLocation(result.getActivityLocation(), activityLocation)) {
                             continue;
                         }
                         if (result.getValues() != null) {

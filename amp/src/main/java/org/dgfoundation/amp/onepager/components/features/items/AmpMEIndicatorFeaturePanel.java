@@ -99,13 +99,14 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             protected String load() {
                 return globalBaseVal.getOriginalValue() != null ? String.valueOf(globalBaseVal.getOriginalValue()) : "N/A";
             }
+        }) {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
                 boolean fmVisible = isVisible();
                 setVisible(fmVisible && !hasDisaggregation);
             }
-        });
+        };
         add(indicatorBaseValueLabel);
 
         final Label indicatorBaseDateLabel = new Label("baseDate", new LoadableDetachableModel<String>() {
@@ -118,13 +119,14 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                     return "N/A";
                 }
             }
+        }) {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
                 boolean fmVisible = isVisible();
                 setVisible(fmVisible && !hasDisaggregation);
             }
-        });
+        };
         add(indicatorBaseDateLabel);
 
         final Label indicatorTargetValueLabel = new Label("target", new LoadableDetachableModel<String>() {
@@ -132,13 +134,14 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
             protected String load() {
                 return globalTargetVal.getOriginalValue() != null ? String.valueOf(globalTargetVal.getOriginalValue()) : "N/A";
             }
+        }) {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
                 boolean fmVisible = isVisible();
                 setVisible(fmVisible && !hasDisaggregation);
             }
-        });
+        };
         add(indicatorTargetValueLabel);
 
         final Label indicatorTargetDateLabel = new Label("targetDate", new LoadableDetachableModel<String>() {
@@ -151,13 +154,14 @@ public class AmpMEIndicatorFeaturePanel extends AmpFeaturePanel<IndicatorActivit
                     return "N/A";
                 }
             }
+        }) {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
                 boolean fmVisible = isVisible();
                 setVisible(fmVisible && !hasDisaggregation);
             }
-        });
+        };
         add(indicatorTargetDateLabel);
 
         AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel(

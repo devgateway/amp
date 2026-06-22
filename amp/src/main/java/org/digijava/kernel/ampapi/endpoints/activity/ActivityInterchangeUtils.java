@@ -479,6 +479,7 @@ public final class ActivityInterchangeUtils {
                     List<Object> actualValues = new ArrayList<>();
                     Long activityLocationId = parseLong(indicator.get("activity_location"));
                     AmpActivityLocation activityLocation = getActivityLocation(projectId, activityLocationId);
+                    boolean singleLocationFallback = activityLocationId == null && activityLocation != null;
 
                     AmpIndicator ind = new AmpIndicator();
                     ind.setIndicatorId(parseLong(indicator.get("indicator")));
@@ -497,13 +498,15 @@ public final class ActivityInterchangeUtils {
                         if (result == null) {
                             continue;
                         }
-                        if (!matchesActivityLocation(result.getActivityLocation(), activityLocation)) {
+                        if (!matchesIndicatorActivityLocation(result.getActivityLocation(), activityLocation,
+                                singleLocationFallback)) {
                             continue;
                         }
                         if (result.getValues() != null) {
                             for (AmpIndicatorValue indicatorValue : result.getValues()) {
                                 if (indicatorValue.getValueType() == AmpIndicatorValue.ACTUAL
-                                        && matchesIndicatorValueActivityLocation(indicatorValue, result)) {
+                                        && matchesIndicatorValueActivityLocation(indicatorValue, result, activityLocation,
+                                                singleLocationFallback)) {
                                     actualValues.add(serializeIndicatorActualValue(indicatorValue));
                                 }
                             }
@@ -516,10 +519,23 @@ public final class ActivityInterchangeUtils {
         });
     }
 
+    private static boolean matchesIndicatorActivityLocation(AmpActivityLocation indicatorActivityLocation,
+                                                            AmpActivityLocation expectedActivityLocation,
+                                                            boolean singleLocationFallback) {
+        return matchesActivityLocation(indicatorActivityLocation, expectedActivityLocation)
+                || (singleLocationFallback && indicatorActivityLocation == null);
+    }
+
     private static boolean matchesIndicatorValueActivityLocation(AmpIndicatorValue indicatorValue,
-                                                                 IndicatorActivity indicatorActivity) {
-        return indicatorValue.getActivityLocation() == null
-                || matchesActivityLocation(indicatorValue.getActivityLocation(), indicatorActivity.getActivityLocation());
+                                                                 IndicatorActivity indicatorActivity,
+                                                                 AmpActivityLocation expectedActivityLocation,
+                                                                 boolean singleLocationFallback) {
+        if (indicatorValue.getActivityLocation() == null) {
+            return true;
+        }
+        return matchesActivityLocation(indicatorValue.getActivityLocation(), indicatorActivity.getActivityLocation())
+            || (singleLocationFallback
+                && matchesActivityLocation(indicatorValue.getActivityLocation(), expectedActivityLocation));
     }
 
     private static Map<String, Object> serializeIndicatorActualValue(AmpIndicatorValue indicatorValue) {

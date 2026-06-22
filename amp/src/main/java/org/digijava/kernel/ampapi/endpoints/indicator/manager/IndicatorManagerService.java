@@ -580,9 +580,7 @@ public class IndicatorManagerService {
                         .filter(existing -> !valuesToKeep.contains(existing))
                         .collect(Collectors.toSet());
                 for (AmpIndicatorDisaggregationValue valueToRemove : valuesToRemove) {
-                    indicator.getDisaggregationValues().remove(valueToRemove);
-                    removeDisaggregationGlobalValues(indicator, valueToRemove);
-                    session.delete(valueToRemove);
+                    deleteDisaggregationValue(indicator, valueToRemove, session);
                 }
             }
             if (program != null) {
@@ -663,10 +661,50 @@ public class IndicatorManagerService {
         return value != null ? value.getId() : null;
     }
 
-    private void removeDisaggregationGlobalValues(AmpIndicator indicator,
-                                                  AmpIndicatorDisaggregationValue disaggregationValue) {
-        indicator.getIndicatorValues().remove(disaggregationValue.getBaseValue());
-        indicator.getIndicatorValues().remove(disaggregationValue.getTargetValue());
+    private void deleteDisaggregationValue(AmpIndicator indicator,
+                                           AmpIndicatorDisaggregationValue disaggregationValue,
+                                           Session session) {
+        AmpIndicatorGlobalValue baseValue = disaggregationValue.getBaseValue();
+        AmpIndicatorGlobalValue targetValue = disaggregationValue.getTargetValue();
+
+        indicator.getDisaggregationValues().remove(disaggregationValue);
+        disaggregationValue.setBaseValue(null);
+        disaggregationValue.setTargetValue(null);
+        disaggregationValue.getActualValues().clear();
+
+        removeDisaggregationGlobalValue(indicator, baseValue, session);
+        removeDisaggregationGlobalValue(indicator, targetValue, session);
+        session.delete(disaggregationValue);
+    }
+
+    private void removeDisaggregationGlobalValue(AmpIndicator indicator, AmpIndicatorGlobalValue value,
+                                                 Session session) {
+        if (value == null || isGlobalValueReferencedByDisaggregation(indicator, value)) {
+            return;
+        }
+        indicator.getIndicatorValues().removeIf(indicatorValue -> sameGlobalValue(indicatorValue, value));
+        value.setIndicator(null);
+        if (value.getId() != null) {
+            AmpIndicatorGlobalValue valueToDelete = session.contains(value)
+                    ? value : session.get(AmpIndicatorGlobalValue.class, value.getId());
+            if (valueToDelete != null) {
+                session.delete(valueToDelete);
+            }
+        }
+    }
+
+    private boolean isGlobalValueReferencedByDisaggregation(AmpIndicator indicator, AmpIndicatorGlobalValue value) {
+        return indicator.getDisaggregationValues().stream()
+                .anyMatch(disaggregationValue -> sameGlobalValue(disaggregationValue.getBaseValue(), value)
+                        || sameGlobalValue(disaggregationValue.getTargetValue(), value));
+    }
+
+    private boolean sameGlobalValue(AmpIndicatorGlobalValue firstValue, AmpIndicatorGlobalValue secondValue) {
+        if (firstValue == null || secondValue == null) {
+            return false;
+        }
+        return firstValue == secondValue || firstValue.getId() != null
+            && Objects.equals(firstValue.getId(), secondValue.getId());
     }
 
     private void addDisaggregationGlobalValues(AmpIndicator indicator,

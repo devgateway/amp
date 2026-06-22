@@ -23,6 +23,11 @@ const DisaggregationManagerPage: React.FC = () => {
   const [editingChild, setEditingChild] = useState<CategoryValue | null>(null);
   const [optionsMap, setOptionsMap] = useState<{ [key: number]: any[] }>({});
   const [optionValueError, setOptionValueError] = useState<string>('');
+  const [deleteCandidate, setDeleteCandidate] = useState<{ category: CategoryValue; child: CategoryValue } | null>(null);
+  const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
+  const [showDeleteBlockedModal, setShowDeleteBlockedModal] = useState(false);
+  const [deleteErrorMessage, setDeleteErrorMessage] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
   const dispatch = useDispatch();
 
   const categoriesReducer = useSelector((state: any) => state.fetchAmpCategoryReducer);
@@ -72,9 +77,70 @@ const DisaggregationManagerPage: React.FC = () => {
     dispatch(getAmpCategories());
   };
 
-  const handleDeleteChild = async (category: CategoryValue, child: CategoryValue) => {
-    await fetch(`/rest/indicator_disaggregation/options/${child.id}`, { method: 'DELETE' });
-    refreshCategories();
+  const extractApiErrorMessage = async (response: Response, fallback: string): Promise<string> => {
+    try {
+      const error = await response.json();
+      if (error?.error) {
+        const firstKey = Object.keys(error.error)[0];
+        if (firstKey && error.error[firstKey] && error.error[firstKey][0]) {
+          return error.error[firstKey][0];
+        }
+      }
+      if (error?.message) {
+        return error.message;
+      }
+    } catch {
+      return fallback;
+    }
+    return fallback;
+  };
+
+  const handleDeleteChild = (category: CategoryValue, child: CategoryValue) => {
+    setDeleteCandidate({ category, child });
+    setShowDeleteConfirmModal(true);
+  };
+
+  const handleCloseDeleteConfirm = () => {
+    if (!isDeleting) {
+      setShowDeleteConfirmModal(false);
+      setDeleteCandidate(null);
+    }
+  };
+
+  const handleConfirmDeleteChild = async () => {
+    if (!deleteCandidate) return;
+
+    const candidate = deleteCandidate;
+    setIsDeleting(true);
+    try {
+      const response = await fetch(`/rest/indicator_disaggregation/options/${candidate.child.id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (response.ok) {
+        setOptionsMap(previousOptionsMap => ({
+          ...previousOptionsMap,
+          [candidate.category.id]: (previousOptionsMap[candidate.category.id] || [])
+            .filter(option => option.id !== candidate.child.id)
+        }));
+        setShowDeleteConfirmModal(false);
+        setDeleteCandidate(null);
+        refreshCategories();
+      } else {
+        const errorMessage = await extractApiErrorMessage(response, t('amp.disaggregationmanager:delete-failed'));
+        setShowDeleteConfirmModal(false);
+        setDeleteCandidate(null);
+        setDeleteErrorMessage(errorMessage);
+        setShowDeleteBlockedModal(true);
+      }
+    } catch {
+      setShowDeleteConfirmModal(false);
+      setDeleteCandidate(null);
+      setDeleteErrorMessage(t('amp.disaggregationmanager:delete-unexpected-error'));
+      setShowDeleteBlockedModal(true);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleClose = () => {
@@ -216,6 +282,52 @@ const DisaggregationManagerPage: React.FC = () => {
             </Button>
           </Modal.Footer>
         </Form>
+      </Modal>
+      <Modal
+          show={showDeleteConfirmModal}
+          onHide={handleCloseDeleteConfirm}
+          centered
+          animation={false}
+          backdropClassName={styles.modal_backdrop}
+          backdrop="static"
+          keyboard={!isDeleting}
+      >
+        <Modal.Header closeButton={!isDeleting}>
+          <Modal.Title>{t('amp.disaggregationmanager:delete-option')}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            {t('amp.disaggregationmanager:delete-option-confirm')} <strong>{deleteCandidate?.child.value}</strong>?
+          </p>
+          <p>{t('amp.disaggregationmanager:delete-option-warning')}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteConfirm} disabled={isDeleting}>
+            {t('amp.disaggregationmanager:cancel')}
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDeleteChild} disabled={isDeleting}>
+            {isDeleting ? t('amp.disaggregationmanager:deleting') : t('amp.disaggregationmanager:delete')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal
+          show={showDeleteBlockedModal}
+          onHide={() => setShowDeleteBlockedModal(false)}
+          centered
+          animation={false}
+          backdropClassName={styles.modal_backdrop}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{t('amp.disaggregationmanager:cannot-delete-option')}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>{deleteErrorMessage || t('amp.disaggregationmanager:delete-linked-option')}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={() => setShowDeleteBlockedModal(false)}>
+            {t('amp.disaggregationmanager:ok')}
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   );

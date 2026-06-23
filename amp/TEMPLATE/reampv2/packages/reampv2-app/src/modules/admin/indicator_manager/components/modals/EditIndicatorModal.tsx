@@ -144,6 +144,37 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     return DateUtil.toISO8601(date, globalSettings['default-date-format']);
   };
 
+  const resolveDisaggregationOrientation = (
+    selectedDisaggregations: number[] = [],
+    disaggregationValues: any[] = []
+  ) => {
+    const defaultOrientation = {
+      parentDisaggregationId: selectedDisaggregations[0],
+      childDisaggregationId: selectedDisaggregations[1],
+    };
+
+    if (selectedDisaggregations.length !== 2 || !Array.isArray(disaggregationValues) || disaggregationValues.length === 0) {
+      return defaultOrientation;
+    }
+
+    const orientationFromValues = disaggregationValues.find((value: any) => (
+      value?.parentDisaggregationId
+      && value?.childDisaggregationId
+      && selectedDisaggregations.includes(value.parentDisaggregationId)
+      && selectedDisaggregations.includes(value.childDisaggregationId)
+      && value.parentDisaggregationId !== value.childDisaggregationId
+    ));
+
+    if (orientationFromValues) {
+      return {
+        parentDisaggregationId: orientationFromValues.parentDisaggregationId,
+        childDisaggregationId: orientationFromValues.childDisaggregationId,
+      };
+    }
+
+    return defaultOrientation;
+  };
+
   const formikRef = useRef<FormikProps<IndicatorFormValues>>(null);
 
   const getCategories = () => {
@@ -523,6 +554,11 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         }}
       >
         {(props) => {
+          const twoLevelOrientation = resolveDisaggregationOrientation(
+            props.values.disaggregation,
+            props.values.disaggregationValues || indicator?.disaggregationValues || []
+          );
+
           // Fetch disaggregation children when disaggregation changes
           useEffect(() => {
             const selected = props.values.disaggregation;
@@ -546,20 +582,25 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       return existing || {
                         parentCategoryId: child.id,
                         childCategoryId: null,
+                        parentDisaggregationId: selected[0],
                         base: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' },
                         target: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' }
                       };
                     });
                   } else if (selected.length === 2) {
                     // For double disaggregation, cross product of children
-                    const parents = childrenMap[selected[0]] || [];
-                    const children = childrenMap[selected[1]] || [];
+                    const parentDisaggregationId = twoLevelOrientation.parentDisaggregationId;
+                    const childDisaggregationId = twoLevelOrientation.childDisaggregationId;
+                    const parents = childrenMap[parentDisaggregationId] || [];
+                    const children = childrenMap[childDisaggregationId] || [];
                     parents.forEach((parent: any) => {
                       children.forEach((child: any) => {
                         const existing = (props.values.disaggregationValues || []).find((v: any) => v.parentCategoryId === parent.id && v.childCategoryId === child.id);
                         newDisaggValues.push(existing || {
                           parentCategoryId: parent.id,
                           childCategoryId: child.id,
+                          parentDisaggregationId,
+                          childDisaggregationId,
                           base: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' },
                           target: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' }
                         });
@@ -1026,7 +1067,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             <div style={{marginTop: '1rem'}}>
                               <h6>{t("amp.indicatormanager:disaggregation-values")}</h6>
                               <Accordion defaultActiveKey="0">
-                                {disaggregationChildren[props.values.disaggregation[0]]?.map((parentChild: any, parentIdx: number) => (
+                                {disaggregationChildren[twoLevelOrientation.parentDisaggregationId]?.map((parentChild: any, parentIdx: number) => (
                                   <Card key={parentChild.id}>
                                     <Accordion.Toggle
                                       as={Card.Header}
@@ -1044,14 +1085,16 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                                     </Accordion.Toggle>
                                     <Accordion.Collapse eventKey={String(parentIdx)}>
                                       <Card.Body>
-                                        {disaggregationChildren[props.values.disaggregation[1]]?.length > 0 ? (
+                                        {disaggregationChildren[twoLevelOrientation.childDisaggregationId]?.length > 0 ? (
                                           <div style={{maxHeight: '300px', overflowY: 'auto'}}>
-                                            {disaggregationChildren[props.values.disaggregation[1]].map((child: any) => {
+                                            {disaggregationChildren[twoLevelOrientation.childDisaggregationId].map((child: any) => {
                                               const disaggArr = Array.isArray(props.values.disaggregationValues) ? props.values.disaggregationValues : [];
                                               let entryIdx = disaggArr.findIndex((v: any) => v.parentCategoryId === parentChild.id && v.childCategoryId === child.id);
                                               let entry = entryIdx !== -1 ? disaggArr[entryIdx] : {
                                                 parentCategoryId: parentChild.id,
                                                 childCategoryId: child.id,
+                                                parentDisaggregationId: twoLevelOrientation.parentDisaggregationId,
+                                                childDisaggregationId: twoLevelOrientation.childDisaggregationId,
                                                 base: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' },
                                                 target: { originalValue: '', originalValueDate: '', revisedValue: '', revisedValueDate: '' }
                                               };

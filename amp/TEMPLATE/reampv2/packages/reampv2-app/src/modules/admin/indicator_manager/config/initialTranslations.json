@@ -250,6 +250,7 @@
   "amp.indicatormanager:calculation-method-placeholder": "Describe how the indicator's value is calculated",
   "amp.indicatormanager:no-disaggregation-children": "No children found for this disaggregation.",
   "amp.indicatormanager:click-to-expand-collapse": "Click to expand/collapse",
+  "amp.indicatormanager:options-count": "options",
   "amp.outcomeoutput:add-outputs": "Add Outputs",
   "amp.outcomeoutput:edit-output": "Edit Output",
   "amp.indicatormanager:select-unit-of-measure": "Select Unit of Measure",

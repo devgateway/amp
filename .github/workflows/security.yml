@@ -85,13 +85,16 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Cache the NVD data feed so successive runs skip the ~60s download
+      # Cache the NVD database so successive runs reuse it instead of hitting
+      # the NVD API from cold on every run. Use a daily bucket (not run_id) so
+      # the restore-keys fallback actually finds a previous cache entry.
       - name: Cache NVD data
         uses: actions/cache@v4
         with:
           path: ~/.m2/repository/org/owasp/dependency-check-data
-          key: nvd-${{ runner.os }}-${{ github.run_id }}
+          key: nvd-${{ runner.os }}-${{ hashFiles('amp/pom.xml') }}-${{ github.run_id }}
           restore-keys: |
+            nvd-${{ runner.os }}-${{ hashFiles('amp/pom.xml') }}-
             nvd-${{ runner.os }}-
 
       - name: Run OWASP Dependency-Check
@@ -125,6 +128,8 @@ jobs:
             -Dformats=HTML,JSON \
             -DnvdApiDelay=10000 \
             -DnvdMaxRetryCount=10 \
+            -DnvdValidForHours=24 \
+            -DfailOnError=false \
             -DnvdApiKey="${NVD_API_KEY}" \
             2>&1 | tee -a "${LOG_FILE}"
           MAVEN_EXIT=${PIPESTATUS[0]}

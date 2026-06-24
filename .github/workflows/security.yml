@@ -107,6 +107,14 @@ jobs:
           LOG_FILE="${GITHUB_WORKSPACE}/owasp-mvn.log"
           mkdir -p "${REPORT_DIR}"
 
+          if [ -z "${NVD_API_KEY}" ]; then
+            echo "::error::NVD_API_KEY repository secret is not set or is not available to this workflow run." | tee "${LOG_FILE}"
+            echo "Set it in Repository Settings > Secrets and variables > Actions, or rerun from a branch where secrets are available." | tee -a "${LOG_FILE}"
+            exit 1
+          fi
+
+          echo "NVD_API_KEY is configured; using CI-safe NVD delay/retry settings." | tee "${LOG_FILE}"
+
           set +e
           mvn -B -ntp \
             org.owasp:dependency-check-maven:9.2.0:check \
@@ -115,8 +123,10 @@ jobs:
             -Dmaven.test.skip=true \
             -DoutputDirectory="${REPORT_DIR}" \
             -Dformats=HTML,JSON \
+            -DnvdApiDelay=10000 \
+            -DnvdMaxRetryCount=10 \
             -DnvdApiKey="${NVD_API_KEY}" \
-            2>&1 | tee "${LOG_FILE}"
+            2>&1 | tee -a "${LOG_FILE}"
           MAVEN_EXIT=${PIPESTATUS[0]}
           echo "Maven exit code: ${MAVEN_EXIT}"
           exit "${MAVEN_EXIT}"

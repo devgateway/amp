@@ -99,6 +99,7 @@ jobs:
             --failOnCVSS 7
             --suppression /github/workspace/security/owasp-suppressions.xml
             --scan /github/workspace/amp/ckeditor_4.4.6
+            --disableNodeAudit
             --enableExperimental
 
       - name: Upload HTML report

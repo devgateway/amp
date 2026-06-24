@@ -100,12 +100,15 @@ jobs:
         # lifecycle (which would run frontend-maven-plugin and fail in CI).
         continue-on-error: true
         id: owasp
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: |
           mvn -B -ntp \
             org.owasp:dependency-check-maven:9.2.0:check \
             -P security \
             -DskipTests \
-            -Dmaven.test.skip=true
+            -Dmaven.test.skip=true \
+            -DnvdApiKey="${NVD_API_KEY}"
 
       - name: Upload HTML report
         if: always()
@@ -114,6 +117,11 @@ jobs:
           name: owasp-dependency-check-report
           path: amp/target/dependency-check-report/
           retention-days: 30
+          if-no-files-found: warn
+
+      - name: Show report directory (debug)
+        if: always()
+        run: find amp/target -name "dependency-check*" 2>/dev/null || echo "No dependency-check output found under amp/target"
 
       - name: Fail if OWASP found CVEs
         if: steps.owasp.outcome == 'failure'

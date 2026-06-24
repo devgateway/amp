@@ -65,6 +65,8 @@ jobs:
 
   # -----------------------------------------------------------------------
   # Job 1: OWASP Dependency-Check (Java / Maven artifacts)
+  # Uses the official GHA action which downloads a pre-built NVD snapshot,
+  # avoiding the raw NVD API stream that causes 524 timeouts in CI.
   # -----------------------------------------------------------------------
   owasp-maven:
     name: OWASP Dependency-Check (Maven)
@@ -85,87 +87,30 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Cache the NVD database so successive runs reuse it instead of hitting
-      # the NVD API from cold on every run. Use a daily bucket (not run_id) so
-      # the restore-keys fallback actually finds a previous cache entry.
-      - name: Cache NVD data
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository/org/owasp/dependency-check-data
-          key: nvd-${{ runner.os }}-${{ hashFiles('amp/pom.xml') }}-${{ github.run_id }}
-          restore-keys: |
-            nvd-${{ runner.os }}-${{ hashFiles('amp/pom.xml') }}-
-            nvd-${{ runner.os }}-
-
-      - name: Verify NVD API key
-        env:
-          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
-        run: |
-          if [ -z "${NVD_API_KEY}" ]; then
-            echo "::error::NVD_API_KEY secret is not set."
-            exit 1
-          fi
-          echo "Checking NVD API key against services.nvd.nist.gov ..."
-          HTTP=$(curl -s -o /tmp/nvd-probe.json -w "%{http_code}" \
-            "https://services.nvd.nist.gov/rest/json/cves/2.0?noRejected&resultsPerPage=1" \
-            -H "apiKey: ${NVD_API_KEY}")
-          echo "NVD API HTTP status: ${HTTP}"
-          if [ "${HTTP}" = "200" ]; then
-            echo "::notice::NVD API key is valid and active."
-          elif [ "${HTTP}" = "403" ] || [ "${HTTP}" = "404" ]; then
-            echo "::warning::NVD API key returned ${HTTP}. This usually means:"
-            echo "::warning::  1. The key was requested recently and is not yet active (NVD takes up to 48 hours to activate new keys)."
-            echo "::warning::  2. The key value stored in the repository secret is incorrect or expired."
-            echo "::warning::The dependency scan will proceed but may produce an incomplete report until the key is activated."
-          else
-            echo "::warning::NVD API returned unexpected HTTP status ${HTTP} — continuing anyway."
-          fi
-
       - name: Run OWASP Dependency-Check
-        working-directory: amp
-        # Call the plugin goal directly to avoid triggering the full Maven
-        # lifecycle (which would run frontend-maven-plugin and fail in CI).
-        continue-on-error: true
+        uses: dependency-check/Dependency-Check_Action@main
         id: owasp
-        env:
-          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
-        run: |
-          REPORT_DIR="${GITHUB_WORKSPACE}/amp/target/dependency-check-report"
-          LOG_FILE="${GITHUB_WORKSPACE}/owasp-mvn.log"
-          mkdir -p "${REPORT_DIR}"
-
-          if [ -z "${NVD_API_KEY}" ]; then
-            echo "::error::NVD_API_KEY repository secret is not set or is not available to this workflow run." | tee "${LOG_FILE}"
-            echo "Set it in Repository Settings > Secrets and variables > Actions, or rerun from a branch where secrets are available." | tee -a "${LOG_FILE}"
-            exit 1
-          fi
-
-          echo "NVD_API_KEY is configured; using CI-safe NVD delay/retry settings." | tee "${LOG_FILE}"
-
-          set +e
-          mvn -B -ntp \
-            org.owasp:dependency-check-maven:12.1.0:check \
-            -P security \
-            -DskipTests \
-            -Dmaven.test.skip=true \
-            -DoutputDirectory="${REPORT_DIR}" \
-            -Dformats=HTML,JSON \
-            -DnvdApiDelay=10000 \
-            -DnvdMaxRetryCount=10 \
-            -DnvdApiKey="${NVD_API_KEY}" \
-            2>&1 | tee -a "${LOG_FILE}"
-          MAVEN_EXIT=${PIPESTATUS[0]}
-          echo "Maven exit code: ${MAVEN_EXIT}"
-          exit "${MAVEN_EXIT}"
+        continue-on-error: true
+        with:
+          project: 'amp'
+          # Scan the Maven module directory; the action resolves dependencies from pom.xml
+          path: 'amp'
+          format: 'HTML,JSON'
+          out: 'amp/target/dependency-check-report'
+          args: >
+            --nvdApiKey ${{ secrets.NVD_API_KEY }}
+            --nvdApiDelay 10000
+            --failOnCVSS 7
+            --suppression security/owasp-suppressions.xml
+            --scan ckeditor_4.4.6
+            --enableExperimental
 
       - name: Upload HTML report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: owasp-dependency-check-report
-          path: |
-            amp/target/dependency-check-report/
-            owasp-mvn.log
+          path: amp/target/dependency-check-report/
           retention-days: 30
           if-no-files-found: warn
 
@@ -174,8 +119,6 @@ jobs:
         run: |
           echo "=== Dependency-Check output ==="
           find . -path "*/dependency-check*" -print 2>/dev/null || true
-          echo "=== Last 80 lines of Maven log ==="
-          tail -80 owasp-mvn.log 2>/dev/null || echo "No Maven log captured"
 
       - name: Fail if OWASP found CVEs
         if: steps.owasp.outcome == 'failure'

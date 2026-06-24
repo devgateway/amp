@@ -215,7 +215,7 @@
                     <plugin>
                         <groupId>org.owasp</groupId>
                         <artifactId>dependency-check-maven</artifactId>
-                        <version>9.2.0</version>
+                        <version>12.1.0</version>
                         <configuration>
                             <!-- NVD API key — set via env var or -DnvdApiKey=... to avoid rate-limiting -->
                             <nvdApiKey>${nvdApiKey}</nvdApiKey>

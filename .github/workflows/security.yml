@@ -144,7 +144,7 @@ jobs:
 
           set +e
           mvn -B -ntp \
-            org.owasp:dependency-check-maven:9.2.0:check \
+            org.owasp:dependency-check-maven:12.1.0:check \
             -P security \
             -DskipTests \
             -Dmaven.test.skip=true \
@@ -152,8 +152,6 @@ jobs:
             -Dformats=HTML,JSON \
             -DnvdApiDelay=10000 \
             -DnvdMaxRetryCount=10 \
-            -DnvdValidForHours=24 \
-            -DfailOnError=false \
             -DnvdApiKey="${NVD_API_KEY}" \
             2>&1 | tee -a "${LOG_FILE}"
           MAVEN_EXIT=${PIPESTATUS[0]}

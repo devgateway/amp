@@ -95,7 +95,7 @@ jobs:
             --nvdApiDelay 10000
             --failOnCVSS 7
             --suppression /github/workspace/security/owasp-suppressions.xml
-            --scan /github/workspace/ckeditor_4.4.6
+            --scan /github/workspace/amp/ckeditor_4.4.6
             --enableExperimental
 
       - name: Upload HTML report

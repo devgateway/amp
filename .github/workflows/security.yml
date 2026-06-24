@@ -80,6 +80,9 @@ jobs:
         with:
           ref: ${{ needs.setup.outputs.ref }}
 
+      - name: Create report output directory
+        run: mkdir -p amp/target/dependency-check-report
+
       - name: Run OWASP Dependency-Check
         uses: dependency-check/Dependency-Check_Action@main
         id: owasp

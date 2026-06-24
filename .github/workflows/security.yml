@@ -94,8 +94,8 @@ jobs:
             --nvdApiKey ${{ secrets.NVD_API_KEY }}
             --nvdApiDelay 10000
             --failOnCVSS 7
-            --suppression security/owasp-suppressions.xml
-            --scan ckeditor_4.4.6
+            --suppression /github/workspace/security/owasp-suppressions.xml
+            --scan /github/workspace/ckeditor_4.4.6
             --enableExperimental
 
       - name: Upload HTML report

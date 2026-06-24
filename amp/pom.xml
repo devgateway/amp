@@ -59,6 +59,8 @@
 
         <buildSource/>
         <buildDate/>
+        <!-- NVD API key for OWASP dependency-check; override with -DnvdApiKey=YOUR_KEY or env NVD_API_KEY -->
+        <nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
     </properties>
     <repositories>
         <repository>
@@ -215,6 +217,8 @@
                         <artifactId>dependency-check-maven</artifactId>
                         <version>9.2.0</version>
                         <configuration>
+                            <!-- NVD API key — set via env var or -DnvdApiKey=... to avoid rate-limiting -->
+                            <nvdApiKey>${nvdApiKey}</nvdApiKey>
                             <!-- Fail the build if any dependency has CVSS >= 7 (high/critical) -->
                             <failBuildOnCVSS>7</failBuildOnCVSS>
                             <!-- Suppress known FPs or accepted-risk CVEs -->

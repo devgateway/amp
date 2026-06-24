@@ -97,6 +97,30 @@ jobs:
             nvd-${{ runner.os }}-${{ hashFiles('amp/pom.xml') }}-
             nvd-${{ runner.os }}-
 
+      - name: Verify NVD API key
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+        run: |
+          if [ -z "${NVD_API_KEY}" ]; then
+            echo "::error::NVD_API_KEY secret is not set."
+            exit 1
+          fi
+          echo "Checking NVD API key against services.nvd.nist.gov ..."
+          HTTP=$(curl -s -o /tmp/nvd-probe.json -w "%{http_code}" \
+            "https://services.nvd.nist.gov/rest/json/cves/2.0?noRejected&resultsPerPage=1" \
+            -H "apiKey: ${NVD_API_KEY}")
+          echo "NVD API HTTP status: ${HTTP}"
+          if [ "${HTTP}" = "200" ]; then
+            echo "::notice::NVD API key is valid and active."
+          elif [ "${HTTP}" = "403" ] || [ "${HTTP}" = "404" ]; then
+            echo "::warning::NVD API key returned ${HTTP}. This usually means:"
+            echo "::warning::  1. The key was requested recently and is not yet active (NVD takes up to 48 hours to activate new keys)."
+            echo "::warning::  2. The key value stored in the repository secret is incorrect or expired."
+            echo "::warning::The dependency scan will proceed but may produce an incomplete report until the key is activated."
+          else
+            echo "::warning::NVD API returned unexpected HTTP status ${HTTP} — continuing anyway."
+          fi
+
       - name: Run OWASP Dependency-Check
         working-directory: amp
         # Call the plugin goal directly to avoid triggering the full Maven

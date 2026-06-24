@@ -88,7 +88,7 @@ jobs:
           project: 'amp'
           # Scan the Maven module directory; the action resolves dependencies from pom.xml
           path: 'amp'
-          format: 'HTML,JSON'
+          format: 'ALL'
           out: 'amp/target/dependency-check-report'
           args: >
             --nvdApiKey ${{ secrets.NVD_API_KEY }}

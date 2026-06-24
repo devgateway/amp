@@ -305,7 +305,7 @@ public final class ActivityInterchangeUtils {
                     .findFirst();
 
             addActualIndicatorValues(indicatorsObject, projectId);
-            addDisaggregationValues(indicatorsObject);
+            addDisaggregationValues(indicatorsObject, projectId);
             resolveIndicatorActivityLocations(indicatorsObject);
         }
     }
@@ -342,15 +342,17 @@ public final class ActivityInterchangeUtils {
         });
     }
 
-    private static void addDisaggregationValues(Optional<Object> indicatorsObject) {
+    private static void addDisaggregationValues(Optional<Object> indicatorsObject, Long projectId) {
         indicatorsObject.ifPresent(indicators -> {
             if (indicators instanceof ArrayList) {
                 List<Map<String, Object>> indicatorsList = (ArrayList<Map<String, Object>>) indicators;
                 for (Map<String, Object> indicator : indicatorsList) {
-                    Long indicatorId = (Long) indicator.get("indicator");
+                    Long indicatorId = parseLong(indicator.get("indicator"));
                     if (indicatorId == null) {
                         continue;
                     }
+                    Long activityLocationId = parseLong(indicator.get("activity_location"));
+                    AmpActivityLocation activityLocation = getActivityLocation(projectId, activityLocationId);
                     AmpIndicator ampIndicator;
                     try {
                         ampIndicator = IndicatorUtil.getIndicator(indicatorId);
@@ -379,7 +381,9 @@ public final class ActivityInterchangeUtils {
                         List<Map<String, Object>> actualValues = new ArrayList<>();
                         if (dv.getActualValues() != null) {
                             for (AmpIndicatorGlobalValue av : dv.getActualValues()) {
-                                actualValues.add(serializeGlobalValue(av));
+                                if (matchesActivityLocation(av.getActivityLocation(), activityLocation)) {
+                                    actualValues.add(serializeGlobalValue(av));
+                                }
                             }
                         }
                         dvMap.put("actual_values", actualValues);
@@ -391,20 +395,79 @@ public final class ActivityInterchangeUtils {
         });
     }
 
-    private static Map<String, Object> serializeGlobalValue(AmpIndicatorGlobalValue gv) {
-        if (gv == null) {
+    private static Map<String, Object> serializeGlobalValue(AmpIndicatorGlobalValue globalValue) {
+        if (globalValue == null) {
             return null;
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Map<String, Object> map = new LinkedHashMap<>();
-        map.put("id", gv.getId());
-        map.put("original_value", gv.getOriginalValue());
+        map.put("id", globalValue.getId());
+        map.put("original_value", globalValue.getOriginalValue());
         map.put("original_value_date",
-                gv.getOriginalValueDate() != null ? dateFormat.format(gv.getOriginalValueDate()) : null);
-        map.put("revised_value", gv.getRevisedValue());
+                globalValue.getOriginalValueDate() != null ? dateFormat.format(globalValue.getOriginalValueDate())
+                        : null);
+        map.put("revised_value", globalValue.getRevisedValue());
         map.put("revised_value_date",
-                gv.getRevisedValueDate() != null ? dateFormat.format(gv.getRevisedValueDate()) : null);
+                globalValue.getRevisedValueDate() != null ? dateFormat.format(globalValue.getRevisedValueDate())
+                        : null);
         return map;
+    }
+
+    private static Long getAmpActivityLocationId(AmpActivityLocation activityLocation) {
+        return activityLocation != null ? activityLocation.getId() : null;
+    }
+
+    private static Long getLocationId(AmpActivityLocation activityLocation) {
+        return activityLocation != null && activityLocation.getLocation() != null
+                ? activityLocation.getLocation().getId() : null;
+    }
+
+    private static AmpActivityLocation getActivityLocation(Long ampActivityLocationId) {
+        if (ampActivityLocationId == null) {
+            return null;
+        }
+        return (AmpActivityLocation) PersistenceManager.getSession().get(AmpActivityLocation.class, ampActivityLocationId);
+    }
+
+    private static AmpActivityLocation getActivityLocation(Long projectId, Long ampActivityLocationId) {
+        if (projectId == null) {
+            return getActivityLocation(ampActivityLocationId);
+        }
+        AmpActivityVersion activity = loadActivity(projectId);
+        if (activity.getLocations() != null && ampActivityLocationId != null) {
+            Optional<AmpActivityLocation> activityLocation = activity.getLocations().stream()
+                    .filter(location -> Objects.equals(getAmpActivityLocationId(location), ampActivityLocationId)
+                            || Objects.equals(getLocationId(location), ampActivityLocationId))
+                    .findFirst();
+            if (activityLocation.isPresent()) {
+                return activityLocation.get();
+            }
+        }
+        return activity.getLocations() != null && activity.getLocations().size() == 1
+                ? activity.getLocations().iterator().next() : null;
+    }
+
+    private static boolean matchesActivityLocation(AmpActivityLocation activityLocation,
+                                                   AmpActivityLocation expectedActivityLocation) {
+        if (expectedActivityLocation == null) {
+            return activityLocation == null;
+        }
+        Long activityLocationId = getAmpActivityLocationId(activityLocation);
+        Long expectedActivityLocationId = getAmpActivityLocationId(expectedActivityLocation);
+        if (activityLocationId != null || expectedActivityLocationId != null) {
+            return Objects.equals(activityLocationId, expectedActivityLocationId);
+        }
+        return Objects.equals(getLocationId(activityLocation), getLocationId(expectedActivityLocation));
+    }
+
+    private static Long parseLong(Object value) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Number) {
+            return ((Number) value).longValue();
+        }
+        return Long.valueOf(value.toString());
     }
 
     private static void addActualIndicatorValues(Optional<Object> indicatorsObject, Long projectId){
@@ -413,45 +476,76 @@ public final class ActivityInterchangeUtils {
             if (indicators instanceof ArrayList) {
                 List<Map<String, Object>> indicatorsList = (ArrayList<Map<String, Object>>) indicators;
                 for (Map<String, Object> indicator : indicatorsList) {
-                    // If indicator already has actual data skip it, only add if actual data is missing
-                    if(indicator.get("actual") == null) {
-                        // Add the "actual" key with its array values to the indicator object
-                        List<Object> actualValues = new ArrayList<>();
+                    List<Object> actualValues = new ArrayList<>();
+                    Long activityLocationId = parseLong(indicator.get("activity_location"));
+                    AmpActivityLocation activityLocation = getActivityLocation(projectId, activityLocationId);
+                    boolean singleLocationFallback = activityLocationId == null && activityLocation != null;
 
-                        // Create an amp indicator class
-                        AmpIndicator ind = new AmpIndicator();
-                        ind.setIndicatorId((Long) indicator.get("indicator"));
+                    AmpIndicator ind = new AmpIndicator();
+                    ind.setIndicatorId(parseLong(indicator.get("indicator")));
 
-                        List<IndicatorActivity> results = null;
-                        AmpActivityVersion activity = null;
+                    List<IndicatorActivity> results = null;
+                    AmpActivityVersion activity = null;
 
-                        try {
-                            activity = ActivityUtil.loadActivity(projectId);
-                        } catch (DgException e) {
-                            throw new RuntimeException(e);
+                    try {
+                        activity = ActivityUtil.loadActivity(projectId);
+                    } catch (DgException e) {
+                        throw new RuntimeException(e);
+                    }
+                    results = IndicatorUtil.findActivityIndicatorConnections(activity, ind);
+
+                    for (IndicatorActivity result : results) {
+                        if (result == null) {
+                            continue;
                         }
-                            results = IndicatorUtil.findActivityIndicatorConnections(activity, ind);
-
-                        for (IndicatorActivity result : results) {
-                            if (result != null && result.getValues() != null) {
-                                for (AmpIndicatorValue indicatorValue : result.getValues()) {
-                                    actualValues.add(new HashMap<String, Object>() {{
-                                        put("comment", indicatorValue.getComment());
-                                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Customize format as needed
-                                        Date valueDate = indicatorValue.getValueDate();
-                                        String formattedDate = dateFormat.format(valueDate);
-                                        put("date", formattedDate);
-                                        put("value", indicatorValue.getValue());
-                                    }});
+                        if (!matchesIndicatorActivityLocation(result.getActivityLocation(), activityLocation,
+                                singleLocationFallback)) {
+                            continue;
+                        }
+                        if (result.getValues() != null) {
+                            for (AmpIndicatorValue indicatorValue : result.getValues()) {
+                                if (indicatorValue.getValueType() == AmpIndicatorValue.ACTUAL
+                                        && matchesIndicatorValueActivityLocation(indicatorValue, result, activityLocation,
+                                                singleLocationFallback)) {
+                                    actualValues.add(serializeIndicatorActualValue(indicatorValue));
                                 }
                             }
                         }
-
-                        indicator.put("actual", actualValues);
                     }
+
+                    indicator.put("actual", actualValues);
                 }
             }
         });
+    }
+
+    private static boolean matchesIndicatorActivityLocation(AmpActivityLocation indicatorActivityLocation,
+                                                            AmpActivityLocation expectedActivityLocation,
+                                                            boolean singleLocationFallback) {
+        return matchesActivityLocation(indicatorActivityLocation, expectedActivityLocation)
+                || (singleLocationFallback && indicatorActivityLocation == null);
+    }
+
+    private static boolean matchesIndicatorValueActivityLocation(AmpIndicatorValue indicatorValue,
+                                                                 IndicatorActivity indicatorActivity,
+                                                                 AmpActivityLocation expectedActivityLocation,
+                                                                 boolean singleLocationFallback) {
+        if (indicatorValue.getActivityLocation() == null) {
+            return true;
+        }
+        return matchesActivityLocation(indicatorValue.getActivityLocation(), indicatorActivity.getActivityLocation())
+            || (singleLocationFallback
+                && matchesActivityLocation(indicatorValue.getActivityLocation(), expectedActivityLocation));
+    }
+
+    private static Map<String, Object> serializeIndicatorActualValue(AmpIndicatorValue indicatorValue) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Map<String, Object> actualValue = new LinkedHashMap<>();
+        actualValue.put("comment", indicatorValue.getComment());
+        actualValue.put("date", indicatorValue.getValueDate() != null
+                ? dateFormat.format(indicatorValue.getValueDate()) : null);
+        actualValue.put("value", indicatorValue.getValue());
+        return actualValue;
     }
 
     private static void filterPropertyBasedOnUserPermission(Map<String, Object> activity, Long projectId) {

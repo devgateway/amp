@@ -135,6 +135,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
   // --- Add disaggregationChildren state ---
   const [disaggregationChildren, setDisaggregationChildren] = useState<{[key: number]: any[]}>({});
+  const [singleDisaggregationActiveKey, setSingleDisaggregationActiveKey] = useState<string | null>('0');
+  const [doubleDisaggregationActiveKey, setDoubleDisaggregationActiveKey] = useState<string | null>('0');
 
   // Utility to convert any date string to ISO format
   const convertDateToISO = (date?: string) => {
@@ -905,27 +907,36 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         <Col>
                           <div style={{marginTop: '1rem'}}>
                             <h6>{t("amp.indicatormanager:disaggregation-values")}</h6>
-                            <Accordion defaultActiveKey="0">
+                            <Accordion
+                              activeKey={singleDisaggregationActiveKey || ''}
+                              onSelect={(eventKey: any) => setSingleDisaggregationActiveKey(
+                                singleDisaggregationActiveKey === eventKey ? null : eventKey
+                              )}
+                            >
                               {props.values.disaggregation.map((parentId, parentIdx) => (
                                 <Card key={parentId}>
                                   <Accordion.Toggle
                                     as={Card.Header}
                                     eventKey={String(parentIdx)}
-                                    className={styles.accordionHeader}
-                                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', background: '#f7f7f7', fontWeight: 'bold' }}
+                                    className={`${styles.accordionHeader} ${singleDisaggregationActiveKey === String(parentIdx) ? styles.accordionHeaderActive : ''}`}
                                     aria-label={t("amp.indicatormanager:click-to-expand-collapse")}
                                   >
-                                    <div className={styles.accordionHeaderTitle} style={{ flex: 1 }}>
-                                      {disaggregationOptions.find(opt => opt.value === parentId)?.label || `Disaggregation ${parentId}`}
+                                    <div className={styles.accordionHeaderTitle}>
+                                      <span className={styles.accordionChevron} aria-hidden="true">
+                                        <i className={`fa ${singleDisaggregationActiveKey === String(parentIdx) ? 'fa-chevron-down' : 'fa-chevron-right'}`} />
+                                      </span>
+                                      <span className={styles.accordionHeaderText}>
+                                        {disaggregationOptions.find(opt => opt.value === parentId)?.label || `Disaggregation ${parentId}`}
+                                      </span>
                                     </div>
-                                    <Accordion.Collapse eventKey={String(parentIdx)}>
-                                      <span style={{ marginLeft: 8 }}>▼</span>
-                                    </Accordion.Collapse>
+                                    <span className={styles.accordionMeta}>
+                                      {(disaggregationChildren[parentId] || []).length} {t("amp.indicatormanager:options-count")}
+                                    </span>
                                   </Accordion.Toggle>
                                   <Accordion.Collapse eventKey={String(parentIdx)}>
                                     <Card.Body>
                                       {disaggregationChildren[parentId] && disaggregationChildren[parentId].length > 0 ? (
-                                        <div style={{maxHeight: '300px', overflowY: 'auto'}}>
+                                        <div className={styles.disaggregationValuesPanel}>
                                           {disaggregationChildren[parentId].map((child) => {
                                             const disaggArr = Array.isArray(props.values.disaggregationValues) ? props.values.disaggregationValues : [];
                                             // For single disaggregation, childCategoryId is null
@@ -943,11 +954,11 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                                             }
                                             const entry = disaggArr[entryIdx];
                                             return (
-                                              <Card key={child.id} style={{marginBottom: '8px'}}>
+                                              <Card key={child.id} className={styles.disaggregationValueCard}>
                                                 <Card.Body>
                                                   <Card.Title className={styles.accordionChildTitle}>{child.value}</Card.Title>
-                                                  <div style={{display: 'flex', flexWrap: 'wrap', gap: '32px'}}>
-                                                    <div style={{minWidth: '300px'}}>
+                                                  <div className={styles.disaggregationValueFields}>
+                                                    <div className={styles.disaggregationValueColumn}>
                                                       <h6 color={"red"}>{t("amp.indicatormanager:base-values")}</h6>
                                                       <Form.Group>
                                                         <Form.Label>{t("amp.indicatormanager:original-value")}</Form.Label>
@@ -994,7 +1005,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                                                         />
                                                       </Form.Group>
                                                     </div>
-                                                    <div style={{minWidth: '300px'}}>
+                                                    <div className={styles.disaggregationValueColumn}>
                                                       <h6 color={"red"}>{t("amp.indicatormanager:target-values")}</h6>
                                                       <Form.Group>
                                                         <Form.Label>{t("amp.indicatormanager:original-value")}</Form.Label>
@@ -1048,7 +1059,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                                           })}
                                         </div>
                                       ) : (
-                                        <div style={{color: '#888', padding: '1rem', textAlign: 'center', border: '1px solid #eee', borderRadius: '4px'}}>
+                                        <div className={styles.emptyDisaggregationState}>
                                           {t("amp.indicatormanager:no-disaggregation-children")}
                                         </div>
                                       )}
@@ -1066,27 +1077,34 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           <Col>
                             <div style={{marginTop: '1rem'}}>
                               <h6>{t("amp.indicatormanager:disaggregation-values")}</h6>
-                              <Accordion defaultActiveKey="0">
+                              <Accordion
+                                activeKey={doubleDisaggregationActiveKey || ''}
+                                onSelect={(eventKey: any) => setDoubleDisaggregationActiveKey(
+                                  doubleDisaggregationActiveKey === eventKey ? null : eventKey
+                                )}
+                              >
                                 {disaggregationChildren[twoLevelOrientation.parentDisaggregationId]?.map((parentChild: any, parentIdx: number) => (
                                   <Card key={parentChild.id}>
                                     <Accordion.Toggle
                                       as={Card.Header}
                                       eventKey={String(parentIdx)}
-                                      className={styles.accordionHeader}
-                                      style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', background: '#f7f7f7', fontWeight: 'bold' }}
+                                      className={`${styles.accordionHeader} ${doubleDisaggregationActiveKey === String(parentIdx) ? styles.accordionHeaderActive : ''}`}
                                       aria-label={t("amp.indicatormanager:click-to-expand-collapse")}
                                     >
-                                      <div className={styles.accordionHeaderTitle} style={{ flex: 1 }}>
-                                        {parentChild.value}
+                                      <div className={styles.accordionHeaderTitle}>
+                                        <span className={styles.accordionChevron} aria-hidden="true">
+                                          <i className={`fa ${doubleDisaggregationActiveKey === String(parentIdx) ? 'fa-chevron-down' : 'fa-chevron-right'}`} />
+                                        </span>
+                                        <span className={styles.accordionHeaderText}>{parentChild.value}</span>
                                       </div>
-                                      <Accordion.Collapse eventKey={String(parentIdx)}>
-                                        <span style={{ marginLeft: 8 }}>▼</span>
-                                      </Accordion.Collapse>
+                                      <span className={styles.accordionMeta}>
+                                        {(disaggregationChildren[twoLevelOrientation.childDisaggregationId] || []).length} {t("amp.indicatormanager:options-count")}
+                                      </span>
                                     </Accordion.Toggle>
                                     <Accordion.Collapse eventKey={String(parentIdx)}>
                                       <Card.Body>
                                         {disaggregationChildren[twoLevelOrientation.childDisaggregationId]?.length > 0 ? (
-                                          <div style={{maxHeight: '300px', overflowY: 'auto'}}>
+                                          <div className={styles.disaggregationValuesPanel}>
                                             {disaggregationChildren[twoLevelOrientation.childDisaggregationId].map((child: any) => {
                                               const disaggArr = Array.isArray(props.values.disaggregationValues) ? props.values.disaggregationValues : [];
                                               let entryIdx = disaggArr.findIndex((v: any) => v.parentCategoryId === parentChild.id && v.childCategoryId === child.id);
@@ -1105,11 +1123,11 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                                                 props.setFieldValue('disaggregationValues', disaggArr);
                                               }
                                               return (
-                                                <Card key={child.id} style={{marginBottom: '8px'}}>
+                                                <Card key={child.id} className={styles.disaggregationValueCard}>
                                                   <Card.Body>
                                                     <Card.Title className={styles.accordionChildTitle}>{child.value}</Card.Title>
-                                                    <div style={{display: 'flex', flexWrap: 'wrap', gap: '32px'}}>
-                                                      <div style={{minWidth: '300px'}}>
+                                                    <div className={styles.disaggregationValueFields}>
+                                                      <div className={styles.disaggregationValueColumn}>
                                                         <h6 color={"red"}>{t("amp.indicatormanager:base-values")}</h6>
                                                         <Form.Group>
                                                           <Form.Label>{t("amp.indicatormanager:original-value")}</Form.Label>
@@ -1156,7 +1174,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                                                           />
                                                         </Form.Group>
                                                       </div>
-                                                      <div style={{minWidth: '300px'}}>
+                                                      <div className={styles.disaggregationValueColumn}>
                                                         <h6 color={"red"}>{t("amp.indicatormanager:target-values")}</h6>
                                                         <Form.Group>
                                                           <Form.Label>{t("amp.indicatormanager:original-value")}</Form.Label>
@@ -1210,7 +1228,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                                             })}
                                           </div>
                                         ) : (
-                                          <div style={{color: '#888', padding: '1rem', textAlign: 'center', border: '1px solid #eee', borderRadius: '4px'}}>
+                                          <div className={styles.emptyDisaggregationState}>
                                             {t("amp.indicatormanager:no-disaggregation-children")}
                                           </div>
                                         )}

@@ -103,25 +103,42 @@ jobs:
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: |
+          REPORT_DIR="${GITHUB_WORKSPACE}/amp/target/dependency-check-report"
+          LOG_FILE="${GITHUB_WORKSPACE}/owasp-mvn.log"
+          mkdir -p "${REPORT_DIR}"
+
+          set +e
           mvn -B -ntp \
             org.owasp:dependency-check-maven:9.2.0:check \
             -P security \
             -DskipTests \
             -Dmaven.test.skip=true \
-            -DnvdApiKey="${NVD_API_KEY}"
+            -DoutputDirectory="${REPORT_DIR}" \
+            -Dformats=HTML,JSON \
+            -DnvdApiKey="${NVD_API_KEY}" \
+            2>&1 | tee "${LOG_FILE}"
+          MAVEN_EXIT=${PIPESTATUS[0]}
+          echo "Maven exit code: ${MAVEN_EXIT}"
+          exit "${MAVEN_EXIT}"
 
       - name: Upload HTML report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: owasp-dependency-check-report
-          path: amp/target/dependency-check-report/
+          path: |
+            amp/target/dependency-check-report/
+            owasp-mvn.log
           retention-days: 30
           if-no-files-found: warn
 
       - name: Show report directory (debug)
         if: always()
-        run: find amp/target -name "dependency-check*" 2>/dev/null || echo "No dependency-check output found under amp/target"
+        run: |
+          echo "=== Dependency-Check output ==="
+          find . -path "*/dependency-check*" -print 2>/dev/null || true
+          echo "=== Last 80 lines of Maven log ==="
+          tail -80 owasp-mvn.log 2>/dev/null || echo "No Maven log captured"
 
       - name: Fail if OWASP found CVEs
         if: steps.owasp.outcome == 'failure'

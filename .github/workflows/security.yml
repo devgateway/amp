@@ -170,6 +170,9 @@ jobs:
         working-directory: ${{ matrix.package.path }}
         run: npm install --ignore-scripts --prefer-offline 2>&1 || true
 
+      - name: Install npm-audit-html
+        run: npm install -g npm-audit-html --prefer-offline 2>&1 || true
+
       - name: npm audit
         id: audit
         working-directory: ${{ matrix.package.path }}
@@ -196,12 +199,22 @@ jobs:
             }' "$FILE"
           fi
 
-      - name: Upload audit JSON
+      - name: Generate HTML report
+        if: always()
+        run: |
+          FILE="/tmp/${{ matrix.package.name }}-audit.json"
+          if [ -f "$FILE" ]; then
+            npm-audit-html --input "$FILE" --output "/tmp/${{ matrix.package.name }}-audit.html" 2>/dev/null || true
+          fi
+
+      - name: Upload audit report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: npm-audit-${{ matrix.package.name }}
-          path: /tmp/${{ matrix.package.name }}-audit.json
+          path: |
+            /tmp/${{ matrix.package.name }}-audit.html
+            /tmp/${{ matrix.package.name }}-audit.json
           retention-days: 30
 
       - name: Fail on HIGH or CRITICAL findings

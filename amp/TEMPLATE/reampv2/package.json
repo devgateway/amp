@@ -23,5 +23,13 @@
     "fs": "^0.0.1-security",
     "jquery-ui": "^1.10.5",
     "use-sync-external-store": "^1.2.0"
+  },
+  "overrides": {
+    "minimist": ">=1.2.6",
+    "lodash": ">=4.17.21",
+    "shell-quote": ">=1.7.4",
+    "braces": ">=3.0.3",
+    "semver": ">=7.5.2",
+    "browserify-sign": ">=4.2.2"
   }
 }

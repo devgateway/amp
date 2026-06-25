@@ -58,5 +58,12 @@
   },
   "dependencies": {
     "amp-translate": "https://github.com/devgateway/amp-translate.git"
+  },
+  "overrides": {
+    "minimist": ">=1.2.6",
+    "shell-quote": ">=1.7.4",
+    "braces": ">=3.0.3",
+    "browserify-sign": ">=4.2.2",
+    "semver": ">=7.5.2"
   }
 }

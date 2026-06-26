@@ -64,11 +64,11 @@ public class FileUploadBehavior extends Behavior {
 //        response.render(JavaScriptHeaderItem.forReference(
 //                new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.fileupload-ui.js")));
         response.render(JavaScriptHeaderItem.forReference(
-                new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.ui.widget.js"), String.valueOf(System.currentTimeMillis())+"a", true));
+                new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.ui.widget.js"), System.currentTimeMillis() +"a", true));
         response.render(JavaScriptHeaderItem.forReference(
-                new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.iframe-transport.js"), String.valueOf(System.currentTimeMillis())+"b", true));
+                new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.iframe-transport.js"), System.currentTimeMillis() +"b", true));
         response.render(JavaScriptHeaderItem.forReference(
-                new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.fileupload.js"), String.valueOf(System.currentTimeMillis())+"c", true));
+                new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.fileupload.js"), System.currentTimeMillis() +"c", true));
 
         String uploadUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(
                 Url.parse(component.urlFor(new FileUploadResourceReference(activityId, fileItemModel), null).toString()));

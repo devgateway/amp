@@ -64,11 +64,11 @@ jobs:
           fi
 
   # -----------------------------------------------------------------------
-  # Job 1: OWASP Dependency-Check (Java / Maven + npm)
-  # Uses the official GHA action which downloads a pre-built NVD snapshot,
-  # avoiding the raw NVD API stream that causes 524 timeouts in CI.
-  # NodeAudit analyzer scans all package-lock.json files found under amp/,
-  # replacing the separate npm-audit job.
+  # Job 1: OWASP Dependency-Check (Java / Maven) + sequential npm audit
+  # OWASP covers Java/Maven artifacts and static JS files (via RetireJS).
+  # npm audit runs sequentially as shell steps to avoid hitting the npm
+  # registry rate limit (429) that OWASP's NodeAudit analyzer triggers
+  # when it fires parallel requests for every package-lock.json.
   # -----------------------------------------------------------------------
   owasp-maven:
     name: OWASP Dependency-Check (Maven + npm)
@@ -87,31 +87,6 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Generate npm lock files for OWASP NodeAudit
-        # OWASP's NodeAudit analyzer requires package-lock.json to be present.
-        # Run npm install --package-lock-only (no downloads, no scripts) in each
-        # frontend package so lock files exist even if not committed.
-        run: |
-          PACKAGES=(
-            amp/TEMPLATE/reamp
-            amp/TEMPLATE/ampTemplate/amp-state
-            amp/TEMPLATE/ampTemplate/amp-boilerplate
-            amp/TEMPLATE/ampTemplate/amp-filter
-            amp/TEMPLATE/ampTemplate/amp-translate
-            amp/TEMPLATE/ampTemplate/amp-url
-            amp/TEMPLATE/ampTemplate/amp-settings
-            amp/TEMPLATE/ampTemplate/gis-layers-manager
-            amp/TEMPLATE/ampTemplate/dashboard/dev
-            amp/TEMPLATE/ampTemplate/gisModule/dev
-            amp/TEMPLATE/reampv2
-          )
-          for PKG in "${PACKAGES[@]}"; do
-            if [ -f "$PKG/package.json" ]; then
-              echo "--- Generating lock file for $PKG ---"
-              npm install --package-lock-only --ignore-scripts --prefix "$PKG" 2>&1 || true
-            fi
-          done
-
       - name: Create report output directory
         run: mkdir -p amp/target/dependency-check-report
 
@@ -121,8 +96,6 @@ jobs:
         continue-on-error: true
         with:
           project: 'amp'
-          # Scan the Maven module directory; NodeAudit picks up all package-lock.json
-          # files found recursively under this path.
           path: 'amp'
           format: 'ALL'
           out: 'amp/target/dependency-check-report'
@@ -132,6 +105,7 @@ jobs:
             --failOnCVSS 7
             --suppression /github/workspace/security/owasp-suppressions.xml
             --scan /github/workspace/amp/ckeditor_4.4.6
+            --disableNodeAudit
             --enableExperimental
 
       - name: Upload HTML report
@@ -151,6 +125,67 @@ jobs:
 
       - name: Fail if OWASP found CVEs
         if: steps.owasp.outcome == 'failure'
+        run: exit 1
+
+      # Run npm audit sequentially (one package at a time) to stay within the
+      # npm registry rate limit. Each package waits for the previous to finish.
+      - name: npm audit (all frontend packages)
+        id: npm_audit
+        continue-on-error: true
+        run: |
+          PACKAGES=(
+            amp/TEMPLATE/reamp
+            amp/TEMPLATE/ampTemplate/amp-state
+            amp/TEMPLATE/ampTemplate/amp-boilerplate
+            amp/TEMPLATE/ampTemplate/amp-filter
+            amp/TEMPLATE/ampTemplate/amp-translate
+            amp/TEMPLATE/ampTemplate/amp-url
+            amp/TEMPLATE/ampTemplate/amp-settings
+            amp/TEMPLATE/ampTemplate/gis-layers-manager
+            amp/TEMPLATE/ampTemplate/dashboard/dev
+            amp/TEMPLATE/ampTemplate/gisModule/dev
+            amp/TEMPLATE/reampv2
+          )
+          FAIL=0
+          mkdir -p amp/target/dependency-check-report/npm-audit
+          for PKG in "${PACKAGES[@]}"; do
+            if [ ! -f "$PKG/package.json" ]; then
+              echo "Skipping $PKG (no package.json)"
+              continue
+            fi
+            NAME=$(basename "$PKG")
+            echo "--- npm audit: $PKG ---"
+            # Generate lock file if absent (required by npm audit)
+            if [ ! -f "$PKG/package-lock.json" ]; then
+              npm install --package-lock-only --ignore-scripts --prefix "$PKG" 2>&1 || true
+            fi
+            npm audit \
+              --prefix "$PKG" \
+              --audit-level high \
+              --json > "amp/target/dependency-check-report/npm-audit/${NAME}.json" 2>&1 || true
+            CRIT=$(jq '.metadata.vulnerabilities.critical // 0' \
+              "amp/target/dependency-check-report/npm-audit/${NAME}.json" 2>/dev/null || echo 0)
+            HIGH=$(jq '.metadata.vulnerabilities.high // 0' \
+              "amp/target/dependency-check-report/npm-audit/${NAME}.json" 2>/dev/null || echo 0)
+            echo "$NAME: critical=${CRIT} high=${HIGH}"
+            if [ "$(( CRIT + HIGH ))" -gt 0 ]; then
+              echo "::error::$NAME: ${CRIT} critical + ${HIGH} high npm vulnerabilities. Run 'npm audit' in $PKG for details."
+              FAIL=1
+            fi
+          done
+          exit $FAIL
+
+      - name: Upload npm audit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-reports
+          path: amp/target/dependency-check-report/npm-audit/
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Fail if npm audit found HIGH/CRITICAL
+        if: steps.npm_audit.outcome == 'failure'
         run: exit 1
 
   # -----------------------------------------------------------------------

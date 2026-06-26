@@ -16,9 +16,6 @@
   "license": "none",
   "devDependencies": {
     "backbone": "1.1.2",
-    "underscore": "1.7.0"
-  },
-  "overrides": {
-    "underscore": ">=1.13.8"
+    "underscore": "1.13.8"
   }
 }

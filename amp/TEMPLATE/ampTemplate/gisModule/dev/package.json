@@ -99,7 +99,7 @@
     "qunitjs": "2.4.1",
     "seedrandom": "2.3.11",
     "through2": "0.6.3",
-    "underscore": "1.7.0",
+    "underscore": "1.13.8",
     "underscore-groups-by": "0.0.1",
     "vinyl-source-stream": "2.0.0",
     "watchify": "0.10.2",
@@ -115,7 +115,6 @@
     "braces": ">=3.0.3",
     "browserify-sign": ">=4.2.2",
     "semver": ">=7.5.2",
-    "underscore": ">=1.13.8",
     "lodash": ">=4.17.21"
   }
 }

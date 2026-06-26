@@ -25,7 +25,7 @@
     "gulp-streamify": "0.0.5",
     "gulp-uglify": "1.5.4",
     "jquery": "2.1.1",
-    "underscore": "1.7.0",
+    "underscore": "1.13.8",
     "vinyl-source-stream": "2.0.0",
     "jquery-ui": "1.10.5",
     "gulp-less": "3.1.0",
@@ -40,7 +40,6 @@
     "braces": ">=3.0.3",
     "browserify-sign": ">=4.2.2",
     "semver": ">=7.5.2",
-    "underscore": ">=1.13.8",
     "lodash": ">=4.17.21"
   }
 }

@@ -34,7 +34,7 @@
     "jquery": "2.1.1",
     "jquery-ui": "1.10.5",
     "jshint-stylish": "2.2.1",
-    "underscore": "1.7.0",
+    "underscore": "1.13.8",
     "vinyl-source-stream": "2.0.0"
   },
   "npmName": "amp-boilerplate",
@@ -61,7 +61,6 @@
     "braces": ">=3.0.3",
     "browserify-sign": ">=4.2.2",
     "semver": ">=7.5.2",
-    "underscore": ">=1.13.8",
     "lodash": ">=4.17.21"
   }
 }

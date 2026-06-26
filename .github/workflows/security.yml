@@ -64,12 +64,14 @@ jobs:
           fi
 
   # -----------------------------------------------------------------------
-  # Job 1: OWASP Dependency-Check (Java / Maven artifacts)
+  # Job 1: OWASP Dependency-Check (Java / Maven + npm)
   # Uses the official GHA action which downloads a pre-built NVD snapshot,
   # avoiding the raw NVD API stream that causes 524 timeouts in CI.
+  # NodeAudit analyzer scans all package-lock.json files found under amp/,
+  # replacing the separate npm-audit job.
   # -----------------------------------------------------------------------
   owasp-maven:
-    name: OWASP Dependency-Check (Maven)
+    name: OWASP Dependency-Check (Maven + npm)
     runs-on: ubuntu-latest
     timeout-minutes: 60
     needs: setup
@@ -80,6 +82,36 @@ jobs:
         with:
           ref: ${{ needs.setup.outputs.ref }}
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate npm lock files for OWASP NodeAudit
+        # OWASP's NodeAudit analyzer requires package-lock.json to be present.
+        # Run npm install --package-lock-only (no downloads, no scripts) in each
+        # frontend package so lock files exist even if not committed.
+        run: |
+          PACKAGES=(
+            amp/TEMPLATE/reamp
+            amp/TEMPLATE/ampTemplate/amp-state
+            amp/TEMPLATE/ampTemplate/amp-boilerplate
+            amp/TEMPLATE/ampTemplate/amp-filter
+            amp/TEMPLATE/ampTemplate/amp-translate
+            amp/TEMPLATE/ampTemplate/amp-url
+            amp/TEMPLATE/ampTemplate/amp-settings
+            amp/TEMPLATE/ampTemplate/gis-layers-manager
+            amp/TEMPLATE/ampTemplate/dashboard/dev
+            amp/TEMPLATE/ampTemplate/gisModule/dev
+            amp/TEMPLATE/reampv2
+          )
+          for PKG in "${PACKAGES[@]}"; do
+            if [ -f "$PKG/package.json" ]; then
+              echo "--- Generating lock file for $PKG ---"
+              npm install --package-lock-only --ignore-scripts --prefix "$PKG" 2>&1 || true
+            fi
+          done
+
       - name: Create report output directory
         run: mkdir -p amp/target/dependency-check-report
 
@@ -89,7 +121,8 @@ jobs:
         continue-on-error: true
         with:
           project: 'amp'
-          # Scan the Maven module directory; the action resolves dependencies from pom.xml
+          # Scan the Maven module directory; NodeAudit picks up all package-lock.json
+          # files found recursively under this path.
           path: 'amp'
           format: 'ALL'
           out: 'amp/target/dependency-check-report'
@@ -99,7 +132,6 @@ jobs:
             --failOnCVSS 7
             --suppression /github/workspace/security/owasp-suppressions.xml
             --scan /github/workspace/amp/ckeditor_4.4.6
-            --disableNodeAudit
             --enableExperimental
 
       - name: Upload HTML report
@@ -122,116 +154,7 @@ jobs:
         run: exit 1
 
   # -----------------------------------------------------------------------
-  # Job 2: npm audit — all frontend packages
-  # -----------------------------------------------------------------------
-  npm-audit:
-    name: npm audit (Frontend)
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    needs: setup
-
-    strategy:
-      fail-fast: false
-      matrix:
-        package:
-          - path: amp/TEMPLATE/reamp
-            name: reamp
-          - path: amp/TEMPLATE/ampTemplate/amp-state
-            name: amp-state
-          - path: amp/TEMPLATE/ampTemplate/amp-boilerplate
-            name: amp-boilerplate
-          - path: amp/TEMPLATE/ampTemplate/amp-filter
-            name: amp-filter
-          - path: amp/TEMPLATE/ampTemplate/amp-translate
-            name: amp-translate
-          - path: amp/TEMPLATE/ampTemplate/amp-url
-            name: amp-url
-          - path: amp/TEMPLATE/ampTemplate/amp-settings
-            name: amp-settings
-          - path: amp/TEMPLATE/ampTemplate/gis-layers-manager
-            name: gis-layers-manager
-          - path: amp/TEMPLATE/ampTemplate/dashboard/dev
-            name: dashboard
-          - path: amp/TEMPLATE/ampTemplate/gisModule/dev
-            name: gisModule
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.setup.outputs.ref }}
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '16'
-
-      - name: npm install (no scripts)
-        working-directory: ${{ matrix.package.path }}
-        run: npm install --ignore-scripts --prefer-offline 2>&1 || true
-
-      - name: Install npm-audit-html
-        run: npm install -g npm-audit-html --prefer-offline 2>&1 || true
-
-      - name: npm audit
-        id: audit
-        working-directory: ${{ matrix.package.path }}
-        # Continue so all packages are scanned; the summary step decides outcome
-        continue-on-error: true
-        run: |
-          npm audit \
-            --audit-level high \
-            --json \
-            > /tmp/${{ matrix.package.name }}-audit.json 2>&1
-
-      - name: Print audit summary
-        if: always()
-        working-directory: ${{ matrix.package.path }}
-        run: |
-          FILE="/tmp/${{ matrix.package.name }}-audit.json"
-          if command -v jq &>/dev/null && [ -f "$FILE" ]; then
-            echo "### ${{ matrix.package.name }} vulnerability counts"
-            jq '{
-              critical: (.metadata.vulnerabilities.critical // 0),
-              high:     (.metadata.vulnerabilities.high     // 0),
-              moderate: (.metadata.vulnerabilities.moderate // 0),
-              low:      (.metadata.vulnerabilities.low      // 0)
-            }' "$FILE"
-          fi
-
-      - name: Generate HTML report
-        if: always()
-        run: |
-          FILE="/tmp/${{ matrix.package.name }}-audit.json"
-          if [ -f "$FILE" ]; then
-            npm-audit-html --input "$FILE" --output "/tmp/${{ matrix.package.name }}-audit.html" 2>/dev/null || true
-          fi
-
-      - name: Upload audit report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: npm-audit-${{ matrix.package.name }}
-          path: |
-            /tmp/${{ matrix.package.name }}-audit.html
-            /tmp/${{ matrix.package.name }}-audit.json
-          retention-days: 30
-
-      - name: Fail on HIGH or CRITICAL findings
-        working-directory: ${{ matrix.package.path }}
-        run: |
-          FILE="/tmp/${{ matrix.package.name }}-audit.json"
-          if [ ! -f "$FILE" ]; then exit 0; fi
-          HIGH=$(jq '.metadata.vulnerabilities.high // 0' "$FILE")
-          CRIT=$(jq '.metadata.vulnerabilities.critical // 0' "$FILE")
-          TOTAL=$(( HIGH + CRIT ))
-          if [ "$TOTAL" -gt 0 ]; then
-            echo "::error::${{ matrix.package.name }}: ${CRIT} critical + ${HIGH} high vulnerabilities found. Run 'npm audit' in ${{ matrix.package.path }} for details."
-            exit 1
-          fi
-
-  # -----------------------------------------------------------------------
-  # Job 3: Trivy — container image CVE scan (runs on push to main / PRs)
+  # Job 2: Trivy — container image CVE scan (runs on push to main / PRs)
   # Catches OS-level CVEs that OWASP cannot see (e.g. base image packages)
   # -----------------------------------------------------------------------
   trivy-image:

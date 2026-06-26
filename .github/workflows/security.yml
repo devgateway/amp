@@ -66,9 +66,11 @@ jobs:
   # -----------------------------------------------------------------------
   # Job 1: OWASP Dependency-Check (Java / Maven) + sequential npm audit
   # OWASP covers Java/Maven artifacts and static JS files (via RetireJS).
-  # npm audit runs sequentially as shell steps to avoid hitting the npm
-  # registry rate limit (429) that OWASP's NodeAudit analyzer triggers
-  # when it fires parallel requests for every package-lock.json.
+  # NodeAudit and NodePackage analyzers are disabled — npm coverage is
+  # handled entirely by the sequential 'npm audit' steps below, which
+  # avoid the npm registry rate limit (429) that OWASP's NodeAudit
+  # analyzer triggers and also eliminate false-negative warnings about
+  # missing node_modules from the NodePackage analyzer.
   # -----------------------------------------------------------------------
   owasp-maven:
     name: OWASP Dependency-Check (Maven + npm)
@@ -106,6 +108,7 @@ jobs:
             --suppression /github/workspace/security/owasp-suppressions.xml
             --scan /github/workspace/amp/ckeditor_4.4.6
             --disableNodeAudit
+            --disableNodePackage
             --enableExperimental
 
       - name: Upload HTML report
@@ -131,6 +134,7 @@ jobs:
       # npm registry rate limit. Each package waits for the previous to finish.
       - name: npm audit (all frontend packages)
         id: npm_audit
+        if: always()
         continue-on-error: true
         run: |
           PACKAGES=(
@@ -184,9 +188,17 @@ jobs:
           retention-days: 30
           if-no-files-found: ignore
 
-      - name: Fail if npm audit found HIGH/CRITICAL
-        if: steps.npm_audit.outcome == 'failure'
-        run: exit 1
+      - name: Fail if OWASP or npm audit found issues
+        if: always()
+        run: |
+          if [ "${{ steps.owasp.outcome }}" = "failure" ]; then
+            echo "::error::OWASP Dependency-Check found vulnerabilities above the CVSS threshold."
+            exit 1
+          fi
+          if [ "${{ steps.npm_audit.outcome }}" = "failure" ]; then
+            echo "::error::npm audit found HIGH or CRITICAL vulnerabilities."
+            exit 1
+          fi
 
   # -----------------------------------------------------------------------
   # Job 2: Trivy — container image CVE scan (runs on push to main / PRs)

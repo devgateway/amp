@@ -108,7 +108,6 @@ jobs:
             --suppression /github/workspace/security/owasp-suppressions.xml
             --scan /github/workspace/amp/ckeditor_4.4.6
             --disableNodeAudit
-            --disableNodePackage
             --enableExperimental
 
       - name: Upload HTML report

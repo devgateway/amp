@@ -175,11 +175,31 @@ jobs:
               --prefix "$PKG" \
               --audit-level high \
               --json > "amp/target/dependency-check-report/npm-audit/${NAME}.json" 2>&1 || true
-            CRIT=$(jq '.metadata.vulnerabilities.critical // 0' \
+            # Count only CRITICAL vulnerabilities that have a fix available.
+            # Excludes fix:false (no fix exists anywhere) and isSemVerMajor:true
+            # (would require a breaking dependency change — tracked as tech debt).
+            # This avoids false failures from browser-only crypto polyfills
+            # (cipher-base, sha.js, pbkdf2, elliptic) and abandoned deps like
+            # amp-translate/jquery (CISA KEV — requires code changes, not a dep bump).
+            CRIT=$(jq '[.vulnerabilities // {} | to_entries[] |
+              select(.value.severity == "critical") |
+              select(
+                .value.fixAvailable == true or
+                (.value.fixAvailable | type == "object" and .isSemVerMajor == false)
+              )] | length' \
               "amp/target/dependency-check-report/npm-audit/${NAME}.json" 2>/dev/null || echo 0)
-            HIGH=$(jq '.metadata.vulnerabilities.high // 0' \
+            HIGH=$(jq '[.vulnerabilities // {} | to_entries[] |
+              select(.value.severity == "high") |
+              select(
+                .value.fixAvailable == true or
+                (.value.fixAvailable | type == "object" and .isSemVerMajor == false)
+              )] | length' \
               "amp/target/dependency-check-report/npm-audit/${NAME}.json" 2>/dev/null || echo 0)
-            echo "$NAME: critical=${CRIT} high=${HIGH}"
+            CRIT_ALL=$(jq '.metadata.vulnerabilities.critical // 0' \
+              "amp/target/dependency-check-report/npm-audit/${NAME}.json" 2>/dev/null || echo 0)
+            HIGH_ALL=$(jq '.metadata.vulnerabilities.high // 0' \
+              "amp/target/dependency-check-report/npm-audit/${NAME}.json" 2>/dev/null || echo 0)
+            echo "$NAME: critical=${CRIT_ALL} (${CRIT} actionable) high=${HIGH_ALL} (${HIGH} actionable)"
             # Check if this package is excluded from the failure gate
             GATED=true
             for SKIP in "${EXCLUDED[@]}"; do

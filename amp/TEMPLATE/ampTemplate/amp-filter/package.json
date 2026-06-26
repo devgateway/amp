@@ -58,6 +58,9 @@
     "shell-quote": ">=1.7.4",
     "braces": ">=3.0.3",
     "browserify-sign": ">=4.2.2",
-    "semver": ">=7.5.2"
+    "semver": ">=7.5.2",
+    "amp-translate": {
+      "underscore": ">=1.13.8"
+    }
   }
 }

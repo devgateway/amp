@@ -33,6 +33,12 @@
     "browserify-sign": ">=4.2.2",
     "underscore": ">=1.13.8",
     "handlebars": ">=4.7.9",
-    "form-data": ">=4.0.6"
+    "form-data": ">=4.0.6",
+    "amp-translate": {
+      "underscore": ">=1.13.8"
+    },
+    "@musicstory/react-bootstrap-table-next": {
+      "underscore": ">=1.13.8"
+    }
   }
 }

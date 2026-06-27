@@ -170,7 +170,7 @@ COPY TEMPLATE/reamp .
 RUN npm run build \
     && rm -rf node_modules
 
-FROM node as compile-reampv2
+FROM node:20 as compile-reampv2
 # Copy npm install helper script
 COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
 RUN chmod +x /usr/local/bin/npm-install-with-retry.sh

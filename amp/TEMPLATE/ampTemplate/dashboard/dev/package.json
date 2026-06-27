@@ -55,7 +55,8 @@
     "browserify-sign": ">=4.2.2",
     "semver": ">=7.5.2",
     "lodash": ">=4.17.21",
-    "browserify-shim": ">=3.8.16",
+    "cipher-base": ">=1.0.7",
+    "elliptic": ">=6.6.1",
     "growl": ">=1.10.0"
   }
 }

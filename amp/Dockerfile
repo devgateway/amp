@@ -146,9 +146,11 @@ RUN --mount=type=cache,target=/root/.npm \
     npm-install-with-retry.sh dev
 # Copy source code after dependencies are installed
 COPY TEMPLATE/ampTemplate/dashboard .
-RUN cd dev \
-    && npm run build \
-    && rm -rf node_modules
+RUN set -euxo pipefail \
+ && cd dev \
+ && npm ci --no-audit --prefer-offline \
+ && npm run build --verbose \
+ && rm -rf node_modules
 
 FROM node as compile-reamp
 # Copy npm install helper script

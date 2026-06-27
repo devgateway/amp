@@ -65,6 +65,8 @@
     "braces": ">=3.0.3",
     "browserify-sign": ">=4.2.2",
     "semver": ">=7.5.2",
+    "cipher-base": ">=1.0.7",
+    "elliptic": ">=6.6.1",
     "amp-translate": {
       "underscore": ">=1.13.8"
     }

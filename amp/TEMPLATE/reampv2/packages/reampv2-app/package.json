@@ -73,6 +73,7 @@
     "react-transition-group": "^4.4.5",
     "react-visibility-sensor": "^5.1.1",
     "redux": "^4.0.5",
+    "@reduxjs/toolkit": "^1.9.5",
     "redux-thunk": "^2.3.0",
     "semantic-ui-react": "^2.0.3",
     "stream-browserify": "^3.0.0",

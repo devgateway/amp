@@ -127,6 +127,7 @@ RUN cd dev \
     && rm -rf node_modules
 
 FROM node as compile-dashboard
+SHELL ["/bin/bash", "-c"]
 # Copy npm install helper script
 COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
 RUN chmod +x /usr/local/bin/npm-install-with-retry.sh

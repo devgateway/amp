@@ -83,7 +83,7 @@
     "gulp-uglify": "3.0.2",
     "gulp-util": "2.2.20",
     "gulp-watch": "0.6.10",
-    "mold-source-map": "0.3.0",
+    "mold-source-map": "0.4.1",
     "husl": "4.0.2",
     "i18next": "1.7.9",
     "jquery": "2.1.1",

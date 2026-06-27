@@ -105,12 +105,12 @@ var paths = {
 //------------------------------------
 
 function _bundlify(ifyer, entry, destFolder, destName) {
-  var bundler = ifyer(entry);
+  var bundler = ifyer(entry, {debug: true});
   bundler.transform('brfs');
 
   var rebundle = function() {
     g.util.log('rebrowserifying ' + entry + '....');
-    return bundler.bundle({debug: true})
+    return bundler.bundle()
       /* Fix sourcemaps in firefox (not in amp-filters though)though https://github.com/substack/node-browserify/issues/681#issuecomment-39530724 */
       .pipe(mold.transformSourcesRelativeTo(__dirname))
       .on('error', function(e) { g.util.log('Browserify error: ', e); })

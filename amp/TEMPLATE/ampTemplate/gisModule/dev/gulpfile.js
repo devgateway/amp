@@ -156,7 +156,6 @@ gulp.task('browserify', function() {
 
 gulp.task('less', function() {
   return gulp.src(paths.app.stylesheets.libs.concat(paths.app.stylesheets.entry))
-    .pipe(g.plumber())
     .pipe(g.less())
       .on('error', g.util.log)
       .on('error', g.util.beep)

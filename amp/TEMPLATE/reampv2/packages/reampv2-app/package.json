@@ -102,7 +102,7 @@
     "memoize-one": "^5.1.1",
     "@nivo/scales": "0.74.0",
     "react-calendar": "^4.6.0",
-    "react-fit": "^1.7.0",
+    "react-fit": "1.7.0",
     "react-motion": "^0.5.2",
     "@hypnosphi/create-react-context": "^0.3.1",
     "typed-styles": "^0.0.7",

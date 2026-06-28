@@ -17,7 +17,8 @@
     "dotenv-webpack": "^8.0.1",
     "lerna": "^7.1.4",
     "nx": "^16.10.0",
-    "nx-cloud": "^16.5.2"
+    "nx-cloud": "^16.5.2",
+    "@types/node": "^20.0.0"
   },
   "dependencies": {
     "fs": "^0.0.1-security",

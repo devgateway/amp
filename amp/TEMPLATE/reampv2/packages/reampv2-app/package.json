@@ -106,6 +106,7 @@
     "react-motion": "^0.5.2",
     "@hypnosphi/create-react-context": "^0.3.1",
     "typed-styles": "^0.0.7",
+    "styled-components": "^5.3.11",
     "semantic-ui-react": "^2.0.3",
     "stream-browserify": "^3.0.0",
     "sweetalert2": "^11.7.2",

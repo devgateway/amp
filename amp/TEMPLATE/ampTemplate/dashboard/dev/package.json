@@ -58,5 +58,10 @@
     "cipher-base": ">=1.0.7",
     "elliptic": ">=6.6.1",
     "growl": ">=1.10.0"
+  },
+  "browserify": {
+    "transform": [
+      "brfs"
+    ]
   }
 }

@@ -118,5 +118,42 @@
     "lodash": ">=4.17.21",
     "cipher-base": ">=1.0.7",
     "elliptic": ">=6.6.1"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "./node_modules/esri-leaflet/dist/esri-leaflet.js": {
+      "exports": "L",
+      "depends": [
+        "./node_modules/leaflet/dist/leaflet.js:L"
+      ]
+    },
+    "./node_modules/leaflet.markercluster/dist/leaflet.markercluster.js": {
+      "depends": [
+        "./node_modules/esri-leaflet/dist/esri-leaflet.js:L"
+      ]
+    },
+    "./app/mock-api/sinon-min.js": {
+      "exports": "sinon"
+    },
+    "./app/js/libs/local/slider/jquery.nouislider.min.js": {
+      "depends": [
+        "./node_modules/jquery/dist/jquery.min.js:jQuery"
+      ]
+    },
+    "./node_modules/bootstrap/dist/js/bootstrap.js": {
+      "depends": [
+        "jquery:jquery"
+      ]
+    },
+    "nvd3": {
+      "exports": "nvd3",
+      "depends": [
+        "d3:d3"
+      ]
+    }
   }
 }

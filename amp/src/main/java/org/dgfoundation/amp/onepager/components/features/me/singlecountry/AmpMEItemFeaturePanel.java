@@ -208,7 +208,20 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         add(setValue);
 
 
-        AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel("disaggregationValuesSubsection","Disaggregation Values", indicator);
+        IModel<AmpActivityLocation> activityLocationModel = new LoadableDetachableModel<AmpActivityLocation>() {
+            @Override
+            protected AmpActivityLocation load() {
+                IndicatorActivity indicatorActivity = conn.getObject();
+                if (indicatorActivity.getActivityLocation() != null) {
+                    return indicatorActivity.getActivityLocation();
+                }
+                AmpActivityVersion activity = indicatorActivity.getActivity();
+                return activity != null && activity.getLocations() != null && activity.getLocations().size() == 1
+                        ? activity.getLocations().iterator().next() : null;
+            }
+        };
+        AmpMEDisaggregationValuesFeaturePanel disaggPanel = new AmpMEDisaggregationValuesFeaturePanel(
+                "disaggregationValuesSubsection", "Disaggregation Values", indicator, activityLocationModel);
         disaggPanel.setOutputMarkupId(true);
         disaggPanel.setOutputMarkupPlaceholderTag(true);
         disaggPanel.setVisible(hasDisaggregation);

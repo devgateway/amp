@@ -7,20 +7,34 @@ import {extractSectors} from "../utils/data";
 
 const REDUCER_NAME = 'sectorClassification';
 
+type MeStateType = {
+    sectorClassificationId: number | null;
+    sectorId: number | null;
+    indicators: Record<number, number>;
+};
+
 type SectorClassificationInitialStateType = {
     data: SectorClassifcation[];
     loading: boolean;
     error: any;
     sectors: SectorObjectType[];
     selectedSector: SectorObjectType | null;
+    meState: MeStateType;
 }
+
+const initialMeState: MeStateType = {
+    sectorClassificationId: null,
+    sectorId: null,
+    indicators: {}
+};
 
 const initialState: SectorClassificationInitialStateType = {
     data: [],
     loading: false,
     error: null,
     sectors: [],
-    selectedSector: null
+    selectedSector: null,
+    meState: initialMeState
 }
 
 export const fetchSectorClassification = createAsyncThunk(
@@ -47,6 +61,12 @@ const fetchSectorClassificationSlice = createSlice({
         },
         clearSelectedSectorState: (state) => {
             state.selectedSector = null;
+        },
+        setMeState: (state, action) => {
+            state.meState = { ...state.meState, ...action.payload };
+        },
+        clearMeState: (state) => {
+            state.meState = { ...initialMeState };
         }
     },
     extraReducers: (builder) => {
@@ -72,7 +92,9 @@ const fetchSectorClassificationSlice = createSlice({
 export const {
     resetState,
     setSelectedSectorState,
-    clearSelectedSectorState
+    clearSelectedSectorState,
+    setMeState,
+    clearMeState
 } = fetchSectorClassificationSlice.actions;
 
 export default fetchSectorClassificationSlice.reducer;

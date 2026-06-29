@@ -73,9 +73,9 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>central-fallback</id>
+            <id>maven-central</id>
             <name>Maven Central</name>
-            <url>https://repo.maven.apache.org/maven2</url>
+            <url>https://repo.maven.apache.org/maven2/</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -91,9 +91,9 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>central-fallback</id>
+            <id>maven-central-plugins</id>
             <name>Maven Central</name>
-            <url>https://repo.maven.apache.org/maven2</url>
+            <url>https://repo.maven.apache.org/maven2/</url>
         </pluginRepository>
     </pluginRepositories>
 
@@ -621,11 +621,6 @@
             <groupId>io.projectreactor.netty</groupId>
             <artifactId>reactor-netty</artifactId>
             <version>1.0.35</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>5.3.28</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -1249,12 +1244,10 @@
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-translate</artifactId>
-            <version>1.95.3</version>
         </dependency>
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-storage</artifactId>
-            <version>1.111.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -1311,7 +1304,24 @@
 
     </dependencies>
 
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.cloud</groupId>
+                <artifactId>libraries-bom</artifactId>
+                <version>4.4.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.10.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
@@ -1747,7 +1757,7 @@
             <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-clean-plugin</artifactId>
-            <version>3.1.0</version>
+            <version>3.3.2</version>
             <executions>
                 <execution>
                     <id>clean-metainf</id>

@@ -1,7 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.indicator.manager.service;
 
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.AmpCategoryValueDTO;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpIndicatorDisaggregationValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Session;
@@ -11,6 +14,8 @@ import javax.ws.rs.BadRequestException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 public class DisaggregationService {
 
@@ -90,8 +95,31 @@ public class DisaggregationService {
         Session session = PersistenceManager.getSession();
         AmpCategoryValue option = session.get(AmpCategoryValue.class, optionId);
         if (option != null) {
+            if (isOptionLinkedToIndicator(session, optionId)) {
+                throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError("This disaggregation option cannot be "
+                        + "deleted because it is used by an indicator. Remove the disaggregation from the "
+                        + "indicator before deleting this option."));
+            }
+            // AmpCategoryClass.possibleValues is cascade="all-delete-orphan" + lazy="false".
+            // The parent class is eagerly loaded and its possibleValues list is already in the
+            // session, so we must remove this option from that list BEFORE deleting it —
+            // otherwise Hibernate's cascade will try to re-save the deleted object on flush.
+            AmpCategoryClass categoryClass = option.getAmpCategoryClass();
+            if (categoryClass != null) {
+                categoryClass.getPossibleValues().remove(option);
+            }
             session.delete(option);
             session.flush();
         }
+    }
+
+    private boolean isOptionLinkedToIndicator(Session session, Long optionId) {
+        Long linkedCount = session.createQuery("select count(disaggValue.id) from "
+                + AmpIndicatorDisaggregationValue.class.getName() + " disaggValue "
+                + "where disaggValue.parentCategory.id = :optionId "
+                + "or disaggValue.childCategory.id = :optionId", Long.class)
+                .setParameter("optionId", optionId)
+                .uniqueResult();
+        return linkedCount != null && linkedCount > 0;
     }
 }

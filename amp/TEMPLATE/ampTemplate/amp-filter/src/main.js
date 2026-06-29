@@ -15,6 +15,7 @@ if (typeof Backbone.$ === 'undefined') {
 }
 
 require('jquery-ui/draggable');
+require('jquery-ui/datepicker');
 require('bootstrap/dist/js/bootstrap');
 require('./lib/jquery-ui-i18n');
 

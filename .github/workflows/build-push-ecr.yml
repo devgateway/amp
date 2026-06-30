@@ -11,18 +11,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # ── Checkout ─────────────────────────────────────────────────────────────
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      # ── Load SSH key for private npm packages ─────────────────────────────
-      # Required by reamp/reampv2 Dockerfile stages that fetch github:devgateway/amp-boilerplate
+      # ── Load SSH key (needed for submodule checkout AND private npm packages) ─
       - name: Start SSH agent
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.DOCKER_BUILD_SSH_KEY }}
+
+      - name: Configure git to use SSH for submodules
+        run: |
+          git config --global url."git@github.com:".insteadOf "https://github.com/"
+          mkdir -p ~/.ssh
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      # ── Checkout (with submodules — Dockerfile COPYs .git dirs from them) ───
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+          ssh-key: ${{ secrets.DOCKER_BUILD_SSH_KEY }}
 
       # ── Derive the Docker tag from the branch name ─────────────────────────
       # Sanitise: replace / with - and strip other unsafe chars (Docker tag rules).

@@ -171,22 +171,35 @@ if [[ "${WITH_TRUBUDGET}" == true ]]; then
   log "TruBudget started."
 fi
 
-# ── Build AMP image ───────────────────────────────────────────────────────────
-if [[ "${SKIP_BUILD}" == false ]]; then
-  log "Building AMP Docker image (this may take a while on first run)..."
+# ── ECR login & pull AMP image ───────────────────────────────────────────────
+if [[ -z "${AMP_IMAGE:-}" || -z "${AMP_TAG:-}" ]]; then
+  err "AMP_IMAGE and AMP_TAG must be set in ${ENV_FILE}"
+  err "They are set by the GitHub Actions CI pipeline (build-push-ecr.yml)."
+  exit 1
+fi
 
-  # The reamp/reampv2 stages use --mount=type=ssh to fetch private npm packages.
-  # Ensure ssh-agent is running and your key is loaded before building.
-  if [[ -z "${SSH_AUTH_SOCK:-}" ]]; then
-    warn "SSH_AUTH_SOCK is not set — reamp/reampv2 stages may fail."
-    warn "Run: eval \$(ssh-agent -s) && ssh-add ~/.ssh/id_rsa"
+if [[ -z "${AWS_ACCESS_KEY_ID:-}" || -z "${AWS_SECRET_ACCESS_KEY:-}" || -z "${AWS_DEFAULT_REGION:-}" ]]; then
+  err "AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and AWS_DEFAULT_REGION must be set in ${ENV_FILE}"
+  exit 1
+fi
+
+if [[ "${SKIP_BUILD}" == false ]]; then
+  if ! command -v aws &>/dev/null; then
+    err "'aws' CLI is not installed. Install it from https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html"
+    exit 1
   fi
 
-  # DOCKER_BUILDKIT=1 is required for --mount=type=ssh and --mount=type=cache
-  DOCKER_BUILDKIT=1 $DC -f "${COMPOSE_FILE}" --env-file "${ENV_FILE}" build \
-    --ssh default amp
+  # Extract the ECR registry hostname (everything before the first /)
+  ECR_REGISTRY=$(echo "${AMP_IMAGE}" | cut -d'/' -f1)
+
+  log "Authenticating with ECR (${ECR_REGISTRY})..."
+  aws ecr get-login-password --region "${AWS_DEFAULT_REGION}" \
+    | docker login --username AWS --password-stdin "${ECR_REGISTRY}"
+
+  log "Pulling AMP image: ${AMP_IMAGE}:${AMP_TAG}"
+  docker pull "${AMP_IMAGE}:${AMP_TAG}"
 else
-  log "Skipping AMP build (--skip-build)"
+  log "Skipping image pull (--skip-build)"
 fi
 
 # ── Start AMP ─────────────────────────────────────────────────────────────────

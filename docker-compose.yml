@@ -3,6 +3,9 @@ version: "3.8"
 # AMP stack — private IP access, no domain required
 # Requires: Docker >= 20.10, Docker Compose >= 2.0
 #
+# Images are built by GitHub Actions and pushed to ECR, tagged with the branch name.
+# Set AMP_IMAGE (ECR repo URL) and AMP_TAG (branch/tag) in .env before running setup.sh.
+#
 # TruBudget is installed separately via its official scripts (see setup.sh).
 #
 # Access (replace 192.168.x.x with your server's private IP):
@@ -20,7 +23,7 @@ services:
     container_name: amp-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${AMP_DB:-amp}
+      POSTGRES_DB: ${AMP_DB_NAME:-amp}
       POSTGRES_USER: ${AMP_DB_USER:-amp}
       POSTGRES_PASSWORD: ${AMP_DB_PASSWORD:-amp}
     volumes:
@@ -28,24 +31,18 @@ services:
     networks:
       - amp-net
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${AMP_DB_USER:-amp} -d ${AMP_DB:-amp}"]
+      test: ["CMD-SHELL", "pg_isready -U ${AMP_DB_USER:-amp} -d ${AMP_DB_NAME:-amp}"]
       interval: 10s
       timeout: 5s
       retries: 10
 
   # ─── AMP (Tomcat WAR) ──────────────────────────────────────────────────────
   amp:
-    build:
-      context: ./amp
-      dockerfile: Dockerfile
-      args:
-        SKIP_TESTS: "true"
-        BUILD_SOURCE: docker
-        JDBC_USER: ${AMP_DB_USER:-amp}
-        JDBC_PASSWORD: ${AMP_DB_PASSWORD:-amp}
-        JDBC_DB: ${AMP_DB:-amp}
-        JDBC_HOST: db
-        JDBC_PORT: "5432"
+    # Image is built by GitHub Actions (.github/workflows/build-push-ecr.yml)
+    # and pushed to ECR tagged with the branch name.
+    # AMP_IMAGE → ECR repo URL (e.g. 123456789.dkr.ecr.us-east-1.amazonaws.com/amp/webapp)
+    # AMP_TAG   → branch / release tag (e.g. develop, main, v1.2.0)
+    image: ${AMP_IMAGE}:${AMP_TAG}
     container_name: amp-app
     restart: unless-stopped
     depends_on:
@@ -54,7 +51,7 @@ services:
     environment:
       JDBC_HOST: db
       JDBC_PORT: 5432
-      JDBC_DB: ${AMP_DB:-amp}
+      JDBC_DB: ${AMP_DB_NAME:-amp}
       JDBC_USER: ${AMP_DB_USER:-amp}
       JDBC_PASSWORD: ${AMP_DB_PASSWORD:-amp}
       # TruBudget API runs on the host via its own compose stack.

@@ -1,0 +1,91 @@
+name: Build & Push AMP image to ECR
+
+on:
+  push:
+    branches:
+      - "**"          # all branches
+  workflow_dispatch:  # allow manual trigger
+
+env:
+  AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Checkout ─────────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ── Load SSH key for private npm packages ─────────────────────────────
+      # Required by reamp/reampv2 Dockerfile stages that fetch github:devgateway/amp-boilerplate
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # ── Derive the Docker tag from the branch name ─────────────────────────
+      # Sanitise: replace any character that is not alphanumeric, dot, hyphen or
+      # underscore with a hyphen (Docker tag rules).
+      - name: Set image tag
+        id: tag
+        run: |
+          RAW="${{ github.ref_name }}"
+          TAG="${RAW//\//-}"          # replace / with -
+          TAG="${TAG//[^a-zA-Z0-9._-]/-}"
+          echo "value=${TAG}" >> "$GITHUB_OUTPUT"
+
+      # ── Configure AWS credentials ─────────────────────────────────────────
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region:            ${{ secrets.AWS_DEFAULT_REGION }}
+
+      # ── Log in to Amazon ECR ──────────────────────────────────────────────
+      - name: Login to Amazon ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # ── Set up Docker Buildx ─────────────────────────────────────────────
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ── Build & push ──────────────────────────────────────────────────────
+      # Secrets.ECR_REGISTRY  → e.g. 798366298150.dkr.ecr.us-east-1.amazonaws.com
+      # Secrets.ECR_REPOSITORY → e.g. amp/webapp
+      - name: Build and push AMP image
+        uses: docker/build-push-action@v5
+        with:
+          context:    ./amp
+          file:       ./amp/Dockerfile
+          push:       true
+          ssh:        default
+          tags: |
+            ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ steps.tag.outputs.value }}
+            ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest
+          build-args: |
+            SKIP_TESTS=true
+            BUILD_SOURCE=docker
+            JDBC_USER=${{ secrets.AMP_DB_USER }}
+            JDBC_PASSWORD=${{ secrets.AMP_DB_PASSWORD }}
+            JDBC_DB=${{ secrets.AMP_DB_NAME }}
+            JDBC_HOST=db
+            JDBC_PORT=5432
+          # Layer cache stored in GitHub Actions cache — speeds up subsequent builds
+          cache-from: type=gha
+          cache-to:   type=gha,mode=max
+
+      # ── Output ────────────────────────────────────────────────────────────
+      - name: Print image reference
+        run: |
+          echo "Image pushed:"
+          echo "  ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ steps.tag.outputs.value }}"
+          echo ""
+          echo "Set in deployment .env:"
+          echo "  AMP_IMAGE=${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}"
+          echo "  AMP_TAG=${{ steps.tag.outputs.value }}"

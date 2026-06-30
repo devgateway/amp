@@ -191,6 +191,14 @@ RUN npm run build \
     && rm -rf node_modules
 FROM maven:3.8.4-jdk-8 as compile-mvn
 WORKDIR /tmp/amp
+
+# JDBC credentials passed in from docker-compose build args (see docker-compose.yml)
+ARG JDBC_USER=amp
+ARG JDBC_PASSWORD=amp
+ARG JDBC_DB=amp
+ARG JDBC_HOST=db
+ARG JDBC_PORT=5432
+
 # Copy pom.xml first for better Maven caching
 COPY pom.xml .
 #COPY amp/pom.xml amp/
@@ -214,16 +222,18 @@ RUN --mount=type=cache,target=/root/.m2 \
     if [ "$SKIP_TESTS" = "true" ]; then \
       mvn -B clean compile org.apache.maven.plugins:maven-war-plugin:2.3:exploded \
         -DbuildSource=$BUILD_SOURCE \
-        -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
-        -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
+        -Djdbc.user=$JDBC_USER -Djdbc.password=$JDBC_PASSWORD \
+        -Djdbc.db=$JDBC_DB -Djdbc.host=$JDBC_HOST -Djdbc.port=$JDBC_PORT \
+        -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
         -Dskip.npm -Dskip.installnodenpm -DskipTests \
         && mv target/amp exploded \
         && rm -rf target; \
     else \
       mvn -B test org.apache.maven.plugins:maven-war-plugin:2.3:exploded \
         -DbuildSource=$BUILD_SOURCE \
-        -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
-        -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
+        -Djdbc.user=$JDBC_USER -Djdbc.password=$JDBC_PASSWORD \
+        -Djdbc.db=$JDBC_DB -Djdbc.host=$JDBC_HOST -Djdbc.port=$JDBC_PORT \
+        -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
         -Dskip.npm -Dskip.installnodenpm \
         && mv target/amp exploded \
         && rm -rf target; \

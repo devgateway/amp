@@ -17,6 +17,11 @@ if (typeof Backbone.$ === 'undefined') {
 require('jquery-ui/draggable');
 require('jquery-ui/datepicker');
 require('bootstrap/dist/js/bootstrap');
+
+// Always expose the internal jQuery (with datepicker) as window.jQuery before
+// loading jquery-ui-i18n, which uses the global jQuery rather than require().
+window.jQuery = jQuery;
+
 require('./lib/jquery-ui-i18n');
 
 var FilterView = require('./views/filters-view');

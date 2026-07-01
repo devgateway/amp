@@ -190,7 +190,22 @@ public class ProjectUtil {
 
     public static TruBudgetActivity activityAlreadyInTrubudget(Long activityId) {
         Session session = PersistenceManager.getRequestDBSession();
-        Query<TruBudgetActivity> query = session.createQuery("FROM " + TruBudgetActivity.class.getName() + " ta WHERE ta.ampActivityId=:ampActivityId", TruBudgetActivity.class);
+        // Each AMP save creates a NEW AmpActivityVersion with a new ampActivityId.
+        // Querying only the current ID misses the record saved for a prior version of
+        // the same logical activity, causing createProject() to fire on every update.
+        // Instead, look up any TruBudgetActivity linked to ANY version in the same
+        // activity group (the stable identity across versions).
+        Query<TruBudgetActivity> query = session.createQuery(
+                "SELECT ta FROM " + TruBudgetActivity.class.getName() + " ta " +
+                "WHERE ta.ampActivityId IN (" +
+                "  SELECT otherAv.ampActivityId FROM " + AmpActivityVersion.class.getName() + " otherAv " +
+                "  JOIN otherAv.groups g " +
+                "  WHERE g IN (" +
+                "    SELECT g2 FROM " + AmpActivityVersion.class.getName() + " av JOIN av.groups g2 " +
+                "    WHERE av.ampActivityId = :ampActivityId" +
+                "  )" +
+                ")",
+                TruBudgetActivity.class);
         query.setParameter("ampActivityId", activityId, LongType.INSTANCE);
         return query.stream().findAny().orElse(null);
     }
@@ -259,10 +274,18 @@ public class ProjectUtil {
     }
 
     private static Map<String, Map<String, BigDecimal>> getCurrencyGroups(AmpActivityVersion ampActivityVersion) {
+        if (ampActivityVersion.getFunding() == null) {
+            return Collections.emptyMap();
+        }
         return ampActivityVersion.getFunding().stream()
+                .filter(ampFunding -> ampFunding.getFundingDetails() != null)
                 .flatMap(ampFunding -> ampFunding.getFundingDetails().stream())
-                .filter(ampFundingDetail -> ampFundingDetail.getAdjustmentType().getValue().equalsIgnoreCase("Actual")
-                        && ampFundingDetail.getTransactionType() == 0)
+                .filter(ampFundingDetail -> ampFundingDetail.getAdjustmentType() != null
+                        && ampFundingDetail.getAdjustmentType().getValue().equalsIgnoreCase("Actual")
+                        && ampFundingDetail.getTransactionType() == 0
+                        && ampFundingDetail.getAmpCurrencyId() != null
+                        && ampFundingDetail.getAmpFundingId() != null
+                        && ampFundingDetail.getAmpFundingId().getAmpDonorOrgId() != null)
                 .collect(Collectors.groupingBy(
                         ampFundingDetail -> ampFundingDetail.getAmpCurrencyId().getCurrencyCode(),
                         Collectors.groupingBy(

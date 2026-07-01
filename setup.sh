@@ -2,13 +2,14 @@
 # setup.sh — Install AMP + TruBudget using Docker
 #
 # Usage:
-#   ./setup.sh [--no-trubudget] [--skip-build] [--down] [--down-all] [--help]
+#   ./setup.sh [--no-trubudget] [--skip-build] [--down] [--down-all] [--background] [--help]
 #
 # Flags:
 #   --no-trubudget   Start only AMP + PostgreSQL (skip TruBudget)
 #   --skip-build     Do not rebuild the AMP Docker image
 #   --down           Stop AMP containers (keeps volumes); also stops TruBudget
 #   --down-all       Stop all containers AND remove volumes (data loss!)
+#   --background     Run the entire setup in the background; tail the log to follow progress
 #   --help           Show this message
 
 set -euo pipefail
@@ -36,6 +37,7 @@ WITH_TRUBUDGET=true
 SKIP_BUILD=false
 TEARDOWN=false
 TEARDOWN_VOLUMES=false
+BACKGROUND=false
 
 # ── Argument parsing ──────────────────────────────────────────────────────────
 for arg in "$@"; do
@@ -44,6 +46,7 @@ for arg in "$@"; do
     --skip-build)    SKIP_BUILD=true ;;
     --down)          TEARDOWN=true ;;
     --down-all)      TEARDOWN=true; TEARDOWN_VOLUMES=true ;;
+    --background)    BACKGROUND=true ;;
     --help|-h)
       sed -n '/^# Usage:/,/^[^#]/p' "$0" | grep '^#' | sed 's/^# //'
       exit 0
@@ -54,6 +57,25 @@ for arg in "$@"; do
       ;;
   esac
 done
+
+# ── Background mode ───────────────────────────────────────────────────────────
+# Re-invoke this script without --background, detached from the terminal.
+# All output goes to SETUP_LOG; the parent exits immediately.
+if [[ "${BACKGROUND}" == true ]]; then
+  SETUP_LOG="${SCRIPT_DIR}/setup-$(date +%Y%m%d-%H%M%S).log"
+  # Rebuild the original argument list, minus --background
+  FORWARD_ARGS=()
+  for arg in "$@"; do
+    [[ "${arg}" == "--background" ]] && continue
+    FORWARD_ARGS+=("${arg}")
+  done
+  nohup bash "${BASH_SOURCE[0]}" "${FORWARD_ARGS[@]}" > "${SETUP_LOG}" 2>&1 &
+  BG_PID=$!
+  echo -e "${GREEN}[setup]${NC} Running in background (PID ${BG_PID})"
+  echo -e "${GREEN}[setup]${NC} Log: ${SETUP_LOG}"
+  echo -e "${GREEN}[setup]${NC} Follow progress: tail -f ${SETUP_LOG}"
+  exit 0
+fi
 
 # ── Prerequisite checks ───────────────────────────────────────────────────────
 check_cmd() {
@@ -89,10 +111,15 @@ if [[ ! -f "${ENV_FILE}" ]]; then
 fi
 
 # Load env so we can use vars in this script
-set -o allexport
-# shellcheck disable=SC1090
-[[ -f "${ENV_FILE}" ]] && source "${ENV_FILE}"
-set +o allexport
+# Strip inline comments before sourcing — bash executes them otherwise.
+if [[ -f "${ENV_FILE}" ]]; then
+  while IFS= read -r line; do
+    [[ -z "${line}" || "${line}" =~ ^[[:space:]]*# ]] && continue
+    line="${line%%  #*}"
+    line="${line%% #*}"
+    export "${line?}" 2>/dev/null || true
+  done < <(grep -v '^[[:space:]]*#' "${ENV_FILE}" | grep '=')
+fi
 
 # ── Tear-down path ────────────────────────────────────────────────────────────
 if [[ "${TEARDOWN}" == true ]]; then

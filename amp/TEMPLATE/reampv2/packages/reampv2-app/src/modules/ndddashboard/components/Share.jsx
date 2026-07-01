@@ -35,9 +35,9 @@ class Share extends Component {
      // TODO: prepare data chart settings.
      // eslint-disable-next-line no-shadow
      const {
-       _getShareLink, filters, settings, fundingType, selectedPrograms
+       _getShareLink, filters, settings, fundingType, selectedPrograms, meState
      } = this.props;
-     return _getShareLink(filters ? filters.filters : null, settings, fundingType, selectedPrograms);
+     return _getShareLink(filters ? filters.filters : null, settings, fundingType, selectedPrograms, meState);
    }
 
    generateModal() {
@@ -91,7 +91,8 @@ class Share extends Component {
 
 const mapStateToProps = state => ({
   shareLink: state.shareLinkReducer.shareLink,
-  translations: state.translationsReducer.translations
+  translations: state.translationsReducer.translations,
+  meState: state.fetchSectorClassificationReducer.meState
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

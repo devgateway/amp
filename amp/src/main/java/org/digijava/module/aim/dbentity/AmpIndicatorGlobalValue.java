@@ -62,6 +62,9 @@ public class AmpIndicatorGlobalValue implements Serializable {
     @JsonIgnore
     private AmpIndicator indicator;
 
+    @JsonIgnore
+    private AmpActivityLocation activityLocation;
+
     public AmpIndicatorGlobalValue() {
     }
 
@@ -91,6 +94,14 @@ public class AmpIndicatorGlobalValue implements Serializable {
 
     public void setIndicator(AmpIndicator indicator) {
         this.indicator = indicator;
+    }
+
+    public AmpActivityLocation getActivityLocation() {
+        return activityLocation;
+    }
+
+    public void setActivityLocation(AmpActivityLocation activityLocation) {
+        this.activityLocation = activityLocation;
     }
 
     public Double getOriginalValue() {
@@ -152,6 +163,7 @@ public class AmpIndicatorGlobalValue implements Serializable {
         r.setOriginalValueDate(originalValueDate);
         r.setRevisedValue(revisedValue);
         r.setRevisedValueDate(revisedValueDate);
+        r.setActivityLocation(activityLocation);
         r.setId(id);
     }
 }

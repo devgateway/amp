@@ -12,6 +12,9 @@
         <many-to-one name="indicator" column="indicator_id"
                      class="org.digijava.module.aim.dbentity.AmpIndicator" cascade="none" />
 
+        <many-to-one name="activityLocation" column="activity_location"
+                 class="org.digijava.module.aim.dbentity.AmpActivityLocation" cascade="none" />
+
         <property name="type" type="int" not-null="true"/>
         <property name="originalValue" column="original_value" type="java.lang.Double"/>
         <property name="originalValueDate" column="original_value_date" type="java.util.Date"/>

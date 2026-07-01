@@ -10,9 +10,9 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorDisaggregationValue;
 import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
@@ -41,6 +41,11 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
     }
 
     public AmpMEDisaggregationValuesFeaturePanel(String id, String fmName, IModel<AmpIndicator> indicatorModel) {
+        this(id, fmName, indicatorModel, null);
+    }
+
+    public AmpMEDisaggregationValuesFeaturePanel(String id, String fmName, IModel<AmpIndicator> indicatorModel,
+                                                IModel<AmpActivityLocation> activityLocationModel) {
         super(id, fmName, true);
         this.indicatorModel = indicatorModel;
         logger.info("Initializing AmpMEDisaggregationValuesFeaturePanel for indicator: " + (indicatorModel.getObject() != null ? indicatorModel.getObject().getName() : "null"));
@@ -150,7 +155,8 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
                         actualValuesContainer.setOutputMarkupId(true);
                         childItem.add(actualValuesContainer);
 
-                        AmpMEDisaggregationActualValuesPanel actualPanel = new AmpMEDisaggregationActualValuesPanel("actualValuesPanel", Model.of(disaggVal));
+                        AmpMEDisaggregationActualValuesPanel actualPanel = new AmpMEDisaggregationActualValuesPanel(
+                            "actualValuesPanel", Model.of(disaggVal), activityLocationModel);
                         actualPanel.setOutputMarkupId(true);
                         actualPanel.setOutputMarkupPlaceholderTag(true);
                         actualValuesContainer.add(actualPanel);

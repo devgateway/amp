@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Col, Row} from "react-bootstrap";
 import ChartUtils from "../../utils/chart";
 import {useSelector, useDispatch } from "react-redux";
@@ -11,7 +11,7 @@ import {FUNDING_TYPE} from "../../../utils/constants";
 import EllipsisText from "react-ellipsis-text";
 import { Tooltip }  from "react-tooltip";
 import NoData from "../NoData";
-import {setSelectedSectorState} from "../../reducers/fetchSectorClassificationReducer";
+import {setSelectedSectorState, setMeState} from "../../reducers/fetchSectorClassificationReducer";
 
 const CustomLegend = ({ data }) => (
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
@@ -50,10 +50,13 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
 
     const [selectedSectorClassification, setSelectedSectorClassification] = React.useState<number | null>(null);
     const [selectedSectorScheme, setSelectedSectorScheme] = React.useState<any>(null);
+    const [selectedSectorLocal, setSelectedSectorLocal] = React.useState<number | null>(null);
 
     const [sectorScheme, setSectorScheme] = React.useState<SectorScheme>();
 
     const sectorClassification: SectorClassifcation [] = useSelector((state: any) => state.fetchSectorClassificationReducer.data);
+    const meState = useSelector((state: any) => state.fetchSectorClassificationReducer.meState);
+    const pendingRestoreSectorIdRef = useRef<number | null>(null);
     const [sectors, setSectors] = React.useState<SectorObjectType[]>([]);
     const [sectorReport, setSectorReport] = React.useState<DataType[]>();
 
@@ -68,8 +71,17 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
             setSectorScheme(classification.sectorScheme);
             const sectorData = classification.sectorScheme.children;
             setSectors(sectorData);
-            setSelectedSector(sectorData[0].id)
-            dispatch(setSelectedSectorState(sectorData[0]));
+
+            const restoreSectorId = pendingRestoreSectorIdRef.current;
+            pendingRestoreSectorIdRef.current = null;
+            const targetSector = (restoreSectorId && sectorData.find((s: SectorObjectType) => s.id === restoreSectorId))
+                ? sectorData.find((s: SectorObjectType) => s.id === restoreSectorId)!
+                : sectorData[0];
+
+            setSelectedSectorLocal(targetSector.id);
+            setSelectedSector(targetSector.id);
+            dispatch(setSelectedSectorState(targetSector));
+            dispatch(setMeState({ sectorClassificationId: selectedSectorClassification, sectorId: targetSector.id }));
         }
     }
 
@@ -111,13 +123,13 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
 
     useEffect(() => {
         if (sectorClassification.length > 0) {
-            setSelectedSectorClassification(sectorClassification[0].id);
+            const initClassificationId = meState.sectorClassificationId ?? sectorClassification[0].id;
+            if (meState.sectorId) {
+                pendingRestoreSectorIdRef.current = meState.sectorId;
+            }
+            setSelectedSectorClassification(initClassificationId);
         }
     }, []);
-
-    useEffect(() => {
-        handleSectorClassificationChange();
-    }, [selectedSectorClassification]);
 
     useEffect(() => {
         setSectorReport(undefined);
@@ -162,9 +174,11 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                                 </select>
                             ) : (
                                 <select
-                                    defaultValue={sectorClassification[0].id}
+                                    value={selectedSectorClassification ?? sectorClassification[0].id}
                                     onChange={(e) => {
-                                        setSelectedSectorClassification(parseInt(e.target.value));
+                                        const newId = parseInt(e.target.value);
+                                        dispatch(setMeState({ sectorClassificationId: newId, sectorId: null, indicators: {} }));
+                                        setSelectedSectorClassification(newId);
                                     }}
                                     style={{
                                         backgroundColor: '#f3f5f8',
@@ -208,8 +222,15 @@ const SectorClassification: React.FC<SectorProgressProps> = (props) => {
                                 </select>
                             ) : (
                                 <select
-                                    defaultValue={sectors[0].id}
-                                    onChange={(e) => setSelectedSector(parseInt(e.target.value))}
+                                    value={selectedSectorLocal ?? (sectors.length > 0 ? sectors[0].id : undefined)}
+                                    onChange={(e) => {
+                                        const newId = parseInt(e.target.value);
+                                        setSelectedSectorLocal(newId);
+                                        setSelectedSector(newId);
+                                        dispatch(setMeState({ sectorId: newId, indicators: {} }));
+                                        const found = sectors.find((s: SectorObjectType) => s.id === newId);
+                                        if (found) dispatch(setSelectedSectorState(found));
+                                    }}
                                     style={{
                                         backgroundColor: '#f3f5f8',
                                         boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'

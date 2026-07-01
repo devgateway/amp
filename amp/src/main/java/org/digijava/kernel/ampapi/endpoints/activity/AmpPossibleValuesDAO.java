@@ -83,6 +83,13 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 "program_setting_name", "amp_theme_id", AmpTheme.class);
     }
 
+    @Override
+    public List<Object[]> getAllThemes() {
+        String queryString = "select cls.ampThemeId, cls.name, cls.parentThemeId.ampThemeId"
+                + " from " + AmpTheme.class.getName() + " cls";
+        return query(queryString);
+    }
+
     /**
      * Method that wraps generic approaches for the programs, sector and org. role entities
      * @param configType

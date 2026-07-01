@@ -220,8 +220,8 @@ fi
 # ── Start AMP ─────────────────────────────────────────────────────────────────
 # Pre-pull all images explicitly so docker compose up never needs to pull.
 # The amp image was already pulled above; pull postgres here (public, no auth).
-log "Pulling postgres image..."
-docker pull postgres:14-alpine
+log "Pulling postgres+postgis image..."
+docker pull postgis/postgis:14-3.4-alpine
 
 # Authenticate with ECR (ensures daemon has fresh credentials)
 if [[ -n "${AWS_ACCESS_KEY_ID:-}" ]]; then

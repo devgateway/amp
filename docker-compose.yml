@@ -19,7 +19,7 @@ services:
 
   # ─── PostgreSQL for AMP ───────────────────────────────────────────────────
   db:
-    image: postgres:14-alpine
+    image: postgis/postgis:14-3.4-alpine
     container_name: amp-db
     restart: unless-stopped
     environment:
@@ -61,6 +61,10 @@ services:
       # host.docker.internal resolves to the host machine from inside a container.
       TRUBUDGET_BASE_URL: ${TRUBUDGET_BASE_URL:-http://host.docker.internal:8081/}
       TRUBUDGET_ENABLED: ${TRUBUDGET_ENABLED:-false}
+      # Optional: override the build label shown in the footer (replaces the branch-name tag)
+      AMP_BUILD_LABEL: ${AMP_BUILD_LABEL:-}
+      # Optional: override the footer text (replaces the DB-stored translation at startup)
+      AMP_FOOTER_TEXT: ${AMP_FOOTER_TEXT:-}
     ports:
       - "${AMP_PORT:-8080}:8080"
     extra_hosts:

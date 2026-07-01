@@ -248,6 +248,13 @@
 
 
 
+	<!-- compareActivityVersions is a read-only compare action rendered from a security="none" page
+	     that cannot supply a CSRF token; disable CSRF for this specific action -->
+	<http pattern="/aim/compareActivityVersions.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<csrf disabled="true"/>
+	</http>
+
 	<!-- set the digestEntryPoint to set up the HTTP headers for digest -->
 	<http entry-point-ref="digestEntryPoint" realm="AMP-Realm" use-expressions="false">
 		<!-- do not allow anonymous tokens, they are enabled by default ! -->

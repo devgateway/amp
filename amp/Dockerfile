@@ -267,3 +267,10 @@ ENV AMP_REGISTRY_PRIVATE_KEY $AMP_REGISTRY_PRIVATE_KEY
 
 RUN rm -fr /usr/local/tomcat/webapps/ROOT
 COPY --from=compile-mvn /tmp/amp/exploded /usr/local/tomcat/webapps/ROOT/
+
+# Entrypoint patches context.xml with runtime JDBC env vars before Tomcat starts,
+# so the same image works with any DB password without a rebuild.
+COPY docker/entrypoint.sh bin/entrypoint.sh
+RUN chmod +x /usr/local/tomcat/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/local/tomcat/bin/entrypoint.sh"]

@@ -43,6 +43,9 @@ services:
     # AMP_IMAGE → ECR repo URL (e.g. 123456789.dkr.ecr.us-east-1.amazonaws.com/amp/webapp)
     # AMP_TAG   → branch / release tag (e.g. develop, main, v1.2.0)
     image: ${AMP_IMAGE}:${AMP_TAG}
+    # Never let Compose pull this image — setup.sh handles ECR auth + pull.
+    # Run setup.sh (not docker compose up directly) to deploy or update.
+    pull_policy: never
     container_name: amp-app
     restart: unless-stopped
     depends_on:

@@ -145,6 +145,13 @@ if [[ "${WITH_TRUBUDGET}" == true ]]; then
   # Start from their example so all their internal flags are present
   cp "${TRUBUDGET_OP_DIR}/.env.example" "${TRUBUDGET_ENV}"
 
+  # Strip inline comments — Docker Compose .env files do NOT support them.
+  # TruBudget's .env.example has lines like: BETA_ENABLED=false # some comment
+  # which makes the value "false # some comment" instead of "false", breaking validation.
+  # This regex only acts on non-comment lines (those not starting with #) and strips
+  # trailing " # ..." patterns. It preserves # inside values (e.g. secrets ending with #).
+  sed -i -E '/^[^#]/s/[[:space:]]+#[[:space:]].+$//' "${TRUBUDGET_ENV}"
+
   # Override with values from our .env
   # Use perl (available on all Linux/macOS) to replace in-place
   set_env() {
@@ -164,6 +171,10 @@ if [[ "${WITH_TRUBUDGET}" == true ]]; then
   set_env "FRONTEND_PORT"             "${TRUBUDGET_UI_PORT:-3000}"
   set_env "TAG"                       "${TRUBUDGET_VERSION:-latest}"
   set_env "NODE_ENV"                  "production"
+  # Fix cookie SameSite/Secure flags for plain HTTP (IP-only) access.
+  # Without this, the JWT cookie set after login is silently dropped by browsers
+  # because SameSite=None requires HTTPS, so every request after login gets 401.
+  set_env "REACT_APP_API_SERVICE_ADDITIONAL_NGINX_CONF" "proxy_cookie_flags ~ nosecure samesite=lax;"
 
   # ── TruBudget: start via official script ────────────────────────────────────
   log "Starting TruBudget (slim: blockchain + api + frontend)..."
@@ -185,8 +196,12 @@ fi
 
 if [[ "${SKIP_BUILD}" == false ]]; then
   if ! command -v aws &>/dev/null; then
-    err "'aws' CLI is not installed. Install it from https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html"
-    exit 1
+    log "AWS CLI not found — installing..."
+    curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
+    unzip -q /tmp/awscliv2.zip -d /tmp/awscliv2
+    sudo /tmp/awscliv2/aws/install
+    rm -rf /tmp/awscliv2.zip /tmp/awscliv2
+    log "AWS CLI installed: $(aws --version)"
   fi
 
   # Extract the ECR registry hostname (everything before the first /)
@@ -203,8 +218,25 @@ else
 fi
 
 # ── Start AMP ─────────────────────────────────────────────────────────────────
+# Pre-pull all images explicitly so docker compose up never needs to pull.
+# The amp image was already pulled above; pull postgres here (public, no auth).
+log "Pulling postgres image..."
+docker pull postgres:14-alpine
+
+# Authenticate with ECR (ensures daemon has fresh credentials)
+if [[ -n "${AWS_ACCESS_KEY_ID:-}" ]]; then
+  ECR_REGISTRY=$(echo "${AMP_IMAGE}" | cut -d'/' -f1)
+  aws ecr get-login-password --region "${AWS_DEFAULT_REGION}" \
+    | docker login --username AWS --password-stdin "${ECR_REGISTRY}" 2>/dev/null || true
+fi
+
 log "Starting AMP + PostgreSQL..."
-$DC -f "${COMPOSE_FILE}" --env-file "${ENV_FILE}" up -d --remove-orphans
+# Use --pull never (Compose v2) or --no-pull (Compose v1) — all images already pulled above.
+if [[ "${DC}" == "docker compose" ]]; then
+  $DC -f "${COMPOSE_FILE}" --env-file "${ENV_FILE}" up -d --remove-orphans --pull never
+else
+  $DC -f "${COMPOSE_FILE}" --env-file "${ENV_FILE}" up -d --remove-orphans --no-pull
+fi
 
 # ── Wait for AMP ─────────────────────────────────────────────────────────────
 log "Waiting for AMP to be reachable..."

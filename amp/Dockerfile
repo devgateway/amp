@@ -153,7 +153,7 @@ RUN set -euxo pipefail \
  && npm run build --verbose \
  && rm -rf node_modules
 
-FROM node as compile-reamp
+FROM node:16.20.2 as compile-reamp
 # Copy npm install helper script
 COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
 RUN chmod +x /usr/local/bin/npm-install-with-retry.sh
@@ -164,10 +164,12 @@ COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/a
 COPY TEMPLATE/reamp/package*.json ./
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
-    npm-install-with-retry.sh
+    npm cache clean --force \
+    && npm-install-with-retry.sh
 # Copy source code after dependencies are installed
 COPY TEMPLATE/reamp .
 RUN npm run build \
+    && node -e "const fs=require('fs'); const source=fs.readFileSync('dependencies-bundle.js','utf8'); const start=source.indexOf('key:\"getFieldDef\"'); const method=start === -1 ? '' : source.slice(start, start + 900); if (start === -1 || /[a-z]\s*\+=\s*2/.test(method)) { console.error('Stale amp-ui FieldsManager.getFieldDef detected in dependencies-bundle.js'); process.exit(1); }" \
     && rm -rf node_modules
 
 FROM node:20 as compile-reampv2

@@ -165,7 +165,7 @@ COPY TEMPLATE/reamp/package*.json ./
 RUN --mount=type=cache,target=/root/.npm \
     --mount=type=ssh \
     npm cache clean --force \
-    && npm-install-with-retry.sh
+    && NPM_CONFIG_LEGACY_PEER_DEPS=true npm-install-with-retry.sh
 # Copy source code after dependencies are installed
 COPY TEMPLATE/reamp .
 RUN npm run build \

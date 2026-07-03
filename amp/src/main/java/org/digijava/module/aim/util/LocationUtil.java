@@ -197,6 +197,7 @@ public final class LocationUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             session.saveOrUpdate(loc);
+            session.flush();
         } catch (Exception e) {
             logger.error("Unable to save category value location into the database " + e.getMessage());
             throw new DgException(e);

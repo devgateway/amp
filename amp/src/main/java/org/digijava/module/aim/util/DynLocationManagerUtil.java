@@ -1100,6 +1100,7 @@ public class DynLocationManagerUtil {
                                 LocationUtil.saveLocation(location, edit);
                             }
                         } else {
+                            logger.info("Getting location for name, impLoc and parentLoc"+ name +"||"+ implLoc +"||"+parentLoc);
                             parentLoc = getLocationByName(name, implLoc, parentLoc);
                             if (parentLoc == null) {
                                 logger.error("Parent location is null");

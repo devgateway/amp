@@ -74,7 +74,7 @@ public class TruLoginResponse {
         private List<String> allowedIntents;
 
         @JsonProperty("groups")
-        private List<String> groups;
+        private List<Object> groups;
 
         @JsonProperty("token")
         private String token;
@@ -116,11 +116,11 @@ public class TruLoginResponse {
             this.allowedIntents = allowedIntents;
         }
 
-        public List<String> getGroups() {
+        public List<Object> getGroups() {
             return groups;
         }
 
-        public void setGroups(List<String> groups) {
+        public void setGroups(List<Object> groups) {
             this.groups = groups;
         }
 

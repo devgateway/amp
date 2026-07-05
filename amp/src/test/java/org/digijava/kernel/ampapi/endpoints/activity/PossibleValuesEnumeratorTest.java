@@ -16,12 +16,11 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
@@ -208,6 +207,16 @@ public class PossibleValuesEnumeratorTest {
                 "[{\"id\":1,\"value\":\"Planned\","
                         + "\"translated-value\":{\"en\":\"en value\",\"fr\":\"fr value\"},"
                         + "\"extra_info\":{\"index\":1,\"workspace-prefix\":\"\"}}]");
+    }
+
+    private static class WithUndiscriminatedCategory {
+        @Interchangeable(fieldTitle = "Category", pickIdOnly = true)
+        private AmpCategoryValue category;
+    }
+
+    @Test
+    public void testUndiscriminatedAmpCategoryValue() throws IOException {
+        assertJsonEquals(possibleValuesFor(WithUndiscriminatedCategory.class, "category"), "[]");
     }
 
     @Test

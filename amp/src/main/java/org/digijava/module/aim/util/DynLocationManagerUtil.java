@@ -34,6 +34,7 @@ import org.hibernate.type.StringType;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.Normalizer;
 import java.util.*;
 
 public class DynLocationManagerUtil {
@@ -419,6 +420,7 @@ public class DynLocationManagerUtil {
             AmpCategoryValueLocations parentLocation)
             throws NullPointerException, NonUniqueResultException {
         Session dbSession = null;
+        String normalizedLocationName = normalizeLocationName(locationName);
 
         if (cvLocationLayer == null)
             throw new NullPointerException(
@@ -437,7 +439,7 @@ public class DynLocationManagerUtil {
             }
             Query qry = dbSession.createQuery(queryString);
             qry.setParameter("cvId", cvLocationLayer.getId(), LongType.INSTANCE);
-            qry.setParameter("name", locationName,StringType.INSTANCE);
+            qry.setParameter("name", normalizedLocationName,StringType.INSTANCE);
             if (parentLocation != null)
                 qry.setParameter("parentLocationId", parentLocation.getId(), LongType.INSTANCE);
 
@@ -445,6 +447,8 @@ public class DynLocationManagerUtil {
             if (locations != null && !locations.isEmpty()) {
                 return locations.toArray(new AmpCategoryValueLocations[0])[0];
             }
+
+            return getLocationByNameNormalizedFallback(normalizedLocationName, cvLocationLayer, parentLocation);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -455,6 +459,7 @@ public class DynLocationManagerUtil {
             String locationName, AmpCategoryValue cvLocationLayer)
             throws NullPointerException, NonUniqueResultException {
         Session dbSession = null;
+        String normalizedLocationName = normalizeLocationName(locationName);
 
         if (cvLocationLayer == null)
             throw new NullPointerException(
@@ -468,15 +473,56 @@ public class DynLocationManagerUtil {
                     + " AND (loc.parentCategoryValue=:cvId) ";
             Query qry = dbSession.createQuery(queryString);
             qry.setParameter("cvId", cvLocationLayer.getId(), LongType.INSTANCE);
-            qry.setParameter("name", locationName,StringType.INSTANCE);
+            qry.setParameter("name", normalizedLocationName,StringType.INSTANCE);
             Collection<AmpCategoryValueLocations> locations = qry.list();
             if (locations != null && locations.size() > 0) {
                 return locations.toArray(new AmpCategoryValueLocations[0])[0];
             }
+
+            return getLocationByNameNormalizedFallback(normalizedLocationName, cvLocationLayer, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static AmpCategoryValueLocations getLocationByNameNormalizedFallback(String locationName,
+            AmpCategoryValue cvLocationLayer, AmpCategoryValueLocations parentLocation) {
+        Session dbSession = PersistenceManager.getSession();
+        String queryString = "select loc from "
+                + AmpCategoryValueLocations.class.getName()
+                + " loc where (loc.parentCategoryValue=:cvId) ";
+        if (parentLocation == null) {
+            queryString += "AND (loc.parentLocation is null) ";
+        } else {
+            queryString += "AND (loc.parentLocation=:parentLocationId) ";
+        }
+
+        Query qry = dbSession.createQuery(queryString);
+        qry.setParameter("cvId", cvLocationLayer.getId(), LongType.INSTANCE);
+        if (parentLocation != null) {
+            qry.setParameter("parentLocationId", parentLocation.getId(), LongType.INSTANCE);
+        }
+
+        Collection<AmpCategoryValueLocations> locations = qry.list();
+        for (AmpCategoryValueLocations location : locations) {
+            if (StringUtils.equals(normalizeLocationName(location.getName()), locationName)) {
+                return location;
+            }
+        }
+
+        return null;
+    }
+
+    private static String normalizeLocationName(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        String normalized = Normalizer.normalize(value, Normalizer.Form.NFC);
+        // Normalize unicode spaces and repeated spacing to avoid false negatives during import matching.
+        normalized = normalized.replace('\u00A0', ' ').replaceAll("\\s+", " ").trim();
+        return normalized;
     }
 
     public static AmpCategoryValueLocations getLocationByIso(
@@ -1037,7 +1083,7 @@ public class DynLocationManagerUtil {
                             k = hierarchyNumberOfCells + 1;
                             break;
                         }
-                        locationNames.add(location);
+                        locationNames.add(normalizeLocationName(location));
                     }
 
                     String latitude = hssfRow.get(k++);

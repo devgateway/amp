@@ -5,10 +5,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.POIXMLException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
@@ -40,9 +43,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,6 +62,9 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import static com.fasterxml.jackson.core.JsonGenerator.Feature.ESCAPE_NON_ASCII;
 
@@ -543,6 +553,96 @@ public class ImporterUtil {
             e.printStackTrace(); // Handle the exception appropriately
             return false; // Consider the content invalid if an exception occurs
         }
+    }
+
+    /**
+     * Opens an OOXML workbook with fallback support for Strict OOXML files.
+     * Older Apache POI versions cannot open strict workbooks directly.
+     */
+    public static Workbook openWorkbookWithStrictFallback(File file) throws IOException {
+        try (InputStream is = new FileInputStream(file)) {
+            return openWorkbookWithStrictFallback(is);
+        }
+    }
+
+    /**
+     * Opens an OOXML workbook with fallback support for Strict OOXML files.
+     * Caller is responsible for closing the returned workbook.
+     */
+    public static Workbook openWorkbookWithStrictFallback(InputStream inputStream) throws IOException {
+        byte[] sourceBytes = toByteArray(inputStream);
+        try {
+            return new XSSFWorkbook(new ByteArrayInputStream(sourceBytes));
+        } catch (POIXMLException e) {
+            if (!isStrictOoxmlException(e)) {
+                throw e;
+            }
+            logger.warn("Strict OOXML detected, attempting namespace conversion fallback.");
+            byte[] convertedBytes = convertStrictOoxmlToTransitional(sourceBytes);
+            return new XSSFWorkbook(new ByteArrayInputStream(convertedBytes));
+        }
+    }
+
+    private static boolean isStrictOoxmlException(Throwable throwable) {
+        Throwable current = throwable;
+        while (current != null) {
+            String msg = current.getMessage();
+            if (msg != null && msg.contains("Strict OOXML isn't currently supported")) {
+                return true;
+            }
+            current = current.getCause();
+        }
+        return false;
+    }
+
+    private static byte[] convertStrictOoxmlToTransitional(byte[] sourceBytes) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try (ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(sourceBytes));
+             ZipOutputStream zos = new ZipOutputStream(out)) {
+            ZipEntry entry;
+            while ((entry = zis.getNextEntry()) != null) {
+                ZipEntry newEntry = new ZipEntry(entry.getName());
+                zos.putNextEntry(newEntry);
+
+                byte[] entryBytes = toByteArray(zis);
+                if (!entry.isDirectory() && isXmlLikeEntry(entry.getName())) {
+                    String xml = new String(entryBytes, java.nio.charset.StandardCharsets.UTF_8);
+                    xml = strictToTransitionalNamespaces(xml);
+                    entryBytes = xml.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+                }
+
+                zos.write(entryBytes);
+                zos.closeEntry();
+                zis.closeEntry();
+            }
+            zos.finish();
+        }
+        return out.toByteArray();
+    }
+
+    private static boolean isXmlLikeEntry(String name) {
+        String lower = name.toLowerCase(Locale.ROOT);
+        return lower.endsWith(".xml") || lower.endsWith(".rels");
+    }
+
+    private static String strictToTransitionalNamespaces(String xml) {
+        String converted = xml;
+        converted = converted.replace("http://purl.oclc.org/ooxml/spreadsheetml/main", "http://schemas.openxmlformats.org/spreadsheetml/2006/main");
+        converted = converted.replace("http://purl.oclc.org/ooxml/officeDocument/relationships", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+        converted = converted.replace("http://purl.oclc.org/ooxml/drawingml/main", "http://schemas.openxmlformats.org/drawingml/2006/main");
+        converted = converted.replace("http://purl.oclc.org/ooxml/wordprocessingml/main", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+        converted = converted.replace("http://purl.oclc.org/ooxml/presentationml/main", "http://schemas.openxmlformats.org/presentationml/2006/main");
+        return converted;
+    }
+
+    private static byte[] toByteArray(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        byte[] data = new byte[8192];
+        int nRead;
+        while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
+        }
+        return buffer.toByteArray();
     }
 
 

@@ -35,7 +35,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -48,6 +47,7 @@ import org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfigVa
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.digijava.module.aim.action.dataimporter.util.ImportedFileUtil;
+import org.digijava.module.aim.action.dataimporter.util.ImporterUtil;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.ConstantsMap;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.isFileContentValid;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.isFileReadable;
@@ -144,7 +144,7 @@ public class DataImporter extends Action {
                         // Excel: return sheet names and columns per sheet for template configuration
                         List<String> sheetNames = new ArrayList<>();
                         Map<String, List<String>> columnsBySheet = new HashMap<>();
-                        try (Workbook workbook = new XSSFWorkbook(fileInputStream)) {
+                        try (Workbook workbook = ImporterUtil.openWorkbookWithStrictFallback(fileInputStream)) {
                             int numberOfSheets = workbook.getNumberOfSheets();
                             for (int i = 0; i < numberOfSheets; i++) {
                                 Sheet sheet = workbook.getSheetAt(i);
@@ -291,8 +291,8 @@ public class DataImporter extends Action {
                 return null;
             }
             List<String> sheetNames = new ArrayList<>();
-            try (InputStream is = dataImporterForm.getDataFile().getInputStream();
-                 Workbook workbook = new XSSFWorkbook(is)) {
+              try (InputStream is = dataImporterForm.getDataFile().getInputStream();
+                  Workbook workbook = ImporterUtil.openWorkbookWithStrictFallback(is)) {
                 int n = workbook.getNumberOfSheets();
                 for (int i = 0; i < n; i++) {
                     sheetNames.add(workbook.getSheetAt(i).getSheetName());

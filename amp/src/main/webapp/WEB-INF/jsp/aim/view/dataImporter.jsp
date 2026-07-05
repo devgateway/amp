@@ -258,8 +258,8 @@
         }
         else if(fileType==="excel") {
           $('#select-file-label').html("<digi:trn jsFriendly='true'>Select Excel File</digi:trn>");
-          $('#data-file').attr("accept", ".xls,.xlsx");
-          $('#template-file').attr("accept", ".xls,.xlsx");
+          $('#data-file').attr("accept", ".xls,.xlsx,.xlsm");
+          $('#template-file').attr("accept", ".xls,.xlsx,.xlsm");
           $('#separator-div').hide();
           $('#data-sheet-choice-div').show();
         }
@@ -1115,7 +1115,7 @@
 
       <form id="templateUploadForm" enctype="multipart/form-data" class="inline-field">
         <label for="template-file"><digi:trn>Select Template File</digi:trn></label>
-        <input id="template-file" type="file" accept=".xls,.xlsx,.csv" name="templateFile" />
+        <input id="template-file" type="file" accept=".xls,.xlsx,.xlsm,.csv" name="templateFile" />
         <div class="mapping-actions">
           <input type="button" class="upload-btn" value="<digi:trn>Upload Template</digi:trn>" onclick="uploadTemplateFile()" />
         </div>
@@ -1190,7 +1190,7 @@
         <p class="section-copy"><digi:trn>This section appears only when the configuration table contains mappings.</digi:trn></p>
 
         <label id="select-file-label" for="data-file"><digi:trn>Select Excel File</digi:trn></label>
-        <input id="data-file" type="file" accept=".xls,.xlsx,.csv" name="dataFile" />
+        <input id="data-file" type="file" accept=".xls,.xlsx,.xlsm,.csv" name="dataFile" />
 
         <div id="data-sheet-choice-div" class="sheet-choice-card" style="display: none;">
           <label><digi:trn>Process data from</digi:trn></label><br>

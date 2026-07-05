@@ -4,9 +4,11 @@
 package org.digijava.module.aim.auth;
 
 import java.io.PrintWriter;
+import java.util.concurrent.CompletableFuture;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -28,6 +30,8 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public class AmpPostLoginAction extends Action {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(AmpPostLoginAction.class);
+    private static final String TRUBUDGET_LOGIN_TOAST_TYPE = "trubudgetLoginToastType";
+    private static final String TRUBUDGET_LOGIN_TOAST_MESSAGE = "trubudgetLoginToastMessage";
     
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -48,13 +52,8 @@ public class AmpPostLoginAction extends Action {
             throw new RuntimeException(ex);
         }
 
-        try {
-            logger.info("Starting TruBudget post-login authentication for user: " + (currentUser != null ? currentUser.getEmail() : "null"));
-            TruBudgetAuthUtil.doActualTruBudgetLogin(currentUser);
-            logger.info("Completed TruBudget post-login authentication attempt for user: " + (currentUser != null ? currentUser.getEmail() : "null"));
-        } catch (Exception e) {
-            logger.error("TruBudget post-login authentication failed for user: " + (currentUser != null ? currentUser.getEmail() : "null"), e);
-        }
+        triggerTruBudgetLoginInBackground(currentUser, request.getSession());
+
         ApiErrorMessage res = ApiAuthentication.login(currentUser, request);
         if(res != null) {
             out.println(getJsonResponse(res.description));
@@ -83,6 +82,32 @@ public class AmpPostLoginAction extends Action {
         }
         json+="}"; 
         return json;
+    }
+
+    private void triggerTruBudgetLoginInBackground(User currentUser, HttpSession session) {
+        if (currentUser == null) {
+            return;
+        }
+
+        session.removeAttribute(TRUBUDGET_LOGIN_TOAST_TYPE);
+        session.removeAttribute(TRUBUDGET_LOGIN_TOAST_MESSAGE);
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                TruBudgetAuthUtil.TruBudgetLoginAttemptResult result =
+                        TruBudgetAuthUtil.doActualTruBudgetLoginWithResult(currentUser);
+
+                if (result.isAttempted()) {
+                    session.setAttribute(TRUBUDGET_LOGIN_TOAST_TYPE, result.isSuccess() ? "success" : "error");
+                    session.setAttribute(TRUBUDGET_LOGIN_TOAST_MESSAGE, result.getMessage());
+                }
+            } catch (Exception e) {
+                logger.error("Unexpected TruBudget post-login authentication error for user: " + currentUser.getEmail(), e);
+                session.setAttribute(TRUBUDGET_LOGIN_TOAST_TYPE, "error");
+                session.setAttribute(TRUBUDGET_LOGIN_TOAST_MESSAGE,
+                        "TruBudget login failed. You can continue using AMP.");
+            }
+        });
     }
     
      protected User getUser(Authentication currentAuth) throws DgException {

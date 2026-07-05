@@ -25,6 +25,30 @@ import static org.digijava.module.um.util.DbUtil.loginToTruBudget;
 public class TruBudgetAuthUtil {
     
     private static final Logger logger = LoggerFactory.getLogger(TruBudgetAuthUtil.class);
+
+    public static class TruBudgetLoginAttemptResult {
+        private final boolean attempted;
+        private final boolean success;
+        private final String message;
+
+        public TruBudgetLoginAttemptResult(boolean attempted, boolean success, String message) {
+            this.attempted = attempted;
+            this.success = success;
+            this.message = message;
+        }
+
+        public boolean isAttempted() {
+            return attempted;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
     
     /**
      * Extracts token from response cookies and sets it in the TruLoginResponse object
@@ -190,42 +214,49 @@ public class TruBudgetAuthUtil {
      * @throws Exception if login fails
      */
     public static void doActualTruBudgetLogin(User currentUser) throws Exception {
+        doActualTruBudgetLoginWithResult(currentUser);
+    }
+
+    public static TruBudgetLoginAttemptResult doActualTruBudgetLoginWithResult(User currentUser) {
         List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+        if (currentUser == null) {
+            logger.info("Skipping TruBudget login because current user is null");
+            return new TruBudgetLoginAttemptResult(false, false, null);
+        }
+
         if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && currentUser.getTruBudgetEnabled() && currentUser.getTruBudgetPassword()!=null) {
             logger.info("Attempting TruBudget login for user: {}", currentUser.getEmail());
 
-            //login into TruBudget
-            TruLoginRequest truLoginRequest = new TruLoginRequest();
-            truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
-            TruLoginRequest.Data data = new TruLoginRequest.Data();
-            TruLoginRequest.User user1 = new TruLoginRequest.User();
-            user1.setPassword(UmUtil.decryptTruBudgetPassword(currentUser.getTruBudgetPassword(), currentUser.getEmail(), currentUser.getTruBudgetKeyGen()));
-            user1.setId(currentUser.getEmail().split("@")[0]);
-            data.setUser(user1);
-            truLoginRequest.setData(data);
-            Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest, settings);
-            TruLoginResponse loginResponse = truResp.doOnSuccess(truLoginResponse -> {
-                        // This code block will run on success
-                        // Tokens are extracted from cookies by GenericWebClient and set in the response
-                        logger.info("TruBudget login success for user: {}", currentUser.getEmail());
-                        if (truLoginResponse != null && truLoginResponse.getData() != null) {
-                            logger.info("TruBudget login response payload: {}", truLoginResponse.getData());
-                        } else {
-                            logger.warn("TruBudget login succeeded but response payload is empty for user: {}", currentUser.getEmail());
-                        }
-                        // Cache tokens and user information
-                        cacheTokensFromResponse(truLoginResponse, currentUser.getEmail());
-                    })
-                    .onErrorResume(e -> {
-                        // This code block will run if an exception occurs
-                        logger.error("Error during TruBudget login for user {}: {}", currentUser.getEmail(), e.getMessage(), e);
-                        // Handle the exception here or return a default value
-                        return Mono.empty(); // or any other Mono if you want to continue processing
-                    })
-                    .block();
+            try {
+                // login into TruBudget
+                TruLoginRequest truLoginRequest = new TruLoginRequest();
+                truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
+                TruLoginRequest.Data data = new TruLoginRequest.Data();
+                TruLoginRequest.User user1 = new TruLoginRequest.User();
+                user1.setPassword(UmUtil.decryptTruBudgetPassword(currentUser.getTruBudgetPassword(), currentUser.getEmail(), currentUser.getTruBudgetKeyGen()));
+                user1.setId(currentUser.getEmail().split("@")[0]);
+                data.setUser(user1);
+                truLoginRequest.setData(data);
+                Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest, settings);
+                TruLoginResponse loginResponse = truResp.block();
 
-            if (loginResponse == null) {
-                logger.warn("TruBudget login completed with no response for user: {}", currentUser.getEmail());
+                if (loginResponse == null) {
+                    logger.warn("TruBudget login completed with no response for user: {}", currentUser.getEmail());
+                    return new TruBudgetLoginAttemptResult(true, false,
+                            "TruBudget login failed. You can continue using AMP.");
+                }
+
+                logger.info("TruBudget login success for user: {}", currentUser.getEmail());
+                if (loginResponse.getData() != null) {
+                    logger.info("TruBudget login response payload: {}", loginResponse.getData());
+                }
+                cacheTokensFromResponse(loginResponse, currentUser.getEmail());
+                return new TruBudgetLoginAttemptResult(true, true,
+                        "TruBudget login successful.");
+            } catch (Exception e) {
+                logger.error("Error during TruBudget login for user {}: {}", currentUser.getEmail(), e.getMessage(), e);
+                return new TruBudgetLoginAttemptResult(true, false,
+                        "TruBudget login failed. You can continue using AMP.");
             }
         } else {
             logger.info("Skipping TruBudget login for user {}. Enabled={}, userEnabled={}, hasPassword={}",
@@ -233,7 +264,7 @@ public class TruBudgetAuthUtil {
                     getSettingValue(settings, "isEnabled"),
                     currentUser != null && currentUser.getTruBudgetEnabled(),
                     currentUser != null && currentUser.getTruBudgetPassword() != null);
-
+            return new TruBudgetLoginAttemptResult(false, false, null);
         }
     }
 }

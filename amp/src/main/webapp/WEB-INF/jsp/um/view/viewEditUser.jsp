@@ -31,7 +31,24 @@ function initialize() {
         $('#notificationEmailRow') [this.checked ? "show" : "hide"]();
       });
 
+	$('#trubudgetEnabledForUser').bind("click", function() {
+		toggleTruBudgetFields();
+	});
+
     $('#notificationEmailRow')[$('#notificationEmailEnabled').is(":checked") ? "show" : "hide"]();
+	toggleTruBudgetFields();
+}
+
+function toggleTruBudgetFields() {
+	var enabled = $('#trubudgetEnabledForUser').is(':checked');
+	var addModify = $("input[name='addModifyTruBudgetUser']");
+	if (!enabled) {
+		addModify.prop('checked', false);
+	}
+	addModify.prop('disabled', !enabled);
+	$("input[name='truBudgetUserName']").prop('disabled', !enabled);
+	$("input[name='truBudgetPassword']").prop('disabled', !enabled);
+	$("select[name='selectedTruBudgetIntents']").prop('disabled', !enabled);
 }
 
 function cancel()
@@ -363,6 +380,15 @@ function validateUserInfo(){
 																		</td>
 																		<td width="380" height="30" colspan="2" class="inputcontainer">
 																			<html:text name="umViewEditUserForm" property="truBudgetUserName" />
+																		</td>
+																	</tr>
+
+																	<tr>
+																		<td width="169" align="right" height="30" style="font-size: 11px; font-weight: bold; color:#000;">
+																			<digi:trn key="um:enableTruBudgetUser">Enable TruBudget for user</digi:trn>
+																		</td>
+																		<td width="380" height="30" colspan="2" class="inputcontainer">
+																			<html:checkbox name="umViewEditUserForm" property="truBudgetUserEnabled" styleClass="inp-text" styleId="trubudgetEnabledForUser"/>
 																		</td>
 																	</tr>
 

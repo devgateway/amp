@@ -237,7 +237,24 @@
 	        $('#notificationEmailRow') [this.checked ? "show" : "hide"]();
 	      });
 
+		$('#trubudgetEnabledForUser').bind("click", function() {
+			toggleTruBudgetFields();
+		});
+
 		$('#notificationEmailRow')[$('#notificationEmailEnabled').is(":checked") ? "show" : "hide"]();
+		toggleTruBudgetFields();
+	}
+
+	function toggleTruBudgetFields() {
+		var enabled = $('#trubudgetEnabledForUser').is(':checked');
+		var addModify = $("input[name='addModifyTruBudgetUser']");
+		if (!enabled) {
+			addModify.prop('checked', false);
+		}
+		addModify.prop('disabled', !enabled);
+		$("input[name='truBudgetUserName']").prop('disabled', !enabled);
+		$("input[name='truBudgetPassword']").prop('disabled', !enabled);
+		$("select[name='selectedTruBudgetIntents']").prop('disabled', !enabled);
 	}
 
 	YAHOOAmp.util.Event.addListener(window, "load", init) ;
@@ -495,6 +512,15 @@
 
 											</tr>
 											<c:if test="${umAddUserForm.truBudgetEnabled=='true'}">
+											<tr>
+												<td width="3%">&nbsp;</td>
+												<td align=right class=f-names noWrap>
+													<digi:trn key="um:enableTruBudgetUser">Enable TruBudget for user</digi:trn>
+												</td>
+												<td align="left">
+													<html:checkbox property="truBudgetUserEnabled" styleClass="inp-text" styleId="trubudgetEnabledForUser"/>
+												</td>
+											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
 												<td align=right class=f-names noWrap>

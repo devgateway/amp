@@ -78,6 +78,7 @@ public class AddUser extends Action {
 
                 List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
                 registerForm.setTruBudgetEnabled(getSettingValue(settings,"isEnabled"));
+                registerForm.setTruBudgetUserEnabled(false);
                 registerForm.setAddModifyTruBudgetUser(false);
 
                 // set default web site

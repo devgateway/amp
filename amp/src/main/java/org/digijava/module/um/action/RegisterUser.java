@@ -71,9 +71,9 @@ public class RegisterUser extends Action {
                             .getLastName());
             String truBudgetUserName = resolveTruBudgetUserName(userRegisterForm.getTruBudgetUserName(), userRegisterForm.getEmail());
             List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
-                user.setTruBudgetEnabled(userRegisterForm.getAddModifyTruBudgetUser());
+                user.setTruBudgetEnabled(userRegisterForm.getTruBudgetUserEnabled());
 
-                if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+                if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && userRegisterForm.getTruBudgetUserEnabled()) {
                     if (!isTruBudgetUserNameAvailable(truBudgetUserName, null)) {
                         userRegisterForm.addError("error.trubudget.usernameExists", "TruBudget username already exists");
                         return (mapping.getInputForward());
@@ -81,7 +81,9 @@ public class RegisterUser extends Action {
                     user.setTruBudgetUserName(truBudgetUserName);
                 }
 
-                if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && userRegisterForm.getAddModifyTruBudgetUser()) {
+                if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")
+                        && userRegisterForm.getTruBudgetUserEnabled()
+                        && userRegisterForm.getAddModifyTruBudgetUser()) {
                 if (!UmUtil.isValidTruBudgetPassword(userRegisterForm.getTruBudgetPassword())) {
                     userRegisterForm.addError("error.strong.validation",
                             "TruBudget password must be 8-16 chars and include uppercase, lowercase, number and special character");

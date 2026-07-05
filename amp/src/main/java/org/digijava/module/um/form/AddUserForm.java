@@ -83,6 +83,7 @@ public class AddUserForm  extends ValidatorForm {
     private String truBudgetPassword;
     private String[] selectedTruBudgetIntents={};
     private String truBudgetEnabled;
+    private boolean truBudgetUserEnabled;
     private boolean addModifyTruBudgetUser;
     private String selectedLanguage;
     private String[] contentSelectedLanguages;
@@ -439,6 +440,7 @@ public class AddUserForm  extends ValidatorForm {
         siteId = null;
         addWorkspace=false;
         nationalCoordinator = false;
+        truBudgetUserEnabled = false;
         addModifyTruBudgetUser = false;
     }
 
@@ -703,6 +705,14 @@ public class AddUserForm  extends ValidatorForm {
 
     public void setTruBudgetEnabled(String truBudgetEnabled) {
         this.truBudgetEnabled = truBudgetEnabled;
+    }
+
+    public boolean getTruBudgetUserEnabled() {
+        return truBudgetUserEnabled;
+    }
+
+    public void setTruBudgetUserEnabled(boolean truBudgetUserEnabled) {
+        this.truBudgetUserEnabled = truBudgetUserEnabled;
     }
 
     public boolean getAddModifyTruBudgetUser() {

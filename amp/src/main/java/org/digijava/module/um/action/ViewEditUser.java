@@ -198,7 +198,8 @@ public class ViewEditUser extends Action {
                 });
 
             }
-            uForm.setAddModifyTruBudgetUser(Boolean.TRUE.equals(user.getTruBudgetEnabled()));
+            uForm.setTruBudgetUserEnabled(Boolean.TRUE.equals(user.getTruBudgetEnabled()));
+            uForm.setAddModifyTruBudgetUser(false);
             uForm.setTruBudgetUserName(user.getTruBudgetUserName() != null ? user.getTruBudgetUserName() : DbUtil.getDefaultTruBudgetUserName(user.getEmail()));
             uForm.setTruBudgetIntents(intents);
             if (user != null) {
@@ -327,18 +328,23 @@ public class ViewEditUser extends Action {
 
                     List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
-                    user.setTruBudgetEnabled(uForm.getAddModifyTruBudgetUser());
+                    user.setTruBudgetEnabled(uForm.getTruBudgetUserEnabled());
 
                     String truBudgetUserName = resolveTruBudgetUserName(uForm.getTruBudgetUserName(), uForm.getEmail());
                     if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")
+                            && uForm.getTruBudgetUserEnabled()
                             && !isTruBudgetUserNameAvailable(truBudgetUserName, user.getId())) {
                         errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.trubudget.usernameExists"));
                         saveErrors(request, errors);
                         return mapping.findForward("forward");
                     }
-                    user.setTruBudgetUserName(truBudgetUserName);
+                    if (uForm.getTruBudgetUserEnabled()) {
+                        user.setTruBudgetUserName(truBudgetUserName);
+                    }
 
-                    if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && uForm.getAddModifyTruBudgetUser()) {
+                    if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")
+                            && uForm.getTruBudgetUserEnabled()
+                            && uForm.getAddModifyTruBudgetUser()) {
                         if (!UmUtil.isValidTruBudgetPassword(uForm.getTruBudgetPassword())) {
                             errors.add(ActionMessages.GLOBAL_MESSAGE,
                                     new ActionMessage("error.strong.validation"));

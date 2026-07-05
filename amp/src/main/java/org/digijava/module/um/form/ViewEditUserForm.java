@@ -20,6 +20,7 @@ public class ViewEditUserForm extends ActionForm {
         this.nationalCoordinator = false;
         this.exemptFromDataFreezing = false;
         this.notificationEmailEnabled = false;
+        this.truBudgetUserEnabled = false;
         this.addModifyTruBudgetUser = false;
     }
     
@@ -58,6 +59,7 @@ public class ViewEditUserForm extends ActionForm {
     private String selectedLanguageCode;
     private Collection languages;
     private String truBudgetEnabled;
+    private boolean truBudgetUserEnabled;
     private Collection<TruBudgetIntent> truBudgetIntents;
     private String truBudgetUserName;
     private String truBudgetPassword;
@@ -447,6 +449,14 @@ public class ViewEditUserForm extends ActionForm {
 
     public void setTruBudgetEnabled(String truBudgetEnabled) {
         this.truBudgetEnabled = truBudgetEnabled;
+    }
+
+    public boolean getTruBudgetUserEnabled() {
+        return truBudgetUserEnabled;
+    }
+
+    public void setTruBudgetUserEnabled(boolean truBudgetUserEnabled) {
+        this.truBudgetUserEnabled = truBudgetUserEnabled;
     }
 
     public String getTruBudgetUserName() {

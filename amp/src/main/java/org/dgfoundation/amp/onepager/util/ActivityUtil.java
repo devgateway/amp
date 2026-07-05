@@ -349,7 +349,10 @@ public class ActivityUtil {
 //        session.refresh(a);
 
 //        a.setComponents(new HashSet<>(query.list()));
-        if ( !draft && getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&&TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
+        if (!draft
+            && context.getSource() != ActivitySource.JOB
+            && getSettingValue(getGlobalSettingsBySection("trubudget"), "isEnabled").equalsIgnoreCase("true")
+            && TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
             // TODO: 9/12/23 check if project is already existing
             Query<AmpComponent> query = session.createQuery("FROM "+AmpComponent.class.getName()+" ac  WHERE ac.activity=:activity AND ac.activity IS NOT NULL", AmpComponent.class).setCacheable(true);
             query.setParameter("activity", a.getAmpActivityId(), LongType.INSTANCE);

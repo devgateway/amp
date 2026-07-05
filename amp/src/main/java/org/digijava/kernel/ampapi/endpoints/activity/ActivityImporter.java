@@ -146,6 +146,10 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         this.newJson = newJson;
         this.isDraftFMEnabled = fmService.isVisible(SAVE_AS_DRAFT_PATH);
         this.endpointContextPath = endpointContextPath;
+        // DataImporter should not trigger immediate TruBudget sync in ActivityUtil.
+        if (endpointContextPath != null && endpointContextPath.startsWith("dataimporter/")) {
+            this.saveContext = SaveContext.job();
+        }
         initRequestedSaveMode();
     }
 

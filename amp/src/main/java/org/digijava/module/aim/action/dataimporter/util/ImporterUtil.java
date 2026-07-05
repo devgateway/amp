@@ -1116,7 +1116,7 @@ public class ImporterUtil {
             }
             logger.info("New activity");
             importedProject.setNewProject(true);
-            response = ActivityInterchangeUtils.importActivity(map, false, rules, "activity/new");
+            response = ActivityInterchangeUtils.importActivity(map, false, rules, "dataimporter/activity/new");
         } else {
             logger.info("Existing activity");
             importedProject.setNewProject(false);
@@ -1168,7 +1168,7 @@ public class ImporterUtil {
             // EntityInsertAction.execute() checks the persistence context during flush.
             session.clear();
             try {
-                response = ActivityInterchangeUtils.importActivity(map, true, rules, "activity/update");
+                response = ActivityInterchangeUtils.importActivity(map, true, rules, "dataimporter/activity/update");
             } catch (Exception e) {
                 logger.error("Activity import failed for row", e);
                 importedProject.setImportStatus(ImportStatus.FAILED);

@@ -332,7 +332,7 @@ public class ProjectUtil {
             AbstractCache myCache = new EhCacheWrapper("trubudget");
             String token = (String) myCache.get("truBudgetToken");
             if (token == null || token.isEmpty()) {
-                User user =getCurrentUser();
+                User user = getCurrentUser();
                 TruBudgetAuthUtil.doActualTruBudgetLogin(user);
                 token = (String) myCache.get("truBudgetToken");
             }

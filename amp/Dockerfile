@@ -94,7 +94,7 @@ WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 # Copy package files for dependency installation
 COPY TEMPLATE/ampTemplate/node_modules/gis-layers-manager/package*.json ./
-RUN --mount=type=cache,target=/root/.npm \
+RUN --mount=type=cache,id=npm-cache-gis-layers-manager,target=/root/.npm,sharing=locked \
     npm-install-with-retry.sh
 # Copy source code after dependencies are installed
 COPY TEMPLATE/ampTemplate/node_modules/gis-layers-manager .
@@ -162,10 +162,9 @@ WORKDIR /tmp/amp/TEMPLATE/reamp
 COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../ampTemplate/node_modules/amp-boilerplate
 # Copy package files for dependency installation
 COPY TEMPLATE/reamp/package*.json ./
-RUN --mount=type=cache,target=/root/.npm \
+RUN --mount=type=cache,id=npm-cache-reamp,target=/root/.npm,sharing=locked \
     --mount=type=ssh \
-    npm cache clean --force \
-    && NPM_CONFIG_LEGACY_PEER_DEPS=true npm-install-with-retry.sh
+    NPM_CONFIG_LEGACY_PEER_DEPS=true npm-install-with-retry.sh
 # Copy source code after dependencies are installed
 COPY TEMPLATE/reamp .
 RUN npm run build \

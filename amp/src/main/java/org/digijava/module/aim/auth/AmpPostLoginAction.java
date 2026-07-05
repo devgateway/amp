@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.security.ApiAuthentication;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.trubudget.util.TruBudgetAuthUtil;
@@ -95,7 +96,8 @@ public class AmpPostLoginAction extends Action {
         CompletableFuture.runAsync(() -> {
             try {
                 TruBudgetAuthUtil.TruBudgetLoginAttemptResult result =
-                        TruBudgetAuthUtil.doActualTruBudgetLoginWithResult(currentUser);
+                        PersistenceManager.supplyInTransaction(() ->
+                                TruBudgetAuthUtil.doActualTruBudgetLoginWithResult(currentUser));
 
                 if (result.isAttempted()) {
                     session.setAttribute(TRUBUDGET_LOGIN_TOAST_TYPE, result.isSuccess() ? "success" : "error");

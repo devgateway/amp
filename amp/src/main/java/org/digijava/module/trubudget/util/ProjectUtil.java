@@ -222,7 +222,7 @@ public class ProjectUtil {
             "OR (ta.ampId IS NULL AND ta.ampActivityId IN (" +
             "  SELECT av.ampActivityId FROM " + AmpActivityVersion.class.getName() + " av " +
             "  WHERE av.ampId = :ampId" +
-                ")",
+            "))",
                 TruBudgetActivity.class);
         query.setParameter("ampId", ampId);
         return query.stream().findAny().orElse(null);

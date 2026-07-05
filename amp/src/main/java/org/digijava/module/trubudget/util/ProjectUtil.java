@@ -148,6 +148,7 @@ public class ProjectUtil {
                         // Use doInTransaction for thread-safe session-per-operation pattern
                         PersistenceManager.doInTransaction(session -> {
                             TruBudgetActivity truBudgetActivity = new TruBudgetActivity();
+                            truBudgetActivity.setAmpId(ampActivityVersion.getAmpId());
                             truBudgetActivity.setAmpActivityId(ampActivityVersion.getAmpActivityId());
                             truBudgetActivity.setTruBudgetId(project.getId());
                             session.save(truBudgetActivity);
@@ -190,17 +191,40 @@ public class ProjectUtil {
 
     public static TruBudgetActivity activityAlreadyInTrubudget(Long activityId) {
         Session session = PersistenceManager.getRequestDBSession();
+        Query<String> ampIdQuery = session.createQuery(
+            "SELECT av.ampId FROM " + AmpActivityVersion.class.getName() + " av " +
+                "WHERE av.ampActivityId = :ampActivityId",
+            String.class);
+        ampIdQuery.setParameter("ampActivityId", activityId, LongType.INSTANCE);
+        String ampId = ampIdQuery.stream().findAny().orElse(null);
+
+        if (ampId != null && !ampId.trim().isEmpty()) {
+            return activityAlreadyInTrubudget(ampId);
+        }
+
+        // Legacy fallback for records created before amp_id support.
+        Query<TruBudgetActivity> legacyQuery = session.createQuery(
+            "SELECT ta FROM " + TruBudgetActivity.class.getName() + " ta WHERE ta.ampActivityId = :ampActivityId",
+            TruBudgetActivity.class);
+        legacyQuery.setParameter("ampActivityId", activityId, LongType.INSTANCE);
+        return legacyQuery.stream().findAny().orElse(null);
+        }
+
+        public static TruBudgetActivity activityAlreadyInTrubudget(String ampId) {
+        if (ampId == null || ampId.trim().isEmpty()) {
+            return null;
+        }
+
+        Session session = PersistenceManager.getRequestDBSession();
         Query<TruBudgetActivity> query = session.createQuery(
                 "SELECT ta FROM " + TruBudgetActivity.class.getName() + " ta " +
-                "WHERE ta.ampActivityId IN (" +
-                "  SELECT av.ampActivityId FROM " + AmpActivityVersion.class.getName() + " av " +
-                "  WHERE av.ampId = (" +
-                "    SELECT av2.ampId FROM " + AmpActivityVersion.class.getName() + " av2 " +
-                "    WHERE av2.ampActivityId = :ampActivityId" +
-                "  )" +
+            "WHERE ta.ampId = :ampId " +
+            "OR (ta.ampId IS NULL AND ta.ampActivityId IN (" +
+            "  SELECT av.ampActivityId FROM " + AmpActivityVersion.class.getName() + " av " +
+            "  WHERE av.ampId = :ampId" +
                 ")",
                 TruBudgetActivity.class);
-        query.setParameter("ampActivityId", activityId, LongType.INSTANCE);
+        query.setParameter("ampId", ampId);
         return query.stream().findAny().orElse(null);
     }
 

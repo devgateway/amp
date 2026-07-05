@@ -17,6 +17,8 @@ public class TruBudgetActivity implements Serializable {
     private Long id;
     @Column(name = "trubudget_id")
     private String truBudgetId;
+    @Column(name = "amp_id")
+    private String ampId;
     @Column(name = "amp_activity_id")
     private Long ampActivityId;
 
@@ -34,6 +36,14 @@ public class TruBudgetActivity implements Serializable {
 
     public void setTruBudgetId(String truBudgetId) {
         this.truBudgetId = truBudgetId;
+    }
+
+    public String getAmpId() {
+        return ampId;
+    }
+
+    public void setAmpId(String ampId) {
+        this.ampId = ampId;
     }
 
     public Long getAmpActivityId() {

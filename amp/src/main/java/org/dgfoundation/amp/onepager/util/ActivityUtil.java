@@ -357,7 +357,7 @@ public class ActivityUtil {
             Query<AmpComponent> query = session.createQuery("FROM "+AmpComponent.class.getName()+" ac  WHERE ac.activity=:activity AND ac.activity IS NOT NULL", AmpComponent.class).setCacheable(true);
             query.setParameter("activity", a.getAmpActivityId(), LongType.INSTANCE);
             // No need for init() or waitAndClose() - each database operation uses its own session via doInTransaction()
-            TruBudgetActivity truBudgetActivity = ProjectUtil.activityAlreadyInTrubudget(a.getAmpActivityId());
+            TruBudgetActivity truBudgetActivity = ProjectUtil.activityAlreadyInTrubudget(a.getAmpId());
             logger.info("TrubudgetActivity found "+truBudgetActivity);
             if (truBudgetActivity==null) {
                 ProjectUtil.createProject(a,query.list(),name);
@@ -931,7 +931,7 @@ public class ActivityUtil {
 
             if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")&&user.getTruBudgetEnabled()) {
 
-                TruBudgetActivity truBudgetActivity  = PersistenceManager.getRequestDBSession().createQuery("FROM "+TruBudgetActivity.class.getName()+" ta WHERE ta.ampActivityId="+a.getAmpActivityId(), TruBudgetActivity.class).stream().findAny().orElse(null);
+                TruBudgetActivity truBudgetActivity = ProjectUtil.activityAlreadyInTrubudget(a.getAmpId());
                 if (truBudgetActivity!=null) {
 
                     try {

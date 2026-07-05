@@ -101,7 +101,7 @@ public class BulkTruBudgetProjectImportJob extends ConnectionCleaningJob impleme
                         .setCacheable(true);
                 query.setParameter("activity", activity.getAmpActivityId(), LongType.INSTANCE);
 
-                TruBudgetActivity existingTruBudgetActivity = ProjectUtil.activityAlreadyInTrubudget(activity.getAmpActivityId());
+                TruBudgetActivity existingTruBudgetActivity = ProjectUtil.activityAlreadyInTrubudget(activity.getAmpId());
                 if (existingTruBudgetActivity == null) {
                     ProjectUtil.createProject(activity, query.list(), activity.getName());
                     created++;

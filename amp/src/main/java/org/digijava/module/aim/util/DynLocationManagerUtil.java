@@ -1100,8 +1100,7 @@ public class DynLocationManagerUtil {
                         String name = locationNames.get(k);
                         AmpCategoryValue implLoc = implLocs.get(k);
                         if (k == locationNames.size() - 1) {
-                            AmpCategoryValueLocations location = new AmpCategoryValueLocations();
-
+                            AmpCategoryValueLocations location;
                             AmpCategoryValueLocations currentLoc = getLocationByName(name, implLoc, parentLoc);
                             if (currentLoc != null) {
                                 if (option.equals(Option.NEW)) {
@@ -1110,12 +1109,19 @@ public class DynLocationManagerUtil {
                                     location = currentLoc;
                                 }
                             } else {
+                                location = null;
                                 if (option.equals(Option.OVERWRITE)) {
                                     if (databaseId != null && databaseId != 0) {
                                         location = getLocationByIdRequestSession(databaseId);
-                                    } else {
-                                        break;
+                                        if (location == null) {
+                                            logger.warn("Location ID " + databaseId + " not found for name '" + name
+                                                    + "' at row " + j + "; creating a new location instead");
+                                        }
                                     }
+                                }
+
+                                if (location == null) {
+                                    location = new AmpCategoryValueLocations();
                                 }
                             }
                             if (location != null) {
@@ -1149,7 +1155,7 @@ public class DynLocationManagerUtil {
                             logger.info("Getting location for name, impLoc and parentLoc"+ name +"||"+ implLoc +"||"+parentLoc);
                             parentLoc = getLocationByName(name, implLoc, parentLoc);
                             if (parentLoc == null) {
-                                logger.error("Parent location is null");
+                                logger.error("Parent location is null for row " + j + " and name '" + name + "' at level " + implLoc);
                                 return ErrorCode.INCORRECT_CONTENT;
                             }
                         }

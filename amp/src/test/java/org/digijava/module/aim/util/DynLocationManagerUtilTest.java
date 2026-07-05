@@ -101,6 +101,37 @@ public class DynLocationManagerUtilTest extends AbstractIntegrationTest {
                 Normalizer.normalize(ngaoundal.getParentLocation().getName(), Normalizer.Form.NFC));
     }
 
+    @Test
+    public void testOverwriteCreatesLocationWhenDatabaseIdIsMissingOrInvalid() throws AimException {
+        String country = "Cameroon Overwrite Test";
+        String region = "Adamawa Overwrite Test";
+        String division = "Djerem Overwrite Test";
+        String arrondissement = "Ngaoundal Overwrite Test";
+
+        List<List<String>> rows = ImmutableList.of(
+                ImmutableList.of("Database ID", "Administrative Level 0", "Administrative Level 1",
+                        "Administrative Level 2", "Administrative Level 3", "Administrative Level 5",
+                        "Latitude", "Longitude", "GeoID", "ISO", "ISO3"),
+                ImmutableList.of("", country, "", "", "", "", "0", "0", "", "CO", "COT"),
+                ImmutableList.of("999999999", country, region, "", "", "", "0", "0", "", "", ""),
+                ImmutableList.of("888888888", country, region, division, "", "", "0", "0", "", "", ""),
+                ImmutableList.of("", country, region, division, arrondissement, "", "0", "0", "", "", "")
+        );
+
+        DynLocationManagerUtil.ErrorCode errorCode =
+                DynLocationManagerUtil.importExcelFile(rows, DynLocationManagerForm.Option.OVERWRITE);
+
+        assertEquals(CORRECT_CONTENT, errorCode);
+
+        AmpCategoryValueLocations divisionLoc = getCategoryValueLocationByName(division);
+        AmpCategoryValueLocations arrondissementLoc = getCategoryValueLocationByName(arrondissement);
+
+        assertNotNull(divisionLoc);
+        assertNotNull(arrondissementLoc);
+        assertNotNull(arrondissementLoc.getParentLocation());
+        assertEquals(divisionLoc.getId(), arrondissementLoc.getParentLocation().getId());
+    }
+
     private void initLocations() {
         AmpCategoryValue country = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getAmpCategoryValueFromDB();
         AmpCategoryValue region = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.getAmpCategoryValueFromDB();

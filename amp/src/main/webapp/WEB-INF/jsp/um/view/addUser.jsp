@@ -121,6 +121,11 @@
         return (name==null || name.length<1);
 	}
 
+	function isValidTruBudgetPassword(password){
+		var regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,16}$/;
+		return regex.test(password);
+	}
+
 
 	function validate(){
         name = document.umAddUserForm.firstNames.value;
@@ -190,6 +195,16 @@
     		</c:set>
 			alert("${translation}");
         	return false;
+        }
+        var addModifyTruBudgetUser = document.umAddUserForm.addModifyTruBudgetUser;
+        if(addModifyTruBudgetUser && addModifyTruBudgetUser.checked){
+			if(!isValidTruBudgetPassword(truBudgetPassword)){
+				<c:set var="translation">
+				<digi:trn>TruBudget password must be 8-16 chars and include uppercase, lowercase, number and special character.</digi:trn>
+		    	</c:set>
+				alert("${translation}");
+	        	return false;
+			}
         }
         if(selectedOrgType=="-1"){
 			<c:set var="translation">
@@ -480,6 +495,15 @@
 
 											</tr>
 											<c:if test="${umAddUserForm.truBudgetEnabled=='true'}">
+											<tr>
+												<td width="3%">&nbsp;</td>
+												<td align=right class=f-names noWrap>
+													<digi:trn key="um:addModifyTruBudgetUser">Add/Modify TruBudget User</digi:trn>
+												</td>
+												<td align="left">
+													<html:checkbox property="addModifyTruBudgetUser" styleClass="inp-text"/>
+												</td>
+											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
 												<td align=right class=f-names noWrap>

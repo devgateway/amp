@@ -102,9 +102,16 @@ function checkPledgeSuperUser(){
 	}
 }
 
+function isValidTruBudgetPassword(password){
+	var regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,16}$/;
+	return regex.test(password);
+}
+
 function validateUserInfo(){
 	var userMail=document.getElementById("userMail").value;
 	var notificationEmail = $("#notificationEmail").val();
+	var truBudgetPassword = $("input[name='truBudgetPassword']").val();
+	var addModifyTruBudgetUser = document.umViewEditUserForm.addModifyTruBudgetUser;
 	var firstName=document.getElementById("firstName").value;
 	var lastName=document.getElementById("lastName").value;
 	var country=document.getElementById("country").value;
@@ -149,6 +156,13 @@ function validateUserInfo(){
             return false;
         }
     }
+
+	if(addModifyTruBudgetUser && addModifyTruBudgetUser.checked){
+		if(!isValidTruBudgetPassword(truBudgetPassword)){
+			alert('<digi:trn jsFriendly="true">TruBudget password must be 8-16 chars and include uppercase, lowercase, number and special character.</digi:trn>');
+			return false;
+		}
+	}
 
 	if(country=='-1'){
 		errorMsg='<digi:trn jsFriendly="true">Please Select Country</digi:trn>';
@@ -343,6 +357,14 @@ function validateUserInfo(){
 																		</td>
 																	</tr>
 																	<c:if test="${umViewEditUserForm.truBudgetEnabled=='true'}">
+																	<tr>
+																		<td width="169" align="right" height="30" style="font-size: 11px; font-weight: bold; color:#000;">
+																			<digi:trn key="um:addModifyTruBudgetUser">Add/Modify TruBudget User</digi:trn>
+																		</td>
+																		<td width="380" height="30" colspan="2" class="inputcontainer">
+																			<html:checkbox name="umViewEditUserForm" property="addModifyTruBudgetUser" styleClass="inp-text"/>
+																		</td>
+																	</tr>
 
 																	<tr>
 																		<td width="169" align="right" height="30"  style="font-size: 11px;">

@@ -44,14 +44,10 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
-import reactor.core.CorePublisher;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -402,7 +398,7 @@ public class DbUtil {
             session.flush();
             List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
-            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && Boolean.TRUE.equals(user.getTruBudgetEnabled())) {
                 try {
                     TruUserData userData = new TruUserData();
                     TruUserData.Data data = new TruUserData.Data();
@@ -494,7 +490,7 @@ public class DbUtil {
             session.flush();
             List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
-            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && Boolean.TRUE.equals(user.getTruBudgetEnabled())) {
 
                 try {
                     TruUserData userData = new TruUserData();
@@ -623,91 +619,160 @@ public class DbUtil {
             logger.info("Trubudget is not enabled for this site.");
             return false;
         }
-        userData.setApiVersion(getSettingValue(settings, "apiVersion"));
-        userData.getData().getUser().setOrganization(getSettingValue(settings, "organization"));
-        logger.info("Registering user on Trubudget");
-        // TODO: 9/15/23 check why the baseUrl setting is empty on haiti
-        logger.info("Settings: "+settings);
-        TruLoginRequest truLoginRequest = new TruLoginRequest();
-        truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
-        TruLoginRequest.Data data = new TruLoginRequest.Data();
-        TruLoginRequest.User user1 = new TruLoginRequest.User();
+        try {
+            userData.setApiVersion(getSettingValue(settings, "apiVersion"));
+            userData.getData().getUser().setOrganization(getSettingValue(settings, "organization"));
+            logger.info("Registering user on Trubudget");
+            logger.info("Settings: " + settings);
 
-        user1.setPassword(getSettingValue(settings,"rootPassword"));
-        user1.setId(getSettingValue(settings,"rootUser"));
-        data.setUser(user1);
-        truLoginRequest.setData(data);
-        Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest,settings);
-        logger.info("Trubudget for user: "+user.getTruBudgetEnabled());
-        truResp.subscribe(truLoginResponse -> {
+            TruLoginRequest truLoginRequest = new TruLoginRequest();
+            truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
+            TruLoginRequest.Data data = new TruLoginRequest.Data();
+            TruLoginRequest.User rootUser = new TruLoginRequest.User();
+            rootUser.setPassword(getSettingValue(settings, "rootPassword"));
+            rootUser.setId(getSettingValue(settings, "rootUser"));
+            data.setUser(rootUser);
+            truLoginRequest.setData(data);
 
-//            TruUserData response = null;
-            logger.info("Tru login response: " + truLoginResponse);
-
-
-            try {
-                GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/global.createUser", userData, TruUserData.class, TruUserData.class, truLoginResponse.getData().getUser().getToken()).subscribe(registerResponse->{
-                    logger.info("Create user response: " + registerResponse);
-                    List<TruBudgetIntent> toBeRevoked = new ArrayList<>();
-                    for (TruBudgetIntent truBudgetIntent : user.getInitialTruBudgetIntents())
-                    {
-                        if (!user.getTruBudgetIntents().contains(truBudgetIntent))
-                        {
-                            toBeRevoked.add(truBudgetIntent);
-                        }
-                    }
-                    if (!user.getTruBudgetIntents().isEmpty()) {
-                        Flux.range(0, user.getTruBudgetIntents().size())
-                                .flatMap(index -> {
-                                    TruGrantPermissionRequest permData = new TruGrantPermissionRequest();
-                                    TruGrantPermissionRequest.Data data1 = new TruGrantPermissionRequest.Data();
-                                    data1.setIdentity(registerResponse !=null? registerResponse.getData().getUser().getId():user.getEmail().split("@")[0]);
-                                    return grantPermRequest(settings, truLoginResponse, permData, data1,new ArrayList<>(user.getTruBudgetIntents()).get(index).getTruBudgetIntentName());
-
-                                }).subscribeOn(Schedulers.parallel()).subscribe(permissionResponse->logger.info("Grant permission response:ss " + permissionResponse));
-                    }
-                    // TODO: 9/6/23  complete the revoke process.. need to checkout all available permissions
-
-                    if (!toBeRevoked.isEmpty()) {
-                        Flux.range(0, toBeRevoked.size())
-                                .flatMap(index -> {
-                                    TruRevokePermissionRequest permData = new TruRevokePermissionRequest();
-                                    TruRevokePermissionRequest.Data data1 = new TruRevokePermissionRequest.Data();
-                                    data1.setIdentity(registerResponse !=null? registerResponse.getData().getUser().getId():user.getEmail().split("@")[0]);
-                                    data1.setUserId(registerResponse !=null? registerResponse.getData().getUser().getId():user.getEmail().split("@")[0]);
-                                    data1.setIntent(new ArrayList<>(toBeRevoked).get(index).getTruBudgetIntentName());
-                                    permData.setData(data1);
-                                    permData.setApiVersion(getSettingValue(settings,"apiVersion"));
-                                    try {
-                                        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/user.intent.revokePermission", permData, TruRevokePermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken());
-                                    } catch (URISyntaxException e) {
-                                        return Flux.error(new RuntimeException(e));
-                                    }
-                                }).subscribeOn(Schedulers.parallel()).subscribe(permissionResponse->logger.info("Revoke permission response:ss " + permissionResponse));
-                    }
-
-                });
-            } catch (Exception e) {
-                logger.error("Error during trubudget registration ",e);
+            TruLoginResponse truLoginResponse = loginToTruBudget(truLoginRequest, settings).block();
+            if (truLoginResponse == null || truLoginResponse.getData() == null || truLoginResponse.getData().getUser() == null) {
+                logger.error("TruBudget login failed: empty response while registering user " + user.getEmail());
+                return false;
             }
 
+            String token = truLoginResponse.getData().getUser().getToken();
+            String identity = userData.getData().getUser().getId();
+            TruUserData registerResponse = null;
 
-        });
-        return true;
+            try {
+                registerResponse = GenericWebClient.postForSingleObjResponse(
+                        getSettingValue(settings, "baseUrl") + "api/global.createUser",
+                        userData,
+                        TruUserData.class,
+                        TruUserData.class,
+                        token
+                ).block();
+                logger.info("Create user response: " + registerResponse);
+            } catch (RuntimeException createException) {
+                if (isTruBudgetUserAlreadyExists(createException)) {
+                    logger.warn("TruBudget user already exists for " + identity + ". Updating password and syncing intents.");
+                    updateTruBudgetUserPassword(settings, token, identity, userData.getData().getUser().getPassword());
+                } else {
+                    throw createException;
+                }
+            }
 
+            if (registerResponse != null && registerResponse.getData() != null && registerResponse.getData().getUser() != null
+                    && registerResponse.getData().getUser().getId() != null) {
+                identity = registerResponse.getData().getUser().getId();
+            }
+
+            Set<TruBudgetIntent> currentIntents = user.getTruBudgetIntents() != null ? user.getTruBudgetIntents() : Collections.emptySet();
+            Set<TruBudgetIntent> initialIntents = user.getInitialTruBudgetIntents() != null ? user.getInitialTruBudgetIntents() : Collections.emptySet();
+            List<TruBudgetIntent> toBeRevoked = new ArrayList<>();
+            for (TruBudgetIntent truBudgetIntent : initialIntents) {
+                if (!currentIntents.contains(truBudgetIntent)) {
+                    toBeRevoked.add(truBudgetIntent);
+                }
+            }
+
+            for (TruBudgetIntent intent : currentIntents) {
+                grantPermRequest(settings, token, identity, intent.getTruBudgetIntentName());
+            }
+
+            for (TruBudgetIntent intent : toBeRevoked) {
+                revokePermRequest(settings, token, identity, intent.getTruBudgetIntentName());
+            }
+
+            return true;
+        } catch (Exception e) {
+            logger.error("Error during trubudget registration", e);
+            return false;
+        }
     }
 
-    @NotNull
-    private static CorePublisher<String> grantPermRequest(List<AmpGlobalSettings> settings, TruLoginResponse truLoginResponse, TruGrantPermissionRequest permData, TruGrantPermissionRequest.Data data1, String intent) {
-        data1.setIntent(intent);
-        permData.setData(data1);
-        permData.setApiVersion(getSettingValue(settings,"apiVersion"));
-        try {
+    private static void grantPermRequest(List<AmpGlobalSettings> settings, String token, String identity, String intent) throws URISyntaxException {
+        TruGrantPermissionRequest permData = new TruGrantPermissionRequest();
+        TruGrantPermissionRequest.Data data = new TruGrantPermissionRequest.Data();
+        data.setIdentity(identity);
+        data.setIntent(intent);
+        permData.setData(data);
+        permData.setApiVersion(getSettingValue(settings, "apiVersion"));
 
-            return GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/global.grantPermission", permData, TruGrantPermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken());
-        } catch (URISyntaxException e) {
-            return Flux.error(new RuntimeException(e));
+        String response = GenericWebClient.postForSingleObjResponse(
+                getSettingValue(settings, "baseUrl") + "api/global.grantPermission",
+                permData,
+                TruGrantPermissionRequest.class,
+                String.class,
+                token
+        ).block();
+        logger.info("Grant permission response: " + response);
+    }
+
+    private static void revokePermRequest(List<AmpGlobalSettings> settings, String token, String identity, String intent) throws URISyntaxException {
+        TruRevokePermissionRequest permData = new TruRevokePermissionRequest();
+        TruRevokePermissionRequest.Data data = new TruRevokePermissionRequest.Data();
+        data.setIdentity(identity);
+        data.setUserId(identity);
+        data.setIntent(intent);
+        permData.setData(data);
+        permData.setApiVersion(getSettingValue(settings, "apiVersion"));
+
+        String response = GenericWebClient.postForSingleObjResponse(
+                getSettingValue(settings, "baseUrl") + "api/user.intent.revokePermission",
+                permData,
+                TruRevokePermissionRequest.class,
+                String.class,
+                token
+        ).block();
+        logger.info("Revoke permission response: " + response);
+    }
+
+    private static void updateTruBudgetUserPassword(List<AmpGlobalSettings> settings, String token, String userId, String newPassword) {
+        String baseUrl = getSettingValue(settings, "baseUrl");
+        Map<String, Object> request = new HashMap<>();
+        request.put("apiVersion", getSettingValue(settings, "apiVersion"));
+        Map<String, Object> data = new HashMap<>();
+        data.put("userId", userId);
+        data.put("newPassword", newPassword);
+        request.put("data", data);
+
+        String[] passwordEndpoints = {"api/user.resetPassword", "api/user.changePassword"};
+        RuntimeException lastException = null;
+        for (String endpoint : passwordEndpoints) {
+            try {
+                logger.info("Trying TruBudget password endpoint " + endpoint + " for user " + userId);
+                Object response = GenericWebClient.postForSingleObjResponse(
+                        baseUrl + endpoint,
+                        request,
+                        Map.class,
+                        Object.class,
+                        token
+                ).block();
+                logger.info("Updated TruBudget password for user " + userId + " via " + endpoint + ". Response: " + response);
+                return;
+            } catch (RuntimeException ex) {
+                lastException = ex;
+                logger.warn("TruBudget password endpoint " + endpoint + " failed for user " + userId + ": " + ex.getMessage());
+            } catch (URISyntaxException ex) {
+                throw new RuntimeException(ex);
+            }
         }
+        if (lastException != null) {
+            throw new RuntimeException("Could not update TruBudget password for user " + userId, lastException);
+        }
+    }
+
+    private static boolean isTruBudgetUserAlreadyExists(Throwable error) {
+        Throwable current = error;
+        while (current != null) {
+            String message = current.getMessage();
+            if (message != null && message.contains("\"code\":\"409\"") && message.toLowerCase().contains("already exists")) {
+                return true;
+            }
+            current = current.getCause();
+        }
+        return false;
     }
 
     public static List<SubIntents> getSubIntentsByMother(String motherName)

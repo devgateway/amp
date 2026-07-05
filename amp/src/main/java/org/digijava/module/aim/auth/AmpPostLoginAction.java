@@ -48,7 +48,13 @@ public class AmpPostLoginAction extends Action {
             throw new RuntimeException(ex);
         }
 
-        TruBudgetAuthUtil.doActualTruBudgetLogin(currentUser);
+        try {
+            logger.info("Starting TruBudget post-login authentication for user: " + (currentUser != null ? currentUser.getEmail() : "null"));
+            TruBudgetAuthUtil.doActualTruBudgetLogin(currentUser);
+            logger.info("Completed TruBudget post-login authentication attempt for user: " + (currentUser != null ? currentUser.getEmail() : "null"));
+        } catch (Exception e) {
+            logger.error("TruBudget post-login authentication failed for user: " + (currentUser != null ? currentUser.getEmail() : "null"), e);
+        }
         ApiErrorMessage res = ApiAuthentication.login(currentUser, request);
         if(res != null) {
             out.println(getJsonResponse(res.description));

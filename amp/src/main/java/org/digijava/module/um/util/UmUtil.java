@@ -52,6 +52,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.*;
+import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 
@@ -69,6 +70,12 @@ public class UmUtil {
     private static final int PBKDF2_ITERATIONS = 100000; // High iteration count for security
     private static final int AES_KEY_LENGTH = 256; // Use AES-256
     private static final int SALT_LENGTH = 16; // 16 bytes salt
+    private static final Pattern TRU_BUDGET_PASSWORD_POLICY =
+            Pattern.compile("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{8,16}$");
+
+    public static boolean isValidTruBudgetPassword(String password) {
+        return password != null && TRU_BUDGET_PASSWORD_POLICY.matcher(password).matches();
+    }
 
     /**
      * Encrypt TruBudget password using master key (secure method).

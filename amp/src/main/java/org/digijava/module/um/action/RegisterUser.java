@@ -70,12 +70,18 @@ public class RegisterUser extends Action {
                     userRegisterForm.getFirstNames(), userRegisterForm
                             .getLastName());
             List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+                user.setTruBudgetEnabled(userRegisterForm.getAddModifyTruBudgetUser());
 
-            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+                if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && userRegisterForm.getAddModifyTruBudgetUser()) {
+                if (!UmUtil.isValidTruBudgetPassword(userRegisterForm.getTruBudgetPassword())) {
+                    userRegisterForm.addError("error.strong.validation",
+                            "TruBudget password must be 8-16 chars and include uppercase, lowercase, number and special character");
+                    return (mapping.getInputForward());
+                }
                 // Use secure master key encryption (no need to store keyGen anymore, but keep for backward compatibility)
                 String keyGen = UmUtil.generateAESKey(128);
                 user.setTruBudgetKeyGen(keyGen);
-                String encryptedTruPassword = UmUtil.encryptTruBudgetPassword(userRegisterForm.getTruBudgetPassword()!=null? userRegisterForm.getTruBudgetPassword() : "amptrubudget", user.getEmail());
+                String encryptedTruPassword = UmUtil.encryptTruBudgetPassword(userRegisterForm.getTruBudgetPassword(), user.getEmail());
                 user.setTruBudgetPassword(encryptedTruPassword);
                 String[] intents = userRegisterForm.getSelectedTruBudgetIntents();
                 List<TruBudgetIntent> truBudgetIntents = new ArrayList<>();

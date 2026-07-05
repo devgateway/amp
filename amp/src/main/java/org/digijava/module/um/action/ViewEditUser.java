@@ -197,6 +197,7 @@ public class ViewEditUser extends Action {
                 });
 
             }
+            uForm.setAddModifyTruBudgetUser(Boolean.TRUE.equals(user.getTruBudgetEnabled()));
             uForm.setTruBudgetIntents(intents);
             if (user != null) {
                 uForm.setMailingAddress(user.getAddress());
@@ -324,7 +325,15 @@ public class ViewEditUser extends Action {
 
                     List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
-                    if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+                    user.setTruBudgetEnabled(uForm.getAddModifyTruBudgetUser());
+
+                    if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && uForm.getAddModifyTruBudgetUser()) {
+                        if (!UmUtil.isValidTruBudgetPassword(uForm.getTruBudgetPassword())) {
+                            errors.add(ActionMessages.GLOBAL_MESSAGE,
+                                    new ActionMessage("error.strong.validation"));
+                            saveErrors(request, errors);
+                            return mapping.findForward("forward");
+                        }
 
                         String[] intents = uForm.getSelectedTruBudgetIntents();
                         List<TruBudgetIntent> truBudgetIntents = new ArrayList<>();
@@ -340,7 +349,7 @@ public class ViewEditUser extends Action {
                         String keyGen = UmUtil.generateAESKey(128);
                         user.setTruBudgetKeyGen(keyGen);
 
-                        String encryptedTruPassword = UmUtil.encryptTruBudgetPassword(uForm.getTruBudgetPassword()!=null? uForm.getTruBudgetPassword() : "amptrubudget", user.getEmail());
+                        String encryptedTruPassword = UmUtil.encryptTruBudgetPassword(uForm.getTruBudgetPassword(), user.getEmail());
                         user.setTruBudgetPassword(encryptedTruPassword);
                     }
 

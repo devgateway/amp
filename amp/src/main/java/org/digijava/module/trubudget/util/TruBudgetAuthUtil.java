@@ -14,7 +14,6 @@ import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Objects;
 
 import static org.digijava.module.um.util.DbUtil.getGlobalSettingsBySection;
 import static org.digijava.module.um.util.DbUtil.getSettingValue;
@@ -193,6 +192,7 @@ public class TruBudgetAuthUtil {
     public static void doActualTruBudgetLogin(User currentUser) throws Exception {
         List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
         if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && currentUser.getTruBudgetEnabled() && currentUser.getTruBudgetPassword()!=null) {
+            logger.info("Attempting TruBudget login for user: {}", currentUser.getEmail());
 
             //login into TruBudget
             TruLoginRequest truLoginRequest = new TruLoginRequest();
@@ -204,20 +204,35 @@ public class TruBudgetAuthUtil {
             data.setUser(user1);
             truLoginRequest.setData(data);
             Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest, settings);
-            truResp.doOnSuccess(truLoginResponse -> {
+            TruLoginResponse loginResponse = truResp.doOnSuccess(truLoginResponse -> {
                         // This code block will run on success
                         // Tokens are extracted from cookies by GenericWebClient and set in the response
-                        logger.info("Trubudget login response: " + Objects.requireNonNull(truLoginResponse).getData());
+                        logger.info("TruBudget login success for user: {}", currentUser.getEmail());
+                        if (truLoginResponse != null && truLoginResponse.getData() != null) {
+                            logger.info("TruBudget login response payload: {}", truLoginResponse.getData());
+                        } else {
+                            logger.warn("TruBudget login succeeded but response payload is empty for user: {}", currentUser.getEmail());
+                        }
                         // Cache tokens and user information
                         cacheTokensFromResponse(truLoginResponse, currentUser.getEmail());
                     })
                     .onErrorResume(e -> {
                         // This code block will run if an exception occurs
-                        logger.error("Error during trubudget login: " + e.getMessage(), e);
+                        logger.error("Error during TruBudget login for user {}: {}", currentUser.getEmail(), e.getMessage(), e);
                         // Handle the exception here or return a default value
                         return Mono.empty(); // or any other Mono if you want to continue processing
                     })
                     .block();
+
+            if (loginResponse == null) {
+                logger.warn("TruBudget login completed with no response for user: {}", currentUser.getEmail());
+            }
+        } else {
+            logger.info("Skipping TruBudget login for user {}. Enabled={}, userEnabled={}, hasPassword={}",
+                    currentUser != null ? currentUser.getEmail() : "null",
+                    getSettingValue(settings, "isEnabled"),
+                    currentUser != null && currentUser.getTruBudgetEnabled(),
+                    currentUser != null && currentUser.getTruBudgetPassword() != null);
 
         }
     }

@@ -20,6 +20,7 @@ public class ViewEditUserForm extends ActionForm {
         this.nationalCoordinator = false;
         this.exemptFromDataFreezing = false;
         this.notificationEmailEnabled = false;
+        this.addModifyTruBudgetUser = false;
     }
     
     private static final long serialVersionUID = 1L;
@@ -60,6 +61,7 @@ public class ViewEditUserForm extends ActionForm {
     private Collection<TruBudgetIntent> truBudgetIntents;
     private String truBudgetPassword;
     private String[] selectedTruBudgetIntents;
+    private boolean addModifyTruBudgetUser;
 
     private String event;
     private Boolean ban;
@@ -468,5 +470,13 @@ public class ViewEditUserForm extends ActionForm {
 
     public void setSelectedTruBudgetIntents(String[] selectedTruBudgetIntents) {
         this.selectedTruBudgetIntents = selectedTruBudgetIntents;
+    }
+
+    public boolean getAddModifyTruBudgetUser() {
+        return addModifyTruBudgetUser;
+    }
+
+    public void setAddModifyTruBudgetUser(boolean addModifyTruBudgetUser) {
+        this.addModifyTruBudgetUser = addModifyTruBudgetUser;
     }
 }

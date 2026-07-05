@@ -186,6 +186,7 @@ public class ViewEditUser extends Action {
 
                 Set<String> intentNames = user.getTruBudgetIntents().stream().map(TruBudgetIntent::getTruBudgetIntentName).collect(Collectors.toSet());
 
+                uForm.setTruBudgetUserName(user.getTruBudgetUserName() != null ? user.getTruBudgetUserName() : DbUtil.getDefaultTruBudgetUserName(user.getEmail()));
                 uForm.setTruBudgetPassword(user.getTruBudgetPassword()!=null?UmUtil.decryptTruBudgetPassword(user.getTruBudgetPassword(), user.getEmail(), user.getTruBudgetKeyGen()):"");
 
 
@@ -198,6 +199,7 @@ public class ViewEditUser extends Action {
 
             }
             uForm.setAddModifyTruBudgetUser(Boolean.TRUE.equals(user.getTruBudgetEnabled()));
+            uForm.setTruBudgetUserName(user.getTruBudgetUserName() != null ? user.getTruBudgetUserName() : DbUtil.getDefaultTruBudgetUserName(user.getEmail()));
             uForm.setTruBudgetIntents(intents);
             if (user != null) {
                 uForm.setMailingAddress(user.getAddress());
@@ -326,6 +328,15 @@ public class ViewEditUser extends Action {
                     List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
                     user.setTruBudgetEnabled(uForm.getAddModifyTruBudgetUser());
+
+                    String truBudgetUserName = resolveTruBudgetUserName(uForm.getTruBudgetUserName(), uForm.getEmail());
+                    if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")
+                            && !isTruBudgetUserNameAvailable(truBudgetUserName, user.getId())) {
+                        errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.trubudget.usernameExists"));
+                        saveErrors(request, errors);
+                        return mapping.findForward("forward");
+                    }
+                    user.setTruBudgetUserName(truBudgetUserName);
 
                     if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && uForm.getAddModifyTruBudgetUser()) {
                         if (!UmUtil.isValidTruBudgetPassword(uForm.getTruBudgetPassword())) {

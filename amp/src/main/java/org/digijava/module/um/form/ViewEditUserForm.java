@@ -59,6 +59,7 @@ public class ViewEditUserForm extends ActionForm {
     private Collection languages;
     private String truBudgetEnabled;
     private Collection<TruBudgetIntent> truBudgetIntents;
+    private String truBudgetUserName;
     private String truBudgetPassword;
     private String[] selectedTruBudgetIntents;
     private boolean addModifyTruBudgetUser;
@@ -446,6 +447,14 @@ public class ViewEditUserForm extends ActionForm {
 
     public void setTruBudgetEnabled(String truBudgetEnabled) {
         this.truBudgetEnabled = truBudgetEnabled;
+    }
+
+    public String getTruBudgetUserName() {
+        return truBudgetUserName;
+    }
+
+    public void setTruBudgetUserName(String truBudgetUserName) {
+        this.truBudgetUserName = truBudgetUserName;
     }
 
     public Collection<TruBudgetIntent> getTruBudgetIntents() {

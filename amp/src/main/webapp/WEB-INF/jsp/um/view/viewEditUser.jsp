@@ -359,6 +359,15 @@ function validateUserInfo(){
 																	<c:if test="${umViewEditUserForm.truBudgetEnabled=='true'}">
 																	<tr>
 																		<td width="169" align="right" height="30" style="font-size: 11px; font-weight: bold; color:#000;">
+																			<digi:trn key="um:truBudgetUsername">TruBudget Username:</digi:trn>
+																		</td>
+																		<td width="380" height="30" colspan="2" class="inputcontainer">
+																			<html:text name="umViewEditUserForm" property="truBudgetUserName" />
+																		</td>
+																	</tr>
+
+																	<tr>
+																		<td width="169" align="right" height="30" style="font-size: 11px; font-weight: bold; color:#000;">
 																			<digi:trn key="um:addModifyTruBudgetUser">Add/Modify TruBudget User</digi:trn>
 																		</td>
 																		<td width="380" height="30" colspan="2" class="inputcontainer">

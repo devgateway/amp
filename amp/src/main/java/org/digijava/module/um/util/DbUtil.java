@@ -408,7 +408,7 @@ public class DbUtil {
                     // TODO: 8/28/23 this can be changed later in Trubudget
                     String pass = user.getTruBudgetPassword()!=null?UmUtil.decryptTruBudgetPassword(user.getTruBudgetPassword(), user.getEmail(), user.getTruBudgetKeyGen()):"amptrubudget";
                     user1.setPassword(pass);
-                    user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
+                    user1.setId(resolveTruBudgetUserName(user.getTruBudgetUserName(), user.getEmail()));
                     data.setUser(user1);
                     userData.setData(data);
                     if (registerUserOnTrubudget(userData, user)) {
@@ -498,7 +498,7 @@ public class DbUtil {
                     TruUserData.User user1 = new TruUserData.User();
                     user1.setDisplayName(user.getFirstNames() + " " + user.getLastName());
                     user1.setPassword(user.getTruBudgetPassword()!=null?UmUtil.decrypt(user.getTruBudgetPassword(), user.getTruBudgetKeyGen()):"amptrubudget");
-                    user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
+                    user1.setId(resolveTruBudgetUserName(user.getTruBudgetUserName(), user.getEmail()));
                     data.setUser(user1);
                     userData.setData(data);
                     if (registerUserOnTrubudget(userData, user)) {
@@ -611,6 +611,48 @@ public class DbUtil {
             throw new UMException(ex0.getMessage(), ex0);
         }
         return iscorrect;
+    }
+
+    public static String getDefaultTruBudgetUserName(String email) {
+        if (email == null) {
+            return null;
+        }
+        String trimmedEmail = email.trim();
+        if (trimmedEmail.isEmpty() || !trimmedEmail.contains("@")) {
+            return trimmedEmail.isEmpty() ? null : trimmedEmail;
+        }
+        return trimmedEmail.substring(0, trimmedEmail.indexOf('@')).trim();
+    }
+
+    public static String resolveTruBudgetUserName(String truBudgetUserName, String email) {
+        if (truBudgetUserName != null && !truBudgetUserName.trim().isEmpty()) {
+            return truBudgetUserName.trim();
+        }
+        return getDefaultTruBudgetUserName(email);
+    }
+
+    public static boolean isTruBudgetUserNameAvailable(String truBudgetUserName, Long currentUserId) throws UMException {
+        if (truBudgetUserName == null || truBudgetUserName.trim().isEmpty()) {
+            return true;
+        }
+
+        Session sess = null;
+        try {
+            sess = PersistenceManager.getSession();
+            String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.truBudgetUserName)) = :userName";
+            if (currentUserId != null) {
+                queryString += " and rs.id <> :currentUserId";
+            }
+            Query query = sess.createQuery(queryString);
+            query.setParameter("userName", truBudgetUserName.trim().toLowerCase(), StringType.INSTANCE);
+            if (currentUserId != null) {
+                query.setParameter("currentUserId", currentUserId, LongType.INSTANCE);
+            }
+            return !query.list().iterator().hasNext();
+        } catch (Exception ex0) {
+            logger.debug("isTruBudgetUserNameAvailable() failed", ex0);
+            throw new UMException(ex0.getMessage(), ex0);
+        }
     }
 
     public static boolean registerUserOnTrubudget(TruUserData userData, User user) throws URISyntaxException {

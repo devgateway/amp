@@ -69,8 +69,17 @@ public class RegisterUser extends Action {
             User user = new User(userRegisterForm.getEmail().toLowerCase(),
                     userRegisterForm.getFirstNames(), userRegisterForm
                             .getLastName());
+            String truBudgetUserName = resolveTruBudgetUserName(userRegisterForm.getTruBudgetUserName(), userRegisterForm.getEmail());
             List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
                 user.setTruBudgetEnabled(userRegisterForm.getAddModifyTruBudgetUser());
+
+                if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+                    if (!isTruBudgetUserNameAvailable(truBudgetUserName, null)) {
+                        userRegisterForm.addError("error.trubudget.usernameExists", "TruBudget username already exists");
+                        return (mapping.getInputForward());
+                    }
+                    user.setTruBudgetUserName(truBudgetUserName);
+                }
 
                 if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && userRegisterForm.getAddModifyTruBudgetUser()) {
                 if (!UmUtil.isValidTruBudgetPassword(userRegisterForm.getTruBudgetPassword())) {

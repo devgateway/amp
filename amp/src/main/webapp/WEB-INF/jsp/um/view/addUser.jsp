@@ -519,6 +519,15 @@
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
+													<td align=right class=f-names noWrap>
+														<digi:trn key="um:truBudgetUsername">TruBudget Username</digi:trn>
+													</td>
+													<td align="left">
+														<html:text styleId="truBudgetUserName" property="truBudgetUserName" size="20" />
+													</td>
+												</tr>
+												<tr>
+													<td width="3%">&nbsp;</td>
 												<td align=right class=f-names noWrap>
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:truBudgetPassword">Enter TruBudget Password</digi:trn></td>

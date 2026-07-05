@@ -79,6 +79,7 @@ public class AddUserForm  extends ValidatorForm {
     private Collection contentLanguages;
     private Collection navigationLanguages;
     private Collection<TruBudgetIntent> truBudgetIntents;
+    private String truBudgetUserName;
     private String truBudgetPassword;
     private String[] selectedTruBudgetIntents={};
     private String truBudgetEnabled;
@@ -433,6 +434,7 @@ public class AddUserForm  extends ValidatorForm {
         newsLetterRadio = true;
         membersProfile = true;
         topicselectedItems = null;
+        truBudgetUserName = null;
 
         siteId = null;
         addWorkspace=false;
@@ -669,6 +671,14 @@ public class AddUserForm  extends ValidatorForm {
 
     public void setTruBudgetIntents(Collection<TruBudgetIntent> truBudgetIntents) {
         this.truBudgetIntents = truBudgetIntents;
+    }
+
+    public String getTruBudgetUserName() {
+        return truBudgetUserName;
+    }
+
+    public void setTruBudgetUserName(String truBudgetUserName) {
+        this.truBudgetUserName = truBudgetUserName;
     }
 
     public String getTruBudgetPassword() {

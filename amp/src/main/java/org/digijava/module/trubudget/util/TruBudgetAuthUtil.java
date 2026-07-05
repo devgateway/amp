@@ -5,6 +5,7 @@ import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.um.util.DbUtil;
 import org.digijava.module.um.model.TruLoginRequest;
 import org.digijava.module.um.model.TruLoginResponse;
 import org.digijava.module.um.util.UmUtil;
@@ -146,7 +147,10 @@ public class TruBudgetAuthUtil {
         
         // Cache user information
         if (userEmail != null && !userEmail.isEmpty()) {
-            myCache.put("truBudgetUser", userEmail.split("@")[0]);
+            User cachedUser = UserUtils.getUserByEmailAddress(userEmail);
+            myCache.put("truBudgetUser", cachedUser != null && cachedUser.getTruBudgetUserName() != null
+                    ? cachedUser.getTruBudgetUserName()
+                    : DbUtil.getDefaultTruBudgetUserName(userEmail));
             myCache.put("truBudgetPassword", userEmail);
         }
     }
@@ -181,7 +185,7 @@ public class TruBudgetAuthUtil {
             TruLoginRequest.Data data = new TruLoginRequest.Data();
             TruLoginRequest.User user1 = new TruLoginRequest.User();
             user1.setPassword(UmUtil.decryptTruBudgetPassword(user.getTruBudgetPassword(), user.getEmail(), user.getTruBudgetKeyGen()));
-            user1.setId(user.getEmail().split("@")[0]);
+            user1.setId(DbUtil.resolveTruBudgetUserName(user.getTruBudgetUserName(), user.getEmail()));
             data.setUser(user1);
             truLoginRequest.setData(data);
             
@@ -234,7 +238,7 @@ public class TruBudgetAuthUtil {
                 TruLoginRequest.Data data = new TruLoginRequest.Data();
                 TruLoginRequest.User user1 = new TruLoginRequest.User();
                 user1.setPassword(UmUtil.decryptTruBudgetPassword(currentUser.getTruBudgetPassword(), currentUser.getEmail(), currentUser.getTruBudgetKeyGen()));
-                user1.setId(currentUser.getEmail().split("@")[0]);
+                user1.setId(DbUtil.resolveTruBudgetUserName(currentUser.getTruBudgetUserName(), currentUser.getEmail()));
                 data.setUser(user1);
                 truLoginRequest.setData(data);
                 Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest, settings);

@@ -62,6 +62,7 @@ public class User
     private Set interests;
     private String truBudgetPassword;
     private String truBudgetKeyGen;
+    private String truBudgetUserName;
     private java.sql.Clob bio;
     private Image portrait;
     private String organizationName;
@@ -590,5 +591,13 @@ public class User
 
     public void setTruBudgetKeyGen(String truBudgetKeyGen) {
         this.truBudgetKeyGen = truBudgetKeyGen;
+    }
+
+    public String getTruBudgetUserName() {
+        return truBudgetUserName;
+    }
+
+    public void setTruBudgetUserName(String truBudgetUserName) {
+        this.truBudgetUserName = truBudgetUserName;
     }
 }

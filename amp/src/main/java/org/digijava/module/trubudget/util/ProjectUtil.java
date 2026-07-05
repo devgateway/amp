@@ -190,19 +190,13 @@ public class ProjectUtil {
 
     public static TruBudgetActivity activityAlreadyInTrubudget(Long activityId) {
         Session session = PersistenceManager.getRequestDBSession();
-        // Each AMP save creates a NEW AmpActivityVersion with a new ampActivityId.
-        // Querying only the current ID misses the record saved for a prior version of
-        // the same logical activity, causing createProject() to fire on every update.
-        // Instead, look up any TruBudgetActivity linked to ANY version in the same
-        // activity group (the stable identity across versions).
         Query<TruBudgetActivity> query = session.createQuery(
                 "SELECT ta FROM " + TruBudgetActivity.class.getName() + " ta " +
                 "WHERE ta.ampActivityId IN (" +
-                "  SELECT otherAv.ampActivityId FROM " + AmpActivityVersion.class.getName() + " otherAv " +
-                "  JOIN otherAv.groups g " +
-                "  WHERE g IN (" +
-                "    SELECT g2 FROM " + AmpActivityVersion.class.getName() + " av JOIN av.groups g2 " +
-                "    WHERE av.ampActivityId = :ampActivityId" +
+                "  SELECT av.ampActivityId FROM " + AmpActivityVersion.class.getName() + " av " +
+                "  WHERE av.ampId = (" +
+                "    SELECT av2.ampId FROM " + AmpActivityVersion.class.getName() + " av2 " +
+                "    WHERE av2.ampActivityId = :ampActivityId" +
                 "  )" +
                 ")",
                 TruBudgetActivity.class);

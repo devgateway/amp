@@ -373,6 +373,15 @@ function validateUserInfo(){
 
 																		</td>
 																	</tr>
+																	<tr>
+																		<td width="169" align="right" height="30" style="font-size: 11px; font-weight: bold; color:#000;">
+																			<digi:trn key="um:enableTruBudgetUser">Enable TruBudget for user</digi:trn>
+																		</td>
+																		<td width="380" height="30" colspan="2" class="inputcontainer">
+																			<html:checkbox name="umViewEditUserForm" property="truBudgetUserEnabled" styleClass="inp-text" styleId="trubudgetEnabledForUser"/>
+																		</td>
+																	</tr>
+
 																	<c:if test="${umViewEditUserForm.truBudgetEnabled=='true'}">
 																	<tr>
 																		<td width="169" align="right" height="30" style="font-size: 11px; font-weight: bold; color:#000;">
@@ -383,14 +392,7 @@ function validateUserInfo(){
 																		</td>
 																	</tr>
 
-																	<tr>
-																		<td width="169" align="right" height="30" style="font-size: 11px; font-weight: bold; color:#000;">
-																			<digi:trn key="um:enableTruBudgetUser">Enable TruBudget for user</digi:trn>
-																		</td>
-																		<td width="380" height="30" colspan="2" class="inputcontainer">
-																			<html:checkbox name="umViewEditUserForm" property="truBudgetUserEnabled" styleClass="inp-text" styleId="trubudgetEnabledForUser"/>
-																		</td>
-																	</tr>
+
 
 																	<tr>
 																		<td width="169" align="right" height="30" style="font-size: 11px; font-weight: bold; color:#000;">

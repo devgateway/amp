@@ -36,6 +36,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
@@ -75,6 +76,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.message.dbentity.AmpAlert;
 import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.message.dbentity.AmpMessageState;
@@ -102,6 +104,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
     private static final Integer GO_TO_DESKTOP=1;
     private static final Integer STAY_ON_PAGE=2;
     private AbstractAjaxTimerBehavior autoSaveTimer;
+    private IModel<AmpActivityVersion> pendingSaveActivityModel;
+    private FeedbackPanel pendingSaveFeedbackPanel;
+    private Model<Integer> pendingSaveRedirected;
+    private boolean pendingSaveDraft;
+    private boolean pendingSaveRejected;
+    private boolean pendingSendRejectMessage;
+    private IModel<AmpActivityVersion> pendingRejectMessageActivityModel;
     public Form<AmpActivityVersion> getActivityForm() {
         return activityForm;
     }
@@ -376,11 +385,53 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             public void onClick(AjaxRequestTarget target) {
                 target.appendJavaScript("hideWarningPanel();");
                 //TODO: fix draft param
-                saveMethod(target, am, feedbackPanel, false, redirected,false);
+                saveMethodWithTruBudgetConfirmation(target, am, feedbackPanel, false, redirected, false,
+                    false, null);
             }
         };
         saveButton.add(new AttributeModifier("value", TranslatorUtil.getTranslatedText("Save")));
         add(saveButton);
+
+        IndicatingAjaxLink<Void> trubudgetCancelButton = new IndicatingAjaxLink<Void>("trubudgetPanelCancel") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                clearPendingSave();
+                target.appendJavaScript("hideTruBudgetClosePanel();enableButtons2();");
+            }
+        };
+        trubudgetCancelButton.add(new AttributeModifier("value", TranslatorUtil.getTranslatedText("Cancel")));
+        add(trubudgetCancelButton);
+
+        IndicatingAjaxLink<Void> trubudgetSaveButton = new IndicatingAjaxLink<Void>("trubudgetPanelSave") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                boolean closeProjectOnTruBudget = RequestCycle.get().getRequest().getRequestParameters()
+                        .getParameterValue("closeProjectOnTruBudget").toBoolean(false);
+
+                target.appendJavaScript("hideTruBudgetClosePanel();");
+
+                if (pendingSaveActivityModel != null && pendingSaveFeedbackPanel != null && pendingSaveRedirected != null) {
+                    saveMethod(target, pendingSaveActivityModel, pendingSaveFeedbackPanel, pendingSaveDraft,
+                            pendingSaveRedirected, pendingSaveRejected, closeProjectOnTruBudget);
+                }
+
+                if (pendingSendRejectMessage && pendingRejectMessageActivityModel != null) {
+                    sendRejectMessage(pendingRejectMessageActivityModel);
+                }
+
+                clearPendingSave();
+            }
+
+            @Override
+            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                super.updateAjaxAttributes(attributes);
+                attributes.getDynamicExtraParameters().add(
+                        "return { closeProjectOnTruBudget: $('#closeProjectOnTruBudgetCheckbox').is(':checked') };"
+                );
+            }
+        };
+        trubudgetSaveButton.add(new AttributeModifier("value", TranslatorUtil.getTranslatedText("Save")));
+        add(trubudgetSaveButton);
 
         //add ajax submit button
         final AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit", AmpFMTypes.MODULE, true) {
@@ -421,7 +472,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
                         }
                         else{
-                            saveMethod(target, am, feedbackPanel, false, redirected,false);
+                                saveMethodWithTruBudgetConfirmation(target, am, feedbackPanel, false, redirected, false,
+                                    false, null);
                         }
                     }
                     else{
@@ -676,7 +728,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 if (!activityForm.hasError())
                     {
                     redirected.setObject(STAY_ON_PAGE);
-                    saveMethod(target, am, feedbackPanel, true, redirected,false);
+                    saveMethod(target, am, feedbackPanel, true, redirected, false, false);
                     }
                 else {
                     formSubmitErrorHandle(activityForm, target, feedbackPanel);
@@ -1102,9 +1154,71 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         target.add(feedbackPanel);
     }
 
+    private void saveMethodWithTruBudgetConfirmation(AjaxRequestTarget target,
+                                                     IModel<AmpActivityVersion> am,
+                                                     FeedbackPanel feedbackPanel,
+                                                     boolean draft,
+                                                     Model<Integer> redirected,
+                                                     boolean rejected,
+                                                     boolean sendRejectMessageAfterSave,
+                                                     IModel<AmpActivityVersion> rejectMessageActivityModel) {
+        if (shouldShowTruBudgetCloseConfirmation(am, draft, rejected)) {
+            this.pendingSaveActivityModel = am;
+            this.pendingSaveFeedbackPanel = feedbackPanel;
+            this.pendingSaveRedirected = redirected;
+            this.pendingSaveDraft = draft;
+            this.pendingSaveRejected = rejected;
+            this.pendingSendRejectMessage = sendRejectMessageAfterSave;
+            this.pendingRejectMessageActivityModel = rejectMessageActivityModel;
+            target.appendJavaScript("showTruBudgetClosePanel();");
+            return;
+        }
+
+        saveMethod(target, am, feedbackPanel, draft, redirected, rejected, false);
+        if (sendRejectMessageAfterSave && rejectMessageActivityModel != null) {
+            sendRejectMessage(rejectMessageActivityModel);
+        }
+    }
+
+    private boolean shouldShowTruBudgetCloseConfirmation(IModel<AmpActivityVersion> am,
+                                                         boolean draft,
+                                                         boolean rejected) {
+        if (draft) {
+            return false;
+        }
+
+        AmpActivityVersion activity = am != null ? am.getObject() : null;
+        ApprovalStatus approvalStatus = activity != null ? activity.getApprovalStatus() : null;
+        boolean isApprovedOrRejected = ApprovalStatus.approved.equals(approvalStatus)
+                || ApprovalStatus.rejected.equals(approvalStatus);
+
+        if (!rejected && !isApprovedOrRejected) {
+            return false;
+        }
+
+        User currentUser = TeamUtil.getCurrentUser();
+        return currentUser != null
+                && currentUser.getTruBudgetEnabled()
+            && org.digijava.module.um.util.DbUtil
+            .getSettingValue(org.digijava.module.um.util.DbUtil.getGlobalSettingsBySection("trubudget"),
+                "isEnabled")
+            .equalsIgnoreCase("true");
+    }
+
+    private void clearPendingSave() {
+        this.pendingSaveActivityModel = null;
+        this.pendingSaveFeedbackPanel = null;
+        this.pendingSaveRedirected = null;
+        this.pendingSaveDraft = false;
+        this.pendingSaveRejected = false;
+        this.pendingSendRejectMessage = false;
+        this.pendingRejectMessageActivityModel = null;
+    }
+
     protected void saveMethod(AjaxRequestTarget target,
                               IModel<AmpActivityVersion> am, FeedbackPanel feedbackPanel,
-                              boolean draft, Model<Integer> redirected,boolean rejected) {
+                              boolean draft, Model<Integer> redirected, boolean rejected,
+                              boolean closeProjectOnTruBudget) {
 
         AmpActivityModel a = (AmpActivityModel) am;
         AmpActivityVersion activity = am.getObject();
@@ -1124,7 +1238,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId()), currentUserId));
         }
 
-        ActivityUtil.saveActivity((AmpActivityModel) am, draft, rejected);
+        ActivityUtil.saveActivity((AmpActivityModel) am, draft, rejected, closeProjectOnTruBudget);
 
         info(TranslatorUtil.getTranslatedText("Activity saved successfully"));
 
@@ -1286,11 +1400,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         } else {
             //if no error happend and we are rejecting we change the approval status to rejected
             // send a message to the creator of the activity
-            saveMethod(target, am, feedbackPanel, true, redirected, isRejected);
-
-            if (isRejected) {
-                sendRejectMessage(am);
-            }
+            saveMethodWithTruBudgetConfirmation(target, am, feedbackPanel, true, redirected, isRejected,
+                    isRejected, am);
         }
 
         target.appendJavaScript("enableButtons2();");

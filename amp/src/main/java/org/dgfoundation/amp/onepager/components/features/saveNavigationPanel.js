@@ -90,3 +90,39 @@ function hideRejectActivityPanel(){
     	rejectActivityPanel.hide();
     }
 }
+
+var trubudgetClosePanel;
+function showTruBudgetClosePanel(){
+    if(trubudgetClosePanel==null){
+        trubudgetClosePanel = new YAHOOAmp.widget.Panel("trubudgetClosePanel", {
+            width : "420px",
+            fixedcenter : true,
+            constraintoviewport : true,
+            underlay : "shadow",
+            close : true,
+            visible : true,
+            modal : true,
+            draggable : false
+        });
+
+        $("#closeProjectOnTruBudgetCheckbox").prop("checked", false);
+        $("#trubudgetClosePanel").show();
+
+        trubudgetClosePanel.beforeHideEvent.subscribe(function() {
+            enableButtons2();
+        });
+        trubudgetClosePanel.render();
+    }
+    else{
+        $("#closeProjectOnTruBudgetCheckbox").prop("checked", false);
+        trubudgetClosePanel.show();
+    }
+
+    return false;
+}
+
+function hideTruBudgetClosePanel(){
+    if(trubudgetClosePanel!=null){
+        trubudgetClosePanel.hide();
+    }
+}

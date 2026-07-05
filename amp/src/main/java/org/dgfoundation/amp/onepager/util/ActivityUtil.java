@@ -80,7 +80,12 @@ public class ActivityUtil {
      *
      * @param am
      */
-    public static void saveActivity(AmpActivityModel am, boolean draft,boolean rejected){
+    public static void saveActivity(AmpActivityModel am, boolean draft, boolean rejected) {
+        saveActivity(am, draft, rejected, true);
+    }
+
+    public static void saveActivity(AmpActivityModel am, boolean draft, boolean rejected,
+                                    boolean closeProjectOnTruBudget) {
 
         AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
         if (!wicketSession.getLocale().getLanguage().equals(TLSUtils.getLangCode())){
@@ -93,7 +98,9 @@ public class ActivityUtil {
 
         AmpActivityVersion oldA = am.getObject();
 
-        AmpActivityVersion newA = saveActivity(oldA, am.getTranslationHashMap().values(), ampCurrentMember, wicketSession.getSite(), wicketSession.getLocale(), sc.getRealPath("/"), draft, SaveContext.activityForm(rejected));
+        AmpActivityVersion newA = saveActivity(oldA, am.getTranslationHashMap().values(), ampCurrentMember,
+            wicketSession.getSite(), wicketSession.getLocale(), sc.getRealPath("/"), draft,
+            SaveContext.activityForm(rejected, closeProjectOnTruBudget));
 
         am.setObject(newA);
 
@@ -161,7 +168,8 @@ public class ActivityUtil {
         }
 
         if (context.isUpdateActivityStatus()) {
-            setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
+            setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected(),
+                    context.isCloseProjectOnTruBudget());
         }
     }
 
@@ -829,7 +837,8 @@ public class ActivityUtil {
     }
 
     private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean savedAsDraft, AmpActivityFields a,
-                                          AmpActivityVersion oldA, boolean newActivity, boolean rejected) {
+                                          AmpActivityVersion oldA, boolean newActivity, boolean rejected,
+                                          boolean closeProjectOnTruBudget) {
         boolean teamLeadFlag = isApprover(ampCurrentMember);
         logger.info("Teamlead? " + teamLeadFlag);
         Boolean crossTeamValidation = ampCurrentMember.getAmpTeam().getCrossteamvalidation();
@@ -922,8 +931,9 @@ public class ActivityUtil {
             a.setApprovalDate(Calendar.getInstance().getTime());
         }
         logger.info("Project status: "+a.getApprovalStatus());
-        if (a.getApprovalStatus().equals(ApprovalStatus.approved)|| a.getApprovalStatus().equals(ApprovalStatus.rejected))
-        {
+        if ((a.getApprovalStatus().equals(ApprovalStatus.approved)
+            || a.getApprovalStatus().equals(ApprovalStatus.rejected))
+            && closeProjectOnTruBudget) {
             List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
             User user=a.getActivityCreator().getUser();
@@ -957,7 +967,7 @@ public class ActivityUtil {
 
     /**
      * Verifies if the team member can approve an activity from the specified team
-     * See {@link #setActivityStatus(AmpTeamMember, boolean, AmpActivityFields, AmpActivityVersion, boolean, boolean)}
+    * See {@link #setActivityStatus(AmpTeamMember, boolean, AmpActivityFields, AmpActivityVersion, boolean, boolean, boolean)}
      *
      * @param atm               the team member to check
      * @param activityTeamId    the team id that activity belongs to that the TM can have the approval right

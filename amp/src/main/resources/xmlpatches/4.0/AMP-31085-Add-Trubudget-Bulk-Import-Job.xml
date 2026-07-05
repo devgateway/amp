@@ -8,7 +8,7 @@
     <author>bmokandu</author>
     <trigger type="all">
         <condition type="entryInTableMissing" tablename="amp_quartz_job_class"
-                   columnname="jc_name" columnvalue="Import Donor funding job" />
+                   columnname="jc_name" columnvalue="TruBudget Bulk Import Job" />
     </trigger>
     <apply>
         <script>

@@ -719,11 +719,19 @@ public class DbUtil {
             }
 
             for (TruBudgetIntent intent : currentIntents) {
-                grantPermRequest(settings, token, identity, intent.getTruBudgetIntentName());
+                try {
+                    grantPermRequest(settings, token, identity, intent.getTruBudgetIntentName());
+                } catch (Exception e) {
+                    logger.error("Failed to grant TruBudget intent " + intent.getTruBudgetIntentName() + " for user " + identity, e);
+                }
             }
 
             for (TruBudgetIntent intent : toBeRevoked) {
-                revokePermRequest(settings, token, identity, intent.getTruBudgetIntentName());
+                try {
+                    revokePermRequest(settings, token, identity, intent.getTruBudgetIntentName());
+                } catch (Exception e) {
+                    logger.error("Failed to revoke TruBudget intent " + intent.getTruBudgetIntentName() + " for user " + identity, e);
+                }
             }
 
             return true;

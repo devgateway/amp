@@ -151,6 +151,7 @@ public class ProjectUtil {
                             truBudgetActivity.setAmpId(ampActivityVersion.getAmpId());
                             truBudgetActivity.setAmpActivityId(ampActivityVersion.getAmpActivityId());
                             truBudgetActivity.setTruBudgetId(project.getId());
+                            truBudgetActivity.setProjectClosed(Boolean.FALSE);
                             session.save(truBudgetActivity);
                             session.flush();
                             return null; // Void return
@@ -340,8 +341,31 @@ public class ProjectUtil {
 
 
         GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.close", closeProjectModel, CloseProjectModel.class, String.class, token)
-                .subscribe(res -> logger.info("Project close response: "+res));
+                .subscribe(
+                    res -> {
+                        logger.info("Project close response: " + res);
+                        markProjectClosedInAmp(projectId);
+                    },
+                    err -> logger.error("Project close request failed for project {}", projectId, err)
+                );
 
+    }
+
+    private static void markProjectClosedInAmp(String projectId) {
+        try {
+            Integer updated = PersistenceManager.<Integer>doInTransaction(dbSession -> {
+                return dbSession.createQuery(
+                        "UPDATE " + TruBudgetActivity.class.getName() + " ta " +
+                            "SET ta.projectClosed = :closed " +
+                            "WHERE ta.truBudgetId = :projectId")
+                    .setParameter("closed", Boolean.TRUE)
+                    .setParameter("projectId", projectId)
+                    .executeUpdate();
+            });
+            logger.info("Marked TruBudget project as closed in AMP. projectId={}, rowsUpdated={}", projectId, updated);
+        } catch (Exception e) {
+            logger.error("Failed to mark TruBudget project as closed in AMP for projectId={}", projectId, e);
+        }
     }
 
     public static String getTrubudgetToken()

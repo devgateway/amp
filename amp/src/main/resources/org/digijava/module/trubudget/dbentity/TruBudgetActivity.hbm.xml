@@ -12,6 +12,7 @@
         <property name="truBudgetId" column="trubudget_id" type="java.lang.String"/>
         <property name="ampId" column="amp_id" type="java.lang.String"/>
         <property name="ampActivityId" column="amp_activity_id" type="java.lang.Long"/>
+        <property name="projectClosed" column="project_closed" type="java.lang.Boolean"/>
 
     </class>
 </hibernate-mapping>

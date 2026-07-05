@@ -85,6 +85,8 @@ import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
+import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
+import org.digijava.module.trubudget.util.ProjectUtil;
 
 import java.util.*;
 
@@ -432,6 +434,29 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         };
         trubudgetSaveButton.add(new AttributeModifier("value", TranslatorUtil.getTranslatedText("Save")));
         add(trubudgetSaveButton);
+
+        IndicatingAjaxLink<Void> trubudgetAlreadyClosedOkButton =
+            new IndicatingAjaxLink<Void>("trubudgetAlreadyClosedPanelOk") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    target.appendJavaScript("hideTruBudgetAlreadyClosedPanel();");
+
+                    if (pendingSaveActivityModel != null && pendingSaveFeedbackPanel != null
+                        && pendingSaveRedirected != null) {
+                        saveMethod(target, pendingSaveActivityModel, pendingSaveFeedbackPanel, pendingSaveDraft,
+                            pendingSaveRedirected, pendingSaveRejected, false);
+                    }
+
+                    if (pendingSendRejectMessage && pendingRejectMessageActivityModel != null) {
+                        sendRejectMessage(pendingRejectMessageActivityModel);
+                    }
+
+                    clearPendingSave();
+                }
+            };
+        trubudgetAlreadyClosedOkButton
+            .add(new AttributeModifier("value", TranslatorUtil.getTranslatedText("OK")));
+        add(trubudgetAlreadyClosedOkButton);
 
         //add ajax submit button
         final AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit", AmpFMTypes.MODULE, true) {
@@ -1162,6 +1187,18 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                                      boolean rejected,
                                                      boolean sendRejectMessageAfterSave,
                                                      IModel<AmpActivityVersion> rejectMessageActivityModel) {
+        if (shouldShowTruBudgetAlreadyClosedPopup(am, draft, rejected)) {
+            this.pendingSaveActivityModel = am;
+            this.pendingSaveFeedbackPanel = feedbackPanel;
+            this.pendingSaveRedirected = redirected;
+            this.pendingSaveDraft = draft;
+            this.pendingSaveRejected = rejected;
+            this.pendingSendRejectMessage = sendRejectMessageAfterSave;
+            this.pendingRejectMessageActivityModel = rejectMessageActivityModel;
+            target.appendJavaScript("showTruBudgetAlreadyClosedPanel();");
+            return;
+        }
+
         if (shouldShowTruBudgetCloseConfirmation(am, draft, rejected)) {
             this.pendingSaveActivityModel = am;
             this.pendingSaveFeedbackPanel = feedbackPanel;
@@ -1180,9 +1217,46 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         }
     }
 
+    private boolean shouldShowTruBudgetAlreadyClosedPopup(IModel<AmpActivityVersion> am,
+                                                          boolean draft,
+                                                          boolean rejected) {
+        if (!isTruBudgetCloseFlowEligible(am, draft, rejected)) {
+            return false;
+        }
+
+        TruBudgetActivity truBudgetActivity = getTruBudgetActivity(am);
+        return truBudgetActivity != null && Boolean.TRUE.equals(truBudgetActivity.getProjectClosed());
+    }
+
     private boolean shouldShowTruBudgetCloseConfirmation(IModel<AmpActivityVersion> am,
                                                          boolean draft,
                                                          boolean rejected) {
+        if (!isTruBudgetCloseFlowEligible(am, draft, rejected)) {
+            return false;
+        }
+
+        AmpActivityVersion activity = am != null ? am.getObject() : null;
+        String ampId = activity != null ? activity.getAmpId() : null;
+        if (ampId == null || ampId.trim().isEmpty()) {
+            return true;
+        }
+
+        TruBudgetActivity truBudgetActivity = getTruBudgetActivity(am);
+        return truBudgetActivity == null || !Boolean.TRUE.equals(truBudgetActivity.getProjectClosed());
+    }
+
+    private TruBudgetActivity getTruBudgetActivity(IModel<AmpActivityVersion> am) {
+        AmpActivityVersion activity = am != null ? am.getObject() : null;
+        String ampId = activity != null ? activity.getAmpId() : null;
+        if (ampId == null || ampId.trim().isEmpty()) {
+            return null;
+        }
+        return ProjectUtil.activityAlreadyInTrubudget(ampId);
+    }
+
+    private boolean isTruBudgetCloseFlowEligible(IModel<AmpActivityVersion> am,
+                                                 boolean draft,
+                                                 boolean rejected) {
         if (draft) {
             return false;
         }

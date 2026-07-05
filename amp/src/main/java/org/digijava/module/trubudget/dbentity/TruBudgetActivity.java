@@ -21,6 +21,8 @@ public class TruBudgetActivity implements Serializable {
     private String ampId;
     @Column(name = "amp_activity_id")
     private Long ampActivityId;
+    @Column(name = "project_closed")
+    private Boolean projectClosed = Boolean.FALSE;
 
     public Long getId() {
         return id;
@@ -52,5 +54,13 @@ public class TruBudgetActivity implements Serializable {
 
     public void setAmpActivityId(Long ampActivityId) {
         this.ampActivityId = ampActivityId;
+    }
+
+    public Boolean getProjectClosed() {
+        return projectClosed;
+    }
+
+    public void setProjectClosed(Boolean projectClosed) {
+        this.projectClosed = projectClosed;
     }
 }

@@ -12,7 +12,6 @@ import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -83,7 +82,7 @@ public class ExcelImporter {
         } catch (IOException e) {
             ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
             logger.error("Error processing Excel file: {}", e.getMessage(), e);
-        } catch (InvalidFormatException | InvalidOperationException e) {
+        } catch (InvalidOperationException e) {
             logger.error("Error processing Excel file: {}", e.getMessage(), e);
         }
         logger.info("Finished processing file record id: {} with status: {}", importedFilesRecord.getId(), importedFilesRecord.getImportStatus());

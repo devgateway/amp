@@ -1044,6 +1044,12 @@ public class ImporterUtil {
 
     private static final String CREATED_BY_KEY = "created_by";
 
+    private static final String APPROVAL_STATUS_KEY = "approval_status";
+
+    private static final String APPROVED_BY_KEY = "approved_by";
+
+    private static final String APPROVAL_DATE_KEY = "approval_date";
+
     /**
      * Ensures created_by in the activity map is set to a valid team member id when null,
      * so the activity API validator does not reject with "(Invalid field value) created_by".
@@ -1069,6 +1075,41 @@ public class ImporterUtil {
         if (currentMember != null) {
             map.put(CREATED_BY_KEY, currentMember.getAmpTeamMemId());
         }
+    }
+
+    private static void applyApprovalForValidation(Map<String, Object> map, ImportDataModel importDataModel,
+                                                   AmpActivityVersion existing) {
+        if (map == null || importDataModel == null) {
+            return;
+        }
+
+        AmpTeamMember currentMember = TeamUtil.getCurrentAmpTeamMember();
+        Long teamId = importDataModel.getTeam();
+        ApprovalStatus oldApprovalStatus = existing != null ? existing.getApprovalStatus() : null;
+
+        if (currentMember == null || teamId == null) {
+            map.put(APPROVAL_STATUS_KEY, existing == null ? ApprovalStatus.started.getId() : ApprovalStatus.edited.getId());
+            map.remove(APPROVED_BY_KEY);
+            map.remove(APPROVAL_DATE_KEY);
+            map.put("is_draft", false);
+            return;
+        }
+
+        boolean canApprove = org.dgfoundation.amp.onepager.util.ActivityUtil.canApprove(currentMember, teamId,
+                oldApprovalStatus);
+
+        if (canApprove) {
+            map.put(APPROVAL_STATUS_KEY, ApprovalStatus.approved.getId());
+            map.put(APPROVED_BY_KEY, currentMember.getAmpTeamMemId());
+            map.put("is_draft", false);
+            return;
+        }
+
+        // If importer user cannot approve in this workspace, keep non-draft but use a non-approved status.
+        map.put(APPROVAL_STATUS_KEY, existing == null ? ApprovalStatus.started.getId() : ApprovalStatus.edited.getId());
+        map.remove(APPROVED_BY_KEY);
+        map.remove(APPROVAL_DATE_KEY);
+        map.put("is_draft", false);
     }
 
     /** @return activity ID on success, null on skip or failure */
@@ -1110,9 +1151,8 @@ public class ImporterUtil {
         if (existing == null) {
             ensureCreatedBySet(map, null);
             if (validateActivities) {
-                logger.info("validateActivities=true: setting approval_status=approved and is_draft=false for new activity");
-                map.put("approval_status", ApprovalStatus.approved.getId());
-                map.put("is_draft", false);
+                logger.info("validateActivities=true: applying approval fields for new activity");
+                applyApprovalForValidation(map, importDataModel, null);
             }
             logger.info("New activity");
             importedProject.setNewProject(true);
@@ -1157,9 +1197,8 @@ public class ImporterUtil {
             evictActivityFromSecondLevelCache(existing.getAmpActivityId());
             ensureCreatedBySet(map, existing);
             if (validateActivities) {
-                logger.info("validateActivities=true: setting approval_status=approved and is_draft=false for existing activity");
-                map.put("approval_status", ApprovalStatus.approved.getId());
-                map.put("is_draft", false);
+                logger.info("validateActivities=true: applying approval fields for existing activity");
+                applyApprovalForValidation(map, importDataModel, existing);
             }
             // All data from 'existing' has been extracted into 'map'. Clear the session first-level
             // cache before handing off to ActivityGatekeeper so its internal doInTransaction starts

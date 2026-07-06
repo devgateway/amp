@@ -40,7 +40,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.translator.TranslatorWorker;
 import static org.digijava.module.aim.action.dataimporter.ExcelImporter.processExcelFileInBatches;
 import org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfig;
 import org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfigValues;
@@ -56,11 +55,13 @@ import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.remo
 import org.digijava.module.aim.action.dataimporter.util.ImporterConstants;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -81,8 +82,24 @@ import com.opencsv.exceptions.CsvValidationException;
 public class DataImporter extends Action {
     static Logger logger = LoggerFactory.getLogger(DataImporter.class);
 
+    private boolean canAccessDataImporter(HttpServletRequest request) {
+        if ("yes".equals(request.getSession().getAttribute("ampAdmin"))) {
+            return true;
+        }
+        AmpTeamMember current = TeamUtil.getCurrentAmpTeamMember();
+        return current != null
+                && current.getAmpMemberRole() != null
+                && (Boolean.TRUE.equals(current.getAmpMemberRole().getTeamHead())
+                || current.getAmpMemberRole().isApprover());
+    }
+
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        if (!canAccessDataImporter(request)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return null;
+        }
+
         // List of fields - map of original to translated
         Map<String, String> fieldsInfo = getEntityFieldsInfo();
         request.setAttribute("fieldsInfo", fieldsInfo);

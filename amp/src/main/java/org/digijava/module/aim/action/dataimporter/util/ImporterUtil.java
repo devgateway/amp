@@ -1420,13 +1420,18 @@ public class ImporterUtil {
         if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty())
             return;
         Set<Location> locs = importDataModel.getLocations();
-        // Only consider locations that were found (location != null)
-        List<Location> foundLocations = new ArrayList<>();
+        // Deduplicate by location id first; the API effectively treats location rows as unique by location,
+        // so assigning percentages before collapsing duplicates can leave totals below 100 after validation.
+        Map<Long, Location> uniqueLocations = new LinkedHashMap<>();
         for (Location loc : locs) {
             if (loc != null && loc.getLocation() != null) {
-                foundLocations.add(loc);
+                Location existing = uniqueLocations.get(loc.getLocation());
+                if (existing == null || (existing.getId() == null && loc.getId() != null)) {
+                    uniqueLocations.put(loc.getLocation(), loc);
+                }
             }
         }
+        List<Location> foundLocations = new ArrayList<>(uniqueLocations.values());
         if (foundLocations.isEmpty()) {
             return;
         }
@@ -1435,7 +1440,7 @@ public class ImporterUtil {
         for (int i = 0; i < foundLocations.size(); i++) {
             foundLocations.get(i).setLocation_percentage((double)percentages.get(i));
         }
-        importDataModel.setLocations(new HashSet<>(foundLocations));
+        importDataModel.setLocations(new LinkedHashSet<>(foundLocations));
     }
 
     /**

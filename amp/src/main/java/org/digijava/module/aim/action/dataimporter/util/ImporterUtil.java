@@ -1096,22 +1096,11 @@ public class ImporterUtil {
             return;
         }
 
-        // In "validation off" mode, new activities accept startedapproved (not approved).
-        // This mirrors ApprovalStatusConstraint.canApproveWith(...) behavior.
-        if (isNewActivity && org.dgfoundation.amp.onepager.util.ActivityUtil.canApproveWith(
-                ApprovalStatus.startedapproved, currentMember, true, false)) {
-            map.put(APPROVAL_STATUS_KEY, ApprovalStatus.startedapproved.getId());
-            map.put(APPROVED_BY_KEY, currentMember.getAmpTeamMemId());
-            map.remove(APPROVAL_DATE_KEY);
-            map.put("is_draft", false);
-            return;
-        }
-
         boolean canApprove = org.dgfoundation.amp.onepager.util.ActivityUtil.canApprove(currentMember, teamId,
                 oldApprovalStatus);
 
         if (canApprove) {
-            map.put(APPROVAL_STATUS_KEY, ApprovalStatus.approved.getId());
+            map.put(APPROVAL_STATUS_KEY, isNewActivity?ApprovalStatus.startedapproved.getId():ApprovalStatus.approved.getId());
             map.put(APPROVED_BY_KEY, currentMember.getAmpTeamMemId());
             map.put("is_draft", false);
             return;

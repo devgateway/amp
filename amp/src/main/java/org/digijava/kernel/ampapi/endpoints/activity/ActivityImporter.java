@@ -146,9 +146,10 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         this.newJson = newJson;
         this.isDraftFMEnabled = fmService.isVisible(SAVE_AS_DRAFT_PATH);
         this.endpointContextPath = endpointContextPath;
-        // DataImporter should not trigger immediate TruBudget sync in ActivityUtil.
+        // DataImporter should not trigger immediate TruBudget sync in ActivityUtil,
+        // but it still needs normal approval-status derivation before validation/save.
         if (endpointContextPath != null && endpointContextPath.startsWith("dataimporter/")) {
-            this.saveContext = SaveContext.job();
+            this.saveContext = SaveContext.dataImporter(!rules.isProcessApprovalFields());
         }
         initRequestedSaveMode();
     }

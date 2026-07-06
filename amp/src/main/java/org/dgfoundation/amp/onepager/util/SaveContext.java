@@ -34,6 +34,13 @@ public final class SaveContext {
         return JOB_CONTEXT;
     }
 
+    public static SaveContext dataImporter(boolean updateActivityStatus) {
+        if (!updateActivityStatus) {
+            return JOB_CONTEXT;
+        }
+        return new SaveContext(ActivitySource.JOB, true, false, true, true);
+    }
+
     public static SaveContext patch() {
         return PATCH_CONTEXT;
     }

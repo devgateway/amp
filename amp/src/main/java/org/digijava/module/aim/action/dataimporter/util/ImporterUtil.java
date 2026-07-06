@@ -1035,20 +1035,14 @@ public class ImporterUtil {
             importDataModel.setActivity_status(statusId);
         }
         if (validateActivities) {
-            logger.info("validateActivities=true: setting approval_status=approved in setStatus");
-            importDataModel.setApproval_status(ApprovalStatus.approved.getId());
+            logger.info("validateActivities=true: approval status will be derived during activity import");
+            importDataModel.setApproval_status(null);
         } else {
             importDataModel.setApproval_status(ApprovalStatus.started.getId());
         }
     }
 
     private static final String CREATED_BY_KEY = "created_by";
-
-    private static final String APPROVAL_STATUS_KEY = "approval_status";
-
-    private static final String APPROVED_BY_KEY = "approved_by";
-
-    private static final String APPROVAL_DATE_KEY = "approval_date";
 
     /**
      * Ensures created_by in the activity map is set to a valid team member id when null,
@@ -1077,54 +1071,20 @@ public class ImporterUtil {
         }
     }
 
-    private static void applyApprovalForValidation(Map<String, Object> map, ImportDataModel importDataModel,
-                                                   AmpActivityVersion existing) {
-        if (map == null || importDataModel == null) {
-            return;
-        }
-
-        AmpTeamMember currentMember = TeamUtil.getCurrentAmpTeamMember();
-        Long teamId = importDataModel.getTeam();
-        ApprovalStatus oldApprovalStatus = existing != null ? existing.getApprovalStatus() : null;
-        boolean isNewActivity = existing == null;
-
-        if (currentMember == null || teamId == null) {
-            map.put(APPROVAL_STATUS_KEY, existing == null ? ApprovalStatus.started.getId() : ApprovalStatus.edited.getId());
-            map.remove(APPROVED_BY_KEY);
-            map.remove(APPROVAL_DATE_KEY);
-            map.put("is_draft", false);
-            return;
-        }
-
-        boolean canApprove = org.dgfoundation.amp.onepager.util.ActivityUtil.canApprove(currentMember, teamId,
-                oldApprovalStatus);
-
-        if (canApprove) {
-            map.put(APPROVAL_STATUS_KEY, isNewActivity?ApprovalStatus.startedapproved.getId():ApprovalStatus.approved.getId());
-            map.put(APPROVED_BY_KEY, currentMember.getAmpTeamMemId());
-            map.put("is_draft", false);
-            return;
-        }
-
-        // If importer user cannot approve in this workspace, keep non-draft but use a non-approved status.
-        map.put(APPROVAL_STATUS_KEY, existing == null ? ApprovalStatus.started.getId() : ApprovalStatus.edited.getId());
-        map.remove(APPROVED_BY_KEY);
-        map.remove(APPROVAL_DATE_KEY);
-        map.put("is_draft", false);
-    }
-
     /** @return activity ID on success, null on skip or failure */
     public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities, boolean replaceExistingTransactions) throws JsonProcessingException {
         if (session == null || !session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
-        
+
         // Re-fetch existing activity in this transaction if ID is provided to avoid detached entity issues
         AmpActivityVersion existing = null;
         if (existingActivityId != null) {
             existing = session.get(AmpActivityVersion.class, existingActivityId);
         }
-        ActivityImportRules rules = new ActivityImportRules(true, validateActivities,
+        // Let ActivityImporter/ActivityUtil derive approval fields during prepareToSave().
+        // Data importer payload approval fields are too easy to drift from the server-side rules.
+        ActivityImportRules rules = new ActivityImportRules(true, false,
                 true);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(ESCAPE_NON_ASCII, false); // Disable escaping of non-ASCII characters during serialization
@@ -1138,7 +1098,7 @@ public class ImporterUtil {
                 });
         // Remove null values and "null" strings from the map to avoid API validation errors
         map.entrySet().removeIf(entry -> entry.getValue() == null || "null".equals(String.valueOf(entry.getValue())));
-        
+
         // Do not send indicators in the payload so activity/update does not replace or clear existing indicators.
         // Indicator data is appended separately in addIndicatorDataToActivity.
         map.remove("indicators");
@@ -1152,8 +1112,7 @@ public class ImporterUtil {
         if (existing == null) {
             ensureCreatedBySet(map, null);
             if (validateActivities) {
-                logger.info("validateActivities=true: applying approval fields for new activity");
-                applyApprovalForValidation(map, importDataModel, null);
+                logger.info("validateActivities=true: approval fields will be derived by ActivityImporter");
             }
             logger.info("New activity");
             importedProject.setNewProject(true);
@@ -1185,7 +1144,7 @@ public class ImporterUtil {
                     });
             // Remove null values and "null" strings from the map to avoid API validation errors
             map.entrySet().removeIf(entry -> entry.getValue() == null || "null".equals(String.valueOf(entry.getValue())));
-            
+
             map.remove("indicators"); // preserve existing indicators; we append in addIndicatorDataToActivity
             // Avoid triggering merge of contacts/documents that may reference deleted rows (ObjectNotFoundException)
             map.remove("activity_contacts");
@@ -1198,8 +1157,7 @@ public class ImporterUtil {
             evictActivityFromSecondLevelCache(existing.getAmpActivityId());
             ensureCreatedBySet(map, existing);
             if (validateActivities) {
-                logger.info("validateActivities=true: applying approval fields for existing activity");
-                applyApprovalForValidation(map, importDataModel, existing);
+                logger.info("validateActivities=true: approval fields will be derived by ActivityImporter");
             }
             // All data from 'existing' has been extracted into 'map'. Clear the session first-level
             // cache before handing off to ActivityGatekeeper so its internal doInTransaction starts

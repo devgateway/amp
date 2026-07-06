@@ -1082,7 +1082,7 @@ public class ImporterUtil {
         if (existingActivityId != null) {
             existing = session.get(AmpActivityVersion.class, existingActivityId);
         }
-        ActivityImportRules rules = new ActivityImportRules(true, false,
+        ActivityImportRules rules = new ActivityImportRules(true, validateActivities,
                 true);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(ESCAPE_NON_ASCII, false); // Disable escaping of non-ASCII characters during serialization
@@ -1342,10 +1342,7 @@ public class ImporterUtil {
                     if (orgRoleId != null) org.setId(orgRoleId);
                     importDataModel.getExecuting_agency().add(org);
                 } else if (roleCode.equalsIgnoreCase("IA")) {
-                    Organization org = new Organization();
-                    org.setOrganization(orgId);
-                    if (orgRoleId != null) org.setId(orgRoleId);
-                    importDataModel.getImplementing_agency().add(org);
+                    createImplementingAgency(importDataModel, orgId, orgRoleId);
                 } else if (roleCode.equalsIgnoreCase("CA")) {
                     Organization org = new Organization();
                     org.setOrganization(orgId);
@@ -2357,9 +2354,7 @@ public class ImporterUtil {
         }
         else if (Objects.equals(type, ImporterConstants.ORG_TYPE_IMPLEMENTING_AGENCY))
         {
-            Organization implementingAgency = new Organization();
-            implementingAgency.setOrganization(orgId);
-            importDataModel.getImplementing_agency().add(implementingAgency);
+            createImplementingAgency(importDataModel, orgId);
         }
         else if (Objects.equals(type, ImporterConstants.ORG_TYPE_CONTRACTING_AGENCY))
         {
@@ -2565,6 +2560,40 @@ public class ImporterUtil {
         int index = 0;
         for (DonorOrganization donorOrganization1 : importDataModel.getDonor_organization()) {
             donorOrganization1.setPercentage(percentages.get(index));
+            index++;
+        }
+    }
+
+    private static void createImplementingAgency(ImportDataModel importDataModel, Long orgId) {
+        createImplementingAgency(importDataModel, orgId, null);
+    }
+
+    private static void createImplementingAgency(ImportDataModel importDataModel, Long orgId, Long orgRoleId) {
+        ImplementingAgency implementingAgency = new ImplementingAgency();
+        implementingAgency.setOrganization(orgId);
+        if (orgRoleId != null) implementingAgency.setId(orgRoleId);
+        importDataModel.getImplementing_agency().add(implementingAgency);
+
+        Set<Organization> normalizedImplementingAgencies = new LinkedHashSet<>();
+        for (Organization organization : importDataModel.getImplementing_agency()) {
+            if (organization instanceof ImplementingAgency) {
+                normalizedImplementingAgencies.add(organization);
+            } else if (organization != null && organization.getOrganization() != null) {
+                ImplementingAgency normalized = new ImplementingAgency();
+                normalized.setId(organization.getId());
+                normalized.setOrganization(organization.getOrganization());
+                normalizedImplementingAgencies.add(normalized);
+            }
+        }
+        importDataModel.setImplementing_agency(normalizedImplementingAgencies);
+
+        int count = importDataModel.getImplementing_agency().size();
+        Map<Integer, Float> percentages = divide100(count);
+        int index = 0;
+        for (Organization organization : importDataModel.getImplementing_agency()) {
+            if (organization instanceof ImplementingAgency) {
+                ((ImplementingAgency) organization).setPercentage(percentages.get(index));
+            }
             index++;
         }
     }

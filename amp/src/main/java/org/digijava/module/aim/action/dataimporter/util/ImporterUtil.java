@@ -1086,10 +1086,22 @@ public class ImporterUtil {
         AmpTeamMember currentMember = TeamUtil.getCurrentAmpTeamMember();
         Long teamId = importDataModel.getTeam();
         ApprovalStatus oldApprovalStatus = existing != null ? existing.getApprovalStatus() : null;
+        boolean isNewActivity = existing == null;
 
         if (currentMember == null || teamId == null) {
             map.put(APPROVAL_STATUS_KEY, existing == null ? ApprovalStatus.started.getId() : ApprovalStatus.edited.getId());
             map.remove(APPROVED_BY_KEY);
+            map.remove(APPROVAL_DATE_KEY);
+            map.put("is_draft", false);
+            return;
+        }
+
+        // In "validation off" mode, new activities accept startedapproved (not approved).
+        // This mirrors ApprovalStatusConstraint.canApproveWith(...) behavior.
+        if (isNewActivity && org.dgfoundation.amp.onepager.util.ActivityUtil.canApproveWith(
+                ApprovalStatus.startedapproved, currentMember, true, false)) {
+            map.put(APPROVAL_STATUS_KEY, ApprovalStatus.startedapproved.getId());
+            map.put(APPROVED_BY_KEY, currentMember.getAmpTeamMemId());
             map.remove(APPROVAL_DATE_KEY);
             map.put("is_draft", false);
             return;

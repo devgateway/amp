@@ -1111,7 +1111,7 @@ public class ImporterUtil {
             ensureCreatedBySet(map, null);
             if (validateActivities) {
                 logger.info("validateActivities=true: setting approval_status=approved and is_draft=false for new activity");
-                map.put("approval_status", "approved");
+                map.put("approval_status", ApprovalStatus.approved.getId());
                 map.put("is_draft", false);
             }
             logger.info("New activity");
@@ -1158,7 +1158,7 @@ public class ImporterUtil {
             ensureCreatedBySet(map, existing);
             if (validateActivities) {
                 logger.info("validateActivities=true: setting approval_status=approved and is_draft=false for existing activity");
-                map.put("approval_status", "approved");
+                map.put("approval_status", ApprovalStatus.approved.getId());
                 map.put("is_draft", false);
             }
             // All data from 'existing' has been extracted into 'map'. Clear the session first-level

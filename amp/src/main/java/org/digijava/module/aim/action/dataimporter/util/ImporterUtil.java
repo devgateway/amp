@@ -3297,6 +3297,8 @@ public class ImporterUtil {
         if (activityId == null || rawProgramNames == null || rawProgramNames.trim().isEmpty()) {
             return;
         }
+        logger.info("Adding programs to activity {}: rawProgramNames='{}', rowProgramClassification='{}', fallbackProgramClassification='{}', createMissingPrograms={}",
+                activityId, rawProgramNames, rowProgramClassification, fallbackProgramClassification, createMissingPrograms);
         String resolvedClassification = (rowProgramClassification != null && !rowProgramClassification.trim().isEmpty())
                 ? rowProgramClassification.trim()
                 : (fallbackProgramClassification != null ? fallbackProgramClassification.trim() : null);

@@ -175,16 +175,12 @@ public class ExcelImporter {
 
                 String secondarySubSector = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.SECONDARY_SUBSECTOR);
 
-                String projectCode = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PROJECT_CODE);
-                if (projectCode == null) {
-                    projectCode = "";
-                }
+                String rawProjectCode = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PROJECT_CODE);
+                final String projectCode = rawProjectCode != null ? rawProjectCode : "";
                 importDataModel.setProject_code(projectCode);
 
-                String projectTitle = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PROJECT_TITLE);
-                if (projectTitle == null) {
-                    projectTitle = "";
-                }
+                String rawProjectTitle = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PROJECT_TITLE);
+                final String projectTitle = rawProjectTitle != null ? rawProjectTitle : "";
                 importDataModel.setProject_title(projectTitle);
                 String objective = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.OBJECTIVE);
                 importDataModel.setObjective(objective);

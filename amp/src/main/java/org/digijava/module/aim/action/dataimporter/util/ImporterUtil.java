@@ -1013,25 +1013,31 @@ public class ImporterUtil {
         if (!session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
-        // Prefer project code if provided
+
+        // Prefer project title (name)
+        if (projectTitle != null && !projectTitle.trim().isEmpty()) {
+            String hql = "SELECT a FROM " + AmpActivityGroup.class.getName()
+                    + " ag JOIN ag.ampActivityLastVersion a LEFT JOIN FETCH a.activityCreator"
+                    + " WHERE a.name = :name ORDER BY a.ampActivityId DESC";
+            Query query = session.createQuery(hql);
+            query.setCacheable(true);
+            query.setParameter("name", projectTitle.trim(), StringType.INSTANCE);
+            List<AmpActivityVersion> ampActivityVersions = query.list();
+            return !ampActivityVersions.isEmpty() ? ampActivityVersions.get(0) : null;
+        }
+
+        // Fallback to project code if provided
         if (projectCode != null && !projectCode.trim().isEmpty()) {
-            String hqlByCode = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a LEFT JOIN FETCH a.activityCreator WHERE a.projectCode = :projectCode";
+            String hqlByCode = "SELECT a FROM " + AmpActivityGroup.class.getName()
+                    + " ag JOIN ag.ampActivityLastVersion a LEFT JOIN FETCH a.activityCreator"
+                    + " WHERE a.projectCode = :projectCode ORDER BY a.ampActivityId DESC";
             Query queryByCode = session.createQuery(hqlByCode);
             queryByCode.setCacheable(true);
             queryByCode.setParameter("projectCode", projectCode.trim(), StringType.INSTANCE);
             List<AmpActivityVersion> byCode = queryByCode.list();
             if (!byCode.isEmpty()) {
-                return byCode.get(byCode.size() - 1);
+                return byCode.get(0);
             }
-        }
-        // Fall back to project title (name)
-        if (projectTitle != null && !projectTitle.trim().isEmpty()) {
-            String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a LEFT JOIN FETCH a.activityCreator WHERE a.name = :name";
-            Query query = session.createQuery(hql);
-            query.setCacheable(true);
-            query.setParameter("name", projectTitle.trim(), StringType.INSTANCE);
-            List<AmpActivityVersion> ampActivityVersions = query.list();
-            return !ampActivityVersions.isEmpty() ? ampActivityVersions.get(ampActivityVersions.size() - 1) : null;
         }
         return null;
     }

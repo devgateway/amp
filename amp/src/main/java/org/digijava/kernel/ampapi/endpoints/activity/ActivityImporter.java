@@ -248,6 +248,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 oldActivityDraft = oldActivity.getDraft();
 
                 newActivity = oldActivity;
+                ActivityVersionUtil.initializeActivity(oldActivity);
                 oldActivity = ActivityVersionUtil.cloneActivity(oldActivity);
                 oldActivity.setAmpId(newActivity.getAmpId());
                 oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup().clone());

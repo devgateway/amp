@@ -1092,6 +1092,7 @@ public class ImporterUtil {
 
         importDataModel.setFundings(mergeFundingsByDonor(importDataModel.getFundings()));
         pruneParentLocationsWhenChildPresent(importDataModel, session);
+        ensureImplementationLevelWhenHasLocations(importDataModel, session);
         normalizeLocationPercentages(importDataModel);
         Map<String, Object> map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
@@ -1136,8 +1137,8 @@ public class ImporterUtil {
             // Preserve existing programs with their DB IDs so the API updates in-place; avoids both
             // StaleStateException (delete+insert) and SizeValidator failures on re-validation
             preserveExistingPrograms(existing, importDataModel);
-            ensureImplementationLevelWhenHasLocations(importDataModel, session);
             pruneParentLocationsWhenChildPresent(importDataModel, session);
+            ensureImplementationLevelWhenHasLocations(importDataModel, session);
             normalizeLocationPercentages(importDataModel);
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
@@ -3133,11 +3134,13 @@ public class ImporterUtil {
                     resolvedClassification, activityId);
             return;
         }
+        logger.info("Adding programs to activity {}: classification='{}', createMissingPrograms={}", activityId, resolvedClassification, createMissingPrograms);
 
         for (String programName : splitMultipleValues(rawProgramNames)) {
             AmpTheme program = createMissingPrograms
                     ? getOrCreateProgramByName(programName, resolvedClassification, session)
                     : getProgramByNameAndClassification(programName, resolvedClassification, session);
+            logger.info("Processing program '{}' for activity {}: resolved to theme id={}", programName, activityId, program != null ? program.getAmpThemeId() : null);
             if (program == null) {
                 logger.info("Program '{}' not found and createMissingPrograms is disabled; skipping", programName);
                 continue;
@@ -3232,8 +3235,34 @@ public class ImporterUtil {
         if (classification == null || classification.trim().isEmpty()) {
             return null;
         }
+        String normalizedClassification = classification.trim();
         try {
-            return ProgramUtil.getAmpActivityProgramSettings(classification);
+            AmpActivityProgramSettings setting = ProgramUtil.getAmpActivityProgramSettings(normalizedClassification);
+            if (setting != null) {
+                return setting;
+            }
+
+            for (AmpActivityProgramSettings candidate : ProgramUtil.getAmpActivityProgramSettingsList(false)) {
+                if (candidate == null) {
+                    continue;
+                }
+                if (candidate.getName() != null && normalizedClassification.equalsIgnoreCase(candidate.getName().trim())) {
+                    return candidate;
+                }
+                AmpTheme defaultHierarchy = candidate.getDefaultHierarchy();
+                if (defaultHierarchy == null) {
+                    continue;
+                }
+                if (defaultHierarchy.getName() != null
+                        && normalizedClassification.equalsIgnoreCase(defaultHierarchy.getName().trim())) {
+                    return candidate;
+                }
+                if (defaultHierarchy.getThemeCode() != null
+                        && normalizedClassification.equalsIgnoreCase(defaultHierarchy.getThemeCode().trim())) {
+                    return candidate;
+                }
+            }
+            return null;
         } catch (Exception e) {
             logger.warn("Could not resolve program setting '{}'", classification, e);
             return null;

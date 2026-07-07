@@ -199,7 +199,7 @@ public class ImporterUtil {
                 String resolvedDonorOrgGroups = StringUtils.isNotBlank(donorOrgGroupNames) ? donorOrgGroupNames.trim() : importedOrgGroupName;
                 String resolvedDonorName = StringUtils.isNotBlank(donorColumn) ? donorColumn.trim() : "no org";
                 if ("no org".equals(resolvedDonorName)) {
-                    logger.warn("Donor Agency lookup resolved empty while creating TXT funding row; falling back to 'no org'. configKey='{}', transactionField='{}'",
+                    logger.info("Donor Agency lookup resolved empty while creating TXT funding row; falling back to 'no org'. configKey='{}', transactionField='{}'",
                             getKey(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
                 }
 

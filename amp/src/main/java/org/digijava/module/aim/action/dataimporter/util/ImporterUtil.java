@@ -25,6 +25,7 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProjectCurrency;
 import org.digijava.module.aim.action.dataimporter.model.*;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -34,6 +35,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.IdWithValueShim;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -53,6 +55,7 @@ import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -1006,8 +1009,10 @@ public class ImporterUtil {
     }
 
     public static AmpActivityVersion existingActivity(String projectTitle, String projectCode, Session session) {
-        if ((projectTitle == null || projectTitle.trim().isEmpty()) &&
-                (projectCode == null || projectCode.trim().isEmpty())) {
+        String normalizedProjectTitle = normalizeImporterMatchValue(projectTitle);
+        String normalizedProjectCode = normalizeImporterMatchValue(projectCode);
+
+        if (normalizedProjectTitle == null && normalizedProjectCode == null) {
             return null;
         }
         if (!session.isOpen()) {
@@ -1015,25 +1020,31 @@ public class ImporterUtil {
         }
 
         // Prefer project title (name)
-        if (projectTitle != null && !projectTitle.trim().isEmpty()) {
-            String hql = "SELECT a FROM " + AmpActivityGroup.class.getName()
-                    + " ag JOIN ag.ampActivityLastVersion a LEFT JOIN FETCH a.activityCreator"
-                    + " WHERE a.name = :name ORDER BY a.ampActivityId DESC";
-            Query query = session.createQuery(hql);
-            query.setCacheable(true);
-            query.setParameter("name", projectTitle.trim(), StringType.INSTANCE);
-            List<AmpActivityVersion> ampActivityVersions = query.list();
-            return !ampActivityVersions.isEmpty() ? ampActivityVersions.get(0) : null;
+        if (normalizedProjectTitle != null) {
+            IdWithValueShim collision = ActivityUtil.getActivityCollisions(normalizedProjectTitle, null);
+            if (collision != null && collision.getId() != null) {
+                String hqlById = "SELECT a FROM " + AmpActivityGroup.class.getName()
+                        + " ag JOIN ag.ampActivityLastVersion a LEFT JOIN FETCH a.activityCreator"
+                        + " WHERE a.ampActivityId = :activityId";
+                Query<AmpActivityVersion> queryById = session.createQuery(hqlById);
+                queryById.setCacheable(true);
+                queryById.setParameter("activityId", collision.getId());
+                List<AmpActivityVersion> byTitle = queryById.list();
+                if (!byTitle.isEmpty()) {
+                    logger.info("Matched existing activity {} by title collision for import title '{}'", collision.getId(), normalizedProjectTitle);
+                    return byTitle.get(0);
+                }
+            }
         }
 
         // Fallback to project code if provided
-        if (projectCode != null && !projectCode.trim().isEmpty()) {
+        if (normalizedProjectCode != null) {
             String hqlByCode = "SELECT a FROM " + AmpActivityGroup.class.getName()
                     + " ag JOIN ag.ampActivityLastVersion a LEFT JOIN FETCH a.activityCreator"
                     + " WHERE a.projectCode = :projectCode ORDER BY a.ampActivityId DESC";
-            Query queryByCode = session.createQuery(hqlByCode);
+            Query<AmpActivityVersion> queryByCode = session.createQuery(hqlByCode);
             queryByCode.setCacheable(true);
-            queryByCode.setParameter("projectCode", projectCode.trim(), StringType.INSTANCE);
+            queryByCode.setParameter("projectCode", normalizedProjectCode, StringType.INSTANCE);
             List<AmpActivityVersion> byCode = queryByCode.list();
             if (!byCode.isEmpty()) {
                 return byCode.get(0);
@@ -3540,6 +3551,35 @@ public class ImporterUtil {
         return fallbackValue;
     }
 
+    public static String getCellValueByHeader(Map<String, String> row, String headerName) {
+        if (row == null || row.isEmpty() || headerName == null) {
+            return null;
+        }
+
+        if (row.containsKey(headerName)) {
+            return row.get(headerName);
+        }
+
+        String normalizedHeaderName = normalizeImporterLookupValue(headerName);
+        if (normalizedHeaderName.isEmpty()) {
+            return null;
+        }
+
+        String fallbackValue = null;
+        for (Map.Entry<String, String> entry : row.entrySet()) {
+            if (normalizedHeaderName.equalsIgnoreCase(normalizeImporterLookupValue(entry.getKey()))) {
+                String value = entry.getValue();
+                if (StringUtils.isNotBlank(value)) {
+                    return value;
+                }
+                if (fallbackValue == null) {
+                    fallbackValue = value;
+                }
+            }
+        }
+        return fallbackValue;
+    }
+
     public static String getCellValueByConfig(Map<String, String> row, Map<String, String> config, String fieldName) {
         if (row == null || row.isEmpty()) {
             return null;
@@ -3547,28 +3587,12 @@ public class ImporterUtil {
 
         String fallbackValue = null;
         for (String key : getKeys(config, fieldName)) {
-            if (row.containsKey(key)) {
-                String value = row.get(key);
-                if (StringUtils.isNotBlank(value)) {
-                    return value;
-                }
-                if (fallbackValue == null) {
-                    fallbackValue = value;
-                }
-                continue;
+            String value = getCellValueByHeader(row, key);
+            if (StringUtils.isNotBlank(value)) {
+                return value;
             }
-
-            String normalizedKey = normalizeImporterLookupValue(key);
-            for (Map.Entry<String, String> entry : row.entrySet()) {
-                if (normalizedKey.equalsIgnoreCase(normalizeImporterLookupValue(entry.getKey()))) {
-                    String value = entry.getValue();
-                    if (StringUtils.isNotBlank(value)) {
-                        return value;
-                    }
-                    if (fallbackValue == null) {
-                        fallbackValue = value;
-                    }
-                }
+            if (fallbackValue == null) {
+                fallbackValue = value;
             }
         }
         return fallbackValue;
@@ -3578,9 +3602,21 @@ public class ImporterUtil {
         if (value == null) {
             return "";
         }
-        return value.replace('\u00A0', ' ')
+        return Normalizer.normalize(value, Normalizer.Form.NFD)
+                .replace('\u00A0', ' ')
                 .replace('\u202F', ' ')
+                .replaceAll("\\p{M}+", "")
+                .replaceAll("\\s+", " ")
                 .trim();
+    }
+
+    private static String normalizeImporterMatchValue(String value) {
+        if (value == null) {
+            return null;
+        }
+        return StringUtils.trimToNull(Normalizer.normalize(value, Normalizer.Form.NFC)
+                .replace('\u00A0', ' ')
+                .replace('\u202F', ' '));
     }
 
     private static double parseDoubleFromConfig(Row row, Sheet sheet, Map<String, String> config, String fieldName) {

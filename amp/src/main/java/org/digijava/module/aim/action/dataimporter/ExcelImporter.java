@@ -163,37 +163,33 @@ public class ExcelImporter {
                 OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
                 importDataModel.setCreation_date(now.format(formatter));
 
-                int componentCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.COMPONENT_CODE));
-                String componentCode = componentCodeColumn >= 0 ? getStringValueFromCell(rowRef.getCell(componentCodeColumn),true) : null;
+                String componentCode = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.COMPONENT_CODE);
 
-                int componentNameColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.COMPONENT_NAME));
-                String componentName = componentNameColumn >= 0 ? getStringValueFromCell(rowRef.getCell(componentNameColumn),true): null;
+                String componentName = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.COMPONENT_NAME);
 
-                int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
-                String donorAgencyCode = donorAgencyCodeColumn >= 0 ? getStringValueFromCell(rowRef.getCell(donorAgencyCodeColumn),true) : null;
+                String donorAgencyCode = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.DONOR_AGENCY_CODE);
 
-                int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.RESPONSIBLE_ORGANIZATION_CODE));
-                String responsibleOrgCode = responsibleOrgCodeColumn >= 0 ? getStringValueFromCell(rowRef.getCell(responsibleOrgCodeColumn),true) : null;
+                String responsibleOrgCode = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.RESPONSIBLE_ORGANIZATION_CODE);
 
-                int primarySubSectorColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PRIMARY_SUBSECTOR));
-                String primarySubSector = primarySubSectorColumn >= 0 ? getStringValueFromCell(rowRef.getCell(primarySubSectorColumn),true) : null;
+                String primarySubSector = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PRIMARY_SUBSECTOR);
 
-                int secondarySubSectorColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.SECONDARY_SUBSECTOR));
-                String secondarySubSector = secondarySubSectorColumn >= 0 ? getStringValueFromCell(rowRef.getCell(secondarySubSectorColumn),true) : null;
+                String secondarySubSector = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.SECONDARY_SUBSECTOR);
 
-                int projectCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PROJECT_CODE));
-                String projectCode = projectCodeColumn >= 0 ? getStringValueFromCell(rowRef.getCell(projectCodeColumn),false) : "";
+                String projectCode = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PROJECT_CODE);
+                if (projectCode == null) {
+                    projectCode = "";
+                }
                 importDataModel.setProject_code(projectCode);
 
-                int projectTitleColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PROJECT_TITLE));
-                String projectTitle = projectTitleColumn >= 0 ? getStringValueFromCell(rowRef.getCell(projectTitleColumn),false) : "";
+                String projectTitle = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PROJECT_TITLE);
+                if (projectTitle == null) {
+                    projectTitle = "";
+                }
                 importDataModel.setProject_title(projectTitle);
-                int objectiveColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.OBJECTIVE));
-                String objective = objectiveColumn >= 0 ? getStringValueFromCell(rowRef.getCell(objectiveColumn),false) : null;
+                String objective = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.OBJECTIVE);
                 importDataModel.setObjective(objective);
 
-                int projectDescColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PROJECT_DESCRIPTION));
-                String projectDesc = projectDescColumn >= 0 ? getStringValueFromCell(rowRef.getCell(projectDescColumn),false) : null;
+                String projectDesc = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PROJECT_DESCRIPTION);
                 importDataModel.setDescription(projectDesc);
 
                 String importedOrgGroupName;

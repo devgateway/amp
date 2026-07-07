@@ -1072,7 +1072,7 @@ public class ImporterUtil {
     }
 
     /** @return activity ID on success, null on skip or failure */
-    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities, boolean replaceExistingTransactions) throws JsonProcessingException {
+    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities, boolean replaceExistingTransactions, boolean replaceExistingLocations) throws JsonProcessingException {
         if (session == null || !session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
@@ -1132,14 +1132,18 @@ public class ImporterUtil {
             importDataModel.setProject_title(existing.getName() != null ? existing.getName() : "");
             importDataModel.setProject_code(!Objects.equals(importDataModel.getProject_code(), "") ? importDataModel.getProject_code() : (existing.getProjectCode() != null ? existing.getProjectCode() : ""));
             updateFundingOrgsAndSectorsWithAlreadyExisting(existing, importDataModel, replaceExistingTransactions);
-            // Merge existing activity locations into payload so we only add (row + existing), never remove
-            mergeExistingActivityLocationsIntoImport(existing, importDataModel);
+            // Stamp existing activity-location row ids onto imported locations so matching rows update in place,
+            // then optionally merge the rest of the existing rows when replace is not requested.
+            mergeExistingActivityLocationsIntoImport(existing, importDataModel, replaceExistingLocations);
             // Preserve existing programs with their DB IDs so the API updates in-place; avoids both
             // StaleStateException (delete+insert) and SizeValidator failures on re-validation
             preserveExistingPrograms(existing, importDataModel);
             pruneParentLocationsWhenChildPresent(importDataModel, session);
             ensureImplementationLevelWhenHasLocations(importDataModel, session);
             normalizeLocationPercentages(importDataModel);
+            if (replaceExistingLocations) {
+                failIfReplaceExistingLocationsWouldRemoveIndicatorLinkedRows(existing, importDataModel);
+            }
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                     });
@@ -1389,15 +1393,33 @@ public class ImporterUtil {
         }
     }
 
-    private static void mergeExistingActivityLocationsIntoImport(AmpActivityVersion existing, ImportDataModel importDataModel) {
+    private static void mergeExistingActivityLocationsIntoImport(AmpActivityVersion existing,
+                                                                 ImportDataModel importDataModel,
+                                                                 boolean replaceExistingLocations) {
         if (existing == null || importDataModel == null) return;
         if (existing.getLocations() == null) return;
         Hibernate.initialize(existing.getLocations());
+        Map<Long, AmpActivityLocation> existingByLocationId = new HashMap<>();
+        for (AmpActivityLocation aal : existing.getLocations()) {
+            if (aal == null || aal.getLocation() == null || aal.getLocation().getId() == null) {
+                continue;
+            }
+            existingByLocationId.putIfAbsent(aal.getLocation().getId(), aal);
+        }
         Set<Long> alreadyInImport = new HashSet<>();
         if (importDataModel.getLocations() != null) {
             for (Location loc : importDataModel.getLocations()) {
-                if (loc != null && loc.getLocation() != null) alreadyInImport.add(loc.getLocation());
+                if (loc != null && loc.getLocation() != null) {
+                    alreadyInImport.add(loc.getLocation());
+                    AmpActivityLocation existingLocation = existingByLocationId.get(loc.getLocation());
+                    if (existingLocation != null && loc.getId() == null && existingLocation.getId() != null) {
+                        loc.setId(existingLocation.getId());
+                    }
+                }
             }
+        }
+        if (replaceExistingLocations) {
+            return;
         }
         for (AmpActivityLocation aal : existing.getLocations()) {
             AmpCategoryValueLocations loc = aal.getLocation();
@@ -1411,6 +1433,56 @@ public class ImporterUtil {
             importDataModel.getLocations().add(aalId != null ? new Location(aalId, locId, pct) : new Location(locId, pct));
             alreadyInImport.add(locId);
         }
+    }
+
+    private static void failIfReplaceExistingLocationsWouldRemoveIndicatorLinkedRows(AmpActivityVersion existing,
+                                                                                     ImportDataModel importDataModel) {
+        if (existing == null || importDataModel == null) {
+            return;
+        }
+
+        Set<Long> keptActivityLocationIds = new HashSet<>();
+        if (importDataModel.getLocations() != null) {
+            for (Location location : importDataModel.getLocations()) {
+                if (location != null && location.getId() != null) {
+                    keptActivityLocationIds.add(location.getId());
+                }
+            }
+        }
+
+        Set<Long> indicatorLinkedLocationIds = getIndicatorLinkedActivityLocationIds(existing);
+        indicatorLinkedLocationIds.removeAll(keptActivityLocationIds);
+        if (!indicatorLinkedLocationIds.isEmpty()) {
+            throw new IllegalStateException("Cannot replace existing locations because one or more existing locations are referenced by indicator data. Keep those locations in the import or clear indicator data first.");
+        }
+    }
+
+    private static Set<Long> getIndicatorLinkedActivityLocationIds(AmpActivityVersion existing) {
+        Set<Long> activityLocationIds = new HashSet<>();
+        if (existing == null || existing.getIndicators() == null) {
+            return activityLocationIds;
+        }
+
+        Hibernate.initialize(existing.getIndicators());
+        for (IndicatorActivity indicatorActivity : existing.getIndicators()) {
+            if (indicatorActivity == null) {
+                continue;
+            }
+            if (indicatorActivity.getActivityLocation() != null && indicatorActivity.getActivityLocation().getId() != null) {
+                activityLocationIds.add(indicatorActivity.getActivityLocation().getId());
+            }
+            if (indicatorActivity.getValues() == null) {
+                continue;
+            }
+            Hibernate.initialize(indicatorActivity.getValues());
+            for (AmpIndicatorValue value : indicatorActivity.getValues()) {
+                if (value != null && value.getActivityLocation() != null && value.getActivityLocation().getId() != null) {
+                    activityLocationIds.add(value.getActivityLocation().getId());
+                }
+            }
+        }
+
+        return activityLocationIds;
     }
 
     /**
@@ -1445,8 +1517,9 @@ public class ImporterUtil {
     }
 
     /**
-     * Removes ancestor locations when both ancestor and descendant are present in payload.
-     * AMP validation rejects payloads that contain parent+child in the same locations collection.
+     * Removes broader locations when more specific ones are present in payload.
+     * AMP validation rejects parent+child combinations, and importer rows that mix
+     * administrative layers should keep the most specific layer.
      */
     private static void pruneParentLocationsWhenChildPresent(ImportDataModel importDataModel, Session session) {
         if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().size() < 2) {
@@ -1476,21 +1549,54 @@ public class ImporterUtil {
                 }
             }
         }
-        if (ancestorsToRemove.isEmpty()) {
-            return;
-        }
-
-        Set<Location> filteredLocations = new HashSet<>();
+        Set<Location> filteredLocations = new LinkedHashSet<>();
         for (Location loc : importDataModel.getLocations()) {
             if (loc == null || loc.getLocation() == null || !ancestorsToRemove.contains(loc.getLocation())) {
                 filteredLocations.add(loc);
             }
         }
+
+        int mostSpecificLayerIndex = Integer.MIN_VALUE;
+        Set<Integer> layerIndexes = new HashSet<>();
+        Map<Long, Integer> layerIndexByLocationId = new HashMap<>();
+        for (Location loc : filteredLocations) {
+            if (loc == null || loc.getLocation() == null) {
+                continue;
+            }
+            AmpCategoryValueLocations current = session.get(AmpCategoryValueLocations.class, loc.getLocation());
+            if (current == null || current.getParentCategoryValue() == null
+                    || current.getParentCategoryValue().getIndex() == null) {
+                continue;
+            }
+            int layerIndex = current.getParentCategoryValue().getIndex();
+            layerIndexes.add(layerIndex);
+            layerIndexByLocationId.put(loc.getLocation(), layerIndex);
+            if (layerIndex > mostSpecificLayerIndex) {
+                mostSpecificLayerIndex = layerIndex;
+            }
+        }
+
+        if (layerIndexes.size() > 1) {
+            Set<Location> mostSpecificLocations = new LinkedHashSet<>();
+            for (Location loc : filteredLocations) {
+                if (loc == null || loc.getLocation() == null) {
+                    mostSpecificLocations.add(loc);
+                    continue;
+                }
+                Integer layerIndex = layerIndexByLocationId.get(loc.getLocation());
+                if (layerIndex == null || layerIndex == mostSpecificLayerIndex) {
+                    mostSpecificLocations.add(loc);
+                }
+            }
+            filteredLocations = mostSpecificLocations;
+        }
+
         importDataModel.setLocations(filteredLocations);
     }
 
     /**
-     * When the payload has locations, implementation level is required. Sets default if missing (e.g. after merging locations for existing activity).
+     * When the payload has locations, derive implementation location and level
+     * from the selected locations (e.g. after merging locations for existing activity).
      */
     private static void ensureImplementationLevelWhenHasLocations(ImportDataModel importDataModel, Session session) {
         if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty())
@@ -2080,7 +2186,12 @@ public class ImporterUtil {
             session = PersistenceManager.getRequestDBSession();
         }
 
-        Long resolved = resolveImplementationLevelForLocations(importDataModel, session);
+        AmpCategoryValue resolvedImplementationLocation = resolveImplementationLocationForLocations(importDataModel, session);
+        if (resolvedImplementationLocation != null && resolvedImplementationLocation.getId() != null) {
+            importDataModel.setImplementation_location(resolvedImplementationLocation.getId());
+        }
+
+        Long resolved = resolveImplementationLevelForLocations(importDataModel, session, resolvedImplementationLocation);
         if (resolved != null) {
             importDataModel.setImplementation_level(resolved);
             return;
@@ -2114,9 +2225,74 @@ public class ImporterUtil {
         }
     }
 
-    private static Long resolveImplementationLevelForLocations(ImportDataModel importDataModel, Session session) {
+    private static AmpCategoryValue resolveImplementationLocationForLocations(ImportDataModel importDataModel,
+                                                                              Session session) {
         if (importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty()) {
             return null;
+        }
+
+        AmpCategoryValue resolvedImplementationLocation = null;
+        Set<Long> implementationLocationIds = new LinkedHashSet<>();
+
+        for (Location loc : importDataModel.getLocations()) {
+            if (loc == null || loc.getLocation() == null) {
+                continue;
+            }
+            AmpCategoryValueLocations location = session.get(AmpCategoryValueLocations.class, loc.getLocation());
+            if (location == null || location.getParentCategoryValue() == null) {
+                continue;
+            }
+
+            AmpCategoryValue implementationLocation = location.getParentCategoryValue();
+            if (resolvedImplementationLocation == null) {
+                resolvedImplementationLocation = implementationLocation;
+            }
+            if (implementationLocation.getId() != null) {
+                implementationLocationIds.add(implementationLocation.getId());
+            }
+        }
+
+        if (implementationLocationIds.isEmpty()) {
+            return null;
+        }
+        if (implementationLocationIds.size() == 1) {
+            return resolvedImplementationLocation;
+        }
+
+        return CategoryConstants.IMPLEMENTATION_LOCATION_ALL.getAmpCategoryValueFromDB();
+    }
+
+    private static Long resolveImplementationLevelForLocations(ImportDataModel importDataModel, Session session,
+                                                               AmpCategoryValue implementationLocation) {
+        if (importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty()) {
+            return null;
+        }
+
+        Long existingImplementationLevel = importDataModel.getImplementation_level();
+
+        if (implementationLocation != null) {
+            Set<Long> allowedByImplementationLocation = new LinkedHashSet<>();
+            if (implementationLocation.getUsedValues() != null) {
+                for (AmpCategoryValue level : implementationLocation.getUsedValues()) {
+                    if (level != null && level.getId() != null) {
+                        allowedByImplementationLocation.add(level.getId());
+                    }
+                }
+            }
+
+            if (existingImplementationLevel != null && allowedByImplementationLocation.contains(existingImplementationLevel)) {
+                return existingImplementationLevel;
+            }
+
+            if (implementationLocation.getDefaultUsedValue() != null
+                    && implementationLocation.getDefaultUsedValue().getId() != null
+                    && allowedByImplementationLocation.contains(implementationLocation.getDefaultUsedValue().getId())) {
+                return implementationLocation.getDefaultUsedValue().getId();
+            }
+
+            if (allowedByImplementationLocation.size() == 1) {
+                return allowedByImplementationLocation.iterator().next();
+            }
         }
 
         Set<Long> commonAllowedLevels = null;
@@ -2139,9 +2315,15 @@ public class ImporterUtil {
             return null;
         }
 
-        Long existingImplementationLevel = importDataModel.getImplementation_level();
         if (existingImplementationLevel != null && commonAllowedLevels.contains(existingImplementationLevel)) {
             return existingImplementationLevel;
+        }
+
+        if (implementationLocation != null
+                && implementationLocation.getDefaultUsedValue() != null
+                && implementationLocation.getDefaultUsedValue().getId() != null
+                && commonAllowedLevels.contains(implementationLocation.getDefaultUsedValue().getId())) {
+            return implementationLocation.getDefaultUsedValue().getId();
         }
 
         // Prefer common hard-coded levels if available to keep behavior predictable.

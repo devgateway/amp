@@ -394,6 +394,7 @@ public class DataImporter extends Action {
                 boolean createMissingOrgGroups = dataImporterForm.isCreateMissingOrgGroups();
                 boolean createMissingPrograms = dataImporterForm.isCreateMissingPrograms();
                 boolean replaceExistingTransactions = dataImporterForm.isReplaceExistingTransactions();
+                boolean replaceExistingLocations = dataImporterForm.isReplaceExistingLocations();
                 Long orgGroupId = dataImporterForm.getOrgGroupId();
                 Long defaultActivityStatusId = dataImporterForm.getDefaultActivityStatusId();
                 Long defaultLocationId = dataImporterForm.getDefaultLocationId();
@@ -408,6 +409,7 @@ public class DataImporter extends Action {
                 logger.info("Create missing org groups: " + createMissingOrgGroups);
                 logger.info("Create missing programs: " + createMissingPrograms);
                 logger.info("Replace existing transactions: " + replaceExistingTransactions);
+                logger.info("Replace existing locations: " + replaceExistingLocations);
                 logger.info("Org group id: "+ orgGroupId);
                 logger.info("Default activity status id: {}", defaultActivityStatusId);
                 logger.info("Default location id: {}", defaultLocationId);
@@ -467,9 +469,9 @@ public class DataImporter extends Action {
                         String dataSheetChoice = request.getParameter("dataSheetChoice");
                         String dataSheetName = request.getParameter("dataSheetName");
                         boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
-                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions);
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions);
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
                     }
                 } catch (Exception e) {
                     ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);

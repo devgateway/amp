@@ -544,6 +544,7 @@
       var createMissingOrgGroups = $('#createMissingOrgGroups').prop('checked');
       var createMissingPrograms = $('#createMissingPrograms').prop('checked');
       var replaceExistingTransactions = $('#replaceExistingTransactions').prop('checked');
+      var replaceExistingLocations = $('#replaceExistingLocations').prop('checked');
       var orgGroupId = $('#orgGroupId').val();
       var defaultActivityStatusId = $('#defaultActivityStatusId').val();
       var defaultLocationId = $('#defaultLocationId').val() || $('#defaultLocationId').attr('data-default-location-id') || '';
@@ -562,6 +563,7 @@
       console.log("Create missing org groups", createMissingOrgGroups);
       console.log("Create missing programs", createMissingPrograms);
       console.log("Replace existing transactions", replaceExistingTransactions);
+      console.log("Replace existing locations", replaceExistingLocations);
       console.log("Org group id", orgGroupId);
       console.log("Default activity status id", defaultActivityStatusId);
       console.log("Default location id", defaultLocationId);
@@ -605,6 +607,7 @@
       formData.append('createMissingOrgGroups', createMissingOrgGroups);
       formData.append('createMissingPrograms', createMissingPrograms);
       formData.append('replaceExistingTransactions', replaceExistingTransactions);
+      formData.append('replaceExistingLocations', replaceExistingLocations);
       if (createMissingOrgs && orgGroupId) {
         formData.append('orgGroupId', orgGroupId);
       }
@@ -1217,6 +1220,7 @@
           <label class="toggle-item" for="createMissingOrgGroups"><input type="checkbox" id="createMissingOrgGroups" name="createMissingOrgGroups"> <digi:trn>Create missing organization groups for new organizations</digi:trn></label>
           <label class="toggle-item" for="createMissingPrograms"><input type="checkbox" id="createMissingPrograms" name="createMissingPrograms"> <digi:trn>Create missing programs</digi:trn></label>
           <label class="toggle-item" for="replaceExistingTransactions"><input type="checkbox" id="replaceExistingTransactions" name="replaceExistingTransactions"> <digi:trn>Replace existing transactions</digi:trn></label>
+          <label class="toggle-item" for="replaceExistingLocations"><input type="checkbox" id="replaceExistingLocations" name="replaceExistingLocations"> <digi:trn>Replace existing locations</digi:trn></label>
         </div>
 
         <div id="orgGroupDiv" style="display:none; margin-top:16px;">

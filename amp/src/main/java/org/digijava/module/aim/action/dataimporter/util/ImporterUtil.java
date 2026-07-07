@@ -116,40 +116,43 @@ public class ImporterUtil {
         String componentName = componentNameColumn >= 0 ? getStringValueFromCell(row.getCell(componentNameColumn), true) : null;
         if (importDataModel.getDonor_organization() == null || importDataModel.getDonor_organization().isEmpty()) {
             if (!config.containsValue(ImporterConstants.DONOR_AGENCY)) {
-                Funding f = new Funding();
-                updateFunding(f, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
-                
-                fundings.add(f);
+                if (!populateDonorsFromExistingActivity(importDataModel, existingActivity)) {
+                    Funding f = new Funding();
+                    updateFunding(f, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
+
+                    fundings.add(f);
+                    return fundings;
+                }
+                logger.info("Reusing {} donor(s) from existing activity {} because the funding sheet has no donor agency column",
+                    importDataModel.getDonor_organization().size(), existingActivity != null ? existingActivity.getAmpActivityId() : null);
 
             } else {
                 String donorName = getCellValueByConfig(row, sheet, config, ImporterConstants.DONOR_AGENCY);
                 String donorAgencyCode = getCellValueByConfig(row, sheet, config, ImporterConstants.DONOR_AGENCY_CODE);
                 String donorOrgGroupNames = getCellValueByConfig(row, sheet, config, ImporterConstants.DONOR_ORGANIZATION_GROUP);
                 String resolvedDonorOrgGroups = StringUtils.isNotBlank(donorOrgGroupNames) ? donorOrgGroupNames.trim() : importedOrgGroupName;
-                String resolvedDonorName = StringUtils.isNotBlank(donorName) ? donorName.trim() : "no org";
-                if ("no org".equals(resolvedDonorName)) {
-                    logger.warn("Donor Agency lookup resolved empty while creating funding row; falling back to 'no org'. configKeys='{}', transactionField='{}'",
-                        getKeys(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
+                if (StringUtils.isBlank(donorName) && populateDonorsFromExistingActivity(importDataModel, existingActivity)) {
+                        logger.info("Reusing {} donor(s) from existing activity {} because the funding row has no donor agency value. configKeys='{}', transactionField='{}'",
+                            importDataModel.getDonor_organization().size(), existingActivity != null ? existingActivity.getAmpActivityId() : null, getKeys(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
+                } else {
+                    String resolvedDonorName = StringUtils.isNotBlank(donorName) ? donorName.trim() : "no org";
+                    if ("no org".equals(resolvedDonorName)) {
+                        logger.warn("Donor Agency lookup resolved empty while creating funding row; falling back to 'no org'. configKeys='{}', transactionField='{}'",
+                            getKeys(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
+                    }
+                    updateOrgs(importDataModel, resolvedDonorName, donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
                 }
-                updateOrgs(importDataModel, resolvedDonorName, donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
-                List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
-                List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
-                for (int i = 0; i < donors.size(); i++) {
-                    Funding f = new Funding();
-                    updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
-                    
-                    fundings.add(f);
-                }
-
             }
 
-        } else {
+        }
+
+        if (importDataModel.getDonor_organization() != null && !importDataModel.getDonor_organization().isEmpty()) {
             List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
             List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
             for (int i = 0; i < donors.size(); i++) {
                 Funding f = new Funding();
                 updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
-                
+
                 fundings.add(f);
             }
         }
@@ -190,34 +193,38 @@ public class ImporterUtil {
 
         if (importDataModel.getDonor_organization() == null || importDataModel.getDonor_organization().isEmpty()) {
             if (!config.containsValue(ImporterConstants.DONOR_AGENCY)) {
-                Funding f = new Funding();
-                updateFunding(f, importDataModel, value, entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
-                
-                fundings.add(f);
+                if (!populateDonorsFromExistingActivity(importDataModel, existingActivity)) {
+                    Funding f = new Funding();
+                    updateFunding(f, importDataModel, value, entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
+
+                    fundings.add(f);
+                    return fundings;
+                }
+                logger.info("Reusing {} donor(s) from existing activity {} because the TXT funding row has no donor agency column",
+                    importDataModel.getDonor_organization().size(), existingActivity != null ? existingActivity.getAmpActivityId() : null);
 
             } else {
                 String donorColumn = getCellValueByConfig(row, config, ImporterConstants.DONOR_AGENCY);
                 String donorAgencyCode = getCellValueByConfig(row, config, ImporterConstants.DONOR_AGENCY_CODE);
                 String donorOrgGroupNames = getCellValueByConfig(row, config, ImporterConstants.DONOR_ORGANIZATION_GROUP);
                 String resolvedDonorOrgGroups = StringUtils.isNotBlank(donorOrgGroupNames) ? donorOrgGroupNames.trim() : importedOrgGroupName;
-                String resolvedDonorName = StringUtils.isNotBlank(donorColumn) ? donorColumn.trim() : "no org";
-                if ("no org".equals(resolvedDonorName)) {
-                    logger.info("Donor Agency lookup resolved empty while creating TXT funding row; falling back to 'no org'. configKeys='{}', transactionField='{}'",
-                        getKeys(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
-                }
+                if (StringUtils.isBlank(donorColumn) && populateDonorsFromExistingActivity(importDataModel, existingActivity)) {
+                        logger.info("Reusing {} donor(s) from existing activity {} because the TXT funding row has no donor agency value. configKeys='{}', transactionField='{}'",
+                            importDataModel.getDonor_organization().size(), existingActivity != null ? existingActivity.getAmpActivityId() : null, getKeys(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
+                } else {
+                    String resolvedDonorName = StringUtils.isNotBlank(donorColumn) ? donorColumn.trim() : "no org";
+                    if ("no org".equals(resolvedDonorName)) {
+                        logger.info("Donor Agency lookup resolved empty while creating TXT funding row; falling back to 'no org'. configKeys='{}', transactionField='{}'",
+                            getKeys(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
+                    }
 
-                updateOrgs(importDataModel, resolvedDonorName, donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
-                List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
-                List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
-                for (int i = 0; i < donors.size(); i++) {
-                    Funding f = new Funding();
-                    updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
-                    
-                    fundings.add(f);
+                    updateOrgs(importDataModel, resolvedDonorName, donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
                 }
             }
 
-        } else {
+        }
+
+        if (importDataModel.getDonor_organization() != null && !importDataModel.getDonor_organization().isEmpty()) {
             List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
             List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
             for (int i = 0; i < donors.size(); i++) {
@@ -479,9 +486,6 @@ public class ImporterUtil {
 
     public static <K, V> List<K> getKeys(Map<K, V> map, V value) {
         List<K> keys = new ArrayList<>();
-        if (map == null || map.isEmpty()) {
-            return keys;
-        }
         for (Map.Entry<K, V> entry : map.entrySet()) {
             if (Objects.equals(entry.getValue(), value)) {
                 keys.add(entry.getKey());
@@ -490,10 +494,6 @@ public class ImporterUtil {
         return keys;
     }
 
-    /**
-     * Result of parsing a Measure Type string (e.g. "PC - Planned Commitment").
-     * Used to set commitment/disbursement/expenditure and Actual/Planned for funding.
-     */
     public static class MeasureTypeResult {
         public final boolean commitment;
         public final boolean disbursement;
@@ -508,6 +508,43 @@ public class ImporterUtil {
         }
     }
 
+    private static boolean populateDonorsFromExistingActivity(ImportDataModel importDataModel, AmpActivityVersion existingActivity) {
+        if (existingActivity == null || (importDataModel.getDonor_organization() != null && !importDataModel.getDonor_organization().isEmpty())) {
+            return importDataModel.getDonor_organization() != null && !importDataModel.getDonor_organization().isEmpty();
+        }
+
+        Set<Long> donorOrgIds = new LinkedHashSet<>();
+        if (existingActivity.getOrgrole() != null) {
+            Hibernate.initialize(existingActivity.getOrgrole());
+            for (AmpOrgRole ampOrgRole : existingActivity.getOrgrole()) {
+                if (ampOrgRole.getRole() == null || ampOrgRole.getOrganisation() == null) {
+                    continue;
+                }
+                if (!"DN".equalsIgnoreCase(ampOrgRole.getRole().getRoleCode())) {
+                    continue;
+                }
+                Long orgId = ampOrgRole.getOrganisation().getAmpOrgId();
+                if (orgId != null && donorOrgIds.add(orgId)) {
+                    createDonorOrg(importDataModel, orgId, ampOrgRole.getAmpOrgRoleId());
+                }
+            }
+        }
+
+        if (donorOrgIds.isEmpty() && existingActivity.getFunding() != null) {
+            Hibernate.initialize(existingActivity.getFunding());
+            for (AmpFunding ampFunding : existingActivity.getFunding()) {
+                if (ampFunding.getAmpDonorOrgId() == null) {
+                    continue;
+                }
+                Long orgId = ampFunding.getAmpDonorOrgId().getAmpOrgId();
+                if (orgId != null && donorOrgIds.add(orgId)) {
+                    createDonorOrg(importDataModel, orgId);
+                }
+            }
+        }
+
+        return importDataModel.getDonor_organization() != null && !importDataModel.getDonor_organization().isEmpty();
+    }
     /**
      * Parses a Measure Type value from the template (e.g. "PC - Planned Commitment", "AC", or "Actual Commitment").
      * @return MeasureTypeResult or null if not recognized

@@ -125,8 +125,8 @@ public class ImporterUtil {
                 String resolvedDonorOrgGroups = StringUtils.isNotBlank(donorOrgGroupNames) ? donorOrgGroupNames.trim() : importedOrgGroupName;
                 String resolvedDonorName = StringUtils.isNotBlank(donorName) ? donorName.trim() : "no org";
                 if ("no org".equals(resolvedDonorName)) {
-                    logger.warn("Donor Agency lookup resolved empty while creating funding row; falling back to 'no org'. configKey='{}', transactionField='{}'",
-                            getKey(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
+                    logger.warn("Donor Agency lookup resolved empty while creating funding row; falling back to 'no org'. configKeys='{}', transactionField='{}'",
+                        getKeys(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
                 }
                 updateOrgs(importDataModel, resolvedDonorName, donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
                 List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
@@ -199,8 +199,8 @@ public class ImporterUtil {
                 String resolvedDonorOrgGroups = StringUtils.isNotBlank(donorOrgGroupNames) ? donorOrgGroupNames.trim() : importedOrgGroupName;
                 String resolvedDonorName = StringUtils.isNotBlank(donorColumn) ? donorColumn.trim() : "no org";
                 if ("no org".equals(resolvedDonorName)) {
-                    logger.info("Donor Agency lookup resolved empty while creating TXT funding row; falling back to 'no org'. configKey='{}', transactionField='{}'",
-                            getKey(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
+                    logger.info("Donor Agency lookup resolved empty while creating TXT funding row; falling back to 'no org'. configKeys='{}', transactionField='{}'",
+                        getKeys(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
                 }
 
                 updateOrgs(importDataModel, resolvedDonorName, donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
@@ -467,11 +467,24 @@ public class ImporterUtil {
 
     public static <K, V> K getKey(Map<K, V> map, V value) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
-            if (entry.getValue().equals(value)) {
+            if (Objects.equals(entry.getValue(), value)) {
                 return entry.getKey();
             }
         }
         return null;
+    }
+
+    public static <K, V> List<K> getKeys(Map<K, V> map, V value) {
+        List<K> keys = new ArrayList<>();
+        if (map == null || map.isEmpty()) {
+            return keys;
+        }
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (Objects.equals(entry.getValue(), value)) {
+                keys.add(entry.getKey());
+            }
+        }
+        return keys;
     }
 
     /**
@@ -2817,19 +2830,26 @@ public class ImporterUtil {
 
     /** Parse date from Excel cell or string; returns today if null/empty/invalid. */
     public static Date parseDateDefaultToday(Row row, Sheet sheet, Map<String, String> config, String columnName) {
-        String key = getKey(config, columnName);
-        if (key == null) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        int col = getColumnIndexByName(sheet, key);
-        if (col < 0) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Cell cell = row.getCell(col);
-        if (cell == null) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        String dateStr = extractDateFromStringCell(cell);
-        if (dateStr == null || dateStr.isEmpty()) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        try {
-            return java.sql.Date.valueOf(dateStr);
-        } catch (Exception e) {
-            return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        for (String key : getKeys(config, columnName)) {
+            int col = getColumnIndexByName(sheet, key);
+            if (col < 0) {
+                continue;
+            }
+            Cell cell = row.getCell(col);
+            if (cell == null) {
+                continue;
+            }
+            String dateStr = extractDateFromStringCell(cell);
+            if (dateStr == null || dateStr.isEmpty()) {
+                continue;
+            }
+            try {
+                return java.sql.Date.valueOf(dateStr);
+            } catch (Exception e) {
+                // Try the next configured alias for this field before defaulting.
+            }
         }
+        return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
     /** Add indicator data to an activity from the current row. Called after importTheData when indicator columns are mapped. */
@@ -3497,29 +3517,55 @@ public class ImporterUtil {
     }
 
     public static String getCellValueByConfig(Row row, Sheet sheet, Map<String, String> config, String fieldName) {
-        String key = getKey(config, fieldName);
-        if (key == null) return null;
-        int col = getColumnIndexByName(sheet, key);
-        if (col < 0) return null;
-        return getStringValueFromCell(row.getCell(col), true);
+        String fallbackValue = null;
+        for (String key : getKeys(config, fieldName)) {
+            int col = getColumnIndexByName(sheet, key);
+            if (col < 0) {
+                continue;
+            }
+            String value = getStringValueFromCell(row.getCell(col), true);
+            if (StringUtils.isNotBlank(value)) {
+                return value;
+            }
+            if (fallbackValue == null) {
+                fallbackValue = value;
+            }
+        }
+        return fallbackValue;
     }
 
     public static String getCellValueByConfig(Map<String, String> row, Map<String, String> config, String fieldName) {
-        String key = getKey(config, fieldName);
-        if (key == null || row == null || row.isEmpty()) {
+        if (row == null || row.isEmpty()) {
             return null;
         }
-        if (row.containsKey(key)) {
-            return row.get(key);
-        }
 
-        String normalizedKey = normalizeImporterLookupValue(key);
-        for (Map.Entry<String, String> entry : row.entrySet()) {
-            if (normalizedKey.equalsIgnoreCase(normalizeImporterLookupValue(entry.getKey()))) {
-                return entry.getValue();
+        String fallbackValue = null;
+        for (String key : getKeys(config, fieldName)) {
+            if (row.containsKey(key)) {
+                String value = row.get(key);
+                if (StringUtils.isNotBlank(value)) {
+                    return value;
+                }
+                if (fallbackValue == null) {
+                    fallbackValue = value;
+                }
+                continue;
+            }
+
+            String normalizedKey = normalizeImporterLookupValue(key);
+            for (Map.Entry<String, String> entry : row.entrySet()) {
+                if (normalizedKey.equalsIgnoreCase(normalizeImporterLookupValue(entry.getKey()))) {
+                    String value = entry.getValue();
+                    if (StringUtils.isNotBlank(value)) {
+                        return value;
+                    }
+                    if (fallbackValue == null) {
+                        fallbackValue = value;
+                    }
+                }
             }
         }
-        return null;
+        return fallbackValue;
     }
 
     private static String normalizeImporterLookupValue(String value) {
@@ -3532,38 +3578,38 @@ public class ImporterUtil {
     }
 
     private static double parseDoubleFromConfig(Row row, Sheet sheet, Map<String, String> config, String fieldName) {
-        String key = getKey(config, fieldName);
-        if (key == null) {
+        List<String> keys = getKeys(config, fieldName);
+        if (keys.isEmpty()) {
             if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: no config key for field '{}'", fieldName);
             return Double.NaN;
         }
-        int col = getColumnIndexByName(sheet, key);
-        if (col < 0) {
-            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: column not found for key '{}' in sheet", key);
-            return Double.NaN;
-        }
-        Cell cell = row.getCell(col);
-        if (cell == null) {
-            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: cell is null for col={} key='{}'", col, key);
-            return Double.NaN;
-        }
-        try {
-            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                double v = cell.getNumericCellValue();
-                if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE from numeric cell col='{}' value={}", key, v);
+        for (String key : keys) {
+            int col = getColumnIndexByName(sheet, key);
+            if (col < 0) {
+                continue;
+            }
+            Cell cell = row.getCell(col);
+            if (cell == null) {
+                continue;
+            }
+            try {
+                if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                    double v = cell.getNumericCellValue();
+                    if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE from numeric cell col='{}' value={}", key, v);
+                    return v;
+                }
+                String s = getStringValueFromCell(cell, true);
+                if (s == null || s.trim().isEmpty()) {
+                    continue;
+                }
+                double v = Double.parseDouble(s.trim());
+                if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE from string cell col='{}' raw='{}' parsed={}", key, s, v);
                 return v;
+            } catch (Exception e) {
+                if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE parse failed for col='{}' cellType={} error={}", key, cell.getCellType(), e.getMessage());
             }
-            String s = getStringValueFromCell(cell, true);
-            if (s == null || s.trim().isEmpty()) {
-                if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE cell empty for col='{}'", key);
-                return Double.NaN;
-            }
-            double v = Double.parseDouble(s.trim());
-            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE from string cell col='{}' raw='{}' parsed={}", key, s, v);
-            return v;
-        } catch (Exception e) {
-            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE parse failed for col='{}' cellType={} error={}", key, cell.getCellType(), e.getMessage());
-            return Double.NaN;
         }
+        if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: no usable value found for field '{}' across config keys {}", fieldName, keys);
+        return Double.NaN;
     }
 }

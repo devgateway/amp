@@ -3382,6 +3382,7 @@ public class ImporterUtil {
         if (programName == null || programName.trim().isEmpty()) {
             return null;
         }
+        logger.info("Creating new program '{}' for classification '{}'", programName, classification);
         try {
             AmpTheme newTheme = new AmpTheme();
             String trimmedName = programName.trim();

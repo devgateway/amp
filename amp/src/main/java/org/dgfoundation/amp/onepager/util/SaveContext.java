@@ -38,7 +38,7 @@ public final class SaveContext {
         if (!updateActivityStatus) {
             return JOB_CONTEXT;
         }
-        return new SaveContext(ActivitySource.JOB, true, false, true, true);
+        return new SaveContext(ActivitySource.JOB, true, false, true, false);
     }
 
     public static SaveContext patch() {

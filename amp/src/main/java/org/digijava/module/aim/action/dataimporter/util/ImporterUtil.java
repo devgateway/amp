@@ -119,13 +119,16 @@ public class ImporterUtil {
                 fundings.add(f);
 
             } else {
-                int columnIndex1 = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY));
-                int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
-                int donorOrgGroupColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_ORGANIZATION_GROUP));
-                String donorAgencyCode = donorAgencyCodeColumn >= 0 ? getStringValueFromCell(row.getCell(donorAgencyCodeColumn), true) : null;
-                String donorOrgGroupNames = donorOrgGroupColumn >= 0 ? getStringValueFromCell(row.getCell(donorOrgGroupColumn), false) : null;
+                String donorName = getCellValueByConfig(row, sheet, config, ImporterConstants.DONOR_AGENCY);
+                String donorAgencyCode = getCellValueByConfig(row, sheet, config, ImporterConstants.DONOR_AGENCY_CODE);
+                String donorOrgGroupNames = getCellValueByConfig(row, sheet, config, ImporterConstants.DONOR_ORGANIZATION_GROUP);
                 String resolvedDonorOrgGroups = StringUtils.isNotBlank(donorOrgGroupNames) ? donorOrgGroupNames.trim() : importedOrgGroupName;
-                updateOrgs(importDataModel, columnIndex1 >= 0 ? Objects.requireNonNull(getStringValueFromCell(row.getCell(columnIndex1), false)).trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
+                String resolvedDonorName = StringUtils.isNotBlank(donorName) ? donorName.trim() : "no org";
+                if ("no org".equals(resolvedDonorName)) {
+                    logger.warn("Donor Agency lookup resolved empty while creating funding row; falling back to 'no org'. configKey='{}', transactionField='{}'",
+                            getKey(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
+                }
+                updateOrgs(importDataModel, resolvedDonorName, donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
                 List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
                 List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
                 for (int i = 0; i < donors.size(); i++) {
@@ -190,12 +193,17 @@ public class ImporterUtil {
                 fundings.add(f);
 
             } else {
-                String donorColumn = row.get(getKey(config, ImporterConstants.DONOR_AGENCY));
-                String donorAgencyCode = row.get(getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
-                String donorOrgGroupNames = row.get(getKey(config, ImporterConstants.DONOR_ORGANIZATION_GROUP));
+                String donorColumn = getCellValueByConfig(row, config, ImporterConstants.DONOR_AGENCY);
+                String donorAgencyCode = getCellValueByConfig(row, config, ImporterConstants.DONOR_AGENCY_CODE);
+                String donorOrgGroupNames = getCellValueByConfig(row, config, ImporterConstants.DONOR_ORGANIZATION_GROUP);
                 String resolvedDonorOrgGroups = StringUtils.isNotBlank(donorOrgGroupNames) ? donorOrgGroupNames.trim() : importedOrgGroupName;
+                String resolvedDonorName = StringUtils.isNotBlank(donorColumn) ? donorColumn.trim() : "no org";
+                if ("no org".equals(resolvedDonorName)) {
+                    logger.warn("Donor Agency lookup resolved empty while creating TXT funding row; falling back to 'no org'. configKey='{}', transactionField='{}'",
+                            getKey(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
+                }
 
-                updateOrgs(importDataModel, donorColumn != null && !donorColumn.isEmpty() ? donorColumn.trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
+                updateOrgs(importDataModel, resolvedDonorName, donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
                 List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
                 List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
                 for (int i = 0; i < donors.size(); i++) {
@@ -2786,10 +2794,15 @@ public class ImporterUtil {
 
     public static int getColumnIndexByName(Sheet sheet, String columnName) {
         try {
+            String normalizedColumnName = normalizeImporterLookupValue(columnName);
+            if (normalizedColumnName.isEmpty()) {
+                return -1;
+            }
             Row headerRow = sheet.getRow(0);
             for (int i = 0; i < headerRow.getLastCellNum(); i++) {
                 Cell cell = headerRow.getCell(i);
-                if (cell != null && columnName.equals(cell.getStringCellValue())) {
+                String headerValue = normalizeImporterLookupValue(getStringValueFromCell(cell, true));
+                if (cell != null && normalizedColumnName.equalsIgnoreCase(headerValue)) {
                     return i;
                 }
             }
@@ -3489,6 +3502,33 @@ public class ImporterUtil {
         int col = getColumnIndexByName(sheet, key);
         if (col < 0) return null;
         return getStringValueFromCell(row.getCell(col), true);
+    }
+
+    public static String getCellValueByConfig(Map<String, String> row, Map<String, String> config, String fieldName) {
+        String key = getKey(config, fieldName);
+        if (key == null || row == null || row.isEmpty()) {
+            return null;
+        }
+        if (row.containsKey(key)) {
+            return row.get(key);
+        }
+
+        String normalizedKey = normalizeImporterLookupValue(key);
+        for (Map.Entry<String, String> entry : row.entrySet()) {
+            if (normalizedKey.equalsIgnoreCase(normalizeImporterLookupValue(entry.getKey()))) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    private static String normalizeImporterLookupValue(String value) {
+        if (value == null) {
+            return "";
+        }
+        return value.replace('\u00A0', ' ')
+                .replace('\u202F', ' ')
+                .trim();
     }
 
     private static double parseDoubleFromConfig(Row row, Sheet sheet, Map<String, String> config, String fieldName) {

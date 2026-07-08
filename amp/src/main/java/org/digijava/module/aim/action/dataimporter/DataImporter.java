@@ -670,6 +670,9 @@ public class DataImporter extends Action {
         fieldsInfos.add(ImporterConstants.SECONDARY_SECTOR);
         fieldsInfos.add(ImporterConstants.PROJECT_LOCATION);
         fieldsInfos.add(ImporterConstants.PROJECT_START_DATE);
+        fieldsInfos.add(ImporterConstants.PROPOSED_PROJECT_START_DATE);
+        fieldsInfos.add(ImporterConstants.PROPOSED_PROJECT_END_DATE);
+        fieldsInfos.add(ImporterConstants.PROJECT_AGREEMENT_SIGN_DATE);
         fieldsInfos.add(ImporterConstants.PROJECT_END_DATE);
         fieldsInfos.add(ImporterConstants.DONOR_AGENCY);
         fieldsInfos.add(ImporterConstants.EXCHANGE_RATE);

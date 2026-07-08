@@ -261,6 +261,27 @@ public class ExcelImporter {
                                         }
                                         break;
                                     }
+                                    case ImporterConstants.PROJECT_AGREEMENT_SIGN_DATE: {
+                                        String formatted = org.digijava.module.aim.action.dataimporter.util.ImporterUtil.extractDateFromStringCell(cell);
+                                        if (formatted != null) {
+                                            importDataModel.setActual_approval_date(formatted);
+                                        }
+                                        break;
+                                    }
+                                    case ImporterConstants.PROPOSED_PROJECT_START_DATE: {
+                                        String formatted = org.digijava.module.aim.action.dataimporter.util.ImporterUtil.extractDateFromStringCell(cell);
+                                        if (formatted != null) {
+                                            importDataModel.setProposed_start_date(formatted);
+                                        }
+                                        break;
+                                    }
+                                    case ImporterConstants.PROPOSED_PROJECT_END_DATE: {
+                                        String formatted = org.digijava.module.aim.action.dataimporter.util.ImporterUtil.extractDateFromStringCell(cell);
+                                        if (formatted != null) {
+                                            importDataModel.setOriginal_completion_date(formatted);
+                                        }
+                                        break;
+                                    }
                                     case ImporterConstants.PROJECT_END_DATE: {
                                         String formatted = org.digijava.module.aim.action.dataimporter.util.ImporterUtil.extractDateFromStringCell(cell);
                                         if (formatted != null) {

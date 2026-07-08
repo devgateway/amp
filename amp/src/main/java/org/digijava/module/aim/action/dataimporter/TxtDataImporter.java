@@ -173,6 +173,36 @@ public class TxtDataImporter {
                                 }
                                 break;
                             }
+                            case ImporterConstants.PROPOSED_PROJECT_START_DATE: {
+                                String dateStr = entryValue;
+                                if (dateStr != null && !dateStr.trim().isEmpty()) {
+                                    String formatted = org.digijava.module.aim.action.dataimporter.util.ImporterUtil.formatDateFromDateObject(dateStr.trim());
+                                    if (formatted != null) {
+                                        importDataModel.setProposed_start_date(formatted);
+                                    }
+                                }
+                                break;
+                            }
+                            case ImporterConstants.PROPOSED_PROJECT_END_DATE: {
+                                String dateStr = entryValue;
+                                if (dateStr != null && !dateStr.trim().isEmpty()) {
+                                    String formatted = org.digijava.module.aim.action.dataimporter.util.ImporterUtil.formatDateFromDateObject(dateStr.trim());
+                                    if (formatted != null) {
+                                        importDataModel.setOriginal_completion_date(formatted);
+                                    }
+                                }
+                                break;
+                            }
+                            case ImporterConstants.PROJECT_AGREEMENT_SIGN_DATE: {
+                                String dateStr = entryValue;
+                                if (dateStr != null && !dateStr.trim().isEmpty()) {
+                                    String formatted = org.digijava.module.aim.action.dataimporter.util.ImporterUtil.formatDateFromDateObject(dateStr.trim());
+                                    if (formatted != null) {
+                                        importDataModel.setActual_approval_date(formatted);
+                                    }
+                                }
+                                break;
+                            }
                             case ImporterConstants.PROJECT_END_DATE: {
                                 String dateStr = entryValue;
                                 if (dateStr != null && !dateStr.trim().isEmpty()) {

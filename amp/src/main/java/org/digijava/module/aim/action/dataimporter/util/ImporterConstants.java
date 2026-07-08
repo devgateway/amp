@@ -30,6 +30,9 @@ public final class ImporterConstants {
     public static final String SECONDARY_SECTOR = "Secondary Sector";
     public static final String PROJECT_LOCATION = "Project Location";
     public static final String PROJECT_START_DATE = "Project Start Date";
+    public static final String PROPOSED_PROJECT_START_DATE = "Proposed Project Start Date";
+    public static final String PROPOSED_PROJECT_END_DATE = "Proposed Project End Date";
+    public static final String PROJECT_AGREEMENT_SIGN_DATE = "Project Agreement Sign Date";
     public static final String PROJECT_END_DATE = "Project End Date";
     public static final String DONOR_AGENCY = "Donor Agency";
     public static final String DONOR_AGENCY_CODE = "Donor Agency Code";

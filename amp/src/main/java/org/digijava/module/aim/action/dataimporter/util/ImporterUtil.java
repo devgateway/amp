@@ -25,6 +25,7 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProjectCurrency;
 import org.digijava.module.aim.action.dataimporter.model.*;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -1261,7 +1262,9 @@ public class ImporterUtil {
                 importedProject.setImportStatus(ImportStatus.FAILED);
             } else {
                 importedProject.setImportStatus(ImportStatus.SUCCESS);
-                activityId = existing != null ? existing.getAmpActivityId() : (Long) response.getContent().getAmpActivityId();
+                activityId = response.getContent() != null
+                    ? (Long) response.getContent().getAmpActivityId()
+                        : (existing != null ? existing.getAmpActivityId() : null);
                 logger.info("Successfully imported the project. Now adding component if present");
                 logger.info("--------------------------------");
                 logger.info("Component name at start: " + componentName);
@@ -1400,28 +1403,31 @@ public class ImporterUtil {
                 if (ampOrgRole.getRole() == null) continue;
                 String roleCode = ampOrgRole.getRole().getRoleCode();
                 if (roleCode == null) continue;
+                if (!shouldPreserveExistingOrgRole(importDataModel, roleCode)) {
+                    continue;
+                }
                 Long orgId = ampOrgRole.getOrganisation().getAmpOrgId();
                 Long orgRoleId = ampOrgRole.getAmpOrgRoleId();
-                if (roleCode.equalsIgnoreCase("DN")) {
+                if (roleCode.equalsIgnoreCase(Constants.FUNDING_AGENCY)) {
                     createDonorOrg(importDataModel, orgId, orgRoleId);
-                } else if (roleCode.equalsIgnoreCase("RO")) {
+                } else if (roleCode.equalsIgnoreCase(Constants.RESPONSIBLE_ORGANISATION)) {
                     Organization org = new Organization();
                     org.setOrganization(orgId);
                     if (orgRoleId != null) org.setId(orgRoleId);
                     importDataModel.getResponsible_organization().add(org);
-                } else if (roleCode.equalsIgnoreCase("BA")) {
+                } else if (roleCode.equalsIgnoreCase(Constants.BENEFICIARY_AGENCY)) {
                     Organization org = new Organization();
                     org.setOrganization(orgId);
                     if (orgRoleId != null) org.setId(orgRoleId);
                     importDataModel.getBeneficiary_agency().add(org);
-                } else if (roleCode.equalsIgnoreCase("EA")) {
+                } else if (roleCode.equalsIgnoreCase(Constants.EXECUTING_AGENCY)) {
                     Organization org = new Organization();
                     org.setOrganization(orgId);
                     if (orgRoleId != null) org.setId(orgRoleId);
                     importDataModel.getExecuting_agency().add(org);
-                } else if (roleCode.equalsIgnoreCase("IA")) {
+                } else if (roleCode.equalsIgnoreCase(Constants.IMPLEMENTING_AGENCY)) {
                     createImplementingAgency(importDataModel, orgId, orgRoleId);
-                } else if (roleCode.equalsIgnoreCase("CA")) {
+                } else if (roleCode.equalsIgnoreCase(Constants.CONTRACTING_AGENCY)) {
                     Organization org = new Organization();
                     org.setOrganization(orgId);
                     if (orgRoleId != null) org.setId(orgRoleId);
@@ -1438,6 +1444,32 @@ public class ImporterUtil {
                 createSector(importDataModel, primary, ampActivitySector.getSectorId().getAmpSectorId(), ampActivitySector.getAmpActivitySectorId());
             }
         }
+    }
+
+    private static boolean shouldPreserveExistingOrgRole(ImportDataModel importDataModel, String roleCode) {
+        if (roleCode.equalsIgnoreCase(Constants.FUNDING_AGENCY)) {
+            return !hasOrganizations(importDataModel.getDonor_organization());
+        }
+        if (roleCode.equalsIgnoreCase(Constants.RESPONSIBLE_ORGANISATION)) {
+            return !hasOrganizations(importDataModel.getResponsible_organization());
+        }
+        if (roleCode.equalsIgnoreCase(Constants.BENEFICIARY_AGENCY)) {
+            return !hasOrganizations(importDataModel.getBeneficiary_agency());
+        }
+        if (roleCode.equalsIgnoreCase(Constants.EXECUTING_AGENCY)) {
+            return !hasOrganizations(importDataModel.getExecuting_agency());
+        }
+        if (roleCode.equalsIgnoreCase(Constants.IMPLEMENTING_AGENCY)) {
+            return !hasOrganizations(importDataModel.getImplementing_agency());
+        }
+        if (roleCode.equalsIgnoreCase(Constants.CONTRACTING_AGENCY)) {
+            return !hasOrganizations(importDataModel.getContracting_agency());
+        }
+        return true;
+    }
+
+    private static boolean hasOrganizations(Collection<? extends Organization> organizations) {
+        return organizations != null && !organizations.isEmpty();
     }
 
     /**

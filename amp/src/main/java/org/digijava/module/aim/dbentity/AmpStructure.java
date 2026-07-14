@@ -62,7 +62,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     @InterchangeableBackReference
     private AmpActivityVersion activity;
     
-    private Set<AmpStructureImg> images;
+    private Set<AmpStructureImg> images = new HashSet<>();
     
     @Interchangeable(fieldTitle = "Coordinates", importable = true, fmPath = "/Activity Form/Structures/Map")
     private List<AmpStructureCoordinate> coordinates = new ArrayList<>();
@@ -194,9 +194,12 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
                 auxImg.setStructure(aux);
                 auxSetImages.add(auxImg);
             }
-            aux.setImages(auxSetImages);
+            aux.getImages().clear();
+            aux.getImages().addAll(auxSetImages);
         } else {
-            aux.setImages(new HashSet<>());
+
+            aux.getImages().clear();
+            aux.getImages().addAll(new HashSet<>());
         }
 
         if (aux.getCoordinates() != null && !aux.getCoordinates().isEmpty()) {

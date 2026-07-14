@@ -86,11 +86,11 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                             for (ReportArea statusData : location.getChildren()) {
                                 TextCell statusCell = (TextCell) statusData.getContents().get(status);
                                 for (ReportArea typeOfAssistanceData : statusData.getChildren()) {
-                                //for (ReportArea reportSystemData : statusData.getChildren()) {
+                                    //for (ReportArea reportSystemData : statusData.getChildren()) {
                                     TextCell typeOfAssistanceCell= (TextCell) typeOfAssistanceData.getContents().get(typeOfAssistance);
                                     //TextCell reportSystemCell = (TextCell) reportSystemData.getContents().get(reportingSystem);
                                     for (ReportArea reportSystemData : typeOfAssistanceData.getChildren()) {
-                                    //for (ReportArea typeOfAssistanceData : reportSystemData.getChildren()) {
+                                        //for (ReportArea typeOfAssistanceData : reportSystemData.getChildren()) {
                                         TextCell reportSystemCell = (TextCell)  reportSystemData.getContents().get(reportingSystem);
                                         //TextCell typeOfAssistanceCell = (TextCell) typeOfAssistanceData.getContents().get(typeOfAssistance);
                                         for (Map.Entry<ReportOutputColumn, ReportCell> content : reportSystemData.getContents().entrySet()) {
@@ -182,6 +182,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             // Convert the ampDashboardFunding to JSON using a JSON library (e.g., Gson)
             Gson gson = new Gson();
             String jsonData = gson.toJson(ampDashboardFunding);
+            logger.info("Data sent: "+jsonData);
 
             // Get the output stream of the connection
             try (OutputStream os = connection.getOutputStream()) {

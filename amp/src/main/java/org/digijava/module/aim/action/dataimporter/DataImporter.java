@@ -61,6 +61,7 @@ import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.OrganisationUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -782,24 +783,14 @@ public class DataImporter extends Action {
     }
 
     private List<AmpOrganisation> getRecordingOrganizationsForImporter() {
-        List<AmpOrganisation> organizations = DbUtil.getOrganisations();
+        List<AmpOrganisation> organizations = OrganisationUtil.getAllOrganisations();
         if (organizations == null) {
             organizations = new ArrayList<>();
-        }
-        if (organizations.isEmpty()) {
-            String queryString = "select org from " + AmpOrganisation.class.getName()
-                    + " org where (org.deleted is null or org.deleted = false)";
-            List<?> rawOrganizations = PersistenceManager.getSession().createQuery(queryString).list();
-            organizations = new ArrayList<>();
-            for (Object candidate : rawOrganizations) {
-                if (candidate instanceof AmpOrganisation) {
-                    organizations.add((AmpOrganisation) candidate);
-                }
-            }
         }
 
         return organizations.stream()
                 .filter(Objects::nonNull)
+                .filter(org -> org.getDeleted() == null || !org.getDeleted())
                 .sorted((left, right) -> {
                     String leftName = left.getName();
                     String rightName = right.getName();

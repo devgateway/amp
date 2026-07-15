@@ -61,7 +61,6 @@ import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
-import org.digijava.module.aim.util.OrganisationUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -783,19 +782,29 @@ public class DataImporter extends Action {
     }
 
     private List<AmpOrganisation> getRecordingOrganizationsForImporter() {
-        List<AmpOrganisation> organizations = OrganisationUtil.getAllOrganisations();
+        List<AmpOrganisation> organizations = DbUtil.getAmpOrganisations(null);
         if (organizations == null) {
             organizations = new ArrayList<>();
         }
+        logger.info("Found {} recording organizations in cache for importer", organizations.size());
+        if (organizations.isEmpty()) {
+            String queryString = "select org from " + AmpOrganisation.class.getName()
+                    + " org inner join org.orgGrpId grp"
+                    + " where (org.deleted is null or org.deleted = false)"
+                    + " and (grp.deleted is null or grp.deleted = false)";
+            List<?> rawOrganizations = PersistenceManager.getSession().createQuery(queryString).list();
+            organizations = new ArrayList<>();
+            for (Object candidate : rawOrganizations) {
+                if (candidate instanceof AmpOrganisation) {
+                    organizations.add((AmpOrganisation) candidate);
+                }
+            }
+        }
+        logger.info("Found {} recording organizations for importer", organizations.size());
+
 
         return organizations.stream()
                 .filter(Objects::nonNull)
-                .filter(org -> org.getDeleted() == null || !org.getDeleted())
-                .sorted((left, right) -> {
-                    String leftName = left.getName();
-                    String rightName = right.getName();
-                    return Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER).compare(leftName, rightName);
-                })
                 .collect(Collectors.toList());
     }
 

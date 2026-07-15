@@ -3,7 +3,7 @@ name: Build & Push AMP image to ECR
 on:
   push:
     branches:
-      - "**"          # all branches
+      - "task/AMP-31085/Update-TruBudget-Branch-with-latest-develolp"          # all branches
   workflow_dispatch:  # allow manual trigger
 
 jobs:

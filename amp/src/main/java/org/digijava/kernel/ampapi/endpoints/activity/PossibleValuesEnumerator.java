@@ -244,6 +244,12 @@ public class PossibleValuesEnumerator {
             discriminatorValue = apiField.getDiscriminatorValue();
         }
         if (StringUtils.isBlank(discriminatorValue)) {
+            if (clazz.equals(AmpCategoryValue.class)) {
+                LOGGER.warn("Missing discriminator for category field " + apiField.getFieldName()
+                        + " (" + apiField.getFieldNameInternal() + ")"
+                        + ". Falling back to generic category value enumeration.");
+                return new GenericPossibleValuesProvider(clazz, () -> possibleValuesDAO.getGenericValues(clazz));
+            }
             throw InterchangeUtils.newServerErrorException("Field without discriminator value. " + apiField);
         }
 

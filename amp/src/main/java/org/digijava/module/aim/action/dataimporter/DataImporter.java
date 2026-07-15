@@ -109,15 +109,7 @@ public class DataImporter extends Action {
         request.setAttribute("configNames", configNames);
         List<AmpOrgGroup> orgGroups = DbUtil.getAllOrgGroups();
         request.setAttribute("orgGroups", orgGroups);
-        List<AmpOrganisation> recordingOrganizations = DbUtil.getOrganisations();
-        if (recordingOrganizations == null) {
-            recordingOrganizations = new ArrayList<>();
-        }
-        recordingOrganizations.sort((left, right) -> {
-            String leftName = left != null ? left.getName() : null;
-            String rightName = right != null ? right.getName() : null;
-            return Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER).compare(leftName, rightName);
-        });
+        List<AmpOrganisation> recordingOrganizations = getRecordingOrganizationsForImporter();
         request.setAttribute("recordingOrganizations", recordingOrganizations);
         request.setAttribute("activityStatuses", getActivityStatuses());
         request.setAttribute("programClassifications", getProgramClassificationNames());
@@ -786,6 +778,33 @@ public class DataImporter extends Action {
                 .map(AmpActivityProgramSettings::getName)
                 .filter(Objects::nonNull)
                 .sorted(String.CASE_INSENSITIVE_ORDER)
+                .collect(Collectors.toList());
+    }
+
+    private List<AmpOrganisation> getRecordingOrganizationsForImporter() {
+        List<AmpOrganisation> organizations = DbUtil.getOrganisations();
+        if (organizations == null) {
+            organizations = new ArrayList<>();
+        }
+        if (organizations.isEmpty()) {
+            String queryString = "select org from " + AmpOrganisation.class.getName()
+                    + " org where (org.deleted is null or org.deleted = false)";
+            List<?> rawOrganizations = PersistenceManager.getSession().createQuery(queryString).list();
+            organizations = new ArrayList<>();
+            for (Object candidate : rawOrganizations) {
+                if (candidate instanceof AmpOrganisation) {
+                    organizations.add((AmpOrganisation) candidate);
+                }
+            }
+        }
+
+        return organizations.stream()
+                .filter(Objects::nonNull)
+                .sorted((left, right) -> {
+                    String leftName = left.getName();
+                    String rightName = right.getName();
+                    return Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER).compare(leftName, rightName);
+                })
                 .collect(Collectors.toList());
     }
 

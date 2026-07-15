@@ -2899,7 +2899,8 @@ public class ImporterUtil {
         if (importDataModel.getActivity_internal_ids() == null) {
             importDataModel.setActivity_internal_ids(new LinkedHashSet<>());
         }
-        for (String internalIdValue : splitMultipleValues(rawInternalIds)) {
+        // Accept multiple internal IDs in one cell separated by semicolons.
+        for (String internalIdValue : splitMultipleValues(rawInternalIds, "[;\\n\\r\\u061B\\uFF1B]")) {
             if (internalIdValue == null || internalIdValue.trim().isEmpty()) {
                 continue;
             }

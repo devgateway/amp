@@ -304,76 +304,10 @@ public final class ActivityInterchangeUtils {
                     .map(Map.Entry::getValue)
                     .findFirst();
 
-            addNonDisaggregatedIndicatorValues(indicatorsObject, projectId);
             addActualIndicatorValues(indicatorsObject, projectId);
             addDisaggregationValues(indicatorsObject, projectId);
             resolveIndicatorActivityLocations(indicatorsObject);
         }
-    }
-
-    private static void addNonDisaggregatedIndicatorValues(Optional<Object> indicatorsObject, Long projectId) {
-        indicatorsObject.ifPresent(indicators -> {
-            if (!(indicators instanceof ArrayList)) {
-                return;
-            }
-            List<Map<String, Object>> indicatorsList = (ArrayList<Map<String, Object>>) indicators;
-            AmpActivityVersion activity;
-            try {
-                activity = ActivityUtil.loadActivity(projectId);
-            } catch (DgException e) {
-                throw new RuntimeException(e);
-            }
-
-            for (Map<String, Object> indicator : indicatorsList) {
-                Long indicatorId = parseLong(indicator.get("indicator"));
-                if (indicatorId == null) {
-                    continue;
-                }
-                Long activityLocationId = parseLong(indicator.get("activity_location"));
-                AmpActivityLocation activityLocation = getActivityLocation(projectId, activityLocationId);
-                boolean singleLocationFallback = activityLocationId == null && activityLocation != null;
-
-                AmpIndicator ind = new AmpIndicator();
-                ind.setIndicatorId(indicatorId);
-
-                List<IndicatorActivity> results = IndicatorUtil.findActivityIndicatorConnections(activity, ind);
-                AmpIndicatorValue baseValue = null;
-                AmpIndicatorValue targetValue = null;
-                AmpIndicatorValue revisedValue = null;
-
-                for (IndicatorActivity result : results) {
-                    if (result == null) {
-                        continue;
-                    }
-                    if (!matchesIndicatorActivityLocation(result.getActivityLocation(), activityLocation,
-                            singleLocationFallback)) {
-                        continue;
-                    }
-                    if (result.getValues() == null) {
-                        continue;
-                    }
-
-                    for (AmpIndicatorValue indicatorValue : result.getValues()) {
-                        if (!matchesIndicatorValueActivityLocation(indicatorValue, result, activityLocation,
-                                singleLocationFallback)) {
-                            continue;
-                        }
-
-                        if (indicatorValue.getValueType() == AmpIndicatorValue.BASE && baseValue == null) {
-                            baseValue = indicatorValue;
-                        } else if (indicatorValue.getValueType() == AmpIndicatorValue.TARGET && targetValue == null) {
-                            targetValue = indicatorValue;
-                        } else if (indicatorValue.getValueType() == AmpIndicatorValue.REVISED && revisedValue == null) {
-                            revisedValue = indicatorValue;
-                        }
-                    }
-                }
-
-                indicator.put("base", serializeIndicatorValue(baseValue));
-                indicator.put("target", serializeIndicatorValue(targetValue));
-                indicator.put("revised", serializeIndicatorValue(revisedValue));
-            }
-        });
     }
 
     /**

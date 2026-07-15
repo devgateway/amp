@@ -714,8 +714,12 @@ public class ImporterUtil {
         Session session = getSession();
         Long currencyId = getCurrencyId(session, currencyCode);
         Long adjType = getCategoryValue("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY, adjustmentType);
-        Long assType = getCategoryValue("assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, assistanceType);
-        Long finInstrument = getCategoryValue("finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, finInst);
+        Long assType = StringUtils.isBlank(assistanceType)
+            ? getCategoryValue("assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "")
+            : getOrCreateCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY, assistanceType.trim(), session);
+        Long finInstrument = StringUtils.isBlank(finInst)
+            ? getCategoryValue("finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, "")
+            : getOrCreateCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY, finInst.trim(), session);
         Long orgRole = getOrganizationRole(session);
 
 
@@ -989,41 +993,46 @@ public class ImporterUtil {
     }
 
     /**
-     * Resolves activity (project) status by value: looks up existing category value for ACTIVITY_STATUS_KEY;
-     * if not found in DB, creates a new category value and returns its id.
-     * @param statusValue value from the file (e.g. "Ongoing", "Completed")
-     * @param session current session (used for create and flush)
-     * @return category value id, or null if statusValue is null/empty
+     * Resolves a category value by key and value text; creates it when missing.
+     * @param categoryKey category class key (e.g. "type_of_assistence")
+     * @param valueName value name from import row
+     * @param session current Hibernate session
+     * @return category value id, or null if the category class cannot be resolved
      */
-    public static Long getOrCreateActivityStatusCategoryValue(String statusValue, Session session) {
-        if (statusValue == null || statusValue.trim().isEmpty()) return null;
-        String trimmed = statusValue.trim();
-        String cacheKey = "statusId_" + trimmed;
+    public static Long getOrCreateCategoryValue(String categoryKey, String valueName, Session session) {
+        if (valueName == null || valueName.trim().isEmpty()) {
+            return null;
+        }
+        String trimmed = valueName.trim();
+        String cacheKey = "catOrCreate_" + categoryKey + "_" + trimmed;
         if (ConstantsMap.containsKey(cacheKey)) {
             return ConstantsMap.get(cacheKey);
         }
         if (!session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
+
         String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
         Query query = session.createQuery(hql);
-        query.setParameter("categoryKey", CategoryConstants.ACTIVITY_STATUS_KEY);
+        query.setParameter("categoryKey", categoryKey);
         @SuppressWarnings("unchecked")
         List<AmpCategoryValue> values = (List<AmpCategoryValue>) query.list();
         if (values != null) {
             for (AmpCategoryValue cv : values) {
-                if (cv.getValue() != null && cv.getValue().equalsIgnoreCase(trimmed)) {
+                if (cv.getValue() != null && cv.getValue().trim().equalsIgnoreCase(trimmed)) {
                     Long id = cv.getId();
                     ConstantsMap.put(cacheKey, id);
                     return id;
                 }
             }
         }
-        AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
+
+        AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(categoryKey);
         if (categoryClass == null) {
-            logger.warn("Activity status category class not found; cannot create value: " + trimmed);
+            logger.warn("Category class not found; cannot create value: key={}, value={}", categoryKey, trimmed);
             return null;
         }
+
         try {
             AmpCategoryValue newValue = new AmpCategoryValue();
             newValue.setValue(trimmed);
@@ -1037,13 +1046,25 @@ public class ImporterUtil {
             Long id = newValue.getId();
             if (id != null) {
                 ConstantsMap.put(cacheKey, id);
-                logger.info("Created new activity status category value: " + trimmed + " (id=" + id + ")");
+                logger.info("Created new category value: key={}, value={}, id={}", categoryKey, trimmed, id);
                 return id;
             }
         } catch (Exception e) {
-            logger.warn("Failed to create activity status value: " + trimmed, e);
+            logger.warn("Failed to create category value: key={}, value={}", categoryKey, trimmed, e);
         }
         return null;
+    }
+
+    /**
+     * Resolves activity (project) status by value: looks up existing category value for ACTIVITY_STATUS_KEY;
+     * if not found in DB, creates a new category value and returns its id.
+     * @param statusValue value from the file (e.g. "Ongoing", "Completed")
+     * @param session current session (used for create and flush)
+     * @return category value id, or null if statusValue is null/empty
+     */
+    public static Long getOrCreateActivityStatusCategoryValue(String statusValue, Session session) {
+        if (statusValue == null || statusValue.trim().isEmpty()) return null;
+        return getOrCreateCategoryValue(CategoryConstants.ACTIVITY_STATUS_KEY, statusValue.trim(), session);
     }
 
     public static AmpActivityVersion existingActivity(String projectTitle, String projectCode, Session session) {

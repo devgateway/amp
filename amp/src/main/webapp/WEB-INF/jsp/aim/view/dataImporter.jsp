@@ -1291,7 +1291,13 @@
           <select id="defaultRecordingOrganizationId" name="defaultRecordingOrganizationId" style="width: 100%;">
             <option value=""><digi:trn>-- Select Recording Organization --</digi:trn></option>
             <c:forEach var="organization" items="${recordingOrganizations}">
-              <option value="${organization.ampOrgId}">${organization.name}</option>
+                <option value="${organization.ampOrgId}">
+                  <c:choose>
+                    <c:when test="${not empty organization.acronymAndName}">${organization.acronymAndName}</c:when>
+                    <c:when test="${not empty organization.orgCode}">${organization.orgCode} - ${organization.name}</c:when>
+                    <c:otherwise>${organization.name} (#${organization.ampOrgId})</c:otherwise>
+                  </c:choose>
+                </option>
             </c:forEach>
           </select>
         </div>

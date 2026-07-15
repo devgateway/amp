@@ -548,7 +548,6 @@ public final class ActivityInterchangeUtils {
         return actualValue;
     }
 
-
     private static void filterPropertyBasedOnUserPermission(Map<String, Object> activity, Long projectId) {
         final Long donorRole = DbUtil.getAmpRole(Constants.FUNDING_AGENCY).getAmpRoleId();
         UserSessionInformation userInformation = SecurityService.getInstance().getUserSessionInformation();

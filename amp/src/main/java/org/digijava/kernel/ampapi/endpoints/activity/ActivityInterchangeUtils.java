@@ -548,12 +548,6 @@ public final class ActivityInterchangeUtils {
         return actualValue;
     }
 
-    private static Map<String, Object> serializeIndicatorValue(AmpIndicatorValue indicatorValue) {
-        if (indicatorValue == null) {
-            return null;
-        }
-        return serializeIndicatorActualValue(indicatorValue);
-    }
 
     private static void filterPropertyBasedOnUserPermission(Map<String, Object> activity, Long projectId) {
         final Long donorRole = DbUtil.getAmpRole(Constants.FUNDING_AGENCY).getAmpRoleId();

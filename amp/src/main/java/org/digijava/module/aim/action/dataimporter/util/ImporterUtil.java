@@ -2865,6 +2865,51 @@ public class ImporterUtil {
         createDonorOrg(importDataModel, orgId, null);
     }
 
+    public static void applyActivityInternalIds(ImportDataModel importDataModel,
+                                                String rawInternalIds,
+                                                String recordingOrganization,
+                                                Long defaultRecordingOrganizationId,
+                                                Session session,
+                                                boolean createMissingOrgs,
+                                                Long orgGroupId,
+                                                String importedOrgGroupName,
+                                                boolean createMissingOrgGroups) {
+        if (rawInternalIds == null || rawInternalIds.trim().isEmpty()) {
+            return;
+        }
+        Long resolvedRecordingOrganizationId = null;
+        if (recordingOrganization != null && !recordingOrganization.trim().isEmpty()) {
+            resolvedRecordingOrganizationId = updateOrgs(importDataModel,
+                    recordingOrganization.trim(),
+                    null,
+                    session,
+                    ImporterConstants.ORG_TYPE_RECORDING_ORGANIZATION,
+                    createMissingOrgs,
+                    orgGroupId,
+                    importedOrgGroupName,
+                    createMissingOrgGroups);
+        }
+        if (resolvedRecordingOrganizationId == null) {
+            resolvedRecordingOrganizationId = defaultRecordingOrganizationId;
+        }
+        if (resolvedRecordingOrganizationId == null) {
+            logger.warn("Skipping Activity Internal IDs because no recording organization could be resolved");
+            return;
+        }
+        if (importDataModel.getActivity_internal_ids() == null) {
+            importDataModel.setActivity_internal_ids(new LinkedHashSet<>());
+        }
+        for (String internalIdValue : splitMultipleValues(rawInternalIds)) {
+            if (internalIdValue == null || internalIdValue.trim().isEmpty()) {
+                continue;
+            }
+            InternalId internalId = new InternalId();
+            internalId.setOrganization(resolvedRecordingOrganizationId);
+            internalId.setInternal_id(internalIdValue.trim());
+            importDataModel.getActivity_internal_ids().add(internalId);
+        }
+    }
+
     private static void createDonorOrg(ImportDataModel importDataModel, Long orgId, Long orgRoleId) {
         DonorOrganization donorOrganization = new DonorOrganization();
         donorOrganization.setOrganization(orgId);

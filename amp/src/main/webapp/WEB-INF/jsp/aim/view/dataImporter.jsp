@@ -71,6 +71,13 @@
         });
       }
 
+      if ($('#defaultRecordingOrganizationId').length) {
+        applySelect2('#defaultRecordingOrganizationId', {
+          width: '100%',
+          placeholder: '<digi:trn jsFriendly="true">Select default recording organization</digi:trn>'
+        });
+      }
+
       if ($('#defaultLocationId').length) {
         applySelect2('#defaultLocationId', {
           width: '100%',
@@ -136,6 +143,7 @@
         }
       }
       toggleProgramClassificationFallback();
+      toggleRecordingOrganizationFallback();
     }
 
     function hasMappedProgramField() {
@@ -159,6 +167,27 @@
       }
     }
 
+    function hasMappedActivityInternalIdField() {
+      return $('#selected-pairs-table-body tr').filter(function() {
+        return $(this).attr('data-selected-field') === 'Activity Internal ID';
+      }).length > 0;
+    }
+
+    function hasMappedRecordingOrganizationField() {
+      return $('#selected-pairs-table-body tr').filter(function() {
+        return $(this).attr('data-selected-field') === 'Recording Organization';
+      }).length > 0;
+    }
+
+    function toggleRecordingOrganizationFallback() {
+      var hasMappings = $('#selected-pairs-table-body tr').length > 0;
+      var showFallback = hasMappings && hasMappedActivityInternalIdField() && !hasMappedRecordingOrganizationField();
+      $('#recording-organization-fallback').toggle(showFallback);
+      if (!showFallback) {
+        $('#defaultRecordingOrganizationId').val('').trigger('change.select2');
+      }
+    }
+
     function repopulateSelectedPairs(updatedMap) {
       var tbody = document.getElementById('selected-pairs-table-body');
       tbody.innerHTML = '';
@@ -170,6 +199,7 @@
       }
 
       toggleUploadSection();
+      toggleDefaultLocationFallback();
     }
 
     function switchImporterTab(tabId) {
@@ -186,6 +216,7 @@
       $('#selected-field').show();
       initializeSelectControls();
       toggleUploadSection();
+      toggleDefaultLocationFallback();
       $('#tab-mapping-btn').removeClass('disabled-tab');
       $('#next-to-map-btn').prop('disabled', false);
       switchImporterTab('tab-mapping-pane');
@@ -547,12 +578,15 @@
       var replaceExistingLocations = $('#replaceExistingLocations').prop('checked');
       var orgGroupId = $('#orgGroupId').val();
       var defaultActivityStatusId = $('#defaultActivityStatusId').val();
+      var defaultRecordingOrganizationId = $('#defaultRecordingOrganizationId').val();
       var defaultLocationId = $('#defaultLocationId').val() || $('#defaultLocationId').attr('data-default-location-id') || '';
       var defaultProgramClassification = $('#defaultProgramClassification').val();
       var anyMappedOrgMissingGroupMapping = hasAnyMappedOrgMissingGroupMapping();
       var hasProjectLocationMapping = hasMappedProjectLocationField();
       var hasProgramMapping = hasMappedProgramField();
       var hasProgramClassificationMapping = hasMappedProgramClassificationField();
+      var hasActivityInternalIdMapping = hasMappedActivityInternalIdField();
+      var hasRecordingOrganizationMapping = hasMappedRecordingOrganizationField();
       console.log("Internal", internal);
       console.log("Skip existing", skipExisting);
       console.log("Skip records without transactions", skipRecordsWithoutTransactions);
@@ -566,6 +600,7 @@
       console.log("Replace existing locations", replaceExistingLocations);
       console.log("Org group id", orgGroupId);
       console.log("Default activity status id", defaultActivityStatusId);
+      console.log("Default recording organization id", defaultRecordingOrganizationId);
       console.log("Default location id", defaultLocationId);
       console.log("Default program classification", defaultProgramClassification);
       if (createMissingOrgs && !orgGroupId && !createMissingOrgGroups && anyMappedOrgMissingGroupMapping) {
@@ -578,6 +613,10 @@
       }
       if (hasProgramMapping && !hasProgramClassificationMapping && !defaultProgramClassification) {
         alert("<digi:trn jsFriendly='true'>Please select a default program classification when no Program Classification column is mapped.</digi:trn>");
+        return;
+      }
+      if (hasActivityInternalIdMapping && !hasRecordingOrganizationMapping && !defaultRecordingOrganizationId) {
+        alert("<digi:trn jsFriendly='true'>Please select a default recording organization when Activity Internal ID is mapped but Recording Organization is not.</digi:trn>");
         return;
       }
       var dataSeparator = $('#data-separator').val();
@@ -613,6 +652,9 @@
       }
       if (defaultActivityStatusId) {
         formData.append('defaultActivityStatusId', defaultActivityStatusId);
+      }
+      if (defaultRecordingOrganizationId) {
+        formData.append('defaultRecordingOrganizationId', defaultRecordingOrganizationId);
       }
       if (defaultLocationId) {
         formData.append('defaultLocationId', defaultLocationId);
@@ -1243,6 +1285,17 @@
           </select>
         </div>
 
+        <div id="recording-organization-fallback" style="display:none; margin-top:16px;">
+          <label for="defaultRecordingOrganizationId"><digi:trn>Default Recording Organization</digi:trn></label>
+          <div class="helper-note" style="margin-bottom: 10px;"><digi:trn>Used only when Activity Internal ID is mapped and Recording Organization is not.</digi:trn></div>
+          <select id="defaultRecordingOrganizationId" name="defaultRecordingOrganizationId" style="width: 100%;">
+            <option value=""><digi:trn>-- Select Recording Organization --</digi:trn></option>
+            <c:forEach var="organization" items="${recordingOrganizations}">
+              <option value="${organization.ampOrgId}">${organization.name}</option>
+            </c:forEach>
+          </select>
+        </div>
+
         <div id="default-location-fallback" style="display:none; margin-top:16px;">
           <label for="defaultLocationId"><digi:trn>Fallback Location</digi:trn></label>
           <div class="helper-note" style="margin-bottom: 10px;"><digi:trn>Used only when no Project Location column is mapped. The instance country is preselected by default.</digi:trn></div>
@@ -1280,6 +1333,7 @@
 <script>
   $(document).ready(function() {
     initializeSelectControls();
+    toggleDefaultLocationFallback();
     $('#createMissingOrgs').change(function() {
       if ($(this).is(':checked')) {
         $('#orgGroupDiv').show();

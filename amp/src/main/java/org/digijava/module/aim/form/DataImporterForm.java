@@ -22,6 +22,7 @@ public class DataImporterForm extends ActionForm {
     private boolean replaceExistingLocations;
     private Long orgGroupId;
     private Long defaultActivityStatusId;
+    private Long defaultRecordingOrganizationId;
     private Long defaultLocationId;
     private String defaultProgramClassification;
     private boolean validateActivities;
@@ -121,6 +122,14 @@ public class DataImporterForm extends ActionForm {
 
     public void setDefaultActivityStatusId(Long defaultActivityStatusId) {
         this.defaultActivityStatusId = defaultActivityStatusId;
+    }
+
+    public Long getDefaultRecordingOrganizationId() {
+        return defaultRecordingOrganizationId;
+    }
+
+    public void setDefaultRecordingOrganizationId(Long defaultRecordingOrganizationId) {
+        this.defaultRecordingOrganizationId = defaultRecordingOrganizationId;
     }
 
     public Long getDefaultLocationId() {

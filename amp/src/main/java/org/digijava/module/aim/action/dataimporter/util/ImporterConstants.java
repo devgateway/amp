@@ -20,6 +20,7 @@ public final class ImporterConstants {
     public static final String ORG_TYPE_EXECUTING_AGENCY = "executingAgency";
     public static final String ORG_TYPE_IMPLEMENTING_AGENCY = "implementingAgency";
     public static final String ORG_TYPE_CONTRACTING_AGENCY = "contractingAgency";
+    public static final String ORG_TYPE_RECORDING_ORGANIZATION = "recordingOrganization";
 
     // ----- Entity / column field names (template mapping) -----
     public static final String PROJECT_TITLE = "Project Title";
@@ -71,6 +72,8 @@ public final class ImporterConstants {
     public static final String REPORTING_DATE = "Reporting Date";
     public static final String PROJECT_STATUS = "Project Status";
     public static final String PROCUREMENT_SYSTEM = "Procurement System";
+    public static final String ACTIVITY_INTERNAL_ID = "Activity Internal ID";
+    public static final String RECORDING_ORGANIZATION = "Recording Organization";
 
     // ----- Indicator (M&E) columns -----
     public static final String INDICATOR_NAME = "Indicator Name";

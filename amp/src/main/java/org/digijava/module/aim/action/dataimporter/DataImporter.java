@@ -54,6 +54,7 @@ import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.remo
 
 import org.digijava.module.aim.action.dataimporter.util.ImporterConstants;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.DataImporterForm;
@@ -108,6 +109,16 @@ public class DataImporter extends Action {
         request.setAttribute("configNames", configNames);
         List<AmpOrgGroup> orgGroups = DbUtil.getAllOrgGroups();
         request.setAttribute("orgGroups", orgGroups);
+        List<AmpOrganisation> recordingOrganizations = DbUtil.getOrganisations();
+        if (recordingOrganizations == null) {
+            recordingOrganizations = new ArrayList<>();
+        }
+        recordingOrganizations.sort((left, right) -> {
+            String leftName = left != null ? left.getName() : null;
+            String rightName = right != null ? right.getName() : null;
+            return Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER).compare(leftName, rightName);
+        });
+        request.setAttribute("recordingOrganizations", recordingOrganizations);
         request.setAttribute("activityStatuses", getActivityStatuses());
         request.setAttribute("programClassifications", getProgramClassificationNames());
         List<AmpCategoryValueLocations> availableLocations = getAvailableLocations();
@@ -397,6 +408,7 @@ public class DataImporter extends Action {
                 boolean replaceExistingLocations = dataImporterForm.isReplaceExistingLocations();
                 Long orgGroupId = dataImporterForm.getOrgGroupId();
                 Long defaultActivityStatusId = dataImporterForm.getDefaultActivityStatusId();
+                Long defaultRecordingOrganizationId = dataImporterForm.getDefaultRecordingOrganizationId();
                 Long defaultLocationId = dataImporterForm.getDefaultLocationId();
                 String defaultProgramClassification = dataImporterForm.getDefaultProgramClassification();
                 logger.info("Internal: "+ isInternal);
@@ -412,6 +424,7 @@ public class DataImporter extends Action {
                 logger.info("Replace existing locations: " + replaceExistingLocations);
                 logger.info("Org group id: "+ orgGroupId);
                 logger.info("Default activity status id: {}", defaultActivityStatusId);
+                logger.info("Default recording organization id: {}", defaultRecordingOrganizationId);
                 logger.info("Default location id: {}", defaultLocationId);
                 logger.info("Default program classification: {}", defaultProgramClassification);
                 boolean hasGenericOrgGroupMapping = columnPairsToUse.containsValue(ImporterConstants.ORG_GROUP);
@@ -463,15 +476,22 @@ public class DataImporter extends Action {
                     response.setStatus(400);
                     return mapping.findForward("importData");
                 }
+                if (columnPairsToUse.containsValue(ImporterConstants.ACTIVITY_INTERNAL_ID)
+                        && !columnPairsToUse.containsValue(ImporterConstants.RECORDING_ORGANIZATION)
+                        && defaultRecordingOrganizationId == null) {
+                    response.setHeader("errorMessage", "Please select a default recording organization when 'Activity Internal ID' is mapped without 'Recording Organization'.");
+                    response.setStatus(400);
+                    return mapping.findForward("importData");
+                }
                 logger.info("Configuration: {}", columnPairsToUse);
                 try {
                     if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
                         String dataSheetChoice = request.getParameter("dataSheetChoice");
                         String dataSheetName = request.getParameter("dataSheetName");
                         boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
-                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultRecordingOrganizationId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultRecordingOrganizationId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
                     }
                 } catch (Exception e) {
                     ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
@@ -707,6 +727,8 @@ public class DataImporter extends Action {
         fieldsInfos.add(ImporterConstants.BENEFICIARY_AGENCY);
         fieldsInfos.add(ImporterConstants.PROJECT_STATUS);
         fieldsInfos.add(ImporterConstants.PROCUREMENT_SYSTEM);
+        fieldsInfos.add(ImporterConstants.ACTIVITY_INTERNAL_ID);
+        fieldsInfos.add(ImporterConstants.RECORDING_ORGANIZATION);
         // Indicator columns for M&E import
         fieldsInfos.add(ImporterConstants.INDICATOR_NAME);
         fieldsInfos.add(ImporterConstants.PROGRAM_NAME);

@@ -40,7 +40,7 @@ public class TxtDataImporter {
     private static final Logger logger = LoggerFactory.getLogger(TxtDataImporter.class);
 
 
-    public static int processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions, boolean replaceExistingLocations)
+    public static int processTxtFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultRecordingOrganizationId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions, boolean replaceExistingLocations)
     {
         logger.info("Processing txt file: " + file.getName());
         CSVParser parser = new CSVParserBuilder().withSeparator(request.getParameter("dataSeparator").charAt(0)).build();
@@ -59,7 +59,7 @@ public class TxtDataImporter {
                     logger.info("Batch number here: {}",batchNumber);
 
                     // Process the batch
-                    processBatch(batch, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
+                    processBatch(batch, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultRecordingOrganizationId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
                     // Clear the batch for the next set of rows
                     batch.clear();
                     batchNumber+=1;
@@ -69,7 +69,7 @@ public class TxtDataImporter {
             // Process any remaining rows in the batch
             if (!batch.isEmpty()) {
                 logger.info("Processing last batch of size {}", batch.size());
-                processBatch(batch, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
+                processBatch(batch, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultRecordingOrganizationId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
             }
         } catch (IOException | CsvValidationException e) {
             logger.error("Error processing txt file "+e.getMessage(),e);
@@ -79,7 +79,7 @@ public class TxtDataImporter {
     }
 
 
-    private static void processBatch(List<Map<String, String>> batch, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions, boolean replaceExistingLocations) throws JsonProcessingException {
+    private static void processBatch(List<Map<String, String>> batch, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultRecordingOrganizationId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions, boolean replaceExistingLocations) throws JsonProcessingException {
         logger.info("Processing txt batch");
         SessionUtil.extendSessionIfNeeded(request);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
@@ -122,6 +122,8 @@ public class TxtDataImporter {
             String executingOrgGroupNames = getCellValueByConfig(rowRef, config, ImporterConstants.EXECUTING_AGENCY_GROUP);
             String implementingOrgGroupNames = getCellValueByConfig(rowRef, config, ImporterConstants.IMPLEMENTING_AGENCY_GROUP);
             String contractingOrgGroupNames = getCellValueByConfig(rowRef, config, ImporterConstants.CONTRACTING_AGENCY_GROUP);
+            String activityInternalId = getCellValueByConfig(rowRef, config, ImporterConstants.ACTIVITY_INTERNAL_ID);
+            String recordingOrganization = getCellValueByConfig(rowRef, config, ImporterConstants.RECORDING_ORGANIZATION);
 
             // Use holder arrays to capture values from lambda (for effectively final requirement)
             final Long[] existingActivityIdHolder = new Long[1];  // Store only the ID, not the entity
@@ -289,6 +291,8 @@ public class TxtDataImporter {
                             case ImporterConstants.CONTRACTING_AGENCY_GROUP:
                                 break;
                             case ImporterConstants.PROJECT_STATUS:
+                            case ImporterConstants.ACTIVITY_INTERNAL_ID:
+                            case ImporterConstants.RECORDING_ORGANIZATION:
                                 break;
                             case ImporterConstants.PROGRAM_NAME:
                                 programNamesHolder[0] = entryValue;
@@ -313,6 +317,9 @@ public class TxtDataImporter {
                                 break;
                         }
                     }
+                    applyActivityInternalIds(importDataModel, activityInternalId, recordingOrganization,
+                            defaultRecordingOrganizationId, session, createMissingOrgs, orgGroupId,
+                            importedOrgGroupName, createMissingOrgGroups);
                     if (!config.containsValue(ImporterConstants.PROJECT_LOCATION) && defaultLocationId != null) {
                         applyDefaultLocation(importDataModel, defaultLocationId, session);
                     }

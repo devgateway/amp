@@ -44,10 +44,10 @@ public class ExcelImporter {
     private static final int BATCH_SIZE = 1000;
 
     public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal) {
-        return processExcelFileInBatches(importedFilesRecord, file, request, config, isInternal, false, null, false, false, null, false, false, false, false, null, null, null, false, false, false);
+        return processExcelFileInBatches(importedFilesRecord, file, request, config, isInternal, false, null, false, false, null, false, false, false, false, null, null, null, null, false, false, false);
     }
 
-    public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting, String sheetNameToProcess, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions, boolean replaceExistingLocations) {
+    public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting, String sheetNameToProcess, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultRecordingOrganizationId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions, boolean replaceExistingLocations) {
         int res = 0;
         ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.IN_PROGRESS);
         try (Workbook workbook = ImporterUtil.openWorkbookWithStrictFallback(file)) {
@@ -64,7 +64,7 @@ public class ExcelImporter {
                 if (isInternal) {
                     addDonorAgencyColumn(sheet, FeaturesUtil.getGlobalSettingValue("Internal Ecowas Donor"));
                 }
-                processSheetInBatches(sheet, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
+                processSheetInBatches(sheet, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultRecordingOrganizationId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
             } else {
                 // Process each sheet in the workbook
                 for (int i = 0; i < numberOfSheets; i++) {
@@ -73,7 +73,7 @@ public class ExcelImporter {
                     if (isInternal) {
                         addDonorAgencyColumn(sheet, FeaturesUtil.getGlobalSettingValue("Internal Ecowas Donor"));
                     }
-                    processSheetInBatches(sheet, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
+                    processSheetInBatches(sheet, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultRecordingOrganizationId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
                 }
             }
 
@@ -117,7 +117,7 @@ public class ExcelImporter {
     }
 
 
-    public static void processSheetInBatches(Sheet sheet, HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions, boolean replaceExistingLocations) throws JsonProcessingException {
+    public static void processSheetInBatches(Sheet sheet, HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultRecordingOrganizationId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions, boolean replaceExistingLocations) throws JsonProcessingException {
         // Get the number of rows in the sheet
         int rowCount = sheet.getPhysicalNumberOfRows();
         logger.info("There are {} rows in sheet {} " , rowCount, sheet.getSheetName());
@@ -139,12 +139,12 @@ public class ExcelImporter {
             }
 
             // Process the batch
-            processBatch(batch, sheet, request,config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
+            processBatch(batch, sheet, request,config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultRecordingOrganizationId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
         }
     }
 
 
-    public static void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions, boolean replaceExistingLocations) throws JsonProcessingException {
+    public static void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultRecordingOrganizationId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions, boolean replaceExistingLocations) throws JsonProcessingException {
         // Process the batch of rows
         SessionUtil.extendSessionIfNeeded(request);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
@@ -205,6 +205,8 @@ public class ExcelImporter {
                 String executingOrgGroupNames = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.EXECUTING_AGENCY_GROUP);
                 String implementingOrgGroupNames = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.IMPLEMENTING_AGENCY_GROUP);
                 String contractingOrgGroupNames = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.CONTRACTING_AGENCY_GROUP);
+                String activityInternalId = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.ACTIVITY_INTERNAL_ID);
+                String recordingOrganization = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.RECORDING_ORGANIZATION);
 
                 // Use holder arrays to capture values from lambda (for effectively final requirement)
                 final Long[] existingActivityIdHolder = new Long[1];  // Store only the ID, not the entity
@@ -368,6 +370,8 @@ public class ExcelImporter {
                                     case ImporterConstants.PROJECT_STATUS:
                                         break;
                                     case ImporterConstants.PROCUREMENT_SYSTEM:
+                                    case ImporterConstants.ACTIVITY_INTERNAL_ID:
+                                    case ImporterConstants.RECORDING_ORGANIZATION:
                                         break;
                                     case ImporterConstants.PROGRAM_NAME:
                                         programNamesHolder[0] = getStringValueFromCell(cell, false);
@@ -394,6 +398,9 @@ public class ExcelImporter {
                                 }
                             }
                         }
+                        applyActivityInternalIds(importDataModel, activityInternalId, recordingOrganization,
+                                defaultRecordingOrganizationId, session, createMissingOrgs, orgGroupId,
+                                importedOrgGroupName, createMissingOrgGroups);
                         if (!config.containsValue(ImporterConstants.PROJECT_LOCATION) && defaultLocationId != null) {
                             applyDefaultLocation(importDataModel, defaultLocationId, session);
                         }

@@ -1725,11 +1725,9 @@ public class ActivityUtil {
             SQLUtils.executeQuery(connection, deleteActivityProgram);
         });
 
-        String deleteActivityOrgRole = "DELETE FROM amp_org_role" +
-                " WHERE activity = " + ampActivityVersion.getAmpActivityId();
-        session.doWork(connection -> {
-            SQLUtils.executeQuery(connection, deleteActivityOrgRole);
-        });
+        // amp_org_role is already handled through the Hibernate-managed association cleanup
+        // in deleteAmpActivityWithVersions (ampActivityVersion.getOrgrole().clear()).
+        // Deleting it again via raw SQL here can cause stale-state exceptions during flush.
     }
 
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{

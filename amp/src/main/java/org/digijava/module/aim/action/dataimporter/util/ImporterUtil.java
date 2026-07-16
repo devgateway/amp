@@ -1168,11 +1168,21 @@ public class ImporterUtil {
         }
     }
 
+    private static String normalizeSingleLineText(String value) {
+        if (value == null) {
+            return "";
+        }
+        // The activity API rejects CR/LF in displayName; normalize all line breaks to spaces.
+        return value.replaceAll("[\\r\\n]+", " ").trim();
+    }
+
     /** @return activity ID on success, null on skip or failure */
     public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities, boolean replaceExistingTransactions, boolean replaceExistingLocations) throws JsonProcessingException {
         if (session == null || !session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
+
+        importDataModel.setProject_title(normalizeSingleLineText(importDataModel.getProject_title()));
 
         // Re-fetch existing activity in this transaction if ID is provided to avoid detached entity issues
         AmpActivityVersion existing = null;

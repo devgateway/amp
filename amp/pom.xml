@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.devgateway</groupId>
     <artifactId>amp</artifactId>
-    <version>4.0-SNAPSHOT</version>
+    <version>4.5</version>
     <packaging>war</packaging>
     <name>Aid Management Platform</name>
     <properties>
@@ -2245,17 +2245,17 @@
                     </execution>
 
 
-                    <execution>
-                        <id>execute-standalone</id>
-                        <phase>package</phase> <!-- Or specify another appropriate phase -->
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>org.dgfoundation.amp.StandaloneAMPStartup</mainClass>
-                            <classpathScope>runtime</classpathScope>
-                        </configuration>
-                    </execution>
+<!--                    <execution>-->
+<!--                        <id>execute-standalone</id>-->
+<!--                        <phase>package</phase> &lt;!&ndash; Or specify another appropriate phase &ndash;&gt;-->
+<!--                        <goals>-->
+<!--                            <goal>java</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <mainClass>org.dgfoundation.amp.StandaloneAMPStartup</mainClass>-->
+<!--                            <classpathScope>runtime</classpathScope>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
 
 <!--                    <execution>-->
 <!--                        <id>compile-selenium</id>-->

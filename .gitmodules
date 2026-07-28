@@ -7,3 +7,6 @@
 [submodule "amp/TEMPLATE/ampTemplate/node_modules/amp-filter"]
 	path = amp/TEMPLATE/ampTemplate/node_modules/amp-filter
 	url = git@github.com:devgateway/amp-filter.git
+[submodule "deploy"]
+	path = deploy
+	url = https://github.com/devgateway/amp-deploy.git

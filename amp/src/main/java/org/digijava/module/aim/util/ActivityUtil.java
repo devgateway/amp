@@ -1683,8 +1683,6 @@ public class ActivityUtil {
                     ampActivityVersion.getActPrograms().clear();
                     ampActivityVersion.getOrgrole().clear();
                     ampActivityVersion.getIndicators().clear();
-                    // Delete duplicate fields if any separately
-                    deleteDuplicateContent(ampActivityVersion, session);
 
                     session.delete(ampActivityVersion);
                 }
@@ -1704,31 +1702,6 @@ public class ActivityUtil {
         }
     }
 
-    public static void deleteDuplicateContent(AmpActivityVersion ampActivityVersion, Session session){
-        List<AmpActivityLocation> existingActivityLocation = getActivityLocations(ampActivityVersion.getAmpActivityId());
-
-        String deleteActivityLocation = "DELETE FROM amp_activity_location" +
-                " WHERE amp_activity_id = " + ampActivityVersion.getAmpActivityId();
-        session.doWork(connection -> {
-            SQLUtils.executeQuery(connection, deleteActivityLocation);
-        });
-
-        String deleteActivitySector = "DELETE FROM amp_activity_sector" +
-                " WHERE amp_activity_id = " + ampActivityVersion.getAmpActivityId();
-        session.doWork(connection -> {
-            SQLUtils.executeQuery(connection, deleteActivitySector);
-        });
-
-        String deleteActivityProgram = "DELETE FROM amp_activity_program" +
-                " WHERE amp_activity_id = " + ampActivityVersion.getAmpActivityId();
-        session.doWork(connection -> {
-            SQLUtils.executeQuery(connection, deleteActivityProgram);
-        });
-
-        // amp_org_role is already handled through the Hibernate-managed association cleanup
-        // in deleteAmpActivityWithVersions (ampActivityVersion.getOrgrole().clear()).
-        // Deleting it again via raw SQL here can cause stale-state exceptions during flush.
-    }
 
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
         ActivityUtil.deleteActivityContent(ampAct,session);

@@ -1086,14 +1086,11 @@ public class ActivityUtil {
         String deleteActivitySurvey = "DELETE FROM amp_ahsurvey WHERE amp_activity_id = ?";
         SQLUtils.executePreparedQuery(con, deleteActivitySurvey,ampAct.getAmpActivityId() ,"amp_ahsurvey");
 
-        String deleteFundingDetail = "DELETE FROM amp_funding_detail WHERE amp_funding_id IN (SELECT amp_funding_id FROM amp_funding WHERE amp_activity_id = ?)";
-        SQLUtils.executePreparedQuery(con, deleteFundingDetail, ampAct.getAmpActivityId(), "amp_funding_detail");
-
-        String deleteMtefProjections = "DELETE FROM amp_funding_mtef_projection WHERE amp_funding_id IN (SELECT amp_funding_id FROM amp_funding WHERE amp_activity_id = ?)";
-        SQLUtils.executePreparedQuery(con, deleteMtefProjections, ampAct.getAmpActivityId(), "amp_funding_mtef_projection");
-
-        String deleteFunding = "DELETE FROM amp_funding WHERE amp_activity_id = ?";
-        SQLUtils.executePreparedQuery(con, deleteFunding,ampAct.getAmpActivityId() ,"amp_funding");
+        // amp_funding (and its amp_funding_detail / amp_funding_mtef_projection children) are already
+        // handled through the Hibernate-managed cascade on AmpActivityVersion.funding
+        // (cascade="merge, all-delete-orphan", cascading further into AmpFunding.fundingDetails and
+        // .mtefProjections). Deleting them again via raw SQL here runs before that ORM-scheduled cascade
+        // is flushed, so Hibernate later finds 0 affected rows and throws a StaleStateException.
 
 
 //        SQLUtils.executeQuery(con, deleteActivitySurvey );

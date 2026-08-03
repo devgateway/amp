@@ -244,9 +244,15 @@
      * referential checks as the single-organization delete on the edit page.
      */
     private void deleteSelectedOrganisations(OrgManagerForm eaForm, HttpServletRequest request) {
-        Long[] ids = eaForm.getSelectedOrgIds();
-        if (ids == null || ids.length == 0) {
+        // Read raw request parameters instead of eaForm.getSelectedOrgIds(): Struts' array-property
+        // binding for checkboxes was only retaining the last checked value here.
+        String[] rawIds = request.getParameterValues("selectedOrgIds");
+        if (rawIds == null || rawIds.length == 0) {
             return;
+        }
+        Long[] ids = new Long[rawIds.length];
+        for (int i = 0; i < rawIds.length; i++) {
+            ids[i] = Long.valueOf(rawIds[i]);
         }
 
         ActionMessages messages = new ActionMessages();

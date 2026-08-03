@@ -6,12 +6,19 @@
     import org.apache.struts.action.ActionForm;
     import org.apache.struts.action.ActionForward;
     import org.apache.struts.action.ActionMapping;
+    import org.apache.struts.action.ActionMessage;
+    import org.apache.struts.action.ActionMessages;
     import org.digijava.module.aim.dbentity.AmpOrganisation;
+    import org.digijava.module.aim.dbentity.AmpTeam;
     import org.digijava.module.aim.form.OrgManagerForm;
     import org.digijava.module.aim.helper.TeamMember;
+    import org.digijava.module.aim.util.ActivityUtil;
     import org.digijava.module.aim.util.DbUtil;
+    import org.digijava.module.aim.util.TeamUtil;
     import org.digijava.module.calendar.util.AmpUtil;
+    import org.hibernate.JDBCException;
 
+    import javax.servlet.http.HttpServletRequest;
     import javax.servlet.http.HttpSession;
     import java.util.*;
 
@@ -50,6 +57,9 @@
 
     OrgManagerForm eaForm = (OrgManagerForm) form;
     eaForm.setAdminSide(isAdmin);
+    if (isAdmin && "true".equals(request.getParameter("deleteSelectedOrgs"))) {
+      deleteSelectedOrganisations(eaForm, request);
+    }
     if (request.getParameter("orgSelReset") != null
         && request.getParameter("orgSelReset").equals("false")) {
       eaForm.setOrgSelReset(false);
@@ -228,6 +238,84 @@
     return mapping.findForward("forward");
 
   }
+
+    /**
+     * Deletes the organizations checked in the "Select" column, applying the same
+     * referential checks as the single-organization delete on the edit page.
+     */
+    private void deleteSelectedOrganisations(OrgManagerForm eaForm, HttpServletRequest request) {
+        Long[] ids = eaForm.getSelectedOrgIds();
+        if (ids == null || ids.length == 0) {
+            return;
+        }
+
+        ActionMessages messages = new ActionMessages();
+        int deletedCount = 0;
+        for (Long orgId : ids) {
+            AmpOrganisation org = DbUtil.getOrganisation(orgId);
+            if (org == null) {
+                continue;
+            }
+
+            boolean blocked = false;
+
+            Set<String> ampIds = new TreeSet<>();
+            addAllIfNotNull(ampIds, DbUtil.getAmpIdsByOrg(orgId));
+            addAllIfNotNull(ampIds, ActivityUtil.getAmpIdsByFundingOrg(orgId));
+            addAllIfNotNull(ampIds, DbUtil.getAmpIdsByInternalIdOrg(orgId));
+            if (!ampIds.isEmpty()) {
+                messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+                        "error.aim.organizationManager.deleteOrgActErrorBulk", org.getName(), String.join(", ", ampIds)));
+                blocked = true;
+            }
+
+            if (org.getCalendar() != null && !org.getCalendar().isEmpty()) {
+                messages.add(ActionMessages.GLOBAL_MESSAGE,
+                        new ActionMessage("error.aim.organizationManager.deleteOrgEventErrorBulk", org.getName()));
+                blocked = true;
+            }
+
+            List<AmpTeam> relatedTeams = TeamUtil.getTeamByOrg(orgId);
+            if (relatedTeams != null && !relatedTeams.isEmpty()) {
+                messages.add(ActionMessages.GLOBAL_MESSAGE,
+                        new ActionMessage("error.aim.organizationManager.deleteOrgTeamErrorBulk", org.getName()));
+                blocked = true;
+            }
+
+            if (org.getUsers() != null && !org.getUsers().isEmpty()) {
+                messages.add(ActionMessages.GLOBAL_MESSAGE,
+                        new ActionMessage("error.aim.organizationManager.deleteOrgVerifiedOrgErrorBulk", org.getName()));
+                blocked = true;
+            }
+
+            if (blocked) {
+                continue;
+            }
+
+            try {
+                DbUtil.deleteOrg(org);
+                deletedCount++;
+            } catch (JDBCException e) {
+                messages.add(ActionMessages.GLOBAL_MESSAGE,
+                        new ActionMessage("error.aim.organizationManager.deleteOrgJdbcErrorBulk", org.getName()));
+            }
+        }
+
+        if (deletedCount > 0) {
+            messages.add(ActionMessages.GLOBAL_MESSAGE,
+                    new ActionMessage("error.aim.organizationManager.deleteOrgSuccessBulk", String.valueOf(deletedCount)));
+        }
+        if (!messages.isEmpty()) {
+            saveErrors(request, messages);
+        }
+        eaForm.setSelectedOrgIds(null);
+    }
+
+    private void addAllIfNotNull(Set<String> set, Collection<String> toAdd) {
+        if (toAdd != null && !toAdd.isEmpty()) {
+            set.addAll(toAdd);
+        }
+    }
 
     private void collectAlphaArray(OrgManagerForm eaForm, Collection<AmpOrganisation> col) {
         SortedSet<String> chars = new TreeSet<String>(AmpUtil.CharUnicodeComparator);

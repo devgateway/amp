@@ -43,6 +43,7 @@ private String keyword;
 
   private String[] digitPages;
   private String[] alphaPages = null;
+  private Long[] selectedOrgIds;
 
     public boolean isAdminSide() {
         return adminSide;
@@ -105,6 +106,14 @@ private String keyword;
    */
   public void setAlphaPages(String[] alphaPages) {
     this.alphaPages = alphaPages;
+  }
+
+  public Long[] getSelectedOrgIds() {
+    return selectedOrgIds;
+  }
+
+  public void setSelectedOrgIds(Long[] selectedOrgIds) {
+    this.selectedOrgIds = selectedOrgIds;
   }
 
   /**

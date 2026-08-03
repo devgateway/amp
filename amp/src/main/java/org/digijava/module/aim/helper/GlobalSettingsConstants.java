@@ -175,6 +175,8 @@ public class GlobalSettingsConstants {
 
     public static final String TRACKING_SITE_URL = "Tracker URL";
 
+    public static final String FOOTER_TEXT = "Footer Text";
+
     public static final String TRACKING_SITE_ID = "Site ID for tracking";
 
     public static final String DEFAULT_ORG_GROUP = "Responsible Organization Default Organization Group";

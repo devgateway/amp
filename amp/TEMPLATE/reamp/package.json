@@ -23,7 +23,7 @@
   "author": "Alexei Savca",
   "license": "inherit",
   "devDependencies": {
-    "amp-ui": "github:devgateway/amp-ui#fix/AMP-31133/Indicator-values-display-fixes",
+    "amp-ui": "git+https://github.com/devgateway/amp-ui.git#fix/AMP-31133/Indicator-values-display-fixes",
     "babel-core": "^6.26.3",
     "babel-jest": "^6.0.1",
     "babel-loader": "^6.3.2",

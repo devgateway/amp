@@ -90,6 +90,7 @@ public class UserEmail
                 sendEmail(email, u.getEmailUsedForNotification(), code, request);
             }
             catch (Exception ex) {
+                logger.error("Failed to send reset password email to " + email, ex);
                 errors.add(ActionMessages.GLOBAL_MESSAGE,
                         new ActionMessage("error.registration.sendmail"));
                 saveErrors(request, errors);

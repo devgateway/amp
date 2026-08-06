@@ -762,9 +762,9 @@ public class ActivityUtil {
     }
 
     private static void setCreationTimeOnStructureImages(AmpActivityVersion activity) {
-        if (activity.getStructures() != null) {
+        if (activity.getStructures() != null && Hibernate.isInitialized(activity.getStructures())) {
             for (AmpStructure str : activity.getStructures()) {
-                if (str.getImages() != null) {
+                if (str.getImages() != null && Hibernate.isInitialized(str.getImages())) {
                     for (AmpStructureImg img : str.getImages()) {
                         img.setStructure(str);
                         img.setCreationTime(System.currentTimeMillis());
@@ -1735,6 +1735,10 @@ public class ActivityUtil {
         for (IndicatorActivity indicator : indicators) {
             AmpIndicator ind = PersistenceManager.getSession()
                     .get(AmpIndicator.class, indicator.getIndicator().getIndicatorId());
+
+            if (ind == null || ind.getProgram() == null || program.getProgram() == null) {
+                continue;
+            }
 
             Long programId = ind.getProgram().getAmpThemeId();
             if (programId.equals(program.getProgram().getAmpThemeId())) {

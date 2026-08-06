@@ -22,7 +22,7 @@ const OutcomeModal: React.FC<AddNewOutcomeModalProps> = ({ show, setShow, onSubm
     description: Yup.string()
   });
 
-  const initialValues = {
+  const initialValues: { name: string; description?: string } = {
     name: initialName,
     description: initialDescription
   };

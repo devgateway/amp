@@ -43,7 +43,7 @@ const OutputModal: React.FC<AddNewOutputModalProps> = ({
     outcomeId: Yup.number().required('Outcome is required')
   });
 
-  const initialValues = {
+  const initialValues: { name: string; description?: string; outcomeId: number } = {
     name: initialName,
     description: initialDescription,
     outcomeId: selectedOutcome.id

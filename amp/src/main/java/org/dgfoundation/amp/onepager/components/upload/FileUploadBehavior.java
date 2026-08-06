@@ -7,6 +7,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -17,7 +18,11 @@ import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.springframework.security.web.csrf.CsrfToken;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,11 +64,11 @@ public class FileUploadBehavior extends Behavior {
 //        response.render(JavaScriptHeaderItem.forReference(
 //                new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.fileupload-ui.js")));
         response.render(JavaScriptHeaderItem.forReference(
-                new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.ui.widget.js"), String.valueOf(System.currentTimeMillis())+"a", true));
+                new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.ui.widget.js"), System.currentTimeMillis() +"a", true));
         response.render(JavaScriptHeaderItem.forReference(
-                new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.iframe-transport.js"), String.valueOf(System.currentTimeMillis())+"b", true));
+                new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.iframe-transport.js"), System.currentTimeMillis() +"b", true));
         response.render(JavaScriptHeaderItem.forReference(
-                new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.fileupload.js"), String.valueOf(System.currentTimeMillis())+"c", true));
+                new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.fileupload.js"), System.currentTimeMillis() +"c", true));
 
         String uploadUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(
                 Url.parse(component.urlFor(new FileUploadResourceReference(activityId, fileItemModel), null).toString()));
@@ -71,9 +76,10 @@ public class FileUploadBehavior extends Behavior {
         
         String maxFileSizeGS = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
         
-        final Map<String, CharSequence> variables = new HashMap<String, CharSequence>();
+        final Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("componentMarkupId", markupId);
-        uploadUrl +="?activityId=" + activityId;
+        uploadUrl = appendQueryParameter(uploadUrl, "activityId", activityId);
+        uploadUrl = appendSpringCsrfToken(uploadUrl);
         variables.put("url", uploadUrl);
         variables.put("paramName", PARAM_NAME);
         variables.put("uploadFailedMsg", TranslatorUtil.getTranslatedText("Upload failed! Please try again."));
@@ -82,13 +88,42 @@ public class FileUploadBehavior extends Behavior {
         variables.put("uploadMaxFileSize", Long.toString(Bytes.megabytes(Long.parseLong(maxFileSizeGS)).bytes()));
         variables.put("uploadNoFileLabel", TranslatorWorker.translateText("No file chosen"));
 
-        IModel variablesModel = new AbstractReadOnlyModel() {
-            public Map getObject() {
+        IModel<Map<String, Object>> variablesModel = new AbstractReadOnlyModel<Map<String, Object>>() {
+            @Override
+            public Map<String, Object> getObject() {
                 return variables;
             }
         };
         response.render(JavaScriptHeaderItem.forReference(
                 new TextTemplateResourceReference(FileUploadBehavior.class, "FileUploadBehavior.js", variablesModel), String.valueOf(System.currentTimeMillis()), true));
         response.render(OnLoadHeaderItem.forScript("setupFileUpload('#" + markupId + "', '" + uploadUrl + "', '" + PARAM_NAME + "');"));
+    }
+
+    static String appendSpringCsrfToken(String url) {
+        RequestCycle requestCycle = RequestCycle.get();
+        if (requestCycle == null || !(requestCycle.getRequest() instanceof ServletWebRequest)) {
+            return url;
+        }
+
+        HttpServletRequest request = ((ServletWebRequest) requestCycle.getRequest()).getContainerRequest();
+        CsrfToken token = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        if (token == null) {
+            return url;
+        }
+
+        return appendQueryParameter(url, token.getParameterName(), token.getToken());
+    }
+
+    private static String appendQueryParameter(String url, String name, String value) {
+        String separator = url.contains("?") ? "&" : "?";
+        return url + separator + urlEncode(name) + "=" + urlEncode(value);
+    }
+
+    private static String urlEncode(String value) {
+        try {
+            return URLEncoder.encode(value, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }

@@ -66,3 +66,6 @@ amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/ConditionType.java
 amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/package-info.java
 amp/src/main/java/org/digijava/module/xmlpatcher/jaxb/ConditionParam.java
 amp/src/main/java/org/digijava/module/help/jaxbi/AmpHelpType.java
+
+# ISO 27001 evidence CSVs and raw DB exports — contain personal data, never commit
+audit-evidence/evidence/

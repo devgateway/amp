@@ -35,7 +35,6 @@ import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
@@ -84,7 +83,6 @@ public class ActivityUtil {
     }
     return col;
   }
-
   public static Response getProjectThumbnail(String projectId)
   {
     Session session = null;
@@ -104,9 +102,7 @@ public class ActivityUtil {
       }
       else
       {
-          {
               response = Response.ok(projectThumbnail.getImgFile(),projectThumbnail.getContentType()).build();
-          }
       }
     }catch (Exception e){
       logger.error("Unable to get project thumbnail");
@@ -624,64 +620,58 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
     try {
       session = PersistenceManager.getSession();
-      AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
-      Set comp = activity.getComponents();
-      if (comp != null && comp.size() > 0) {
-        Iterator itr1 = comp.iterator();
-        while (itr1.hasNext()) {
-          AmpComponent ampComp = (AmpComponent) itr1.next();
-          Components<FundingDetail> components = new Components<FundingDetail>();
-          components.setComponentId(ampComp.getAmpComponentId());
-          components.setDescription(ampComp.getDescription());
-          components.setType_Id((ampComp.getType()!=null)?ampComp.getType().getType_id():null);
-          components.setTitle(ampComp.getTitle());
-          components.setCommitments(new ArrayList());
-          components.setDisbursements(new ArrayList());
-          components.setExpenditures(new ArrayList());
+      AmpActivityVersion activity = session.load(AmpActivityVersion.class, id);
+      Set<AmpComponent> comp = activity.getComponents();
+      if (comp != null && !comp.isEmpty()) {
+          for (Object o : comp) {
+              AmpComponent ampComp = (AmpComponent) o;
+              Components<FundingDetail> components = new Components<FundingDetail>();
+              components.setComponentId(ampComp.getAmpComponentId());
+              components.setDescription(ampComp.getDescription());
+              components.setType_Id((ampComp.getType() != null) ? ampComp.getType().getType_id() : null);
+              components.setTitle(ampComp.getTitle());
+              components.setCommitments(new ArrayList<>());
+              components.setDisbursements(new ArrayList<>());
+              components.setExpenditures(new ArrayList<>());
 
-          Collection<AmpComponentFunding> componentsFunding = ampComp.getFundings();
-          Iterator compFundIterator = componentsFunding.iterator();
-          while (compFundIterator.hasNext()) {
-            AmpComponentFunding cf = (AmpComponentFunding) compFundIterator.next();
-            FundingDetail fd = new FundingDetail();
-            fd.setAdjustmentTypeName(cf.getAdjustmentType());
-
-            fd.setCurrencyCode(cf.getCurrency().getCurrencyCode());
-            fd.setCurrencyName(cf.getCurrency().getCurrencyName());
-            fd.setTransactionAmount(FormatHelper.formatNumber(cf.getTransactionAmount().doubleValue()));
-            fd.setTransactionDate(DateConversion.convertDateToLocalizedString(cf.getTransactionDate()));
-            fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(cf.getTransactionDate()));
-            fd.setTransactionType(cf.getTransactionType().intValue());
-            if (fd.getTransactionType() == Constants.COMMITMENT) {
-              components.getCommitments().add(fd);
-            }
-            else if (fd.getTransactionType() == Constants.DISBURSEMENT) {
-              components.getDisbursements().add(fd);
-            }
-            else if (fd.getTransactionType() == Constants.EXPENDITURE) {
-              components.getExpenditures().add(fd);
-            }
+              Collection<AmpComponentFunding> componentsFunding = ampComp.getFundings();
+              for (AmpComponentFunding cf : componentsFunding) {
+                  FundingDetail fd = new FundingDetail();
+                  fd.setAdjustmentTypeName(cf.getAdjustmentType());
+                  fd.setCurrencyCode(cf.getCurrency().getCurrencyCode());
+                  fd.setCurrencyName(cf.getCurrency().getCurrencyName());
+                  fd.setTransactionAmount(FormatHelper.formatNumber(cf.getTransactionAmount().doubleValue()));
+                  fd.setTransactionDate(DateConversion.convertDateToLocalizedString(cf.getTransactionDate()));
+                  fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(cf.getTransactionDate()));
+                  fd.setTransactionType(cf.getTransactionType());
+                  if (fd.getTransactionType() == Constants.COMMITMENT) {
+                      components.getCommitments().add(fd);
+                  } else if (fd.getTransactionType() == Constants.DISBURSEMENT) {
+                      components.getDisbursements().add(fd);
+                  } else if (fd.getTransactionType() == Constants.EXPENDITURE) {
+                      components.getExpenditures().add(fd);
+                  }
+              }
+              List list = null;
+              if (components.getCommitments() != null) {
+                  list = new ArrayList<>(components.getCommitments());
+                  list.sort(FundingValidator.dateComp);
+              }
+              components.setCommitments(list);
+              list = null;
+              if (components.getDisbursements() != null) {
+                  list = new ArrayList<>(components.getDisbursements());
+                  list.sort(FundingValidator.dateComp);
+              }
+              components.setDisbursements(list);
+              list = null;
+              if (components.getExpenditures() != null) {
+                  list = new ArrayList<>(components.getExpenditures());
+                  list.sort(FundingValidator.dateComp);
+              }
+              components.setExpenditures(list);
+              componentsCollection.add(components);
           }
-          List list = null;
-          if (components.getCommitments() != null) {
-            list = new ArrayList(components.getCommitments());
-            Collections.sort(list, FundingValidator.dateComp);
-          }
-          components.setCommitments(list);
-          list = null;
-          if (components.getDisbursements() != null) {
-            list = new ArrayList(components.getDisbursements());
-            Collections.sort(list, FundingValidator.dateComp);
-          }
-          components.setDisbursements(list);
-          list = null;
-          if (components.getExpenditures() != null) {
-            list = new ArrayList(components.getExpenditures());
-            Collections.sort(list, FundingValidator.dateComp);
-          }
-          components.setExpenditures(list);
-          componentsCollection.add(components);
-        }
       }
 
     }
@@ -1096,6 +1086,15 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         String deleteActivitySurvey = "DELETE FROM amp_ahsurvey WHERE amp_activity_id = ?";
         SQLUtils.executePreparedQuery(con, deleteActivitySurvey,ampAct.getAmpActivityId() ,"amp_ahsurvey");
 
+        // amp_funding_detail and amp_funding_mtef_projection FK-reference amp_funding and must be removed first
+        String deleteFundingDetail = "DELETE FROM amp_funding_detail WHERE amp_funding_id IN "
+                + "( SELECT amp_funding_id FROM amp_funding WHERE amp_activity_id = ? )";
+        SQLUtils.executePreparedQuery(con, deleteFundingDetail,ampAct.getAmpActivityId() ,"amp_funding_detail");
+
+        String deleteFundingMtefProjection = "DELETE FROM amp_funding_mtef_projection WHERE amp_funding_id IN "
+                + "( SELECT amp_funding_id FROM amp_funding WHERE amp_activity_id = ? )";
+        SQLUtils.executePreparedQuery(con, deleteFundingMtefProjection,ampAct.getAmpActivityId() ,"amp_funding_mtef_projection");
+
         String deleteFunding = "DELETE FROM amp_funding WHERE amp_activity_id = ?";
         SQLUtils.executePreparedQuery(con, deleteFunding,ampAct.getAmpActivityId() ,"amp_funding");
 
@@ -1174,19 +1173,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
   }
 
   public static void deleteActivityIndicatorsSession(Long ampActivityId,Session session) throws Exception{
-        Collection col = null;
-        Query qry = null;
-        String queryString = "select indAct from "
-                + IndicatorActivity.class.getName() + " indAct "
-                + " where (indAct.activity=:ampActId)";
-        qry = session.createQuery(queryString);
-        qry.setParameter("ampActId", ampActivityId, LongType.INSTANCE);
-        col = qry.list();
-
-      for (Object o : col) {
-          IndicatorActivity indAct = (IndicatorActivity) o;
-          session.delete(indAct);
-      }
+        deleteIndicatorConnectionsForActivity(ampActivityId, session);
 
   }
 
@@ -1700,7 +1687,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     ampActivityVersion.getOrgrole().clear();
                     ampActivityVersion.getIndicators().clear();
                     // Delete duplicate fields if any separately
-                    deleteDuplicateContent(ampActivityVersion, session);
+//                    deleteDuplicateContent(ampActivityVersion, session);
 
                     session.delete(ampActivityVersion);
                 }
@@ -1751,15 +1738,32 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
         ActivityUtil.deleteActivityContent(ampAct,session);
         Long ampActId = ampAct.getAmpActivityId();
-        //This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
-        ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
-        }
+        deleteIndicatorConnectionsForActivity(ampActId, session);
+    }
 
     public static void  deleteAllActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
         ActivityUtil.deleteActivityContent(ampAct,session);
         Long ampActId = ampAct.getAmpActivityId();
         ActivityUtil.removeMergeSources(ampActId, session);
-        ActivityUtil.deleteActivityIndicatorsSession(ampActId, session);
+        deleteIndicatorConnectionsForActivity(ampActId, session);
+    }
+
+    private static void deleteIndicatorConnectionsForActivity(Long ampActId, Session session) throws Exception {
+        // Delete indicator values first, then the activity indicator connections, without loading entities.
+        session.doWork(connection -> {
+            try (java.sql.PreparedStatement deleteValues = connection.prepareStatement(
+                    "delete from AMP_INDICATOR_VALUES where IND_CONNECT_ID in (" +
+                            "select ID from AMP_INDICATOR_CONNECTION where ACTIVITY_ID = ? and SUB_CLAZZ = 'a')");
+                 java.sql.PreparedStatement deleteConnections = connection.prepareStatement(
+                         "delete from AMP_INDICATOR_CONNECTION where ACTIVITY_ID = ? and SUB_CLAZZ = 'a'")) {
+
+                deleteValues.setLong(1, ampActId);
+                deleteValues.executeUpdate();
+
+                deleteConnections.setLong(1, ampActId);
+                deleteConnections.executeUpdate();
+            }
+        });
     }
 
     public static Integer activityExists (Long versionId,Session session) throws Exception{

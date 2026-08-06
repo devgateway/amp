@@ -94,7 +94,7 @@ WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 # Copy package files for dependency installation
 COPY TEMPLATE/ampTemplate/node_modules/gis-layers-manager/package*.json ./
-RUN --mount=type=cache,target=/root/.npm \
+RUN --mount=type=cache,id=npm-cache-gis-layers-manager,target=/root/.npm,sharing=locked \
     npm-install-with-retry.sh
 # Copy source code after dependencies are installed
 COPY TEMPLATE/ampTemplate/node_modules/gis-layers-manager .
@@ -127,6 +127,7 @@ RUN cd dev \
     && rm -rf node_modules
 
 FROM node as compile-dashboard
+SHELL ["/bin/bash", "-c"]
 # Copy npm install helper script
 COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
 RUN chmod +x /usr/local/bin/npm-install-with-retry.sh
@@ -146,11 +147,13 @@ RUN --mount=type=cache,target=/root/.npm \
     npm-install-with-retry.sh dev
 # Copy source code after dependencies are installed
 COPY TEMPLATE/ampTemplate/dashboard .
-RUN cd dev \
-    && npm run build \
-    && rm -rf node_modules
+RUN set -euxo pipefail \
+ && cd dev \
+ && npm ci --no-audit --prefer-offline \
+ && npm run build --verbose \
+ && rm -rf node_modules
 
-FROM node as compile-reamp
+FROM node:16.20.2 as compile-reamp
 # Copy npm install helper script
 COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
 RUN chmod +x /usr/local/bin/npm-install-with-retry.sh
@@ -159,15 +162,16 @@ WORKDIR /tmp/amp/TEMPLATE/reamp
 COPY --from=compile-amp-boilerplate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate ../ampTemplate/node_modules/amp-boilerplate
 # Copy package files for dependency installation
 COPY TEMPLATE/reamp/package*.json ./
-RUN --mount=type=cache,target=/root/.npm \
+RUN --mount=type=cache,id=npm-cache-reamp,target=/root/.npm,sharing=locked \
     --mount=type=ssh \
-    npm-install-with-retry.sh
+    NPM_CONFIG_LEGACY_PEER_DEPS=true npm-install-with-retry.sh
 # Copy source code after dependencies are installed
 COPY TEMPLATE/reamp .
 RUN npm run build \
+    && node -e "const fs=require('fs'); const source=fs.readFileSync('dependencies-bundle.js','utf8'); const start=source.indexOf('key:\"getFieldDef\"'); const method=start === -1 ? '' : source.slice(start, start + 900); if (start === -1 || /[a-z]\s*\+=\s*2/.test(method)) { console.error('Stale amp-ui FieldsManager.getFieldDef detected in dependencies-bundle.js'); process.exit(1); }" \
     && rm -rf node_modules
 
-FROM node as compile-reampv2
+FROM node:20 as compile-reampv2
 # Copy npm install helper script
 COPY docker/npm-install-with-retry.sh /usr/local/bin/npm-install-with-retry.sh
 RUN chmod +x /usr/local/bin/npm-install-with-retry.sh

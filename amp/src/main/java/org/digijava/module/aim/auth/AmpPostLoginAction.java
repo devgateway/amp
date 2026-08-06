@@ -9,6 +9,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.security.ApiAuthentication;
+import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
@@ -48,14 +49,38 @@ public class AmpPostLoginAction extends Action {
 
         ApiErrorMessage res = ApiAuthentication.login(currentUser, request);
         if(res != null) {
-            out.println(getJsonResponse(res.description));
+            out.println(getJsonResponse(toLoginWidgetErrorCode(res)));
         } else {
             out.println(getJsonResponse("noError", null));
         }
 
         return null;
     }
-    
+
+    /**
+     * The login widget's JavaScript (digest-auth.js) matches "original_result" against fixed short codes
+     * (e.g. "userBanned") rather than the translatable {@link ApiErrorMessage#description}, so it must be
+     * translated back here. Any other string ends up mishandled by that script.
+     */
+    private String toLoginWidgetErrorCode(ApiErrorMessage res) {
+        if (SecurityErrors.USER_BANNED.id.equals(res.id)) {
+            return "userBanned";
+        }
+        if (SecurityErrors.NO_TEAM.id.equals(res.id)) {
+            return "noTeamMember";
+        }
+        if (SecurityErrors.USER_SUSPENDED.id.equals(res.id)) {
+            StringBuilder code = new StringBuilder("userSuspended");
+            if (res.getValues() != null) {
+                for (String reason : res.getValues()) {
+                    code.append('{').append(reason).append('}');
+                }
+            }
+            return code.toString();
+        }
+        return "invalidUser";
+    }
+
     private String getJsonResponse(String originalMessage){
         return getJsonResponse(originalMessage,null);
     }

@@ -331,6 +331,7 @@
 </div>
 <div style="display: none;">
 	<form id="addNewLocationForm"  method="post" action="/aim/addNewLocation.do">
+		<jsp:include page="/WEB-INF/jsp/common/csrfInput.jsp" />
 		<input type="hidden" name="parentCatValId" />
 		<input type="hidden" name="parentLocationId" />
 		<input type="hidden" name="editedId" />
@@ -339,6 +340,7 @@
 </div>
 <div style="display: none;">
 	<form id="dynLocationManagerForm" action="/aim/dynLocationManager.do" method="post">
+		<jsp:include page="/WEB-INF/jsp/common/csrfInput.jsp" />
 		<input type="hidden" name="treeStructure" />
 		<input type="hidden" name="unorgLocations" />
 		<input type="hidden" name="deleteLocationId" />
@@ -346,6 +348,7 @@
 </div>
 <div style="display: none;">
 	<form id="indicatorLayerForm"  method="post" action="/aim/indicatorLayerManager.do">
+		<jsp:include page="/WEB-INF/jsp/common/csrfInput.jsp" />
 		<input type="hidden" name="event" />
 	</form>
 </div>

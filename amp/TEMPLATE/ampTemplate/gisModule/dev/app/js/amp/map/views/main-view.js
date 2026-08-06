@@ -3,7 +3,7 @@ var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var topojsonLibrary = require('../../../libs/local/topojson.js');
-var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
+var L = window.L; // use global L set by lib-load-hacks.js
 
 var MapHeaderView = require('../views/map-header-view');
 var MapHeaderGapAnalysisView = require('../views/map-header-gap-analysis-view');

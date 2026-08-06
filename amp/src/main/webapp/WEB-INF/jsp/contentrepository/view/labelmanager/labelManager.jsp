@@ -258,6 +258,7 @@
 
 <div id="addEditLabelDiv" style="display: none;">
 	<form id="addEditLabelForm"  method="post" action="/contentrepository/labelManager.do?addOrEdit=true">
+		<jsp:include page="/WEB-INF/jsp/common/csrfInput.jsp" />
 		<input type="hidden" name="editParentUUID" />
 		<input type="hidden" name="editUUID" />
 		<input type="hidden" name="editLabelType" />
@@ -289,6 +290,7 @@
 
 <div style="display: none;">
 	<form id="LabelManagerForm" action="/contentrepository/labelManager.do?delete=true" method="post">
+		<jsp:include page="/WEB-INF/jsp/common/csrfInput.jsp" />
 		<input type="hidden" name="deleteLabelUUID" />
 	</form>
 </div>

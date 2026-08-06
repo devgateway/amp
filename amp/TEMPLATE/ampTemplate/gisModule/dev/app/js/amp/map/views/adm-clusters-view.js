@@ -4,7 +4,7 @@ var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var TopojsonLibrary = require('../../../libs/local/topojson.js');
-var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
+var L = window.L; // use global L set by lib-load-hacks.js
 
 var ADMTemplate = fs.readFileSync(__dirname + '/../templates/map-adm-template.html', 'utf8');
 var WocatADMTemplate = fs.readFileSync(__dirname + '/../templates/wocat-adm-template.html', 'utf8');

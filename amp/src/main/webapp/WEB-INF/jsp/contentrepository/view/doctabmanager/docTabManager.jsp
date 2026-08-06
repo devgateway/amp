@@ -133,6 +133,11 @@ var trnObj		= {
 	function retrieveFilterData(filterId) {
 		YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?time='+ new Date().getTime()+'&action=jsonfilter&filterId='+filterId, new RetrieveFilters(publicListObj) );
 	}
+
+	function deleteFilter(filterId) {
+		document.forms["crDocTabManagerForm"].action	= "/contentrepository/publicDocTabManager.do?action=delete&filterId=" + filterId;
+		document.forms["crDocTabManagerForm"].submit();
+	}
 	
 	YAHOO.util.Event.on(window, "load", afterPageLoad);
 	
@@ -253,7 +258,7 @@ var trnObj		= {
 										${filter.name}
 									</a> 
 									[<a style="cursor:pointer; text-decoration:none; color: blue" 
-									href="/contentrepository/publicDocTabManager.do?action=delete&filterId=${filter.id}"><digi:trn>Delete</digi:trn></a>]
+									href="#" onclick="deleteFilter(${filter.id}); return false;"><digi:trn>Delete</digi:trn></a>]
 								</li>
 							</c:forEach>
 							</ul>

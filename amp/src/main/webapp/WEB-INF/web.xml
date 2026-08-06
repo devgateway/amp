@@ -47,8 +47,6 @@
 			org.dgfoundation.amp.error.keeper.DigiXmlECSLoaderListener
 		</listener-class>
 	</listener>
-	<!--                 SEGMENT END                 -->
-	<!--  ADD ENTRIES BELOW -->
 
 	<filter>
 		<filter-name>characterEncodingFilter</filter-name>

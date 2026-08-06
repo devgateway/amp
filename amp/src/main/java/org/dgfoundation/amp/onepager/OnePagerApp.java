@@ -7,19 +7,22 @@ import net.ftlines.wicketsource.WicketSource;
 import org.apache.log4j.Logger;
 import org.apache.wicket.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
+import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.markup.head.*;
 import org.apache.wicket.markup.html.DecoratingHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.http.CsrfPreventionRequestCycleListener;
 import org.apache.wicket.protocol.http.servlet.ResponseIOException;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.protocol.http.servlet.ServletWebResponse;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
-import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
@@ -29,7 +32,9 @@ import org.dgfoundation.amp.onepager.util.JspResolver;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.web.csrf.CsrfToken;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.SocketException;
@@ -164,23 +169,12 @@ public class OnePagerApp extends AuthenticatedWebApplication {
         //set UTF-8 as the default encoding for all requests
         getRequestCycleSettings().setResponseRequestEncoding("UTF-8");
         getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
+        addSpringCsrfTokenToWicketAjax();
+        addWicketCsrfProtection();
 
-//        getRequestCycleListeners().add(new AbstractRequestCycleListener() {
-//            @Override
-//            public void onBeginRequest(RequestCycle cycle) {
-//                WebResponse response = (WebResponse) cycle.getResponse();
-//                response.setHeader("Content-Security-Policy",
-//                        "default-src 'self'; " +
-//                                "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
-//                                "style-src 'self' 'unsafe-inline'; " +
-//                                "img-src 'self' data:; " +
-//                                "frame-ancestors 'none'; " +
-//                                "object-src 'none';");
-//                response.setHeader("X-Frame-Options", "SAMEORIGIN");
-//            }
-//        });
-
-
+        // Browser hardening headers (X-Frame-Options, Content-Security-Policy, HSTS, etc.)
+        // are now applied globally by SecurityHeadersFilter registered in web.xml, so no
+        // per-cycle header injection is needed here.
 
         setHeaderResponseDecorator(new IHeaderResponseDecorator() {
             @Override
@@ -204,6 +198,56 @@ public class OnePagerApp extends AuthenticatedWebApplication {
                 };
             }
         });
+    }
+
+    private void addSpringCsrfTokenToWicketAjax() {
+        getAjaxRequestTargetListeners().add(new AjaxRequestTarget.AbstractListener() {
+            @Override
+            public void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                CsrfToken token = getCurrentSpringCsrfToken();
+                if (token == null) {
+                    return;
+                }
+
+                String parameterName = escapeJavaScript(token.getParameterName());
+                String tokenValue = escapeJavaScript(token.getToken());
+                attributes.getDynamicExtraParameters().add(
+                        "var method = attrs && attrs.mp ? 'POST' : (attrs && attrs.m ? attrs.m : 'GET');"
+                                + "if (method.toUpperCase() !== 'POST') { return {}; }"
+                                + "return [{name:'" + parameterName + "', value:'" + tokenValue + "'}];");
+
+                AjaxCallListener listener = new AjaxCallListener();
+                listener.onBeforeSend("if (jqXHR && jqXHR.setRequestHeader) { jqXHR.setRequestHeader('"
+                        + escapeJavaScript(token.getHeaderName()) + "', '" + tokenValue + "'); }");
+                attributes.getAjaxCallListeners().add(listener);
+            }
+        });
+    }
+
+    private CsrfToken getCurrentSpringCsrfToken() {
+        RequestCycle requestCycle = RequestCycle.get();
+        if (requestCycle == null || !(requestCycle.getRequest() instanceof ServletWebRequest)) {
+            return null;
+        }
+
+        HttpServletRequest request = ((ServletWebRequest) requestCycle.getRequest()).getContainerRequest();
+        return (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+    }
+
+    private String escapeJavaScript(CharSequence value) {
+        return JavaScriptUtils.escapeQuotes(value).toString();
+    }
+
+    /**
+     * Register Wicket's own Origin/Referer-based CSRF protection for all Wicket
+     * action requests. Spring CSRF is exempted for /wicket/** in AmpWebCsrfRequestMatcher;
+     * this listener enforces same-origin policy at the Wicket layer instead.
+     */
+    private void addWicketCsrfProtection() {
+        CsrfPreventionRequestCycleListener csrfListener = new CsrfPreventionRequestCycleListener();
+        // Allow requests that have no Origin/Referer header (curl, server-side calls, old proxies)
+        csrfListener.setNoOriginAction(CsrfPreventionRequestCycleListener.CsrfAction.ALLOW);
+        getRequestCycleListeners().add(csrfListener);
     }
 
 

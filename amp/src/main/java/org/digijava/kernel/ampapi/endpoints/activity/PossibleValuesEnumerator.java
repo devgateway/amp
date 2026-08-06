@@ -262,6 +262,7 @@ public class PossibleValuesEnumerator {
                 }
             } else if (clazz.equals(AmpClassificationConfiguration.class)) {
                 final String configType = discriminatorValue;
+                @SuppressWarnings("rawtypes")
                 Supplier<List> possibleValuesSupplier = () -> Collections.singletonList(
                         possibleValuesDAO.getAmpClassificationConfiguration(configType));
                 pvp = new GenericPossibleValuesProvider(clazz, possibleValuesSupplier);
@@ -280,8 +281,12 @@ public class PossibleValuesEnumerator {
      */
     private PossibleValuesProvider getPossibleValuesForField(APIField apiField) throws Exception {
         Class<?> clazz = apiField.getApiType().getType();
-        if (clazz.isAssignableFrom(AmpCategoryValue.class))
+        if (clazz.isAssignableFrom(AmpCategoryValue.class)) {
+            if (StringUtils.isBlank(apiField.getDiscriminatorValue())) {
+                return null;
+            }
             return getPossibleValuesForComplexField(apiField, null);
+        }
         if (clazz.isAssignableFrom(AmpOrganisation.class)) {
             return new GenericPossibleValuesProvider(clazz, () -> possibleValuesDAO.getOrganisations(),
                     (id) -> possibleValuesDAO.isOrganizationValid(id));

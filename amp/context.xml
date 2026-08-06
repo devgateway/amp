@@ -4,7 +4,11 @@
 allowLinking="true" antiJARLocking="" antiResourceLocking="" clearReferencesStopTimerThreads="true"
 clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTlds="false">
   <Environment name="hostname" value="" type="java.lang.String"/> 
-  
+
+  <!-- SameSite=Lax: browser will not send the session cookie on cross-site
+       POST/PUT/DELETE requests, providing CSRF protection for all endpoints
+       including /rest/** without requiring any token in requests. -->
+  <CookieProcessor sameSiteCookies="lax" />
   <!-- PostgreSQL connection -->
   <Resource factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" 
   	defaultTransactionIsolation="READ_COMMITTED" 

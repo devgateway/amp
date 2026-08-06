@@ -29,6 +29,9 @@ public interface PossibleValuesDAO {
 
     List<Object[]> getThemes(String configType);
 
+    /** Returns all themes from all program types, with no filtering by config type. */
+    List<Object[]> getAllThemes();
+
     boolean isThemeValid(String configType, Long id);
 
     List<Object[]> getSectors(String configType);

@@ -105,7 +105,7 @@ public class SecurityService {
             menuStructureItem.setUrl(item.url);
             menuStructureItem.setPopup(item.isPopup);
             menuStructureItem.setTab(item.isTab);
-            menuStructureItem.setPopup(item.isPost);
+            menuStructureItem.setPost(item.isPost);
             
             if (item.getChildren().size() > 0) {
                 menuStructureItem.setChildren(getMenuStructures(item.getChildren()));

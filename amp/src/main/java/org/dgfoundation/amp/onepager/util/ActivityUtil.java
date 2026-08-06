@@ -762,7 +762,7 @@ public class ActivityUtil {
     }
 
     private static void setCreationTimeOnStructureImages(AmpActivityVersion activity) {
-\        if (activity.getStructures() != null && Hibernate.isInitialized(activity.getStructures())) {
+        if (activity.getStructures() != null && Hibernate.isInitialized(activity.getStructures())) {
             for (AmpStructure str : activity.getStructures()) {
                 if (str.getImages() != null && Hibernate.isInitialized(str.getImages())) {
                     for (AmpStructureImg img : str.getImages()) {

@@ -1687,7 +1687,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     ampActivityVersion.getOrgrole().clear();
                     ampActivityVersion.getIndicators().clear();
                     // Delete duplicate fields if any separately
-                    deleteDuplicateContent(ampActivityVersion, session);
+//                    deleteDuplicateContent(ampActivityVersion, session);
 
                     session.delete(ampActivityVersion);
                 }

@@ -208,8 +208,8 @@ public class SecurityService {
         User user = UserUtils.getUserByEmailAddress(username);
         String storedPassword = (user != null && user.getPassword() != null) ? user.getPassword() : "";
         boolean passwordMatches = MessageDigest.isEqual(
-                storedPassword.toLowerCase(Locale.ROOT).getBytes(StandardCharsets.UTF_8),
-                password.toLowerCase(Locale.ROOT).getBytes(StandardCharsets.UTF_8));
+                storedPassword.getBytes(StandardCharsets.UTF_8),
+                password.getBytes(StandardCharsets.UTF_8));
         if (user == null || !passwordMatches) {
             ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.INVALID_USER_PASSWORD);
         }

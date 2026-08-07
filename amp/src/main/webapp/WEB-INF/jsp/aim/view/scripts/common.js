@@ -45,10 +45,19 @@
 		 anchor.href = url;
 		 return anchor.protocol === window.location.protocol && anchor.host === window.location.host;
 	 }
+	 // A form field named "action" (e.g. Struts <html:hidden property="action">) shadows the
+	 // HTMLFormElement.action getter, turning form.action into that input element instead of a
+	 // URL string; fall back to the raw attribute (unaffected by named-element shadowing) then.
+	 function getFormActionUrl(form) {
+		 if (typeof form.action === "string") {
+			 return form.action;
+		 }
+		 return form.getAttribute("action") || window.location.href;
+	 }
 
 	 function addCsrfToForm(form) {
 		 var token = getCsrfToken();
-		 if (!token || !form || !isUnsafeMethod(form.method) || !isSameOrigin(form.action)) {
+		 if (!token || !form || !isUnsafeMethod(form.method) || !isSameOrigin(getFormActionUrl(form))) {
 			 return;
 		 }
 

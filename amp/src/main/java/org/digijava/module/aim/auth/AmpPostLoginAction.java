@@ -21,7 +21,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author mihai

@@ -390,6 +390,28 @@ public class ProjectUtil {
         }
     }
 
+    /**
+     * Marks the local cache of a TruBudget workflowitem's status as closed, so the component form can
+     * check it without an API call on every page render. Used by {@code closeWorkFlowItem}/{@code closeSubProject}'s
+     * own close calls and by the periodic {@code TruBudgetStatusSyncJob}.
+     */
+    public static void markWorkflowItemClosedInAmp(String truWFId) {
+        try {
+            Integer updated = PersistenceManager.<Integer>doInTransaction(dbSession -> {
+                return dbSession.createQuery(
+                        "UPDATE " + AmpComponentFundingTruWF.class.getName() + " wf " +
+                            "SET wf.workflowItemClosed = :closed " +
+                            "WHERE wf.truWFId = :truWFId")
+                    .setParameter("closed", Boolean.TRUE)
+                    .setParameter("truWFId", truWFId)
+                    .executeUpdate();
+            });
+            logger.info("Marked TruBudget workflowitem as closed in AMP. truWFId={}, rowsUpdated={}", truWFId, updated);
+        } catch (Exception e) {
+            logger.error("Failed to mark TruBudget workflowitem as closed in AMP for truWFId={}", truWFId, e);
+        }
+    }
+
     public static String getTrubudgetToken()
     {
         try {
@@ -446,6 +468,7 @@ public class ProjectUtil {
                         return closeWorkFlowItemForReal(closeWFItemModel, settings, token)
                                 .map(res -> {
                                     logger.info("Workflow close response: Item " + closeWFItemModel.getData().getWorkflowitemId() + ": Res: " + res);
+                                    markWorkflowItemClosedInAmp(ampComponentFundingTruWF.getTruWFId());
                                     return res;
                                 })
                                 .onErrorResume(e -> {
@@ -458,7 +481,8 @@ public class ProjectUtil {
                 });
 
         return closeWorkflows
-                .then(GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.close", closeSubProjectModel, CloseSubProjectModel.class, String.class, token));
+                .then(GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.close", closeSubProjectModel, CloseSubProjectModel.class, String.class, token))
+                .doOnSuccess(res -> markSubProjectClosedInAmp(subProjectId));
     }
 
     /**
@@ -868,7 +892,10 @@ public class ProjectUtil {
             }
 
             closeWorkFlowItemForReal(closeWFItemModel,settings,token)
-                    .subscribe(res -> logger.info("WF close response: "+res));
+                    .subscribe(res -> {
+                        logger.info("WF close response: "+res);
+                        markWorkflowItemClosedInAmp(workFlowItemId);
+                    });
 
 
         }
@@ -960,6 +987,27 @@ public class ProjectUtil {
     }
 
     /**
+     * Fetches the live workflowitem status from TruBudget. Returns null (instead of throwing) on any
+     * communication failure so callers can fail open rather than block AMP editing.
+     */
+    public static String getWorkflowItemStatus(AmpComponentFundingTruWF ampComponentFundingTruWF, List<AmpGlobalSettings> settings, String token) {
+        try {
+            WorkflowItemDetailsModel response = getWFItemDetails(ampComponentFundingTruWF, settings, token);
+            return response != null && response.getData() != null && response.getData().getWorkflowitem() != null
+                    && response.getData().getWorkflowitem().getData() != null
+                    ? response.getData().getWorkflowitem().getData().getStatus() : null;
+        } catch (Exception e) {
+            logger.error("Failed to fetch TruBudget workflowitem status for truWFId={}",
+                    ampComponentFundingTruWF != null ? ampComponentFundingTruWF.getTruWFId() : null, e);
+            return null;
+        }
+    }
+
+    public static boolean isWorkflowItemClosedInTruBudget(AmpComponentFundingTruWF ampComponentFundingTruWF, List<AmpGlobalSettings> settings, String token) {
+        return "closed".equalsIgnoreCase(getWorkflowItemStatus(ampComponentFundingTruWF, settings, token));
+    }
+
+    /**
      * Convenience check for the activity form: is this activity's linked TruBudget project closed?
      * Reads the locally cached {@code TruBudgetActivity.projectClosed} flag (kept in sync by
      * {@code TruBudgetStatusSyncJob}) instead of calling the TruBudget API on every page render.
@@ -1003,6 +1051,34 @@ public class ProjectUtil {
             return null;
         });
         return subProject[0] != null && Boolean.TRUE.equals(subProject[0].getSubProjectClosed());
+    }
+
+    /**
+     * Convenience check for the funding/workflow-item form: is this component funding's linked TruBudget
+     * workflowitem closed? Reads the locally cached {@code AmpComponentFundingTruWF.workflowItemClosed} flag
+     * (kept in sync by {@code TruBudgetStatusSyncJob}) instead of calling the TruBudget API on every page render.
+     * Fails open (returns false) when not linked or TruBudget integration is disabled.
+     */
+    public static boolean isComponentFundingWorkflowItemClosedInTruBudget(AmpComponentFunding componentFunding) {
+        if (componentFunding == null || componentFunding.getJustAnId() == null) {
+            return false;
+        }
+        List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+        if (!"true".equalsIgnoreCase(getSettingValue(settings, "isEnabled"))) {
+            return false;
+        }
+
+        String ampComponentFundingId = componentFunding.getJustAnId();
+        final AmpComponentFundingTruWF[] workflowItem = new AmpComponentFundingTruWF[1];
+        PersistenceManager.doInTransaction(session -> {
+            workflowItem[0] = session.createQuery(
+                            "FROM " + AmpComponentFundingTruWF.class.getName()
+                                    + " act WHERE act.ampComponentFundingId = :ampComponentFundingId", AmpComponentFundingTruWF.class)
+                    .setParameter("ampComponentFundingId", ampComponentFundingId)
+                    .stream().findAny().orElse(null);
+            return null;
+        });
+        return workflowItem[0] != null && Boolean.TRUE.equals(workflowItem[0].getWorkflowItemClosed());
     }
 
 }

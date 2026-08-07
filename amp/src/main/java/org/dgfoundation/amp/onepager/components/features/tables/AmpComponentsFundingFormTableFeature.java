@@ -19,21 +19,13 @@ import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.dgfoundation.amp.onepager.models.AmpRelatedOrgsModel;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.trubudget.dbentity.AmpComponentFundingTruWF;
-import org.digijava.module.trubudget.model.workflowitem.WorkflowItemDetailsModel;
 import org.digijava.module.trubudget.util.ProjectUtil;
 
 import java.util.*;
 
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
-import static org.digijava.module.trubudget.util.TruBudgetAuthUtil.doActualTruBudgetLogin;
-import static org.digijava.module.um.util.DbUtil.getGlobalSettingsBySection;
-import static org.digijava.module.um.util.DbUtil.getSettingValue;
 
 /**
  * @author aartimon@dginternational.org 
@@ -74,27 +66,12 @@ public class AmpComponentsFundingFormTableFeature extends
                 if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES) == null)
                     getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES,  new HashMap<>());
 //                item.add(new AttributeModifier("style",""))
-                User user = model.getObject().getComponent().getActivity().getActivityCreator().getUser();
-                if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&& user.getTruBudgetEnabled()) {
-                    if (model.getObject().getTransactionType()==1) {
-                        PersistenceManager.getRequestDBSession().createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.ampComponentFundingId= '" + model.getObject().getJustAnId() + "' AND act.ampComponentFundingId IS NOT NULL", AmpComponentFundingTruWF.class).stream().findAny().ifPresent(ampComponentFundingTruWF->{
-                            WorkflowItemDetailsModel workflowItemDetailsModel = null;
-                            try {
-                                List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
-                                String token = ProjectUtil.getTrubudgetToken();
-                                workflowItemDetailsModel = ProjectUtil.getWFItemDetails(ampComponentFundingTruWF,settings,token);
-                            } catch (Exception e) {
-                                logger.info("Error when getting WF details: ",e);
-                            }
-                            if (workflowItemDetailsModel!=null && workflowItemDetailsModel.getData()!=null) {
-                                if (!workflowItemDetailsModel.getData().getWorkflowitem().getData().getStatus().equalsIgnoreCase("open")) {
-                                    item.add(new AttributeModifier("style", "pointer-events: none; opacity: 0.5;"));
-                                }
-                            }
-                        });
-
-
-                    }
+                // Reads the locally cached workflowItemClosed flag (kept in sync by TruBudgetStatusSyncJob)
+                // instead of calling the TruBudget API on every row render.
+                if (model.getObject().getTransactionType() == 1
+                        && ProjectUtil.isComponentFundingWorkflowItemClosedInTruBudget(model.getObject())) {
+                    item.setEnabled(false);
+                    item.add(new AttributeModifier("style", "pointer-events: none; opacity: 0.5;"));
                 }
                 try{
                     AmpCategorySelectFieldPanel adjustmentTypes = new AmpCategorySelectFieldPanel(

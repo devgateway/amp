@@ -13,6 +13,7 @@
         <property name="truProjectId" column="tru_project_id" type="java.lang.String"/>
         <property name="truSubprojectId" column="tru_subproject_id" type="java.lang.String"/>
         <property name="ampComponentFundingId" column="amp_component_funding_id" type="java.lang.String"/>
+        <property name="workflowItemClosed" column="workflow_item_closed" type="java.lang.Boolean"/>
 
     </class>
 </hibernate-mapping>

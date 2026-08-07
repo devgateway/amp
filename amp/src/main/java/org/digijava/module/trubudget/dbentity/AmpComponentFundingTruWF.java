@@ -35,6 +35,18 @@ public class AmpComponentFundingTruWF implements Serializable {
     private String truSubprojectId;
     @Column(name = "amp_component_funding_id")//we use the justAnId field.. a unique uuid.
     private String ampComponentFundingId;
+
+    @Column(name = "workflow_item_closed")
+    private Boolean workflowItemClosed = Boolean.FALSE;
+
+    public Boolean getWorkflowItemClosed() {
+        return workflowItemClosed;
+    }
+
+    public void setWorkflowItemClosed(Boolean workflowItemClosed) {
+        this.workflowItemClosed = workflowItemClosed;
+    }
+
     public String getTruProjectId() {
         return truProjectId;
     }

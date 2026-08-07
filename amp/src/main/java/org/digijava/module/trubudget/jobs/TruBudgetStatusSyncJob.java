@@ -4,6 +4,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.message.jobs.AmpJobsUtil;
 import org.digijava.module.message.jobs.ConnectionCleaningJob;
+import org.digijava.module.trubudget.dbentity.AmpComponentFundingTruWF;
 import org.digijava.module.trubudget.dbentity.AmpComponentTruSubProject;
 import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
 import org.digijava.module.trubudget.util.ProjectUtil;
@@ -22,8 +23,9 @@ import static org.digijava.module.um.util.DbUtil.getGlobalSettingsBySection;
 import static org.digijava.module.um.util.DbUtil.getSettingValue;
 
 /**
- * Periodically checks the live status of TruBudget projects/subprojects already linked to AMP and
- * caches "closed" status locally (TruBudgetActivity.projectClosed / AmpComponentTruSubProject.subProjectClosed).
+ * Periodically checks the live status of TruBudget projects/subprojects/workflowitems already linked to
+ * AMP and caches "closed" status locally (TruBudgetActivity.projectClosed / AmpComponentTruSubProject.subProjectClosed
+ * / AmpComponentFundingTruWF.workflowItemClosed).
  * The activity form reads these cached flags instead of calling the TruBudget API on every page render.
  */
 public class TruBudgetStatusSyncJob extends ConnectionCleaningJob implements StatefulJob {
@@ -89,8 +91,25 @@ public class TruBudgetStatusSyncJob extends ConnectionCleaningJob implements Sta
             }
         }
 
-        logger.info("TruBudget status sync completed. projectsClosed={}, subProjectsClosed={}",
-                projectsClosed, subProjectsClosed);
+        int workflowItemsClosed = 0;
+        List<AmpComponentFundingTruWF> openWorkflowItems = session.createQuery(
+                "FROM " + AmpComponentFundingTruWF.class.getName() + " wf "
+                        + "WHERE wf.workflowItemClosed = false OR wf.workflowItemClosed IS NULL",
+                AmpComponentFundingTruWF.class).list();
+        for (AmpComponentFundingTruWF workflowItem : openWorkflowItems) {
+            try {
+                if (ProjectUtil.isWorkflowItemClosedInTruBudget(workflowItem, settings, token)) {
+                    ProjectUtil.markWorkflowItemClosedInAmp(workflowItem.getTruWFId());
+                    workflowItemsClosed++;
+                }
+            } catch (Exception e) {
+                logger.error("Failed to sync TruBudget workflowitem status for truWFId={}",
+                        workflowItem.getTruWFId(), e);
+            }
+        }
+
+        logger.info("TruBudget status sync completed. projectsClosed={}, subProjectsClosed={}, workflowItemsClosed={}",
+                projectsClosed, subProjectsClosed, workflowItemsClosed);
     }
 }
 

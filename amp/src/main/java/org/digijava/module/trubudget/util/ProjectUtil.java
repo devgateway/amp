@@ -10,6 +10,7 @@ import org.digijava.kernel.entity.trubudget.SubIntents;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.trubudget.dbentity.AmpComponentFundingTruWF;
 import org.digijava.module.trubudget.dbentity.AmpComponentTruSubProject;

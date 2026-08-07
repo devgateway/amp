@@ -1087,18 +1087,10 @@ public class ActivityUtil {
         String deleteActivitySurvey = "DELETE FROM amp_ahsurvey WHERE amp_activity_id = ?";
         SQLUtils.executePreparedQuery(con, deleteActivitySurvey,ampAct.getAmpActivityId() ,"amp_ahsurvey");
 
-        // amp_funding_detail and amp_funding_mtef_projection FK-reference amp_funding and must be removed first
-        String deleteFundingDetail = "DELETE FROM amp_funding_detail WHERE amp_funding_id IN "
-                + "( SELECT amp_funding_id FROM amp_funding WHERE amp_activity_id = ? )";
-        SQLUtils.executePreparedQuery(con, deleteFundingDetail,ampAct.getAmpActivityId() ,"amp_funding_detail");
-
-        String deleteFundingMtefProjection = "DELETE FROM amp_funding_mtef_projection WHERE amp_funding_id IN "
-                + "( SELECT amp_funding_id FROM amp_funding WHERE amp_activity_id = ? )";
-        SQLUtils.executePreparedQuery(con, deleteFundingMtefProjection,ampAct.getAmpActivityId() ,"amp_funding_mtef_projection");
-
-        String deleteFunding = "DELETE FROM amp_funding WHERE amp_activity_id = ?";
-        SQLUtils.executePreparedQuery(con, deleteFunding,ampAct.getAmpActivityId() ,"amp_funding");
-
+        // amp_funding/amp_funding_detail/amp_funding_mtef_projection are already fully covered by the
+        // cascade="merge, all-delete-orphan" on AmpActivityVersion.funding (and AmpFunding.fundingDetails/
+        // .mtefProjections); deleting them here too races with that ORM cascade at flush time and causes
+        // StaleStateException ("actual row count: 0; expected: 1") on whichever path runs second.
 
 //        SQLUtils.executeQuery(con, deleteActivitySurvey );
 

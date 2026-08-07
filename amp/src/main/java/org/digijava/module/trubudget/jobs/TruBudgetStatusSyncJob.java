@@ -11,6 +11,7 @@ import org.digijava.module.um.util.DbUtil;
 import org.hibernate.Session;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.Scheduler;
 import org.quartz.StatefulJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +41,9 @@ public class TruBudgetStatusSyncJob extends ConnectionCleaningJob implements Sta
             logger.info("Skipping TruBudget status sync because TruBudget integration is disabled.");
             return;
         }
-        if (!"true".equalsIgnoreCase(getSettingValue(settings, "statusSyncJobEnabled"))) {
-            logger.info("Skipping TruBudget status sync because the statusSyncJobEnabled setting is off.");
+        boolean manualRun = Scheduler.DEFAULT_MANUAL_TRIGGERS.equals(context.getTrigger().getGroup());
+        if (!manualRun && !"true".equalsIgnoreCase(getSettingValue(settings, "statusSyncJobEnabled"))) {
+            logger.info("Skipping scheduled TruBudget status sync because the statusSyncJobEnabled setting is off.");
             return;
         }
 

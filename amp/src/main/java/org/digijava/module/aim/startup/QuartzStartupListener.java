@@ -130,36 +130,41 @@ public class QuartzStartupListener extends QuartzInitializerListener {
             return; //already scheduled
         }
 
-        List<AmpGlobalSettings> settings = DbUtil.getGlobalSettingsBySection("trubudget");
-        if (!"true".equalsIgnoreCase(DbUtil.getSettingValue(settings, "statusSyncJobEnabled"))) {
-            return; //auto-run disabled via global setting
-        }
+        // DbUtil/QuartzJobClassUtils/QuartzJobUtils rely on PersistenceManager's current-session-in-view
+        // context, which only exists during a request; contextInitialized runs before any request, so
+        // it must be opened explicitly here.
+        PersistenceManager.inTransaction(() -> {
+            List<AmpGlobalSettings> settings = DbUtil.getGlobalSettingsBySection("trubudget");
+            if (!"true".equalsIgnoreCase(DbUtil.getSettingValue(settings, "statusSyncJobEnabled"))) {
+                return; //auto-run disabled via global setting
+            }
 
-        AmpQuartzJobClass jobClass = QuartzJobClassUtils.getJobClassesByClassfullName(
-                TruBudgetStatusSyncJob.class.getName());
-        if (jobClass == null) {
-            logger.warn("TruBudget status sync job class is not registered yet; skipping auto-schedule.");
-            return;
-        }
+            AmpQuartzJobClass jobClass = QuartzJobClassUtils.getJobClassesByClassfullName(
+                    TruBudgetStatusSyncJob.class.getName());
+            if (jobClass == null) {
+                logger.warn("TruBudget status sync job class is not registered yet; skipping auto-schedule.");
+                return;
+            }
 
-        QuartzJobForm jobForm = new QuartzJobForm();
-        jobForm.setClassFullname(jobClass.getClassFullname());
-        jobForm.setGroupName("ampServices");
-        jobForm.setManualJob(false);
-        jobForm.setName(jobClass.getName());
-        jobForm.setTriggerType(QuartzJobForm.DAILY);
-        jobForm.setExeTimeH("2");
-        jobForm.setExeTimeM("0");
-        jobForm.setExeTimeS("0");
-        jobForm.setStartDateTime("01/01/2013");
-        jobForm.setStartH("00");
-        jobForm.setStartM("00");
+            QuartzJobForm jobForm = new QuartzJobForm();
+            jobForm.setClassFullname(jobClass.getClassFullname());
+            jobForm.setGroupName("ampServices");
+            jobForm.setManualJob(false);
+            jobForm.setName(jobClass.getName());
+            jobForm.setTriggerType(QuartzJobForm.DAILY);
+            jobForm.setExeTimeH("2");
+            jobForm.setExeTimeM("0");
+            jobForm.setExeTimeS("0");
+            jobForm.setStartDateTime("01/01/2013");
+            jobForm.setStartH("00");
+            jobForm.setStartM("00");
 
-        try {
-            QuartzJobUtils.addJob(jobForm);
-        } catch (Exception e) {
-            logger.error("Failed to auto-schedule TruBudget status sync job.", e);
-        }
+            try {
+                QuartzJobUtils.addJob(jobForm);
+            } catch (Exception e) {
+                logger.error("Failed to auto-schedule TruBudget status sync job.", e);
+            }
+        });
     }
 
     private boolean isJobScheduled(String jobClassName) {

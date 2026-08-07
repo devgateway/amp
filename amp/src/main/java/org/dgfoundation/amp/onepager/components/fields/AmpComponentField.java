@@ -103,4 +103,14 @@ public class AmpComponentField extends AmpFeaturePanel<Boolean>{
         truBudgetClosedNotice.setVisible(subProjectClosedInTruBudget);
     }
 
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();
+        // AmpComponentPanel.onBeforeRender() re-enables this panel if any nested AmpComponentPanel
+        // child (info/commitments/disbursements/expeditures) is itself enabled, undoing onConfigure().
+        if (ProjectUtil.isComponentSubProjectClosedInTruBudget(componentModel.getObject())) {
+            setEnabled(false);
+        }
+    }
+
 }

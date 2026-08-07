@@ -13,6 +13,7 @@
 		<property column="title" name="title" type="java.lang.String" />
 		<property column="description" name="description" type="text" />
 		<property column="code" name="code" type="java.lang.String" />
+		<property column="just_an_id" name="justAnId" type="java.lang.String" />
 		<property column="creation_date" name="creationdate" type="java.sql.Timestamp" />
 
 		<many-to-one name="activity" column="amp_activity_id" index="i_activity"

@@ -27,6 +27,17 @@ public class AmpComponentTruSubProject implements Serializable {
     @Column(name = "amp_component_id")
     private Long ampComponentId;
 
+    @Column(name = "component_just_an_id")//stable across activity versions, unlike amp_component_id
+    private String componentJustAnId;
+
+    public String getComponentJustAnId() {
+        return componentJustAnId;
+    }
+
+    public void setComponentJustAnId(String componentJustAnId) {
+        this.componentJustAnId = componentJustAnId;
+    }
+
     public String getTruProjectId() {
         return truProjectId;
     }

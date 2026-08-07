@@ -438,16 +438,50 @@ public class ProjectUtil {
         return closeWorkflows
                 .then(GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.close", closeSubProjectModel, CloseSubProjectModel.class, String.class, token));
     }
+
+    /**
+     * Returns the component's version-stable identifier, generating and persisting one on first use.
+     * Needed because {@code ampComponentId} is regenerated on every activity version (see
+     * {@link AmpComponent#prepareMerge}), while {@code justAnId} is carried over by the shallow clone.
+     */
+    private static String ensureComponentJustAnId(AmpComponent ampComponent) {
+        if (ampComponent.getJustAnId() != null && !ampComponent.getJustAnId().trim().isEmpty()) {
+            return ampComponent.getJustAnId();
+        }
+
+        String generatedId = UUID.randomUUID().toString();
+        ampComponent.setJustAnId(generatedId);
+        Long componentId = ampComponent.getAmpComponentId();
+        PersistenceManager.doInTransaction(session -> {
+            AmpComponent componentToUpdate = session.get(AmpComponent.class, componentId);
+            if (componentToUpdate != null) {
+                componentToUpdate.setJustAnId(generatedId);
+                session.update(componentToUpdate);
+                session.flush();
+            }
+            return null;
+        });
+        return generatedId;
+    }
+
     public static void createUpdateSubProjects(List<AmpComponent> components, String projectId, List<AmpGlobalSettings> settings, AmpAuthWebSession ampAuthWebSession) throws URISyntaxException {
 
         String token = ProjectUtil.getTrubudgetToken();
         logger.info("Trubudget Cached Token:" + token);
         for (AmpComponent ampComponent:components)
         {
+            // Component's own PK is regenerated on every activity version (see AmpComponent.prepareMerge),
+            // so subprojects must be matched by the version-stable justAnId, not ampComponentId.
+            String componentJustAnId = ensureComponentJustAnId(ampComponent);
+
             // Query in a transaction
             final AmpComponentTruSubProject[] ampComponentTruSubProject = new AmpComponentTruSubProject[1];
             PersistenceManager.doInTransaction(session -> {
-                ampComponentTruSubProject[0] = session.createQuery("FROM " + AmpComponentTruSubProject.class.getName() + " act WHERE act.ampComponentId= " + ampComponent.getAmpComponentId() + " AND act.ampComponentId IS NOT NULL", AmpComponentTruSubProject.class).stream().findAny().orElse(null);
+                ampComponentTruSubProject[0] = session.createQuery(
+                        "FROM " + AmpComponentTruSubProject.class.getName()
+                                + " act WHERE act.componentJustAnId = :componentJustAnId", AmpComponentTruSubProject.class)
+                        .setParameter("componentJustAnId", componentJustAnId)
+                        .stream().findAny().orElse(null);
                 return null;
             });
 
@@ -489,6 +523,7 @@ public class ProjectUtil {
                                 PersistenceManager.doInTransaction(session -> {
                                     ampComponentTruSubProject[0] = new AmpComponentTruSubProject();
                                     ampComponentTruSubProject[0].setAmpComponentId(ampComponent.getAmpComponentId());
+                                    ampComponentTruSubProject[0].setComponentJustAnId(componentJustAnId);
                                     ampComponentTruSubProject[0].setTruSubProjectId(subproject.getId());
                                     ampComponentTruSubProject[0].setTruProjectId(projectId);
                                     session.save(ampComponentTruSubProject[0]);

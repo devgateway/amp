@@ -515,9 +515,11 @@ public class ProjectUtil {
 
         String token = ProjectUtil.getTrubudgetToken();
         logger.info("Trubudget Cached Token:" + token);
-        // Resolved here (on the caller's managed-session thread) rather than inside the async
-        // subscribe() callbacks below, which run on Netty/Reactor threads with no managed session.
-        final AmpCategoryValue componentStatusClosedValue = CategoryConstants.COMPONENT_STATUS_CLOSED.getAmpCategoryValueFromDB();
+        // createUpdateSubProjects itself is often invoked from a reactive .subscribe() callback
+        // (see createProject/updateProject), which runs on a Netty/Reactor thread with no managed
+        // Hibernate session context; supplyInTransaction opens one regardless of caller thread.
+        final AmpCategoryValue componentStatusClosedValue = PersistenceManager.supplyInTransaction(
+                CategoryConstants.COMPONENT_STATUS_CLOSED::getAmpCategoryValueFromDB);
         for (AmpComponent ampComponent:components)
         {
             // Component's own PK is regenerated on every activity version (see AmpComponent.prepareMerge),

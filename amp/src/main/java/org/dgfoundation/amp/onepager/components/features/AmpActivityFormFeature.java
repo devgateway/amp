@@ -276,6 +276,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
     }
 
     private ListView<AmpComponentPanel> featureList;
+    private Label truBudgetClosedNotice;
+    private ExternalLink truBudgetGoToDesktopLink;
 
     /**
      * @param id
@@ -462,6 +464,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         //add ajax submit button
         final AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit", AmpFMTypes.MODULE, true) {
 
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (isProjectClosedInTruBudgetNow()) {
+                    setEnabled(false);
+                }
+            }
 
             @Override
             protected void onSubmit(final AjaxRequestTarget target, Form<?> form) {
@@ -558,6 +567,14 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             }
 
             @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (isProjectClosedInTruBudgetNow()) {
+                    setEnabled(false);
+                }
+            }
+
+            @Override
             protected void onBeforeRender() {
                 super.onBeforeRender();
 
@@ -579,6 +596,14 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AmpAjaxLinkField saveAsDraft = new AmpAjaxLinkField("saveAsDraft", "Save as Draft", "Save as Draft") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
+            }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (isProjectClosedInTruBudgetNow()) {
+                    setEnabled(false);
+                }
             }
         };
 
@@ -648,6 +673,14 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         activityForm.add(cancelLink);
 
         AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (isProjectClosedInTruBudgetNow()) {
+                    setEnabled(false);
+                }
+            }
+
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 onSaveAsDraft(am, feedbackPanel, redirected,
@@ -891,27 +924,41 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         activityForm.add(featureList);
         quickMenu(am, listModel);
 
-        String ampId = am.getObject() != null ? am.getObject().getAmpId() : null;
-        boolean projectClosedInTruBudget = ampId != null && !ampId.trim().isEmpty()
-                && ProjectUtil.isActivityProjectClosedInTruBudget(ampId);
-        if (projectClosedInTruBudget) {
-            featureList.setEnabled(false);
-            saveAndSubmit.setEnabled(false);
-            rejectActivityLink.setEnabled(false);
-            saveAsDraft.setEnabled(false);
-            saveAsDraftAction.setEnabled(false);
-        }
-        Label truBudgetClosedNotice = new Label("truBudgetClosedNotice",
+        truBudgetClosedNotice = new Label("truBudgetClosedNotice",
                 TranslatorUtil.getTranslatedText("This project is closed in TruBudget and can no longer be edited."));
-        truBudgetClosedNotice.setVisible(projectClosedInTruBudget);
+        truBudgetClosedNotice.setOutputMarkupPlaceholderTag(true);
         activityForm.add(truBudgetClosedNotice);
 
-        ExternalLink truBudgetGoToDesktopLink = new ExternalLink("truBudgetGoBackButton", "/aim/showDesktop.do");
+        truBudgetGoToDesktopLink = new ExternalLink("truBudgetGoBackButton", "/aim/showDesktop.do");
         truBudgetGoToDesktopLink.add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
-        truBudgetGoToDesktopLink.setVisible(projectClosedInTruBudget);
+        truBudgetGoToDesktopLink.setOutputMarkupPlaceholderTag(true);
         activityForm.add(truBudgetGoToDesktopLink);
     }
 
+    /**
+     * Live re-check (not just constructor-time) since AmpComponentPanel.onConfigure() resets
+     * setEnabled() based on FM permissions on every render, which would otherwise clobber a
+     * one-time constructor-set disable.
+     */
+    private boolean isProjectClosedInTruBudgetNow() {
+        AmpActivityVersion activity = getModel() != null ? getModel().getObject() : null;
+        String ampId = activity != null ? activity.getAmpId() : null;
+        return ampId != null && !ampId.trim().isEmpty() && ProjectUtil.isActivityProjectClosedInTruBudget(ampId);
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        boolean projectClosedInTruBudget = isProjectClosedInTruBudgetNow();
+        // featureList/truBudgetClosedNotice/truBudgetGoToDesktopLink are plain ListView/Label/Link,
+        // not AmpComponentPanel, so they are safe to control here (see saveAndSubmit and friends,
+        // which enforce this in their own onConfigure() instead).
+        if (projectClosedInTruBudget) {
+            featureList.setEnabled(false);
+        }
+        truBudgetClosedNotice.setVisible(projectClosedInTruBudget);
+        truBudgetGoToDesktopLink.setVisible(projectClosedInTruBudget);
+    }
 
     private void processAndUpdateForm(boolean notDraft, IModel<AmpActivityVersion> am, final Form<?> form, final AjaxRequestTarget target, IndicatingAjaxButton button) {
         OnePager op = this.findParent(OnePager.class);

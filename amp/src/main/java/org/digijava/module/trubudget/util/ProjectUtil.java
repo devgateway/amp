@@ -514,6 +514,9 @@ public class ProjectUtil {
 
         String token = ProjectUtil.getTrubudgetToken();
         logger.info("Trubudget Cached Token:" + token);
+        // Resolved here (on the caller's managed-session thread) rather than inside the async
+        // subscribe() callbacks below, which run on Netty/Reactor threads with no managed session.
+        final AmpCategoryValue componentStatusClosedValue = CategoryConstants.COMPONENT_STATUS_CLOSED.getAmpCategoryValueFromDB();
         for (AmpComponent ampComponent:components)
         {
             // Component's own PK is regenerated on every activity version (see AmpComponent.prepareMerge),
@@ -612,7 +615,7 @@ public class ProjectUtil {
                                                         PersistenceManager.doInTransaction(session -> {
                                                             AmpComponent componentToUpdate = session.get(AmpComponent.class, componentId);
                                                             if (componentToUpdate != null) {
-                                                                componentToUpdate.setComponentStatus(CategoryConstants.COMPONENT_STATUS_CLOSED.getAmpCategoryValueFromDB());
+                                                                componentToUpdate.setComponentStatus(componentStatusClosedValue);
                                                                 session.update(componentToUpdate);
                                                                 session.flush();
                                                             }
@@ -661,7 +664,7 @@ public class ProjectUtil {
                                                     PersistenceManager.doInTransaction(session -> {
                                                         AmpComponent componentToUpdate = session.get(AmpComponent.class, componentId);
                                                         if (componentToUpdate != null) {
-                                                            componentToUpdate.setComponentStatus(CategoryConstants.COMPONENT_STATUS_CLOSED.getAmpCategoryValueFromDB());
+                                                            componentToUpdate.setComponentStatus(componentStatusClosedValue);
                                                             session.update(componentToUpdate);
                                                             session.flush();
                                                         }
@@ -754,6 +757,12 @@ public class ProjectUtil {
                             data.setAmountType(Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") ? "allocated" : "disbursed");
                             data.setBillingDate(convertToISO8601(componentFunding.getTransactionDate()));
                             data.setDueDate(convertToISO8601AndAddDays(componentFunding.getTransactionDate(), Integer.parseInt(getSettingValue(settings, "workFlowItemDueDays"))));//set approprite date
+                            List<String> rawWfTags = Arrays.stream((componentFunding.getComponent().getTitle() + " " + componentFunding.getDescription()).trim().split(" "))
+                                .filter(x -> x.length() <= 15 && !x.isEmpty())
+                                .collect(Collectors.toList());
+                            data.setTags(sanitizeTags(rawWfTags));
+                            data.setFundingOrganization(componentFunding.getReportingOrganization() != null
+                                    ? componentFunding.getReportingOrganization().getName() : null);
                             createWorkFlowItemModel.setData(data);
                             AmpComponentFundingTruWF ampComponentFundingTruWF1 = new AmpComponentFundingTruWF();
                             List<SubIntents> subIntents = getSubIntentsByMother("workflowitem");
@@ -824,6 +833,12 @@ public class ProjectUtil {
                             data.setAmountType(Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") ? "allocated" : "disbursed");
                             data.setBillingDate(convertToISO8601(componentFunding.getTransactionDate()));
                             data.setDueDate(convertToISO8601AndAddDays(componentFunding.getTransactionDate(), Integer.parseInt(getSettingValue(settings, "workFlowItemDueDays"))));//set approprite date
+                            List<String> rawWfTags = Arrays.stream((componentFunding.getComponent().getTitle() + " " + componentFunding.getDescription()).trim().split(" "))
+                                .filter(x -> x.length() <= 15 && !x.isEmpty())
+                                .collect(Collectors.toList());
+                            data.setTags(sanitizeTags(rawWfTags));
+                            data.setFundingOrganization(componentFunding.getReportingOrganization() != null
+                                    ? componentFunding.getReportingOrganization().getName() : null);
                             List<CreateWorkFlowItemModel.Document> docs = new ArrayList<>();
 //                                AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
                             HashSet<TemporaryComponentFundingDocument> newResources = ampAuthWebSession.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(componentFunding.getJustAnId());

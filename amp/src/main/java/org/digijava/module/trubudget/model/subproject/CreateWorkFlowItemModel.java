@@ -44,6 +44,8 @@ public class CreateWorkFlowItemModel {
         private List<Document> documents= new ArrayList<>();
         private Map<String, Object> additionalData= new HashMap<>();
         private String workflowitemType="general";
+        private List<String> tags = new ArrayList<>();
+        private String fundingOrganization;
 
         // Getters and setters for projectId, subprojectId, displayName, description,
         // amount, assignee, currency, amountType, billingDate, dueDate, exchangeRate,
@@ -167,6 +169,22 @@ public class CreateWorkFlowItemModel {
             this.workflowitemType = workflowitemType;
         }
 
+        public List<String> getTags() {
+            return tags;
+        }
+
+        public void setTags(List<String> tags) {
+            this.tags = tags;
+        }
+
+        public String getFundingOrganization() {
+            return fundingOrganization;
+        }
+
+        public void setFundingOrganization(String fundingOrganization) {
+            this.fundingOrganization = fundingOrganization;
+        }
+
         @Override
         public String toString() {
             return "Data{" +
@@ -185,6 +203,8 @@ public class CreateWorkFlowItemModel {
                     ", documents=" + documents +
                     ", additionalData=" + additionalData +
                     ", workflowitemType='" + workflowitemType + '\'' +
+                    ", tags=" + tags +
+                    ", fundingOrganization='" + fundingOrganization + '\'' +
                     '}';
         }
     }

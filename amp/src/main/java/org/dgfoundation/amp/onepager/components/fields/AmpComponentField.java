@@ -37,10 +37,14 @@ public class AmpComponentField extends AmpFeaturePanel<Boolean>{
             .put(Constants.EXPENDITURE, "Components Expenditures")
             .build();
 
+    private final IModel<AmpComponent> componentModel;
+    private Label truBudgetClosedNotice;
+
     public AmpComponentField(String id, IModel<AmpActivityVersion> activityModel, 
             final IModel<AmpComponent> componentModel, String fmName){
         super(id,fmName, true);
         this.fmType = AmpFMTypes.MODULE;
+        this.componentModel = componentModel;
         
         final PropertyModel<Set<AmpComponentFunding>> componentsSetModel=new 
                 PropertyModel<Set<AmpComponentFunding>>(componentModel, "fundings");
@@ -81,15 +85,22 @@ public class AmpComponentField extends AmpFeaturePanel<Boolean>{
             e.printStackTrace();
         }
 
-        boolean subProjectClosedInTruBudget = ProjectUtil.isComponentSubProjectClosedInTruBudget(c);
-        if (subProjectClosedInTruBudget) {
-            setEnabled(false);
-        }
-        Label truBudgetClosedNotice = new Label("truBudgetClosedNotice",
+        truBudgetClosedNotice = new Label("truBudgetClosedNotice",
                 TranslatorUtil.getTranslatedText("This component is closed in TruBudget and can no longer be edited."));
-        truBudgetClosedNotice.setVisible(subProjectClosedInTruBudget);
+        truBudgetClosedNotice.setOutputMarkupPlaceholderTag(true);
         add(truBudgetClosedNotice);
     }
 
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        // AmpComponentPanel.onConfigure() resets setEnabled() based on FM permissions on every
+        // render, so the TruBudget-closed override must be re-applied here, not just once.
+        boolean subProjectClosedInTruBudget = ProjectUtil.isComponentSubProjectClosedInTruBudget(componentModel.getObject());
+        if (subProjectClosedInTruBudget) {
+            setEnabled(false);
+        }
+        truBudgetClosedNotice.setVisible(subProjectClosedInTruBudget);
+    }
 
 }

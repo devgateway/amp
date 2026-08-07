@@ -52,6 +52,8 @@ public class EditWFItemModel {
         private String description;
         private Map<String , Object> additionalData= new HashMap<>();
         private List<CreateWorkFlowItemModel.Document> documents=new ArrayList<>();
+        private List<String> tags = new ArrayList<>();
+        private String fundingOrganization;
 
         // Getters and setters for projectId, displayName, and description
 
@@ -159,6 +161,22 @@ public class EditWFItemModel {
             this.dueDate = dueDate;
         }
 
+        public List<String> getTags() {
+            return tags;
+        }
+
+        public void setTags(List<String> tags) {
+            this.tags = tags;
+        }
+
+        public String getFundingOrganization() {
+            return fundingOrganization;
+        }
+
+        public void setFundingOrganization(String fundingOrganization) {
+            this.fundingOrganization = fundingOrganization;
+        }
+
         @Override
         public String toString() {
             return "Data{" +
@@ -175,6 +193,8 @@ public class EditWFItemModel {
                     ", description='" + description + '\'' +
                     ", additionalData=" + additionalData +
                     ", documents=" + documents +
+                    ", tags=" + tags +
+                    ", fundingOrganization='" + fundingOrganization + '\'' +
                     '}';
         }
     }

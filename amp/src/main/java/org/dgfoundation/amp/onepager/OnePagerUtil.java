@@ -185,6 +185,10 @@ public final class OnePagerUtil {
     {
         return String.format(OnePagerConst.toggleJSPM, c.getMarkupId());
     }
+    public static String getToggleChildrenJSComponentFunding(Component c, String id)
+    {
+        return String.format(OnePagerConst.toggleChildrenJSComponent,c.getMarkupId(),id);
+    }
 
     /**
      * Slide the section on refresh

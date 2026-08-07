@@ -58,6 +58,37 @@
         document.aimOrgManagerForm.submit();
     }
 
+	function toggleAllOrgCheckboxes(masterCheckbox) {
+		var boxes = document.getElementsByName("selectedOrgIds");
+		for (var i = 0; i < boxes.length; i++) {
+			boxes[i].checked = masterCheckbox.checked;
+		}
+	}
+
+	function deleteSelectedOrgs() {
+		var boxes = document.getElementsByName("selectedOrgIds");
+		var selected = false;
+		for (var i = 0; i < boxes.length; i++) {
+			if (boxes[i].checked) {
+				selected = true;
+				break;
+			}
+		}
+		if (!selected) {
+			alert('<digi:trn jsFriendly="true">Please select at least one organization first.</digi:trn>');
+			return false;
+		}
+		if (!confirm('<digi:trn jsFriendly="true">Are you sure you want to delete the selected organizations?</digi:trn>')) {
+			return false;
+		}
+		<digi:context name="searchOrg" property="context/module/moduleinstance/organisationManager.do"/>
+		url = "<%= searchOrg %>?deleteSelectedOrgs=true&orgSelReset=false";
+		document.aimOrgManagerForm.action = url;
+		document.aimOrgManagerForm.target = "_self";
+		document.aimOrgManagerForm.submit();
+		return true;
+	}
+
 
 
 
@@ -182,6 +213,13 @@
 																		</td>
 																		<!-- end header -->
 																	</tr>
+																	<c:if test="${aimOrgManagerForm.adminSide}">
+																	<tr>
+																		<td colspan="6" align="right" style="padding: 5px;">
+																			<input type="button" class="buttonx_sm" onclick="return deleteSelectedOrgs()" value="<digi:trn jsFriendly="true">Delete Selected</digi:trn>">
+																		</td>
+																	</tr>
+																	</c:if>
 																	<!-- Page Logic -->
 
 																	<logic:empty name="aimOrgManagerForm"
@@ -203,6 +241,11 @@
 																					class="inside">
 																					<thead>
 																						<tr>
+																							<c:if test="${aimOrgManagerForm.adminSide}">
+																							<td class="inside" bgcolor=#F2F2F2 align="center">
+																								<input type="checkbox" onclick="toggleAllOrgCheckboxes(this)">
+																							</td>
+																							</c:if>
 																							<td class="inside" bgcolor=#F2F2F2><c:if
 																									test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy!='nameAscending'}">
 																									<digi:link
@@ -306,6 +349,11 @@
 																							property="pagedCol" id="organisation"
 																							indexId="index">
 																							<tr>
+																								<c:if test="${aimOrgManagerForm.adminSide}">
+																								<td class="inside" align="center">
+																									<input type="checkbox" name="selectedOrgIds" value="${organisation.ampOrgId}">
+																								</td>
+																								</c:if>
 																								<td class="inside">
 																								<jsp:useBean
 																										id="urlParams" type="java.util.Map"

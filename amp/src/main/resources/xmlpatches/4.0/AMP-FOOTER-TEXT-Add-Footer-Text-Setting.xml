@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-FOOTER-TEXT</jira>
+    <keyword>Footer Text global setting</keyword>
+    <author>brianbrix</author>
+    <description>
+        Adds a 'Footer Text' global setting so the site footer credit line can be overridden per deployment
+        without a code change. When left blank, AMP falls back to the default "Developed in partnership with
+        OECD, UNDP, WB, Government of Ethiopia and DG" text.
+    </description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section)
+                SELECT (SELECT COALESCE(MAX(id), 0) + 1 FROM amp_global_settings),
+                    'Footer Text', '', '',
+                    'Text shown at the end of the site footer, after the AMP version and build date. Leave blank to use the default credit line.',
+                    'general'
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM amp_global_settings WHERE settingsname = 'Footer Text'
+                );
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

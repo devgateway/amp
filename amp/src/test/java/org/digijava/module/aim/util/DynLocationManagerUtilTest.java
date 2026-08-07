@@ -13,6 +13,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.junit.jupiter.api.Test;
 
+import java.text.Normalizer;
 import java.util.List;
 
 import static org.digijava.module.aim.util.DynLocationManagerUtil.ErrorCode.CORRECT_CONTENT;
@@ -73,6 +74,62 @@ public class DynLocationManagerUtilTest extends AbstractIntegrationTest {
         assertThat(wonderland.getChildLocations(), containsInAnyOrder(oz));
         assertEquals(wonderland, oz.getParentLocation());
 
+    }
+
+    @Test
+    public void testImportHandlesUnicodeEquivalentParentNames() throws AimException {
+        String composed = "Dje\u0301rem";
+        String decomposed = Normalizer.normalize(composed, Normalizer.Form.NFD);
+
+        List<List<String>> rows = ImmutableList.of(
+                ImmutableList.of("Database ID", "Administrative Level 0", "Administrative Level 1",
+                        "Administrative Level 2", "Administrative Level 3", "Administrative Level 5",
+                        "Latitude", "Longitude", "GeoID", "ISO", "ISO3"),
+                ImmutableList.of("", "Cameroon", "Adamawa", composed, "", "", "0", "0", "", "", ""),
+                ImmutableList.of("", "Cameroon", "Adamawa", decomposed, "Ngaoundal", "", "0", "0", "", "", "")
+        );
+
+        DynLocationManagerUtil.ErrorCode errorCode =
+                DynLocationManagerUtil.importExcelFile(rows, DynLocationManagerForm.Option.NEW);
+
+        assertEquals(CORRECT_CONTENT, errorCode);
+
+        AmpCategoryValueLocations ngaoundal = (AmpCategoryValueLocations) locationCriteria("Ngaoundal").uniqueResult();
+        assertNotNull(ngaoundal);
+        assertNotNull(ngaoundal.getParentLocation());
+        assertEquals(Normalizer.normalize(composed, Normalizer.Form.NFC),
+                Normalizer.normalize(ngaoundal.getParentLocation().getName(), Normalizer.Form.NFC));
+    }
+
+    @Test
+    public void testOverwriteCreatesLocationWhenDatabaseIdIsMissingOrInvalid() throws AimException {
+        String country = "Cameroon Overwrite Test";
+        String region = "Adamawa Overwrite Test";
+        String division = "Djerem Overwrite Test";
+        String arrondissement = "Ngaoundal Overwrite Test";
+
+        List<List<String>> rows = ImmutableList.of(
+                ImmutableList.of("Database ID", "Administrative Level 0", "Administrative Level 1",
+                        "Administrative Level 2", "Administrative Level 3", "Administrative Level 5",
+                        "Latitude", "Longitude", "GeoID", "ISO", "ISO3"),
+                ImmutableList.of("", country, "", "", "", "", "0", "0", "", "CO", "COT"),
+                ImmutableList.of("999999999", country, region, "", "", "", "0", "0", "", "", ""),
+                ImmutableList.of("888888888", country, region, division, "", "", "0", "0", "", "", ""),
+                ImmutableList.of("", country, region, division, arrondissement, "", "0", "0", "", "", "")
+        );
+
+        DynLocationManagerUtil.ErrorCode errorCode =
+                DynLocationManagerUtil.importExcelFile(rows, DynLocationManagerForm.Option.OVERWRITE);
+
+        assertEquals(CORRECT_CONTENT, errorCode);
+
+        AmpCategoryValueLocations divisionLoc = getCategoryValueLocationByName(division);
+        AmpCategoryValueLocations arrondissementLoc = getCategoryValueLocationByName(arrondissement);
+
+        assertNotNull(divisionLoc);
+        assertNotNull(arrondissementLoc);
+        assertNotNull(arrondissementLoc.getParentLocation());
+        assertEquals(divisionLoc.getId(), arrondissementLoc.getParentLocation().getId());
     }
 
     private void initLocations() {

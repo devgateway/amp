@@ -1,0 +1,131 @@
+name: Build & Push AMP image to ECR
+
+on:
+  push:
+    branches:
+      - "task/AMP-31085/Update-TruBudget-Branch-with-latest-develolp"          # all branches
+  workflow_dispatch:  # allow manual trigger
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Load SSH key (needed for submodule checkout AND private npm packages) ─
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DOCKER_BUILD_SSH_KEY }}
+
+      - name: Configure git to use SSH for submodules
+        run: |
+          git config --global url."git@github.com:".insteadOf "https://github.com/"
+          mkdir -p ~/.ssh
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      # ── Checkout (with submodules — Dockerfile COPYs .git dirs from them) ───
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+          ssh-key: ${{ secrets.DOCKER_BUILD_SSH_KEY }}
+
+      # ── Derive the Docker tag from the branch name ─────────────────────────
+      # Sanitise: replace / with - and strip other unsafe chars (Docker tag rules).
+      - name: Set image tag
+        id: tag
+        run: |
+          RAW="${{ github.ref_name }}"
+          TAG="${RAW//\//-}"
+          TAG="${TAG//[^a-zA-Z0-9._-]/-}"
+          echo "value=${TAG}" >> "$GITHUB_OUTPUT"
+
+      # ── Configure AWS credentials ─────────────────────────────────────────
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region:            us-east-1
+
+      # ── Log in to Amazon ECR ──────────────────────────────────────────────
+      - name: Login to Amazon ECR
+        id: ecr-login
+        run: |
+          set +x
+          PASSWORD=$(aws ecr get-login-password --region us-east-1)
+          echo "::add-mask::$PASSWORD"
+          echo "$PASSWORD" | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
+          echo "✅ Logged in to ECR"
+
+      - name: Free disk space on runner
+        run: |
+          echo "Disk usage before cleanup"
+          df -h
+          docker system df || true
+
+          # Remove large preinstalled SDKs that are not used by this workflow.
+          sudo rm -rf /usr/local/lib/android || true
+          sudo rm -rf /usr/share/dotnet || true
+          sudo rm -rf /opt/ghc || true
+          sudo rm -rf /usr/local/.ghcup || true
+          if [ -n "${AGENT_TOOLSDIRECTORY:-}" ]; then
+            sudo rm -rf "$AGENT_TOOLSDIRECTORY/CodeQL" || true
+          fi
+
+          docker system prune -af || true
+          docker builder prune -af || true
+
+          echo "Disk usage after cleanup"
+          df -h
+          docker system df || true
+
+      # ── Set up Docker Buildx ─────────────────────────────────────────────
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: |
+            image=moby/buildkit:latest
+            network=host
+
+      # ── Build & push ──────────────────────────────────────────────────────
+      # ECR_REGISTRY → e.g. 798366298150.dkr.ecr.us-east-1.amazonaws.com
+      # Image repo path is hardcoded to amp/webapp (matching deploy.yml convention)
+      - name: Build and push AMP image
+        env:
+          DOCKER_BUILDKIT: 1
+          BUILDKIT_PROGRESS: plain
+        run: |
+          TAG="${{ steps.tag.outputs.value }}"
+          IMAGE="${{ secrets.ECR_REGISTRY }}/amp/webapp"
+
+          docker buildx build \
+            --progress=plain \
+            --ssh default \
+            --build-arg SKIP_TESTS=true \
+            --build-arg BUILD_SOURCE="${TAG}" \
+            --build-arg AMP_BRANCH="${{ github.ref_name }}" \
+            --cache-from type=registry,ref="${IMAGE}:${TAG}" \
+            --cache-from type=registry,ref="${IMAGE}:latest" \
+            --cache-to type=inline \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            -t "${IMAGE}:${TAG}" \
+            -t "${IMAGE}:latest" \
+            --push \
+            amp
+
+      # ── Output ────────────────────────────────────────────────────────────
+      - name: Print image reference
+        run: |
+          echo "Image pushed:"
+          echo "  ${{ secrets.ECR_REGISTRY }}/amp/webapp:${{ steps.tag.outputs.value }}"
+          echo ""
+          echo "Set in deployment .env:"
+          echo "  AMP_IMAGE=${{ secrets.ECR_REGISTRY }}/amp/webapp"
+          echo "  AMP_TAG=${{ steps.tag.outputs.value }}"
+
+      # ── Logout ───────────────────────────────────────────────────────────
+      - name: Logout from ECR
+        if: always()
+        run: docker logout ${{ secrets.ECR_REGISTRY }} || true

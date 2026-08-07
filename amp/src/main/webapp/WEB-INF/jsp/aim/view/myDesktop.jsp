@@ -17,6 +17,12 @@
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <%
 	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+	String truBudgetLoginToastType = (String) session.getAttribute("trubudgetLoginToastType");
+	String truBudgetLoginToastMessage = (String) session.getAttribute("trubudgetLoginToastMessage");
+	session.removeAttribute("trubudgetLoginToastType");
+	session.removeAttribute("trubudgetLoginToastMessage");
+	pageContext.setAttribute("truBudgetLoginToastType", truBudgetLoginToastType);
+	pageContext.setAttribute("truBudgetLoginToastMessage", truBudgetLoginToastMessage);
 %>
 
 
@@ -85,6 +91,26 @@
 
 
 </script>
+
+<c:if test="${not empty truBudgetLoginToastMessage}">
+	<div id="trubudget-login-toast"
+		 style="position: fixed; top: 20px; right: 20px; z-index: 99999; padding: 12px 16px; color: #ffffff; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.25); background-color: ${truBudgetLoginToastType == 'success' ? '#2f855a' : '#c53030'}; max-width: 420px; font-family: Arial, sans-serif; font-size: 13px;">
+		<c:out value="${truBudgetLoginToastMessage}"/>
+	</div>
+	<script type="text/javascript">
+		(function () {
+			var toast = document.getElementById('trubudget-login-toast');
+			if (!toast) {
+				return;
+			}
+			setTimeout(function () {
+				if (toast && toast.parentNode) {
+					toast.parentNode.removeChild(toast);
+				}
+			}, 6000);
+		})();
+	</script>
+</c:if>
 
 
 

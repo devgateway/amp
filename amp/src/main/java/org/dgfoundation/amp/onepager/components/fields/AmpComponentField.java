@@ -17,6 +17,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.trubudget.util.ProjectUtil;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -79,6 +80,15 @@ public class AmpComponentField extends AmpFeaturePanel<Boolean>{
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        boolean subProjectClosedInTruBudget = ProjectUtil.isComponentSubProjectClosedInTruBudget(c);
+        if (subProjectClosedInTruBudget) {
+            setEnabled(false);
+        }
+        Label truBudgetClosedNotice = new Label("truBudgetClosedNotice",
+                TranslatorUtil.getTranslatedText("This component is closed in TruBudget and can no longer be edited."));
+        truBudgetClosedNotice.setVisible(subProjectClosedInTruBudget);
+        add(truBudgetClosedNotice);
     }
 
 

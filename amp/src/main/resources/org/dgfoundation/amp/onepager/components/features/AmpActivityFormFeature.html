@@ -22,6 +22,7 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
 				<form wicket:id="activityForm" id="activityForm">
 				<div id="mainContent" class="main_side_cont">
 				<div style="float: right;"></div>
+					<div wicket:id="truBudgetClosedNotice" class="error_msg" style="margin-bottom:10px;padding:8px;"></div>
 					<span name="section" wicket:id="featureList">
 						<span wicket:id="featureItem"></span>
 					</span>
@@ -178,6 +179,41 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
         <br />
         <div style="text-align: center;">
             <input type="button" wicket:id="warnPanelSave" value="Button" class="button_green_btm" />  <input type="button" wicket:id="warnPanelCancel" value="Button" class="button_green_btm" />
+        </div>
+        <div class="ft"></div>
+    </div>
+    <div id="trubudgetClosePanel" style="display:none;">
+        <div class="hd" style="text-align: left">
+            <wicket:trn>TruBudget Confirmation</wicket:trn>
+        </div>
+        <div class="bd" style="text-align: left;">
+            <p>
+                <wicket:trn>Choose whether this save should close the linked project on TruBudget.</wicket:trn>
+            </p>
+            <label for="closeProjectOnTruBudgetCheckbox">
+                <input id="closeProjectOnTruBudgetCheckbox" type="checkbox" />
+                <wicket:trn>Close project on Trubudget</wicket:trn>
+            </label>
+        </div>
+        <br />
+        <div style="text-align: center;">
+            <input type="button" wicket:id="trubudgetPanelSave" value="Button" class="button_green_btm" />
+            <input type="button" wicket:id="trubudgetPanelCancel" value="Button" class="button_green_btm" />
+        </div>
+        <div class="ft"></div>
+    </div>
+    <div id="trubudgetAlreadyClosedPanel" style="display:none;">
+        <div class="hd" style="text-align: left">
+            <wicket:trn>TruBudget Information</wicket:trn>
+        </div>
+        <div class="bd" style="text-align: left;">
+            <p>
+                <wicket:trn>Project is already closed on TruBudget; this status change will not be reflected there.</wicket:trn>
+            </p>
+        </div>
+        <br />
+        <div style="text-align: center;">
+            <input type="button" wicket:id="trubudgetAlreadyClosedPanelOk" value="Button" class="button_green_btm" />
         </div>
         <div class="ft"></div>
     </div>

@@ -71,6 +71,13 @@
         });
       }
 
+      if ($('#defaultRecordingOrganizationId').length) {
+        applySelect2('#defaultRecordingOrganizationId', {
+          width: '100%',
+          placeholder: '<digi:trn jsFriendly="true">Select default recording organization</digi:trn>'
+        });
+      }
+
       if ($('#defaultLocationId').length) {
         applySelect2('#defaultLocationId', {
           width: '100%',
@@ -136,6 +143,7 @@
         }
       }
       toggleProgramClassificationFallback();
+      toggleRecordingOrganizationFallback();
     }
 
     function hasMappedProgramField() {
@@ -159,6 +167,27 @@
       }
     }
 
+    function hasMappedActivityInternalIdField() {
+      return $('#selected-pairs-table-body tr').filter(function() {
+        return $(this).attr('data-selected-field') === 'Activity Internal ID';
+      }).length > 0;
+    }
+
+    function hasMappedRecordingOrganizationField() {
+      return $('#selected-pairs-table-body tr').filter(function() {
+        return $(this).attr('data-selected-field') === 'Recording Organization';
+      }).length > 0;
+    }
+
+    function toggleRecordingOrganizationFallback() {
+      var hasMappings = $('#selected-pairs-table-body tr').length > 0;
+      var showFallback = hasMappings && hasMappedActivityInternalIdField() && !hasMappedRecordingOrganizationField();
+      $('#recording-organization-fallback').toggle(showFallback);
+      if (!showFallback) {
+        $('#defaultRecordingOrganizationId').val('').trigger('change.select2');
+      }
+    }
+
     function repopulateSelectedPairs(updatedMap) {
       var tbody = document.getElementById('selected-pairs-table-body');
       tbody.innerHTML = '';
@@ -170,6 +199,7 @@
       }
 
       toggleUploadSection();
+      toggleDefaultLocationFallback();
     }
 
     function switchImporterTab(tabId) {
@@ -186,6 +216,7 @@
       $('#selected-field').show();
       initializeSelectControls();
       toggleUploadSection();
+      toggleDefaultLocationFallback();
       $('#tab-mapping-btn').removeClass('disabled-tab');
       $('#next-to-map-btn').prop('disabled', false);
       switchImporterTab('tab-mapping-pane');
@@ -258,8 +289,8 @@
         }
         else if(fileType==="excel") {
           $('#select-file-label').html("<digi:trn jsFriendly='true'>Select Excel File</digi:trn>");
-          $('#data-file').attr("accept", ".xls,.xlsx");
-          $('#template-file').attr("accept", ".xls,.xlsx");
+          $('#data-file').attr("accept", ".xls,.xlsx,.xlsm");
+          $('#template-file').attr("accept", ".xls,.xlsx,.xlsm");
           $('#separator-div').hide();
           $('#data-sheet-choice-div').show();
         }
@@ -544,14 +575,18 @@
       var createMissingOrgGroups = $('#createMissingOrgGroups').prop('checked');
       var createMissingPrograms = $('#createMissingPrograms').prop('checked');
       var replaceExistingTransactions = $('#replaceExistingTransactions').prop('checked');
+      var replaceExistingLocations = $('#replaceExistingLocations').prop('checked');
       var orgGroupId = $('#orgGroupId').val();
       var defaultActivityStatusId = $('#defaultActivityStatusId').val();
+      var defaultRecordingOrganizationId = $('#defaultRecordingOrganizationId').val();
       var defaultLocationId = $('#defaultLocationId').val() || $('#defaultLocationId').attr('data-default-location-id') || '';
       var defaultProgramClassification = $('#defaultProgramClassification').val();
       var anyMappedOrgMissingGroupMapping = hasAnyMappedOrgMissingGroupMapping();
       var hasProjectLocationMapping = hasMappedProjectLocationField();
       var hasProgramMapping = hasMappedProgramField();
       var hasProgramClassificationMapping = hasMappedProgramClassificationField();
+      var hasActivityInternalIdMapping = hasMappedActivityInternalIdField();
+      var hasRecordingOrganizationMapping = hasMappedRecordingOrganizationField();
       console.log("Internal", internal);
       console.log("Skip existing", skipExisting);
       console.log("Skip records without transactions", skipRecordsWithoutTransactions);
@@ -562,8 +597,10 @@
       console.log("Create missing org groups", createMissingOrgGroups);
       console.log("Create missing programs", createMissingPrograms);
       console.log("Replace existing transactions", replaceExistingTransactions);
+      console.log("Replace existing locations", replaceExistingLocations);
       console.log("Org group id", orgGroupId);
       console.log("Default activity status id", defaultActivityStatusId);
+      console.log("Default recording organization id", defaultRecordingOrganizationId);
       console.log("Default location id", defaultLocationId);
       console.log("Default program classification", defaultProgramClassification);
       if (createMissingOrgs && !orgGroupId && !createMissingOrgGroups && anyMappedOrgMissingGroupMapping) {
@@ -576,6 +613,10 @@
       }
       if (hasProgramMapping && !hasProgramClassificationMapping && !defaultProgramClassification) {
         alert("<digi:trn jsFriendly='true'>Please select a default program classification when no Program Classification column is mapped.</digi:trn>");
+        return;
+      }
+      if (hasActivityInternalIdMapping && !hasRecordingOrganizationMapping && !defaultRecordingOrganizationId) {
+        alert("<digi:trn jsFriendly='true'>Please select a default recording organization when Activity Internal ID is mapped but Recording Organization is not.</digi:trn>");
         return;
       }
       var dataSeparator = $('#data-separator').val();
@@ -605,11 +646,15 @@
       formData.append('createMissingOrgGroups', createMissingOrgGroups);
       formData.append('createMissingPrograms', createMissingPrograms);
       formData.append('replaceExistingTransactions', replaceExistingTransactions);
+      formData.append('replaceExistingLocations', replaceExistingLocations);
       if (createMissingOrgs && orgGroupId) {
         formData.append('orgGroupId', orgGroupId);
       }
       if (defaultActivityStatusId) {
         formData.append('defaultActivityStatusId', defaultActivityStatusId);
+      }
+      if (defaultRecordingOrganizationId) {
+        formData.append('defaultRecordingOrganizationId', defaultRecordingOrganizationId);
       }
       if (defaultLocationId) {
         formData.append('defaultLocationId', defaultLocationId);
@@ -1115,7 +1160,7 @@
 
       <form id="templateUploadForm" enctype="multipart/form-data" class="inline-field">
         <label for="template-file"><digi:trn>Select Template File</digi:trn></label>
-        <input id="template-file" type="file" accept=".xls,.xlsx,.csv" name="templateFile" />
+        <input id="template-file" type="file" accept=".xls,.xlsx,.xlsm,.csv" name="templateFile" />
         <div class="mapping-actions">
           <input type="button" class="upload-btn" value="<digi:trn>Upload Template</digi:trn>" onclick="uploadTemplateFile()" />
         </div>
@@ -1190,7 +1235,7 @@
         <p class="section-copy"><digi:trn>This section appears only when the configuration table contains mappings.</digi:trn></p>
 
         <label id="select-file-label" for="data-file"><digi:trn>Select Excel File</digi:trn></label>
-        <input id="data-file" type="file" accept=".xls,.xlsx,.csv" name="dataFile" />
+        <input id="data-file" type="file" accept=".xls,.xlsx,.xlsm,.csv" name="dataFile" />
 
         <div id="data-sheet-choice-div" class="sheet-choice-card" style="display: none;">
           <label><digi:trn>Process data from</digi:trn></label><br>
@@ -1217,6 +1262,7 @@
           <label class="toggle-item" for="createMissingOrgGroups"><input type="checkbox" id="createMissingOrgGroups" name="createMissingOrgGroups"> <digi:trn>Create missing organization groups for new organizations</digi:trn></label>
           <label class="toggle-item" for="createMissingPrograms"><input type="checkbox" id="createMissingPrograms" name="createMissingPrograms"> <digi:trn>Create missing programs</digi:trn></label>
           <label class="toggle-item" for="replaceExistingTransactions"><input type="checkbox" id="replaceExistingTransactions" name="replaceExistingTransactions"> <digi:trn>Replace existing transactions</digi:trn></label>
+          <label class="toggle-item" for="replaceExistingLocations"><input type="checkbox" id="replaceExistingLocations" name="replaceExistingLocations"> <digi:trn>Replace existing locations</digi:trn></label>
         </div>
 
         <div id="orgGroupDiv" style="display:none; margin-top:16px;">
@@ -1235,6 +1281,23 @@
             <option value=""><digi:trn>-- Use system default --</digi:trn></option>
             <c:forEach var="activityStatus" items="${activityStatuses}">
               <option value="${activityStatus.id}">${activityStatus.label}</option>
+            </c:forEach>
+          </select>
+        </div>
+
+        <div id="recording-organization-fallback" style="display:none; margin-top:16px;">
+          <label for="defaultRecordingOrganizationId"><digi:trn>Default Recording Organization</digi:trn></label>
+          <div class="helper-note" style="margin-bottom: 10px;"><digi:trn>Used only when Activity Internal ID is mapped and Recording Organization is not.</digi:trn></div>
+          <select id="defaultRecordingOrganizationId" name="defaultRecordingOrganizationId" style="width: 100%;">
+            <option value=""><digi:trn>-- Select Recording Organization --</digi:trn></option>
+            <c:forEach var="organization" items="${recordingOrganizations}">
+                <option value="${organization.ampOrgId}">
+                  <c:choose>
+                    <c:when test="${not empty organization.acronymAndName}">${organization.acronymAndName}</c:when>
+                    <c:when test="${not empty organization.orgCode}">${organization.orgCode} - ${organization.name}</c:when>
+                    <c:otherwise>${organization.name} (#${organization.ampOrgId})</c:otherwise>
+                  </c:choose>
+                </option>
             </c:forEach>
           </select>
         </div>
@@ -1276,6 +1339,7 @@
 <script>
   $(document).ready(function() {
     initializeSelectControls();
+    toggleDefaultLocationFallback();
     $('#createMissingOrgs').change(function() {
       if ($(this).is(':checked')) {
         $('#orgGroupDiv').show();

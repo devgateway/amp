@@ -8,6 +8,7 @@ package org.digijava.module.aim.dbentity;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
@@ -18,6 +19,8 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
 
@@ -29,12 +32,30 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     private Long ampComponentFundingId;
 
     private Integer transactionType;
+    private String justAnId;
+
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_ADJUSTMENT_TYPE, importable = true, pickIdOnly = true,
             fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_ADJUSTMENT_TYPE,
             interValidators = @InterchangeableValidator(RequiredValidator.class),
             discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY)
     private AmpCategoryValue adjustmentType;
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_STATUS, importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_STATUS,
+            interValidators = @InterchangeableValidator(RequiredValidator.class),
+            discriminatorOption = CategoryConstants.COMPONENT_FUNDING_STATUS_KEY)
+    private AmpCategoryValue componentFundingStatus;
+
+
+    @Interchangeable(fieldTitle = "Reject Reason", importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.PARENT_FM + "/" + "Reject Reason",
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private String componentRejectReason="";
+
+
+    @Interchangeable(fieldTitle = "Component Funding Documents",  fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_DOCS, importable = true)
+    @VersionableCollection(fieldTitle = "Component Funding Documents")
+    private Set<AmpComponentFundingDocument> componentFundingDocuments = new HashSet<>();
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_DATE, importable = true,
             fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_TRANSACTION_DATE,
@@ -254,5 +275,38 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-    
+
+    public String getJustAnId() {
+        return justAnId;
+    }
+
+    public void setJustAnId(String justAnId) {
+        this.justAnId = justAnId;
+    }
+
+    public AmpCategoryValue getComponentFundingStatus() {
+        return componentFundingStatus;
+    }
+    public String getComponentFundingStatusFormatted() {
+        return componentFundingStatus.getValue().toLowerCase();
+    }
+
+    public void setComponentFundingStatus(AmpCategoryValue componentFundingStatus) {
+        this.componentFundingStatus = componentFundingStatus;
+    }
+
+    public String getComponentRejectReason() {
+        return componentRejectReason;
+    }
+
+    public void setComponentRejectReason(String componentRejectReason) {
+        this.componentRejectReason = componentRejectReason;
+    }
+    public Set<AmpComponentFundingDocument> getComponentFundingDocuments() {
+        return componentFundingDocuments;
+    }
+
+    public void setComponentFundingDocuments(Set<AmpComponentFundingDocument> componentFundingDocuments) {
+        this.componentFundingDocuments = componentFundingDocuments;
+    }
 }

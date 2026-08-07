@@ -17,6 +17,8 @@ on:
         options:
           - bfaso
           - boad
+          - cameroon
+          - cameroontrubudget
           - chad
           - civ
           - drc
@@ -538,6 +540,30 @@ jobs:
           echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
           ssh-add -l || echo "No keys in agent"
           ssh -o StrictHostKeyChecking=no -T git@github.com 2>&1 || true
+
+      - name: Free disk space on runner
+        if: steps.check_image.outputs.SKIP_BUILD == 'false'
+        run: |
+          echo "Disk usage before cleanup"
+          df -h
+          docker system df || true
+
+          # Remove large preinstalled SDKs that are not used by this workflow.
+          sudo rm -rf /usr/local/lib/android || true
+          sudo rm -rf /usr/share/dotnet || true
+          sudo rm -rf /opt/ghc || true
+          sudo rm -rf /usr/local/.ghcup || true
+          if [ -n "${AGENT_TOOLSDIRECTORY:-}" ]; then
+            sudo rm -rf "$AGENT_TOOLSDIRECTORY/CodeQL" || true
+          fi
+
+          # Prune Docker data before the Buildx --load phase.
+          docker system prune -af || true
+          docker builder prune -af || true
+
+          echo "Disk usage after cleanup"
+          df -h
+          docker system df || true
 
       - name: Build Docker image
         if: steps.check_image.outputs.SKIP_BUILD == 'false'

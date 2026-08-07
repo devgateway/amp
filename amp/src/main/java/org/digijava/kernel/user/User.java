@@ -26,6 +26,7 @@ import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvi
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.*;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -33,6 +34,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.util.Identifiable;
 
+import javax.persistence.Transient;
 import javax.security.auth.Subject;
 import java.io.Serializable;
 import java.util.*;
@@ -58,6 +60,9 @@ public class User
     private Boolean pledgeSuperUser;
     private Site registeredThrough;
     private Set interests;
+    private String truBudgetPassword;
+    private String truBudgetKeyGen;
+    private String truBudgetUserName;
     private java.sql.Clob bio;
     private Image portrait;
     private String organizationName;
@@ -83,6 +88,18 @@ public class User
 
     private Set<AmpOrganisation> assignedOrgs;
     private Date passwordChangedAt;
+    private Set<TruBudgetIntent> truBudgetIntents= new HashSet<>();
+    @Transient
+    private transient Set<TruBudgetIntent> initialTruBudgetIntents= new HashSet<>();
+    private Boolean truBudgetEnabled=false;
+
+    public Boolean getTruBudgetEnabled() {
+        return truBudgetEnabled;
+    }
+
+    public void setTruBudgetEnabled(Boolean truBudgetEnabled) {
+        this.truBudgetEnabled = truBudgetEnabled;
+    }
 
     public User() {
     }
@@ -542,5 +559,45 @@ public class User
         }
         
         return email;
+    }
+
+    public Set<TruBudgetIntent> getTruBudgetIntents() {
+        return truBudgetIntents;
+    }
+
+    public void setTruBudgetIntents(Set<TruBudgetIntent> truBudgetIntents) {
+        this.truBudgetIntents = truBudgetIntents;
+    }
+
+    public Set<TruBudgetIntent> getInitialTruBudgetIntents() {
+        return initialTruBudgetIntents;
+    }
+
+    public void setInitialTruBudgetIntents(Set<TruBudgetIntent> initialTruBudgetIntents) {
+        this.initialTruBudgetIntents = initialTruBudgetIntents;
+    }
+
+    public String getTruBudgetPassword() {
+        return truBudgetPassword;
+    }
+
+    public void setTruBudgetPassword(String truBudgetPassword) {
+        this.truBudgetPassword = truBudgetPassword;
+    }
+
+    public String getTruBudgetKeyGen() {
+        return truBudgetKeyGen;
+    }
+
+    public void setTruBudgetKeyGen(String truBudgetKeyGen) {
+        this.truBudgetKeyGen = truBudgetKeyGen;
+    }
+
+    public String getTruBudgetUserName() {
+        return truBudgetUserName;
+    }
+
+    public void setTruBudgetUserName(String truBudgetUserName) {
+        this.truBudgetUserName = truBudgetUserName;
     }
 }

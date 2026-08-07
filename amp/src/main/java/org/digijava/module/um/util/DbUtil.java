@@ -442,6 +442,34 @@ public class DbUtil {
     public static Mono<TruLoginResponse> loginToTruBudget(TruLoginRequest truLoginRequest, List<AmpGlobalSettings> settings) throws URISyntaxException {
         return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/user.authenticate",truLoginRequest, TruLoginRequest.class,TruLoginResponse.class);
     }
+
+    /**
+     * Logs in with the TruBudget root credentials (trubudget.rootUser/rootPassword global settings)
+     * and returns the resulting access token, or null on failure. Used by backend/job code that needs
+     * a TruBudget token without a specific AMP user context.
+     */
+    public static String getRootToken(List<AmpGlobalSettings> settings) {
+        try {
+            TruLoginRequest truLoginRequest = new TruLoginRequest();
+            truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
+            TruLoginRequest.Data data = new TruLoginRequest.Data();
+            TruLoginRequest.User rootUser = new TruLoginRequest.User();
+            rootUser.setId(getSettingValue(settings, "rootUser"));
+            rootUser.setPassword(getSettingValue(settings, "rootPassword"));
+            data.setUser(rootUser);
+            truLoginRequest.setData(data);
+
+            TruLoginResponse truLoginResponse = loginToTruBudget(truLoginRequest, settings).block();
+            if (truLoginResponse == null || truLoginResponse.getData() == null || truLoginResponse.getData().getUser() == null) {
+                logger.error("TruBudget root login failed: empty response.");
+                return null;
+            }
+            return truLoginResponse.getData().getUser().getToken();
+        } catch (Exception e) {
+            logger.error("Failed to authenticate TruBudget root user.", e);
+            return null;
+        }
+    }
     
     public static Mono<TruLoginResponse> refreshTruBudgetToken(String userId, String refreshToken, List<AmpGlobalSettings> settings) throws URISyntaxException {
         TruRefreshTokenRequest refreshRequest = new TruRefreshTokenRequest();
@@ -667,22 +695,12 @@ public class DbUtil {
             logger.info("Registering user on Trubudget");
             logger.info("Settings: " + settings);
 
-            TruLoginRequest truLoginRequest = new TruLoginRequest();
-            truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
-            TruLoginRequest.Data data = new TruLoginRequest.Data();
-            TruLoginRequest.User rootUser = new TruLoginRequest.User();
-            rootUser.setPassword(getSettingValue(settings, "rootPassword"));
-            rootUser.setId(getSettingValue(settings, "rootUser"));
-            data.setUser(rootUser);
-            truLoginRequest.setData(data);
-
-            TruLoginResponse truLoginResponse = loginToTruBudget(truLoginRequest, settings).block();
-            if (truLoginResponse == null || truLoginResponse.getData() == null || truLoginResponse.getData().getUser() == null) {
-                logger.error("TruBudget login failed: empty response while registering user " + user.getEmail());
+            String token = getRootToken(settings);
+            if (token == null || token.isEmpty()) {
+                logger.error("TruBudget root login failed while registering user " + user.getEmail());
                 return false;
             }
 
-            String token = truLoginResponse.getData().getUser().getToken();
             String identity = userData.getData().getUser().getId();
             TruUserData registerResponse = null;
 

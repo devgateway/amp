@@ -13,6 +13,7 @@
         <property name="truProjectId" column="tru_project_id" type="java.lang.String"/>
         <property name="ampComponentId" column="amp_component_id" type="java.lang.Long"/>
         <property name="componentJustAnId" column="component_just_an_id" type="java.lang.String"/>
+        <property name="subProjectClosed" column="sub_project_closed" type="java.lang.Boolean"/>
 
     </class>
 </hibernate-mapping>

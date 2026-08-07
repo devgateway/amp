@@ -889,6 +889,17 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         featureList.setReuseItems(true);
         activityForm.add(featureList);
         quickMenu(am, listModel);
+
+        String ampId = am.getObject() != null ? am.getObject().getAmpId() : null;
+        boolean projectClosedInTruBudget = ampId != null && !ampId.trim().isEmpty()
+                && ProjectUtil.isActivityProjectClosedInTruBudget(ampId);
+        if (projectClosedInTruBudget) {
+            featureList.setEnabled(false);
+        }
+        Label truBudgetClosedNotice = new Label("truBudgetClosedNotice",
+                TranslatorUtil.getTranslatedText("This project is closed in TruBudget and can no longer be edited."));
+        truBudgetClosedNotice.setVisible(projectClosedInTruBudget);
+        activityForm.add(truBudgetClosedNotice);
     }
 
 

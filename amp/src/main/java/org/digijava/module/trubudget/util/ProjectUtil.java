@@ -351,7 +351,7 @@ public class ProjectUtil {
 
     }
 
-    private static void markProjectClosedInAmp(String projectId) {
+    public static void markProjectClosedInAmp(String projectId) {
         try {
             Integer updated = PersistenceManager.<Integer>doInTransaction(dbSession -> {
                 return dbSession.createQuery(
@@ -365,6 +365,28 @@ public class ProjectUtil {
             logger.info("Marked TruBudget project as closed in AMP. projectId={}, rowsUpdated={}", projectId, updated);
         } catch (Exception e) {
             logger.error("Failed to mark TruBudget project as closed in AMP for projectId={}", projectId, e);
+        }
+    }
+
+    /**
+     * Marks the local cache of a TruBudget subproject's status as closed, so the activity form can
+     * check it without an API call on every page render. Used by {@code createUpdateSubProjects}'s
+     * own close calls and by the periodic {@code TruBudgetStatusSyncJob}.
+     */
+    public static void markSubProjectClosedInAmp(String truSubProjectId) {
+        try {
+            Integer updated = PersistenceManager.<Integer>doInTransaction(dbSession -> {
+                return dbSession.createQuery(
+                        "UPDATE " + AmpComponentTruSubProject.class.getName() + " sp " +
+                            "SET sp.subProjectClosed = :closed " +
+                            "WHERE sp.truSubProjectId = :truSubProjectId")
+                    .setParameter("closed", Boolean.TRUE)
+                    .setParameter("truSubProjectId", truSubProjectId)
+                    .executeUpdate();
+            });
+            logger.info("Marked TruBudget subproject as closed in AMP. truSubProjectId={}, rowsUpdated={}", truSubProjectId, updated);
+        } catch (Exception e) {
+            logger.error("Failed to mark TruBudget subproject as closed in AMP for truSubProjectId={}", truSubProjectId, e);
         }
     }
 
@@ -885,5 +907,102 @@ public class ProjectUtil {
         return null;
     }
 
+    /**
+     * Fetches the live project status from TruBudget. Returns null (instead of throwing) on any
+     * communication failure so callers can fail open rather than block AMP editing.
+     */
+    public static String getProjectStatus(String projectId, List<AmpGlobalSettings> settings, String token) {
+        if (projectId == null || projectId.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            ProjectViewDetailsModel response = GenericWebClient.getForSingleObjResponse(
+                    getSettingValue(settings, "baseUrl") + String.format("api/project.viewDetails?projectId=%s", projectId),
+                    ProjectViewDetailsModel.class, token)
+                    .onErrorReturn(new ProjectViewDetailsModel()).block();
+            return response != null && response.getData() != null && response.getData().getProject() != null
+                    && response.getData().getProject().getData() != null
+                    ? response.getData().getProject().getData().getStatus() : null;
+        } catch (Exception e) {
+            logger.error("Failed to fetch TruBudget project status for projectId={}", projectId, e);
+            return null;
+        }
+    }
+
+    public static boolean isProjectClosedInTruBudget(String projectId, List<AmpGlobalSettings> settings, String token) {
+        return "closed".equalsIgnoreCase(getProjectStatus(projectId, settings, token));
+    }
+
+    /**
+     * Fetches the live subproject status from TruBudget. Returns null (instead of throwing) on any
+     * communication failure so callers can fail open rather than block AMP editing.
+     */
+    public static String getSubProjectStatus(String projectId, String subProjectId, List<AmpGlobalSettings> settings, String token) {
+        if (projectId == null || projectId.trim().isEmpty() || subProjectId == null || subProjectId.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            SubProjectViewDetailsModel response = GenericWebClient.getForSingleObjResponse(
+                    getSettingValue(settings, "baseUrl") + String.format("api/subproject.viewDetails?projectId=%s&subprojectId=%s", projectId, subProjectId),
+                    SubProjectViewDetailsModel.class, token)
+                    .onErrorReturn(new SubProjectViewDetailsModel()).block();
+            return response != null && response.getData() != null && response.getData().getSubproject() != null
+                    && response.getData().getSubproject().getData() != null
+                    ? response.getData().getSubproject().getData().getStatus() : null;
+        } catch (Exception e) {
+            logger.error("Failed to fetch TruBudget subproject status for projectId={}, subProjectId={}", projectId, subProjectId, e);
+            return null;
+        }
+    }
+
+    public static boolean isSubProjectClosedInTruBudget(String projectId, String subProjectId, List<AmpGlobalSettings> settings, String token) {
+        return "closed".equalsIgnoreCase(getSubProjectStatus(projectId, subProjectId, settings, token));
+    }
+
+    /**
+     * Convenience check for the activity form: is this activity's linked TruBudget project closed?
+     * Reads the locally cached {@code TruBudgetActivity.projectClosed} flag (kept in sync by
+     * {@code TruBudgetStatusSyncJob}) instead of calling the TruBudget API on every page render.
+     * Fails open (returns false) when not linked or TruBudget integration is disabled.
+     */
+    public static boolean isActivityProjectClosedInTruBudget(String ampId) {
+        if (ampId == null || ampId.trim().isEmpty()) {
+            return false;
+        }
+        List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+        if (!"true".equalsIgnoreCase(getSettingValue(settings, "isEnabled"))) {
+            return false;
+        }
+        TruBudgetActivity truBudgetActivity = activityAlreadyInTrubudget(ampId);
+        return truBudgetActivity != null && Boolean.TRUE.equals(truBudgetActivity.getProjectClosed());
+    }
+
+    /**
+     * Convenience check for the component form: is this component's linked TruBudget subproject closed?
+     * Reads the locally cached {@code AmpComponentTruSubProject.subProjectClosed} flag (kept in sync by
+     * {@code TruBudgetStatusSyncJob}) instead of calling the TruBudget API on every page render.
+     * Fails open (returns false) when not linked or TruBudget integration is disabled.
+     */
+    public static boolean isComponentSubProjectClosedInTruBudget(AmpComponent ampComponent) {
+        if (ampComponent == null || ampComponent.getJustAnId() == null) {
+            return false;
+        }
+        List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+        if (!"true".equalsIgnoreCase(getSettingValue(settings, "isEnabled"))) {
+            return false;
+        }
+
+        String componentJustAnId = ampComponent.getJustAnId();
+        final AmpComponentTruSubProject[] subProject = new AmpComponentTruSubProject[1];
+        PersistenceManager.doInTransaction(session -> {
+            subProject[0] = session.createQuery(
+                            "FROM " + AmpComponentTruSubProject.class.getName()
+                                    + " act WHERE act.componentJustAnId = :componentJustAnId", AmpComponentTruSubProject.class)
+                    .setParameter("componentJustAnId", componentJustAnId)
+                    .stream().findAny().orElse(null);
+            return null;
+        });
+        return subProject[0] != null && Boolean.TRUE.equals(subProject[0].getSubProjectClosed());
+    }
 
 }

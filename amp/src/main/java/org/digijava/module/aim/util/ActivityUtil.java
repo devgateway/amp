@@ -1701,15 +1701,12 @@ public class ActivityUtil {
 
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
         ActivityUtil.deleteActivityContent(ampAct,session);
-        Long ampActId = ampAct.getAmpActivityId();
-        deleteIndicatorConnectionsForActivity(ampActId, session);
     }
 
     public static void  deleteAllActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
         ActivityUtil.deleteActivityContent(ampAct,session);
         Long ampActId = ampAct.getAmpActivityId();
         ActivityUtil.removeMergeSources(ampActId, session);
-        deleteIndicatorConnectionsForActivity(ampActId, session);
     }
 
     private static void deleteIndicatorConnectionsForActivity(Long ampActId, Session session) throws Exception {

@@ -26,6 +26,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -895,11 +896,20 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 && ProjectUtil.isActivityProjectClosedInTruBudget(ampId);
         if (projectClosedInTruBudget) {
             featureList.setEnabled(false);
+            saveAndSubmit.setEnabled(false);
+            rejectActivityLink.setEnabled(false);
+            saveAsDraft.setEnabled(false);
+            saveAsDraftAction.setEnabled(false);
         }
         Label truBudgetClosedNotice = new Label("truBudgetClosedNotice",
                 TranslatorUtil.getTranslatedText("This project is closed in TruBudget and can no longer be edited."));
         truBudgetClosedNotice.setVisible(projectClosedInTruBudget);
         activityForm.add(truBudgetClosedNotice);
+
+        ExternalLink truBudgetGoToDesktopLink = new ExternalLink("truBudgetGoBackButton", "/aim/showDesktop.do");
+        truBudgetGoToDesktopLink.add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
+        truBudgetGoToDesktopLink.setVisible(projectClosedInTruBudget);
+        activityForm.add(truBudgetGoToDesktopLink);
     }
 
 

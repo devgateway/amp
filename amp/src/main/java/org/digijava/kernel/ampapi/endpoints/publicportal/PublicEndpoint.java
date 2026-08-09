@@ -14,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.publicportal.dto.PublicTotalsByMeasure;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportFormParameters;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +41,7 @@ public class PublicEndpoint {
     @POST
     @Path("/topprojects")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "topprojects")
+    @ApiMethod(ui = false, id = "topprojects", authTypes = AuthRule.PUBLIC)
     @ApiOperation("Retrieves top 'count' projects based on fixed requirements.")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Top projects",
             response = PublicTopData.class))
@@ -64,7 +65,7 @@ public class PublicEndpoint {
     @POST
     @Path("/donorFunding")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "donorFunding")
+    @ApiMethod(ui = false, id = "donorFunding", authTypes = AuthRule.PUBLIC)
     @ApiOperation(
             value = "Retrieves Donor Disbursements/Commitments List for the last X days",
             notes = "Get donor funding for the specific funding type "
@@ -98,7 +99,7 @@ public class PublicEndpoint {
     @POST
     @Path("/activitiesPledges")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "activitiesPledges")
+    @ApiMethod(ui = false, id = "activitiesPledges", authTypes = AuthRule.PUBLIC)
     @ApiOperation("Retrieves the count for activities that have been at least linked to one pledge")
     public int getActivitiesPledgesCount(@ApiParam(required = true) PublicReportFormParameters config) {
         return PublicPortalService.getActivitiesCount(config != null ? config.getFilters() : null, true);
@@ -107,7 +108,7 @@ public class PublicEndpoint {
     @POST
     @Path("/totalByMeasure")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "getTopByMeasure")
+    @ApiMethod(ui = false, id = "getTopByMeasure", authTypes = AuthRule.PUBLIC)
     @ApiOperation("Total funding by measure")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Top chart data",
             response = PublicTotalsByMeasure.class))
@@ -129,7 +130,7 @@ public class PublicEndpoint {
     @POST
     @Path("/projectCount")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "projectCount")
+    @ApiMethod(ui = false, id = "projectCount", authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "get total project count respecting filters")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Top chart data",
             response = PublicTotalsByMeasure.class))

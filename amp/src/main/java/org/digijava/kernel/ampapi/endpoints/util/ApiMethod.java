@@ -64,7 +64,11 @@ public @interface ApiMethod {
     String visibilityCheck() default "";
 
     /**
-     * Authorization rules that must be applied to this method. Default is no authorization to be done.
+     * Authorization rules that must be applied to this method.
+     *
+     * <p>Fail-closed default: when left empty, the method still requires an authenticated session
+     * (equivalent to {@link AuthRule#AUTHENTICATED}). Use {@link AuthRule#PUBLIC} explicitly to allow
+     * anonymous access.</p>
      */
     AuthRule[] authTypes() default {};
 }

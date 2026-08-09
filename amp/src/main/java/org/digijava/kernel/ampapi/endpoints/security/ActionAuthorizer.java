@@ -20,6 +20,7 @@ import org.glassfish.jersey.server.ContainerRequest;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -40,14 +41,37 @@ public class ActionAuthorizer {
             .build();
 
     /**
+     * Returns true if the given ApiMethod is explicitly opted out of authorization via {@link AuthRule#PUBLIC}.
+     */
+    private static boolean isExplicitlyPublic(ApiMethod apiMethod) {
+        for (AuthRule authRule : apiMethod.authTypes()) {
+            if (authRule == AuthRule.PUBLIC) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns the effective auth rules for the given ApiMethod, defaulting to {@link AuthRule#AUTHENTICATED}
+     * (fail-closed) when no authTypes were declared at all.
+     */
+    private static Collection<AuthRule> getEffectiveRules(ApiMethod apiMethod) {
+        if (apiMethod.authTypes().length == 0) {
+            return Collections.singleton(AuthRule.AUTHENTICATED);
+        }
+        return ruleHierarchy.getEffectiveRules(apiMethod.authTypes());
+    }
+
+    /**
      * Returns true if the given ApiMethod requires an authenticated user session.
      * Used by request filters to decide whether CSRF protection is warranted.
      */
     public static boolean requiresAuthentication(ApiMethod apiMethod) {
-        if (apiMethod.authTypes().length == 0) {
+        if (isExplicitlyPublic(apiMethod)) {
             return false;
         }
-        Collection<AuthRule> authRules = ruleHierarchy.getEffectiveRules(apiMethod.authTypes());
+        Collection<AuthRule> authRules = getEffectiveRules(apiMethod);
         return authRules.contains(AuthRule.AUTHENTICATED);
     }
 
@@ -58,12 +82,12 @@ public class ActionAuthorizer {
      * @param containerReq general container request to be used for additional information 
      */
     public static void authorize(Method method, ApiMethod apiMethod, ContainerRequest containerReq) {
-        if (apiMethod.authTypes().length == 0) {
-            // no authorization -> nothing to check, skip immediately
+        if (isExplicitlyPublic(apiMethod)) {
+            // explicitly and deliberately open to anonymous callers -> nothing to check, skip immediately
             return;
         }
 
-        Collection<AuthRule> authRules = ruleHierarchy.getEffectiveRules(apiMethod.authTypes());
+        Collection<AuthRule> authRules = getEffectiveRules(apiMethod);
         logger.info("Authenticated: "+AuthRule.AUTHENTICATED +"User: "+TeamUtil.getCurrentUser());
 
         if (authRules.contains(AuthRule.AUTHENTICATED) && TeamUtil.getCurrentUser() == null) {

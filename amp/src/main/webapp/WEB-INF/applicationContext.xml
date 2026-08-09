@@ -283,8 +283,9 @@
 		<custom-filter position="LOGOUT_FILTER" ref="logoutFilter" />
 	</http>
 
-	<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"
-				factory-method="getInstance"/>
+	<!-- AMP-SEC-017/054: bcrypt-hashes new/changed passwords; still verifies legacy plaintext
+	     accounts stored before this encoder was introduced (see AmpPasswordEncoder) -->
+	<beans:bean id="passwordEncoder" class="org.digijava.kernel.security.auth.AmpPasswordEncoder"/>
 
 
 	<!-- the authentication manager references the auth service -->

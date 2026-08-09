@@ -294,7 +294,8 @@ class DigiInitUtil {
         user.setFirstNames("System");
         user.setLastName("System");
         user.setEmail("system@digijava.org");
-        user.setPassword("changeme");
+        // AMP-SEC-017/054: never store the plaintext password
+        user.setPassword(new org.digijava.kernel.security.auth.AmpPasswordEncoder().encode("changeme"));
         user.setRegisterLanguage(english);
         user.setBanned(false);
         user.setOrganizationTypeOther(" ");

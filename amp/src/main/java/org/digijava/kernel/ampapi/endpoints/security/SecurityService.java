@@ -14,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.gpi.GPIEPConstants;
 import org.digijava.kernel.ampapi.endpoints.security.dto.*;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.security.auth.AmpPasswordEncoder;
 import org.digijava.kernel.services.AmpVersionInfo;
 import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -38,8 +39,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -206,12 +205,15 @@ public class SecurityService {
         }
     
         User user = UserUtils.getUserByEmailAddress(username);
-        String storedPassword = (user != null && user.getPassword() != null) ? user.getPassword() : "";
-        boolean passwordMatches = MessageDigest.isEqual(
-                storedPassword.getBytes(StandardCharsets.UTF_8),
-                password.getBytes(StandardCharsets.UTF_8));
+        String storedPassword = (user != null) ? user.getPassword() : null;
+        AmpPasswordEncoder passwordEncoder = new AmpPasswordEncoder();
+        boolean passwordMatches = storedPassword != null && passwordEncoder.matches(password, storedPassword);
         if (user == null || !passwordMatches) {
             ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.INVALID_USER_PASSWORD);
+        }
+        if (!passwordEncoder.isHashed(storedPassword)) {
+            // opportunistically upgrade legacy plaintext password to a bcrypt hash on successful login
+            user.setPassword(passwordEncoder.encode(password));
         }
     
         ApiErrorMessage result = ApiAuthentication.login(user, TLSUtils.getRequest());

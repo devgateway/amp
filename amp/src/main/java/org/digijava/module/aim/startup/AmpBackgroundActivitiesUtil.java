@@ -93,9 +93,10 @@ public final class AmpBackgroundActivitiesUtil {
         // set client IP address
         user.setModifyingIP("0.0.0.0");
 
-        // set password
-        user.setPassword(AMP_USER_PASSWORD);
-        user.setSalt(AMP_USER_PASSWORD);
+        // set password (AMP-SEC-017/054: never store the plaintext password)
+        String hashedPassword = new org.digijava.kernel.security.auth.AmpPasswordEncoder().encode(AMP_USER_PASSWORD);
+        user.setPassword(hashedPassword);
+        user.setSalt(hashedPassword);
 
         // set Website
         user.setUrl("/");

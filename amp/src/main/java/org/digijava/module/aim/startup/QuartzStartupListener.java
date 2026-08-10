@@ -58,7 +58,7 @@ public class QuartzStartupListener extends QuartzInitializerListener {
             scheduler.getContext().put(Constants.AMP_SERVLET_CONTEXT, sc);
 
             enableActivityCloserIfNeeded();
-            enableTruBudgetStatusSyncJobIfNeeded();
+//            enableTruBudgetStatusSyncJobIfNeeded();
 
         } catch (SchedulerException e) {
             logger.error("Failed to configure the scheduler.", e);

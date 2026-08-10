@@ -5,6 +5,7 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.SiteUtils;
@@ -156,9 +157,12 @@ public final class AmpBackgroundActivitiesUtil {
 
         org.digijava.kernel.user.Group memberGroup = DbUtil.getGroup(org.digijava.kernel.user.Group.MEMBERS,
                 site.getId());
+        org.digijava.kernel.user.Group translatorGroup = DbUtil.getGroup(Group.TRANSLATORS,
+                site.getId());
         Long[] uid = new Long[1];
         uid[0] = user.getId();
         org.digijava.module.admin.util.DbUtil.addUsersToGroup(memberGroup.getId(), uid);
+        org.digijava.module.admin.util.DbUtil.addUsersToGroup(translatorGroup.getId(), uid);
 
         //save amp user extensions;
         AmpUserExtensionPK extPK = new AmpUserExtensionPK(user);

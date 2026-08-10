@@ -39,6 +39,7 @@ public class MenuItemsProcessor {
     
     private AmpView view;
     private TeamMember tm;
+    private AmpTeamMember currentAmpTeamMember;
     private Set<String> currentUserGroupKeys = new HashSet<String>();
     private String referer;
     
@@ -51,8 +52,9 @@ public class MenuItemsProcessor {
             currentUserGroupKeys.add(Group.PLEDGERS);
         }
         if (tm != null && tm.getMemberId() != null) {
-            AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-            Set<Group> userGroups = atm != null && atm.getUser() != null ? atm.getUser().getGroups() : null;
+            this.currentAmpTeamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+            Set<Group> userGroups = currentAmpTeamMember != null && currentAmpTeamMember.getUser() != null
+                    ? currentAmpTeamMember.getUser().getGroups() : null;
             if (userGroups != null) {
                 for(Group group : userGroups) {
                     currentUserGroupKeys.add(group.getKey());
@@ -102,6 +104,11 @@ public class MenuItemsProcessor {
         case MenuConstants.IATI_IMPORTER:
             visible = canAddActivity() || MenuUtils.isAmpAdmin();
             break;
+        case MenuConstants.DATA_IMPORTER:
+        case MenuConstants.IMPORT_DATA:
+        case MenuConstants.VIEW_PROGRESS:
+            visible = canAccessDataImporter();
+            break;
         case MenuConstants.GPI_DATA:
             visible = FeaturesUtil.isVisibleModule(MenuConstants.GPI_DATA_ENTRY);
             break;
@@ -114,6 +121,17 @@ public class MenuItemsProcessor {
 
     private boolean canAddActivity() {
         return tm != null && Boolean.TRUE.equals(tm.getAddActivity());
+    }
+
+    private boolean canAccessDataImporter() {
+        if (MenuUtils.isAmpAdmin()) {
+            return true;
+        }
+        if (currentAmpTeamMember == null || currentAmpTeamMember.getAmpMemberRole() == null) {
+            return false;
+        }
+        return Boolean.TRUE.equals(currentAmpTeamMember.getAmpMemberRole().getTeamHead())
+                || currentAmpTeamMember.getAmpMemberRole().isApprover();
     }
 
     private boolean isAllowedUserGroup(MenuItem mi) {

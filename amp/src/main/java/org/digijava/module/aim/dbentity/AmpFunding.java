@@ -290,21 +290,17 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
     }
     // Compare by transaction type, then amount, then date.
     // (transient in order to be wicket friendly, no need to serialize this field)
-    private transient Comparator fundingDetailsComparator = new Comparator(){
-        
-        
-        public int compare(Object o1, Object o2) {
-            AmpFundingDetail aux1 = (AmpFundingDetail)o1;
-            AmpFundingDetail aux2 = (AmpFundingDetail)o2;
-            if (aux1.getTransactionType().equals(aux2.getTransactionType())) {
-                if (aux1.getTransactionAmount().equals(aux2.getTransactionAmount())) {
-                    return aux1.getTransactionDate().compareTo(aux2.getTransactionDate());
-                } else {
-                    return aux1.getTransactionAmount().compareTo(aux2.getTransactionAmount());
-                }
+    private transient Comparator fundingDetailsComparator = (o1, o2) -> {
+        AmpFundingDetail aux1 = (AmpFundingDetail)o1;
+        AmpFundingDetail aux2 = (AmpFundingDetail)o2;
+        if (aux1.getTransactionType().equals(aux2.getTransactionType())) {
+            if (aux1.getTransactionAmount().equals(aux2.getTransactionAmount())) {
+                return aux1.getTransactionDate().compareTo(aux2.getTransactionDate());
             } else {
-                return aux1.getTransactionType().compareTo(aux2.getTransactionType());
+                return aux1.getTransactionAmount().compareTo(aux2.getTransactionAmount());
             }
+        } else {
+            return aux1.getTransactionType().compareTo(aux2.getTransactionType());
         }
     };
 
@@ -316,7 +312,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
     @Override
     public Output getOutput() {
         Output out = new Output();
-        out.setOutputs(new ArrayList<Output>());
+        out.setOutputs(new ArrayList<>());
         
         String orgName = this.ampDonorOrgId.getName();
         if (this.ampDonorOrgId != null 
@@ -369,98 +365,101 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
         boolean trnMTEF = false;
         boolean trnEDD = false;
         boolean trnRoF = false;
-        List<AmpFundingDetail> auxDetails = new ArrayList(this.fundingDetails);
-        Collections.sort(auxDetails, fundingDetailsComparator);
-        Iterator<AmpFundingDetail> iter = auxDetails.iterator();
-        while (iter.hasNext()) {
+        List<AmpFundingDetail> auxDetails = new ArrayList<>(this.fundingDetails);
+        auxDetails.sort(fundingDetailsComparator);
+        for (AmpFundingDetail detail : auxDetails) {
             boolean error = false;
-            AmpFundingDetail auxDetail = iter.next();
             String transactionType = "";
             String extraValues = "";
             Output auxOutDetail = null;
-            switch (auxDetail.getTransactionType().intValue()) {
-            case Constants.COMMITMENT: 
-                transactionType = "Commitments";
-                if (auxDetail.getPledgeid() != null) {
-                    if (auxDetail.getPledgeid().getTitle() != null) {
-                        extraValues = " - " + auxDetail.getPledgeid().getTitle().getValue();
+            switch (detail.getTransactionType()) {
+                case Constants.COMMITMENT:
+                    transactionType = "Commitments";
+                    if (detail.getPledgeid() != null) {
+                        if (detail.getPledgeid().getTitle() != null) {
+                            extraValues = " - " + detail.getPledgeid().getTitle().getValue();
+                        }
                     }
-                }
-                if (!trnComm) {
-                    out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
-                    trnComm = true;
-                }
-                break;
-            
-            case Constants.DISBURSEMENT: 
-                transactionType = " Disbursements";
-                if (auxDetail.getDisbOrderId() != null && auxDetail.getDisbOrderId().trim().length() > 0) extraValues += " - " + auxDetail.getDisbOrderId();
-                if (auxDetail.getContract() != null) extraValues += " - " + auxDetail.getContract().getContractName();
-                if (auxDetail.getPledgeid() != null) {
-                    if (auxDetail.getPledgeid().getTitle() != null) {
-                        extraValues = " - " + auxDetail.getPledgeid().getTitle().getValue();
+                    if (!trnComm) {
+                        out.getOutputs().add(new Output(new ArrayList<>(), new String[]{transactionType}, new Object[]{""}));
+                        trnComm = true;
                     }
-                }
-                if (!trnDisb) {
-                    out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
-                    trnDisb = true;
-                }
-                break;
-            
-            case Constants.EXPENDITURE: 
-                transactionType = " Expenditures";
-                if (auxDetail.getExpCategory() != null && auxDetail.getExpCategory().trim().length() > 0) extraValues += " - " + auxDetail.getExpCategory();
-                if (!trnExp) {
-                    out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
-                    trnExp = true;
-                }
-                break;
-            
-            case Constants.DISBURSEMENT_ORDER: 
-                transactionType = " Disbursement Orders";
-                if (auxDetail.getDisbOrderId() != null && auxDetail.getDisbOrderId().trim().length() > 0) extraValues += " - " + auxDetail.getDisbOrderId();
-                if (auxDetail.getContract() != null) extraValues += " - " + auxDetail.getContract().getContractName();
-                if (auxDetail.getDisbursementOrderRejected() != null) {
-                    if (auxDetail.getDisbursementOrderRejected()) extraValues += " - Rejected"; else extraValues += " - Not Rejected";
-                }
-                if (!trnDisbOrder) {
-                    out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
-                    trnDisbOrder = true;
-                }
-                break;
-            
-            case Constants.ESTIMATED_DONOR_DISBURSEMENT: 
-                transactionType = " Estimated Donor Disbursements";
-                if (!trnEDD) {
-                    out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
-                    trnEDD = true;
-                }
-                break;
-            
-            case Constants.RELEASE_OF_FUNDS: 
-                transactionType = " Release of Funds";
-                if (!trnRoF) {
-                    out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
-                    trnRoF = true;
-                }
-                break;
-            
-            default: 
-                error = true;
-                break;
-            
+                    break;
+
+                case Constants.DISBURSEMENT:
+                    transactionType = " Disbursements";
+                    if (detail.getDisbOrderId() != null && !detail.getDisbOrderId().trim().isEmpty())
+                        extraValues += " - " + detail.getDisbOrderId();
+                    if (detail.getContract() != null)
+                        extraValues += " - " + detail.getContract().getContractName();
+                    if (detail.getPledgeid() != null) {
+                        if (detail.getPledgeid().getTitle() != null) {
+                            extraValues = " - " + detail.getPledgeid().getTitle().getValue();
+                        }
+                    }
+                    if (!trnDisb) {
+                        out.getOutputs().add(new Output(new ArrayList<>(), new String[]{transactionType}, new Object[]{""}));
+                        trnDisb = true;
+                    }
+                    break;
+
+                case Constants.EXPENDITURE:
+                    transactionType = " Expenditures";
+                    if (detail.getExpCategory() != null && !detail.getExpCategory().trim().isEmpty())
+                        extraValues += " - " + detail.getExpCategory();
+                    if (!trnExp) {
+                        out.getOutputs().add(new Output(new ArrayList<>(), new String[]{transactionType}, new Object[]{""}));
+                        trnExp = true;
+                    }
+                    break;
+
+                case Constants.DISBURSEMENT_ORDER:
+                    transactionType = " Disbursement Orders";
+                    if (detail.getDisbOrderId() != null && !detail.getDisbOrderId().trim().isEmpty())
+                        extraValues += " - " + detail.getDisbOrderId();
+                    if (detail.getContract() != null)
+                        extraValues += " - " + detail.getContract().getContractName();
+                    if (detail.getDisbursementOrderRejected() != null) {
+                        if (detail.getDisbursementOrderRejected()) extraValues += " - Rejected";
+                        else extraValues += " - Not Rejected";
+                    }
+                    if (!trnDisbOrder) {
+                        out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
+                        trnDisbOrder = true;
+                    }
+                    break;
+
+                case Constants.ESTIMATED_DONOR_DISBURSEMENT:
+                    transactionType = " Estimated Donor Disbursements";
+                    if (!trnEDD) {
+                        out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
+                        trnEDD = true;
+                    }
+                    break;
+
+                case Constants.RELEASE_OF_FUNDS:
+                    transactionType = " Release of Funds";
+                    if (!trnRoF) {
+                        out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
+                        trnRoF = true;
+                    }
+                    break;
+
+                default:
+                    error = true;
+                    break;
+
             }
             if (!error) {
                 String recipientInfo = "";
-                if (auxDetail.getRecipientOrg() != null) recipientInfo = String.format(" to %s as %s", auxDetail.getRecipientOrg().getName(), auxDetail.getRecipientRole().getName());
-                String adjustment = auxDetail.getAdjustmentType().getValue();
+                if (detail.getRecipientOrg() != null)
+                    recipientInfo = String.format(" to %s as %s", detail.getRecipientOrg().getName(), detail.getRecipientRole().getName());
+                String adjustment = detail.getAdjustmentType().getValue();
                 auxOutDetail = out.getOutputs().get(out.getOutputs().size() - 1);
-                auxOutDetail.getOutputs().add(new Output(null, new String[]{""}, new Object[]{adjustment, " - ", auxDetail.getTransactionAmount(), " ", auxDetail.getAmpCurrencyId(), " - ", auxDetail.getTransactionDate(), extraValues + recipientInfo}));
+                auxOutDetail.getOutputs().add(new Output(null, new String[]{""}, new Object[]{adjustment, " - ", detail.getTransactionAmount(), " ", detail.getAmpCurrencyId(), " - ", detail.getTransactionDate(), extraValues + recipientInfo}));
             }
         }
-        Iterator<AmpFundingMTEFProjection> it2 = this.mtefProjections.iterator();
-        while (it2.hasNext()) {
-            AmpFundingMTEFProjection mtef = (AmpFundingMTEFProjection)it2.next();
+        for (AmpFundingMTEFProjection mtef : this.mtefProjections) {
             if (!trnMTEF) {
                 out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{"MTEF Projection"}, new Object[]{""}));
                 trnMTEF = true;
@@ -477,12 +476,10 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
         AmpFunding aux = (AmpFunding)clone();
         aux.ampActivityId = newActivity;
         aux.ampFundingId = null;
-        if (aux.fundingDetails != null && aux.fundingDetails.size() > 0) {
+        if (aux.fundingDetails != null && !aux.fundingDetails.isEmpty()) {
             Set<AmpFundingDetail> auxSetFD = new HashSet<AmpFundingDetail>();
-            Iterator<AmpFundingDetail> iF = aux.fundingDetails.iterator();
-            while (iF.hasNext()) {
-                AmpFundingDetail auxFD = iF.next();
-                AmpFundingDetail newFD = (AmpFundingDetail)auxFD.clone();
+            for (AmpFundingDetail auxFD : aux.fundingDetails) {
+                AmpFundingDetail newFD = (AmpFundingDetail) auxFD.clone();
                 newFD.setAmpFundDetailId(null);
                 newFD.setAmpFundingId(aux);
                 auxSetFD.add(newFD);
@@ -491,12 +488,10 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
         } else {
             aux.fundingDetails = null;
         }
-        if (aux.mtefProjections != null && aux.mtefProjections.size() > 0) {
+        if (aux.mtefProjections != null && !aux.mtefProjections.isEmpty()) {
             Set<AmpFundingMTEFProjection> auxSetMTEF = new HashSet<AmpFundingMTEFProjection>();
-            Iterator<AmpFundingMTEFProjection> iMTEF = aux.mtefProjections.iterator();
-            while (iMTEF.hasNext()) {
-                AmpFundingMTEFProjection auxMTEF = iMTEF.next();
-                AmpFundingMTEFProjection newMTEF = (AmpFundingMTEFProjection)auxMTEF.clone();
+            for (AmpFundingMTEFProjection auxMTEF : aux.mtefProjections) {
+                AmpFundingMTEFProjection newMTEF = (AmpFundingMTEFProjection) auxMTEF.clone();
                 newMTEF.setAmpFundingMTEFProjectionId(null);
                 newMTEF.setAmpFunding(aux);
                 auxSetMTEF.add(newMTEF);

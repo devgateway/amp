@@ -12,10 +12,7 @@ import org.apache.wicket.util.lang.Bytes;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.upload.FileItemEx;
-import org.dgfoundation.amp.onepager.helper.EditorStore;
-import org.dgfoundation.amp.onepager.helper.ResourceTranslation;
-import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
-import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
+import org.dgfoundation.amp.onepager.helper.*;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
@@ -23,6 +20,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
@@ -39,6 +37,8 @@ import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
+import org.digijava.module.trubudget.util.ProjectUtil;
 import org.hibernate.*;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
@@ -55,6 +55,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
+import static org.digijava.module.trubudget.util.TruBudgetAuthUtil.doActualTruBudgetLogin;
+import static org.digijava.module.um.util.DbUtil.getGlobalSettingsBySection;
+import static org.digijava.module.um.util.DbUtil.getSettingValue;
 
 /**
  * Util class used to manipulate an activity
@@ -77,7 +80,12 @@ public class ActivityUtil {
      *
      * @param am
      */
-    public static void saveActivity(AmpActivityModel am, boolean draft,boolean rejected){
+    public static void saveActivity(AmpActivityModel am, boolean draft, boolean rejected) {
+        saveActivity(am, draft, rejected, true);
+    }
+
+    public static void saveActivity(AmpActivityModel am, boolean draft, boolean rejected,
+                                    boolean closeProjectOnTruBudget) {
 
         AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
         if (!wicketSession.getLocale().getLanguage().equals(TLSUtils.getLangCode())){
@@ -90,7 +98,9 @@ public class ActivityUtil {
 
         AmpActivityVersion oldA = am.getObject();
 
-        AmpActivityVersion newA = saveActivity(oldA, am.getTranslationHashMap().values(), ampCurrentMember, wicketSession.getSite(), wicketSession.getLocale(), sc.getRealPath("/"), draft, SaveContext.activityForm(rejected));
+        AmpActivityVersion newA = saveActivity(oldA, am.getTranslationHashMap().values(), ampCurrentMember,
+            wicketSession.getSite(), wicketSession.getLocale(), sc.getRealPath("/"), draft,
+            SaveContext.activityForm(rejected, closeProjectOnTruBudget));
 
         am.setObject(newA);
 
@@ -158,7 +168,8 @@ public class ActivityUtil {
         }
 
         if (context.isUpdateActivityStatus()) {
-            setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
+            setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected(),
+                    context.isCloseProjectOnTruBudget());
         }
     }
 
@@ -184,6 +195,7 @@ public class ActivityUtil {
 
         AmpActivityVersion oldA = a;
         boolean newActivity = isNewActivity(a);
+        String name = a.getName();
 
         a.setDraft(draft);
         a.setDeleted(false);
@@ -338,7 +350,36 @@ public class ActivityUtil {
         updateIndirectPrograms(a, session);
 
         logAudit(ampCurrentMember, a, newActivity);
-//        session.flush();
+        updateComponents(a,session);
+        session.flush();
+//        session.clear();
+//        session.getTransaction().commit();
+//        session.refresh(a);
+
+//        a.setComponents(new HashSet<>(query.list()));
+        if (!draft
+            && context.getSource() != ActivitySource.JOB
+            && getSettingValue(getGlobalSettingsBySection("trubudget"), "isEnabled").equalsIgnoreCase("true")
+            && TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
+            // TODO: 9/12/23 check if project is already existing
+            Query<AmpComponent> query = session.createQuery("FROM "+AmpComponent.class.getName()+" ac  WHERE ac.activity=:activity AND ac.activity IS NOT NULL", AmpComponent.class).setCacheable(true);
+            query.setParameter("activity", a.getAmpActivityId(), LongType.INSTANCE);
+            // No need for init() or waitAndClose() - each database operation uses its own session via doInTransaction()
+            TruBudgetActivity truBudgetActivity = ProjectUtil.activityAlreadyInTrubudget(a.getAmpId());
+            logger.info("TrubudgetActivity found "+truBudgetActivity);
+            if (truBudgetActivity==null) {
+                ProjectUtil.createProject(a,query.list(),name);
+            }
+            else
+            {
+                //update project
+                logger.info("Project name: "+a.getName());
+                ProjectUtil.updateProject(truBudgetActivity.getTruBudgetId(),a,query.list(),name);
+//                session.flush();
+            }
+
+        }
+
 
         return a;
     }
@@ -588,6 +629,27 @@ public class ActivityUtil {
         return (AmpIndicatorGlobalValue) session.merge(value);
     }
 
+
+    private static  void updateComponents(AmpActivityVersion ampActivityVersion, Session session)
+    {
+        Query<AmpComponent> query = session.createQuery("FROM "+AmpComponent.class.getName()+" ac  WHERE ac.activity=:activity AND ac.activity IS NOT NULL", AmpComponent.class);
+        query.setParameter("activity", ampActivityVersion.getAmpActivityId(), LongType.INSTANCE);
+        //            z.setActivity(null);//we can also delete this component permanently
+//        query.stream().filter(x->!ampActivityVersion.getComponents().stream().map(AmpComponent::getAmpComponentId).collect(Collectors.toList()).contains(x.getAmpComponentId()) && x.getAmpComponentId()!=null).forEach(y->y.setActivity(null));
+        logger.info("Components found: "+query.list().size());
+        logger.info("Components in activity: "+ampActivityVersion.getComponents().size());
+        for (AmpComponent ampComponent: query.list()){
+            logger.info("Checking component: "+ampComponent.getAmpComponentId() + " in activity: "+(ampActivityVersion.getComponents().stream().map(AmpComponent::getAmpComponentId).collect(Collectors.toList()).contains(ampComponent.getAmpComponentId())));
+
+            if (!ampActivityVersion.getComponents().stream().map(AmpComponent::getAmpComponentId).collect(Collectors.toList()).contains(ampComponent.getAmpComponentId()))
+            {
+                logger.info("Removing component from activity: "+ampComponent.getAmpComponentId());
+                ampComponent.setActivity(null);
+                session.update(ampComponent);
+            }
+        }
+        logger.info("Components activity after update: "+ampActivityVersion.getComponents().size());
+    }
     private static <T> void cleanObjectFromSession(Session session, Class<T> objectClass, Long id)
     {
         T object = session.get(objectClass, id);
@@ -775,7 +837,8 @@ public class ActivityUtil {
     }
 
     private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean savedAsDraft, AmpActivityFields a,
-                                          AmpActivityVersion oldA, boolean newActivity, boolean rejected) {
+                                          AmpActivityVersion oldA, boolean newActivity, boolean rejected,
+                                          boolean closeProjectOnTruBudget) {
         boolean teamLeadFlag = isApprover(ampCurrentMember);
         logger.info("Teamlead? " + teamLeadFlag);
         Boolean crossTeamValidation = ampCurrentMember.getAmpTeam().getCrossteamvalidation();
@@ -867,11 +930,44 @@ public class ActivityUtil {
             a.setApprovedBy(ampCurrentMember);
             a.setApprovalDate(Calendar.getInstance().getTime());
         }
+        logger.info("Project status: "+a.getApprovalStatus());
+        if ((a.getApprovalStatus().equals(ApprovalStatus.approved)
+            || a.getApprovalStatus().equals(ApprovalStatus.rejected))
+            && closeProjectOnTruBudget) {
+            List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+
+            User user=a.getActivityCreator().getUser();
+            logger.info("Activity creator: "+user.getEmail());
+
+            if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")&&user.getTruBudgetEnabled()) {
+
+                TruBudgetActivity truBudgetActivity = ProjectUtil.activityAlreadyInTrubudget(a.getAmpId());
+                if (truBudgetActivity!=null) {
+
+                    try {
+
+                        String token = ProjectUtil.getTrubudgetToken();
+                        new Thread(() -> {
+                            logger.info("Started background task for closing project.");
+                            try {
+                                // closeProject now uses doInTransaction internally, no need to manage session here
+                                ProjectUtil.closeProject(truBudgetActivity.getTruBudgetId(), settings, token);
+                            } catch (Exception e) {
+                                logger.info("Error during project close", e);
+                            }
+                        }).start();
+
+                    } catch (Exception e) {
+                        logger.info("An error during project close: ", e);
+                    }
+                }
+            }
+        }
     }
 
     /**
      * Verifies if the team member can approve an activity from the specified team
-     * See {@link #setActivityStatus(AmpTeamMember, boolean, AmpActivityFields, AmpActivityVersion, boolean, boolean)}
+    * See {@link #setActivityStatus(AmpTeamMember, boolean, AmpActivityFields, AmpActivityVersion, boolean, boolean, boolean)}
      *
      * @param atm               the team member to check
      * @param activityTeamId    the team id that activity belongs to that the TM can have the approval right
@@ -1017,8 +1113,16 @@ public class ActivityUtil {
         for (AmpComponent ampComponent : components) {
             if (Hibernate.isInitialized(ampComponent.getFundings()) && (ampComponent.getFundings() != null)) {
 
-                ampComponent.getFundings().removeIf(acf -> acf.getTransactionAmount() == null);
-
+                ampComponent.getFundings().forEach(acf -> {
+                    if (acf.getTransactionAmount() == null)
+                    {
+                        ampComponent.getFundings().remove(acf);
+                    }
+                    if (!acf.getComponentFundingStatus().getValue().equalsIgnoreCase("rejected")){
+                        acf.setComponentRejectReason("");
+                    }
+                    saveComponentFundingResources(acf);
+                });
             }
         }
     }
@@ -1058,6 +1162,210 @@ public class ActivityUtil {
     private static EditorStore getSessionEditorStore() {
         AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
         return s.getMetaData(OnePagerConst.EDITOR_ITEMS);
+    }
+
+    public static void saveComponentFundingResources(AmpComponentFunding a) {
+        AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+
+//        if (a.getComponentFundingDocuments() == null) {
+//            a.getComponentFundingDocuments().addAll(new HashSet<>());
+//        }
+
+        HashSet<TemporaryComponentFundingDocument> newResources = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(a.getJustAnId());
+        HashSet<AmpComponentFundingDocument> deletedResources = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS).get(a.getJustAnId());
+        HashSet<TemporaryComponentFundingDocument> existingTitles = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES).get(a.getJustAnId());
+        newResources= newResources!=null?newResources:new HashSet<>();
+        deletedResources= deletedResources!=null?deletedResources:new HashSet<>();
+        existingTitles= existingTitles!=null?existingTitles:new HashSet<>();
+
+        // update titles when multilingual is enabled
+        if (ContentTranslationUtil.multilingualIsEnabled()) {
+            updateComponentFundingResourcesTitles(newResources, deletedResources, existingTitles);
+        }
+
+        // remove old resources
+        deleteComponentFundingResources(a, deletedResources);
+
+        // insert new resources in the system
+        insertComponentFundingResources(a, newResources);
+        if (!(getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&&TeamUtil.getCurrentUser().getTruBudgetEnabled()) || a.getTransactionType() != 1) {
+            newResources.clear();
+        }
+    }
+
+    private static void insertComponentFundingResources(AmpComponentFunding a, HashSet<TemporaryComponentFundingDocument> newResources) {
+        if (newResources != null) {
+            for (TemporaryComponentFundingDocument temp : newResources) {
+                TemporaryDocumentData tdd = new TemporaryDocumentData();
+                tdd.setTitle(temp.getTitle());
+                tdd.setName(temp.getFileName());
+                tdd.setDescription(temp.getDescription());
+                tdd.setNotes(temp.getNote());
+                if (temp.getTranslatedTitleList() != null) {
+                    Map<String, String> translatedTitleMap = new HashMap<String, String>();
+                    for (ResourceTranslation titleTranslation : temp.getTranslatedTitleList()) {
+                        translatedTitleMap.put(titleTranslation.getLocale(), titleTranslation.getTranslation());
+                    }
+                    tdd.setTranslatedTitles(translatedTitleMap);
+                }
+
+                if (temp.getTranslatedDescriptionList() != null) {
+                    Map<String, String> translatedDescMap = new HashMap<String, String>();
+                    for (ResourceTranslation descTranslation : temp.getTranslatedDescriptionList()) {
+                        translatedDescMap.put(descTranslation.getLocale(), descTranslation.getTranslation());
+                    }
+                    tdd.setTranslatedDescriptions(translatedDescMap);
+                }
+
+                if (temp.getTranslatedNoteList() != null) {
+                    Map<String, String> translatedNoteMap = new HashMap<String, String>();
+                    for (ResourceTranslation noteTranslation : temp.getTranslatedDescriptionList()) {
+                        translatedNoteMap.put(noteTranslation.getLocale(), noteTranslation.getTranslation());
+                    }
+                    tdd.setTranslatedNotes(translatedNoteMap);
+                }
+
+//                if (temp.getType() != null) {
+//                    tdd.setCmDocTypeId(temp.getType().getId());
+//                }
+                if (temp.getDate() != null) {
+                    tdd.setDate(temp.getDate().getTime());
+                }
+                if (temp.getYear() != null) {
+                    tdd.setYearofPublication(temp.getYear());
+                }
+                if (temp.getWebLink() == null || temp.getWebLink().length() == 0) {
+                    if (temp.getFile() != null) {
+                        tdd.setFileSize(temp.getFile().getSize());
+                        tdd.setFormFile(generateFormFile(temp.getFile()));
+                    }
+                }
+
+                tdd.setWebLink(temp.getWebLink());
+
+                try {
+                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest());
+
+                    AmpComponentFundingDocument aad = new AmpComponentFundingDocument();
+                    aad.setAmpComponentFunding(a);
+//                    aad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
+                    if (node != null) {
+                        aad.setUuid(node.getUuid());
+                    } else {
+                        aad.setUuid(temp.getExistingDocument().getUuid());
+                    }
+                    a.getComponentFundingDocuments().add(aad);
+                } catch (JCRSessionException ex) {
+                    // we catch the exception and show a warning, but allow the activity to be saved
+                    logger.warn("The JCR Session couldn't be opened. " + "The document " + tdd.getName()
+                            + " will not be saved.", ex);
+                }
+            }
+        }
+    }
+
+    private static void deleteComponentFundingResources(AmpComponentFunding a, HashSet<AmpComponentFundingDocument> deletedResources) {
+        Session session = PersistenceManager.getRequestDBSession();
+//        Transaction transaction=session.getTransaction();
+
+        if (deletedResources != null) {
+            for (AmpComponentFundingDocument tmpDoc : deletedResources) {
+//                tmpDoc.setAmpComponentFunding(null);
+                if (tmpDoc!=null){
+
+                    a.getComponentFundingDocuments().remove(tmpDoc);
+//                    tmpDoc.setAmpComponentFunding(null);
+
+//                    if (tmpDoc.getId()!=null) {
+//                        session.delete(tmpDoc);
+//                    }
+
+                }
+
+
+            }
+        }
+//        session.flush();
+
+//        transaction.commit();
+//        session.close();
+
+
+    }
+
+    private static void updateComponentFundingResourcesTitles(HashSet<TemporaryComponentFundingDocument> newResources,
+                                                              HashSet<AmpComponentFundingDocument> deletedResources, HashSet<TemporaryComponentFundingDocument> existingTitles) {
+        if (existingTitles != null) {
+            HttpServletRequest req = SessionUtil.getCurrentServletRequest();
+
+            for (TemporaryComponentFundingDocument d : existingTitles) {
+                Node node = DocumentManagerUtil.getWriteNode(d.getExistingDocument().getUuid(), req);
+                if (node != null && d != null) {
+                    NodeWrapper nw = new NodeWrapper(node);
+
+                    //NodeWrapper's title will be null if the document is multilingual
+                    //and it was saved in ONLY one language. Then language was changed
+                    // and jackrabbit tries to retrieve the title for the other language.
+                    //The call to -> getTranslatedTitleByLang(TLSUtils.getLangCode());
+                    //returns null.
+                    //In that scenario we act as if we were changing the document name
+                    boolean onlyOneLanguageSaved = nw.getTitle() == null;
+                    if (onlyOneLanguageSaved || !nw.getTitle().equals(d.getTitle())) {
+                        logger.warn("lang " + TLSUtils.getLangCode());
+                        if (onlyOneLanguageSaved) {
+                            populateAmpComponentFundingDocsTranslatedTitles(d, nw);
+                        }
+
+                        if (d.getWebLink() != null && d.getWebLink().trim().length() > 0 &&
+                                (d.getFileName() == null || d.getFileName().trim().length() == 0)) {
+                            d.setFileName(d.getWebLink());
+                        }
+
+                        if (!deletedResources.contains(d.getExistingDocument())) {
+                            String contentType = nw.getContentType();
+                            String fileName = nw.getName();
+                            Bytes fileSize = null;
+                            InputStream fileData = null;
+                            try {
+                                if (nw.getNode().hasProperty(CrConstants.PROPERTY_DATA))
+                                    fileData = nw.getNode().getProperty(CrConstants.PROPERTY_DATA).getBinary().getStream();
+                                //                                  .getBinary().getStream();
+                                if (nw.getNode().hasProperty(CrConstants.PROPERTY_FILE_SIZE))
+                                    fileSize = Bytes.bytes(nw.getNode().getProperty(CrConstants.PROPERTY_FILE_SIZE).getLong());
+                                DocumentManagerUtil.logoutJcrSessions(req);
+                            } catch (RepositoryException e) {
+                                logger.error("Error while getting data stream from JCR:", e);
+                            }
+
+                            FileUpload file = new FileUpload(new FileItemEx(fileName, contentType, fileData, fileSize));
+                            d.setFile(file);
+                            newResources.add(d);
+                            deletedResources.add(d.getExistingDocument());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static void populateAmpComponentFundingDocsTranslatedTitles(TemporaryComponentFundingDocument d, NodeWrapper nw) {
+        List<ResourceTranslation> translatedTitles = d.getTranslatedTitleList();
+        if (translatedTitles == null) {
+            translatedTitles = new ArrayList<>();
+        }
+        List<String> languages = TranslatorUtil.getLocaleCache();
+        for (String locale : languages) {
+            String translation = nw.getTranslatedTitleByLang(locale);
+            if (translation != null && !Objects.equals(locale, TLSUtils.getLangCode())) {
+                ResourceTranslation resource = new ResourceTranslation(d.getExistingDocument()
+                        .getUuid(), translation, locale);
+                translatedTitles.add(resource);
+            }
+        }
+
+        translatedTitles.add(new ResourceTranslation(d.getExistingDocument().getUuid(), d
+                .getTitle(), TLSUtils.getLangCode()));
+        d.setTranslatedTitleList(translatedTitles);
     }
 
     private static void saveEditors(Session session, boolean createNewVersion, EditorStore editorStore, Site site) {

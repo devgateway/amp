@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../schemas/xmlpatcher.xsd">
+    <jira>AMP-31085</jira>
+    <author>bmokandu</author>
+    <description>Add TruBudget bulk import user global setting with dropdown of TruBudget-enabled users.</description>
+
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+                CREATE OR REPLACE VIEW v_g_settings_trubudget_enabled_users AS
+                SELECT
+                    u.id::text AS id,
+                    TRIM(CONCAT(COALESCE(u.first_names, ''), ' ', COALESCE(u.last_name, '')))
+                        || ' (' || u.email || ')' AS value
+                FROM dg_user u
+                WHERE u.trubudget_enabled = TRUE
+                  AND u.banned = FALSE
+                                    AND u.tru_budget_password IS NOT NULL
+                  AND u.email IS NOT NULL
+                ORDER BY u.first_names, u.last_name, u.email;
+
+                INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section)
+                SELECT
+                    (SELECT COALESCE(MAX(id), 0) + 1 FROM amp_global_settings),
+                    'TruBudget Bulk Import User',
+                    (SELECT id FROM v_g_settings_trubudget_enabled_users LIMIT 1),
+                    'v_g_settings_trubudget_enabled_users',
+                    'User account used to authenticate TruBudget bulk project import jobs',
+                    'trubudget'
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM amp_global_settings WHERE settingsname = 'TruBudget Bulk Import User'
+                );
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

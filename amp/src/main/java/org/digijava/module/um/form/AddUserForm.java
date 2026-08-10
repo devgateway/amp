@@ -22,6 +22,7 @@ package org.digijava.module.um.form;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -77,6 +78,13 @@ public class AddUserForm  extends ValidatorForm {
     private Boolean pledgeSuperUser;
     private Collection contentLanguages;
     private Collection navigationLanguages;
+    private Collection<TruBudgetIntent> truBudgetIntents;
+    private String truBudgetUserName;
+    private String truBudgetPassword;
+    private String[] selectedTruBudgetIntents={};
+    private String truBudgetEnabled;
+    private boolean truBudgetUserEnabled;
+    private boolean addModifyTruBudgetUser;
     private String selectedLanguage;
     private String[] contentSelectedLanguages;
     private String organizationTypeOther;
@@ -98,7 +106,7 @@ public class AddUserForm  extends ValidatorForm {
     
     private Boolean notificationEmailEnabled;
     private String notificationEmail;
-    
+
     public String[] getSelectedItems() {
         return this.selectedItems;
     }
@@ -427,10 +435,13 @@ public class AddUserForm  extends ValidatorForm {
         newsLetterRadio = true;
         membersProfile = true;
         topicselectedItems = null;
+        truBudgetUserName = null;
 
         siteId = null;
         addWorkspace=false;
         nationalCoordinator = false;
+        truBudgetUserEnabled = false;
+        addModifyTruBudgetUser = false;
     }
 
     /**
@@ -655,5 +666,60 @@ public class AddUserForm  extends ValidatorForm {
     public void setNotificationEmail(String notificationEmail) {
         this.notificationEmail = notificationEmail;
     }
-    
+
+    public Collection<TruBudgetIntent> getTruBudgetIntents() {
+        return truBudgetIntents;
+    }
+
+    public void setTruBudgetIntents(Collection<TruBudgetIntent> truBudgetIntents) {
+        this.truBudgetIntents = truBudgetIntents;
+    }
+
+    public String getTruBudgetUserName() {
+        return truBudgetUserName;
+    }
+
+    public void setTruBudgetUserName(String truBudgetUserName) {
+        this.truBudgetUserName = truBudgetUserName;
+    }
+
+    public String getTruBudgetPassword() {
+        return truBudgetPassword;
+    }
+
+    public void setTruBudgetPassword(String truBudgetPassword) {
+        this.truBudgetPassword = truBudgetPassword;
+    }
+
+    public String[] getSelectedTruBudgetIntents() {
+        return selectedTruBudgetIntents;
+    }
+
+    public void setSelectedTruBudgetIntents(String[] selectedTruBudgetIntents) {
+        this.selectedTruBudgetIntents = selectedTruBudgetIntents;
+    }
+
+    public String getTruBudgetEnabled() {
+        return truBudgetEnabled;
+    }
+
+    public void setTruBudgetEnabled(String truBudgetEnabled) {
+        this.truBudgetEnabled = truBudgetEnabled;
+    }
+
+    public boolean getTruBudgetUserEnabled() {
+        return truBudgetUserEnabled;
+    }
+
+    public void setTruBudgetUserEnabled(boolean truBudgetUserEnabled) {
+        this.truBudgetUserEnabled = truBudgetUserEnabled;
+    }
+
+    public boolean getAddModifyTruBudgetUser() {
+        return addModifyTruBudgetUser;
+    }
+
+    public void setAddModifyTruBudgetUser(boolean addModifyTruBudgetUser) {
+        this.addModifyTruBudgetUser = addModifyTruBudgetUser;
+    }
 }

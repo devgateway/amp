@@ -5,10 +5,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.POIXMLException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImportRules;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
@@ -22,6 +25,8 @@ import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProjectCurrency;
 import org.digijava.module.aim.action.dataimporter.model.*;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -31,6 +36,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.IdWithValueShim;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -40,12 +46,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -55,6 +66,9 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import static com.fasterxml.jackson.core.JsonGenerator.Feature.ESCAPE_NON_ASCII;
 
@@ -103,37 +117,43 @@ public class ImporterUtil {
         String componentName = componentNameColumn >= 0 ? getStringValueFromCell(row.getCell(componentNameColumn), true) : null;
         if (importDataModel.getDonor_organization() == null || importDataModel.getDonor_organization().isEmpty()) {
             if (!config.containsValue(ImporterConstants.DONOR_AGENCY)) {
-                Funding f = new Funding();
-                updateFunding(f, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
-                
-                fundings.add(f);
+                if (!populateDonorsFromExistingActivity(importDataModel, existingActivity)) {
+                    Funding f = new Funding();
+                    updateFunding(f, importDataModel, getNumericValueFromCell(cell), entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
+
+                    fundings.add(f);
+                    return fundings;
+                }
+                logger.info("Reusing {} donor(s) from existing activity {} because the funding sheet has no donor agency column",
+                    importDataModel.getDonor_organization().size(), existingActivity != null ? existingActivity.getAmpActivityId() : null);
 
             } else {
-                int columnIndex1 = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY));
-                int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
-                int donorOrgGroupColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_ORGANIZATION_GROUP));
-                String donorAgencyCode = donorAgencyCodeColumn >= 0 ? getStringValueFromCell(row.getCell(donorAgencyCodeColumn), true) : null;
-                String donorOrgGroupNames = donorOrgGroupColumn >= 0 ? getStringValueFromCell(row.getCell(donorOrgGroupColumn), false) : null;
+                String donorName = getCellValueByConfig(row, sheet, config, ImporterConstants.DONOR_AGENCY);
+                String donorAgencyCode = getCellValueByConfig(row, sheet, config, ImporterConstants.DONOR_AGENCY_CODE);
+                String donorOrgGroupNames = getCellValueByConfig(row, sheet, config, ImporterConstants.DONOR_ORGANIZATION_GROUP);
                 String resolvedDonorOrgGroups = StringUtils.isNotBlank(donorOrgGroupNames) ? donorOrgGroupNames.trim() : importedOrgGroupName;
-                updateOrgs(importDataModel, columnIndex1 >= 0 ? Objects.requireNonNull(getStringValueFromCell(row.getCell(columnIndex1), false)).trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
-                List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
-                List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
-                for (int i = 0; i < donors.size(); i++) {
-                    Funding f = new Funding();
-                    updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
-                    
-                    fundings.add(f);
+                if (StringUtils.isBlank(donorName) && populateDonorsFromExistingActivity(importDataModel, existingActivity)) {
+                        logger.info("Reusing {} donor(s) from existing activity {} because the funding row has no donor agency value. configKeys='{}', transactionField='{}'",
+                            importDataModel.getDonor_organization().size(), existingActivity != null ? existingActivity.getAmpActivityId() : null, getKeys(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
+                } else {
+                    String resolvedDonorName = StringUtils.isNotBlank(donorName) ? donorName.trim() : "no org";
+                    if ("no org".equals(resolvedDonorName)) {
+                        logger.warn("Donor Agency lookup resolved empty while creating funding row; falling back to 'no org'. configKeys='{}', transactionField='{}'",
+                            getKeys(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
+                    }
+                    updateOrgs(importDataModel, resolvedDonorName, donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
                 }
-
             }
 
-        } else {
+        }
+
+        if (importDataModel.getDonor_organization() != null && !importDataModel.getDonor_organization().isEmpty()) {
             List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
             List<Double> splits = splitAmounts(getNumericValueFromCell(cell).doubleValue(), donors.size());
             for (int i = 0; i < donors.size(); i++) {
                 Funding f = new Funding();
                 updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
-                
+
                 fundings.add(f);
             }
         }
@@ -174,29 +194,38 @@ public class ImporterUtil {
 
         if (importDataModel.getDonor_organization() == null || importDataModel.getDonor_organization().isEmpty()) {
             if (!config.containsValue(ImporterConstants.DONOR_AGENCY)) {
-                Funding f = new Funding();
-                updateFunding(f, importDataModel, value, entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
-                
-                fundings.add(f);
+                if (!populateDonorsFromExistingActivity(importDataModel, existingActivity)) {
+                    Funding f = new Funding();
+                    updateFunding(f, importDataModel, value, entry.getKey(), separateFundingDate, getRandomOrg(session), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
+
+                    fundings.add(f);
+                    return fundings;
+                }
+                logger.info("Reusing {} donor(s) from existing activity {} because the TXT funding row has no donor agency column",
+                    importDataModel.getDonor_organization().size(), existingActivity != null ? existingActivity.getAmpActivityId() : null);
 
             } else {
-                String donorColumn = row.get(getKey(config, ImporterConstants.DONOR_AGENCY));
-                String donorAgencyCode = row.get(getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
-                String donorOrgGroupNames = row.get(getKey(config, ImporterConstants.DONOR_ORGANIZATION_GROUP));
+                String donorColumn = getCellValueByConfig(row, config, ImporterConstants.DONOR_AGENCY);
+                String donorAgencyCode = getCellValueByConfig(row, config, ImporterConstants.DONOR_AGENCY_CODE);
+                String donorOrgGroupNames = getCellValueByConfig(row, config, ImporterConstants.DONOR_ORGANIZATION_GROUP);
                 String resolvedDonorOrgGroups = StringUtils.isNotBlank(donorOrgGroupNames) ? donorOrgGroupNames.trim() : importedOrgGroupName;
+                if (StringUtils.isBlank(donorColumn) && populateDonorsFromExistingActivity(importDataModel, existingActivity)) {
+                        logger.info("Reusing {} donor(s) from existing activity {} because the TXT funding row has no donor agency value. configKeys='{}', transactionField='{}'",
+                            importDataModel.getDonor_organization().size(), existingActivity != null ? existingActivity.getAmpActivityId() : null, getKeys(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
+                } else {
+                    String resolvedDonorName = StringUtils.isNotBlank(donorColumn) ? donorColumn.trim() : "no org";
+                    if ("no org".equals(resolvedDonorName)) {
+                        logger.info("Donor Agency lookup resolved empty while creating TXT funding row; falling back to 'no org'. configKeys='{}', transactionField='{}'",
+                            getKeys(config, ImporterConstants.DONOR_AGENCY), entry.getKey());
+                    }
 
-                updateOrgs(importDataModel, donorColumn != null && !donorColumn.isEmpty() ? donorColumn.trim() : "no org", donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
-                List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
-                List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
-                for (int i = 0; i < donors.size(); i++) {
-                    Funding f = new Funding();
-                    updateFunding(f, importDataModel, splits.get(i), entry.getKey(), separateFundingDate, donors.get(i).getOrganization(), typeOfAss, finInstrument, commitment, disbursement, expenditure, adjustmentType, currencyCode, componentName, exchangeRateValue, addDisbursementForCommitment);
-                    
-                    fundings.add(f);
+                    updateOrgs(importDataModel, resolvedDonorName, donorAgencyCode, session, "donor", createMissingOrgs, orgGroupId, resolvedDonorOrgGroups, createMissingOrgGroups);
                 }
             }
 
-        } else {
+        }
+
+        if (importDataModel.getDonor_organization() != null && !importDataModel.getDonor_organization().isEmpty()) {
             List<DonorOrganization> donors = new ArrayList<>(importDataModel.getDonor_organization());
             List<Double> splits = splitAmounts(value != null ? value.doubleValue() : 0.0, donors.size());
             for (int i = 0; i < donors.size(); i++) {
@@ -449,17 +478,23 @@ public class ImporterUtil {
 
     public static <K, V> K getKey(Map<K, V> map, V value) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
-            if (entry.getValue().equals(value)) {
+            if (Objects.equals(entry.getValue(), value)) {
                 return entry.getKey();
             }
         }
         return null;
     }
 
-    /**
-     * Result of parsing a Measure Type string (e.g. "PC - Planned Commitment").
-     * Used to set commitment/disbursement/expenditure and Actual/Planned for funding.
-     */
+    public static <K, V> List<K> getKeys(Map<K, V> map, V value) {
+        List<K> keys = new ArrayList<>();
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (Objects.equals(entry.getValue(), value)) {
+                keys.add(entry.getKey());
+            }
+        }
+        return keys;
+    }
+
     public static class MeasureTypeResult {
         public final boolean commitment;
         public final boolean disbursement;
@@ -474,6 +509,43 @@ public class ImporterUtil {
         }
     }
 
+    private static boolean populateDonorsFromExistingActivity(ImportDataModel importDataModel, AmpActivityVersion existingActivity) {
+        if (existingActivity == null || (importDataModel.getDonor_organization() != null && !importDataModel.getDonor_organization().isEmpty())) {
+            return importDataModel.getDonor_organization() != null && !importDataModel.getDonor_organization().isEmpty();
+        }
+
+        Set<Long> donorOrgIds = new LinkedHashSet<>();
+        if (existingActivity.getOrgrole() != null) {
+            Hibernate.initialize(existingActivity.getOrgrole());
+            for (AmpOrgRole ampOrgRole : existingActivity.getOrgrole()) {
+                if (ampOrgRole.getRole() == null || ampOrgRole.getOrganisation() == null) {
+                    continue;
+                }
+                if (!"DN".equalsIgnoreCase(ampOrgRole.getRole().getRoleCode())) {
+                    continue;
+                }
+                Long orgId = ampOrgRole.getOrganisation().getAmpOrgId();
+                if (orgId != null && donorOrgIds.add(orgId)) {
+                    createDonorOrg(importDataModel, orgId, ampOrgRole.getAmpOrgRoleId());
+                }
+            }
+        }
+
+        if (donorOrgIds.isEmpty() && existingActivity.getFunding() != null) {
+            Hibernate.initialize(existingActivity.getFunding());
+            for (AmpFunding ampFunding : existingActivity.getFunding()) {
+                if (ampFunding.getAmpDonorOrgId() == null) {
+                    continue;
+                }
+                Long orgId = ampFunding.getAmpDonorOrgId().getAmpOrgId();
+                if (orgId != null && donorOrgIds.add(orgId)) {
+                    createDonorOrg(importDataModel, orgId);
+                }
+            }
+        }
+
+        return importDataModel.getDonor_organization() != null && !importDataModel.getDonor_organization().isEmpty();
+    }
     /**
      * Parses a Measure Type value from the template (e.g. "PC - Planned Commitment", "AC", or "Actual Commitment").
      * @return MeasureTypeResult or null if not recognized
@@ -545,6 +617,96 @@ public class ImporterUtil {
         }
     }
 
+    /**
+     * Opens an OOXML workbook with fallback support for Strict OOXML files.
+     * Older Apache POI versions cannot open strict workbooks directly.
+     */
+    public static Workbook openWorkbookWithStrictFallback(File file) throws IOException {
+        try (InputStream is = new FileInputStream(file)) {
+            return openWorkbookWithStrictFallback(is);
+        }
+    }
+
+    /**
+     * Opens an OOXML workbook with fallback support for Strict OOXML files.
+     * Caller is responsible for closing the returned workbook.
+     */
+    public static Workbook openWorkbookWithStrictFallback(InputStream inputStream) throws IOException {
+        byte[] sourceBytes = toByteArray(inputStream);
+        try {
+            return new XSSFWorkbook(new ByteArrayInputStream(sourceBytes));
+        } catch (POIXMLException e) {
+            if (!isStrictOoxmlException(e)) {
+                throw e;
+            }
+            logger.warn("Strict OOXML detected, attempting namespace conversion fallback.");
+            byte[] convertedBytes = convertStrictOoxmlToTransitional(sourceBytes);
+            return new XSSFWorkbook(new ByteArrayInputStream(convertedBytes));
+        }
+    }
+
+    private static boolean isStrictOoxmlException(Throwable throwable) {
+        Throwable current = throwable;
+        while (current != null) {
+            String msg = current.getMessage();
+            if (msg != null && msg.contains("Strict OOXML isn't currently supported")) {
+                return true;
+            }
+            current = current.getCause();
+        }
+        return false;
+    }
+
+    private static byte[] convertStrictOoxmlToTransitional(byte[] sourceBytes) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try (ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(sourceBytes));
+             ZipOutputStream zos = new ZipOutputStream(out)) {
+            ZipEntry entry;
+            while ((entry = zis.getNextEntry()) != null) {
+                ZipEntry newEntry = new ZipEntry(entry.getName());
+                zos.putNextEntry(newEntry);
+
+                byte[] entryBytes = toByteArray(zis);
+                if (!entry.isDirectory() && isXmlLikeEntry(entry.getName())) {
+                    String xml = new String(entryBytes, java.nio.charset.StandardCharsets.UTF_8);
+                    xml = strictToTransitionalNamespaces(xml);
+                    entryBytes = xml.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+                }
+
+                zos.write(entryBytes);
+                zos.closeEntry();
+                zis.closeEntry();
+            }
+            zos.finish();
+        }
+        return out.toByteArray();
+    }
+
+    private static boolean isXmlLikeEntry(String name) {
+        String lower = name.toLowerCase(Locale.ROOT);
+        return lower.endsWith(".xml") || lower.endsWith(".rels");
+    }
+
+    private static String strictToTransitionalNamespaces(String xml) {
+        String converted = xml;
+        converted = converted.replace("http://purl.oclc.org/ooxml/spreadsheetml/main", "http://schemas.openxmlformats.org/spreadsheetml/2006/main");
+        converted = converted.replace("http://purl.oclc.org/ooxml/officeDocument/relationships", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+        converted = converted.replace("http://purl.oclc.org/ooxml/drawingml/main", "http://schemas.openxmlformats.org/drawingml/2006/main");
+        converted = converted.replace("http://purl.oclc.org/ooxml/wordprocessingml/main", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+        converted = converted.replace("http://purl.oclc.org/ooxml/presentationml/main", "http://schemas.openxmlformats.org/presentationml/2006/main");
+        return converted;
+    }
+
+    private static byte[] toByteArray(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        byte[] data = new byte[8192];
+        int nRead;
+        while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
+        }
+        return buffer.toByteArray();
+    }
+
 
         private static Funding updateFunding(Funding fundingItem, ImportDataModel importDataModel, Number amount, String columnHeaderContainingYear, String separateFundingDate, Long orgId, String assistanceType, String finInst, boolean commitment, boolean disbursement, boolean expenditure, String
             adjustmentType, String currencyCode, String componentName, Double exchangeRate, boolean addDisbursementForCommitment) {
@@ -552,8 +714,12 @@ public class ImporterUtil {
         Session session = getSession();
         Long currencyId = getCurrencyId(session, currencyCode);
         Long adjType = getCategoryValue("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY, adjustmentType);
-        Long assType = getCategoryValue("assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, assistanceType);
-        Long finInstrument = getCategoryValue("finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, finInst);
+        Long assType = StringUtils.isBlank(assistanceType)
+            ? getCategoryValue("assistanceType", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "")
+            : getOrCreateCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY, assistanceType.trim(), session);
+        Long finInstrument = StringUtils.isBlank(finInst)
+            ? getCategoryValue("finInstrument", CategoryConstants.FINANCING_INSTRUMENT_KEY, "")
+            : getOrCreateCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY, finInst.trim(), session);
         Long orgRole = getOrganizationRole(session);
 
 
@@ -827,41 +993,46 @@ public class ImporterUtil {
     }
 
     /**
-     * Resolves activity (project) status by value: looks up existing category value for ACTIVITY_STATUS_KEY;
-     * if not found in DB, creates a new category value and returns its id.
-     * @param statusValue value from the file (e.g. "Ongoing", "Completed")
-     * @param session current session (used for create and flush)
-     * @return category value id, or null if statusValue is null/empty
+     * Resolves a category value by key and value text; creates it when missing.
+     * @param categoryKey category class key (e.g. "type_of_assistence")
+     * @param valueName value name from import row
+     * @param session current Hibernate session
+     * @return category value id, or null if the category class cannot be resolved
      */
-    public static Long getOrCreateActivityStatusCategoryValue(String statusValue, Session session) {
-        if (statusValue == null || statusValue.trim().isEmpty()) return null;
-        String trimmed = statusValue.trim();
-        String cacheKey = "statusId_" + trimmed;
+    public static Long getOrCreateCategoryValue(String categoryKey, String valueName, Session session) {
+        if (valueName == null || valueName.trim().isEmpty()) {
+            return null;
+        }
+        String trimmed = valueName.trim();
+        String cacheKey = "catOrCreate_" + categoryKey + "_" + trimmed;
         if (ConstantsMap.containsKey(cacheKey)) {
             return ConstantsMap.get(cacheKey);
         }
         if (!session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
+
         String hql = "SELECT s FROM " + AmpCategoryValue.class.getName() + " s JOIN s.ampCategoryClass c WHERE c.keyName = :categoryKey";
         Query query = session.createQuery(hql);
-        query.setParameter("categoryKey", CategoryConstants.ACTIVITY_STATUS_KEY);
+        query.setParameter("categoryKey", categoryKey);
         @SuppressWarnings("unchecked")
         List<AmpCategoryValue> values = (List<AmpCategoryValue>) query.list();
         if (values != null) {
             for (AmpCategoryValue cv : values) {
-                if (cv.getValue() != null && cv.getValue().equalsIgnoreCase(trimmed)) {
+                if (cv.getValue() != null && cv.getValue().trim().equalsIgnoreCase(trimmed)) {
                     Long id = cv.getId();
                     ConstantsMap.put(cacheKey, id);
                     return id;
                 }
             }
         }
-        AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
+
+        AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(categoryKey);
         if (categoryClass == null) {
-            logger.warn("Activity status category class not found; cannot create value: " + trimmed);
+            logger.warn("Category class not found; cannot create value: key={}, value={}", categoryKey, trimmed);
             return null;
         }
+
         try {
             AmpCategoryValue newValue = new AmpCategoryValue();
             newValue.setValue(trimmed);
@@ -875,42 +1046,68 @@ public class ImporterUtil {
             Long id = newValue.getId();
             if (id != null) {
                 ConstantsMap.put(cacheKey, id);
-                logger.info("Created new activity status category value: " + trimmed + " (id=" + id + ")");
+                logger.info("Created new category value: key={}, value={}, id={}", categoryKey, trimmed, id);
                 return id;
             }
         } catch (Exception e) {
-            logger.warn("Failed to create activity status value: " + trimmed, e);
+            logger.warn("Failed to create category value: key={}, value={}", categoryKey, trimmed, e);
         }
         return null;
     }
 
+    /**
+     * Resolves activity (project) status by value: looks up existing category value for ACTIVITY_STATUS_KEY;
+     * if not found in DB, creates a new category value and returns its id.
+     * @param statusValue value from the file (e.g. "Ongoing", "Completed")
+     * @param session current session (used for create and flush)
+     * @return category value id, or null if statusValue is null/empty
+     */
+    public static Long getOrCreateActivityStatusCategoryValue(String statusValue, Session session) {
+        if (statusValue == null || statusValue.trim().isEmpty()) return null;
+        return getOrCreateCategoryValue(CategoryConstants.ACTIVITY_STATUS_KEY, statusValue.trim(), session);
+    }
+
     public static AmpActivityVersion existingActivity(String projectTitle, String projectCode, Session session) {
-        if ((projectTitle == null || projectTitle.trim().isEmpty()) &&
-                (projectCode == null || projectCode.trim().isEmpty())) {
+        String normalizedProjectTitle = normalizeImporterMatchValue(projectTitle);
+        String normalizedProjectCode = normalizeImporterMatchValue(projectCode);
+
+        if (normalizedProjectTitle == null && normalizedProjectCode == null) {
             return null;
         }
         if (!session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
-        // Prefer project code if provided
-        if (projectCode != null && !projectCode.trim().isEmpty()) {
-            String hqlByCode = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a LEFT JOIN FETCH a.activityCreator WHERE a.projectCode = :projectCode";
-            Query queryByCode = session.createQuery(hqlByCode);
-            queryByCode.setCacheable(true);
-            queryByCode.setParameter("projectCode", projectCode.trim(), StringType.INSTANCE);
-            List<AmpActivityVersion> byCode = queryByCode.list();
-            if (!byCode.isEmpty()) {
-                return byCode.get(byCode.size() - 1);
+
+        // Prefer project title (name)
+        if (normalizedProjectTitle != null) {
+            IdWithValueShim collision = ActivityUtil.getActivityCollisions(normalizedProjectTitle, null);
+            if (collision != null && collision.getId() != null) {
+                String hqlById = "SELECT a FROM " + AmpActivityGroup.class.getName()
+                        + " ag JOIN ag.ampActivityLastVersion a LEFT JOIN FETCH a.activityCreator"
+                        + " WHERE a.ampActivityId = :activityId";
+                Query<AmpActivityVersion> queryById = session.createQuery(hqlById);
+                queryById.setCacheable(true);
+                queryById.setParameter("activityId", collision.getId());
+                List<AmpActivityVersion> byTitle = queryById.list();
+                if (!byTitle.isEmpty()) {
+                    logger.info("Matched existing activity {} by title collision for import title '{}'", collision.getId(), normalizedProjectTitle);
+                    return byTitle.get(0);
+                }
             }
         }
-        // Fall back to project title (name)
-        if (projectTitle != null && !projectTitle.trim().isEmpty()) {
-            String hql = "SELECT a FROM " + AmpActivityVersion.class.getName() + " a LEFT JOIN FETCH a.activityCreator WHERE a.name = :name";
-            Query query = session.createQuery(hql);
-            query.setCacheable(true);
-            query.setParameter("name", projectTitle.trim(), StringType.INSTANCE);
-            List<AmpActivityVersion> ampActivityVersions = query.list();
-            return !ampActivityVersions.isEmpty() ? ampActivityVersions.get(ampActivityVersions.size() - 1) : null;
+
+        // Fallback to project code if provided
+        if (normalizedProjectCode != null) {
+            String hqlByCode = "SELECT a FROM " + AmpActivityGroup.class.getName()
+                    + " ag JOIN ag.ampActivityLastVersion a LEFT JOIN FETCH a.activityCreator"
+                    + " WHERE a.projectCode = :projectCode ORDER BY a.ampActivityId DESC";
+            Query<AmpActivityVersion> queryByCode = session.createQuery(hqlByCode);
+            queryByCode.setCacheable(true);
+            queryByCode.setParameter("projectCode", normalizedProjectCode, StringType.INSTANCE);
+            List<AmpActivityVersion> byCode = queryByCode.list();
+            if (!byCode.isEmpty()) {
+                return byCode.get(0);
+            }
         }
         return null;
     }
@@ -935,8 +1132,8 @@ public class ImporterUtil {
             importDataModel.setActivity_status(statusId);
         }
         if (validateActivities) {
-            logger.info("validateActivities=true: setting approval_status=approved in setStatus");
-            importDataModel.setApproval_status(ApprovalStatus.approved.getId());
+            logger.info("validateActivities=true: approval status will be derived during activity import");
+            importDataModel.setApproval_status(null);
         } else {
             importDataModel.setApproval_status(ApprovalStatus.started.getId());
         }
@@ -971,17 +1168,29 @@ public class ImporterUtil {
         }
     }
 
+    private static String normalizeSingleLineText(String value) {
+        if (value == null) {
+            return "";
+        }
+        // The activity API rejects CR/LF in displayName; normalize all line breaks to spaces.
+        return value.replaceAll("[\\r\\n]+", " ").trim();
+    }
+
     /** @return activity ID on success, null on skip or failure */
-    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities, boolean replaceExistingTransactions) throws JsonProcessingException {
+    public static Long importTheData(ImportDataModel importDataModel, Session session, ImportedProject importedProject, String componentName, String componentCode, Long responsibleOrgId, List<Funding> fundings, Long existingActivityId, boolean validateActivities, boolean replaceExistingTransactions, boolean replaceExistingLocations) throws JsonProcessingException {
         if (session == null || !session.isOpen()) {
             session = PersistenceManager.getRequestDBSession();
         }
-        
+
+        importDataModel.setProject_title(normalizeSingleLineText(importDataModel.getProject_title()));
+
         // Re-fetch existing activity in this transaction if ID is provided to avoid detached entity issues
         AmpActivityVersion existing = null;
         if (existingActivityId != null) {
             existing = session.get(AmpActivityVersion.class, existingActivityId);
         }
+        // Let ActivityImporter/ActivityUtil derive approval fields during prepareToSave().
+        // Data importer payload approval fields are too easy to drift from the server-side rules.
         ActivityImportRules rules = new ActivityImportRules(true, false,
                 true);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -990,13 +1199,14 @@ public class ImporterUtil {
 
         importDataModel.setFundings(mergeFundingsByDonor(importDataModel.getFundings()));
         pruneParentLocationsWhenChildPresent(importDataModel, session);
+        ensureImplementationLevelWhenHasLocations(importDataModel, session);
         normalizeLocationPercentages(importDataModel);
         Map<String, Object> map = objectMapper
                 .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                 });
         // Remove null values and "null" strings from the map to avoid API validation errors
         map.entrySet().removeIf(entry -> entry.getValue() == null || "null".equals(String.valueOf(entry.getValue())));
-        
+
         // Do not send indicators in the payload so activity/update does not replace or clear existing indicators.
         // Indicator data is appended separately in addIndicatorDataToActivity.
         map.remove("indicators");
@@ -1010,13 +1220,11 @@ public class ImporterUtil {
         if (existing == null) {
             ensureCreatedBySet(map, null);
             if (validateActivities) {
-                logger.info("validateActivities=true: setting approval_status=approved and is_draft=false for new activity");
-                map.put("approval_status", "approved");
-                map.put("is_draft", false);
+                logger.info("validateActivities=true: approval fields will be derived by ActivityImporter");
             }
             logger.info("New activity");
             importedProject.setNewProject(true);
-            response = ActivityInterchangeUtils.importActivity(map, false, rules, "activity/new");
+            response = ActivityInterchangeUtils.importActivity(map, false, rules, "dataimporter/activity/new");
         } else {
             logger.info("Existing activity");
             importedProject.setNewProject(false);
@@ -1031,20 +1239,24 @@ public class ImporterUtil {
             importDataModel.setProject_title(existing.getName() != null ? existing.getName() : "");
             importDataModel.setProject_code(!Objects.equals(importDataModel.getProject_code(), "") ? importDataModel.getProject_code() : (existing.getProjectCode() != null ? existing.getProjectCode() : ""));
             updateFundingOrgsAndSectorsWithAlreadyExisting(existing, importDataModel, replaceExistingTransactions);
-            // Merge existing activity locations into payload so we only add (row + existing), never remove
-            mergeExistingActivityLocationsIntoImport(existing, importDataModel);
+            // Stamp existing activity-location row ids onto imported locations so matching rows update in place,
+            // then optionally merge the rest of the existing rows when replace is not requested.
+            mergeExistingActivityLocationsIntoImport(existing, importDataModel, replaceExistingLocations);
             // Preserve existing programs with their DB IDs so the API updates in-place; avoids both
             // StaleStateException (delete+insert) and SizeValidator failures on re-validation
             preserveExistingPrograms(existing, importDataModel);
-            ensureImplementationLevelWhenHasLocations(importDataModel, session);
             pruneParentLocationsWhenChildPresent(importDataModel, session);
+            ensureImplementationLevelWhenHasLocations(importDataModel, session);
             normalizeLocationPercentages(importDataModel);
+            if (replaceExistingLocations) {
+                failIfReplaceExistingLocationsWouldRemoveIndicatorLinkedRows(existing, importDataModel);
+            }
             map = objectMapper
                     .convertValue(importDataModel, new TypeReference<Map<String, Object>>() {
                     });
             // Remove null values and "null" strings from the map to avoid API validation errors
             map.entrySet().removeIf(entry -> entry.getValue() == null || "null".equals(String.valueOf(entry.getValue())));
-            
+
             map.remove("indicators"); // preserve existing indicators; we append in addIndicatorDataToActivity
             // Avoid triggering merge of contacts/documents that may reference deleted rows (ObjectNotFoundException)
             map.remove("activity_contacts");
@@ -1057,9 +1269,7 @@ public class ImporterUtil {
             evictActivityFromSecondLevelCache(existing.getAmpActivityId());
             ensureCreatedBySet(map, existing);
             if (validateActivities) {
-                logger.info("validateActivities=true: setting approval_status=approved and is_draft=false for existing activity");
-                map.put("approval_status", "approved");
-                map.put("is_draft", false);
+                logger.info("validateActivities=true: approval fields will be derived by ActivityImporter");
             }
             // All data from 'existing' has been extracted into 'map'. Clear the session first-level
             // cache before handing off to ActivityGatekeeper so its internal doInTransaction starts
@@ -1068,7 +1278,7 @@ public class ImporterUtil {
             // EntityInsertAction.execute() checks the persistence context during flush.
             session.clear();
             try {
-                response = ActivityInterchangeUtils.importActivity(map, true, rules, "activity/update");
+                response = ActivityInterchangeUtils.importActivity(map, true, rules, "dataimporter/activity/update");
             } catch (Exception e) {
                 logger.error("Activity import failed for row", e);
                 importedProject.setImportStatus(ImportStatus.FAILED);
@@ -1083,7 +1293,9 @@ public class ImporterUtil {
                 importedProject.setImportStatus(ImportStatus.FAILED);
             } else {
                 importedProject.setImportStatus(ImportStatus.SUCCESS);
-                activityId = existing != null ? existing.getAmpActivityId() : (Long) response.getContent().getAmpActivityId();
+                activityId = response.getContent() != null
+                    ? (Long) response.getContent().getAmpActivityId()
+                        : (existing != null ? existing.getAmpActivityId() : null);
                 logger.info("Successfully imported the project. Now adding component if present");
                 logger.info("--------------------------------");
                 logger.info("Component name at start: " + componentName);
@@ -1222,31 +1434,31 @@ public class ImporterUtil {
                 if (ampOrgRole.getRole() == null) continue;
                 String roleCode = ampOrgRole.getRole().getRoleCode();
                 if (roleCode == null) continue;
+                if (!shouldPreserveExistingOrgRole(importDataModel, roleCode)) {
+                    continue;
+                }
                 Long orgId = ampOrgRole.getOrganisation().getAmpOrgId();
                 Long orgRoleId = ampOrgRole.getAmpOrgRoleId();
-                if (roleCode.equalsIgnoreCase("DN")) {
+                if (roleCode.equalsIgnoreCase(Constants.FUNDING_AGENCY)) {
                     createDonorOrg(importDataModel, orgId, orgRoleId);
-                } else if (roleCode.equalsIgnoreCase("RO")) {
+                } else if (roleCode.equalsIgnoreCase(Constants.RESPONSIBLE_ORGANISATION)) {
                     Organization org = new Organization();
                     org.setOrganization(orgId);
                     if (orgRoleId != null) org.setId(orgRoleId);
                     importDataModel.getResponsible_organization().add(org);
-                } else if (roleCode.equalsIgnoreCase("BA")) {
+                } else if (roleCode.equalsIgnoreCase(Constants.BENEFICIARY_AGENCY)) {
                     Organization org = new Organization();
                     org.setOrganization(orgId);
                     if (orgRoleId != null) org.setId(orgRoleId);
                     importDataModel.getBeneficiary_agency().add(org);
-                } else if (roleCode.equalsIgnoreCase("EA")) {
+                } else if (roleCode.equalsIgnoreCase(Constants.EXECUTING_AGENCY)) {
                     Organization org = new Organization();
                     org.setOrganization(orgId);
                     if (orgRoleId != null) org.setId(orgRoleId);
                     importDataModel.getExecuting_agency().add(org);
-                } else if (roleCode.equalsIgnoreCase("IA")) {
-                    Organization org = new Organization();
-                    org.setOrganization(orgId);
-                    if (orgRoleId != null) org.setId(orgRoleId);
-                    importDataModel.getImplementing_agency().add(org);
-                } else if (roleCode.equalsIgnoreCase("CA")) {
+                } else if (roleCode.equalsIgnoreCase(Constants.IMPLEMENTING_AGENCY)) {
+                    createImplementingAgency(importDataModel, orgId, orgRoleId);
+                } else if (roleCode.equalsIgnoreCase(Constants.CONTRACTING_AGENCY)) {
                     Organization org = new Organization();
                     org.setOrganization(orgId);
                     if (orgRoleId != null) org.setId(orgRoleId);
@@ -1263,6 +1475,32 @@ public class ImporterUtil {
                 createSector(importDataModel, primary, ampActivitySector.getSectorId().getAmpSectorId(), ampActivitySector.getAmpActivitySectorId());
             }
         }
+    }
+
+    private static boolean shouldPreserveExistingOrgRole(ImportDataModel importDataModel, String roleCode) {
+        if (roleCode.equalsIgnoreCase(Constants.FUNDING_AGENCY)) {
+            return !hasOrganizations(importDataModel.getDonor_organization());
+        }
+        if (roleCode.equalsIgnoreCase(Constants.RESPONSIBLE_ORGANISATION)) {
+            return !hasOrganizations(importDataModel.getResponsible_organization());
+        }
+        if (roleCode.equalsIgnoreCase(Constants.BENEFICIARY_AGENCY)) {
+            return !hasOrganizations(importDataModel.getBeneficiary_agency());
+        }
+        if (roleCode.equalsIgnoreCase(Constants.EXECUTING_AGENCY)) {
+            return !hasOrganizations(importDataModel.getExecuting_agency());
+        }
+        if (roleCode.equalsIgnoreCase(Constants.IMPLEMENTING_AGENCY)) {
+            return !hasOrganizations(importDataModel.getImplementing_agency());
+        }
+        if (roleCode.equalsIgnoreCase(Constants.CONTRACTING_AGENCY)) {
+            return !hasOrganizations(importDataModel.getContracting_agency());
+        }
+        return true;
+    }
+
+    private static boolean hasOrganizations(Collection<? extends Organization> organizations) {
+        return organizations != null && !organizations.isEmpty();
     }
 
     /**
@@ -1293,15 +1531,33 @@ public class ImporterUtil {
         }
     }
 
-    private static void mergeExistingActivityLocationsIntoImport(AmpActivityVersion existing, ImportDataModel importDataModel) {
+    private static void mergeExistingActivityLocationsIntoImport(AmpActivityVersion existing,
+                                                                 ImportDataModel importDataModel,
+                                                                 boolean replaceExistingLocations) {
         if (existing == null || importDataModel == null) return;
         if (existing.getLocations() == null) return;
         Hibernate.initialize(existing.getLocations());
+        Map<Long, AmpActivityLocation> existingByLocationId = new HashMap<>();
+        for (AmpActivityLocation aal : existing.getLocations()) {
+            if (aal == null || aal.getLocation() == null || aal.getLocation().getId() == null) {
+                continue;
+            }
+            existingByLocationId.putIfAbsent(aal.getLocation().getId(), aal);
+        }
         Set<Long> alreadyInImport = new HashSet<>();
         if (importDataModel.getLocations() != null) {
             for (Location loc : importDataModel.getLocations()) {
-                if (loc != null && loc.getLocation() != null) alreadyInImport.add(loc.getLocation());
+                if (loc != null && loc.getLocation() != null) {
+                    alreadyInImport.add(loc.getLocation());
+                    AmpActivityLocation existingLocation = existingByLocationId.get(loc.getLocation());
+                    if (existingLocation != null && loc.getId() == null && existingLocation.getId() != null) {
+                        loc.setId(existingLocation.getId());
+                    }
+                }
             }
+        }
+        if (replaceExistingLocations) {
+            return;
         }
         for (AmpActivityLocation aal : existing.getLocations()) {
             AmpCategoryValueLocations loc = aal.getLocation();
@@ -1317,6 +1573,56 @@ public class ImporterUtil {
         }
     }
 
+    private static void failIfReplaceExistingLocationsWouldRemoveIndicatorLinkedRows(AmpActivityVersion existing,
+                                                                                     ImportDataModel importDataModel) {
+        if (existing == null || importDataModel == null) {
+            return;
+        }
+
+        Set<Long> keptActivityLocationIds = new HashSet<>();
+        if (importDataModel.getLocations() != null) {
+            for (Location location : importDataModel.getLocations()) {
+                if (location != null && location.getId() != null) {
+                    keptActivityLocationIds.add(location.getId());
+                }
+            }
+        }
+
+        Set<Long> indicatorLinkedLocationIds = getIndicatorLinkedActivityLocationIds(existing);
+        indicatorLinkedLocationIds.removeAll(keptActivityLocationIds);
+        if (!indicatorLinkedLocationIds.isEmpty()) {
+            throw new IllegalStateException("Cannot replace existing locations because one or more existing locations are referenced by indicator data. Keep those locations in the import or clear indicator data first.");
+        }
+    }
+
+    private static Set<Long> getIndicatorLinkedActivityLocationIds(AmpActivityVersion existing) {
+        Set<Long> activityLocationIds = new HashSet<>();
+        if (existing == null || existing.getIndicators() == null) {
+            return activityLocationIds;
+        }
+
+        Hibernate.initialize(existing.getIndicators());
+        for (IndicatorActivity indicatorActivity : existing.getIndicators()) {
+            if (indicatorActivity == null) {
+                continue;
+            }
+            if (indicatorActivity.getActivityLocation() != null && indicatorActivity.getActivityLocation().getId() != null) {
+                activityLocationIds.add(indicatorActivity.getActivityLocation().getId());
+            }
+            if (indicatorActivity.getValues() == null) {
+                continue;
+            }
+            Hibernate.initialize(indicatorActivity.getValues());
+            for (AmpIndicatorValue value : indicatorActivity.getValues()) {
+                if (value != null && value.getActivityLocation() != null && value.getActivityLocation().getId() != null) {
+                    activityLocationIds.add(value.getActivityLocation().getId());
+                }
+            }
+        }
+
+        return activityLocationIds;
+    }
+
     /**
      * Scales location percentages so they sum to 100, as required by activity validation.
      * If there are no locations or sum is 0, does nothing.
@@ -1325,13 +1631,18 @@ public class ImporterUtil {
         if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty())
             return;
         Set<Location> locs = importDataModel.getLocations();
-        // Only consider locations that were found (location != null)
-        List<Location> foundLocations = new ArrayList<>();
+        // Deduplicate by location id first; the API effectively treats location rows as unique by location,
+        // so assigning percentages before collapsing duplicates can leave totals below 100 after validation.
+        Map<Long, Location> uniqueLocations = new LinkedHashMap<>();
         for (Location loc : locs) {
             if (loc != null && loc.getLocation() != null) {
-                foundLocations.add(loc);
+                Location existing = uniqueLocations.get(loc.getLocation());
+                if (existing == null || (existing.getId() == null && loc.getId() != null)) {
+                    uniqueLocations.put(loc.getLocation(), loc);
+                }
             }
         }
+        List<Location> foundLocations = new ArrayList<>(uniqueLocations.values());
         if (foundLocations.isEmpty()) {
             return;
         }
@@ -1340,12 +1651,13 @@ public class ImporterUtil {
         for (int i = 0; i < foundLocations.size(); i++) {
             foundLocations.get(i).setLocation_percentage((double)percentages.get(i));
         }
-        importDataModel.setLocations(new HashSet<>(foundLocations));
+        importDataModel.setLocations(new LinkedHashSet<>(foundLocations));
     }
 
     /**
-     * Removes ancestor locations when both ancestor and descendant are present in payload.
-     * AMP validation rejects payloads that contain parent+child in the same locations collection.
+     * Removes broader locations when more specific ones are present in payload.
+     * AMP validation rejects parent+child combinations, and importer rows that mix
+     * administrative layers should keep the most specific layer.
      */
     private static void pruneParentLocationsWhenChildPresent(ImportDataModel importDataModel, Session session) {
         if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().size() < 2) {
@@ -1375,21 +1687,54 @@ public class ImporterUtil {
                 }
             }
         }
-        if (ancestorsToRemove.isEmpty()) {
-            return;
-        }
-
-        Set<Location> filteredLocations = new HashSet<>();
+        Set<Location> filteredLocations = new LinkedHashSet<>();
         for (Location loc : importDataModel.getLocations()) {
             if (loc == null || loc.getLocation() == null || !ancestorsToRemove.contains(loc.getLocation())) {
                 filteredLocations.add(loc);
             }
         }
+
+        int mostSpecificLayerIndex = Integer.MIN_VALUE;
+        Set<Integer> layerIndexes = new HashSet<>();
+        Map<Long, Integer> layerIndexByLocationId = new HashMap<>();
+        for (Location loc : filteredLocations) {
+            if (loc == null || loc.getLocation() == null) {
+                continue;
+            }
+            AmpCategoryValueLocations current = session.get(AmpCategoryValueLocations.class, loc.getLocation());
+            if (current == null || current.getParentCategoryValue() == null
+                    || current.getParentCategoryValue().getIndex() == null) {
+                continue;
+            }
+            int layerIndex = current.getParentCategoryValue().getIndex();
+            layerIndexes.add(layerIndex);
+            layerIndexByLocationId.put(loc.getLocation(), layerIndex);
+            if (layerIndex > mostSpecificLayerIndex) {
+                mostSpecificLayerIndex = layerIndex;
+            }
+        }
+
+        if (layerIndexes.size() > 1) {
+            Set<Location> mostSpecificLocations = new LinkedHashSet<>();
+            for (Location loc : filteredLocations) {
+                if (loc == null || loc.getLocation() == null) {
+                    mostSpecificLocations.add(loc);
+                    continue;
+                }
+                Integer layerIndex = layerIndexByLocationId.get(loc.getLocation());
+                if (layerIndex == null || layerIndex == mostSpecificLayerIndex) {
+                    mostSpecificLocations.add(loc);
+                }
+            }
+            filteredLocations = mostSpecificLocations;
+        }
+
         importDataModel.setLocations(filteredLocations);
     }
 
     /**
-     * When the payload has locations, implementation level is required. Sets default if missing (e.g. after merging locations for existing activity).
+     * When the payload has locations, derive implementation location and level
+     * from the selected locations (e.g. after merging locations for existing activity).
      */
     private static void ensureImplementationLevelWhenHasLocations(ImportDataModel importDataModel, Session session) {
         if (importDataModel == null || importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty())
@@ -1979,7 +2324,12 @@ public class ImporterUtil {
             session = PersistenceManager.getRequestDBSession();
         }
 
-        Long resolved = resolveImplementationLevelForLocations(importDataModel, session);
+        AmpCategoryValue resolvedImplementationLocation = resolveImplementationLocationForLocations(importDataModel, session);
+        if (resolvedImplementationLocation != null && resolvedImplementationLocation.getId() != null) {
+            importDataModel.setImplementation_location(resolvedImplementationLocation.getId());
+        }
+
+        Long resolved = resolveImplementationLevelForLocations(importDataModel, session, resolvedImplementationLocation);
         if (resolved != null) {
             importDataModel.setImplementation_level(resolved);
             return;
@@ -2013,9 +2363,74 @@ public class ImporterUtil {
         }
     }
 
-    private static Long resolveImplementationLevelForLocations(ImportDataModel importDataModel, Session session) {
+    private static AmpCategoryValue resolveImplementationLocationForLocations(ImportDataModel importDataModel,
+                                                                              Session session) {
         if (importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty()) {
             return null;
+        }
+
+        AmpCategoryValue resolvedImplementationLocation = null;
+        Set<Long> implementationLocationIds = new LinkedHashSet<>();
+
+        for (Location loc : importDataModel.getLocations()) {
+            if (loc == null || loc.getLocation() == null) {
+                continue;
+            }
+            AmpCategoryValueLocations location = session.get(AmpCategoryValueLocations.class, loc.getLocation());
+            if (location == null || location.getParentCategoryValue() == null) {
+                continue;
+            }
+
+            AmpCategoryValue implementationLocation = location.getParentCategoryValue();
+            if (resolvedImplementationLocation == null) {
+                resolvedImplementationLocation = implementationLocation;
+            }
+            if (implementationLocation.getId() != null) {
+                implementationLocationIds.add(implementationLocation.getId());
+            }
+        }
+
+        if (implementationLocationIds.isEmpty()) {
+            return null;
+        }
+        if (implementationLocationIds.size() == 1) {
+            return resolvedImplementationLocation;
+        }
+
+        return CategoryConstants.IMPLEMENTATION_LOCATION_ALL.getAmpCategoryValueFromDB();
+    }
+
+    private static Long resolveImplementationLevelForLocations(ImportDataModel importDataModel, Session session,
+                                                               AmpCategoryValue implementationLocation) {
+        if (importDataModel.getLocations() == null || importDataModel.getLocations().isEmpty()) {
+            return null;
+        }
+
+        Long existingImplementationLevel = importDataModel.getImplementation_level();
+
+        if (implementationLocation != null) {
+            Set<Long> allowedByImplementationLocation = new LinkedHashSet<>();
+            if (implementationLocation.getUsedValues() != null) {
+                for (AmpCategoryValue level : implementationLocation.getUsedValues()) {
+                    if (level != null && level.getId() != null) {
+                        allowedByImplementationLocation.add(level.getId());
+                    }
+                }
+            }
+
+            if (existingImplementationLevel != null && allowedByImplementationLocation.contains(existingImplementationLevel)) {
+                return existingImplementationLevel;
+            }
+
+            if (implementationLocation.getDefaultUsedValue() != null
+                    && implementationLocation.getDefaultUsedValue().getId() != null
+                    && allowedByImplementationLocation.contains(implementationLocation.getDefaultUsedValue().getId())) {
+                return implementationLocation.getDefaultUsedValue().getId();
+            }
+
+            if (allowedByImplementationLocation.size() == 1) {
+                return allowedByImplementationLocation.iterator().next();
+            }
         }
 
         Set<Long> commonAllowedLevels = null;
@@ -2038,9 +2453,15 @@ public class ImporterUtil {
             return null;
         }
 
-        Long existingImplementationLevel = importDataModel.getImplementation_level();
         if (existingImplementationLevel != null && commonAllowedLevels.contains(existingImplementationLevel)) {
             return existingImplementationLevel;
+        }
+
+        if (implementationLocation != null
+                && implementationLocation.getDefaultUsedValue() != null
+                && implementationLocation.getDefaultUsedValue().getId() != null
+                && commonAllowedLevels.contains(implementationLocation.getDefaultUsedValue().getId())) {
+            return implementationLocation.getDefaultUsedValue().getId();
         }
 
         // Prefer common hard-coded levels if available to keep behavior predictable.
@@ -2257,9 +2678,7 @@ public class ImporterUtil {
         }
         else if (Objects.equals(type, ImporterConstants.ORG_TYPE_IMPLEMENTING_AGENCY))
         {
-            Organization implementingAgency = new Organization();
-            implementingAgency.setOrganization(orgId);
-            importDataModel.getImplementing_agency().add(implementingAgency);
+            createImplementingAgency(importDataModel, orgId);
         }
         else if (Objects.equals(type, ImporterConstants.ORG_TYPE_CONTRACTING_AGENCY))
         {
@@ -2456,6 +2875,52 @@ public class ImporterUtil {
         createDonorOrg(importDataModel, orgId, null);
     }
 
+    public static void applyActivityInternalIds(ImportDataModel importDataModel,
+                                                String rawInternalIds,
+                                                String recordingOrganization,
+                                                Long defaultRecordingOrganizationId,
+                                                Session session,
+                                                boolean createMissingOrgs,
+                                                Long orgGroupId,
+                                                String importedOrgGroupName,
+                                                boolean createMissingOrgGroups) {
+        if (rawInternalIds == null || rawInternalIds.trim().isEmpty()) {
+            return;
+        }
+        Long resolvedRecordingOrganizationId = null;
+        if (recordingOrganization != null && !recordingOrganization.trim().isEmpty()) {
+            resolvedRecordingOrganizationId = updateOrgs(importDataModel,
+                    recordingOrganization.trim(),
+                    null,
+                    session,
+                    ImporterConstants.ORG_TYPE_RECORDING_ORGANIZATION,
+                    createMissingOrgs,
+                    orgGroupId,
+                    importedOrgGroupName,
+                    createMissingOrgGroups);
+        }
+        if (resolvedRecordingOrganizationId == null) {
+            resolvedRecordingOrganizationId = defaultRecordingOrganizationId;
+        }
+        if (resolvedRecordingOrganizationId == null) {
+            logger.warn("Skipping Activity Internal IDs because no recording organization could be resolved");
+            return;
+        }
+        if (importDataModel.getActivity_internal_ids() == null) {
+            importDataModel.setActivity_internal_ids(new LinkedHashSet<>());
+        }
+        // Accept multiple internal IDs in one cell separated by semicolons.
+        for (String internalIdValue : splitMultipleValues(rawInternalIds, "[;\\n\\r\\u061B\\uFF1B]")) {
+            if (internalIdValue == null || internalIdValue.trim().isEmpty()) {
+                continue;
+            }
+            InternalId internalId = new InternalId();
+            internalId.setOrganization(resolvedRecordingOrganizationId);
+            internalId.setInternal_id(internalIdValue.trim());
+            importDataModel.getActivity_internal_ids().add(internalId);
+        }
+    }
+
     private static void createDonorOrg(ImportDataModel importDataModel, Long orgId, Long orgRoleId) {
         DonorOrganization donorOrganization = new DonorOrganization();
         donorOrganization.setOrganization(orgId);
@@ -2469,12 +2934,51 @@ public class ImporterUtil {
         }
     }
 
+    private static void createImplementingAgency(ImportDataModel importDataModel, Long orgId) {
+        createImplementingAgency(importDataModel, orgId, null);
+    }
+
+    private static void createImplementingAgency(ImportDataModel importDataModel, Long orgId, Long orgRoleId) {
+        ImplementingAgency implementingAgency = new ImplementingAgency();
+        implementingAgency.setOrganization(orgId);
+        if (orgRoleId != null) implementingAgency.setId(orgRoleId);
+        importDataModel.getImplementing_agency().add(implementingAgency);
+
+        Set<Organization> normalizedImplementingAgencies = new LinkedHashSet<>();
+        for (Organization organization : importDataModel.getImplementing_agency()) {
+            if (organization instanceof ImplementingAgency) {
+                normalizedImplementingAgencies.add(organization);
+            } else if (organization != null && organization.getOrganization() != null) {
+                ImplementingAgency normalized = new ImplementingAgency();
+                normalized.setId(organization.getId());
+                normalized.setOrganization(organization.getOrganization());
+                normalizedImplementingAgencies.add(normalized);
+            }
+        }
+        importDataModel.setImplementing_agency(normalizedImplementingAgencies);
+
+        int count = importDataModel.getImplementing_agency().size();
+        Map<Integer, Float> percentages = divide100(count);
+        int index = 0;
+        for (Organization organization : importDataModel.getImplementing_agency()) {
+            if (organization instanceof ImplementingAgency) {
+                ((ImplementingAgency) organization).setPercentage(percentages.get(index));
+            }
+            index++;
+        }
+    }
+
     public static int getColumnIndexByName(Sheet sheet, String columnName) {
         try {
+            String normalizedColumnName = normalizeImporterLookupValue(columnName);
+            if (normalizedColumnName.isEmpty()) {
+                return -1;
+            }
             Row headerRow = sheet.getRow(0);
             for (int i = 0; i < headerRow.getLastCellNum(); i++) {
                 Cell cell = headerRow.getCell(i);
-                if (cell != null && columnName.equals(cell.getStringCellValue())) {
+                String headerValue = normalizeImporterLookupValue(getStringValueFromCell(cell, true));
+                if (cell != null && normalizedColumnName.equalsIgnoreCase(headerValue)) {
                     return i;
                 }
             }
@@ -2489,19 +2993,26 @@ public class ImporterUtil {
 
     /** Parse date from Excel cell or string; returns today if null/empty/invalid. */
     public static Date parseDateDefaultToday(Row row, Sheet sheet, Map<String, String> config, String columnName) {
-        String key = getKey(config, columnName);
-        if (key == null) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        int col = getColumnIndexByName(sheet, key);
-        if (col < 0) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Cell cell = row.getCell(col);
-        if (cell == null) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        String dateStr = extractDateFromStringCell(cell);
-        if (dateStr == null || dateStr.isEmpty()) return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        try {
-            return java.sql.Date.valueOf(dateStr);
-        } catch (Exception e) {
-            return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        for (String key : getKeys(config, columnName)) {
+            int col = getColumnIndexByName(sheet, key);
+            if (col < 0) {
+                continue;
+            }
+            Cell cell = row.getCell(col);
+            if (cell == null) {
+                continue;
+            }
+            String dateStr = extractDateFromStringCell(cell);
+            if (dateStr == null || dateStr.isEmpty()) {
+                continue;
+            }
+            try {
+                return java.sql.Date.valueOf(dateStr);
+            } catch (Exception e) {
+                // Try the next configured alias for this field before defaulting.
+            }
         }
+        return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
     /** Add indicator data to an activity from the current row. Called after importTheData when indicator columns are mapped. */
@@ -2982,6 +3493,8 @@ public class ImporterUtil {
         if (activityId == null || rawProgramNames == null || rawProgramNames.trim().isEmpty()) {
             return;
         }
+        logger.info("Adding programs to activity {}: rawProgramNames='{}', rowProgramClassification='{}', fallbackProgramClassification='{}', createMissingPrograms={}",
+                activityId, rawProgramNames, rowProgramClassification, fallbackProgramClassification, createMissingPrograms);
         String resolvedClassification = (rowProgramClassification != null && !rowProgramClassification.trim().isEmpty())
                 ? rowProgramClassification.trim()
                 : (fallbackProgramClassification != null ? fallbackProgramClassification.trim() : null);
@@ -3001,11 +3514,13 @@ public class ImporterUtil {
                     resolvedClassification, activityId);
             return;
         }
+        logger.info("Adding programs to activity {}: classification='{}', createMissingPrograms={}", activityId, resolvedClassification, createMissingPrograms);
 
         for (String programName : splitMultipleValues(rawProgramNames)) {
             AmpTheme program = createMissingPrograms
                     ? getOrCreateProgramByName(programName, resolvedClassification, session)
                     : getProgramByNameAndClassification(programName, resolvedClassification, session);
+            logger.info("Processing program '{}' for activity {}: resolved to theme id={}", programName, activityId, program != null ? program.getAmpThemeId() : null);
             if (program == null) {
                 logger.info("Program '{}' not found and createMissingPrograms is disabled; skipping", programName);
                 continue;
@@ -3065,6 +3580,7 @@ public class ImporterUtil {
         if (programName == null || programName.trim().isEmpty()) {
             return null;
         }
+        logger.info("Creating new program '{}' for classification '{}'", programName, classification);
         try {
             AmpTheme newTheme = new AmpTheme();
             String trimmedName = programName.trim();
@@ -3100,8 +3616,34 @@ public class ImporterUtil {
         if (classification == null || classification.trim().isEmpty()) {
             return null;
         }
+        String normalizedClassification = classification.trim();
         try {
-            return ProgramUtil.getAmpActivityProgramSettings(classification);
+            AmpActivityProgramSettings setting = ProgramUtil.getAmpActivityProgramSettings(normalizedClassification);
+            if (setting != null) {
+                return setting;
+            }
+
+            for (AmpActivityProgramSettings candidate : ProgramUtil.getAmpActivityProgramSettingsList(false)) {
+                if (candidate == null) {
+                    continue;
+                }
+                if (candidate.getName() != null && normalizedClassification.equalsIgnoreCase(candidate.getName().trim())) {
+                    return candidate;
+                }
+                AmpTheme defaultHierarchy = candidate.getDefaultHierarchy();
+                if (defaultHierarchy == null) {
+                    continue;
+                }
+                if (defaultHierarchy.getName() != null
+                        && normalizedClassification.equalsIgnoreCase(defaultHierarchy.getName().trim())) {
+                    return candidate;
+                }
+                if (defaultHierarchy.getThemeCode() != null
+                        && normalizedClassification.equalsIgnoreCase(defaultHierarchy.getThemeCode().trim())) {
+                    return candidate;
+                }
+            }
+            return null;
         } catch (Exception e) {
             logger.warn("Could not resolve program setting '{}'", classification, e);
             return null;
@@ -3138,46 +3680,124 @@ public class ImporterUtil {
     }
 
     public static String getCellValueByConfig(Row row, Sheet sheet, Map<String, String> config, String fieldName) {
-        String key = getKey(config, fieldName);
-        if (key == null) return null;
-        int col = getColumnIndexByName(sheet, key);
-        if (col < 0) return null;
-        return getStringValueFromCell(row.getCell(col), true);
+        String fallbackValue = null;
+        for (String key : getKeys(config, fieldName)) {
+            int col = getColumnIndexByName(sheet, key);
+            if (col < 0) {
+                continue;
+            }
+            String value = getStringValueFromCell(row.getCell(col), true);
+            if (StringUtils.isNotBlank(value)) {
+                return value;
+            }
+            if (fallbackValue == null) {
+                fallbackValue = value;
+            }
+        }
+        return fallbackValue;
+    }
+
+    public static String getCellValueByHeader(Map<String, String> row, String headerName) {
+        if (row == null || row.isEmpty() || headerName == null) {
+            return null;
+        }
+
+        if (row.containsKey(headerName)) {
+            return row.get(headerName);
+        }
+
+        String normalizedHeaderName = normalizeImporterLookupValue(headerName);
+        if (normalizedHeaderName.isEmpty()) {
+            return null;
+        }
+
+        String fallbackValue = null;
+        for (Map.Entry<String, String> entry : row.entrySet()) {
+            if (normalizedHeaderName.equalsIgnoreCase(normalizeImporterLookupValue(entry.getKey()))) {
+                String value = entry.getValue();
+                if (StringUtils.isNotBlank(value)) {
+                    return value;
+                }
+                if (fallbackValue == null) {
+                    fallbackValue = value;
+                }
+            }
+        }
+        return fallbackValue;
+    }
+
+    public static String getCellValueByConfig(Map<String, String> row, Map<String, String> config, String fieldName) {
+        if (row == null || row.isEmpty()) {
+            return null;
+        }
+
+        String fallbackValue = null;
+        for (String key : getKeys(config, fieldName)) {
+            String value = getCellValueByHeader(row, key);
+            if (StringUtils.isNotBlank(value)) {
+                return value;
+            }
+            if (fallbackValue == null) {
+                fallbackValue = value;
+            }
+        }
+        return fallbackValue;
+    }
+
+    private static String normalizeImporterLookupValue(String value) {
+        if (value == null) {
+            return "";
+        }
+        return Normalizer.normalize(value, Normalizer.Form.NFD)
+                .replace('\u00A0', ' ')
+                .replace('\u202F', ' ')
+                .replaceAll("\\p{M}+", "")
+                .replaceAll("\\s+", " ")
+                .trim();
+    }
+
+    private static String normalizeImporterMatchValue(String value) {
+        if (value == null) {
+            return null;
+        }
+        return StringUtils.trimToNull(Normalizer.normalize(value, Normalizer.Form.NFC)
+                .replace('\u00A0', ' ')
+                .replace('\u202F', ' '));
     }
 
     private static double parseDoubleFromConfig(Row row, Sheet sheet, Map<String, String> config, String fieldName) {
-        String key = getKey(config, fieldName);
-        if (key == null) {
+        List<String> keys = getKeys(config, fieldName);
+        if (keys.isEmpty()) {
             if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: no config key for field '{}'", fieldName);
             return Double.NaN;
         }
-        int col = getColumnIndexByName(sheet, key);
-        if (col < 0) {
-            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: column not found for key '{}' in sheet", key);
-            return Double.NaN;
-        }
-        Cell cell = row.getCell(col);
-        if (cell == null) {
-            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: cell is null for col={} key='{}'", col, key);
-            return Double.NaN;
-        }
-        try {
-            if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                double v = cell.getNumericCellValue();
-                if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE from numeric cell col='{}' value={}", key, v);
+        for (String key : keys) {
+            int col = getColumnIndexByName(sheet, key);
+            if (col < 0) {
+                continue;
+            }
+            Cell cell = row.getCell(col);
+            if (cell == null) {
+                continue;
+            }
+            try {
+                if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                    double v = cell.getNumericCellValue();
+                    if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE from numeric cell col='{}' value={}", key, v);
+                    return v;
+                }
+                String s = getStringValueFromCell(cell, true);
+                if (s == null || s.trim().isEmpty()) {
+                    continue;
+                }
+                double v = Double.parseDouble(s.trim());
+                if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE from string cell col='{}' raw='{}' parsed={}", key, s, v);
                 return v;
+            } catch (Exception e) {
+                if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE parse failed for col='{}' cellType={} error={}", key, cell.getCellType(), e.getMessage());
             }
-            String s = getStringValueFromCell(cell, true);
-            if (s == null || s.trim().isEmpty()) {
-                if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE cell empty for col='{}'", key);
-                return Double.NaN;
-            }
-            double v = Double.parseDouble(s.trim());
-            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE from string cell col='{}' raw='{}' parsed={}", key, s, v);
-            return v;
-        } catch (Exception e) {
-            if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: ACTUAL_VALUE parse failed for col='{}' cellType={} error={}", key, cell.getCellType(), e.getMessage());
-            return Double.NaN;
         }
+        if (ImporterConstants.ACTUAL_VALUE.equals(fieldName)) logger.info("parseDoubleFromConfig: no usable value found for field '{}' across config keys {}", fieldName, keys);
+        return Double.NaN;
     }
 }

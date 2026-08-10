@@ -195,6 +195,14 @@ RUN npm run build \
     && rm -rf node_modules
 FROM maven:3.8.4-jdk-8 as compile-mvn
 WORKDIR /tmp/amp
+
+# JDBC credentials passed in from docker-compose build args (see docker-compose.yml)
+ARG JDBC_USER=amp
+ARG JDBC_PASSWORD=amp
+ARG JDBC_DB=amp
+ARG JDBC_HOST=db
+ARG JDBC_PORT=5432
+
 # Copy pom.xml first for better Maven caching
 COPY pom.xml .
 #COPY amp/pom.xml amp/
@@ -210,24 +218,26 @@ COPY --from=compile-reampv2 /tmp/amp/TEMPLATE/reampv2 TEMPLATE/reampv2
 # Download Maven dependencies (this layer will be cached if pom.xml doesn't change)
 ARG BUILD_SOURCE
 RUN --mount=type=cache,target=/root/.m2 \
-    mvn -B dependency:go-offline -f pom.xml || true
+    mvn -B org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline -f pom.xml || true
 # Copy source code after dependencies are downloaded
 COPY . .
 ARG SKIP_TESTS=false
 RUN --mount=type=cache,target=/root/.m2 \
     if [ "$SKIP_TESTS" = "true" ]; then \
-      mvn -B clean compile war:exploded \
+      mvn -B clean compile org.apache.maven.plugins:maven-war-plugin:2.3:exploded \
         -DbuildSource=$BUILD_SOURCE \
-        -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
-        -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
+        -Djdbc.user=$JDBC_USER -Djdbc.password=$JDBC_PASSWORD \
+        -Djdbc.db=$JDBC_DB -Djdbc.host=$JDBC_HOST -Djdbc.port=$JDBC_PORT \
+        -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
         -Dskip.npm -Dskip.installnodenpm -DskipTests \
         && mv target/amp exploded \
         && rm -rf target; \
     else \
-      mvn -B test war:exploded \
+      mvn -B test org.apache.maven.plugins:maven-war-plugin:2.3:exploded \
         -DbuildSource=$BUILD_SOURCE \
-        -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
-        -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
+        -Djdbc.user=$JDBC_USER -Djdbc.password=$JDBC_PASSWORD \
+        -Djdbc.db=$JDBC_DB -Djdbc.host=$JDBC_HOST -Djdbc.port=$JDBC_PORT \
+        -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
         -Dskip.npm -Dskip.installnodenpm \
         && mv target/amp exploded \
         && rm -rf target; \
@@ -236,7 +246,7 @@ RUN --mount=type=cache,target=/root/.m2 \
 FROM tomcat:8.5.79-jdk8
 
 RUN apt-get update \
-    && apt-get install -y apt-transport-https ca-certificates curl gnupg --no-install-recommends \
+    && apt-get install -y apt-transport-https ca-certificates curl gnupg postgresql-client --no-install-recommends \
     && curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
     && apt-get update \
@@ -261,3 +271,10 @@ ENV AMP_REGISTRY_PRIVATE_KEY $AMP_REGISTRY_PRIVATE_KEY
 
 RUN rm -fr /usr/local/tomcat/webapps/ROOT
 COPY --from=compile-mvn /tmp/amp/exploded /usr/local/tomcat/webapps/ROOT/
+
+# Entrypoint patches context.xml with runtime JDBC env vars before Tomcat starts,
+# so the same image works with any DB password without a rebuild.
+COPY docker/entrypoint.sh bin/entrypoint.sh
+RUN chmod +x /usr/local/tomcat/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/local/tomcat/bin/entrypoint.sh"]

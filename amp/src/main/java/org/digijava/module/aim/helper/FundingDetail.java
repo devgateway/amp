@@ -64,6 +64,25 @@ public class FundingDetail implements Serializable, Comparable
     public Boolean disasterResponse;
 
     private String disbursementId;
+    public AmpCategoryValue getComponentFundingStatus() {
+        return componentFundingStatus;
+    }
+
+    public void setComponentFundingStatus(AmpCategoryValue componentFundingStatus) {
+        this.componentFundingStatus = componentFundingStatus;
+    }
+
+    private AmpCategoryValue componentFundingStatus;
+
+    public String getComponentRejectReason() {
+        return componentRejectReason;
+    }
+
+    public void setComponentRejectReason(String componentRejectReason) {
+        this.componentRejectReason = componentRejectReason;
+    }
+
+    private String componentRejectReason="";
 
     public FundingDetail() {}
 

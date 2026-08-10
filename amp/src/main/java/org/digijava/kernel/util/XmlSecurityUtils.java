@@ -75,16 +75,17 @@ public final class XmlSecurityUtils {
     }
 
     /**
-     * Hardens a Commons Digester instance against XXE. DOCTYPE declarations are disallowed entirely
-     * unless {@code allowDoctypeDecl} is true, which is only needed when the digester validates
-     * against a locally registered DTD.
+     * Hardens a Commons Digester instance against XXE. DOCTYPE declarations (and the general
+     * entities they may declare, e.g. this codebase's own digi.xml file-inclusion trick) are
+     * disallowed entirely unless {@code allowDoctypeDecl} is true, which is only needed for
+     * digesters that parse trusted, locally-controlled config files relying on DOCTYPE features.
      */
     public static void secureDigester(Digester digester, boolean allowDoctypeDecl) {
         try {
             if (!allowDoctypeDecl) {
                 digester.setFeature(FEATURE_DISALLOW_DOCTYPE, true);
+                digester.setFeature(FEATURE_EXTERNAL_GENERAL_ENTITIES, false);
             }
-            digester.setFeature(FEATURE_EXTERNAL_GENERAL_ENTITIES, false);
             digester.setFeature(FEATURE_EXTERNAL_PARAMETER_ENTITIES, false);
             digester.setFeature(FEATURE_LOAD_EXTERNAL_DTD, false);
         } catch (ParserConfigurationException | SAXException e) {

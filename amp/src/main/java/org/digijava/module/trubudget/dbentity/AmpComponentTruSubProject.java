@@ -38,17 +38,6 @@ public class AmpComponentTruSubProject implements Serializable {
         this.componentJustAnId = componentJustAnId;
     }
 
-    @Column(name = "sub_project_closed")
-    private Boolean subProjectClosed = Boolean.FALSE;
-
-    public Boolean getSubProjectClosed() {
-        return subProjectClosed;
-    }
-
-    public void setSubProjectClosed(Boolean subProjectClosed) {
-        this.subProjectClosed = subProjectClosed;
-    }
-
     public String getTruProjectId() {
         return truProjectId;
     }

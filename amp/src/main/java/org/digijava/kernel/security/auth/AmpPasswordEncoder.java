@@ -16,11 +16,11 @@ public class AmpPasswordEncoder implements PasswordEncoder {
 
     private static final Pattern BCRYPT_PATTERN = Pattern.compile("^\\$2[aby]\\$\\d{2}\\$.{53}$");
 
-    private final BCryptPasswordEncoder delegate = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Override
     public String encode(CharSequence rawPassword) {
-        return delegate.encode(rawPassword);
+        return encoder.encode(rawPassword);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class AmpPasswordEncoder implements PasswordEncoder {
             return false;
         }
         if (isHashed(encodedPassword)) {
-            return delegate.matches(rawPassword, encodedPassword);
+            return encoder.matches(rawPassword, encodedPassword);
         }
         // legacy account: password column still holds the plaintext value, compare directly
         return MessageDigest.isEqual(

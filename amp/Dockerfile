@@ -195,6 +195,9 @@ RUN npm run build \
     && rm -rf node_modules
 FROM maven:3.8.4-jdk-8 as compile-mvn
 WORKDIR /tmp/amp
+# Copy Maven retry helper
+COPY docker/mvn-with-retry.sh /usr/local/bin/mvn-with-retry.sh
+RUN chmod +x /usr/local/bin/mvn-with-retry.sh
 # Copy pom.xml first for better Maven caching
 COPY pom.xml .
 #COPY amp/pom.xml amp/
@@ -210,13 +213,13 @@ COPY --from=compile-reampv2 /tmp/amp/TEMPLATE/reampv2 TEMPLATE/reampv2
 # Download Maven dependencies (this layer will be cached if pom.xml doesn't change)
 ARG BUILD_SOURCE
 RUN --mount=type=cache,target=/root/.m2 \
-    mvn -B dependency:go-offline -f pom.xml || true
+        mvn-with-retry.sh -B -Dmaven.wagon.http.retryHandler.count=5 dependency:go-offline -f pom.xml || true
 # Copy source code after dependencies are downloaded
 COPY . .
 ARG SKIP_TESTS=false
 RUN --mount=type=cache,target=/root/.m2 \
     if [ "$SKIP_TESTS" = "true" ]; then \
-      mvn -B clean compile war:exploded \
+            mvn-with-retry.sh -B -Dmaven.wagon.http.retryHandler.count=5 clean compile war:exploded \
         -DbuildSource=$BUILD_SOURCE \
         -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
         -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
@@ -224,7 +227,7 @@ RUN --mount=type=cache,target=/root/.m2 \
         && mv target/amp exploded \
         && rm -rf target; \
     else \
-      mvn -B test war:exploded \
+            mvn-with-retry.sh -B -Dmaven.wagon.http.retryHandler.count=5 test war:exploded \
         -DbuildSource=$BUILD_SOURCE \
         -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
         -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \

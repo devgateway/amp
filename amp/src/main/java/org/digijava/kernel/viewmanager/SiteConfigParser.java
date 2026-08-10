@@ -47,8 +47,9 @@ public final class SiteConfigParser {
         digester.setValidating(false);
         // Workaround Tomcat's issue with ClassLoader
         digester.setUseContextClassLoader(true);
-        // AMP-SEC-025/061: block XXE
-        XmlSecurityUtils.secureDigester(digester);
+        // AMP-SEC-025/061: block XXE, but allow DOCTYPE - ampTemplate/site-config.xml declares
+        // internal-only general entities (&ampVersion; etc.) via a DOCTYPE internal subset
+        XmlSecurityUtils.secureDigester(digester, true);
 
         // Configure digester
         digester.addObjectCreate("site-config", SiteConfig.class);

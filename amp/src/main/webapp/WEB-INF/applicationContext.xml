@@ -110,13 +110,12 @@
 	<http pattern="/esrigis/**" security="none" />
 	 -->
 
-	<http pattern="/rest/**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm">
+	<http pattern="/rest/**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" create-session="stateless">
 		<csrf disabled="true"/>
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<!-- Stateless: SecurityService.storeInSession() manually sets SecurityContextHolder's
 		     Authentication on REST login; without this, SecurityContextPersistenceFilter would
 		     start persisting that token into the HTTP session, which JAX-RS auth never relied on. -->
-		<session-management session-creation-policy="stateless"/>
 	</http>
     <http pattern="/api-docs/**" security="none" />
 

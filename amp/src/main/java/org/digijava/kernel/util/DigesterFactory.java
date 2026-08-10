@@ -127,6 +127,8 @@ public class DigesterFactory{
         if (rule != null) {
             digester.addRuleSet(rule);
         }
+        // AMP-SEC-025/061: block XXE (DOCTYPE/external entities are not needed for XSD-based validation)
+        XmlSecurityUtils.secureDigester(digester, false);
 
         return (digester);
     }

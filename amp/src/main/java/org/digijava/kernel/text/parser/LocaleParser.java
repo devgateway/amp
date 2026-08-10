@@ -24,6 +24,7 @@ package org.digijava.kernel.text.parser;
 
 import org.apache.commons.digester.Digester;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.util.XmlSecurityUtils;
 
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
@@ -63,6 +64,8 @@ public class LocaleParser {
         digester.setValidating(true);
         // Workaround Tomcat's issue with ClassLoader
         digester.setUseContextClassLoader(true);
+        // AMP-SEC-025/061: block XXE; DOCTYPE stays allowed since validation needs the registered local DTD
+        XmlSecurityUtils.secureDigester(digester, true);
 
         // Configure digester
         digester.addObjectCreate("locale", LocaleData.class);

@@ -10,7 +10,7 @@
 <digi:instance property="cacheForm" />
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="${pageContext.request.contextPath}/resources/images/module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
 				<digi:trn key="admin:caches">Caches</digi:trn>
@@ -25,18 +25,18 @@
 <tr><td colspan="5">&nbsp;</td></tr>
 <tr>
    <td align= "center" colspan="5"><b><digi:trn key="admin:hibernateCaches">Hibernate Caches</digi:trn></b></td>
- </tr>   
+ </tr>
 <tr><td colspan="5">&nbsp;</td></tr>
 <tr bgcolor="silver">
    <td align= "center"><b><digi:trn key="admin:cacheKey">Cache Key</digi:trn></b></td>
    <td align= "right"><b><digi:trn key="admin:cacheSize">Cache Size</digi:trn></b></td>
    <td align= "center"><b><digi:trn key="admin:numberOfCacheGets">Gets</digi:trn></b></td>
    <td align= "center"><b><digi:trn key="admin:numberOfCachePuts">Puts</digi:trn></b></td>
-   <td align= "center">&nbsp;</td>   
- </tr>   
+   <td align= "center">&nbsp;</td>
+ </tr>
   <logic:iterate indexId="ind" id="cachesList" name="cacheForm" property="hibernateCachesList">
     <c:set var="isEven" value="${ind % 2}"/>
-    <tr 
+    <tr
     <c:if test="${isEven == 0}">bgcolor="#EBEBEB"</c:if>
     <c:if test="${isEven == 1}">bgcolor="#D2D2DB"</c:if>
     >
@@ -56,16 +56,16 @@
   	    <digi:link href="/showCaches.do" paramName="cachesList" paramProperty="name" paramId="hibernateKey"><digi:trn key="admin:clear">clear</digi:trn></digi:link>
   	</td>
     </tr>
-  </logic:iterate> 
+  </logic:iterate>
  <tr><td colspan="5" bgcolor="silver">&nbsp;</td></tr>
  <tr>
    <td align="right"><b><digi:trn key="admin:numberOfCaches">Total number of caches</digi:trn></b></td>
    <td align="right"><c:out value="${cacheForm.hibernateCacheCount}" /></td>
- </tr>   
+ </tr>
  <tr>
    <td align="right"><b><digi:trn key="admin:numberOfItemsInCaches">Total number of items in all caches</digi:trn></b></td>
    <td align="right"><c:out value="${cacheForm.hibernateTotalCount}" /></td>
- </tr>   
+ </tr>
 </table>
 		</td>
 	</tr>

@@ -5,7 +5,15 @@
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
 <%@ taglib uri="http://digijava.org/digi" prefix="digi"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+<script type="text/javascript">
+(function(){
+	// avoid reloading jQuery if the header already loaded it, otherwise the global $/jQuery
+	// gets reset and the main menu (bound against the original instance) stops responding to clicks
+	if (typeof jQuery === 'undefined' && typeof $ === 'undefined') {
+		document.write('<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"><\/script>');
+	}
+})();
+</script>
 <%@page import="org.digijava.module.help.util.HelpUtil"%>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />

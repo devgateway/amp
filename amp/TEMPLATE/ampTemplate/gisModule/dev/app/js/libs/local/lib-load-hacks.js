@@ -16,7 +16,11 @@ require('bootstrap/dist/js/bootstrap');
 jQuery.support.cors = true;
 
 // init leaflet plugins
-var L = require('../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
+// Explicitly load leaflet first and expose as global so esri-leaflet can find it
+// (browserify-shim's 'depends' chain is unreliable with browserify v17)
+var L = require('../../../../node_modules/leaflet/dist/leaflet.js');
+window.L = L;
+require('../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 L.Icon.Default.imagePath = '/img/map-icons';
 require('../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster.js');
 require('leaflet-div-style-icon');

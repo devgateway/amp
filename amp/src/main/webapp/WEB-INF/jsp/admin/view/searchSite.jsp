@@ -11,7 +11,7 @@
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="${pageContext.request.contextPath}/resources/images/module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
 				<digi:trn key="admin:searchSite">Search site</digi:trn>
@@ -20,8 +20,8 @@
 	</tr>
 	<tr>
 		<td colspan="2" class="yellow" valign="top" align="left">
-		
-		
+
+
 <digi:errors />
 <digi:instance property="searchSiteForm" />
 <digi:form action="/searchSite.do" >
@@ -56,12 +56,12 @@
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
-</tr> 
- <tr bgcolor="#EEEEEE">    
+</tr>
+ <tr bgcolor="#EEEEEE">
     <td width="20%" align="left" valign="center">
      <c:out value="${sites.siteName}"/>
     </td>
-    <td width="20%" align="left" valign="center">  
+    <td width="20%" align="left" valign="center">
      <b><c:out value="${sites.siteId}"/></b>
     </td>
     <td width="50%" align="left" >
@@ -82,18 +82,18 @@
            </tr>
          </c:forEach>
          </c:if>
-      </table> 
+      </table>
     </td>
     <td width="10%" align="center">
      <table>
         <tr>
              <c:if test="${ !empty sites.adminLink}">
      	          <td noWrap width="50%" align="center"><a href='<c:out value="${sites.adminLink}" />'><digi:trn key="admin:admin">Admin</digi:trn></a></td>
-             </c:if> 
-			 <c:if test="${sites.delete}">
-                  <td noWrap width="50%" align="center"><digi:link href="/deleteSite.do" paramName="sites" paramId="selectedSiteId" paramProperty="id"><digi:trn key="admin:delete">Delete</digi:trn></digi:link></td> 
              </c:if>
-        </tr>			
+			 <c:if test="${sites.delete}">
+                  <td noWrap width="50%" align="center"><digi:link href="/deleteSite.do" paramName="sites" paramId="selectedSiteId" paramProperty="id"><digi:trn key="admin:delete">Delete</digi:trn></digi:link></td>
+             </c:if>
+        </tr>
      </table>
    </td>
  </tr>

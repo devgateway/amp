@@ -6,6 +6,7 @@ import { Value } from 'react-date-picker/dist/cjs/shared/types';
 import 'react-date-picker/dist/DatePicker.css';
 import './css/React-Calendar.css';
 import './css/DateInput.css';
+import initialTranslations from '../config/initialTranslations.json';
 
 export interface DateInputProps {
     id?: string;
@@ -44,6 +45,7 @@ const DateInput: React.FC<DateInputProps> = (props) => {
         disableCalendar,
         translations
     } = props;
+    const t = (key: string): string => translations[key] ?? initialTranslations[key as keyof typeof initialTranslations] ?? key;
     const globalSettings: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
     const [dateFormat, setDateFormat] = useState<string | undefined>();
     const [inputValue, setInputValue] = useState<string | Date | undefined>(value);
@@ -97,9 +99,9 @@ const DateInput: React.FC<DateInputProps> = (props) => {
                 <DatePicker
                     id={id}
                     format={dateFormat}
-                    monthPlaceholder={translations["amp.indicatormanager:mm"]}
-                    dayPlaceholder={translations["amp.indicatormanager:dd"]}
-                    yearPlaceholder={translations["amp.indicatormanager:yyyy"]}
+                    monthPlaceholder={t("amp.indicatormanager:mm")}
+                    dayPlaceholder={t("amp.indicatormanager:dd")}
+                    yearPlaceholder={t("amp.indicatormanager:yyyy")}
                     className={className}
                     onChange={onChange}
                     name={name}
@@ -109,12 +111,12 @@ const DateInput: React.FC<DateInputProps> = (props) => {
                     defaultValue={defaultValue}
                     disabled={disabled}
                     clearIcon={clearIcon === null ? null : <ClearInputButton />}
-                    monthAriaLabel="Month"
-                    dayAriaLabel="Day"
-                    yearAriaLabel="Year"
+                    monthAriaLabel={t("amp.indicatormanager:aria-month")}
+                    dayAriaLabel={t("amp.indicatormanager:aria-day")}
+                    yearAriaLabel={t("amp.indicatormanager:aria-year")}
                     closeCalendar
-                    clearAriaLabel="Clear Date"
-                    calendarAriaLabel="Toggle Calendar"
+                    clearAriaLabel={t("amp.indicatormanager:aria-clear-date")}
+                    calendarAriaLabel={t("amp.indicatormanager:aria-toggle-calendar")}
                     inputRef={inputRef}
                     locale="en-US"
                     disableCalendar={disableCalendar}

@@ -213,6 +213,7 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, AmpCategoryValue.class, "typeOfAssistance", true);
 
         // Other section.
+        addFilter(ColumnConstants.PROCUREMENT_SYSTEM, AmpCategoryValue.class, "procurementSystem", true);
         addFilter(ColumnConstants.HUMANITARIAN_AID, Integer.class, "humanitarianAid", true);
         addFilter(ColumnConstants.DISASTER_RESPONSE_MARKER, Integer.class, "disasterResponse", true);
         addDateRangeFilter(ColumnConstants.ACTUAL_START_DATE, "fromActivityStartDate", "toActivityStartDate");

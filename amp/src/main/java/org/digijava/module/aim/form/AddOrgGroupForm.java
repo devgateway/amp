@@ -17,6 +17,15 @@ public class AddOrgGroupForm extends ActionForm {
     
     private Collection orgTypeColl = null;
     private Long orgTypeId = null;
+    private Collection referencingOrgs = null;
+
+    public Collection getReferencingOrgs() {
+        return referencingOrgs;
+    }
+
+    public void setReferencingOrgs(Collection referencingOrgs) {
+        this.referencingOrgs = referencingOrgs;
+    }
 
     public Long getAmpOrgGrpId() {
         return ampOrgGrpId;

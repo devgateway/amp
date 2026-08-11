@@ -1,7 +1,9 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.kernel.ampapi.endpoints.common.values.providers.AllThemesPossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,6 +21,7 @@ public class AmpActivityIndirectProgram implements Serializable, Cloneable {
 
     private AmpActivityProgram activityProgram;
 
+    @PossibleValues(AllThemesPossibleValuesProvider.class)
     @Interchangeable(fieldTitle = "Program", pickIdOnly = true)
     private AmpTheme program;
 

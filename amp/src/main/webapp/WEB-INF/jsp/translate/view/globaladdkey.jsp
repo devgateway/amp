@@ -42,6 +42,7 @@ function addkey(myString)
 
   <body bgcolor="white">
 <form name="form1" method="POST" action="<%=request.getContextPath()%>/translate/global/global.do">
+<jsp:include page="/WEB-INF/jsp/common/csrfInput.jsp" />
 
       <table width="100%" border="0" cellpadding="0" cellspacing="0" class="headerNav">
         <tr>

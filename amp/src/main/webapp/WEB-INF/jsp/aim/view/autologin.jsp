@@ -12,6 +12,7 @@ function delayer(){
 </head>
 <body onLoad="setTimeout('delayer()', 500)">
 <form action="/j_spring_security_check" method="post" name="myAutoForm">
+	<jsp:include page="/WEB-INF/jsp/common/csrfInput.jsp" />
 	<input type="hidden" name="j_username" value="<%=request.getParameter("user")%>"/>
 	<input type="hidden" name="j_password" value="<%=request.getParameter("password")%>" />
 	<input type="hidden" name="j_autoLogin" value="true" />

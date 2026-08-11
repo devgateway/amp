@@ -24,6 +24,9 @@ export const RUN_REPORT_NAME = 'Dynamic Report';
 
 export const SUMMARY_REPORT = 'summary-report';
 export const ANNUAL_REPORT = 'annual-report';
+export const PUBLIC_VIEW = 'public-view';
+export const WORKSPACE_LINKED = 'workspace-linked';
+export const PUBLIC_VIEW_OPTIONS =[PUBLIC_VIEW,WORKSPACE_LINKED];
 export const QUARTERLY_REPORT = 'quarterly-report';
 export const MONTHLY_REPORT = 'monthly-report';
 export const TOTALS_ONLY = 'totals-only';

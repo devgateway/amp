@@ -1,6 +1,7 @@
 enableComputateVisibleSections = false;
 onepagerMode = ${onepagerMode};
 isTabView = ${isTabView};
+var isMeTabView = ${isMeTabView};
 var isRtl = ${isRtl};
 
 //the distance between the content body and the menu should be 40px
@@ -156,7 +157,7 @@ function translationsEnable(){
 	$("#switchFMMode").css("display", "block");
 }
 function subSectionsSliderEnable(){
-	$("a.slider").click(function(){
+	$("a.slider").off("click").on("click", function () {
 		$(this).siblings("div:first").slideToggle();
 		return false;
 	});
@@ -208,7 +209,6 @@ function pageLeaveConfirmationEnabler(){
 }
 
 function switchTabs(lastIndex) {
-	if (isTabView) {
 		$('div[data-is_tab=true]').each(function(index) {
 			$(this).appendTo("#theContent");
 		});
@@ -239,11 +239,9 @@ function switchTabs(lastIndex) {
 			}
 		});
 		loader.insert();
-	}
 }
 
 function indicatorTabs(lastIndex) {
-	if (isTabView) {
 		$('div[data-is_location_tab=true]').each(function(index) {
 			$(this).appendTo("#theLocationIndicatorContent");
 		});
@@ -274,7 +272,6 @@ function indicatorTabs(lastIndex) {
 			}
 		});
 		loader.insert();
-	}
 }
 
 function getLeftPositionOfRightMenu(isAbsolutePosition) {
@@ -319,6 +316,9 @@ $(document).ready(function(){
 	pageLeaveConfirmationEnabler();
 	if(isTabView){
 		switchTabs();
+	}
+	if (isMeTabView)
+	{
 		indicatorTabs();
 	}
 

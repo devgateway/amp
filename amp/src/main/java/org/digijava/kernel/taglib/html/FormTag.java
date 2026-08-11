@@ -22,6 +22,7 @@
 
 package org.digijava.kernel.taglib.html;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.taglib.html.Constants;
 import org.digijava.kernel.request.Site;
@@ -31,7 +32,10 @@ import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteConfigUtils;
 import org.digijava.kernel.util.SiteUtils;
+import org.springframework.security.web.csrf.CsrfToken;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -161,6 +165,7 @@ public class FormTag
         results.append(this.renderFormStart());
 
         results.append(renderToken());
+        results.append(renderSpringCsrfToken(request));
 
         TagUtils.getInstance().write(pageContext, results.toString());
 
@@ -243,7 +248,7 @@ public class FormTag
         results.append(" method=\"");
         results.append(method == null ? "post" : method);
         results.append("\" action=\"");
-        results.append( response.encodeURL(context.toString()) );
+        results.append(response.encodeURL(appendSpringCsrfTokenToMultipartAction(context.toString(), request)));
 
         results.append("\"");
 
@@ -284,6 +289,60 @@ public class FormTag
         }
         results.append(">");
         return results.toString();
+    }
+
+    protected String renderSpringCsrfToken(HttpServletRequest request) {
+        if (isSafeMethod()) {
+            return "";
+        }
+
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        if (csrfToken == null) {
+            return "";
+        }
+
+        return "<input type=\"hidden\" name=\""
+                + StringEscapeUtils.escapeHtml(csrfToken.getParameterName())
+                + "\" value=\""
+                + StringEscapeUtils.escapeHtml(csrfToken.getToken())
+                + "\" />";
+    }
+
+    private String appendSpringCsrfTokenToMultipartAction(String actionUrl, HttpServletRequest request) {
+        if (isSafeMethod() || !isMultipartForm()) {
+            return actionUrl;
+        }
+
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        if (csrfToken == null || hasQueryParameter(actionUrl, csrfToken.getParameterName())) {
+            return actionUrl;
+        }
+
+        String separator = actionUrl.indexOf('?') >= 0 ? "&" : "?";
+        return actionUrl + separator + urlEncode(csrfToken.getParameterName()) + "=" + urlEncode(csrfToken.getToken());
+    }
+
+    private boolean isMultipartForm() {
+        return enctype != null && "multipart/form-data".equalsIgnoreCase(enctype);
+    }
+
+    private boolean hasQueryParameter(String url, String parameterName) {
+        return url.contains("?" + parameterName + "=") || url.contains("&" + parameterName + "=");
+    }
+
+    private String urlEncode(String value) {
+        try {
+            return URLEncoder.encode(value, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private boolean isSafeMethod() {
+        return "get".equalsIgnoreCase(method)
+                || "head".equalsIgnoreCase(method)
+                || "options".equalsIgnoreCase(method)
+                || "trace".equalsIgnoreCase(method);
     }
 
     /**

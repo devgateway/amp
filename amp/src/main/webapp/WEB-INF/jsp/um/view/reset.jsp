@@ -12,7 +12,8 @@
 <digi:errors/>
       <TABLE width="100%">
 
-      <form action='<%= userResetAction %>' method="post" >
+                  <form action='<%= userResetAction %>' method="post" >
+                        <jsp:include page="/WEB-INF/jsp/common/csrfInput.jsp" />
         
 
 <tr><td colspan="2"><b><font size="5"><digi:trn key="um:resetPassword">Reset Password</digi:trn></font></b></td></tr>

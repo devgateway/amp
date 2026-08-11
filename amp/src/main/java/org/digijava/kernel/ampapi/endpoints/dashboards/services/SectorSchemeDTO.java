@@ -26,12 +26,12 @@ public class SectorSchemeDTO {
     private final SectorDTO[] children;
 
     public SectorSchemeDTO(AmpSectorScheme scheme, SectorDTO[] children) {
-        this.ampSecSchemeId = scheme.getAmpSecSchemeId();
-        this.secSchemeCode = scheme.getSecSchemeCode();
-        this.secSchemeName = scheme.getSecSchemeName();
-        this.showInRMFilters = scheme.getShowInRMFilters();
-        this.used = scheme.isUsed();
-        this.children = children;
+        this.ampSecSchemeId = scheme != null ? scheme.getAmpSecSchemeId() : null;
+        this.secSchemeCode = scheme != null ? scheme.getSecSchemeCode() : null;
+        this.secSchemeName = scheme != null ? scheme.getSecSchemeName() : null;
+        this.showInRMFilters = Boolean.TRUE.equals(scheme != null ? scheme.getShowInRMFilters() : null);
+        this.used = scheme != null && scheme.isUsed();
+        this.children = children != null ? children : new SectorDTO[0];
     }
 
     public Long getAmpSecSchemeId() {

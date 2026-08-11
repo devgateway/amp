@@ -28,35 +28,37 @@ module.exports = BaseControlView.extend({
 
       this._loaded = this.app.data.admClusters.load().then(function() {
           // console.log("Settings,", JSON.stringify(this.app.data.generalSettings))
-          //   var wocatEnabled =this.app.data.generalSettings.get('gis-show-wocat');
-          // console.log("Wocat enabled",wocatEnabled)
-          //   if (wocatEnabled===true) {
-                var originalModel = self.app.data.admClusters.get('adm-0');
-                console.log("Found adm-0", originalModel);
+              $.when(self.app.data.generalSettings.loaded, this._loaded).then(function() {
+                  var wocatEnabled = self.app.data.generalSettings.get('gis-show-wocat');
+                  // console.log("Wocat enabled",wocatEnabled)
+                  if (wocatEnabled === true) {
+                      var originalModel = self.app.data.admClusters.get('adm-0');
+                      console.log("Found adm-0", originalModel);
 
-                if (originalModel) {
-                    var clonedModel = originalModel.clone();
+                      if (originalModel) {
+                          var clonedModel = originalModel.clone();
 
-                    clonedModel.set({
-                        id: 'wocat',
-                        title: 'Wocat'
-                    });
+                          clonedModel.set({
+                              id: 'wocat',
+                              title: 'Wocat'
+                          });
 
-                    // Save the cloned model (if needed to persist on the server)
-                    clonedModel.save();
+                          // Save the cloned model (if needed to persist on the server)
+                          clonedModel.save();
 
-                    // Add the cloned model to the collection
-                    self.app.data.admClusters.add(clonedModel);
+                          // Add the cloned model to the collection
+                          self.app.data.admClusters.add(clonedModel);
 
-                    // Manually trigger an event to notify the collection about the update
-                    self.app.data.admClusters.trigger('update', self.app.data.admClusters);
+                          // Manually trigger an event to notify the collection about the update
+                          self.app.data.admClusters.trigger('update', self.app.data.admClusters);
 
-                    console.log("Added cloned model to collection:", clonedModel);
+                          console.log("Added cloned model to collection:", clonedModel);
 
-                } else {
-                    console.error("Model with id 'adm-0' not found");
-                }
-            // }
+                      } else {
+                          console.error("Model with id 'adm-0' not found");
+                      }
+                  }
+              });
       self.projectLayerCollection = new RadioListCollection(_.union(
         self.app.data.admClusters.models,
         [self.app.data.structuresMenu]

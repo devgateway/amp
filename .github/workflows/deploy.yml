@@ -65,6 +65,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60  # Add timeout to prevent hanging jobs
     steps:
+#      - name: Free disk space
+#        run: |
+#          echo "Disk space before cleanup:"
+#          df -h /
+#          # Remove large pre-installed tool sets not needed for this build
+#          sudo rm -rf /usr/local/lib/android
+#          sudo rm -rf /usr/share/dotnet
+#          sudo rm -rf /opt/ghc
+#          sudo rm -rf /usr/local/share/boost
+#          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+#          sudo apt-get clean
+#          docker system prune -af --volumes 2>/dev/null || true
+#          echo "Disk space after cleanup:"
+#          df -h /
+
       - name: Setup SSH agent with build and deploy keys
         uses: webfactory/ssh-agent@v0.9.0
         with:
@@ -350,7 +365,7 @@ jobs:
                 # Fallback: use as-is
                 TARGET_HOST="$DEPLOY_HOST"
               fi
-          
+              
               cat >> ~/.ssh/config << EOF
           Host bastion
             HostName $BASTION_HOST
@@ -663,7 +678,7 @@ jobs:
             AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
             AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
             PR_NUMBER="$PR_NUMBER"
-          
+            
             # Validate required variables
             if [ -z "$TAG" ] || [ -z "$COUNTRY" ] || [ -z "$DB_VERSION" ] || [ -z "$PG_VERSION" ]; then
               echo "❌ Error: One or more required variables are empty!"
@@ -673,20 +688,20 @@ jobs:
               echo "  PG_VERSION: '$PG_VERSION'"
               exit 1
             fi
-          
+            
             # Set image name to match the registry used in the workflow
             export AMP_WEBAPP_IMAGE_NAME="${REGISTRY}/amp/webapp"
-          
+            
             # For PRs, log the PR number
             if [ -n "$PR_NUMBER" ]; then
               echo "Deploying PR #$PR_NUMBER to ${COUNTRY}"
             fi
-          
+            
             # Export AWS credentials for the script to use
             export AWS_ACCESS_KEY_ID
             export AWS_SECRET_ACCESS_KEY
             export AWS_DEFAULT_REGION=us-east-1
-          
+            
             # Check if user can access docker without sudo
             if docker ps > /dev/null 2>&1; then
               amp-up2 "$TAG" "$COUNTRY" "$DB_VERSION" "$PG_VERSION"
@@ -706,3 +721,4 @@ jobs:
         if: always()
         run: |
           docker rmi "${{ env.IMAGE }}" || true
+

@@ -1,6 +1,6 @@
 var $ = require('jquery');
 var Backbone = require('backbone');
-var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
+var L = window.L; // use global L set by lib-load-hacks.js
 var util = require('../../../libs/local/chart-util');
 var _ = require('underscore');
 var Constants = require('../../../libs/local/constants');

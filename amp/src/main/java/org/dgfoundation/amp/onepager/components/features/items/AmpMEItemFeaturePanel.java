@@ -4,9 +4,7 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -14,7 +12,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.events.ProgramSelectedEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
@@ -22,30 +19,21 @@ import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.dgfoundation.amp.onepager.models.AmpMEIndicatorSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.DbUtil;
 
-
-import org.apache.log4j.Logger;
-
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
-
-import org.apache.log4j.Logger;
 
 /**
  * @author aartimon@dginternational.org
  * @since Feb 10, 2011
  */
 public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
-
-
-    private static final Logger logger = Logger.getLogger(AmpMEItemFeaturePanel.class);
     /**
      * @param id
      * @param fmName
@@ -75,8 +63,9 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         }
         add(new Label("countryLocation", locationName));
 
+        final IModel<Set<IndicatorActivity>> indicatorsModel = new PropertyModel<>(conn, "indicators");
         final IModel<List<IndicatorActivity>> listModel = OnePagerUtil
-                .getReadOnlyListModelFromSetModel(new PropertyModel(conn, "indicators"));
+            .getReadOnlyListModelFromSetModel(indicatorsModel);
 
         final IModel<List<IndicatorActivity>> filteredListModel = new LoadableDetachableModel<List<IndicatorActivity>>() {
             @Override
@@ -85,7 +74,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                 List<IndicatorActivity> filteredIndicators = new ArrayList<>();
 
                 for (IndicatorActivity indicatorActivity : allIndicators) {
-                    if (indicatorActivity.getActivityLocation() != null && indicatorActivity.getActivityLocation() == location.getObject()) {
+                    if (matchesActivityLocation(indicatorActivity.getActivityLocation(), location.getObject())) {
                         filteredIndicators.add(indicatorActivity);
                     }
                 }
@@ -94,12 +83,12 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
             }
         };
 
-        parentModel = new PropertyModel<>(conn, "indicators");
+        parentModel = indicatorsModel;
 
         setModel = new AbstractMixedSetModel<IndicatorActivity>(parentModel) {
             @Override
             public boolean condition(IndicatorActivity item) {
-                return item.getActivityLocation() == location.getObject();
+                return matchesActivityLocation(item.getActivityLocation(), location.getObject());
             }
         };
 
@@ -117,7 +106,12 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
             protected void populateItem(org.apache.wicket.markup.html.list.ListItem<IndicatorActivity> item) {
                 AmpMEIndicatorFeaturePanel indicatorItem = null;
                 try {
-                    indicatorItem = new AmpMEIndicatorFeaturePanel("item", "ME Item", item.getModel(), PersistentObjectModel.getModel(item.getModelObject().getIndicator()), new PropertyModel(item.getModel(), "values"), location);
+                    @SuppressWarnings("unchecked")
+                    IModel<AmpIndicator> indicatorModel = PersistentObjectModel.getModel(
+                            item.getModelObject().getIndicator());
+                    IModel<Set<AmpIndicatorValue>> valuesModel = new PropertyModel<>(item.getModel(), "values");
+                    indicatorItem = new AmpMEIndicatorFeaturePanel("item", "ME Item", item.getModel(),
+                            indicatorModel, valuesModel, location);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -188,5 +182,20 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 
     public void setTabIndex(Integer tabIndex) {
         this.tabIndex = tabIndex;
+    }
+
+    private static boolean matchesActivityLocation(AmpActivityLocation activityLocation,
+                                                   AmpActivityLocation expectedActivityLocation) {
+        if (expectedActivityLocation == null) {
+            return activityLocation == null;
+        }
+        return activityLocation == expectedActivityLocation
+                || (activityLocation != null && (Objects.equals(activityLocation.getId(), expectedActivityLocation.getId())
+                || Objects.equals(getLocationId(activityLocation), getLocationId(expectedActivityLocation))));
+    }
+
+    private static Long getLocationId(AmpActivityLocation activityLocation) {
+        return activityLocation != null && activityLocation.getLocation() != null
+                ? activityLocation.getLocation().getId() : null;
     }
 }

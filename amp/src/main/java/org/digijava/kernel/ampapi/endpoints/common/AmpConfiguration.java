@@ -69,7 +69,11 @@ public class AmpConfiguration {
     @Path("/settings")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "Settings")
-    @ApiOperation("General settings")
+    @ApiOperation(
+            value = "Retrieve general AMP settings",
+            notes = "This endpoint provides access to general AMP configuration settings including " +
+                    "currency information, date format, and other system-wide settings. " +
+                    "These settings are essential for client applications to properly format and display data.")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "General settings",
             response = AmpGeneralSettings.class))
     public Response getSettings() {
@@ -103,9 +107,17 @@ public class AmpConfiguration {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "version-check")
     @ApiOperation(
-            value = "Check if AMP Offline App is compatible with AMP.",
-            notes = "AMP Offline version is read from User-Agent header. Header must have the following form: "
-                    + "AMPOffline/{version} ({os}; {arch}).\n\nExample: `AMPOffline/1.0.0 (windows; 32)`.")
+            value = "Check if AMP Offline App is compatible with current AMP version",
+            notes = "This endpoint verifies compatibility between the AMP Offline application and the current AMP server version.\n\n" +
+                    "The AMP Offline version is automatically detected from the User-Agent header, which must follow this format:\n" +
+                    "AMPOffline/{version} ({os}; {arch})\n\n" +
+                    "Example: `AMPOffline/1.0.0 (windows; 32)`\n\n" +
+                    "The response includes:\n" +
+                    "- Whether the client version is compatible with the server\n" +
+                    "- If AMP Offline is enabled on this server\n" +
+                    "- The current AMP server version\n" +
+                    "- Information about the latest compatible AMP Offline release\n" +
+                    "- Server ID information for verification")
     public VersionCheckResponse ampOfflineVersionCheck(@QueryParam("server-id") String serverId) {
 
         AmpOfflineRelease clientRelease = detectClientRelease();
@@ -139,7 +151,14 @@ public class AmpConfiguration {
     @GET
     @Path("/amp-offline-release")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiOperation("List latest AMP Offline releases for each OS/Arch combination.")
+    @ApiOperation(
+            value = "List latest AMP Offline releases for each OS/Arch combination",
+            notes = "This endpoint returns a list of the most recent AMP Offline application releases " +
+                    "that are compatible with the current AMP server version.\n\n" +
+                    "The response includes separate releases for different operating systems (Windows, macOS) " +
+                    "and architecture types (32-bit, 64-bit).\n\n" +
+                    "Each release entry contains version information, release date, download URL, " +
+                    "and system requirements.")
     public List<AmpOfflineRelease> getAmpOfflineReleases() {
         return ampOfflineService.getLatestCompatibleReleases();
     }
@@ -147,7 +166,12 @@ public class AmpConfiguration {
     @GET
     @Path("/amp-offline-release/{id}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @ApiOperation("Returns the AMP Offline release binary.")
+    @ApiOperation(
+            value = "Download AMP Offline release binary file",
+            notes = "This endpoint allows downloading the installation file for a specific AMP Offline release.\n\n" +
+                    "The file is returned as an attachment with the appropriate content type and filename.\n\n" +
+                    "Use the release ID obtained from the /amp-offline-release endpoint to specify which " +
+                    "release version you want to download.")
     public Response getAmpOfflineReleaseFile(@ApiParam("Release id") @PathParam("id") Long id) {
         File file = ampOfflineService.getReleaseFile(id);
 
@@ -167,10 +191,16 @@ public class AmpConfiguration {
     @Path("global-settings")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "global-settings", authTypes = AuthRule.AUTHENTICATED)
-    @ApiOperation(value = "Returns all AMP Global Settings.")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
-            message = "Response is a map containing all global settings where "
-                    + "key is setting name and value is setting value."))
+    @ApiOperation(
+            value = "Retrieve all AMP Global Settings",
+            notes = "This endpoint provides access to all global configuration settings in the AMP system.\n\n" +
+                    "Global settings control system-wide behaviors and defaults such as currency display, " +
+                    "fiscal calendar configuration, approval workflows, and many other aspects of the system.\n\n" +
+                    "This endpoint requires authentication as it may contain sensitive configuration information.")
+    @ApiResponses(@ApiResponse(
+            code = HttpServletResponse.SC_OK,
+            message = "A map containing all global settings where key is the setting name and value is the setting value. " +
+                    "For example: {\"Currency Code\": \"USD\", \"Default Country\": \"US\", ...}"))
     public Map<String, String> getGlobalSettings() {
         return FeaturesUtil.getGlobalSettings().stream()
                 .filter(s -> s.getGlobalSettingsValue() != null)
@@ -183,10 +213,18 @@ public class AmpConfiguration {
     @Path("global-settings/public")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "public-global-settings")
-    @ApiOperation(value = "Returns all public AMP Global Settings.")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
-            message = "Response is a map containing all public global settings where "
-                    + "key is setting name and value is setting value."))
+    @ApiOperation(
+            value = "Retrieve all public AMP Global Settings",
+            notes = "This endpoint provides access to public global configuration settings in the AMP system.\n\n" +
+                    "Unlike the /global-settings endpoint, this endpoint returns only settings that are " +
+                    "considered safe for public access. It does not require authentication and can be used " +
+                    "by public-facing applications.\n\n" +
+                    "Public settings typically include non-sensitive configuration like default language, " +
+                    "currency display formats, and other UI-related settings.")
+    @ApiResponses(@ApiResponse(
+            code = HttpServletResponse.SC_OK,
+            message = "A map containing all public global settings where key is the setting name and value is the setting value. " +
+                    "For example: {\"Default Language\": \"en\", \"Number Format\": \"#,###.##\", ...}"))
     public Map<String, String> getPublicGlobalSettings() {
         return FeaturesUtil.getGlobalSettings().stream()
                 .filter(s -> s.getGlobalSettingsValue() != null
@@ -200,7 +238,14 @@ public class AmpConfiguration {
     @Path("compatible-version-range")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getCompatibleVersionRanges", ui = false, authTypes = AuthRule.IN_ADMIN)
-    @ApiOperation("Returns all compatible AMP Offline version ranges.")
+    @ApiOperation(
+            value = "Retrieve all compatible AMP Offline version ranges",
+            notes = "This endpoint returns a list of version ranges that define which AMP Offline versions " +
+                    "are compatible with the current AMP server version.\n\n" +
+                    "Each version range specifies a minimum and maximum AMP Offline version that can work " +
+                    "with this AMP server. This information is used to determine if a client needs to upgrade " +
+                    "their AMP Offline application.\n\n" +
+                    "This endpoint requires administrator privileges as it provides system compatibility information.")
     public List<AmpOfflineCompatibleVersionRange> getCompatibleVersionRanges() {
         return ampVersionService.getCompatibleVersionRanges();
     }
@@ -209,7 +254,16 @@ public class AmpConfiguration {
     @Path("compatible-version-range")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "addCompatibleVersionRange", ui = false, authTypes = AuthRule.IN_ADMIN)
-    @ApiOperation("Create a new version range to denote AMP Offline compatibility.")
+    @ApiOperation(
+            value = "Create a new AMP Offline compatibility version range",
+            notes = "This endpoint allows administrators to define a new version range that specifies which " +
+                    "AMP Offline versions are compatible with the current AMP server.\n\n" +
+                    "The version range must include a minimum and maximum version number in semantic versioning " +
+                    "format (e.g., 1.0.0). The range is inclusive, meaning both the minimum and maximum versions " +
+                    "are considered compatible.\n\n" +
+                    "If the provided version range overlaps with existing ranges or contains invalid version " +
+                    "numbers, the request will be rejected with an appropriate error message.\n\n" +
+                    "This endpoint requires administrator privileges.")
     public AmpOfflineCompatibleVersionRange addCompatibleVersionRange(AmpOfflineCompatibleVersionRange versionRange) {
         try {
             return ampVersionService.addCompatibleVersionRange(versionRange);
@@ -223,7 +277,17 @@ public class AmpConfiguration {
     @Path("compatible-version-range/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "updateCompatibleVersionRange", ui = false, authTypes = AuthRule.IN_ADMIN)
-    @ApiOperation("Update an existing version range that denotes AMP Offline compatibility.")
+    @ApiOperation(
+            value = "Update an existing AMP Offline compatibility version range",
+            notes = "This endpoint allows administrators to modify an existing version range that defines " +
+                    "which AMP Offline versions are compatible with the current AMP server.\n\n" +
+                    "The version range must include a minimum and maximum version number in semantic versioning " +
+                    "format (e.g., 1.0.0). The range is inclusive, meaning both the minimum and maximum versions " +
+                    "are considered compatible.\n\n" +
+                    "The ID in the path must match an existing version range. If the updated version range " +
+                    "overlaps with other existing ranges or contains invalid version numbers, the request " +
+                    "will be rejected with an appropriate error message.\n\n" +
+                    "This endpoint requires administrator privileges.")
     public AmpOfflineCompatibleVersionRange updateCompatibleVersionRange(@PathParam("id") Long id,
                                                                          AmpOfflineCompatibleVersionRange versionRange) {
         try {
@@ -239,7 +303,15 @@ public class AmpConfiguration {
     @Path("compatible-version-range/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "deleteCompatibleVersionRange", ui = false, authTypes = AuthRule.IN_ADMIN)
-    @ApiOperation("Delete an existing version range that denotes AMP Offline compatibility.")
+    @ApiOperation(
+            value = "Delete an existing AMP Offline compatibility version range",
+            notes = "This endpoint allows administrators to remove a version range that defines which " +
+                    "AMP Offline versions are compatible with the current AMP server.\n\n" +
+                    "The ID in the path must match an existing version range. If the specified version range " +
+                    "does not exist, the request will return an error.\n\n" +
+                    "Deleting a version range means that AMP Offline clients with versions in that range " +
+                    "will no longer be considered compatible with this AMP server and may be required to upgrade.\n\n" +
+                    "This endpoint requires administrator privileges.")
     public AmpOfflineCompatibleVersionRange deleteCompatibleVersionRange(@PathParam("id") Long id) {
         return ampVersionService.deleteCompatibleVersionRange(id);
     }
@@ -247,7 +319,13 @@ public class AmpConfiguration {
     @GET
     @Path("offline/{arch}/latest-mac.yml")
     @Produces(MediaType.TEXT_PLAIN)
-    @ApiOperation("Returns info about latest AMP Offline release for macOS.")
+    @ApiOperation(
+            value = "Get information about the latest AMP Offline release for macOS",
+            notes = "This endpoint returns metadata about the latest compatible AMP Offline release for macOS " +
+                    "in YAML format. This information is used by the AMP Offline auto-update mechanism.\n\n" +
+                    "The response includes version number, release date, file path, and SHA-512 hash for " +
+                    "verifying the integrity of the downloaded file.\n\n" +
+                    "The architecture parameter specifies whether to return information for 32-bit or 64-bit systems.")
     public Response getOfflineLatestMac(
             @ApiParam(allowableValues = "32,64", example = "64") @PathParam("arch") String arch) {
         return getOfflineReleaseYml(arch, AmpOfflineRelease.MAC_OS, "zip");
@@ -256,7 +334,13 @@ public class AmpConfiguration {
     @GET
     @Path("offline/{arch}/latest.yml")
     @Produces(MediaType.TEXT_PLAIN)
-    @ApiOperation("Returns info about latest AMP Offline release for Windows.")
+    @ApiOperation(
+            value = "Get information about the latest AMP Offline release for Windows",
+            notes = "This endpoint returns metadata about the latest compatible AMP Offline release for Windows " +
+                    "in YAML format. This information is used by the AMP Offline auto-update mechanism.\n\n" +
+                    "The response includes version number, release date, file path, and SHA-512 hash for " +
+                    "verifying the integrity of the downloaded file.\n\n" +
+                    "The architecture parameter specifies whether to return information for 32-bit or 64-bit systems.")
     public Response getOfflineLatestWin(
             @ApiParam(allowableValues = "32,64", example = "64") @PathParam("arch") String arch) {
         return getOfflineReleaseYml(arch, AmpOfflineRelease.WINDOWS, "exe");
@@ -292,7 +376,14 @@ public class AmpConfiguration {
     @GET
     @Path("offline/{arch}/{id}.exe")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @ApiOperation("Returns the AMP Offline release binary for Windows.")
+    @ApiOperation(
+            value = "Download AMP Offline installation file for Windows",
+            notes = "This endpoint allows downloading the installation file (.exe) for a specific AMP Offline " +
+                    "release for Windows operating systems.\n\n" +
+                    "The file is returned as an attachment with the appropriate content type and filename.\n\n" +
+                    "The architecture parameter specifies whether to download the 32-bit or 64-bit version.\n\n" +
+                    "Use the release ID obtained from the /amp-offline-release endpoint or from the latest.yml " +
+                    "metadata to specify which release version you want to download.")
     public Response getWinReleaseFile(
             @ApiParam(allowableValues = "32,64", example = "64") @PathParam("arch") String arch,
             @ApiParam(value = "Release id") @PathParam("id") Long id) {
@@ -303,7 +394,14 @@ public class AmpConfiguration {
     @GET
     @Path("offline/{arch}/{id}.zip")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @ApiOperation("Returns the AMP Offline release binary for macOS.")
+    @ApiOperation(
+            value = "Download AMP Offline installation file for macOS",
+            notes = "This endpoint allows downloading the installation file (.zip) for a specific AMP Offline " +
+                    "release for macOS operating systems.\n\n" +
+                    "The file is returned as an attachment with the appropriate content type and filename.\n\n" +
+                    "The architecture parameter specifies whether to download the 32-bit or 64-bit version.\n\n" +
+                    "Use the release ID obtained from the /amp-offline-release endpoint or from the latest-mac.yml " +
+                    "metadata to specify which release version you want to download.")
     public Response getMacReleaseFile(
             @ApiParam(allowableValues = "32,64", example = "64") @PathParam("arch") String arch,
             @ApiParam(value = "Release id") @PathParam("id") Long id) {

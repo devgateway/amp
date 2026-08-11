@@ -40,7 +40,7 @@ public class AddEditData
             Long parentId=Long.valueOf(parent);
             IndicatorTheme connection=IndicatorUtil.getConnectionToTheme(parentId);
             themeForm.setIndicatorName(connection.getIndicator().getName());
-            if (connection.getValues()!=null && connection.getValues().size()>0){
+            if (connection.getValues()!=null && !connection.getValues().isEmpty()){
                 List<AmpIndicatorValue> sortedIndicatorValues = new ArrayList(connection.getValues());
                 Collections.sort(sortedIndicatorValues,new IndicatorValuesComparator());
                 List<AmpPrgIndicatorValue> indValuesList=new ArrayList<AmpPrgIndicatorValue>();
@@ -117,10 +117,7 @@ public class AddEditData
             themeForm.setPrgIndValues(indValues);
         }else if(event!=null && event.equals("save")){
             if (themeForm.getParentId() != null) {
-                for (Iterator indValIter = indValues.iterator(); indValIter
-                        .hasNext();) {
-                    AmpPrgIndicatorValue indVal = (AmpPrgIndicatorValue) indValIter
-                            .next();
+                for (AmpPrgIndicatorValue indVal : indValues) {
                     if (indVal.getIndicatorValueId() != null
                             && (indVal.getIndicatorValueId().longValue() < 0)) {
                         // ProgramUtil.deletePrgIndicatorValueById(themeForm.getParentId(),indVal.getIndicatorValueId());
@@ -139,17 +136,16 @@ public class AddEditData
             IndicatorTheme connection=IndicatorUtil.getConnectionToTheme(themeForm.getParentId());
             if (connection!=null){
                 connection.getValues().clear();
-                for (Iterator indValIter = indValues.iterator(); indValIter.hasNext();) {
-                    AmpPrgIndicatorValue prgValue = (AmpPrgIndicatorValue) indValIter.next();
-                    if(prgValue.getCreationDate()!=null && !prgValue.getCreationDate().equals("") && prgValue.getValAmount()!=null && !prgValue.getValAmount().equals("")){
-                        AmpIndicatorValue value=new AmpIndicatorValue();
+                for (AmpPrgIndicatorValue prgValue : indValues) {
+                    if (prgValue.getCreationDate() != null && !prgValue.getCreationDate().equals("") && prgValue.getValAmount() != null && !prgValue.getValAmount().equals("")) {
+                        AmpIndicatorValue value = new AmpIndicatorValue();
                         value.setValue(prgValue.getValAmount());
                         value.setValueDate(DateConversion.getDateForIndicator(prgValue.getCreationDate()));
                         value.setValueType(prgValue.getValueType());
                         value.setLocation(prgValue.getLocation());
                         value.setIndicatorConnection(connection);
                         connection.getValues().add(value);
-                    }                   
+                    }
                 }
                 try{
                     IndicatorUtil.updateThemeConnection(connection);

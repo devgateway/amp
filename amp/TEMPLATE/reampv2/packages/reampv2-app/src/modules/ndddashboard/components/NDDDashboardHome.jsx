@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Container } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
-import { connect, useSelector } from 'react-redux';
+import { connect, useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { NDDTranslationContext } from './StartUp';
 import HeaderContainer from './HeaderContainer';
@@ -17,6 +17,7 @@ import './print.css';
 import { removeFilter } from '../utils/Utils';
 import { SRC_DIRECT } from './charts/FundingByYearChart';
 import { useLocation, useParams } from 'react-router-dom';
+import { setMeState } from '../medashboard/reducers/fetchSectorClassificationReducer';
 
 const NDDDashboardHome = (props) => {
     const {
@@ -39,6 +40,7 @@ const NDDDashboardHome = (props) => {
 
     const location = useLocation();
     const urlParams = useParams();
+    const dispatch = useDispatch();
     const params = new URLSearchParams(window.location.search);
     const [state, setState] = useState({
         filters: undefined,
@@ -53,8 +55,8 @@ const NDDDashboardHome = (props) => {
 
     const fetchFmReducer = useSelector(state => state.fetchFmReducer);
 
-    const nddDashboard = !!fetchFmReducer.data.find(d => d === NDDPath);
-    const meDashboard = !!fetchFmReducer.data.find(d => d === MEPath);
+    const nddDashboard = !!fetchFmReducer.data?.find(d => d === NDDPath);
+    const meDashboard = !!fetchFmReducer.data?.find(d => d === MEPath);
 
     const getSharedDataOrResolve = (id) => {
         if (id) {
@@ -102,6 +104,9 @@ const NDDDashboardHome = (props) => {
                     }
                     if (savedData && savedData.selectedPrograms) {
                         ids = savedData.selectedPrograms;
+                    }
+                    if (savedData && savedData.meState) {
+                        dispatch(setMeState(savedData.meState));
                     }
                 }
 

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <style type="text/css">
+        .collapsible-header { cursor: pointer; }
+        .disaggregation-parent { margin-bottom:8px; }
+        .disaggregation-child { margin-left:15px; margin-bottom:6px; }
+        .featuredLabelLnk{
+            background-color:#FFFFFF;
+            /* grey diagonal stripes */
+            background-image: repeating-linear-gradient(45deg, #f5f5f5 0 12px, #e6e6e6 12px 24px);
+            padding:5px; border:1px solid #CCCCCC; display:block; margin-top:7px;
+        }
+        /* slider transition */
+        .collapsible-body { overflow:hidden; max-height:0; transition:max-height .35s ease; }
+        .collapsible-body.open { max-height:4000px; /* sufficiently large */ }
+    </style>
+    <span class="featuredLabelLnk" wicket:id="panelLabel"></span>
+    <div class="disaggregation-section" wicket:id="parentList">
+        <div class="disaggregation-parent">
+            <a href="#" class="slider">
+            <h4 class="collapsible-header" wicket:id="parentName"></h4>
+            </a>
+            <div class="collapsible-body open" wicket:id="childrenContainer">
+                <div class="disaggregation-children" wicket:id="childList">
+                    <div class="disaggregation-child">
+                        <!-- changed from div to h5 to emphasize section header -->
+                        <a href="#" class="slider">
+                        <h5 class="child-header collapsible-header" wicket:id="childHeader"></h5>
+                        </a>
+                        <div>
+                            <b>Base Value:</b> <span wicket:id="baseValue"></span>
+                            <b>Base Date:</b> <span wicket:id="baseDate"></span>
+                            &nbsp;&nbsp;
+                            <b>Target Value:</b> <span wicket:id="targetValue"></span>
+                            <b>Target Date:</b> <span wicket:id="targetDate"></span>
+                        </div>
+                        <div class="collapsible-body" wicket:id="actualValuesContainer">
+                            <div wicket:id="actualValuesPanel"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</wicket:extend>
+</html>

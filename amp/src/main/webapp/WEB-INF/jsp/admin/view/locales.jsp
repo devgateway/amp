@@ -11,7 +11,7 @@
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="${pageContext.request.contextPath}/resources/images/module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
 				<digi:trn key="admin:locales">Locales</digi:trn>
@@ -31,18 +31,18 @@
        <td noWrap width="10%" align="center" height="19"><b><digi:trn key="admin:available">Available</digi:trn></b></td>
    </tr>
   <c:forEach var="locale" items="${localesForm.locales}">
-   <tr bgcolor="#F2F4F8"> 
+   <tr bgcolor="#F2F4F8">
       <td width="10%" align="left" height="19"><c:out value="${locale.code}" /></td>
       <td width="40%" align="left" height="19"><c:out value="${locale.name}" /></td>
       <td width="20%" align="center" height="19">
-        <html:hidden name="locale" indexed="true" property="code" />  
+        <html:hidden name="locale" indexed="true" property="code" />
         <html:hidden name="locale" indexed="true" property="name" />
         <html:select name="locale" indexed="true" property="leftToRight">
   	    	<html:option  value="true" >true</html:option>
   	    	<html:option  value="false" >false</html:option>
         </html:select>
        </td>
-       <td>	
+       <td>
         <html:select name="locale" indexed="true" property="available">
   	    	<html:option  value="false" >false</html:option>
   	    	<html:option  value="true" >true</html:option>
@@ -53,7 +53,7 @@
   </table>
   <table border="0">
      <tr><td><html:submit value="submit" /></td></tr>
-  </table>    
+  </table>
 </c:if>
 </digi:form>
 		</td>

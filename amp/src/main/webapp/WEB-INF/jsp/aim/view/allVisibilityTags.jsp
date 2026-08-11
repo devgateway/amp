@@ -42,6 +42,7 @@
 <module:display  name="/Dashboards"></module:display>
 <feature:display name="Top Donors" module="/Dashboards"/>
 <field:display name="Show Names As Acronyms" feature="Top Donors"/>
+<feature:display name="Top Countries" module="/Dashboards"/>
 <feature:display name="Top Regions" module="/Dashboards"/>
 <feature:display name="Top Sectors" module="/Dashboards"/>
 <feature:display name="Top Donor Group" module="/Dashboards"/>
@@ -713,6 +714,14 @@ deleted 6 fields, do not reinsert
 <field:display name="Indicator Target Value" feature="Reports"></field:display>
 <field:display name="Indicator Target Date" feature="Reports"></field:display>
 <field:display name="Indicator Target Comment" feature="Reports"></field:display>
+<field:display name="Indicator Output" feature="Reports"></field:display>
+<field:display name="Indicator Outcome" feature="Reports"></field:display>
+<field:display name="Indicator Disaggregation Level 0" feature="Reports"></field:display>
+<field:display name="Indicator Disaggregation Level 1" feature="Reports"></field:display>
+<field:display name="Indicator Primary Disaggregation Base Value" feature="Reports"></field:display>
+<field:display name="Indicator Primary Disaggregation Target Value" feature="Reports"></field:display>
+<field:display name="Indicator Secondary Disaggregation Base Value" feature="Reports"></field:display>
+<field:display name="Indicator Secondary Disaggregation Target Value" feature="Reports"></field:display>
 <field:display name="Admin Indicator Type" feature="Admin"></field:display>
 <field:display name="Indicator Type" feature="Reports"></field:display>
 <field:display name="Admin Indicator code" feature="Admin"></field:display>
@@ -1108,6 +1117,7 @@ deleted 6 fields, do not reinsert
 <feature:display name="Project sites" module="/GIS"></feature:display>
 <feature:display name="Download Map selector" module="/GIS"></feature:display>
 <feature:display name="Gap Analysis Map" module="/GIS"></feature:display>
+<feature:display name="Wocat" module="/GIS"></feature:display>
 
 <!-- Public View Modules/Features/Fields -->
 <module:display name="Login - User Management" parentModule="PUBLIC VIEW"></module:display>

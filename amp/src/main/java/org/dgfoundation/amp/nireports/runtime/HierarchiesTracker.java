@@ -80,7 +80,7 @@ public class HierarchiesTracker {
         return prod;
     }
     
-    static class SplitCellPercentage {
+    public static class SplitCellPercentage {
 
         public final int level;
         public final long id;
@@ -110,6 +110,10 @@ public class HierarchiesTracker {
         @Override
         public String toString() {
             return String.format("%.2f perc for (level: %d, id: %d)", percentage == null ? -1 : percentage.doubleValue() * 100, level, id);
+        }
+
+        public long getSplitCellPercentageId() {
+            return id;
         }
     }
     
@@ -147,5 +151,9 @@ public class HierarchiesTracker {
         public String toString() {
             return String.format("level: %s, id: %d, cellPercentage: %s", level, id, cellPercentage);
         }
+    }
+
+    public Map<NiDimensionUsage, SplitCellPercentage> getPercentages() {
+        return percentages;
     }
 }

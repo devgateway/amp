@@ -174,9 +174,17 @@ public final class PMUtil {
         //we delete the old permissions, if they are dedicated
         if (p!=null && p.isDedicated()) {
         CompositePermission cp = (CompositePermission)p;
-        Iterator<Permission> i = cp.getPermissions().iterator();
-        while (i.hasNext()) {
-            Permission element = (Permission) i.next();
+        List<Permission> toDelete = new ArrayList<>(cp.getPermissions());
+        cp.getPermissions().clear();
+        for (Permission element : toDelete) {
+            // Remove from every CompositePermission that references this element so
+            // Hibernate does not attempt to re-save a deleted object via cascade on flush
+            Iterator<CompositePermission> linkedIt = element.getCompositeLinkedPermissions().iterator();
+            while (linkedIt.hasNext()) {
+                CompositePermission linkedCp = linkedIt.next();
+                linkedCp.getPermissions().remove(element);
+                linkedIt.remove();
+            }
             Object object = session.load(Permission.class, element.getId());
             session.delete(object);
         }
@@ -189,11 +197,15 @@ public final class PMUtil {
 
 
     public static void deleteCompositePermission(CompositePermission cp, Session session, boolean delCompositePermission) {
-        // TODO Auto-generated method stub
-//session.flush();  
-        Iterator<Permission> i = cp.getPermissions().iterator();
-        while (i.hasNext()) {
-            Permission element = (Permission) i.next();
+        List<Permission> toDelete = new ArrayList<>(cp.getPermissions());
+        cp.getPermissions().clear();
+        for (Permission element : toDelete) {
+            Iterator<CompositePermission> linkedIt = element.getCompositeLinkedPermissions().iterator();
+            while (linkedIt.hasNext()) {
+                CompositePermission linkedCp = linkedIt.next();
+                linkedCp.getPermissions().remove(element);
+                linkedIt.remove();
+            }
             Object object = session.load(Permission.class, element.getId());
             session.delete(object);
         }

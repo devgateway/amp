@@ -112,6 +112,11 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
     }
 
     public HashMap<String, AmpContentTranslation> getTranslationHashMap() {
+        // transient: can come back null after a page-store serialize/deserialize cycle (e.g. several
+        // activity edit tabs open at once evict this page from the in-memory page store)
+        if (translationHashMap == null) {
+            translationHashMap = new HashMap<String, AmpContentTranslation>();
+        }
         return translationHashMap;
     }
 

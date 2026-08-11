@@ -205,6 +205,7 @@ public class GlobalSettingsConstants {
     public static final String COUNTRY_LONGITUDE = "Country Longitude";
 
     public static final String ACTIVITY_FORM_FUNDING_SECTION_DESIGN = "Activity Form - Funding Section - Tab View";
+    public static final String IS_ME_TABVIEW = "Activity Form - M&E is TabView";
 
     public static final String MAX_LOCATIONS_ICONS = "Show icons for Project Sites for locations up to";
 

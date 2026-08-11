@@ -1,6 +1,187 @@
  function unload() {
  }
 
+ (function () {
+	 if (window.ampCsrfProtectionInstalled) {
+		 return;
+	 }
+	 window.ampCsrfProtectionInstalled = true;
+
+	 var CSRF_COOKIE = "XSRF-TOKEN";
+	 var CSRF_HEADER = "X-XSRF-TOKEN";
+	 var CSRF_PARAMETER = "_csrf";
+
+	 function getCookie(name) {
+		 var namePrefix = name + "=";
+		 var cookies = document.cookie ? document.cookie.split(";") : [];
+		 for (var index = 0; index < cookies.length; index++) {
+			 var cookie = cookies[index].replace(/^\s+|\s+$/g, "");
+			 if (cookie.indexOf(namePrefix) === 0) {
+				 return decodeURIComponent(cookie.substring(namePrefix.length));
+			 }
+		 }
+		 return null;
+	 }
+
+	 function getCsrfToken() {
+		 return getCookie(CSRF_COOKIE);
+	 }
+
+	 function isUnsafeMethod(method) {
+		 var normalizedMethod = (method || "GET").toUpperCase();
+		 return normalizedMethod !== "GET" && normalizedMethod !== "HEAD"
+			 && normalizedMethod !== "OPTIONS" && normalizedMethod !== "TRACE";
+	 }
+
+	 function isSameOrigin(url) {
+		 if (!url || (url.charAt(0) === "/" && url.charAt(1) !== "/")) {
+			 return true;
+		 }
+		 if (url.indexOf("http://") !== 0 && url.indexOf("https://") !== 0 && url.indexOf("//") !== 0) {
+			 return true;
+		 }
+
+		 var anchor = document.createElement("a");
+		 anchor.href = url;
+		 return anchor.protocol === window.location.protocol && anchor.host === window.location.host;
+	 }
+	 // A form field named "action" (e.g. Struts <html:hidden property="action">) shadows the
+	 // HTMLFormElement.action getter, turning form.action into that input element instead of a
+	 // URL string; fall back to the raw attribute (unaffected by named-element shadowing) then.
+	 function getFormActionUrl(form) {
+		 if (typeof form.action === "string") {
+			 return form.action;
+		 }
+		 return form.getAttribute("action") || window.location.href;
+	 }
+
+	 function addCsrfToForm(form) {
+		 var token = getCsrfToken();
+		 if (!token || !form || !isUnsafeMethod(form.method) || !isSameOrigin(getFormActionUrl(form))) {
+			 return;
+		 }
+
+		 var tokenInput = form.elements[CSRF_PARAMETER];
+		 if (!tokenInput) {
+			 tokenInput = document.createElement("input");
+			 tokenInput.type = "hidden";
+			 tokenInput.name = CSRF_PARAMETER;
+			 form.appendChild(tokenInput);
+		 }
+		 tokenInput.value = token;
+	 }
+
+	 function setCsrfHeader(jqXHR) {
+		 var token = getCsrfToken();
+		 if (token && jqXHR && jqXHR.setRequestHeader) {
+			 try {
+				 jqXHR.setRequestHeader(CSRF_HEADER, token);
+			 } catch (ignored) {
+			 }
+		 }
+	 }
+
+	 function installWicketCsrfProtection() {
+		 if (window.ampWicketCsrfProtectionInstalled) {
+			 return true;
+		 }
+		 if (!window.Wicket || !Wicket.Event || !Wicket.Event.subscribe || !Wicket.Event.Topic) {
+			 return false;
+		 }
+
+		 window.ampWicketCsrfProtectionInstalled = true;
+		 Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_BEFORE_SEND, function (event, attrs, jqXHR, settings) {
+			 var method = settings && settings.type ? settings.type : (attrs && attrs.mp ? "POST" : attrs && attrs.m);
+			 var url = settings && settings.url ? settings.url : attrs && attrs.u;
+			 if (!isUnsafeMethod(method) || !isSameOrigin(url)) {
+				 return;
+			 }
+
+			 setCsrfHeader(jqXHR);
+			 if (attrs && attrs.mp && attrs.f) {
+				 addCsrfToForm(Wicket.$ ? Wicket.$(attrs.f) : document.getElementById(attrs.f));
+			 }
+		 });
+		 return true;
+	 }
+
+	 if (!installWicketCsrfProtection()) {
+		 var wicketInstallRetries = 40;
+		 var wicketInstallTimer = window.setInterval(function () {
+			 wicketInstallRetries--;
+			 if (installWicketCsrfProtection() || wicketInstallRetries <= 0) {
+				 window.clearInterval(wicketInstallTimer);
+			 }
+		 }, 50);
+	 }
+
+	 if (document.addEventListener) {
+		 document.addEventListener("submit", function (event) {
+			 addCsrfToForm(event.target);
+		 }, true);
+	 } else if (document.attachEvent) {
+		 document.attachEvent("onsubmit", function () {
+			 addCsrfToForm(window.event.srcElement);
+		 });
+	 }
+
+	 if (window.HTMLFormElement && window.HTMLFormElement.prototype && window.HTMLFormElement.prototype.submit) {
+		 var originalSubmit = window.HTMLFormElement.prototype.submit;
+		 window.HTMLFormElement.prototype.submit = function () {
+			 addCsrfToForm(this);
+			 return originalSubmit.apply(this, arguments);
+		 };
+	 }
+
+	 if (window.XMLHttpRequest && window.XMLHttpRequest.prototype) {
+		 var originalOpen = window.XMLHttpRequest.prototype.open;
+		 var originalSend = window.XMLHttpRequest.prototype.send;
+
+		 window.XMLHttpRequest.prototype.open = function (method, url) {
+			 this.ampCsrfMethod = method;
+			 this.ampCsrfUrl = url;
+			 return originalOpen.apply(this, arguments);
+		 };
+
+		 window.XMLHttpRequest.prototype.send = function () {
+			 var token = getCsrfToken();
+			 if (token && isUnsafeMethod(this.ampCsrfMethod) && isSameOrigin(this.ampCsrfUrl)) {
+				 try {
+					 this.setRequestHeader(CSRF_HEADER, token);
+				 } catch (ignored) {
+				 }
+			 }
+			 return originalSend.apply(this, arguments);
+		 };
+	 }
+
+	 if (window.fetch) {
+		 var originalFetch = window.fetch;
+		 window.fetch = function (input, init) {
+			 var options = init || {};
+			 var method = options.method || (input && input.method) || "GET";
+			 var url = typeof input === "string" ? input : (input && input.url);
+			 var token = getCsrfToken();
+
+			 if (token && isUnsafeMethod(method) && isSameOrigin(url)) {
+				 options = init || {};
+				 if (window.Headers && options.headers instanceof window.Headers) {
+					 options.headers = new window.Headers(options.headers);
+					 options.headers.set(CSRF_HEADER, token);
+				 } else if (Object.prototype.toString.call(options.headers) === "[object Array]") {
+					 options.headers.push([CSRF_HEADER, token]);
+				 } else {
+					 options.headers = options.headers || {};
+					 options.headers[CSRF_HEADER] = token;
+				 }
+				 return originalFetch.call(this, input, options);
+			 }
+
+			 return originalFetch.apply(this, arguments);
+		 };
+	 }
+ }());
+
 
  if (!Array.prototype.indexOf) {
      Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {

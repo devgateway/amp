@@ -12,6 +12,123 @@ public class DataImporterForm extends ActionForm {
 
 
     private boolean internal;
+    private boolean skipExisting;
+    private boolean skipRecordsWithoutTransactions;
+    private boolean createMissingOrgs;
+    private boolean createMissingSectors;
+    private boolean createMissingOrgGroups;
+    private boolean createMissingPrograms;
+    private boolean replaceExistingTransactions;
+    private Long orgGroupId;
+    private Long defaultActivityStatusId;
+    private Long defaultLocationId;
+    private String defaultProgramClassification;
+    private boolean validateActivities;
+    private boolean addDisbursementForCommitment;
+
+    public boolean isSkipExisting() {
+        return skipExisting;
+    }
+
+    public void setSkipExisting(boolean skipExisting) {
+        this.skipExisting = skipExisting;
+    }
+
+    public boolean isSkipRecordsWithoutTransactions() {
+        return skipRecordsWithoutTransactions;
+    }
+
+    public void setSkipRecordsWithoutTransactions(boolean skipRecordsWithoutTransactions) {
+        this.skipRecordsWithoutTransactions = skipRecordsWithoutTransactions;
+    }
+
+    public boolean isValidateActivities() {
+        return validateActivities;
+    }
+
+    public void setValidateActivities(boolean validateActivities) {
+        this.validateActivities = validateActivities;
+    }
+
+    public boolean isAddDisbursementForCommitment() {
+        return addDisbursementForCommitment;
+    }
+
+    public void setAddDisbursementForCommitment(boolean addDisbursementForCommitment) {
+        this.addDisbursementForCommitment = addDisbursementForCommitment;
+    }
+
+    public boolean isCreateMissingOrgs() {
+        return createMissingOrgs;
+    }
+
+    public void setCreateMissingOrgs(boolean createMissingOrgs) {
+        this.createMissingOrgs = createMissingOrgs;
+    }
+
+    public boolean isCreateMissingSectors() {
+        return createMissingSectors;
+    }
+
+    public void setCreateMissingSectors(boolean createMissingSectors) {
+        this.createMissingSectors = createMissingSectors;
+    }
+
+    public boolean isCreateMissingOrgGroups() {
+        return createMissingOrgGroups;
+    }
+
+    public void setCreateMissingOrgGroups(boolean createMissingOrgGroups) {
+        this.createMissingOrgGroups = createMissingOrgGroups;
+    }
+
+    public boolean isCreateMissingPrograms() {
+        return createMissingPrograms;
+    }
+
+    public void setCreateMissingPrograms(boolean createMissingPrograms) {
+        this.createMissingPrograms = createMissingPrograms;
+    }
+
+    public boolean isReplaceExistingTransactions() {
+        return replaceExistingTransactions;
+    }
+
+    public void setReplaceExistingTransactions(boolean replaceExistingTransactions) {
+        this.replaceExistingTransactions = replaceExistingTransactions;
+    }
+
+    public Long getOrgGroupId() {
+        return orgGroupId;
+    }
+
+    public void setOrgGroupId(Long orgGroupId) {
+        this.orgGroupId = orgGroupId;
+    }
+
+    public Long getDefaultActivityStatusId() {
+        return defaultActivityStatusId;
+    }
+
+    public void setDefaultActivityStatusId(Long defaultActivityStatusId) {
+        this.defaultActivityStatusId = defaultActivityStatusId;
+    }
+
+    public Long getDefaultLocationId() {
+        return defaultLocationId;
+    }
+
+    public void setDefaultLocationId(Long defaultLocationId) {
+        this.defaultLocationId = defaultLocationId;
+    }
+
+    public String getDefaultProgramClassification() {
+        return defaultProgramClassification;
+    }
+
+    public void setDefaultProgramClassification(String defaultProgramClassification) {
+        this.defaultProgramClassification = defaultProgramClassification;
+    }
 
     public Set<String> getFileHeaders() {
         return fileHeaders;

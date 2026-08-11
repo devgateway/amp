@@ -71,6 +71,7 @@
 				<tr>
 					<td height=16 valign="center" width=571>
 						<form action="/luceneIndex.do" method="post">
+							<jsp:include page="/WEB-INF/jsp/common/csrfInput.jsp" />
 							Field:<input type="text" name="field" size="30" />
 							String:<input type="text" name="search" size="30" />
 							<input type="text" name="action" value="view"/>

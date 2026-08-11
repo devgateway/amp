@@ -37,7 +37,7 @@
     "jquery": "2.1.1",
     "jquery-ui": "1.10.5",
     "rimraf": "2.2.8",
-    "underscore": "1.7.0",
+    "underscore": "1.13.8",
     "vinyl-source-stream": "2.0.0"
   },
   "npmName": "amp-settings",
@@ -58,5 +58,17 @@
   },
   "dependencies": {
     "amp-translate": "https://github.com/devgateway/amp-translate.git"
+  },
+  "overrides": {
+    "minimist": ">=1.2.6",
+    "shell-quote": ">=1.7.4",
+    "braces": ">=3.0.3",
+    "browserify-sign": ">=4.2.2",
+    "semver": ">=7.5.2",
+    "cipher-base": ">=1.0.7",
+    "elliptic": ">=6.6.1",
+    "amp-translate": {
+      "underscore": ">=1.13.8"
+    }
   }
 }

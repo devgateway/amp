@@ -54,8 +54,17 @@ public class ContactEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getFields", ui = false)
     @ApiOperation(
-            value = "Provides full set of available fields and their settings/rules in a hierarchical structure.",
-            notes = "See [Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration).")
+            value = "Retrieve all available contact fields with their settings and rules",
+            notes = "This endpoint returns a comprehensive list of all fields that can be used when creating or " +
+                    "updating contacts in the AMP system.\n\n" +
+                    "The response is structured hierarchically and includes detailed information about each field, " +
+                    "such as its data type, validation rules, required status, dependencies, and other metadata " +
+                    "that defines how the field should be handled in forms and data processing.\n\n" +
+                    "Client applications can use this information to dynamically build contact forms, validate " +
+                    "user input, and ensure that contact data meets the system's requirements.\n\n" +
+                    "For more details on the field enumeration format, see the " +
+                    "[Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration).\n\n" +
+                    "This endpoint requires authentication.")
     public List<APIField> getAvailableFields() {
         return AmpFieldsEnumerator.getEnumerator().getContactFields();
     }
@@ -94,7 +103,16 @@ public class ContactEndpoint {
     @Path("field/id-values")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getIdValues", ui = false)
-    @ApiOperation(value = "Returns a list of values for all id of requested fields.")
+    @ApiOperation(
+            value = "Retrieve field values by their IDs",
+            notes = "This endpoint allows you to fetch detailed information about specific field values " +
+                    "by providing their IDs.\n\n" +
+                    "For each field specified in the request, you can provide a list of IDs, and the endpoint " +
+                    "will return the corresponding values and metadata for those IDs.\n\n" +
+                    "This is particularly useful when you need to display human-readable labels for ID values " +
+                    "stored in contacts, or when you need additional metadata about specific field values.\n\n" +
+                    "The request format is a JSON object where keys are fully qualified field names and values " +
+                    "are arrays of IDs. For example: `{\"organisation_contacts~organisation\": [123, 456]}`")
     public Map<String, List<FieldIdValue>> getFieldValuesById(
             @ApiParam("List of fully qualified activity fields with list of ids.") Map<String, List<Long>> fieldIds) {
         List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getContactFields();
@@ -110,7 +128,13 @@ public class ContactEndpoint {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getContact", ui = false)
-    @ApiOperation("Retrieve contact")
+    @ApiOperation(
+            value = "Retrieve a specific contact by ID",
+            notes = "This endpoint returns detailed information about a single contact identified by its ID.\n\n" +
+                    "The response includes all available fields for the contact, such as name, title, " +
+                    "organization, email, phone numbers, and any other information stored in the system.\n\n" +
+                    "This endpoint is useful for displaying contact details or for retrieving a contact's " +
+                    "information before updating it. Authentication is required to access this endpoint.")
     public SwaggerContact getContact(@ApiParam("contact id") @PathParam("id") Long id) {
         Map<String, Object> contact = ContactUtil.getContact(id);
         return new SwaggerContact(contact);

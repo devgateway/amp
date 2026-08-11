@@ -50,9 +50,9 @@
     "@babel/polyfill": "^7.2.5",
     "backbone": "1.1.2",
     "bootstrap": "3.3.0",
-    "brfs": "1.2.0",
-    "browserify": "4.2.3",
-    "browserify-shim": "3.6.0",
+    "brfs": "1.6.1",
+    "browserify": "17.0.0",
+    "browserify-shim": "3.8.16",
     "cheerio": "0.18.0",
     "css-element-queries": "1.0.0",
     "d3-browserify": "3.4.12",
@@ -68,10 +68,10 @@
     "gulp-inject": "0.4.1",
     "gulp-jscs": "1.4.0",
     "gulp-jshint": "1.9.0",
-    "gulp-less": "1.3.9",
+    "gulp-less": "5.0.0",
     "gulp-livereload": "2.1.1",
     "gulp-load-plugins": "2.0.7",
-    "gulp-mocha": "2.0.0",
+    "gulp-mocha": "8.0.0",
     "gulp-plumber": "0.6.6",
     "gulp-rename": "1.2.0",
     "gulp-rev": "0.4.2",
@@ -83,7 +83,7 @@
     "gulp-uglify": "3.0.2",
     "gulp-util": "2.2.20",
     "gulp-watch": "0.6.10",
-    "mold-source-map": "0.3.0",
+    "mold-source-map": "0.4.1",
     "husl": "4.0.2",
     "i18next": "1.7.9",
     "jquery": "2.1.1",
@@ -99,14 +99,61 @@
     "qunitjs": "2.4.1",
     "seedrandom": "2.3.11",
     "through2": "0.6.3",
-    "underscore": "1.7.0",
+    "underscore": "1.13.8",
     "underscore-groups-by": "0.0.1",
     "vinyl-source-stream": "2.0.0",
-    "watchify": "0.10.2",
+    "watchify": "4.0.0",
     "zeroclipboard": "2.2.0"
   },
   "dependencies": {
-    "chokidar": "1.0.0-rc5",
+    "chokidar": "3.5.3",
     "i18n-iso-countries": "^7.12.0"
+  },
+  "overrides": {
+    "minimist": ">=1.2.6",
+    "shell-quote": ">=1.7.4",
+    "braces": ">=3.0.3",
+    "browserify-sign": ">=4.2.2",
+    "semver": ">=7.5.2",
+    "lodash": ">=4.17.21",
+    "cipher-base": ">=1.0.7",
+    "elliptic": ">=6.6.1"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "./node_modules/esri-leaflet/dist/esri-leaflet.js": {
+      "exports": "L",
+      "depends": [
+        "./node_modules/leaflet/dist/leaflet.js:L"
+      ]
+    },
+    "./node_modules/leaflet.markercluster/dist/leaflet.markercluster.js": {
+      "depends": [
+        "./node_modules/esri-leaflet/dist/esri-leaflet.js:L"
+      ]
+    },
+    "./app/mock-api/sinon-min.js": {
+      "exports": "sinon"
+    },
+    "./app/js/libs/local/slider/jquery.nouislider.min.js": {
+      "depends": [
+        "./node_modules/jquery/dist/jquery.min.js:jQuery"
+      ]
+    },
+    "./node_modules/bootstrap/dist/js/bootstrap.js": {
+      "depends": [
+        "jquery:jquery"
+      ]
+    },
+    "nvd3": {
+      "exports": "nvd3",
+      "depends": [
+        "d3:d3"
+      ]
+    }
   }
 }

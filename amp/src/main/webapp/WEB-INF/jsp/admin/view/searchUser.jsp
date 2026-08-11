@@ -12,7 +12,7 @@
 <digi:form action="/searchUser.do">
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="${pageContext.request.contextPath}/resources/images/module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
 				<digi:trn key="admin:userAdministration">User Administration</digi:trn>
@@ -47,17 +47,17 @@
  <tr>
     <td nowrap="nowrap" width="30%" align="center"><b><digi:trn key="admin:email">Email</digi:trn></b></td>
     <td nowrap="nowrap" width="50%" align="center"><b><digi:trn key="admin:name">Name</digi:trn></b></td>
-    <td nowrap="nowrap" width="20%">&nbsp;</td> 
+    <td nowrap="nowrap" width="20%">&nbsp;</td>
  </tr>
 </table>
 <table border="0" cellpadding="0" cellspacing="0">
  <c:forEach var="userList" items="${searchUserForm.userList}">
- <tr bgcolor="#EEEEEE">    
+ <tr bgcolor="#EEEEEE">
     <td width="30%" align="left">
      <c:out value="${userList.email}"/>
     </td>
-    <td width="50%" align="center"> 
-      <c:out value="${userList.firstNames}" /> 
+    <td width="50%" align="center">
+      <c:out value="${userList.firstNames}" />
       <c:out value="${userList.lastName}" />
     </td>
     <td noWrap width="20%" align="left">

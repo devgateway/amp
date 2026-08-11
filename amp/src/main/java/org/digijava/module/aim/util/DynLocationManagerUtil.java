@@ -442,7 +442,7 @@ public class DynLocationManagerUtil {
                 qry.setParameter("parentLocationId", parentLocation.getId(), LongType.INSTANCE);
 
             Collection<AmpCategoryValueLocations> locations = qry.list();
-            if (locations != null && locations.size() > 0) {
+            if (locations != null && !locations.isEmpty()) {
                 return locations.toArray(new AmpCategoryValueLocations[0])[0];
             }
         } catch (Exception e) {
@@ -1033,7 +1033,7 @@ public class DynLocationManagerUtil {
                             break;
                         }
                         String location = cell;
-                        if (location == null || location.trim().length() == 0) {
+                        if (location.trim().isEmpty()) {
                             k = hierarchyNumberOfCells + 1;
                             break;
                         }
@@ -1229,7 +1229,7 @@ public class DynLocationManagerUtil {
 
         String queryString = "select indicator from "
                 + AmpIndicatorLayer.class.getName() + " indicator "
-                + " left join indicator.createdBy.user c "
+                + " left join indicator.createdBy c "
                 + " order by " + orderBy + " " + sort;
         Query qry = dbSession.createQuery(queryString);
         return qry.list();
@@ -1250,7 +1250,7 @@ public class DynLocationManagerUtil {
         Session dbSession = PersistenceManager.getSession();
         String queryString = "select indicator from " + AmpIndicatorLayer.class.getName() + " indicator ";
         queryString += " left join indicator.sharedWorkspaces s ";
-        queryString += " where indicator.createdBy.user.id=:userId ";
+        queryString += " where indicator.createdBy.id=:userId ";
 
         Collection<AmpTeam> workspaces = null;
         TeamMember tm = TeamUtil.getCurrentMember();

@@ -807,7 +807,7 @@ public class DbUtil {
         queryString.append(" select org from ").append(AmpOrganisation.class.getName()).append(" org ")
                 .append(" inner join org.orgGrpId grp ").append(" where(lower(org.acronym) like '%").append(keyword)
                 .append("%' or lower(" + organizationName + ") like '%").append(keyword)
-                .append("%') and grp.orgType=:orgType and (org.deleted is null or org.deleted = false)");
+                .append("%') and grp.orgType=:orgType and (org.deleted is null or org.deleted = false) and (grp.deleted is null or grp.deleted = false)");
 
         appendNotIn("org.ampOrgId", excludeIds, queryString);
 
@@ -826,9 +826,10 @@ public class DbUtil {
 
         String organizationName = AmpOrganisation.hqlStringForName("org");
         queryString.append("select distinct org from ").append(AmpOrganisation.class.getName()).append(" org ")
+                .append(" inner join org.orgGrpId grp ")
                 .append("where (lower(acronym) like :keyword")// .append(keyword)
                 .append(" or lower(" + organizationName + ") like :keyword")// .append(keyword)
-                .append(") and (org.deleted is null or org.deleted = false) ");
+                .append(") and (org.deleted is null or org.deleted = false) and (grp.deleted is null or grp.deleted = false) ");
 
         appendNotIn("org.ampOrgId", excludeIds, queryString);
         Query q = PersistenceManager.getSession().createQuery(queryString.toString()).setParameter("keyword",
@@ -851,9 +852,10 @@ public class DbUtil {
 
         String organizationName = AmpOrganisation.hqlStringForName("org");
         String queryString = "select distinct org from " + AmpOrganisation.class.getName() + " org "
+                + " inner join org.orgGrpId grp "
                 + "where ((lower(acronym) like '%" + keyword + "%' and lower(" + organizationName + ") like '"
                 + namesFirstLetter + "%') or lower(" + organizationName + ") like '" + namesFirstLetter + "%" + keyword
-                + "%') and (org.deleted is null or org.deleted = false)";
+                + "%') and (org.deleted is null or org.deleted = false) and (grp.deleted is null or grp.deleted = false)";
         return PersistenceManager.getSession().createQuery(queryString).list();
     }
 
@@ -875,7 +877,7 @@ public class DbUtil {
                 + " org inner join org.orgGrpId grp " + "where grp.orgType=:orgType and ((lower(acronym) like '%"
                 + keyword + "%' and lower(" + organizationName + ") like '" + namesFirstLetter + "%') or lower("
                 + organizationName + ") like '" + namesFirstLetter + "%" + keyword
-                + "%') and (org.deleted is null or org.deleted = false)";
+                + "%') and (org.deleted is null or org.deleted = false) and (grp.deleted is null or grp.deleted = false)";
         Query qry = PersistenceManager.getSession().createQuery(queryString);
         qry.setParameter("orgType", orgType, LongType.INSTANCE);
         return qry.list();
@@ -899,7 +901,7 @@ public class DbUtil {
             Session session = PersistenceManager.getRequestDBSession();
             StringBuilder queryString = new StringBuilder();
             queryString.append("select distinct org from ").append(AmpOrganisation.class.getName()).append(" org ")
-                    .append(" inner join org.orgGrpId grp where grp.orgType=:orgType and (org.deleted is null or org.deleted = false)");
+                    .append(" inner join org.orgGrpId grp where grp.orgType=:orgType and (org.deleted is null or org.deleted = false) and (grp.deleted is null or grp.deleted = false)");
 
             appendNotIn("org.ampOrgId", excludeIds, queryString);
 
@@ -954,8 +956,9 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
 
-            queryString.append(" select org from ").append(AmpOrganisation.class.getName()).append(" org ");
-            queryString.append(" where (org.deleted is null or org.deleted = false)");
+            queryString.append(" select org from ").append(AmpOrganisation.class.getName()).append(" org ")
+                    .append(" inner join org.orgGrpId grp ");
+            queryString.append(" where (org.deleted is null or org.deleted = false) and (grp.deleted is null or grp.deleted = false)");
 
             appendNotIn("org.ampOrgId", excludeIds, queryString);
 
@@ -1526,7 +1529,7 @@ public class DbUtil {
 
     public static List<AmpOrganisation> getOrganisations() {
         String queryString = "select distinct org from " + AmpOrganisation.class.getName()
-                + " org  join  org.calendar  cal where (org.deleted is null or org.deleted = false) ";
+                + " org  join  org.calendar  cal inner join org.orgGrpId grp where (org.deleted is null or org.deleted = false) and (grp.deleted is null or grp.deleted = false) ";
         return PersistenceManager.getSession().createQuery(queryString).list();
     }
 
@@ -1545,7 +1548,7 @@ public class DbUtil {
         List<OrgGroupSkeleton> col = new ArrayList<OrgGroupSkeleton>();
 
         String orgGrpNameHql = AmpOrgGroup.hqlStringForName("c");
-        String queryString = "select c.ampOrgGrpId, " + orgGrpNameHql + " FROM " + AmpOrgGroup.class.getName() + " c";
+        String queryString = "select c.ampOrgGrpId, " + orgGrpNameHql + " FROM " + AmpOrgGroup.class.getName() + " c where (c.deleted is null or c.deleted = false)";
         Query qry = PersistenceManager.getSession().createQuery(queryString);
         for (Object[] grpInfo : ((List<Object[]>) qry.list())) {
             OrgGroupSkeleton skel = new OrgGroupSkeleton();
@@ -1888,7 +1891,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String orgName = AmpOrganisation.hqlStringForName("o");
-            String queryString = "select o from " + AmpOrgGroup.class.getName() + " o order by "
+            String queryString = "select o from " + AmpOrgGroup.class.getName() + " o where (o.deleted is null or o.deleted = false) order by "
                     + AmpOrgGroup.hqlStringForName("o") + " asc";
             qry = session.createQuery(queryString);
             organisation = qry.list();
@@ -2436,10 +2439,10 @@ public class DbUtil {
                     relatedObj = org;
                 }
                 query = session.createQuery(qhl);
-                query.setParameter("relatedObj", relatedObj, ObjectType.INSTANCE);
+                query.setParameter("relatedObj", relatedObj);
                 query.executeUpdate();
             } catch (Exception e) {
-                logger.error("Delete Failed: " + e.toString());
+                logger.error("Delete Failed: ", e);
             }
         }
     }

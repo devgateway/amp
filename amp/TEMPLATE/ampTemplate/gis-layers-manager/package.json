@@ -18,20 +18,30 @@
     "backbone": "1.1.2",
     "bootstrap": "3.4.1",
     "brfs": "1.4.3",
-    "browserify": "10.2.6",
+    "browserify": "17.0.0",
     "rimraf": "2.2.8",
     "gulp": "4.0.2",
     "gulp-load-plugins": "0.10.0",
     "gulp-streamify": "0.0.5",
     "gulp-uglify": "1.5.4",
     "jquery": "2.1.1",
-    "underscore": "1.7.0",
+    "underscore": "1.13.8",
     "vinyl-source-stream": "2.0.0",
     "jquery-ui": "1.10.5",
-    "gulp-less": "3.1.0",
+    "gulp-less": "5.0.0",
     "gulp-plumber": "1.1.0",
     "gulp-concat": "2.6.0",
     "gulp-csso": "1.1.0",
     "gulp-sourcemaps": "1.7.1"
+  },
+  "overrides": {
+    "minimist": ">=1.2.6",
+    "shell-quote": ">=1.7.4",
+    "braces": ">=3.0.3",
+    "browserify-sign": ">=4.2.2",
+    "semver": ">=7.5.2",
+    "lodash": ">=4.17.21",
+    "cipher-base": ">=1.0.7",
+    "elliptic": ">=6.6.1"
   }
 }

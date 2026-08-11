@@ -18,56 +18,56 @@ import java.util.stream.Collectors;
  *
  */
 public class DocumentFilter {
-    
+
     public final static String SESSION_LAST_APPLIED_PUBLIC_FILTER   = "SESSION_LAST_APPLIED_PUBLIC_FILTER";
-    
+
     public final static String SOURCE_PRIVATE_DOCUMENTS = "private_documents";
     public final static String SOURCE_TEAM_DOCUMENTS    = "team_documents";
     public final static String SOURCE_SHARED_DOCUMENTS  = "shared_documents";
     public final static String SOURCE_PUBLIC_DOCUMENTS  = "public_documents";
-    
+
     public static final Long KEYWORDS_MODE_ANY = 0L;
     public static final Long KEYWORDS_MODE_ALL = 1L;
-    
+
     private Long id;
-    
+
     private String name;
     private String source;
-    
+
     private String baseUsername;
     private Long baseTeamId;
-    
+
     /**
-      * the AmpOrganisationId to filter by. null, zero or negative value = don't filter by this field 
+      * the AmpOrganisationId to filter by. null, zero or negative value = don't filter by this field
       */
     private Long organisationId;
-    
+
     private AmpTeamMember user;
-    
+
     private List<String> filterLabelsUUID;
     private List<Label> filterLabels;
-    
+
     private List<Long> filterDocTypeIds;
     private List<String> filterFileType;
-    
+
     private List<Long> filterTeamIds;
     private List<String> filterOwners;
-    
+
     private String filterFromDate;
     private String filterToDate;
-    
+
     private Long filterKeywordMode = KEYWORDS_MODE_ANY;
-    
+
     private Long publicViewPosition;
-    
+
     private List<String> filterKeywords;
-    
+
     public DocumentFilter() {
-        
+
     }
-    
+
     public DocumentFilter(DocumentManagerForm docForm) {
-        
+
         source = DocumentFilter.SOURCE_PUBLIC_DOCUMENTS;
         if (docForm.getOtherUsername() != null && docForm.getOtherTeamId() != null) {
             source = DocumentFilter.SOURCE_PRIVATE_DOCUMENTS;
@@ -76,10 +76,10 @@ public class DocumentFilter {
         } else if (docForm.getShowSharedDocs() != null) {
             source = DocumentFilter.SOURCE_SHARED_DOCUMENTS;
         }
-        
+
         baseUsername = docForm.getOtherUsername();
         baseTeamId = docForm.getOtherTeamId();
-        
+
         if (docForm.getFilterLabelsUUID() != null) {
             filterLabelsUUID = Arrays.asList(docForm.getFilterLabelsUUID());
         }
@@ -116,59 +116,59 @@ public class DocumentFilter {
                     .map(String::toLowerCase)
                     .collect(Collectors.toList());
         }
-        
+
         if (docForm.getFilterOrganisations() != null) {
             organisationId = Long.parseLong(docForm.getFilterOrganisations());
         }
-        
+
         if (docForm.getKeywordMode() != null) {
             filterKeywordMode = docForm.getKeywordMode();
         }
-        
+
         filterFromDate = docForm.getFilterFromDate();
         filterToDate = docForm.getFilterToDate();
-        
+
     }
-    
+
     public List<DocumentData> applyFilter(Collection<DocumentData> col) {
         String fileTypeFilter="image/";
         List<DocumentData> retCol  = new ArrayList<DocumentData>();
         if ( col != null ) {
-            for ( DocumentData dd: col ) 
+            for ( DocumentData dd: col )
             {
-            
+
                 // dear future coder: NEVER EVER write pass = true. The sole reason to modify pass'es value is to put it to false
                 boolean pass = true;
                 if (!isNullOrEmpty(filterDocTypeIds) && !this.filterDocTypeIds.contains(dd.getCmDocTypeId())) {
                     pass = false;
                 }
-                
+
                 if (!isNullOrEmpty(filterFileType) && (!this.filterFileType.contains(dd.getContentType())
                         && !(this.filterFileType.contains(fileTypeFilter)
                                 && dd.getContentType().contains(fileTypeFilter)))) {
                     pass = false;
                 }
-                
+
                 if (!isNullOrEmpty(filterTeamIds) && !this.filterTeamIds.contains(dd.getCreatorTeamId())) {
                     pass = false;
                 }
-                
+
                 if (!isNullOrEmpty(filterOwners) && !this.filterOwners.contains(dd.getCreatorEmail())) {
                     pass = false;
                 }
-                
+
                 if ((this.organisationId != null) && (this.organisationId > 0))
                 {
                     Set<Long> organisationIds = DocumentOrganizationManager.getInstance()
                             .getDocToOrgIdsByUUID(dd.getUuid());
-                    
+
                     pass &= organisationIds.contains(this.organisationId);
                 }
-                
+
                 if (!isNullOrEmpty(filterLabelsUUID)) {
                     if ( dd.getLabels() != null ) {
-                        ArrayList<String> ddLabelsUUID  = new ArrayList<String>();  
-                        for ( Label l: dd.getLabels() ) 
+                        ArrayList<String> ddLabelsUUID  = new ArrayList<String>();
+                        for ( Label l: dd.getLabels() )
                             ddLabelsUUID.add( l.getUuid() );
                         boolean tempPass = false;
                         for ( String uuid: this.filterLabelsUUID ){
@@ -182,7 +182,7 @@ public class DocumentFilter {
                         pass = false;
                     }
                 }
-                
+
                 if (!isNullOrEmpty(this.filterKeywords)) {
                     String title = dd.getTitle() == null ? null : dd.getTitle().toLowerCase();
                     String name = dd.getName() == null ? null : dd.getName().toLowerCase();
@@ -196,7 +196,7 @@ public class DocumentFilter {
                         pass &= keywordFound.contains(Boolean.TRUE);
                     }
                 }
-                
+
                 SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
                 SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
                 if (this.filterFromDate !=null && this.filterFromDate.length() > 0){
@@ -211,7 +211,7 @@ public class DocumentFilter {
                     if (ddCal.before(cal))
                         pass = false;
                 }
-                
+
                 if (this.filterToDate !=null && this.filterToDate.length() > 0){
                     Calendar cal = Calendar.getInstance();
                     Calendar ddCal = Calendar.getInstance();
@@ -224,17 +224,17 @@ public class DocumentFilter {
                     if (ddCal.after(cal))
                         pass = false;
                 }
-                
+
                 if (pass)
                     retCol.add(dd);
             }
         }
-        
+
         return retCol;
     }
-    
-    
-    
+
+
+
     private boolean isNullOrEmpty(List<?> list) {
         return list == null || list.isEmpty();
     }
@@ -259,7 +259,7 @@ public class DocumentFilter {
     public void setSource(String source) {
         this.source = source;
     }
-    
+
     public AmpTeamMember getUser() {
         return user;
     }
@@ -279,7 +279,7 @@ public class DocumentFilter {
     public void setFilterLabels(List<Label> filterLabels) {
         this.filterLabels = filterLabels;
     }
-    
+
     public List<Long> getFilterDocTypeIds() {
         return filterDocTypeIds;
     }
@@ -335,12 +335,12 @@ public class DocumentFilter {
     {
         return organisationId;
     }
-    
+
     public void setOrganisationId(Long orgId)
     {
         this.organisationId = orgId;
     }
-    
+
     public Long getPublicViewPosition() {
         return publicViewPosition;
     }
@@ -386,5 +386,28 @@ public class DocumentFilter {
     public void setFilterKeywordMode(Long filterKeywordMode) {
         this.filterKeywordMode = filterKeywordMode;
     }
-    
+
+    @Override
+    public String toString() {
+        return "DocumentFilter{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", source='" + source + '\'' +
+                ", baseUsername='" + baseUsername + '\'' +
+                ", baseTeamId=" + baseTeamId +
+                ", organisationId=" + organisationId +
+                ", user=" + user +
+                ", filterLabelsUUID=" + filterLabelsUUID +
+                ", filterLabels=" + filterLabels +
+                ", filterDocTypeIds=" + filterDocTypeIds +
+                ", filterFileType=" + filterFileType +
+                ", filterTeamIds=" + filterTeamIds +
+                ", filterOwners=" + filterOwners +
+                ", filterFromDate='" + filterFromDate + '\'' +
+                ", filterToDate='" + filterToDate + '\'' +
+                ", filterKeywordMode=" + filterKeywordMode +
+                ", publicViewPosition=" + publicViewPosition +
+                ", filterKeywords=" + filterKeywords +
+                '}';
+    }
 }

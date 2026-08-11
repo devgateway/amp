@@ -24,7 +24,7 @@
 			<tr>
 				<td colspan="2">
 					<div>
-						<div>
+						<div wicket:id="baseTargetContainer">
 							<b><span> <wicket:trn>
 								Base Values
 							</wicket:trn>: </span></b><span wicket:id = "base"></span> <b><span>
@@ -40,6 +40,11 @@
 					</div>
 				</td>
 			</tr>
+            <tr>
+                <td colspan="2">
+                    <div wicket:id="disaggregationValuesSubsection"></div>
+                </td>
+            </tr>
 <!--			<tr>-->
 <!--				<td colspan="2">-->
 <!--					<hr>-->
@@ -63,5 +68,6 @@
 <!--			</tr>-->
 			</table>
 		</div>
+
 </wicket:extend>
 </html>

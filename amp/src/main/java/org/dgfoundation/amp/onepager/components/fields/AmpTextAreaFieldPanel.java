@@ -27,18 +27,18 @@ import org.dgfoundation.amp.onepager.validators.TranslatableValidators;
 public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 335388041997101521L;
     private final boolean wysiwyg;
     protected TextArea<String> textAreaContainer;
     private Component translationDecorator;
     private WebMarkupContainer closeLink;
-    
+
     /**
-     * Since all validation errors are going through TranslatableValidators.onError(), 
-     * and there is no way to send the validator that generated the cause, 
-     * it will be bound on 
+     * Since all validation errors are going through TranslatableValidators.onError(),
+     * and there is no way to send the validator that generated the cause,
+     * it will be bound on
      */
     private boolean uniqueTitleValidatorError = false;
     public TextArea<String> getTextAreaContainer() {
@@ -61,7 +61,7 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
             model = (IModel<String>) new EditorWrapperModel((IModel<String>) model, id);
         }
         final IModel<String> finalModel = model;
-        textAreaContainer = new TextArea<String>("richText", TranslationDecorator.proxyModel((IModel<String>) model)){
+        textAreaContainer = new TextArea<String>("richText", TranslationDecorator.proxyModel(model)){
             @Override
             protected void onInitialize() {
                 //get validators and put them in the {@link TranslatableValidators}
@@ -70,13 +70,13 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
             }
         };
         textAreaContainer.setOutputMarkupId(true);
-        
+
         final Label preview = (Label) new Label("previewText", model).setEscapeModelStrings(false);
 
         closeLink = new WebMarkupContainer("closeLink");
-        
+
         closeLink.add(new AttributePrepender("data-is_close", new Model<String>("true"), ""));
-        
+
         closeLink.setOutputMarkupId(true);
         closeLink.add(new AttributeModifier("onclick",
             "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) { CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].updateElement(); }" +
@@ -85,27 +85,27 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
             "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) {CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].destroy();} " +
             "$('#" + textAreaContainer.getMarkupId() + "').show();" +
             "$('#" + textAreaContainer.getMarkupId() + "').focus();" +
-                       
-            "$('#" + textAreaContainer.getMarkupId() + "').blur();"+            
+
+            "$('#" + textAreaContainer.getMarkupId() + "').blur();"+
             "$('#" + textAreaContainer.getMarkupId() + "').hide(); " +
             "$('#" + closeLink.getMarkupId() + "').hide(); " +
             "$('#" + preview.getMarkupId() + "').show(); " +
             "return false;"));
 
         add(closeLink);
-        
+
         preview.setVisible(false);
         preview.setOutputMarkupId(true);
         if(wysiwyg){
             preview.setVisible(true);
             AmpAuthWebSession ses = (AmpAuthWebSession) getSession();
-            
+
             String language = ses.getLocale().getLanguage();
             if (language == null || language.length() == 0)
                 language = "en";
-            
+
             textAreaContainer.add(new AttributeModifier("style", "display: none;"));
-            
+
              preview.add(new AttributeModifier("onclick",
                     "if($('#loadingEditorDiv').length == 0) {"+
                         "$('#"+ preview.getMarkupId() +"').hide();" +
@@ -135,7 +135,7 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
                      ));
         }
         add(preview);
-        
+
         translationDecorator = TranslationDecorator.of("trnContainer", (IModel<String>) textAreaContainer.getModel(), (wysiwyg ? this : textAreaContainer),currentNavigationLanguageRequired);
         add(translationDecorator);
         addFormComponent(textAreaContainer);
@@ -145,7 +145,7 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
         this(id, model, fmName, wysiwyg);
         this.fmType = fmType;
     }
-    
+
     public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg) {
         this(id, model, fmName, wysiwyg, false, false);
     }
@@ -174,7 +174,7 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
             target.add(((TranslationDecorator) translationDecorator).getCurrentLabel());
         }
     }
-    
+
     public boolean isComponentMultilingual () {
         return translationDecorator instanceof TranslationDecorator;
     }

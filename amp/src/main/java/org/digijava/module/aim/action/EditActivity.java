@@ -324,7 +324,7 @@ public class EditActivity extends Action {
           eaForm.getFunding().setProProjCost(null);
         }
       }
-      
+
       ProposedProjCost revisedProjCost = null;
       if (eaForm.getFunding().getRevProjCost() != null) {
           revisedProjCost = new ProposedProjCost();
@@ -335,7 +335,7 @@ public class EditActivity extends Action {
           eaForm.getFunding().setRevProjCost(null);
         }
       }
-      
+
         List<AmpActivityBudgetStructure> budgetStructure = DbUtil.getBudgetStructure(eaForm.getActivityId());
         List<BudgetStructure> pojoBS = new ArrayList<BudgetStructure>();
         for (AmpActivityBudgetStructure aabs : budgetStructure) {
@@ -351,7 +351,7 @@ public class EditActivity extends Action {
       eaForm.getPrograms().setPrimaryPrograms(primaryPrograms);
       eaForm.getPrograms().setSecondaryPrograms(secondaryPrograms);
       eaForm.getPrograms().setTertiaryPrograms(tertiaryPrograms);
-      
+
     //allComments
       List<AmpComments> colAux  = null;
       Collection ampFields          = DbUtil.getAmpFields();
@@ -652,7 +652,7 @@ public class EditActivity extends Action {
 
         // load the activity details
         ApprovalStatus actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
-        
+
         //eaForm.setApprovalStatus(actApprovalStatus);
         if (tm != null && tm.getTeamId()!=null && activity.getTeam() != null && activity.getTeam().getAmpTeamId() != null) {
                     if (("true".compareTo((String) session
@@ -672,27 +672,27 @@ public class EditActivity extends Action {
                 eaForm.getIdentification().setApprovalStatus(ApprovalStatus.edited.getDbName());
             }
         }
-        
 
-        
+
+
         //AMP-17127
         //for modalities that is a SSC category we have to add the SSC prefix
           List<AmpCategoryValue> modalities = CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
                   CategoryManagerUtil.getAlternateKey(currentTeam,
                           CategoryConstants.MODALITIES_KEY), activity.getCategories());
         String[] actModalities=null;
-        
+
         if(modalities !=null && modalities.size() >0){
             actModalities=new String[modalities.size()];
             int m=0;
-            
+
             for (AmpCategoryValue modal : modalities) {
                 actModalities[m] = modal.getLabel();
                 m++;
-            }           
+            }
         }
         eaForm.getIdentification().setSsc_modalities(actModalities );
-       
+
         AmpCategoryValue typeOfCooperation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                 CategoryManagerUtil.getAlternateKey(currentTeam, CategoryConstants.TYPE_OF_COOPERATION_KEY), activity
                         .getCategories());
@@ -706,25 +706,25 @@ public class EditActivity extends Action {
        // eaForm.getIdentification().setFundingSourcesNumber(activity.getFundingSourcesNumber());
 
         if (activity != null) {
-            
+
             // set annual budgets and proposed project cost
             Set<AmpAnnualProjectBudget> annualBudgets = activity.getAnnualProjectBudgets();
             List<ProposedProjCost> proposedAnnualBudgets = new ArrayList<ProposedProjCost>();
             if (annualBudgets != null) {
                 for (AmpAnnualProjectBudget annualBudget : annualBudgets) {
-                    String ppcCurrencyCode = annualBudget.getAmpCurrencyId() != null ? annualBudget.getAmpCurrencyId().getCurrencyCode() : null; 
-                    ProposedProjCost ppc = getProposedProjectCost(activity, eaForm, annualBudget.getAmount(), ppcCurrencyCode, 
+                    String ppcCurrencyCode = annualBudget.getAmpCurrencyId() != null ? annualBudget.getAmpCurrencyId().getCurrencyCode() : null;
+                    ProposedProjCost ppc = getProposedProjectCost(activity, eaForm, annualBudget.getAmount(), ppcCurrencyCode,
                             annualBudget.getYear(), true, AmpFundingAmount.FundingType.PROPOSED);
                     proposedAnnualBudgets.add(ppc);
                 }
             }
-            
+
             Collections.sort(proposedAnnualBudgets);
             eaForm.getFunding().setProposedAnnualBudgets(proposedAnnualBudgets);
-            
+
             eaForm.getFunding().setProProjCost(getProjectCost(activity, eaForm, AmpFundingAmount.FundingType.PROPOSED));
             eaForm.getFunding().setRevProjCost(getProjectCost(activity, eaForm, AmpFundingAmount.FundingType.REVISED));
-            
+
 
           // load programs by type
             if (ProgramUtil.getAmpActivityProgramSettingsList(true) != null) {
@@ -752,7 +752,7 @@ public class EditActivity extends Action {
           eaForm.getIdentification().setTeam(activity.getTeam());
           eaForm.getIdentification().setCreatedBy(activity.getActivityCreator());
           eaForm.getIdentification().setModifiedBy(activity.getModifiedBy());
-          
+
 
          // eaForm.getIdentification().setBudget(activity.getBudget());
           AmpCategoryValue budgetOff =  CategoryConstants.ACTIVITY_BUDGET_OFF.getAmpCategoryValueFromDB();
@@ -827,7 +827,7 @@ public class EditActivity extends Action {
 
           if (activity.getCrisNumber() != null)
               eaForm.getIdentification().setCrisNumber(activity.getCrisNumber().trim());
-    
+
 
           if (activity.getDescription() != null)
             eaForm.getIdentification().setDescription(activity.getDescription().trim());
@@ -862,7 +862,7 @@ public class EditActivity extends Action {
         eaForm.getIdentification().setActivitySummary(activity.getActivitySummary());
 
         eaForm.getIdentification().setConditionality(activity.getConditionality());
-    
+
         if (StringUtils.isNotBlank(activity.getIatiIdentifier())) {
             eaForm.getIdentification().setIatiIdentifier(activity.getIatiIdentifier());
         }
@@ -897,10 +897,10 @@ public class EditActivity extends Action {
                                     trim());
           }
           eaForm.getIdentification().setAmpId(activity.getAmpId());
-          
+
            if (activity.getStatusReason() != null)
               eaForm.getIdentification().setStatusReason(activity.getStatusReason());
-    
+
             List gpiSurveys = new ArrayList();
             if (activity.getGpiSurvey() != null) {
                 eaForm.setGpiSurvey(activity.getGpiSurvey());
@@ -1035,7 +1035,7 @@ public class EditActivity extends Action {
 
                   AmpCategoryValueLocations ampCVRegion = DynLocationManagerUtil.getAncestorByLayer(loc,
                           CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
-    
+
                   if (ampCVRegion != null) {
                       if (eaForm.getFunding().getFundingRegions() == null) {
                           eaForm.getFunding().setFundingRegions(new ArrayList());
@@ -1051,7 +1051,7 @@ public class EditActivity extends Action {
                     location.setPercent(strPercentage);
 //                  location.setPercent( strPercentage.replace(",", ".") );
                 }
-    
+
                   if (setFullPercForDefaultCountry && (actLoc.getLocationPercentage() == null
                           || actLoc.getLocationPercentage() == 0.0)
                           && CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(
@@ -1073,10 +1073,10 @@ public class EditActivity extends Action {
           eaForm.getDocuments().setReferenceDocs(null);
 
           eaForm=setSectorsToForm(eaForm, activity);
-          
+
           List<AmpClassificationConfiguration> classificationConfigs = SectorUtil.getAllClassificationConfigsOrdered();
           eaForm.getSectors().setClassificationConfigs(classificationConfigs);
-          
+
           if (activity.getProgramDescription() != null)
               eaForm.getPrograms().setProgramDescription(activity
                                        .getProgramDescription().trim());
@@ -1493,7 +1493,7 @@ public class EditActivity extends Action {
     } catch (Exception e) {
         addErrorMessageToForm(eaForm, e);
     }
-    
+
     if (request.getParameter("logframepr") != null)
       if (request.getParameter("logframepr").compareTo("true") == 0) {
         session.setAttribute("logframepr", "true");
@@ -1502,7 +1502,7 @@ public class EditActivity extends Action {
 
     TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
     eaForm.getFunding().fillFinancialBreakdowns(activityId, DbUtil.getAmpFunding(activityId), debug);
-    
+
     if (teamMember != null && teamMember.getTeamAccessType() != null){
         Long ampTeamId = teamMember.getTeamId();
         boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
@@ -1527,9 +1527,9 @@ public class EditActivity extends Action {
                 }
         }
     }
-    
+
     setRegionalObservationsToForm(activity, eaForm);
-    
+
     setLineMinistryObservationsToForm(activity, eaForm);
 
     //structures
@@ -1592,13 +1592,13 @@ public class EditActivity extends Action {
         }
     }
 
-    private ProposedProjCost getProposedProjectCost(AmpActivityVersion activity, EditActivityForm eaForm, 
+    private ProposedProjCost getProposedProjectCost(AmpActivityVersion activity, EditActivityForm eaForm,
             Double ppcAmount, String ppcCurrencyCode, Date year, boolean yearDate, AmpFundingAmount.FundingType funType) {
 
         ProposedProjCost ppc = new ProposedProjCost();
         Calendar c = Calendar.getInstance();
         c.setTime(year);
-        
+
         AmpCurrency ppcCurrency;
         AmpFundingAmount activityPpc = activity.getProjectCostByType(funType);
         if (ppcCurrencyCode != null) {
@@ -1608,23 +1608,23 @@ public class EditActivity extends Action {
         } else {
             ppcCurrency = CurrencyUtil.getCurrencyByCode(eaForm.getCurrCode());
         }
-    
+
         java.sql.Date ppcDate = new java.sql.Date(c.getTimeInMillis());
         double frmExRt = Util.getExchange(ppcCurrency.getCurrencyCode(), ppcDate);
         double toExRt = Util.getExchange(eaForm.getCurrCode(), ppcDate);
-        
+
         DecimalWraper amt = CurrencyWorker.convertWrapper(ppcAmount, frmExRt, toExRt, ppcDate);
         ppc.setFunAmountAsDouble(amt.doubleValue());
         ppc.setCurrencyCode(eaForm.getCurrCode());
         ppc.setCurrencyName(eaForm.getCurrName());
         ppc.setFunAmount(FormatHelper.formatNumber(amt.doubleValue()));
-        
+
         if (yearDate) {
             ppc.setFunDate(Integer.toString(c.get(Calendar.YEAR)));
         } else {
             ppc.setFunDate(FormatHelper.formatDate(activityPpc.getFunDate()));
         }
-        
+
         return ppc;
     }
 
@@ -1655,12 +1655,12 @@ public class EditActivity extends Action {
       }
       return activityId;
 }
-    
-    
+
+
     private void setRegionalObservationsToForm(AmpActivityVersion activity, EditActivityForm eaForm) {
         if (activity.getRegionalObservations() != null && activity.getRegionalObservations().size() > 0) {
             ArrayList issueList = new ArrayList();
-            
+
             for (AmpRegionalObservation aro : activity.getRegionalObservations()) {
                 Issues issue = new Issues();
                 issue.setId(aro.getAmpRegionalObservationId());
@@ -1737,7 +1737,7 @@ public class EditActivity extends Action {
   private EditActivityForm setSectorsToForm(EditActivityForm form, AmpActivityVersion activity) {
         Collection<AmpActivitySector> sectors = activity.getSectors();
 
-        if (sectors != null && sectors.size() > 0) {
+        if (sectors != null && !sectors.isEmpty()) {
             List<ActivitySector> activitySectors = new ArrayList<ActivitySector>();
             for (AmpActivitySector ampActSect : sectors) {
                 if (ampActSect != null) {
@@ -1866,7 +1866,7 @@ public class EditActivity extends Action {
                 fd.setComponentOrganisation(ampCompFund.getReportingOrganization());
                 fd.setComponentSecondResponsibleOrganization(ampCompFund.getComponentSecondResponsibleOrganization());
                 fd.setComponentTransactionDescription(ampCompFund.getDescription());
-                
+
                 if (fd.getTransactionType() == 0) {
 
                     tempComp.getCommitments().add(fd);
@@ -1913,8 +1913,8 @@ public class EditActivity extends Action {
 
         eaForm.getComponents().setSelectedComponents(selectedComponents);
     }
-    
-    private ProposedProjCost getProjectCost(AmpActivityVersion activity,  EditActivityForm eaForm, 
+
+    private ProposedProjCost getProjectCost(AmpActivityVersion activity,  EditActivityForm eaForm,
             AmpFundingAmount.FundingType funType) {
         ProposedProjCost projCost = new ProposedProjCost();
         AmpFundingAmount ppc = activity.getProjectCostByType(funType);
@@ -1924,7 +1924,7 @@ public class EditActivity extends Action {
                 }
         return projCost;
     }
-    
+
     private void addErrorMessageToForm(EditActivityForm eaForm, Exception e) {
         eaForm.getWarningMessges().add(TranslatorWorker.translateText("An error occurred when loading the page. Please contact the AMP administrator."));
         logger.error(e.getMessage(), e);

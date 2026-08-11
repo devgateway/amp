@@ -10,6 +10,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.SerializableComparator;
+import org.hibernate.collection.internal.PersistentSet;
 
 import java.io.Serializable;
 import java.util.*;
@@ -289,11 +290,19 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
         return gpiNiSurveys;
     }
     public void setGpiNiSurveys(Set<AmpGPINiSurvey> gpiNiSurveys) {
-        if (this.gpiNiSurveys == null) {
+        if (gpiNiSurveys instanceof PersistentSet) {
             this.gpiNiSurveys = gpiNiSurveys;
         } else {
+            if (this.gpiNiSurveys == null) {
+                if (gpiNiSurveys == null) {
+                    gpiNiSurveys = new HashSet<>();
+                }
+                this.gpiNiSurveys = new HashSet<>(gpiNiSurveys);
+            }
             this.gpiNiSurveys.clear();
-            if (gpiNiSurveys==null)gpiNiSurveys=new HashSet<>();
+            if (gpiNiSurveys == null) {
+                gpiNiSurveys = new HashSet<>();
+            }
             this.gpiNiSurveys.addAll(gpiNiSurveys);
         }
     }

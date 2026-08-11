@@ -11,6 +11,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -133,7 +134,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements AmpFMConfigu
     public void switchFmVisible(AjaxRequestTarget target) {
         FMUtil.switchFmVisible(AmpComponentPanel.this);
         visibleFmButton.add(new AttributeModifier("value", new Model<String>(
-                (FMUtil.isFmVisible(AmpComponentPanel.this) ? "Hide" : "Show") + " " + getShorterFmName())));
+                (FMUtil.isFmVisibleInTemplate(AmpComponentPanel.this) ? "Hide" : "Show") + " " + getShorterFmName())));
         target.add(this);
         target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this));
     }
@@ -172,7 +173,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements AmpFMConfigu
                 FMFormCache.getInstance().disable(true);
                 switchFmVisible(target);
                 if (cascadeFmToChildren.getModelObject() != null && cascadeFmToChildren.getModelObject())
-                    OnePagerUtil.cascadeFmVisible(target, FMUtil.isFmVisible(AmpComponentPanel.this),
+                    OnePagerUtil.cascadeFmVisible(target, FMUtil.isFmVisibleInTemplate(AmpComponentPanel.this),
                             AmpComponentPanel.this);
                 FMFormCache.getInstance().enable(true);
             }
@@ -347,6 +348,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements AmpFMConfigu
         boolean fmEnabled = (foundEnabledChild.getObject() || isEnabledInFm);
         // we should check here
         boolean fmVisible = FMUtil.isFmVisible(this);
+        boolean fmTemplateVisible = FMUtil.isFmVisibleInTemplate(this);
 
         if (isAffectedByFreezing && this.findParent(FundingListEditor.class) == null && !fmMode) {
             // if visibility needs to be checked , this is
@@ -383,9 +385,9 @@ public abstract class AmpComponentPanel<T> extends Panel implements AmpFMConfigu
             enabledFmButton.add(new AttributeModifier("src", new Model<>(
                     "/TEMPLATE/ampTemplate/img_2/onepager/" + (fmEnabled ? "enable.png" : "disable.png"))));
             visibleFmButton.add(new AttributeModifier("title",
-                    new Model<>((fmVisible ? "Hide" : "Show") + " " + getFMName())));
+                new Model<>((fmTemplateVisible ? "Hide" : "Show") + " " + getFMName())));
             visibleFmButton.add(new AttributeModifier("src", new Model<>(
-                    "/TEMPLATE/ampTemplate/img_2/onepager/" + (fmVisible ? "alt_enable.png" : "alt_disable.png"))));
+                "/TEMPLATE/ampTemplate/img_2/onepager/" + (fmTemplateVisible ? "alt_enable.png" : "alt_disable.png"))));
             visibleFmButton.setVisible(true);
             // enabledFmButton.setVisible(true);
             cascadeFmToChildren.setVisible(true);

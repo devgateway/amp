@@ -28,10 +28,10 @@
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="green">
-		<td><digi:img src="module/admin/images/greenLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="${pageContext.request.contextPath}/resources/images/module/admin/images/greenLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%" align="center">
 			<font class="sectionTitle">
-				<digi:link styleClass="admin" href="/showLayout.do"><digi:trn key="admin:adminMenu">Admin Menu</digi:trn></digi:link>			
+				<digi:link styleClass="admin" href="/showLayout.do"><digi:trn key="admin:adminMenu">Admin Menu</digi:trn></digi:link>
 			</font>
 		</td>
 	</tr>
@@ -39,7 +39,7 @@
 		<td colspan="2" class="green" height="100%" valign="top">
 			<table border="0" width="100%" cellpadding="0" cellspacing="3">
 				<tr>
-					<td nowrap class="navigarionBarDefault" 
+					<td nowrap class="navigarionBarDefault"
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"
@@ -51,7 +51,7 @@
 				<digi:secure globalAdmin="true">
 				<tr>
 			      	<digi:context name="createSite" property="context/module/moduleinstance/showCreateSite.do" />
-					<td nowrap class="navigarionBarDefault" 
+					<td nowrap class="navigarionBarDefault"
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"
@@ -63,7 +63,7 @@
 				</digi:secure>
 				<tr>
 					<digi:context name="editSite" property="context/module/moduleinstance/showEditSite.do"/>
-					<td nowrap class="navigarionBarDefault" 
+					<td nowrap class="navigarionBarDefault"
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"
@@ -71,10 +71,10 @@
 							   onClick="gotoNavigation('<%= editSite %>')">
 						&nbsp;<digi:trn key="admin:editSite">Edit Site</digi:trn>
 					</td>
-				</tr>				
+				</tr>
 				<tr>
 					<digi:context name="searchSite" property="context/module/moduleinstance/showSearchSite.do"/>
-					<td nowrap class="navigarionBarDefault" 
+					<td nowrap class="navigarionBarDefault"
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"
@@ -85,7 +85,7 @@
 				</tr>
 				<tr>
 					<digi:context name="showModuleInstances" property="context/module/moduleinstance/showSiteInstances.do"/>
-					<td nowrap class="navigarionBarDefault" 
+					<td nowrap class="navigarionBarDefault"
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"
@@ -97,7 +97,7 @@
 				<digi:secure globalAdmin="true">
 				<tr>
 					<digi:context name="showCommonInstances" property="context/module/moduleinstance/showCommonInstances.do"/>
-					<td nowrap class="navigarionBarDefault" 
+					<td nowrap class="navigarionBarDefault"
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"
@@ -109,7 +109,7 @@
 				</digi:secure>
 				<tr>
 					<digi:context name="showGroups" property="context/module/moduleinstance/showGroups.do"/>
-					<td nowrap class="navigarionBarDefault" 
+					<td nowrap class="navigarionBarDefault"
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"
@@ -120,7 +120,7 @@
 				</tr>
 				<tr>
 					<digi:context name="searchUser" property="context/module/moduleinstance/showSearchUser.do"/>
-					<td nowrap class="navigarionBarDefault" 
+					<td nowrap class="navigarionBarDefault"
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"
@@ -131,7 +131,7 @@
 				</tr>
 				<tr>
 					<digi:context name="allSites" property="context/module/moduleinstance/showAllSites.do"/>
-					<td nowrap class="navigarionBarDefault" 
+					<td nowrap class="navigarionBarDefault"
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"
@@ -143,7 +143,7 @@
 				<digi:secure globalAdmin="true">
 				 <tr>
 					<digi:context name="locales" property="context/module/moduleinstance/showLocales.do"/>
-				 	<td nowrap class="navigarionBarDefault" 
+				 	<td nowrap class="navigarionBarDefault"
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"
@@ -154,7 +154,7 @@
 				</tr>
 				<tr>
 					<digi:context name="caches" property="context/module/moduleinstance/showCaches.do"/>
-					<td nowrap class="navigarionBarDefault" 
+					<td nowrap class="navigarionBarDefault"
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"
@@ -165,7 +165,7 @@
 				</tr>
 				<tr>
 					<digi:context name="showUnclosedSessions" property="context/module/moduleinstance/showUnclosedSessions.do"/>
-					<td nowrap class="navigarionBarDefault" 
+					<td nowrap class="navigarionBarDefault"
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"
@@ -177,7 +177,7 @@
 				</digi:secure>
 				<tr>
 					<digi:context name="configuration" property="context/module/moduleinstance/showConfiguration.do"/>
-					<td nowrap class="navigarionBarDefault" 
+					<td nowrap class="navigarionBarDefault"
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"
@@ -185,10 +185,10 @@
 							   onClick="gotoNavigation('<%= configuration %>')">
 						&nbsp;<digi:trn key="admin:configuration">Configuration</digi:trn>
 					</td>
-				</tr>				
+				</tr>
 				<tr>
 					<digi:context name="emailTemplates" property="context/module/moduleinstance/showEmailTemplates.do"/>
-					<td nowrap class="navigarionBarDefault" 
+					<td nowrap class="navigarionBarDefault"
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"
@@ -196,9 +196,9 @@
 							   onClick="gotoNavigation('<%= emailTemplates %>')">
 						&nbsp;<digi:trn key="admin:emailTemplates">Email Templates</digi:trn>
 					</td>
-				</tr>				
+				</tr>
 				<tr>
-					<td nowrap class="navigarionBarDefault" 
+					<td nowrap class="navigarionBarDefault"
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"

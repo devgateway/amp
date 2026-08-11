@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.onepager.models;
 
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.request.TLSUtils;
 
 /**
@@ -30,7 +31,13 @@ public abstract class LocaleAwareProxyModel<T> implements IModel<T> {
     protected String localeOfLangModel(){
         if (langModel == null || langModel.getObject() == null){
             //same language as page
-            return TLSUtils.getLangCode();
+            String pageLocale = TLSUtils.getLangCode();
+            if (pageLocale != null) {
+                return pageLocale;
+            }
+
+            String defaultLocale = TranslatorUtil.getDefaultLocaleCache();
+            return defaultLocale != null ? defaultLocale : "";
         }
         else
             return langModel.getObject();

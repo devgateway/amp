@@ -23,8 +23,10 @@ const Startup = (props) => {
     _fetchTranslations,
     programConfigurationPending,
     fmReducerPending,
+    fmReducerError,
     sectorClassificationPending,
-    settingsPending
+    settingsPending,
+    settingsError
   } = props;
   const dispatch = useDispatch();
 
@@ -37,8 +39,31 @@ const Startup = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const isAuthError = (error) => {
+      if (!error) return false;
+
+      if (typeof error === 'string') {
+        return error.toLowerCase().includes('auth');
+      }
+      if (error && typeof error === 'object') {
+        if (error.code && String(error.code).toLowerCase().includes('auth')) return true;
+        if (error.message && error.message.toLowerCase().includes('auth')) return true;
+      }
+      return false;
+    };
+
+    if (isAuthError(fmReducerError) || isAuthError(settingsError)) {
+      window.location.replace('/login.do');
+    }
+  }, [fmReducerError, settingsError]);
+
   if (translationPending || programConfigurationPending || fmReducerPending || sectorClassificationPending || settingsPending) {
     return (<Loading />);
+  }
+
+  if (fmReducerError || settingsError) {
+    return <div className="error">An error occurred: {fmReducerError || settingsError}</div>;
   } else {
     document.title = translations['amp.ndd.dashboard:page-title'];
     return (
@@ -54,8 +79,10 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   programConfigurationPending: state.programConfigurationReducer.loading,
   fmReducerPending: state.fetchFmReducer.loading,
+  fmReducerError: state.fetchFmReducer.error,
   sectorClassificationPending: state.fetchSectorClassificationReducer.loading,
   settingsPending: state.fetchSettingsReducer.loading,
+  settingsError: state.fetchSettingsReducer.error,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

@@ -39,6 +39,8 @@ import java.util.*;
 
 import static java.lang.Boolean.TRUE;
 import static org.dgfoundation.amp.ar.ColumnConstants.PROJECT_TITLE;
+import static org.dgfoundation.amp.ar.ColumnConstants.LOCATION_ADM_LEVEL_1;
+import static org.dgfoundation.amp.ar.ColumnConstants.REGIONAL_REGION;
 import static org.dgfoundation.amp.newreports.AmountsUnits.getAmountCode;
 import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportDesignerErrors.REPORT_NOT_FOUND;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportSettings;
@@ -54,6 +56,7 @@ public class ReportManager {
     public static final String REPORT = "report";
 
     public static final String PUBLIC_REPORT_GENERATOR_MODULE_NAME = "Public Report Generator";
+    public static final String PUBLIC_VIEW_CHECKBOX = "Public View Checkbox";
 
     private static TranslatorService translatorService = AMPTranslatorService.INSTANCE;
 
@@ -85,6 +88,8 @@ public class ReportManager {
 
         this.reportRequest = reportRequest;
         this.report = reportId == null ? new AmpReports() : getReportById(reportId);
+
+        remapSaveRegionalColumns(reportRequest);
 
         initValidators();
         validate();
@@ -351,8 +356,84 @@ public class ReportManager {
         return reportMeasures;
     }
 
+    private void remapSaveRegionalColumns(final ReportRequest req) {
+        if (req.getColumns() == null || req.getColumns().isEmpty() || req.getType() == null) {
+            return;
+        }
+        ReportType type;
+        try {
+            type = ReportType.fromString(req.getType());
+        } catch (IllegalArgumentException e) {
+            return;
+        }
+        if (!type.isRegional()) {
+            return;
+        }
+        AmpColumns adm1 = getAmpColumnByName(LOCATION_ADM_LEVEL_1);
+        if (adm1 == null) {
+            return;
+        }
+        if (!req.getColumns().contains(adm1.getColumnId())) {
+            return;
+        }
+        AmpColumns regionalRegion = getAmpColumnByName(REGIONAL_REGION);
+        if (regionalRegion == null) {
+            return;
+        }
+        List<Long> remapped = new ArrayList<>(req.getColumns());
+        for (int i = 0; i < remapped.size(); i++) {
+            if (adm1.getColumnId().equals(remapped.get(i))) {
+                remapped.set(i, regionalRegion.getColumnId());
+            }
+        }
+        req.setColumns(remapped);
+
+        // Also remap in hierarchies if present
+        if (req.getHierarchies() != null && req.getHierarchies().contains(adm1.getColumnId())) {
+            List<Long> remappedHierarchies = new ArrayList<>(req.getHierarchies());
+            for (int i = 0; i < remappedHierarchies.size(); i++) {
+                if (adm1.getColumnId().equals(remappedHierarchies.get(i))) {
+                    remappedHierarchies.set(i, regionalRegion.getColumnId());
+                }
+            }
+            req.setHierarchies(remappedHierarchies);
+        }
+    }
+
+    private Set<AmpReportColumn> remapRegionalColumns(final AmpReports ampReport) {
+        if (ReportType.fromLong(ampReport.getType()).isRegional()) {
+            AmpColumns adm1 = null;
+            Set<AmpReportColumn> remapped = new LinkedHashSet<>();
+            for (AmpReportColumn rc : ampReport.getColumns()) {
+                if (REGIONAL_REGION.equals(rc.getColumn().getColumnName())) {
+                    if (adm1 == null) {
+                        adm1 = getAmpColumnByName(LOCATION_ADM_LEVEL_1);
+                    }
+                    if (adm1 != null) {
+                        AmpReportColumn replacement = new AmpReportColumn();
+                        replacement.setColumn(adm1);
+                        replacement.setOrderId(rc.getOrderId());
+                        replacement.setLevel(rc.getLevel());
+                        remapped.add(replacement);
+                        continue;
+                    }
+                }
+                remapped.add(rc);
+            }
+            return remapped;
+        }
+        return ampReport.getColumns();
+    }
+
     private AmpColumns getAmpColumnById(final Long columnId) {
         return PersistenceManager.getSession().get(AmpColumns.class, columnId);
+    }
+
+    private AmpColumns getAmpColumnByName(final String columnName) {
+        return (AmpColumns) PersistenceManager.getSession()
+                .createQuery("from " + AmpColumns.class.getName() + " where columnName = :name")
+                .setParameter("name", columnName)
+                .uniqueResult();
     }
 
     private AmpMeasures getAmpMeasureById(final Long columnId) {
@@ -429,7 +510,7 @@ public class ReportManager {
         }
 
         report.setMeasures(ampReport.getMeasures());
-        report.setColumns(ampReport.getColumns());
+        report.setColumns(remapRegionalColumns(ampReport));
         report.setHierarchies(ampReport.getHierarchies());
 
         AmpARFilterConverter arFilterConverter = new AmpARFilterConverter(buildFilterFromSource(ampReport));
@@ -444,7 +525,7 @@ public class ReportManager {
         boolean isMultilingual = TranslationSettings.getCurrent().isMultilingual();
         Map<String, String> translations = new HashMap<>();
         if (isMultilingual) {
-            MultilingualInputFieldValues mifv = new MultilingualInputFieldValues(AmpReports.class, 
+            MultilingualInputFieldValues mifv = new MultilingualInputFieldValues(AmpReports.class,
                     ampReport.getAmpReportId(), "name", null, null);
             translations = mifv.getTranslations();
         }

@@ -43,7 +43,6 @@ public class NamedEnumType extends EnumType {
         }
         Method getterMethod = ReflectHelper.getterMethodOrNull(enumClass, valueProperty);
         Getter getter = new GetterMethodImpl(enumClass, valueProperty, getterMethod);
-        logger.info("Getter is: "+getter.getMethodName());
 
         for (Enum enumConstant : enumClass.getEnumConstants()) {
             values.put(enumConstant, (String) getter.get(enumConstant));

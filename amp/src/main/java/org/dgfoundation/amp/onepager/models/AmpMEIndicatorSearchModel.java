@@ -15,6 +15,7 @@ import org.hibernate.criterion.Restrictions;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import org.apache.log4j.Logger;
 
 /**
  * @author aartimon@dginternational.org
@@ -31,9 +32,11 @@ public class AmpMEIndicatorSearchModel extends
 
     private static final long serialVersionUID = 8211300754918658832L;
     private Session session;
+    private static final Logger logger = Logger.getLogger(AmpMEIndicatorSearchModel.class);
+
 
     public enum PARAM implements AmpAutoCompleteModelParam {
-        ACTIVITY_PROGRAM
+        ACTIVITY_PROGRAM, ACTIVITY_SECTOR
     }
 
 
@@ -49,11 +52,13 @@ public class AmpMEIndicatorSearchModel extends
 
             Criteria crit = session.createCriteria(AmpIndicator.class);
 
-            Set<AmpActivityProgram> ampActivityPrograms = (Set<AmpActivityProgram>) getParam(PARAM.ACTIVITY_PROGRAM);
+            Set<Long> activityProgramThemeIds = toProgramThemeIds(getParam(PARAM.ACTIVITY_PROGRAM));
+            Set<Long> activitySectorIds = toSectorIds(getParam(PARAM.ACTIVITY_SECTOR));
+            logger.info("All sectors: " + activitySectorIds);
 
             // Get activity location
             crit.setCacheable(false);
-            if (input.trim().length() > 0) {
+            if (!input.trim().isEmpty()) {
                 Junction junction = Restrictions.conjunction().add(getTextCriterion("name", input));
                 crit.add(junction);
             }
@@ -62,28 +67,40 @@ public class AmpMEIndicatorSearchModel extends
             if (maxResults != null && maxResults != 0)
                 crit.setMaxResults(maxResults);
             ret = crit.list();
-
             // Re assign all indicators as filtered
             filterAmpIndicators = ret;
             // Check if the indicator filter by program is active
             boolean filterByProgram = FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_PROGRAM);
-            if(filterByProgram) {
-                // If not activity programs then do not return any indicator
-                if (ampActivityPrograms != null && !ampActivityPrograms.isEmpty()) {
-                    Set<AmpTheme> programThemes = ampActivityPrograms.stream()
-                            .map(AmpActivityProgram::getProgram)
-                            .collect(Collectors.toSet());
-                    Set<AmpTheme> programThemesClone = new HashSet<>(programThemes);
-                    // Check if program has siblings and add them to themes to get all indicators for objectives in a program
-                    for (AmpTheme program : programThemes) {
-                        if (program.getSiblings() != null) {
-                            programThemesClone.addAll(program.getSiblings());
+
+            if (filterByProgram) {
+                if (!activityProgramThemeIds.isEmpty()) {
+                    // Include siblings (children in AMP hierarchy) via fresh session to avoid lazy-load issues
+                    Set<Long> allProgramIds = new HashSet<>(activityProgramThemeIds);
+                    for (Long themeId : activityProgramThemeIds) {
+                        AmpTheme theme = session.get(AmpTheme.class, themeId);
+                        if (theme != null && theme.getSiblings() != null) {
+                            for (AmpTheme sibling : theme.getSiblings()) {
+                                if (sibling.getAmpThemeId() != null) {
+                                    allProgramIds.add(sibling.getAmpThemeId());
+                                }
+                            }
                         }
                     }
-
-
                     filterAmpIndicators = ret.stream()
-                            .filter(indicator -> programThemesClone.contains(indicator.getProgram()))
+                            .filter(ind -> ind.getProgram() != null
+                                    && allProgramIds.contains(ind.getProgram().getAmpThemeId()))
+                            .collect(Collectors.toList());
+                }
+            }
+
+            // Check if the indicator filter by sector is active
+            boolean filterBySector = FeaturesUtil.isVisibleModule(IndicatorManagerService.FILTER_BY_SECTOR);
+            if (filterBySector) {
+                if (!activitySectorIds.isEmpty()) {
+                    filterAmpIndicators = filterAmpIndicators.stream()
+                            .filter(ind -> ind.getSectors() != null && ind.getSectors().stream()
+                                    .anyMatch(s -> s.getAmpSectorId() != null
+                                            && activitySectorIds.contains(s.getAmpSectorId())))
                             .collect(Collectors.toList());
                 }
             }
@@ -92,6 +109,33 @@ public class AmpMEIndicatorSearchModel extends
         } catch (HibernateException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Set<Long> toSectorIds(Object param) {
+        if (param == null) return Collections.emptySet();
+        Set<?> raw = (Set<?>) param;
+        if (raw.isEmpty()) return Collections.emptySet();
+        return (Set<Long>) raw;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Set<Long> toProgramThemeIds(Object param) {
+        if (param == null) return Collections.emptySet();
+        Set<?> raw = (Set<?>) param;
+        if (raw.isEmpty()) return Collections.emptySet();
+        Object first = raw.iterator().next();
+        if (first instanceof Long) {
+            return (Set<Long>) raw;
+        }
+        // Legacy: stale Wicket session still holds Set<AmpActivityProgram>
+        Set<Long> ids = new HashSet<>();
+        for (AmpActivityProgram ap : (Set<AmpActivityProgram>) raw) {
+            if (ap.getProgram() != null && ap.getProgram().getAmpThemeId() != null) {
+                ids.add(ap.getProgram().getAmpThemeId());
+            }
+        }
+        return ids;
     }
 
 }

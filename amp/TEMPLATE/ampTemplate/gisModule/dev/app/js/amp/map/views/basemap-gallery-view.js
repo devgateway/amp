@@ -1,7 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
-var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
+var L = window.L; // use global L set by lib-load-hacks.js
 
 var Template = fs.readFileSync(__dirname + '/../templates/basemap-gallery-template.html', 'utf8');
 

@@ -126,6 +126,13 @@ public class TopsChartService {
                 name = DashboardConstants.TOP_REGIONS;
                 spec.setReportCollapsingStrategy(ReportCollapsingStrategy.NEVER);
                 break;
+            case MCT:
+                setColumn(ColumnConstants.LOCATION_ADM_LEVEL_0);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.LOCATION_ADM_LEVEL_0));
+                title = TranslatorWorker.translateText(DashboardConstants.TOP_COUNTRIES);
+                name = DashboardConstants.TOP_COUNTRIES;
+                spec.setReportCollapsingStrategy(ReportCollapsingStrategy.NEVER);
+                break;
             case PS:
                 setColumn(ColumnConstants.PRIMARY_SECTOR);
                 applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.PRIMARY_SECTOR));

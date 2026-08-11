@@ -21,7 +21,7 @@ import java.util.List;
 public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -5601918041949098629L;
 
@@ -34,7 +34,7 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel {
             throws Exception {
         super(id, fmName, am);
         this.fmType = AmpFMTypes.MODULE;
-        
+
         RepeatingView view = new RepeatingView("allSectorsTables");
         view.setOutputMarkupId(true);
         add(view);
@@ -43,9 +43,9 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel {
 
         for (AmpClassificationConfiguration sectorConf : allClassificationConfigs) {
             AmpSectorsFormTableFeature sectorsTable=new AmpSectorsFormTableFeature(view.newChildId(), sectorConf.getName()+" Sectors", am,sectorConf);
-            view.add(sectorsTable); 
+            view.add(sectorsTable);
         }
-        
+
     }
 
 }

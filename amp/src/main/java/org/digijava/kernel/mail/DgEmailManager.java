@@ -531,6 +531,8 @@ public class DgEmailManager {
             }
         }
         catch (MessagingException ex) {
+            logger.error("Failed to send mail to " + (to != null ? Arrays.toString(to) : "none")
+                + " via smtp host " + smtp.getHost(), ex);
 
             // log mail
             if (log) {

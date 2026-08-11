@@ -13,7 +13,7 @@
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
 	<tr class="yellow">
-		<td><digi:img src="module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
+		<td><digi:img src="${pageContext.request.contextPath}/resources/images/module/admin/images/yellowLeftTile.gif" border="0" width="20"/></td>
 		<td width="100%">
 			<font class="sectionTitle">
 				<digi:trn key="admin:allSites">All sites</digi:trn>
@@ -30,7 +30,7 @@
     <tr><td><digi:trn key="admin:childsOfSite">Childs of Site</digi:trn> <b><c:out value="${allSitesForm.parentSiteName}" /></b></td></tr>
  </table>
  <br>
-</c:if> 
+</c:if>
 <div align="center">
 <table width="60%" border="0" cellpadding="0" cellspacing="0" class="border">
  <tr>
@@ -45,36 +45,36 @@
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
- </tr> 
- <tr bgcolor="#EEEEEE"> 
- <td width="30%" align="left"> 
+ </tr>
+ <tr bgcolor="#EEEEEE">
+ <td width="30%" align="left">
    	<bean:define id="siteName" name="sites" property="siteName" type="java.lang.String" />
    	<bean:define id="siteId" name="sites" property="siteId" type="java.lang.String" />
     <c:if test="${sites.hasChildren}">
        <digi:link href="/showAllSites.do" paramName="sites" paramId="selectedSiteId" paramProperty="id" >
-	 	<digi:trn key='<%= "site:" + siteName %>' siteId='<%=siteId%>'>	
+	 	<digi:trn key='<%= "site:" + siteName %>' siteId='<%=siteId%>'>
 	      <c:out value="${sites.siteName}" />
-		</digi:trn>	 
+		</digi:trn>
 	  </digi:link>
     </c:if>
     <c:if test="${!sites.hasChildren}">
-	 <digi:trn key='<%= "site:" + siteName %>' siteId='<%=siteId%>'>	
+	 <digi:trn key='<%= "site:" + siteName %>' siteId='<%=siteId%>'>
          <c:out value="${sites.siteName}" />
-	</digi:trn>	 
+	</digi:trn>
     </c:if>
     </td>
-    <td nowrap width="10%" align="left" valign="center">  
+    <td nowrap width="10%" align="left" valign="center">
   	  <a href='<c:out value="${sites.viewSite}" />'><digi:trn key="admin:viewSite">View Site</digi:trn></a>
     </td>
     <td nowrap width="10%" align="left" >
        <c:if test="${sites.editableSite}">
   	     <a href='<c:out value="${sites.editSite}" />'><digi:trn key="admin:editSite">Edit Site</digi:trn></a> </c:if>
-   </td>	
-    <td nowrap width="10%" align="left" valign="center">  
+   </td>
+    <td nowrap width="10%" align="left" valign="center">
        <c:if test="${sites.editableSite}">
   	  <a href='<c:out value="${sites.admin}" />'><digi:trn key="admin:admin">Admin</digi:trn></a> </c:if>
     </td>
- </tr>			
+ </tr>
 </c:forEach>
 </table>
 </c:if>

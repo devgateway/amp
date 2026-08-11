@@ -2,16 +2,15 @@ import {ActualValue, DefaultTranslations, LineChartData, SectorReport, YearValue
 import {printChart} from "../../../sscdashboard/utils/PrintUtils";
 import {
     BASE_VALUE,
-    BASE_VALUE_COLOR, CURRENT_VALUE, CURRENT_VALUE_COLOR,
+    BASE_VALUE_COLOR,
+    CURRENT_VALUE,
+    CURRENT_VALUE_COLOR,
     DEFAULT_REPORTING_PERIOD,
+    SECTOR_COLOR,
     TARGET_VALUE,
-    TARGET_VALUE_COLOR,
-    SECTOR_COLOR
+    TARGET_VALUE_COLOR
 } from "../../utils/constants";
-import React from "react";
 import {DataType} from "../components/charts/BarChart";
-import _ from 'lodash';
-import {DateUtil} from "../../../admin/indicator_manager/utils/dateFn";
 import dayjs from "dayjs";
 
 interface GaugeUtils {
@@ -69,11 +68,17 @@ class ChartUtils {
 
         if (!actualValue) {
             // if current year is not found, get the most recent year
-            const sortedActualValues = actualValues.sort((a: any, b: any) => b.year - a.year);
+            // Create a copy before sorting to avoid modifying the original read-only array
+            const sortedActualValues = [...actualValues].sort((a: any, b: any) => b.year - a.year);
             return sortedActualValues[0].value;
         }
 
         return actualValue ? actualValue.value : 0;
+    }
+    public static sumActualValues = (actualValues: ActualValue []) => {
+        if (!actualValues || actualValues.length === 0) return 0;
+
+        return actualValues.reduce((acc, curr) => acc + curr.value, 0);
     }
 
     public static getMaxActualValue = (actualValues: ActualValue []) => {
@@ -88,7 +93,7 @@ class ChartUtils {
             if (!curr.actualValues || curr.actualValues.length === 0) {
                 acc.actualValue += curr.baseValue;
             }
-            acc.actualValue += ChartUtils.getActualValueForCurrentYear(curr.actualValues);
+            acc.actualValue += ChartUtils.sumActualValues(curr.actualValues);
             acc.targetValue += curr.targetValue;
             acc.baseValue += curr.baseValue;
             return acc;
@@ -167,53 +172,86 @@ class ChartUtils {
 
         const finalDataSet: DataType [] = [];
 
-        if (data) {
-            let aggregateValue = {
-                baseValue: 0,
-                targetValue: 0,
-                actualValue: 0
+        const collectItems = Array.isArray(data) ? data : (data ? [data] : []);
+
+        // helper to parse dd/MM/yyyy or ISO to Date
+        const parseDate = (d?: string): Date | null => {
+            if (!d) return null;
+            const parts = d.split('/');
+            if (parts.length === 3 && parts[2].length === 4) {
+                const [dd, MM, yyyy] = parts;
+                const dateObj = new Date(Number(yyyy), Number(MM) - 1, Number(dd));
+                return isNaN(dateObj.getTime()) ? null : dateObj;
+            }
+            const iso = new Date(d);
+            return isNaN(iso.getTime()) ? null : iso;
+        };
+        // new helper: extract only the year string
+        const extractYear = (d?: string): string | undefined => {
+            if (!d) return undefined;
+            if (/^\d{4}$/.test(d)) return d; // already a year
+            const parsed = parseDate(d);
+            return parsed ? parsed.getFullYear().toString() : undefined;
+        };
+        const getLatestYearForActualValues = (values: ActualValue[]): number | undefined => {
+            if (!values || values.length === 0) return undefined;
+            const years = values.map(v => { return Number(v.year); }).filter((y): y is number => y !== null);
+            if (years.length === 0) return undefined;
+            return Math.max(...years);
+        }
+        const getMaxDateString = (dates: string[]): string | undefined => {
+            const mapped = dates.map(d => ({ raw: d, date: parseDate(d) }))
+                .filter(o => o.date !== null) as { raw: string; date: Date }[];
+            if (mapped.length === 0) return undefined;
+            mapped.sort((a,b) => a.date.getTime() - b.date.getTime());
+            return mapped[mapped.length - 1].raw; // keep original formatting
+        };
+
+        // aggregate numeric values (existing logic)
+        let aggregateValue = { baseValue: 0, targetValue: 0, actualValue: 0 };
+        if (collectItems.length > 0) {
+            aggregateValue = ChartUtils.computeAggregateValues(collectItems as YearValues[]);
+        }
+
+        // collect date strings
+        const baseDates: string[] = collectItems.map((i: YearValues) => i.baseValueDate).filter(Boolean);
+        const targetDates: string[] = collectItems.map((i: YearValues) => i.targetValueDate).filter(Boolean);
+        const maxBaseDateStr = getMaxDateString(baseDates);
+        const maxTargetDateStr = getMaxDateString(targetDates);
+        const year = new Date().getFullYear();
+        const maxActualYearStr = getLatestYearForActualValues(collectItems.flatMap(i => i.actualValues));
+
+        const baseYearLabel = extractYear(maxBaseDateStr) || year;
+        const targetYearLabel = extractYear(maxTargetDateStr) || year;
+
+        if (aggregateValue.baseValue) {
+            const baseData = {
+                id: translations['amp.ndd.dashboard:me-baseline'],
+                value: aggregateValue.baseValue,
+                label: `${translations['amp.ndd.dashboard:me-baseline']} ${baseYearLabel}`.trim(),
+                color: BASE_VALUE_COLOR
             };
+            finalDataSet.push(baseData);
+        }
 
-            if (Array.isArray(data)) {
-                aggregateValue = ChartUtils.computeAggregateValues(data);
-            } else {
-                aggregateValue = ChartUtils.computeAggregateValues([data]);
-            }
+        if (aggregateValue.actualValue) {
+            const actualData = {
+                id: translations['amp.ndd.dashboard:me-current'],
+                value: aggregateValue.actualValue,
+                label: `${translations['amp.ndd.dashboard:me-current']} ${maxActualYearStr || year}`.trim(),
+                color: CURRENT_VALUE_COLOR
+            };
+            finalDataSet.push(actualData);
+        }
 
-            const year = new Date().getFullYear();
-            if (aggregateValue.baseValue) {
-                const baseData = {
-                    id: translations['amp.ndd.dashboard:me-baseline'],
-                    value: aggregateValue.baseValue,
-                    label: `${translations['amp.ndd.dashboard:me-baseline']} ${year}`,
-                    color: BASE_VALUE_COLOR
-                }
-
-                finalDataSet.push(baseData);
-            }
-
-            if (aggregateValue.actualValue) {
-                const actualData = {
-                    id: translations['amp.ndd.dashboard:me-current'],
-                    value: aggregateValue.actualValue,
-                    label: `${translations['amp.ndd.dashboard:me-current']} ${year}`,
-                    color: CURRENT_VALUE_COLOR
-                };
-
-                finalDataSet.push(actualData);
-            }
-
-            if (aggregateValue.targetValue) {
-                const targetData = {
-                    id: translations['amp.ndd.dashboard:me-target'],
-                    value: aggregateValue.targetValue,
-                    label: `${translations['amp.ndd.dashboard:me-target']} ${year}`,
-                    color: TARGET_VALUE_COLOR
-                };
-
-                finalDataSet.push(targetData);
-            }
-
+        if (aggregateValue.targetValue) {
+            const targetData = {
+                id: translations['amp.ndd.dashboard:me-target'],
+                value: aggregateValue.targetValue,
+                label: `${translations['amp.ndd.dashboard:me-target']} ${targetYearLabel}`.trim(),
+                color: TARGET_VALUE_COLOR
+            };
+            finalDataSet.push(targetData);
         }
 
         return finalDataSet;

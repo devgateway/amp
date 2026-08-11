@@ -441,12 +441,15 @@
                     return false;
                 }
 
-                var countryId= document.aimAddOrgForm.countryId.value;
+                var countryIdElement = document.aimAddOrgForm.countryId;
                 var mandatoryCountryOfOrigin = document.getElementById('mandatoryCountryOfOrigin');
-                if (mandatoryCountryOfOrigin!=null && (countryId == null||countryId == '-1')) {
-                    alert('<digi:trn  jsFriendly="true">Please Select Country of Origin.</digi:trn>');
-                    document.aimAddOrgForm.countryId.focus();
-                    return false;
+                if (mandatoryCountryOfOrigin!=null && countryIdElement != null) {
+                    var countryId = countryIdElement.value;
+                    if (countryId == null || countryId == '' || countryId == '-1') {
+                        alert('<digi:trn  jsFriendly="true">Please Select Country of Origin.</digi:trn>');
+                        countryIdElement.focus();
+                        return false;
+                    }
                 }
 
                 var address= document.aimAddOrgForm.address.value;
@@ -1981,7 +1984,7 @@ border-right: 1px solid rgb(208, 208, 208);
 	                                            <td class="tdClass">
 	                                            	<c:forEach var="phone" items="${orgCont.contact.properties}">
 														<c:if test="${phone.name=='contact phone'}">
-                                                                                 <div><c:if test="${not empty phone.phoneCategory}"><digi:trn> <c:out value="${phone.phoneCategory}"/></digi:trn></c:if> <c:out value="${phone.actualPhoneNumber}"></c:out></div>
+                                                                                 <div><c:if test="${not empty phone.phoneCategory}"><digi:trn> <c:out value="${phone.phoneCategory}"/></digi:trn></c:if> <c:out value="${phone.value}"/></div>
 														</c:if>
 													</c:forEach>
 	                                            </td>

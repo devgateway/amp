@@ -21,13 +21,13 @@ public final class ArConstants {
     public final static MetaInfo []prefixes=new MetaInfo[] {
         //PLEASE KEEP THE SAME ORDER IN prefixes AND suffixes !!
 
-        new MetaInfo(GenericViews.HTML2,"/repository/aim/view/ar/html2/"),
-        new MetaInfo(GenericViews.HTML,"/repository/aim/view/ar/html/"),
+        new MetaInfo(GenericViews.HTML2,"/WEB-INF/jsp/aim/view/ar/html2/"),
+        new MetaInfo(GenericViews.HTML,"/WEB-INF/jsp/aim/view/ar/html/"),
         new MetaInfo(GenericViews.XLS,"org.dgfoundation.amp.ar.view.xls."),
         new MetaInfo(GenericViews.PDF,"org.dgfoundation.amp.ar.view.pdf."),
-        new MetaInfo(GenericViews.PRINT,"/repository/aim/view/ar/print/"),
-        new MetaInfo(GenericViews.TREE,"/repository/aim/view/ar/tree/"),
-        new MetaInfo(GenericViews.FOLDABLE,"/repository/aim/view/ar/foldable/"),
+        new MetaInfo(GenericViews.PRINT,"/WEB-INF/jsp/aim/view/ar/print/"),
+        new MetaInfo(GenericViews.TREE,"/WEB-INF/jsp/aim/view/ar/tree/"),
+        new MetaInfo(GenericViews.FOLDABLE,"/WEB-INF/jsp/aim/view/ar/foldable/"),
         };
 
     public final static MetaInfo []suffixes=new MetaInfo[] {
@@ -387,8 +387,7 @@ public final class ArConstants {
 //  public final static String EXECUTING_AGENCY_PERCENTAGE="Eexecuting Agency Percentage";
 
 
-    //burkina
-//  public final static String PROGRAM_PERCENTAGE="Program Percentage";
+ public final static String PROGRAM_PERCENTAGE="Program Percentage";
 
 
 

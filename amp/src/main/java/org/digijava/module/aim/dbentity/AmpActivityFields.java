@@ -14,6 +14,7 @@ import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
+import org.digijava.module.aim.annotations.activityversioning.VersionableFieldBinary;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.*;
@@ -70,6 +71,21 @@ LoggerIdentifiable, Cloneable {
             fmPath = "/Activity Form/Identification/Activity Summary")
     @VersionableFieldTextEditor(fieldTitle = "Activity Summary")
     protected String activitySummary;
+
+
+    @Interchangeable(
+            fieldTitle = "Project Thumbnail",
+            importable = false,
+            fmPath = "/Activity Form/Identification/Project Thumbnail",
+            interValidators = @InterchangeableValidator(RequiredValidator.class)
+    )
+//    @VersionableCollection(
+//            fieldTitle = "Project Thumbnail"
+//    )
+//    @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
+//    @VersionableFieldBinary(fieldTitle = "Project Thumbnail")
+//    @TranslatableField
+    protected AmpProjectThumbnail projectThumbnail;
 
     @Interchangeable(fieldTitle = "Conditionalities", importable = true,
             fmPath = "/Activity Form/Identification/Conditionalities")
@@ -1321,17 +1337,29 @@ LoggerIdentifiable, Cloneable {
 
         }
 
+    public AmpProjectThumbnail getProjectThumbnail() {
+        return projectThumbnail;
+    }
+
+    public void setProjectThumbnail(AmpProjectThumbnail projectThumbnail) {
+        this.projectThumbnail = projectThumbnail;
+    }
+
         public Set<AmpActivityContact> getActivityContacts() {
             return activityContacts;
         }
 
         public void setActivityContacts(Set<AmpActivityContact> activityContacts) {
-            if (this.activityContacts == null) {
+            if (activityContacts instanceof PersistentSet) {
                 this.activityContacts = activityContacts;
             } else {
+                if (this.activityContacts == null) {
+                    this.activityContacts = new HashSet<>();
+                }
                 this.activityContacts.clear();
-                if (activityContacts==null)activityContacts=new HashSet<>();
-                this.activityContacts.addAll(activityContacts);
+                if (activityContacts != null) {
+                    this.activityContacts.addAll(activityContacts);
+                }
             }
         }
 
@@ -2166,11 +2194,18 @@ LoggerIdentifiable, Cloneable {
         }
 
         public void setContracts(Set<IPAContract> contracts) {
-            if (this.contracts == null) {
+
+            if (contracts instanceof PersistentSet) {
                 this.contracts = contracts;
             } else {
+                if(this.contracts==null) {
+                    if (contracts==null)
+                    {
+                        contracts=new HashSet<>();
+                    }
+                    this.contracts = new HashSet<>(contracts);
+                }
                 this.contracts.clear();
-                if (contracts==null)contracts=new HashSet<>();
                 this.contracts.addAll(contracts);
             }
         }

@@ -27,9 +27,9 @@
         UPDATE AMP_CATEGORY_VALUE_LOCATION
         SET is_ecowas = TRUE
         WHERE UPPER(iso) IN (
-            'BJ', 'BF', 'CV', 'CI', 'GM',
-            'GH', 'GN', 'GW', 'LR', 'ML',
-            'NE', 'NG', 'SN', 'SL', 'TG'
+            'BJ', 'CV', 'CI', 'GM',
+            'GH', 'GN', 'GW', 'LR',
+            'NG', 'SN', 'SL', 'TG'
         );
             ]]></lang>
         </script>

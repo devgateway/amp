@@ -48,6 +48,7 @@ public class ViewImportProgress extends Action {
             data.put("importedProjects", importedProjects);
             data.put("failedProjects", variousCounts.get("failedProjects"));
             data.put("successfulProjects", variousCounts.get("successfulProjects"));
+            data.put("skippedProjects", variousCounts.get("skippedProjects"));
 //            data.put("totalPages", variousCounts.get("totalPages"));
             data.put("totalProjects", variousCounts.get("totalProjects"));
 
@@ -57,7 +58,6 @@ public class ViewImportProgress extends Action {
             String jsonData = objectMapper.writeValueAsString(data);
 
             response.setContentType("application/json");
-            logger.info("Json Data: "+jsonData);
             response.getWriter().write(jsonData);
             response.setCharacterEncoding("UTF-8");
             return null;
@@ -86,6 +86,9 @@ public class ViewImportProgress extends Action {
         List<Object[]> resultList = query.list();
 
         Map<String, Long> countsMap = new HashMap<>();
+        countsMap.put("failedProjects", 0L);
+        countsMap.put("successfulProjects", 0L);
+        countsMap.put("skippedProjects", 0L);
 
         for (Object[] row : resultList) {
             ImportStatus importStatus = (ImportStatus) row[0];
@@ -95,6 +98,8 @@ public class ViewImportProgress extends Action {
                 countsMap.put("failedProjects", count);
             } else if (importStatus.equals(ImportStatus.SUCCESS)) {
                 countsMap.put("successfulProjects", count);
+            } else if (importStatus.equals(ImportStatus.SKIPPED)) {
+                countsMap.put("skippedProjects", count);
             }
         }
         long totalProjects= getTotalProjects(importedFilesRecordId);
@@ -155,7 +160,7 @@ public class ViewImportProgress extends Action {
     public List<ImportedFilesRecord> getAllImportFileRecords() {
         Session session = PersistenceManager.getRequestDBSession();
 
-        String hql = "FROM ImportedFilesRecord";
+        String hql = "FROM ImportedFilesRecord ORDER BY uploadedAt DESC, id DESC";
         Query query = session.createQuery(hql);
         List<ImportedFilesRecord> importedFilesRecords = query.list();
         logger.info("importedFilesRecords: " + importedFilesRecords);

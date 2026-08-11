@@ -40,6 +40,18 @@ public class ActionAuthorizer {
             .build();
 
     /**
+     * Returns true if the given ApiMethod requires an authenticated user session.
+     * Used by request filters to decide whether CSRF protection is warranted.
+     */
+    public static boolean requiresAuthentication(ApiMethod apiMethod) {
+        if (apiMethod.authTypes().length == 0) {
+            return false;
+        }
+        Collection<AuthRule> authRules = ruleHierarchy.getEffectiveRules(apiMethod.authTypes());
+        return authRules.contains(AuthRule.AUTHENTICATED);
+    }
+
+    /**
      * Main process to give authorization to call current method based on its authorization rules 
      * @param method the method to authorize
      * @param apiMethod method settings that store the authorization rules as well

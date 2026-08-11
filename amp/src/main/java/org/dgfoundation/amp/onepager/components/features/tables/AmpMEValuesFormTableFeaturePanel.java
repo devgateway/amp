@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
@@ -14,10 +13,10 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
+import java.util.Objects;
 import java.util.Set;
 
 public abstract class AmpMEValuesFormTableFeaturePanel extends AmpMEFormTableFeaturePanel<AmpIndicator, AmpIndicatorValue> {
-    private static Logger logger = Logger.getLogger(AmpMEValuesFormTableFeaturePanel.class);
 
     protected IModel<Set<AmpIndicatorValue>> parentModel;
     protected IModel<Set<AmpIndicatorValue>> setModel;
@@ -35,16 +34,40 @@ public abstract class AmpMEValuesFormTableFeaturePanel extends AmpMEFormTableFea
         setModel = new AbstractMixedSetModel<AmpIndicatorValue>(parentModel) {
             @Override
             public boolean condition(AmpIndicatorValue item) {
-                return item.getValueType() == AmpIndicatorValue.ACTUAL && item.getActivityLocation() == location.getObject();
+                return item.getValueType() == AmpIndicatorValue.ACTUAL
+                        && matchesActivityLocation(item.getActivityLocation(), location.getObject());
             }
         };
 
         setBaseTargetModel = new AbstractMixedSetModel<AmpIndicatorValue>(parentModel) {
             @Override
             public boolean condition(AmpIndicatorValue item) {
-                return (item.getValueType() == AmpIndicatorValue.BASE || item.getValueType() == AmpIndicatorValue.TARGET) && item.getActivityLocation() == location.getObject();
+                return (item.getValueType() == AmpIndicatorValue.BASE || item.getValueType() == AmpIndicatorValue.TARGET)
+                        && matchesActivityLocation(item.getActivityLocation(), location.getObject());
             }
         };
+    }
+
+    private static boolean matchesActivityLocation(AmpActivityLocation activityLocation,
+                                                   AmpActivityLocation expectedActivityLocation) {
+        if (expectedActivityLocation == null) {
+            return activityLocation == null;
+        }
+        if (activityLocation == expectedActivityLocation) {
+            return true;
+        }
+        if (activityLocation == null) {
+            return false;
+        }
+        if (activityLocation.getId() != null || expectedActivityLocation.getId() != null) {
+            return Objects.equals(activityLocation.getId(), expectedActivityLocation.getId());
+        }
+        return Objects.equals(getLocationId(activityLocation), getLocationId(expectedActivityLocation));
+    }
+
+    private static Long getLocationId(AmpActivityLocation activityLocation) {
+        return activityLocation != null && activityLocation.getLocation() != null
+                ? activityLocation.getLocation().getId() : null;
     }
 
     protected AmpTextFieldPanel<Double> getActualValue(ListItem<AmpIndicatorValue> item){

@@ -11,8 +11,12 @@ public class ListItem<T> extends Item<T>{
 
     private class ListItemModel extends AbstractReadOnlyModel<T>{
         public T getObject(){
-            return ((ListEditor<T>)ListItem.this.getParent())
-            .items.get(getIndex());
+            ListEditor<T> editor = (ListEditor<T>) ListItem.this.getParent();
+            // items is transient: repopulate if lost across page (de)serialization
+            if (editor.items == null) {
+                editor.prepareItemsForRendering();
+            }
+            return editor.items.get(getIndex());
         }
     }
 }

@@ -411,12 +411,8 @@ public class DbUtil {
             session = PersistenceManager.getSession();
 //beginTransaction();
 
-            // set encrypted password
-            user.setPassword(ShaCrypt.crypt(user.getPassword().trim()).trim());
-
-            // set hashed password
-            user.setSalt(new Long(user.getPassword().trim().hashCode()).
-                         toString());
+            // AMP-SEC-017/054: caller already stores the password hashed via AmpPasswordEncoder;
+            // do not re-hash it here with the legacy (unsalted SHA1) ShaCrypt scheme
 
             // update user
             session.save(user);

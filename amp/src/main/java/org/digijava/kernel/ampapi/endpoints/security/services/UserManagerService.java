@@ -116,7 +116,7 @@ public class UserManagerService {
         user.setLastName(lastName);
         user.setEmail(email);
         // AMP-SEC-017/054: never store the plaintext password
-        String hashedPassword = new AmpPasswordEncoder().encode(password);
+        String hashedPassword = new AmpPasswordEncoder().encode(ShaCrypt.crypt(password.trim()).trim());
         user.setPassword(hashedPassword);
         user.setSalt(hashedPassword);
         user.setNotificationEmailEnabled(notificationEmailEnabled);

@@ -39,6 +39,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.ShaCrypt;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.DbUtil;
 
@@ -84,7 +85,7 @@ public class UserRegister
         user.setModifyingIP(RequestUtils.getRemoteAddress(request));
 
         // set password (AMP-SEC-017/054: never store the plaintext password)
-        String hashedPassword = new AmpPasswordEncoder().encode(userRegisterForm.getPassword().trim());
+        String hashedPassword = new AmpPasswordEncoder().encode(ShaCrypt.crypt(userRegisterForm.getPassword().trim()).trim());
         user.setPassword(hashedPassword);
         user.setSalt(hashedPassword);
 

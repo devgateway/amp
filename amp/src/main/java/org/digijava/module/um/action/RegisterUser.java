@@ -23,6 +23,7 @@ import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.ShaCrypt;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -73,7 +74,7 @@ public class RegisterUser extends Action {
                 return (mapping.getInputForward());
             }
             // set password (AMP-SEC-017/054: never store the plaintext password)
-            String hashedPassword = new AmpPasswordEncoder().encode(userRegisterForm.getPassword().trim());
+            String hashedPassword = new AmpPasswordEncoder().encode(ShaCrypt.crypt(userRegisterForm.getPassword().trim()).trim());
             user.setPassword(hashedPassword);
             user.setSalt(hashedPassword);
 

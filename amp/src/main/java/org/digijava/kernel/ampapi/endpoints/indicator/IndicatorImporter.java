@@ -5,11 +5,12 @@ package org.digijava.kernel.ampapi.endpoints.indicator;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
@@ -36,6 +37,8 @@ import java.util.Set;
 public class IndicatorImporter {
 
     private static final Logger LOGGER = Logger.getLogger(IndicatorImporter.class);
+    // AMP-SEC-006/077: cap upload size before it is fully buffered/parsed to avoid unbounded memory use
+    private static final long MAX_UPLOAD_SIZE_BYTES = 100L * 1024 * 1024;
     private ApiEMGroup errors = new ApiEMGroup();
 
     public ApiEMGroup getApiErrors() {
@@ -49,14 +52,10 @@ public class IndicatorImporter {
      * @throws org.digijava.module.aim.exception.AimException
      */
     public List<LocationIndicatorValueResult> processExcelFile(InputStream inputStream, long admLevelId) {
-        POIFSFileSystem fsFileSystem = null;
         List<LocationIndicatorValueResult> locationIndicatorValueList = new ArrayList<>();
         Set<String> geoIdsWithProblems = new HashSet<String>();
-        try {
-            fsFileSystem = new POIFSFileSystem(inputStream);
-            HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
-
-            HSSFSheet hssfSheet = workBook.getSheetAt(0);
+        try (Workbook workBook = WorkbookFactory.create(inputStream)) {
+            Sheet hssfSheet = workBook.getSheetAt(0);
             Row hssfRow = hssfSheet.getRow(0);
             Cell admLevelCell = hssfRow.getCell(0);
             String admLevel = "";
@@ -144,6 +143,8 @@ public class IndicatorImporter {
 
         } catch (NullPointerException e) {
             errors.addApiErrorMessage(GenericErrors.UNKNOWN_ERROR, " Cannot import indicator values ");
+        } catch (InvalidFormatException e) {
+            errors.addApiErrorMessage(IndicatorErrors.INVALID_FILE_TYPE, " File is not a valid Excel (.xls/.xlsx) file ");
         } catch (IllegalStateException e) {
             errors.addApiErrorMessage(IndicatorErrors.INCORRECT_CONTENT, " File is not ok ");
         } catch (IOException e) {
@@ -180,9 +181,15 @@ public class IndicatorImporter {
 
         byte[] fileData;
         try {
-            fileData = org.apache.commons.io.IOUtils.toByteArray(uploadedInputStream);
+            fileData = org.apache.commons.io.IOUtils.toByteArray(
+                    new org.apache.commons.io.input.BoundedInputStream(uploadedInputStream, MAX_UPLOAD_SIZE_BYTES + 1));
         } catch (IOException e) {
             throw new WebApplicationException(e);
+        }
+
+        if (fileData.length > MAX_UPLOAD_SIZE_BYTES) {
+            throw new AmpWebApplicationException(Response.Status.BAD_REQUEST,
+                    ApiError.toError(IndicatorErrors.FILE_TOO_LARGE));
         }
 
         InputStream inputStream = new ByteArrayInputStream(fileData);

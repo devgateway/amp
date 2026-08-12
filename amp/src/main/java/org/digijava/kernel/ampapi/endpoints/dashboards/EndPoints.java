@@ -94,7 +94,7 @@ public class EndPoints {
     @Path("/tops/{type}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "tops")
+    @ApiMethod(ui = false, id = "tops", authTypes = AuthRule.PUBLIC)
     @ApiOperation("Get top funding by property")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Top chart data",
             response = TopChartData.class))
@@ -153,7 +153,7 @@ public class EndPoints {
     @POST
     @Path("/ftype")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "ftype")
+    @ApiMethod(ui = false, id = "ftype", authTypes = AuthRule.PUBLIC)
     @ApiOperation("Get funding type chart data")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Funding type chart data",
             response = FundingTypeChartData.class))
@@ -173,7 +173,7 @@ public class EndPoints {
     @POST
     @Path("/finstrument")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "ftype")
+    @ApiMethod(ui = false, id = "ftype", authTypes = AuthRule.PUBLIC)
     @ApiOperation("Get financing instrument chart data")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Funding istrumet chart data",
             response = FundingTypeChartData.class))
@@ -454,7 +454,7 @@ public class EndPoints {
     @POST
     @Path("/me/indicatorReportsByProgramCountry")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "getValuesForIndicatorsCountryProgram")
+    @ApiMethod(id = "getValuesForIndicatorsCountryProgram", authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Returns indicator report values for all indicators.")
     public Response getIndicatorYearValuesByIndicatorsCountryProgram(SettingsAndFiltersParameters params) {
         List<ProgramIndicatorValues> resp = new MeService().getIndicatorYearValuesByIndicatorCountryProgramId(params);
@@ -473,7 +473,7 @@ public class EndPoints {
     @POST
     @Path("/me/dashboardCoreIndicatorData")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "getCoreIndicatorData")
+    @ApiMethod(id = "getCoreIndicatorData", authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Returns indicator report values for all indicators.")
     public Response getCoreIndicatorData(ReportFormParameters formParams) {
         ReportSpecificationImpl

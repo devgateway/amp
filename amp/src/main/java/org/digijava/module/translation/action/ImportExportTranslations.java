@@ -26,6 +26,7 @@ import org.digijava.module.translation.jaxb.ObjectFactory;
 import org.digijava.module.translation.jaxb.Translations;
 import org.digijava.module.translation.lucene.TrnLuceneModule;
 import org.digijava.module.translation.util.ImportExportUtil;
+import org.digijava.kernel.util.XmlSecurityUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -314,7 +315,7 @@ public class ImportExportTranslations extends Action {
         request.getSession().setAttribute(SESSION_FILE, uploadedFile);
         try {
             Unmarshaller unmarshaller = ImportExportUtil.getUnmarshaler();
-            Translations root = (Translations) unmarshaller.unmarshal(inputStream);
+            Translations root = (Translations) unmarshaller.unmarshal(XmlSecurityUtils.secureSource(inputStream));
             request.getSession().setAttribute(SESSION_ROOT, root);
             Set<String> languagesInFile = ImportExportUtil.extractUsedLangages(root);
             ioForm.setImportedLanguages(new ArrayList<String>(languagesInFile));

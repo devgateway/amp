@@ -11,6 +11,7 @@ import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.util.XmlSecurityUtils;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.gateperm.core.*;
 import org.digijava.module.gateperm.feed.schema.*;
@@ -93,7 +94,7 @@ public class ExchangePermission extends MultiAction {
 
             JAXBContext jc = JAXBContext.newInstance("org.digijava.module.gateperm.feed.schema");
             Unmarshaller m = jc.createUnmarshaller();
-            Permissions xmlPermissions = (Permissions) m.unmarshal(inputStream);
+            Permissions xmlPermissions = (Permissions) m.unmarshal(XmlSecurityUtils.secureSource(inputStream));
             List gatePerm = xmlPermissions.getGatePerm();
             Iterator i=gatePerm.iterator();
             Session session=PersistenceManager.getRequestDBSession();

@@ -106,11 +106,12 @@ public class IndicatorEndPoints {
     @Path("/indicator-layer/import")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "importIndicator", ui = false)
     @ApiOperation(
             value = "Import indicator layers values in the file.",
             notes = "Parameters:\n"
                     + "* admLevelId - to check if the file has same adm level than the indicator\n"
-                    + "* file - file with values to be uploaded\n\n"
+                    + "* file - file with values to be uploaded(MAX Size=100MB)\n\n"
                     + "<dl>\n"
                     + "The file to be uploaded is generated on /indicator-layer/download\n")
     public IndicatorImporterResult importIndicator(

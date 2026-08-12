@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.syndication.digester.Rss;
 import org.digijava.kernel.syndication.digester.RssChannel;
 import org.digijava.kernel.syndication.digester.RssItem;
+import org.digijava.kernel.util.XmlSecurityUtils;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -98,6 +99,8 @@ public class Rss2Impl
         digester.clear();
         digester.setValidating(false);
         digester.setUseContextClassLoader(true);
+        // AMP-SEC-025/061: remote RSS feeds are untrusted input, block XXE
+        XmlSecurityUtils.secureDigester(digester);
 
         digester.addObjectCreate("rss", Rss.class);
         digester.addObjectCreate("rss/channel", RssChannel.class);

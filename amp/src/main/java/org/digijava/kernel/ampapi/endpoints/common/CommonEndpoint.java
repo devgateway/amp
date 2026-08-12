@@ -40,7 +40,7 @@ public class CommonEndpoint implements AmpEndpoint {
     @POST
     @Path("/fm")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiMethod(ui = false, name = "fm", id = "")
+    @ApiMethod(ui = false, name = "fm", id = "", authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Provides FM (Feature Manager) settings for the requested options as a tree.")
     public FMSettingsResult<FMSettingsTree> getFMSettings(
             @ApiParam("FM Settings with requested options") FMSettingsConfig config) {
@@ -50,7 +50,7 @@ public class CommonEndpoint implements AmpEndpoint {
     @POST
     @Path("/fm/flat")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiMethod(ui = false, name = "fm", id = "")
+    @ApiMethod(ui = false, name = "fm", id = "", authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Provides FM (Feature Manager) settings for the requested options in flat mode.")
     public FMSettingsResult<FMSettingsFlat> getFMSettingsFlat(
             @ApiParam("FM Settings with requested options") FMSettingsConfig config) {
@@ -70,7 +70,7 @@ public class CommonEndpoint implements AmpEndpoint {
     @POST
     @Path("/fm/flatAsResponse")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiMethod(ui = false, name = "fm", id = "")
+    @ApiMethod(ui = false, name = "fm", id = "", authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Provides FM (Feature Manager) settings for the requested options in flat mode.")
     public Response getFMSettingsFlatAsResponse(
             @ApiParam("FM Settings with requested options") FMSettingsConfig config) {

@@ -24,6 +24,7 @@ import org.digijava.kernel.entity.*;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.security.auth.AmpPasswordEncoder;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.*;
@@ -102,6 +103,17 @@ public class DbUtil {
 //////////////////////
             while(iter.hasNext()) {
                 User iterUser = (User) iter.next();
+                AmpPasswordEncoder passwordEncoder = new AmpPasswordEncoder();
+
+                if (passwordEncoder.isHashed(iterUser.getPassword())) {
+                    // password was already upgraded (e.g. on a successful login); the login widget
+                    // hashes with SHA1 before this encoder bcrypt-wraps it, so mirror that here
+                    String sha1OfPass = ShaCrypt.crypt(pass.trim()).trim();
+                    if (passwordEncoder.matches(sha1OfPass, iterUser.getPassword())) {
+                        iscorrect = true;
+                    }
+                    continue;
+                }
 
                 for(int i = 0; i < 3; i++) {
 
@@ -198,7 +210,7 @@ public class DbUtil {
                 return false;
             }
 
-            iterUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
+            iterUser.setPassword(hashNewPassword(newPassword));
             iterUser.setSalt(new Long(newPassword.trim().hashCode()).toString());
             session.update(iterUser);
             session.delete(resetPassword);
@@ -223,6 +235,14 @@ public class DbUtil {
     public static void updatePassword(String user, String newPassword) throws UMException{
         updatePassword(user, null, newPassword);
     }
+
+    /**
+     * Bcrypt-wraps the SHA1(password) value, matching the domain the login widget submits
+     * (see AmpPasswordEncoder / SecurityService.verifyCredentials).
+     */
+    private static String hashNewPassword(String newPassword) {
+        return new AmpPasswordEncoder().encode(ShaCrypt.crypt(newPassword.trim()).trim());
+    }
     /**
      * Update password in database see table
      *
@@ -238,7 +258,7 @@ public class DbUtil {
             session = PersistenceManager.getSession();
 
             User userToUpdate = UserUtils.getUserByEmailAddress(user);
-            userToUpdate.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
+            userToUpdate.setPassword(hashNewPassword(newPassword));
             userToUpdate.setSalt(new Long(newPassword.trim().hashCode()).toString());
             userToUpdate.updateLastModified();
             session.saveOrUpdate(userToUpdate);

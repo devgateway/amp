@@ -33,6 +33,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
+import org.digijava.kernel.security.auth.AmpPasswordEncoder;
 import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.security.principal.UserPrincipal;
 import org.digijava.kernel.user.Group;
@@ -512,7 +513,9 @@ public class UserUtils {
      * @param password String new password
      */
     public static void setPassword(User user, String password) {
-        user.setPassword(ShaCrypt.crypt(password.trim()).trim());
+        // bcrypt-wrap the SHA1(password) value, matching the domain the login widget submits
+        // (see AmpPasswordEncoder / SecurityService.verifyCredentials)
+        user.setPassword(new AmpPasswordEncoder().encode(ShaCrypt.crypt(password.trim()).trim()));
         user.setSalt(new Long(password.trim().hashCode()).toString());
         user.setPasswordChangedAt(new Date());
     }

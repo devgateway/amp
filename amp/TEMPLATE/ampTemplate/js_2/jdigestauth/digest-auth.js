@@ -1,89 +1,88 @@
 /*
- * A JavaScript implementation of the Digest Authentication
- * Digest Authentication, as defined in RFC 2617.
- * Version 1.0 Copyright (C) Maricn Michalski (http://marcin-michalski.pl) 
- * Distributed under the BSD License
- * 
- * site: http://arrowgroup.eu
+ * Login widget submission handler.
+ * Sends the SHA-1 hash of the password (never the plaintext) to /aim/postLogin.do,
+ * which verifies it the same way as the /rest/security/user API login.
  */
 
 function ajaxLogin() {
 		$('#loader').show();
 
-		var digestAuth = new pl.arrowgroup.DigestAuthentication(
-	   			{
-					onSuccess : function(data) {
-						var serverResponse=JSON.parse(data);
-						var error = jQuery.trim(serverResponse.original_result);
+		var reportError = function(id) {
+			$('#loader').hide();
+			$('#result').show();
+			$(".error_text_login > span").hide();
+			$("#" + id).show();
+		};
 
-						$('#result').hide();
-						
-						//Suspended login
-						var suspendedLoginText = null;
-						var suspendReasons = [];
-						if (error != null && error.length > 13) {
-							if (error.substring (0, 13) == "userSuspended") {
-								//split reasons
-								var startIndex = 0;
-								var endIndex = 0;
-								
-								while (endIndex != error.length - 1) {
-									startIndex = error.indexOf("{", endIndex);
-									endIndex = error.indexOf("}", startIndex);
-									var reasonTxt = error.substring (startIndex + 1, endIndex);
-									suspendReasons.push(reasonTxt);
-								}
-							}
-							error = "userSuspended";
-						}
-						
-						//endOf Suspended login
-						
-						switch (error) {
-						case 'noTeamMember':
-							reportError("unassigned_user");
-							break;
-						case 'userBanned':
-							reportError("banned_user");
-							break;
-						case 'invalidUser':
-							// isn't the generic onFailure actually called for this use case?
-							reportError("invalid_user");
-							break;
-						case 'userSuspended':
-							var suspUserErrTxt = "";
-							var reasonIdx = 0;
-							for (reasonIdx = 0; reasonIdx < suspendReasons.length; reasonIdx ++){
-								suspUserErrTxt += suspendReasons[reasonIdx];
-								if (reasonIdx < suspendReasons.length) {
-									suspUserErrTxt += "<br />"
-								}
-							}
-							$('#suspend').html(suspUserErrTxt);
-							reportError("suspend");
-							break;
-						case 'noError':
-							location.href = '/index.do';
-							break;
-						}
-					},
-	   				onFailure : function(response){
-	   					reportError("invalid_user_pwd");
-	   				},
-	   				cnonce : 'testCnonce'
-	   			}
-	   		);
-		
-			var reportError = function(id) {
-				$('#loader').hide();
-				$('#result').show();
-				$(".error_text_login > span").hide();
-				$("#" + id).show();
-			};
+		var handleResponse = function(data) {
+			var serverResponse = JSON.parse(data);
+			var error = jQuery.trim(serverResponse.original_result);
 
-  			digestAuth.setCredentials($('#j_username').val().trim(),$('#j_password').val());
-   			digestAuth.call('/aim/postLogin.do');
+			$('#result').hide();
+
+			//Suspended login
+			var suspendReasons = [];
+			if (error != null && error.length > 13) {
+				if (error.substring (0, 13) == "userSuspended") {
+					//split reasons
+					var startIndex = 0;
+					var endIndex = 0;
+
+					while (endIndex != error.length - 1) {
+						startIndex = error.indexOf("{", endIndex);
+						endIndex = error.indexOf("}", startIndex);
+						var reasonTxt = error.substring (startIndex + 1, endIndex);
+						suspendReasons.push(reasonTxt);
+					}
+				}
+				error = "userSuspended";
+			}
+
+			//endOf Suspended login
+
+			switch (error) {
+			case 'noTeamMember':
+				reportError("unassigned_user");
+				break;
+			case 'userBanned':
+				reportError("banned_user");
+				break;
+			case 'invalidUser':
+				reportError("invalid_user_pwd");
+				break;
+			case 'userSuspended':
+				var suspUserErrTxt = "";
+				var reasonIdx = 0;
+				for (reasonIdx = 0; reasonIdx < suspendReasons.length; reasonIdx ++){
+					suspUserErrTxt += suspendReasons[reasonIdx];
+					if (reasonIdx < suspendReasons.length) {
+						suspUserErrTxt += "<br />"
+					}
+				}
+				$('#suspend').html(suspUserErrTxt);
+				reportError("suspend");
+				break;
+			case 'noError':
+				location.href = '/index.do';
+				break;
+			}
+		};
+
+		$.ajax({
+			url: '/aim/postLogin.do',
+			type: 'POST',
+			cache: false,
+			data: {
+				j_username: $('#j_username').val().trim(),
+				j_password: CryptoJS.SHA1($('#j_password').val()).toString()
+			},
+			success: handleResponse,
+			error: function(response) {
+				reportError("invalid_user_pwd");
+			}
+		});
 	}
+
 
 $.Class("pl.arrowgroup.DigestAuthentication", {
 	MAX_ATTEMPTS : 1,

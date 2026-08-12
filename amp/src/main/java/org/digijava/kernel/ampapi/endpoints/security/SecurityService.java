@@ -15,6 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.security.dto.*;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.security.auth.AmpPasswordEncoder;
+import org.digijava.kernel.security.auth.DigiUserDetailsService;
 import org.digijava.kernel.services.AmpVersionInfo;
 import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -35,7 +36,9 @@ import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -204,16 +207,9 @@ public class SecurityService {
             ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.INVALID_USER_PASSWORD);
         }
     
-        User user = UserUtils.getUserByEmailAddress(username);
-        String storedPassword = (user != null) ? user.getPassword() : null;
-        AmpPasswordEncoder passwordEncoder = new AmpPasswordEncoder();
-        boolean passwordMatches = storedPassword != null && passwordEncoder.matches(password, storedPassword);
-        if (user == null || !passwordMatches) {
+        User user = verifyCredentials(username, password);
+        if (user == null) {
             ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.INVALID_USER_PASSWORD);
-        }
-        if (!passwordEncoder.isHashed(storedPassword)) {
-            // opportunistically upgrade legacy plaintext password to a bcrypt hash on successful login
-            user.setPassword(passwordEncoder.encode(password));
         }
     
         ApiErrorMessage result = ApiAuthentication.login(user, TLSUtils.getRequest());
@@ -234,6 +230,26 @@ public class SecurityService {
         return SecurityService.getInstance().createUserSessionInformation(isAdmin, user, ampTeamName, true);
     }
     
+    /**
+     * Verifies the given credentials, opportunistically upgrading a legacy (non-bcrypt) stored
+     * password on success, so both the REST login and the login widget share one verification path.
+     *
+     * @return the matching user, or null if the credentials are invalid
+     */
+    public User verifyCredentials(String username, String password) {
+        User user = UserUtils.getUserByEmailAddress(username);
+        String storedPassword = (user != null) ? user.getPassword() : null;
+        AmpPasswordEncoder passwordEncoder = new AmpPasswordEncoder();
+        if (storedPassword == null || !passwordEncoder.matches(password, storedPassword)) {
+            return null;
+        }
+        if (!passwordEncoder.isHashed(storedPassword)) {
+            // opportunistically upgrade legacy plaintext password to a bcrypt hash on successful login
+            user.setPassword(passwordEncoder.encode(password));
+        }
+        return user;
+    }
+    
     public void invalidateExistingSession() {
         HttpSession session = TLSUtils.getRequest().getSession(false);
         if (session != null) {
@@ -249,14 +265,27 @@ public class SecurityService {
         return teamMember;
     }
     
-    private void storeInSession(String username, AmpTeamMember teamMember, User user) {
+    /**
+     * Establishes the AMP session (legacy attributes + Spring Security context) for a user that has
+     * already passed {@link #verifyCredentials(String, String)} and {@link ApiAuthentication#login}.
+     * Used by both the REST login and the login widget (see AmpPostLoginAction), so both share the
+     * same authenticated state, including on pages/apps (e.g. the activity form) gated by Spring's
+     * own ROLE_AUTHENTICATED access control rather than only the legacy session attributes.
+     */
+    public void storeInSession(String username, AmpTeamMember teamMember, User user) {
         // Do not pass credentials to the token — the submitted hash must not be
         // stored in the Spring Security context or serialised into the session.
+        UserDetails userDetails = SpringUtil.getBean(DigiUserDetailsService.class).loadUserByUsername(username);
         final UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(username, null);
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         authToken.setDetails(new WebAuthenticationDetails(TLSUtils.getRequest()));
         SecurityContextHolder.getContext().setAuthentication(authToken);
         final HttpSession session = TLSUtils.getRequest().getSession();
+        // /rest/** is create-session="stateless" so SecurityContextPersistenceFilter never persists this;
+        // save it explicitly under the same key so non-REST pages (Struts .do actions, the Wicket activity
+        // form) restore it via the normal HttpSessionSecurityContextRepository on their own request chain.
+        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                SecurityContextHolder.getContext());
         PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
         if (teamMember != null) {
             session.setAttribute(Constants.CURRENT_MEMBER, teamMember.toTeamMember());

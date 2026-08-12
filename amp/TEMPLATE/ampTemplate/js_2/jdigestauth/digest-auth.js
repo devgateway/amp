@@ -4,6 +4,11 @@
  * which verifies it the same way as the /rest/security/user API login.
  */
 
+function getCsrfTokenFromCookie() {
+	var match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]*)/);
+	return match ? decodeURIComponent(match[1]) : null;
+}
+
 function ajaxLogin() {
 		$('#loader').show();
 
@@ -72,6 +77,14 @@ function ajaxLogin() {
 			url: '/aim/postLogin.do',
 			type: 'POST',
 			cache: false,
+			// this page may not load common.js (e.g. the standalone publicPortalLogin.jsp), so
+			// don't rely on its global CSRF header injection — attach it here directly
+			beforeSend: function(xhr) {
+				var token = getCsrfTokenFromCookie();
+				if (token) {
+					xhr.setRequestHeader('X-XSRF-TOKEN', token);
+				}
+			},
 			data: {
 				j_username: $('#j_username').val().trim(),
 				j_password: CryptoJS.SHA1($('#j_password').val()).toString()

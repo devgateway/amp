@@ -35,10 +35,10 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -411,20 +411,53 @@ public class PublicPortalService {
             return result;
         }
 
+        ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_getDonorCommitmentsByYear",
+                ArConstants.DONOR_TYPE);
+        SettingsUtils.applyExtendedSettings(spec, settings);
+
+        Map<String, Object> groupedFilters = copyMap(filters);
+        groupedFilters.put(DONOR_AGENCY_FILTER, donorIds);
+        groupedFilters.put(DATE_FILTER, buildDateFilter(groupedFilters.get(DATE_FILTER), targetYear));
+        ReportsUtil.configureFilters(spec, groupedFilters);
+
+        spec.addColumn(new ReportColumn(ColumnConstants.DONOR_ID));
+        spec.setHierarchies(spec.getColumns());
+
+        Map<Long, BigDecimal> totalsByDonorId = new HashMap<>();
+        Set<Long> requestedDonorIds = new LinkedHashSet<>();
         for (Object donorId : donorIds) {
-            SettingsAndFiltersParameters donorConfig = new SettingsAndFiltersParameters();
-            donorConfig.setSettings(copyMap(settings));
+            Long parsedDonorId = parseLong(donorId);
+            if (parsedDonorId != null) {
+                requestedDonorIds.add(parsedDonorId);
+                totalsByDonorId.put(parsedDonorId, BigDecimal.ZERO);
+            }
+        }
 
-            Map<String, Object> donorFilters = copyMap(filters);
-            donorFilters.put(DONOR_AGENCY_FILTER, Collections.singletonList(donorId));
-            donorFilters.put(DATE_FILTER, buildDateFilter(donorFilters.get(DATE_FILTER), targetYear));
-            donorConfig.setFilters(donorFilters);
+        GeneratedReport report = EndpointUtils.runReport(spec);
+        if (report != null && report.reportContents != null && report.reportContents.getChildren() != null) {
+            for (ReportArea row : report.reportContents.getChildren()) {
+                Long donorId = null;
+                BigDecimal donorTotal = BigDecimal.ZERO;
 
-            PublicTotalsByMeasure totals = getTotalByMeasure(donorConfig);
-            BigDecimal donorTotal = totals != null && totals.getTotal() != null ? totals.getTotal() : BigDecimal.ZERO;
+                for (Entry<ReportOutputColumn, ReportCell> cell : row.getContents().entrySet()) {
+                    if (ColumnConstants.DONOR_ID.equals(cell.getKey().originalColumnName)) {
+                        donorId = parseLong(cell.getValue().value);
+                    } else if (cell.getValue().value instanceof BigDecimal) {
+                        donorTotal = donorTotal.add((BigDecimal) cell.getValue().value);
+                    }
+                }
+
+                if (donorId != null && totalsByDonorId.containsKey(donorId)) {
+                    totalsByDonorId.put(donorId, donorTotal);
+                }
+            }
+        }
+
+        for (Long donorId : requestedDonorIds) {
+            BigDecimal donorTotal = totalsByDonorId.getOrDefault(donorId, BigDecimal.ZERO);
 
             PublicDonorCommitment donorCommitment = new PublicDonorCommitment();
-            donorCommitment.setDonorId(parseLong(donorId));
+            donorCommitment.setDonorId(donorId);
             donorCommitment.setTotal(donorTotal);
 
             result.getDonorTotals().add(donorCommitment);
@@ -467,14 +500,10 @@ public class PublicPortalService {
         Map<String, Object> dateFilter = new HashMap<>();
         if (existingDateFilter instanceof Map<?, ?>) {
             ((Map<?, ?>) existingDateFilter).forEach((key, value) -> {
-                if (key != null) {
+                if (key != null && !DATE_START.equals(String.valueOf(key))) {
                     dateFilter.put(String.valueOf(key), value);
                 }
             });
-        }
-
-        if (!dateFilter.containsKey(DATE_START)) {
-            dateFilter.put(DATE_START, "1900-01-01");
         }
         dateFilter.put(DATE_END, year + "-12-31");
         return dateFilter;

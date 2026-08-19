@@ -408,7 +408,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             fieldMappings.put("location", locationAdmLevel != null ? locationAdmLevel : ColumnConstants.LOCATION);
             fieldMappings.put("implementationLevel", ColumnConstants.IMPLEMENTATION_LEVEL);
             fieldMappings.put("status", ColumnConstants.STATUS);
-            fieldMappings.put("reportingSystem", ColumnConstants.PRIMARY_SECTOR);
+            fieldMappings.put("reportingSystem", ColumnConstants.REPORTING_SYSTEM);
             fieldMappings.put("typeOfAssistance", ColumnConstants.TYPE_OF_ASSISTANCE);
             fieldMappings.put("procurementSystem", ColumnConstants.PROCUREMENT_SYSTEM);
             fieldMappings.put("responsibleOrganization", ColumnConstants.RESPONSIBLE_ORGANIZATION);

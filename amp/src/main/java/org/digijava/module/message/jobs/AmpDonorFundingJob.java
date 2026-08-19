@@ -107,8 +107,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         logger.info("Number of leaf headers: " + report.leafHeaders.size());
 
         // Find columns by name for robustness (works regardless of order)
-        // Note: Indices are based on the order in addColumnsToSpecification:
-        // Hierarchies: 0-10, then AMP_ID (11), ACTIVITY_COUNT (12), measures (13-14)
+        // Note: indices align with hierarchy columns first; non-hierarchy columns may be omitted from leaf headers
         ReportOutputColumn donorAgency = findColumnByName(report.leafHeaders, ColumnConstants.DONOR_AGENCY, 0);
         ReportOutputColumn implementingAgency = findColumnByName(report.leafHeaders, ColumnConstants.IMPLEMENTING_AGENCY, 1);
         ReportOutputColumn procurementSystemAgency = findColumnByName(report.leafHeaders, ColumnConstants.PROCUREMENT_SYSTEM, 2);
@@ -121,7 +120,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         ReportOutputColumn reportingSystem = findColumnByName(report.leafHeaders, ColumnConstants.REPORTING_SYSTEM, 8); // Also called Forum
         ReportOutputColumn responsibleOrg = findColumnByName(report.leafHeaders, ColumnConstants.RESPONSIBLE_ORGANIZATION, 9);
         ReportOutputColumn secondarySector = findColumnByName(report.leafHeaders, ColumnConstants.SECONDARY_SECTOR, 10);
-        ReportOutputColumn ampId = findColumnByName(report.leafHeaders, ColumnConstants.AMP_ID, 11); // AMP_ID is now after hierarchies
+        ReportOutputColumn ampId = findOptionalColumnByName(report.leafHeaders, ColumnConstants.AMP_ID, 11);
 
         List<ReportsDashboard> ampDashboardFunding = new ArrayList<>();
 
@@ -181,7 +180,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                                                                             }
                                                                                             // gather AMP IDs from children (leaf nodes)
                                                                                             List<String> ampIdsList = new ArrayList<>();
-                                                                                            if (responsibleOrgData.getChildren() != null) {
+                                                                                            if (ampId != null && responsibleOrgData.getChildren() != null) {
                                                                                                 for (ReportArea ampIdData : responsibleOrgData.getChildren()) {
                                                                                                     TextCell ampIdCell = (TextCell) ampIdData.getContents().get(ampId);
                                                                                                     if (ampIdCell != null && ampIdCell.value != null) {
@@ -190,13 +189,13 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                                                                                 }
                                                                                             }
                                                                                             // fallback if AMP ID directly on this node and no children
-                                                                                            if (ampIdsList.isEmpty()) {
+                                                                                            if (ampId != null && ampIdsList.isEmpty()) {
                                                                                                 TextCell directAmpIdCell = (TextCell) responsibleOrgData.getContents().get(ampId);
                                                                                                 if (directAmpIdCell != null && directAmpIdCell.value != null) {
                                                                                                     ampIdsList.add(directAmpIdCell.value.toString());
                                                                                                 }
                                                                                             }
-                                                                                            String ampIdsJoined = String.join(",", ampIdsList);
+                                                                                            String ampIdsJoined = ampIdsList.isEmpty() ? null : String.join(",", ampIdsList);
 
                                                                                             // now process measures
                                                                                             for (Map.Entry<ReportOutputColumn, ReportCell> content : responsibleOrgData.getContents().entrySet()) {
@@ -311,6 +310,15 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                 leafHeaders.stream().map(c -> c.originalColumnName != null ? c.originalColumnName : "null").collect(Collectors.joining(", ")));
     }
 
+    private ReportOutputColumn findOptionalColumnByName(List<ReportOutputColumn> leafHeaders, String columnName, int expectedIndex) {
+        try {
+            return findColumnByName(leafHeaders, columnName, expectedIndex);
+        } catch (RuntimeException ex) {
+            logger.warn("Optional column missing from report output: " + columnName + ". Continuing without it.");
+            return null;
+        }
+    }
+
     private void addFilters(ReportSpecificationImpl spec) {
         if (spec.getFilters() == null) {
             spec.setFilters(new ReportFiltersImpl());
@@ -357,14 +365,12 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         spec.addColumn(new ReportColumn(ColumnConstants.REPORTING_SYSTEM));
         spec.addColumn(new ReportColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION));
         spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_SECTOR));
-        // Ensure AMP ID is part of the hierarchy so commitments roll up under each activity
-
-        // Set hierarchies - includes AMP_ID so commitments/disbursements roll up under each activity
-        // This is required for summary reports to include all columns in leaf headers
+        // Set hierarchy columns used to navigate the report output tree.
         Set<ReportColumn> hierarchyColumns = new LinkedHashSet<>(spec.getColumns());
         spec.setHierarchies(hierarchyColumns);
 
-        // Add non-hierarchy columns after setHierarchies
+        // Add non-hierarchy columns after setHierarchies.
+        // AMP ID may be absent in some grouped outputs; parser handles it as optional.
         spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
         spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_COUNT));
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));

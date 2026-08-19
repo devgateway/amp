@@ -167,38 +167,20 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                                                                         for (ReportArea secondarySectorData : responsibleOrgData.getChildren()) {
                                                                                             TextCell secondarySectorCell = (TextCell) secondarySectorData.getContents().get(secondarySector);
 
-                                                                                            Long activityCount = 0L;
-                                                                                            // collect activity count
-                                                                                            for (Map.Entry<ReportOutputColumn, ReportCell> content : responsibleOrgData.getContents().entrySet()) {
-                                                                                                ReportOutputColumn col = content.getKey();
-                                                                                                if (col.originalColumnName.equals(ColumnConstants.ACTIVITY_COUNT)) {
-                                                                                                    IntCell amount = (IntCell) content.getValue();
-                                                                                                    if (amount != null && amount.value != null) {
-                                                                                                        activityCount = (Long) amount.value;
-                                                                                                    }
-                                                                                                }
+                                                                                            Long activityCount = extractActivityCount(secondarySectorData);
+                                                                                            // In some outputs, Activity Count sits on the parent node.
+                                                                                            if (activityCount == 0L) {
+                                                                                                activityCount = extractActivityCount(responsibleOrgData);
                                                                                             }
-                                                                                            // gather AMP IDs from children (leaf nodes)
-                                                                                            List<String> ampIdsList = new ArrayList<>();
-                                                                                            if (ampId != null && responsibleOrgData.getChildren() != null) {
-                                                                                                for (ReportArea ampIdData : responsibleOrgData.getChildren()) {
-                                                                                                    TextCell ampIdCell = (TextCell) ampIdData.getContents().get(ampId);
-                                                                                                    if (ampIdCell != null && ampIdCell.value != null) {
-                                                                                                        ampIdsList.add(ampIdCell.value.toString());
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                            // fallback if AMP ID directly on this node and no children
-                                                                                            if (ampId != null && ampIdsList.isEmpty()) {
-                                                                                                TextCell directAmpIdCell = (TextCell) responsibleOrgData.getContents().get(ampId);
-                                                                                                if (directAmpIdCell != null && directAmpIdCell.value != null) {
-                                                                                                    ampIdsList.add(directAmpIdCell.value.toString());
-                                                                                                }
+                                                                                            // Gather AMP IDs from the same area where measures are read.
+                                                                                            List<String> ampIdsList = extractAmpIds(secondarySectorData, ampId);
+                                                                                            if (ampIdsList.isEmpty()) {
+                                                                                                ampIdsList = extractAmpIds(responsibleOrgData, ampId);
                                                                                             }
                                                                                             String ampIdsJoined = ampIdsList.isEmpty() ? null : String.join(",", ampIdsList);
 
                                                                                             // now process measures
-                                                                                            for (Map.Entry<ReportOutputColumn, ReportCell> content : responsibleOrgData.getContents().entrySet()) {
+                                                                                            for (Map.Entry<ReportOutputColumn, ReportCell> content : secondarySectorData.getContents().entrySet()) {
                                                                                                 ReportOutputColumn col = content.getKey();
                                                                                                 if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS) || col.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
                                                                                                     if (col.parentColumn != null && !col.parentColumn.originalColumnName.equals("Totals")) {
@@ -308,6 +290,45 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
 
         throw new RuntimeException("Column not found: " + columnName + " in leaf headers. Available columns: " +
                 leafHeaders.stream().map(c -> c.originalColumnName != null ? c.originalColumnName : "null").collect(Collectors.joining(", ")));
+    }
+
+    private Long extractActivityCount(ReportArea reportArea) {
+        Long activityCount = 0L;
+        for (Map.Entry<ReportOutputColumn, ReportCell> content : reportArea.getContents().entrySet()) {
+            ReportOutputColumn col = content.getKey();
+            if (col.originalColumnName.equals(ColumnConstants.ACTIVITY_COUNT)) {
+                IntCell amount = (IntCell) content.getValue();
+                if (amount != null && amount.value != null) {
+                    activityCount = (Long) amount.value;
+                }
+                break;
+            }
+        }
+        return activityCount;
+    }
+
+    private List<String> extractAmpIds(ReportArea reportArea, ReportOutputColumn ampIdColumn) {
+        List<String> ampIdsList = new ArrayList<>();
+        if (ampIdColumn == null) {
+            return ampIdsList;
+        }
+
+        if (reportArea.getChildren() != null) {
+            for (ReportArea ampIdData : reportArea.getChildren()) {
+                TextCell ampIdCell = (TextCell) ampIdData.getContents().get(ampIdColumn);
+                if (ampIdCell != null && ampIdCell.value != null) {
+                    ampIdsList.add(ampIdCell.value.toString());
+                }
+            }
+        }
+
+        if (ampIdsList.isEmpty()) {
+            TextCell directAmpIdCell = (TextCell) reportArea.getContents().get(ampIdColumn);
+            if (directAmpIdCell != null && directAmpIdCell.value != null) {
+                ampIdsList.add(directAmpIdCell.value.toString());
+            }
+        }
+        return ampIdsList;
     }
 
     private ReportOutputColumn findOptionalColumnByName(List<ReportOutputColumn> leafHeaders, String columnName, int expectedIndex) {
@@ -426,6 +447,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             fieldMappings.put("implementingAgency", ColumnConstants.IMPLEMENTING_AGENCY);
             fieldMappings.put("pillar", ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
             fieldMappings.put("location", locationAdmLevel != null ? locationAdmLevel : ColumnConstants.LOCATION);
+            fieldMappings.put("country", locationAdmLevel != null ? locationAdmLevel : ColumnConstants.LOCATION);
             fieldMappings.put("implementationLevel", ColumnConstants.IMPLEMENTATION_LEVEL);
             fieldMappings.put("status", ColumnConstants.STATUS);
             fieldMappings.put("reportingSystem", ColumnConstants.REPORTING_SYSTEM);

@@ -14,7 +14,7 @@ public class ReportsDashboard {
     private String reportingSystem;
     private String typeOfAssistance;
     private String currency;
-    //private String year;
+    private String year;
     private BigDecimal actualCommitment;
     private BigDecimal actualDisbursement;
     private Long activityCount;
@@ -64,15 +64,14 @@ public class ReportsDashboard {
         this.activityIds = activityIds;
     }
 
-    /*
-        public String getYear() {
-            return year;
-        }
+    public String getYear() {
+        return year;
+    }
 
-        public void setYear(String year) {
-            this.year = year;
-        }
-    */
+    public void setYear(String year) {
+        this.year = year;
+    }
+
     public BigDecimal getActualCommitment() {
         return actualCommitment;
     }

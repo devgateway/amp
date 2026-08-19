@@ -38,7 +38,6 @@ import org.quartz.StatefulJob;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -81,8 +80,6 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         List<ReportsDashboard> ampDashboardFunding = processReportData(fundingReport, currencyCode);
         // The ampDashboardFunding data contains objects for commitments and disbursment differently in
         // separate objects. We need to combine them in same object combining commitment and disbursment values.
-        //Make year configurable
-        //+ "|" + report.getYear()
         return new ArrayList<>(ampDashboardFunding.stream()
                 .collect(Collectors.toMap(
                         report -> report.getDonorAgency()
@@ -91,7 +88,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                 + "|" + report.getLocation()
                                 + "|" + report.getImplementationLevel()
                                 + "|" + report.getStatus()
-                                //+ "|" + report.getYear()
+                                + "|" + extractYear(report)
                                 + "|" + report.getReportingSystem()
                                 + "|" + report.getTypeOfAssistance()
                                 + "|" + report.getProcurementSystem()
@@ -205,7 +202,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                                                                             for (Map.Entry<ReportOutputColumn, ReportCell> content : responsibleOrgData.getContents().entrySet()) {
                                                                                                 ReportOutputColumn col = content.getKey();
                                                                                                 if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS) || col.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
-                                                                                                    if (col.parentColumn != null && col.parentColumn.originalColumnName.equals("Totals")) {
+                                                                                                    if (col.parentColumn != null && !col.parentColumn.originalColumnName.equals("Totals")) {
                                                                                                         ReportsDashboard fundingReport = new ReportsDashboard();
                                                                                                         fundingReport.setDonorAgency(donorAgencyCell != null ? donorAgencyCell.value.toString() : null);
                                                                                                         fundingReport.setImplementingAgency(implementingAgencyCell != null ? implementingAgencyCell.value.toString() : null);
@@ -218,6 +215,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                                                                                         fundingReport.setProcurementSystem(procurementSystemAgencyCell != null ? procurementSystemAgencyCell.value.toString() : null);
                                                                                                         fundingReport.setResponsibleOrganization(responsibleOrgCell != null ? responsibleOrgCell.value.toString() : null);
                                                                                                         fundingReport.setSecondarySector(secondarySectorCell != null ? secondarySectorCell.value.toString() : null);
+                                                                                                        assignYear(fundingReport, col.parentColumn.originalColumnName);
                                                                                                         fundingReport.setActivityCount(activityCount);
                                                                                                         fundingReport.setCurrency(currencyCode);
                                                                                                         fundingReport.setActivityIds(ampIdsJoined);
@@ -333,9 +331,8 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", ArConstants.DONOR_TYPE);
         addColumnsToSpecification(spec);
 
-        spec.setSummaryReport(false);
-        //TODO broken by year configurable
-        spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
+        spec.setSummaryReport(true);
+        spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
         spec.setShowOriginalCurrency(false);
         spec.setDisplayEmptyFundingRows(true);
         ReportSettingsImpl reportSettings = new ReportSettingsImpl();
@@ -374,6 +371,23 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 
         logger.info("Report columns set for Donor Funding Report" + spec.getColumns().size());
+    }
+
+    private String extractYear(ReportsDashboard report) {
+        try {
+            Object year = ReportsDashboard.class.getMethod("getYear").invoke(report);
+            return year != null ? year.toString() : null;
+        } catch (ReflectiveOperationException ignored) {
+            return null;
+        }
+    }
+
+    private void assignYear(ReportsDashboard report, String year) {
+        try {
+            ReportsDashboard.class.getMethod("setYear", String.class).invoke(report, year);
+        } catch (ReflectiveOperationException ignored) {
+            // Year accessor is optional in some builds.
+        }
     }
 
     /**

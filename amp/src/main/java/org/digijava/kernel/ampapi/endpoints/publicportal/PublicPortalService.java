@@ -20,6 +20,8 @@ import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
+import org.digijava.kernel.ampapi.endpoints.publicportal.dto.PublicDonorCommitment;
+import org.digijava.kernel.ampapi.endpoints.publicportal.dto.PublicDonorCommitmentsByYear;
 import org.digijava.kernel.ampapi.endpoints.publicportal.dto.PublicTotalsByMeasure;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportFormParameters;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
@@ -32,9 +34,12 @@ import org.digijava.module.aim.util.FeaturesUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +54,14 @@ import java.util.Set;
  */
 public class PublicPortalService {
     protected static final Logger logger = Logger.getLogger(PublicPortalService.class);
+    private static final String DONOR_AGENCY_FILTER = "donor-agency";
+    private static final String DONOR_AGENCY_CAMEL_FILTER = "donorAgency";
+    private static final String DONOR_FILTER = "donor";
+    private static final String REPORTING_SYSTEM_FILTER = "reporting-system";
+    private static final String REPORTING_SYSTEM_CAMEL_FILTER = "reportingSystem";
+    private static final String DATE_FILTER = "date";
+    private static final String DATE_START = "start";
+    private static final String DATE_END = "end";
 
     /**
      * Retrieves top 'count' projects based on fixed requirements. <br>
@@ -373,6 +386,133 @@ public class PublicPortalService {
                                          Integer months) {
         if (filters != null) {
             FilterUtils.applyFilterRules(filters, spec, months);
+        }
+    }
+
+    public static PublicDonorCommitmentsByYear getDonorCommitmentsByYear(SettingsAndFiltersParameters config,
+                                                                          Integer year) {
+        PublicDonorCommitmentsByYear result = new PublicDonorCommitmentsByYear();
+        int targetYear = year == null ? Calendar.getInstance().get(Calendar.YEAR) : year;
+        result.setYear(targetYear);
+
+        Map<String, Object> settings = copyMap(config != null ? config.getSettings() : null);
+        if (!settings.containsKey(SettingsConstants.FUNDING_TYPE_ID)) {
+            settings.put(SettingsConstants.FUNDING_TYPE_ID, SettingsConstants.DEFAULT_FUNDING_TYPE_ID);
+        }
+        if (!settings.containsKey(SettingsConstants.CURRENCY_ID)) {
+            settings.put(SettingsConstants.CURRENCY_ID, "USD");
+        }
+        result.setCurrency((String) settings.get(SettingsConstants.CURRENCY_ID));
+
+        Map<String, Object> filters = copyMap(config != null ? config.getFilters() : null);
+        normalizeKnownFilterAliases(filters);
+
+        List<Object> donorIds = extractDonorIds(filters);
+        if (donorIds.isEmpty()) {
+            return result;
+        }
+
+        Set<Long> requestedDonorIds = new LinkedHashSet<>();
+        for (Object donorId : donorIds) {
+            Long parsedDonorId = parseLong(donorId);
+            if (parsedDonorId != null) {
+                requestedDonorIds.add(parsedDonorId);
+            }
+        }
+
+        Map<String, Object> baseFilters = copyMap(filters);
+        baseFilters.put(DATE_FILTER, buildDateFilter(baseFilters.get(DATE_FILTER), targetYear));
+
+        for (Long donorId : requestedDonorIds) {
+            Map<String, Object> donorFilters = copyMap(baseFilters);
+            donorFilters.put(DONOR_AGENCY_FILTER, Collections.singletonList(donorId));
+            BigDecimal donorTotal = getTotalForFilters(settings, donorFilters);
+
+            PublicDonorCommitment donorCommitment = new PublicDonorCommitment();
+            donorCommitment.setDonorId(donorId);
+            donorCommitment.setTotal(donorTotal);
+
+            result.getDonorTotals().add(donorCommitment);
+            result.setTotal(result.getTotal().add(donorTotal));
+        }
+
+        return result;
+    }
+
+    private static BigDecimal getTotalForFilters(Map<String, Object> settings, Map<String, Object> filters) {
+        ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_getDonorCommitmentsByYearSingle",
+                ArConstants.DONOR_TYPE);
+
+        SettingsUtils.applyExtendedSettings(spec, settings);
+        ReportsUtil.configureFilters(spec, filters);
+        spec.setSummaryReport(true);
+
+        GeneratedReport report = EndpointUtils.runReport(spec);
+        if (report == null || report.reportContents == null || report.reportContents.getContents() == null) {
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal total = BigDecimal.ZERO;
+        for (ReportCell cell : report.reportContents.getContents().values()) {
+            if (cell != null && cell.value instanceof BigDecimal) {
+                total = total.add((BigDecimal) cell.value);
+            }
+        }
+
+        return total;
+    }
+
+    private static Map<String, Object> copyMap(Map<String, Object> source) {
+        return source == null ? new HashMap<>() : new HashMap<>(source);
+    }
+
+    private static void normalizeKnownFilterAliases(Map<String, Object> filters) {
+        if (filters.containsKey(DONOR_AGENCY_CAMEL_FILTER) && !filters.containsKey(DONOR_AGENCY_FILTER)) {
+            filters.put(DONOR_AGENCY_FILTER, filters.get(DONOR_AGENCY_CAMEL_FILTER));
+        }
+        if (filters.containsKey(DONOR_FILTER) && !filters.containsKey(DONOR_AGENCY_FILTER)) {
+            filters.put(DONOR_AGENCY_FILTER, filters.get(DONOR_FILTER));
+        }
+        if (filters.containsKey(REPORTING_SYSTEM_CAMEL_FILTER) && !filters.containsKey(REPORTING_SYSTEM_FILTER)) {
+            filters.put(REPORTING_SYSTEM_FILTER, filters.get(REPORTING_SYSTEM_CAMEL_FILTER));
+        }
+    }
+
+    private static List<Object> extractDonorIds(Map<String, Object> filters) {
+        Object rawDonors = filters.get(DONOR_AGENCY_FILTER);
+        if (rawDonors instanceof List<?>) {
+            return new ArrayList<>((List<?>) rawDonors);
+        }
+        if (rawDonors != null) {
+            List<Object> singleValue = new ArrayList<>();
+            singleValue.add(rawDonors);
+            return singleValue;
+        }
+        return new ArrayList<>();
+    }
+
+    private static Map<String, Object> buildDateFilter(Object existingDateFilter, Integer year) {
+        Map<String, Object> dateFilter = new HashMap<>();
+        if (existingDateFilter instanceof Map<?, ?>) {
+            ((Map<?, ?>) existingDateFilter).forEach((key, value) -> {
+                if (key != null && !DATE_START.equals(String.valueOf(key))) {
+                    dateFilter.put(String.valueOf(key), value);
+                }
+            });
+        }
+        dateFilter.put(DATE_END, year + "-12-31");
+        return dateFilter;
+    }
+
+    private static Long parseLong(Object donorId) {
+        if (donorId == null) {
+            return null;
+        }
+
+        try {
+            return Long.parseLong(String.valueOf(donorId));
+        } catch (NumberFormatException ex) {
+            return null;
         }
     }
 

@@ -63,9 +63,9 @@ public final class CategoryValueFilterListManager implements FilterListManager {
                     .put(FiltersConstants.PROCUREMENT_SYSTEM,
                             new CategoryBean(ColumnConstants.PROCUREMENT_SYSTEM,
                                     CategoryConstants.PROCUREMENT_SYSTEM_KEY))
-                        .put(FiltersConstants.REPORTING_SYSTEM,
+                    .put(FiltersConstants.REPORTING_SYSTEM,
                             new CategoryBean(ColumnConstants.REPORTING_SYSTEM,
-                                CategoryConstants.REPORTING_SYSTEM_KEY))
+                                    CategoryConstants.REPORTING_SYSTEM_KEY))
                     .build();
 
     public static CategoryValueFilterListManager getInstance() {

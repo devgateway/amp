@@ -411,50 +411,21 @@ public class PublicPortalService {
             return result;
         }
 
-        ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_getDonorCommitmentsByYear",
-                ArConstants.DONOR_TYPE);
-        SettingsUtils.applyExtendedSettings(spec, settings);
-
-        Map<String, Object> groupedFilters = copyMap(filters);
-        groupedFilters.put(DONOR_AGENCY_FILTER, donorIds);
-        groupedFilters.put(DATE_FILTER, buildDateFilter(groupedFilters.get(DATE_FILTER), targetYear));
-        ReportsUtil.configureFilters(spec, groupedFilters);
-
-        spec.addColumn(new ReportColumn(ColumnConstants.DONOR_ID));
-        spec.setHierarchies(spec.getColumns());
-
-        Map<Long, BigDecimal> totalsByDonorId = new HashMap<>();
         Set<Long> requestedDonorIds = new LinkedHashSet<>();
         for (Object donorId : donorIds) {
             Long parsedDonorId = parseLong(donorId);
             if (parsedDonorId != null) {
                 requestedDonorIds.add(parsedDonorId);
-                totalsByDonorId.put(parsedDonorId, BigDecimal.ZERO);
             }
         }
 
-        GeneratedReport report = EndpointUtils.runReport(spec);
-        if (report != null && report.reportContents != null && report.reportContents.getChildren() != null) {
-            for (ReportArea row : report.reportContents.getChildren()) {
-                Long donorId = null;
-                BigDecimal donorTotal = BigDecimal.ZERO;
-
-                for (Entry<ReportOutputColumn, ReportCell> cell : row.getContents().entrySet()) {
-                    if (ColumnConstants.DONOR_ID.equals(cell.getKey().originalColumnName)) {
-                        donorId = parseLong(cell.getValue().value);
-                    } else if (cell.getValue().value instanceof BigDecimal) {
-                        donorTotal = donorTotal.add((BigDecimal) cell.getValue().value);
-                    }
-                }
-
-                if (donorId != null && totalsByDonorId.containsKey(donorId)) {
-                    totalsByDonorId.put(donorId, donorTotal);
-                }
-            }
-        }
+        Map<String, Object> baseFilters = copyMap(filters);
+        baseFilters.put(DATE_FILTER, buildDateFilter(baseFilters.get(DATE_FILTER), targetYear));
 
         for (Long donorId : requestedDonorIds) {
-            BigDecimal donorTotal = totalsByDonorId.getOrDefault(donorId, BigDecimal.ZERO);
+            Map<String, Object> donorFilters = copyMap(baseFilters);
+            donorFilters.put(DONOR_AGENCY_FILTER, Collections.singletonList(donorId));
+            BigDecimal donorTotal = getTotalForFilters(settings, donorFilters);
 
             PublicDonorCommitment donorCommitment = new PublicDonorCommitment();
             donorCommitment.setDonorId(donorId);
@@ -465,6 +436,29 @@ public class PublicPortalService {
         }
 
         return result;
+    }
+
+    private static BigDecimal getTotalForFilters(Map<String, Object> settings, Map<String, Object> filters) {
+        ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_getDonorCommitmentsByYearSingle",
+                ArConstants.DONOR_TYPE);
+
+        SettingsUtils.applyExtendedSettings(spec, settings);
+        ReportsUtil.configureFilters(spec, filters);
+        spec.setSummaryReport(true);
+
+        GeneratedReport report = EndpointUtils.runReport(spec);
+        if (report == null || report.reportContents == null || report.reportContents.getContents() == null) {
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal total = BigDecimal.ZERO;
+        for (ReportCell cell : report.reportContents.getContents().values()) {
+            if (cell != null && cell.value instanceof BigDecimal) {
+                total = total.add((BigDecimal) cell.value);
+            }
+        }
+
+        return total;
     }
 
     private static Map<String, Object> copyMap(Map<String, Object> source) {

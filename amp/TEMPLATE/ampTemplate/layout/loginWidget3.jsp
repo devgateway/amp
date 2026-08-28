@@ -61,6 +61,10 @@
 				</label>
 
 				<input name="j_password" type="password" class="inputx" id="j_password">
+				<p style="font-size:11px; line-height:15px; margin:6px 0;">
+					<digi:trn>By signing in, you acknowledge the</digi:trn>
+					<a href="/privacy-policy.html"><digi:trn>Privacy Policy</digi:trn></a>.
+				</p>
 				<div class="clear">
 				    <input type="submit"  class="buttonx_sm_lgn"  onclick="ajaxLogin();return false" value="<digi:trn>Login</digi:trn>">
 				</div>

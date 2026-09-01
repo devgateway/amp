@@ -65,6 +65,10 @@ var loginFailed = function(data, status) {
 
         <div id="loginbox">
         	<div class="logintitle"><h2><digi:trn>Member Login</digi:trn></h2></div>
+		<div class="login-privacy-notice" style="font-size:11px; line-height:16px; margin:0 20px 10px; color:#555;">
+			<digi:trn>By signing in, you acknowledge that AMP processes account and activity information according to the</digi:trn>
+			<a href="/privacy-policy.html"><digi:trn>Privacy Policy</digi:trn></a>.
+		</div>
         	<form action="/aim/postLogin.do" id="loginForm" method="post"
 				onsubmit="ajaxLogin();return false;">
             	<p class="userfield">

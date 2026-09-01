@@ -6,6 +6,13 @@
     <version>4.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Aid Management Platform</name>
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
     <properties>
         <wicketVersion>6.29.0</wicketVersion>
         <tomcatVersion>8.5.73</tomcatVersion>

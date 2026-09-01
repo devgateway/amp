@@ -323,9 +323,9 @@ public class Reports {
             @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, message = "Invalid report configuration")
     })
     public final Response getCustomReport(ReportFormParameters formParams) {
-        ApiErrorResponse result = ReportsUtil.validateReportConfig(formParams, true);
-        if (result != null) {
-            return Response.ok(result).build(); // FIXME return bad request
+        ApiErrorResponse errorResponse = ReportsUtil.validateReportConfig(formParams, true);
+        if (errorResponse != null) {
+            return PublicServices.buildBadRequestResponseWithOriginHeaders(errorResponse);
         }
         // we need reportId only to store the report result in cache
         Long reportId = (long) formParams.getReportName().hashCode();

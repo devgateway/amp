@@ -54,6 +54,8 @@
 	<http pattern="/robots.txt" security="none" />
 	<http pattern="/favicon.ico" security="none" />
 	<http pattern="/" security="none" />
+	<http pattern="/privacy-policy.html" security="none" />
+	<http pattern="/code-of-conduct.html" security="none" />
 
 	<http pattern="/translation/ajaxTranslator.do**" security="none" />
 

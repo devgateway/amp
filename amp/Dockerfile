@@ -233,9 +233,10 @@ RUN --mount=type=cache,target=/root/.m2 \
         && rm -rf target; \
     fi
 
-FROM tomcat:8.5.79-jdk8
+FROM tomcat:8.5-jdk8-temurin
 
-RUN apt-get update \
+RUN rm -rf /var/lib/apt/lists/* \
+    && apt-get update \
     && apt-get install -y apt-transport-https ca-certificates curl gnupg --no-install-recommends \
     && curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \

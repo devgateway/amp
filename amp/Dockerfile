@@ -235,6 +235,8 @@ RUN --mount=type=cache,target=/root/.m2 \
 
 FROM tomcat:8.5.100-jdk8-temurin
 
+RUN test -f /usr/local/tomcat/bin/setclasspath.sh
+
 RUN rm -rf /var/lib/apt/lists/* \
     && apt-get update \
     && apt-get install -y apt-transport-https ca-certificates curl gnupg --no-install-recommends \

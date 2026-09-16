@@ -519,7 +519,10 @@ jobs:
           echo "Checking for existing image with commit hash ${COMMIT_HASH:0:12}..."
           
           # Try to pull image by commit hash
-          if docker pull "$IMAGE_BY_HASH" 2>/dev/null; then
+          if docker pull "$IMAGE_BY_HASH" 2>/dev/null \
+            && docker run --rm --entrypoint /bin/sh "$IMAGE_BY_HASH" -c \
+              'test -f /usr/local/tomcat/bin/setclasspath.sh && test -f /usr/local/tomcat/bin/catalina.sh' \
+              >/dev/null 2>&1; then
             echo "✅ Found existing image for commit ${COMMIT_HASH:0:12}"
             echo "SKIP_BUILD=true" >> $GITHUB_OUTPUT
             echo "EXISTING_IMAGE=$IMAGE_BY_HASH" >> $GITHUB_OUTPUT
@@ -604,6 +607,16 @@ jobs:
             amp
           
           echo "✅ Image built successfully"
+
+      - name: Verify AMP Tomcat runtime files
+        run: |
+          IMAGE_BY_TAG="${{ secrets.ECR_REGISTRY }}/amp/webapp:${{ steps.tag.outputs.TAG }}"
+          docker run --rm --entrypoint /bin/sh "$IMAGE_BY_TAG" -c '
+            set -eu
+            test -f /usr/local/tomcat/bin/setclasspath.sh
+            test -f /usr/local/tomcat/bin/catalina.sh
+          '
+          echo "✅ Tomcat runtime files are present in ${IMAGE_BY_TAG}"
 
       - name: Push Docker image to registry
         run: |

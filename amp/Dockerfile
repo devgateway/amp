@@ -233,7 +233,7 @@ RUN --mount=type=cache,target=/root/.m2 \
         && rm -rf target; \
     fi
 
-FROM tomcat:8.5.79-jdk8
+FROM tomcat:8.5.94-jdk8-temurin-focal
 
 RUN apt-get update \
     && apt-get install -y apt-transport-https ca-certificates curl gnupg --no-install-recommends \

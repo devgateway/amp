@@ -233,7 +233,7 @@ RUN --mount=type=cache,target=/root/.m2 \
         && rm -rf target; \
     fi
 
-FROM tomcat:8.5-jdk8-temurin
+FROM tomcat:8.5.100-jdk8-temurin
 
 RUN rm -rf /var/lib/apt/lists/* \
     && apt-get update \

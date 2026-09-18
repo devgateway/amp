@@ -385,10 +385,23 @@ public class FiltersEndpoint {
     }
 
     /**
-     * List the possible values of 'Funding Status' filter.
+     * List the possible values of 'Reporting System' filter.
      *
-     * @return filter definition and values of 'funding-status' filter.
+     * @return filter definition and values of 'reporting-system' filter.
      */
+    @GET
+    @Path("/reportingSystem/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.REPORTING_SYSTEM, name = ColumnConstants.REPORTING_SYSTEM)
+    @ApiOperation(value = "Retrieve the data needed for building the 'Reporting System' filter.",
+            notes = "The response contains 2 objects - the filter definition and the values. \n"
+                    + "The filter widget should create a tree for 'Reporting System' values.")
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.REPORTING_SYSTEM)
+    public Response getReportingSystem() {
+        return PublicServices.buildOkResponseWithOriginHeaders(
+                FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.REPORTING_SYSTEM));
+    }
+
     @OPTIONS
     @Path("/procurementSystem")
     @ApiOperation(
@@ -397,6 +410,22 @@ public class FiltersEndpoint {
     public Response describeProcurementSystem() {
         return PublicServices.buildOkResponseWithOriginHeaders("");
     }
+
+    @OPTIONS
+    @Path("/reportingSystem")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeReportingSystem() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
+    /**
+     * List the possible values of 'Funding Status' filter.
+     *
+     * @return filter definition and values of 'funding-status' filter.
+     */
+
     @GET
     @Path("/fundingStatus/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

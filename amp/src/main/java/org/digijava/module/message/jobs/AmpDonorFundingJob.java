@@ -38,7 +38,6 @@ import org.quartz.StatefulJob;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -81,8 +80,6 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         List<ReportsDashboard> ampDashboardFunding = processReportData(fundingReport, currencyCode);
         // The ampDashboardFunding data contains objects for commitments and disbursment differently in
         // separate objects. We need to combine them in same object combining commitment and disbursment values.
-        //Make year configurable
-        //+ "|" + report.getYear()
         return new ArrayList<>(ampDashboardFunding.stream()
                 .collect(Collectors.toMap(
                         report -> report.getDonorAgency()
@@ -91,7 +88,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                 + "|" + report.getLocation()
                                 + "|" + report.getImplementationLevel()
                                 + "|" + report.getStatus()
-                                //+ "|" + report.getYear()
+                                + "|" + extractYear(report)
                                 + "|" + report.getReportingSystem()
                                 + "|" + report.getTypeOfAssistance()
                                 + "|" + report.getProcurementSystem()
@@ -110,8 +107,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         logger.info("Number of leaf headers: " + report.leafHeaders.size());
 
         // Find columns by name for robustness (works regardless of order)
-        // Note: Indices are based on the order in addColumnsToSpecification:
-        // Hierarchies: 0-10, then AMP_ID (11), ACTIVITY_COUNT (12), measures (13-14)
+        // Note: indices align with hierarchy columns first; non-hierarchy columns may be omitted from leaf headers
         ReportOutputColumn donorAgency = findColumnByName(report.leafHeaders, ColumnConstants.DONOR_AGENCY, 0);
         ReportOutputColumn implementingAgency = findColumnByName(report.leafHeaders, ColumnConstants.IMPLEMENTING_AGENCY, 1);
         ReportOutputColumn procurementSystemAgency = findColumnByName(report.leafHeaders, ColumnConstants.PROCUREMENT_SYSTEM, 2);
@@ -121,10 +117,10 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         ReportOutputColumn impLocation = findColumnByName(report.leafHeaders, location_adm_level, 5);
         ReportOutputColumn status = findColumnByName(report.leafHeaders, ColumnConstants.STATUS, 6);
         ReportOutputColumn typeOfAssistance = findColumnByName(report.leafHeaders, ColumnConstants.TYPE_OF_ASSISTANCE, 7);
-        ReportOutputColumn reportingSystem = findColumnByName(report.leafHeaders, ColumnConstants.PRIMARY_SECTOR, 8); // Also called Forum
+        ReportOutputColumn reportingSystem = findColumnByName(report.leafHeaders, ColumnConstants.REPORTING_SYSTEM, 8); // Also called Forum
         ReportOutputColumn responsibleOrg = findColumnByName(report.leafHeaders, ColumnConstants.RESPONSIBLE_ORGANIZATION, 9);
         ReportOutputColumn secondarySector = findColumnByName(report.leafHeaders, ColumnConstants.SECONDARY_SECTOR, 10);
-        ReportOutputColumn ampId = findColumnByName(report.leafHeaders, ColumnConstants.AMP_ID, 11); // AMP_ID is now after hierarchies
+        ReportOutputColumn ampId = findOptionalColumnByName(report.leafHeaders, ColumnConstants.AMP_ID, 11);
 
         List<ReportsDashboard> ampDashboardFunding = new ArrayList<>();
 
@@ -171,41 +167,23 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                                                                         for (ReportArea secondarySectorData : responsibleOrgData.getChildren()) {
                                                                                             TextCell secondarySectorCell = (TextCell) secondarySectorData.getContents().get(secondarySector);
 
-                                                                                            Long activityCount = 0L;
-                                                                                            // collect activity count
-                                                                                            for (Map.Entry<ReportOutputColumn, ReportCell> content : responsibleOrgData.getContents().entrySet()) {
-                                                                                                ReportOutputColumn col = content.getKey();
-                                                                                                if (col.originalColumnName.equals(ColumnConstants.ACTIVITY_COUNT)) {
-                                                                                                    IntCell amount = (IntCell) content.getValue();
-                                                                                                    if (amount != null && amount.value != null) {
-                                                                                                        activityCount = (Long) amount.value;
-                                                                                                    }
-                                                                                                }
+                                                                                            Long activityCount = extractActivityCount(secondarySectorData);
+                                                                                            // In some outputs, Activity Count sits on the parent node.
+                                                                                            if (activityCount == 0L) {
+                                                                                                activityCount = extractActivityCount(responsibleOrgData);
                                                                                             }
-                                                                                            // gather AMP IDs from children (leaf nodes)
-                                                                                            List<String> ampIdsList = new ArrayList<>();
-                                                                                            if (responsibleOrgData.getChildren() != null) {
-                                                                                                for (ReportArea ampIdData : responsibleOrgData.getChildren()) {
-                                                                                                    TextCell ampIdCell = (TextCell) ampIdData.getContents().get(ampId);
-                                                                                                    if (ampIdCell != null && ampIdCell.value != null) {
-                                                                                                        ampIdsList.add(ampIdCell.value.toString());
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                            // fallback if AMP ID directly on this node and no children
+                                                                                            // Gather AMP IDs from the same area where measures are read.
+                                                                                            List<String> ampIdsList = extractAmpIds(secondarySectorData, ampId);
                                                                                             if (ampIdsList.isEmpty()) {
-                                                                                                TextCell directAmpIdCell = (TextCell) responsibleOrgData.getContents().get(ampId);
-                                                                                                if (directAmpIdCell != null && directAmpIdCell.value != null) {
-                                                                                                    ampIdsList.add(directAmpIdCell.value.toString());
-                                                                                                }
+                                                                                                ampIdsList = extractAmpIds(responsibleOrgData, ampId);
                                                                                             }
-                                                                                            String ampIdsJoined = String.join(",", ampIdsList);
+                                                                                            String ampIdsJoined = ampIdsList.isEmpty() ? null : String.join(",", ampIdsList);
 
                                                                                             // now process measures
-                                                                                            for (Map.Entry<ReportOutputColumn, ReportCell> content : responsibleOrgData.getContents().entrySet()) {
+                                                                                            for (Map.Entry<ReportOutputColumn, ReportCell> content : secondarySectorData.getContents().entrySet()) {
                                                                                                 ReportOutputColumn col = content.getKey();
                                                                                                 if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS) || col.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
-                                                                                                    if (col.parentColumn != null && col.parentColumn.originalColumnName.equals("Totals")) {
+                                                                                                    if (col.parentColumn != null && !col.parentColumn.originalColumnName.equals("Totals")) {
                                                                                                         ReportsDashboard fundingReport = new ReportsDashboard();
                                                                                                         fundingReport.setDonorAgency(donorAgencyCell != null ? donorAgencyCell.value.toString() : null);
                                                                                                         fundingReport.setImplementingAgency(implementingAgencyCell != null ? implementingAgencyCell.value.toString() : null);
@@ -218,6 +196,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                                                                                         fundingReport.setProcurementSystem(procurementSystemAgencyCell != null ? procurementSystemAgencyCell.value.toString() : null);
                                                                                                         fundingReport.setResponsibleOrganization(responsibleOrgCell != null ? responsibleOrgCell.value.toString() : null);
                                                                                                         fundingReport.setSecondarySector(secondarySectorCell != null ? secondarySectorCell.value.toString() : null);
+                                                                                                        assignYear(fundingReport, col.parentColumn.originalColumnName);
                                                                                                         fundingReport.setActivityCount(activityCount);
                                                                                                         fundingReport.setCurrency(currencyCode);
                                                                                                         fundingReport.setActivityIds(ampIdsJoined);
@@ -313,6 +292,54 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                 leafHeaders.stream().map(c -> c.originalColumnName != null ? c.originalColumnName : "null").collect(Collectors.joining(", ")));
     }
 
+    private Long extractActivityCount(ReportArea reportArea) {
+        Long activityCount = 0L;
+        for (Map.Entry<ReportOutputColumn, ReportCell> content : reportArea.getContents().entrySet()) {
+            ReportOutputColumn col = content.getKey();
+            if (col.originalColumnName.equals(ColumnConstants.ACTIVITY_COUNT)) {
+                IntCell amount = (IntCell) content.getValue();
+                if (amount != null && amount.value != null) {
+                    activityCount = (Long) amount.value;
+                }
+                break;
+            }
+        }
+        return activityCount;
+    }
+
+    private List<String> extractAmpIds(ReportArea reportArea, ReportOutputColumn ampIdColumn) {
+        List<String> ampIdsList = new ArrayList<>();
+        if (ampIdColumn == null) {
+            return ampIdsList;
+        }
+
+        if (reportArea.getChildren() != null) {
+            for (ReportArea ampIdData : reportArea.getChildren()) {
+                TextCell ampIdCell = (TextCell) ampIdData.getContents().get(ampIdColumn);
+                if (ampIdCell != null && ampIdCell.value != null) {
+                    ampIdsList.add(ampIdCell.value.toString());
+                }
+            }
+        }
+
+        if (ampIdsList.isEmpty()) {
+            TextCell directAmpIdCell = (TextCell) reportArea.getContents().get(ampIdColumn);
+            if (directAmpIdCell != null && directAmpIdCell.value != null) {
+                ampIdsList.add(directAmpIdCell.value.toString());
+            }
+        }
+        return ampIdsList;
+    }
+
+    private ReportOutputColumn findOptionalColumnByName(List<ReportOutputColumn> leafHeaders, String columnName, int expectedIndex) {
+        try {
+            return findColumnByName(leafHeaders, columnName, expectedIndex);
+        } catch (RuntimeException ex) {
+            logger.warn("Optional column missing from report output: " + columnName + ". Continuing without it.");
+            return null;
+        }
+    }
+
     private void addFilters(ReportSpecificationImpl spec) {
         if (spec.getFilters() == null) {
             spec.setFilters(new ReportFiltersImpl());
@@ -333,9 +360,8 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", ArConstants.DONOR_TYPE);
         addColumnsToSpecification(spec);
 
-        spec.setSummaryReport(false);
-        //TODO broken by year configurable
-        spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
+        spec.setSummaryReport(true);
+        spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
         spec.setShowOriginalCurrency(false);
         spec.setDisplayEmptyFundingRows(true);
         ReportSettingsImpl reportSettings = new ReportSettingsImpl();
@@ -357,23 +383,38 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         spec.addColumn(new ReportColumn(ColumnConstants.STATUS));
         spec.addColumn(new ReportColumn(ColumnConstants.TYPE_OF_ASSISTANCE));
         //TODO for GGW this is reporting system, for others it is Sectors
-        spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
+        spec.addColumn(new ReportColumn(ColumnConstants.REPORTING_SYSTEM));
         spec.addColumn(new ReportColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION));
         spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_SECTOR));
-        // Ensure AMP ID is part of the hierarchy so commitments roll up under each activity
-
-        // Set hierarchies - includes AMP_ID so commitments/disbursements roll up under each activity
-        // This is required for summary reports to include all columns in leaf headers
+        // Set hierarchy columns used to navigate the report output tree.
         Set<ReportColumn> hierarchyColumns = new LinkedHashSet<>(spec.getColumns());
         spec.setHierarchies(hierarchyColumns);
 
-        // Add non-hierarchy columns after setHierarchies
+        // Add non-hierarchy columns after setHierarchies.
+        // AMP ID may be absent in some grouped outputs; parser handles it as optional.
         spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
         spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_COUNT));
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 
         logger.info("Report columns set for Donor Funding Report" + spec.getColumns().size());
+    }
+
+    private String extractYear(ReportsDashboard report) {
+        try {
+            Object year = ReportsDashboard.class.getMethod("getYear").invoke(report);
+            return year != null ? year.toString() : null;
+        } catch (ReflectiveOperationException ignored) {
+            return null;
+        }
+    }
+
+    private void assignYear(ReportsDashboard report, String year) {
+        try {
+            ReportsDashboard.class.getMethod("setYear", String.class).invoke(report, year);
+        } catch (ReflectiveOperationException ignored) {
+            // Year accessor is optional in some builds.
+        }
     }
 
     /**
@@ -406,9 +447,10 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             fieldMappings.put("implementingAgency", ColumnConstants.IMPLEMENTING_AGENCY);
             fieldMappings.put("pillar", ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
             fieldMappings.put("location", locationAdmLevel != null ? locationAdmLevel : ColumnConstants.LOCATION);
+            fieldMappings.put("country", locationAdmLevel != null ? locationAdmLevel : ColumnConstants.LOCATION);
             fieldMappings.put("implementationLevel", ColumnConstants.IMPLEMENTATION_LEVEL);
             fieldMappings.put("status", ColumnConstants.STATUS);
-            fieldMappings.put("reportingSystem", ColumnConstants.PRIMARY_SECTOR);
+            fieldMappings.put("reportingSystem", ColumnConstants.REPORTING_SYSTEM);
             fieldMappings.put("typeOfAssistance", ColumnConstants.TYPE_OF_ASSISTANCE);
             fieldMappings.put("procurementSystem", ColumnConstants.PROCUREMENT_SYSTEM);
             fieldMappings.put("responsibleOrganization", ColumnConstants.RESPONSIBLE_ORGANIZATION);

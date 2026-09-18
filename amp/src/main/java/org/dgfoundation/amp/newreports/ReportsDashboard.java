@@ -10,11 +10,12 @@ public class ReportsDashboard {
     private String implementationLevel;
     private String procurementSystem;
     private String location;
+    private String country;
     private String status;
     private String reportingSystem;
     private String typeOfAssistance;
     private String currency;
-    //private String year;
+    private String year;
     private BigDecimal actualCommitment;
     private BigDecimal actualDisbursement;
     private Long activityCount;
@@ -64,15 +65,14 @@ public class ReportsDashboard {
         this.activityIds = activityIds;
     }
 
-    /*
-        public String getYear() {
-            return year;
-        }
+    public String getYear() {
+        return year;
+    }
 
-        public void setYear(String year) {
-            this.year = year;
-        }
-    */
+    public void setYear(String year) {
+        this.year = year;
+    }
+
     public BigDecimal getActualCommitment() {
         return actualCommitment;
     }
@@ -82,11 +82,21 @@ public class ReportsDashboard {
     }
 
     public String getLocation() {
-        return location;
+        return location != null ? location : country;
     }
 
     public void setLocation(String location) {
         this.location = location;
+        this.country = location;
+    }
+
+    public String getCountry() {
+        return country != null ? country : location;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+        this.location = country;
     }
 
     public String getImplementationLevel() {

@@ -22,6 +22,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.publicportal.dto.PublicDonorCommitment;
 import org.digijava.kernel.ampapi.endpoints.publicportal.dto.PublicDonorCommitmentsByYear;
+import org.digijava.kernel.ampapi.endpoints.publicportal.dto.PublicDonorReportingSystemCommitment;
 import org.digijava.kernel.ampapi.endpoints.publicportal.dto.PublicTotalsByMeasure;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportFormParameters;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
@@ -422,6 +423,13 @@ public class PublicPortalService {
 
         Map<String, Object> baseFilters = copyMap(filters);
         baseFilters.put(DATE_FILTER, buildDateFilter(baseFilters.get(DATE_FILTER), targetYear));
+        Set<Long> requestedReportingSystemIds = new LinkedHashSet<>();
+        for (Object reportingSystemId : extractFilterValues(filters, REPORTING_SYSTEM_FILTER)) {
+            Long parsedReportingSystemId = parseLong(reportingSystemId);
+            if (parsedReportingSystemId != null) {
+                requestedReportingSystemIds.add(parsedReportingSystemId);
+            }
+        }
 
         for (Long donorId : requestedDonorIds) {
             Map<String, Object> donorFilters = copyMap(baseFilters);
@@ -434,6 +442,19 @@ public class PublicPortalService {
 
             result.getDonorTotals().add(donorCommitment);
             result.setTotal(result.getTotal().add(donorTotal));
+
+            for (Long reportingSystemId : requestedReportingSystemIds) {
+                Map<String, Object> portfolioFilters = copyMap(baseFilters);
+                portfolioFilters.put(DONOR_AGENCY_FILTER, Collections.singletonList(donorId));
+                portfolioFilters.put(REPORTING_SYSTEM_FILTER, Collections.singletonList(reportingSystemId));
+
+                PublicDonorReportingSystemCommitment reportingSystemCommitment =
+                    new PublicDonorReportingSystemCommitment();
+                reportingSystemCommitment.setDonorId(donorId);
+                reportingSystemCommitment.setReportingSystemId(reportingSystemId);
+                reportingSystemCommitment.setTotal(getTotalForFilters(settings, portfolioFilters));
+                result.getReportingSystemTotals().add(reportingSystemCommitment);
+            }
         }
 
         return result;
@@ -479,13 +500,17 @@ public class PublicPortalService {
     }
 
     private static List<Object> extractDonorIds(Map<String, Object> filters) {
-        Object rawDonors = filters.get(DONOR_AGENCY_FILTER);
-        if (rawDonors instanceof List<?>) {
-            return new ArrayList<>((List<?>) rawDonors);
+        return extractFilterValues(filters, DONOR_AGENCY_FILTER);
+    }
+
+    private static List<Object> extractFilterValues(Map<String, Object> filters, String filterName) {
+        Object rawValues = filters.get(filterName);
+        if (rawValues instanceof List<?>) {
+            return new ArrayList<>((List<?>) rawValues);
         }
-        if (rawDonors != null) {
+        if (rawValues != null) {
             List<Object> singleValue = new ArrayList<>();
-            singleValue.add(rawDonors);
+            singleValue.add(rawValues);
             return singleValue;
         }
         return new ArrayList<>();

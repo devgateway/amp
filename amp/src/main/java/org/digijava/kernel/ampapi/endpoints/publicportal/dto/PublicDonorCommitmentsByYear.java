@@ -24,6 +24,9 @@ public class PublicDonorCommitmentsByYear {
     @JsonProperty("donorTotals")
     private List<PublicDonorCommitment> donorTotals = new ArrayList<>();
 
+    @JsonProperty("reportingSystemTotals")
+    private List<PublicDonorReportingSystemCommitment> reportingSystemTotals = new ArrayList<>();
+
     public Integer getYear() {
         return year;
     }
@@ -54,5 +57,13 @@ public class PublicDonorCommitmentsByYear {
 
     public void setDonorTotals(List<PublicDonorCommitment> donorTotals) {
         this.donorTotals = donorTotals;
+    }
+
+    public List<PublicDonorReportingSystemCommitment> getReportingSystemTotals() {
+        return reportingSystemTotals;
+    }
+
+    public void setReportingSystemTotals(List<PublicDonorReportingSystemCommitment> reportingSystemTotals) {
+        this.reportingSystemTotals = reportingSystemTotals;
     }
 }

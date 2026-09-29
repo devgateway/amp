@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../schemas/xmlpatcher.xsd ">
     <keyword>Core indicator funding job</keyword>
     <author>brianbrix</author>
-    <description>Seed core indicator progress data mapped to relevant existing Senegal programs for CDIP</description>
+    <description>Seed core indicator progress data mapped to existing Senegal national planning objectives for CDIP</description>
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
@@ -43,11 +43,11 @@
                               ('renewable_energy', 'Quantity of renewable energy consumed annually in MWH', 'renewable energy consumed', 9000.00, 7200.00),
                               ('beneficiaries', 'Number of beneficiaries', 'beneficiaries', 18500.00, 12950.00)
                   ), program_definitions(program_no, program_name, parent_code, indicator_key) AS (
-                      VALUES (1, 'ODD 15', 'ODD', 'ha_restoration'),
-                          (2, 'ODD 13', 'ODD', 'co2eq_sequestered'),
-                          (3, 'ODD 8', 'ODD', 'employment_opportunities'),
-                          (4, 'ODD 7', 'ODD', 'renewable_energy'),
-                          (5, 'ODD 2', 'ODD', 'beneficiaries')
+                      VALUES (1, 'Axe 1', 'SDN', 'employment_opportunities'),
+                          (2, 'Axe 1', 'SDN', 'beneficiaries'),
+                          (3, 'Axe 2', 'SDN', 'co2eq_sequestered'),
+                          (4, 'Axe 2', 'SDN', 'renewable_energy'),
+                          (5, 'Axe 3', 'SDN', 'ha_restoration')
                 ), programs AS (
                       SELECT program_def.program_no, program_def.indicator_key,
                           theme.amp_theme_id AS program_id, theme.name AS program_name
@@ -93,6 +93,7 @@
                         ON cvl.id = al.location_id
                     WHERE COALESCE(aa.deleted, false) = false
                       AND aa.approval_status IN ('approved', 'startedapproved')
+                      AND cvl.location_name = 'Senegal'
                       AND (
                           SELECT COUNT(DISTINCT oro.organisation)
                           FROM amp_org_role oro
@@ -140,6 +141,7 @@
                         ON cvl.id = al.location_id
                     WHERE COALESCE(aa.deleted, false) = false
                       AND aa.approval_status IN ('approved', 'startedapproved')
+                      AND cvl.location_name = 'Senegal'
                       AND (
                           SELECT COUNT(DISTINCT oro.organisation)
                           FROM amp_org_role oro

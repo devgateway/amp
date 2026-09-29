@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../schemas/xmlpatcher.xsd ">
+    <keyword>CDIP Core indicator funding job NPO correction</keyword>
+    <author>brianbrix</author>
+    <description>Correct previously seeded core indicator data to use Senegal national planning objectives and country-level location</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                WITH core_indicator_types(indicator_key, indicator_name) AS (
+                    VALUES ('ha_restoration', 'land under restoration'),
+                           ('co2eq_sequestered', 'Co2EQ sequestered'),
+                           ('employment_opportunities', 'employment opportunities'),
+                           ('renewable_energy', 'renewable energy consumed'),
+                           ('beneficiaries', 'beneficiaries')
+                ), program_definitions(program_no, program_name, parent_code, indicator_key) AS (
+                    VALUES (1, 'Axe 1', 'SDN', 'employment_opportunities'),
+                           (2, 'Axe 1', 'SDN', 'beneficiaries'),
+                           (3, 'Axe 2', 'SDN', 'co2eq_sequestered'),
+                           (4, 'Axe 2', 'SDN', 'renewable_energy'),
+                           (5, 'Axe 3', 'SDN', 'ha_restoration')
+                ), programs AS (
+                    SELECT program_def.program_no, program_def.indicator_key,
+                           theme.amp_theme_id AS program_id, theme.name AS program_name
+                    FROM program_definitions program_def
+                    JOIN amp_theme theme
+                        ON theme.name = program_def.program_name
+                    JOIN amp_theme parent_theme
+                        ON parent_theme.amp_theme_id = theme.parent_theme_id
+                       AND parent_theme.theme_code = program_def.parent_code
+                )
+                UPDATE amp_indicator existing
+                SET program_id = programs.program_id,
+                    name = 'Core demo Senegal ' || programs.program_name || ' - ' || type_def.indicator_name
+                FROM core_indicator_types type_def
+                JOIN programs
+                    ON programs.indicator_key = type_def.indicator_key
+                WHERE existing.code = 'core_demo_senegal_metric_' || programs.program_no || '_' || type_def.indicator_key;
+
+                WITH seed_anchor AS (
+                    SELECT aa.amp_activity_id,
+                           al.amp_activity_location_id
+                    FROM amp_activity aa
+                    JOIN amp_activity_location al
+                        ON al.amp_activity_id = aa.amp_activity_id
+                                        JOIN amp_category_value_location cvl
+                                                ON cvl.id = al.location_id
+                    WHERE COALESCE(aa.deleted, false) = false
+                      AND aa.approval_status IN ('approved', 'startedapproved')
+                                            AND cvl.location_name = 'Senegal'
+                      AND (
+                          SELECT COUNT(DISTINCT oro.organisation)
+                          FROM amp_org_role oro
+                          JOIN amp_organisation org
+                              ON org.amp_org_id = oro.organisation
+                          WHERE oro.activity = aa.amp_activity_id
+                            AND oro.role = 1
+                            AND COALESCE(org.deleted, false) = false
+                      ) = 1
+                    ORDER BY aa.amp_activity_id, al.amp_activity_location_id
+                    LIMIT 1
+                ), core_indicators AS (
+                    SELECT indicator_id
+                    FROM amp_indicator
+                    WHERE code LIKE 'core_demo_senegal_metric_%'
+                )
+                UPDATE amp_indicator_connection existing
+                SET activity_id = anchor.amp_activity_id,
+                    activity_location = anchor.amp_activity_location_id
+                FROM core_indicators indicator
+                CROSS JOIN seed_anchor anchor
+                WHERE existing.sub_clazz = 'a'
+                  AND existing.indicator_id = indicator.indicator_id;
+
+                WITH seed_anchor AS (
+                    SELECT aa.amp_activity_id,
+                           al.amp_activity_location_id
+                    FROM amp_activity aa
+                    JOIN amp_activity_location al
+                        ON al.amp_activity_id = aa.amp_activity_id
+                                        JOIN amp_category_value_location cvl
+                                                ON cvl.id = al.location_id
+                    WHERE COALESCE(aa.deleted, false) = false
+                      AND aa.approval_status IN ('approved', 'startedapproved')
+                                            AND cvl.location_name = 'Senegal'
+                      AND (
+                          SELECT COUNT(DISTINCT oro.organisation)
+                          FROM amp_org_role oro
+                          JOIN amp_organisation org
+                              ON org.amp_org_id = oro.organisation
+                          WHERE oro.activity = aa.amp_activity_id
+                            AND oro.role = 1
+                            AND COALESCE(org.deleted, false) = false
+                      ) = 1
+                    ORDER BY aa.amp_activity_id, al.amp_activity_location_id
+                    LIMIT 1
+                ), core_indicators AS (
+                    SELECT indicator_id
+                    FROM amp_indicator
+                    WHERE code LIKE 'core_demo_senegal_metric_%'
+                )
+                INSERT INTO amp_indicator_connection
+                    (id, sub_clazz, indicator_id, activity_id, activity_location)
+                SELECT nextval('amp_indicator_connection_seq'), 'a', indicator.indicator_id,
+                       anchor.amp_activity_id, anchor.amp_activity_location_id
+                FROM core_indicators indicator
+                CROSS JOIN seed_anchor anchor
+                WHERE NOT EXISTS (
+                    SELECT 1
+                    FROM amp_indicator_connection existing
+                    WHERE existing.sub_clazz = 'a'
+                      AND existing.indicator_id = indicator.indicator_id
+                      AND existing.activity_id = anchor.amp_activity_id
+                      AND existing.activity_location = anchor.amp_activity_location_id
+                );
+
+                UPDATE amp_indicator_values existing
+                SET activity_location = connection.activity_location
+                FROM amp_indicator_connection connection
+                JOIN amp_indicator indicator
+                    ON indicator.indicator_id = connection.indicator_id
+                WHERE existing.ind_connect_id = connection.id
+                  AND indicator.code LIKE 'core_demo_senegal_metric_%';
+
+                WITH core_indicator_types(indicator_key, target_value, actual_value) AS (
+                    VALUES ('ha_restoration', 1250.00, 875.00),
+                           ('co2eq_sequestered', 6000.00, 3900.00),
+                           ('employment_opportunities', 2400.00, 1560.00),
+                           ('renewable_energy', 9000.00, 7200.00),
+                           ('beneficiaries', 18500.00, 12950.00)
+                ), connections AS (
+                    SELECT ic.id, ic.indicator_id, ic.activity_location
+                    FROM amp_indicator_connection ic
+                    JOIN amp_indicator i
+                        ON i.indicator_id = ic.indicator_id
+                    WHERE ic.sub_clazz = 'a'
+                      AND i.code LIKE 'core_demo_senegal_metric_%'
+                )
+                INSERT INTO amp_indicator_values
+                    (ind_val_id, value_date, interval_start_date, interval_end_date, value,
+                     value_type, ind_connect_id, default_ind, history, activity_location)
+                SELECT nextval('amp_indicator_values_seq'), CURRENT_TIMESTAMP, CURRENT_DATE,
+                       CURRENT_DATE, CASE WHEN value_type = 0 THEN type_def.target_value
+                                          ELSE type_def.actual_value END,
+                       value_type, connection.id, false, false, connection.activity_location
+                FROM connections connection
+                JOIN amp_indicator indicator
+                    ON indicator.indicator_id = connection.indicator_id
+                JOIN core_indicator_types type_def
+                    ON indicator.code LIKE '%_' || type_def.indicator_key
+                CROSS JOIN (VALUES (0), (1)) AS value_types(value_type)
+                WHERE NOT EXISTS (
+                    SELECT 1
+                    FROM amp_indicator_values existing
+                    WHERE existing.ind_connect_id = connection.id
+                      AND existing.value_type = value_type
+                      AND existing.activity_location = connection.activity_location
+                );
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -233,7 +233,7 @@ RUN --mount=type=cache,target=/root/.m2 \
         && rm -rf target; \
     fi
 
-FROM tomcat:9.0.122-jdk8-temurin-jammy
+FROM tomcat:8.5.100-jdk8-temurin-focal
 
 RUN apt-get update \
     && apt-get install -y apt-transport-https ca-certificates curl gnupg --no-install-recommends \

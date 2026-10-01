@@ -5,8 +5,8 @@ allowLinking="true" antiJARLocking="" antiResourceLocking="" clearReferencesStop
 clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTlds="false">
   <Environment name="hostname" value="" type="java.lang.String"/> 
 
-    <!-- Strict prevents session cookies from being sent in cross-site requests. -->
-    <CookieProcessor sameSiteCookies="strict" />
+    <!-- Lax permits the top-level redirect back from the separate login site. -->
+    <CookieProcessor sameSiteCookies="lax" />
   <!-- PostgreSQL connection -->
   <Resource factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" 
   	defaultTransactionIsolation="READ_COMMITTED" 

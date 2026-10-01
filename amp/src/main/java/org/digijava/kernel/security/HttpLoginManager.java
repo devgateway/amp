@@ -926,7 +926,7 @@ public final class HttpLoginManager {
         }
 
         sessionIdCookie.setPath(cookiePath);
-        sessionIdCookie.setSecure(request.isSecure());
+        sessionIdCookie.setSecure(true);
         sessionIdCookie.setHttpOnly(true);
 
         response.addCookie(sessionIdCookie);

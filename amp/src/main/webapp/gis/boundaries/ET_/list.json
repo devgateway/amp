@@ -1,0 +1,20 @@
+[
+  {
+    "id": "ET-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "ET"
+  },
+  {
+    "id": "ET-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "ET"
+  },
+  {
+    "id": "ET-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "ET"
+  }
+]

@@ -1,0 +1,21 @@
+<wicket:extend>
+	<span wicket:id="featureLabel"/>
+	<div style="height: 20px; width: 100%;">
+		<div style="float:auto;">
+			<a href="#" onclick="$(this).parent().parent().siblings('div:first').slideToggle();return false;">			<b><span style="font-size:large;" wicket:id="donorOrg"/></b>
+			</a>
+		</div>
+	</div>
+	<div class="collapsable">
+	<!-- <wicket:trn>From</wicket:trn>&nbsp;<span wicket:id="sourceOrg"/>&nbsp;<wicket:trn>as the</wicket:trn>&nbsp; <b><span wicket:id="sourceRoleLabel"/></b>	
+		 -->
+		<div wicket:id="listFunding">
+			<div class="organization_box">
+				<div class="organization_box_content">
+					<div wicket:id="fundingItem" />		
+				</div>
+			</div>
+		</div>
+		<span wicket:id="addAnotherFunding" style="margin-left:130px;"/>
+	</div>
+</wicket:extend>

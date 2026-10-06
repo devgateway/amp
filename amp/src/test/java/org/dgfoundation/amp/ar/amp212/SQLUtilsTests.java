@@ -2,24 +2,25 @@ package org.dgfoundation.amp.ar.amp212;
 
 import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.test.categories.DatabaseTests;
 import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Tag;
 
 import java.util.LinkedHashMap;
 import java.util.Set;
+import org.junit.jupiter.api.BeforeAll;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * ETL Testcases
  * @author Dolghier Constantin
  *
  */
-@Category(DatabaseTests.class)
+@Tag("databasetests")
 public class SQLUtilsTests extends AmpTestCase {
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         StandaloneAMPInitializer.initialize();
     }
@@ -31,11 +32,11 @@ public class SQLUtilsTests extends AmpTestCase {
     public void testColumnTypeFetching() {
         LinkedHashMap<String, String> cols = SQLUtils.getTableColumnsWithTypes("dg_site_domain", true);
         assertEquals("{site_domain_id=bigint, site_domain=character varying, site_path=character varying, site_id=bigint, language_code=character varying, is_default=boolean, enable_security=boolean}", cols.toString());
-        
+
         cols = SQLUtils.getTableColumnsWithTypes("v_adm_level_2", true);
         assertEquals("{amp_activity_id=bigint, adm_level_2_name=character varying, adm_level_2_id=bigint, percentage=real, cnt_nulls=bigint}", cols.toString());
     }
-    
+
     /**
      * tests that SQLUtils fetches columns in correct order
      */

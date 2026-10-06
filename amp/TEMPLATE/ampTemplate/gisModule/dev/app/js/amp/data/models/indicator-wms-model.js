@@ -4,7 +4,7 @@ var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
-var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
+var L = window.L; // use global L set by lib-load-hacks.js
 
 
 

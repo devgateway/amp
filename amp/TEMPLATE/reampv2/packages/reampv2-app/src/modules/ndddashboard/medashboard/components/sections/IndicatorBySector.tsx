@@ -1,11 +1,12 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useRef} from "react";
 import styles from './css/Styles.module.css';
 import {Col, Row} from "react-bootstrap";
 import ChartUtils from "../../utils/chart";
 import {IndicatorObjectType, SectorObjectType} from "../../../../admin/indicator_manager/types";
 import {DefaultTranslations} from "../../types";
 import IndicatorProgressChart from "../IndicatorProgressChart";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
+import {setMeState} from "../../reducers/fetchSectorClassificationReducer";
 
 interface IndicatorBySectorProps {
     translations: DefaultTranslations;
@@ -21,6 +22,9 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
     // @ts-ignore
     const globalSettings = useSelector(state => state.fetchSettingsReducer.settings);
     const selectedSector: SectorObjectType = useSelector((state: any) => state.fetchSectorClassificationReducer.selectedSector);
+    const meState = useSelector((state: any) => state.fetchSectorClassificationReducer.meState);
+    const dispatch = useDispatch();
+    const hasRestoredRef = useRef(false);
 
     const [selectedIndicatorId, setSelectedIndicatorId] = React.useState<number | null>(null);
     const [selectedIndicator, setSelectedIndicator] = React.useState<IndicatorObjectType | null>(null);
@@ -33,8 +37,16 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
 
     useEffect(() => {
         if (indicators.length > 0) {
-            setSelectedIndicatorId(indicators[0].id);
-            setSelectedIndicator(indicators[0])
+            let targetId = indicators[0].id;
+            if (!hasRestoredRef.current) {
+                hasRestoredRef.current = true;
+                const savedId = meState.indicators && meState.indicators[index];
+                if (savedId && indicators.find((i: IndicatorObjectType) => i.id === savedId)) {
+                    targetId = savedId;
+                }
+            }
+            setSelectedIndicatorId(targetId);
+            setSelectedIndicator(indicators.find((i: IndicatorObjectType) => i.id === targetId) ?? indicators[0]);
         }
     }, [indicators]);
 
@@ -73,10 +85,12 @@ const IndicatorBySector: React.FC<IndicatorBySectorProps> = (props) => {
                                 </select>
                             ) : (
                                 <select
-                                    defaultValue={indicators[0].id}
+                                    value={selectedIndicatorId ?? (indicators.length > 0 ? indicators[0].id : undefined)}
                                     onChange={(e) => {
+                                        const newId = parseInt(e.target.value);
                                         setSelectedIndicator(null);
-                                        setSelectedIndicatorId(parseInt(e.target.value))
+                                        setSelectedIndicatorId(newId);
+                                        dispatch(setMeState({ indicators: { ...meState.indicators, [index]: newId } }));
                                     }}
                                     style={{
                                         backgroundColor: '#f3f5f8',

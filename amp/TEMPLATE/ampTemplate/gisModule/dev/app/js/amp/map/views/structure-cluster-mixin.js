@@ -2,7 +2,7 @@
 var $ = require('jquery');
 var fs = require('fs');
 var _ = require('underscore');
-var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
+var L = window.L; // use global L set by lib-load-hacks.js
 
 var PopupTemplate = fs.readFileSync(__dirname + '/../templates/structure-cluster-popup-template.html', 'utf8');
 

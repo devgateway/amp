@@ -91,7 +91,6 @@ function loadBaseMap() {
         });
     }
 
-
     map.addLayer(tileLayer);
 	map.setZoom(5);
     currentZoom = map.getZoom();

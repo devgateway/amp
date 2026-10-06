@@ -47,7 +47,7 @@ function init() {
 	loading = dojo.byId("loadingImg");
 	loading.hidden = true;
 	initializeTranslations();
-	
+
 	var xhrArgs = {
 			url : "/esrigis/datadispatcher.do?getconfig=true",
 			handleAs : "json",
@@ -81,7 +81,7 @@ function init() {
 		}
 		// Call the asynchronous xhrGet
 		var deferred = dojo.xhrGet(xhrArgs);
-	
+
 	if (!isOsm){
 		basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapurl, {id : 'base'}); // Levels at which this layer will be visible);
 	}else{
@@ -96,7 +96,7 @@ function init() {
 		locator = new esri.tasks.Locator(locatorurl);
 		dojo.connect(locator, "onAddressToLocationsComplete", showResults);
 	}
-	
+
 	var layerLoadCount = 0;
 	if (basemap.loaded) {
 		layerLoadCount += 1;
@@ -133,19 +133,19 @@ function init() {
 // Create a map, set the extent, and add the services to the map.
 function createMapAddLayers(myService1, myService2) {
 	customLods = [
-		   {"level" : 0,"resolution" : 19567.87924099992,"scale" : 7.3957190948944E7}, 
-		   {"level" : 1,"resolution" : 4891.96981024998,"scale" : 18489297.737236}, 
-		   {"level" : 2,"resolution" : 2445.98490512499,"scale" : 9244648.868618}, 
-		   {"level" : 3,"resolution" : 1222.99245256249,"scale" : 4622324.434309}, 
-		   {"level" : 4,"resolution" : 611.49622628138,"scale" : 2311162.217155}, 
-		   {"level" : 5,"resolution" : 305.748113140558,"scale" : 1155581.108577}, 
-		   {"level" : 6,"resolution" : 152.874056570411,"scale" : 577790.554289}, 
-		   {"level" : 7,"resolution" : 76.4370282850732,"scale" : 288895.277144}, 
-		   {"level" : 8,"resolution" : 38.2185141425366,"scale" : 144447.638572}, 
-		   {"level" : 9,"resolution" : 19.1092570712683,"scale" : 72223.819286}, 
-		   {"level" : 10,"resolution" : 9.55462853563415,"scale" : 36111.909643}, 
+		   {"level" : 0,"resolution" : 19567.87924099992,"scale" : 7.3957190948944E7},
+		   {"level" : 1,"resolution" : 4891.96981024998,"scale" : 18489297.737236},
+		   {"level" : 2,"resolution" : 2445.98490512499,"scale" : 9244648.868618},
+		   {"level" : 3,"resolution" : 1222.99245256249,"scale" : 4622324.434309},
+		   {"level" : 4,"resolution" : 611.49622628138,"scale" : 2311162.217155},
+		   {"level" : 5,"resolution" : 305.748113140558,"scale" : 1155581.108577},
+		   {"level" : 6,"resolution" : 152.874056570411,"scale" : 577790.554289},
+		   {"level" : 7,"resolution" : 76.4370282850732,"scale" : 288895.277144},
+		   {"level" : 8,"resolution" : 38.2185141425366,"scale" : 144447.638572},
+		   {"level" : 9,"resolution" : 19.1092570712683,"scale" : 72223.819286},
+		   {"level" : 10,"resolution" : 9.55462853563415,"scale" : 36111.909643},
 		   {"level" : 11,"resolution" : 4.77731426794937,"scale" : 18055.954822} ];
-	
+
 	// create map
 	// convert the extent to Web Mercator
 	map = new esri.Map("map", {lods : customLods,
@@ -161,7 +161,7 @@ function createMapAddLayers(myService1, myService2) {
         	selectCurrentLocation();
         }
         catch(e){
-        	
+
         	console.log("Couldn't position current structure:" + e);
         }
     });
@@ -187,7 +187,7 @@ function showCoordinates(evt) {
     var mp = esri.geometry.webMercatorToGeographic(evt.mapPoint);
     //display mouse coordinates
     console.log(mp.x + ", " + mp.y);
-     
+
   }
 
 function extentHistoryChangeHandler() {
@@ -236,12 +236,12 @@ function createMapMenu() {
       // Lets calculate the map coordinates where user right clicked.
       // We'll use this to create the graphic when the user clicks
       // on the menu item to "Add Point"
-      currentLocation = getMapPointFromMenuPosition(box);          
+      currentLocation = getMapPointFromMenuPosition(box);
       editToolbar.deactivate();
     }
   });
 
-  ctxMenuForMap.addChild(new dijit.MenuItem({ 
+  ctxMenuForMap.addChild(new dijit.MenuItem({
     label: "Select this point",
     onClick: function(evt) {
     		(currentLocation);
@@ -258,13 +258,13 @@ function createGraphicsMenu() {
   // Creates right-click context menu for GRAPHICS
 
   ctxMenuForGraphics = new dijit.Menu({});
-  ctxMenuForGraphics.addChild(new dijit.MenuItem({ 
+  ctxMenuForGraphics.addChild(new dijit.MenuItem({
 	    label: "Select this structure",
 	    onClick: function(evt) {
 	    	selectLocationCallerShape(selected);
 	    }
 	  }));
-  ctxMenuForGraphics.addChild(new dijit.MenuItem({ 
+  ctxMenuForGraphics.addChild(new dijit.MenuItem({
     label: trnEdit,
     onClick: function() {
       if(selected.geometry.type !== "point"){
@@ -273,18 +273,18 @@ function createGraphicsMenu() {
       else{
         alert(trnNotImplemented);
       }
-    } 
+    }
   }));
 
 
-  ctxMenuForGraphics.addChild(new dijit.MenuItem({ 
+  ctxMenuForGraphics.addChild(new dijit.MenuItem({
     label: trnMove,
     onClick: function() {
       editToolbar.activate(esri.toolbars.Edit.MOVE, selected);
-    } 
+    }
   }));
 
-  ctxMenuForGraphics.addChild(new dijit.MenuItem({ 
+  ctxMenuForGraphics.addChild(new dijit.MenuItem({
     label: trnRotateScale,
     onClick: function() {
     if(selected.geometry.type !== "point"){
@@ -297,7 +297,7 @@ function createGraphicsMenu() {
   }));
 
   ctxMenuForGraphics.addChild(new dijit.MenuSeparator());
-  ctxMenuForGraphics.addChild(new dijit.MenuItem({ 
+  ctxMenuForGraphics.addChild(new dijit.MenuItem({
     label: trnDelete,
     onClick: function() {
       map.graphics.remove(selected);
@@ -312,7 +312,7 @@ function createGraphicsMenu() {
     // listed in the menu.
     selected = evt.graphic;
 
-    // Let's bind to the graphic underneath the mouse cursor           
+    // Let's bind to the graphic underneath the mouse cursor
     ctxMenuForGraphics.bindDomNode(evt.graphic.getDojoShape().getNode());
   });
 
@@ -324,7 +324,7 @@ function createGraphicsMenu() {
 
 /*****************
  * Helper Methods
- *****************/      
+ *****************/
 
 function getMapPointFromMenuPosition(box) {
   var x = box.x, y = box.y;
@@ -353,8 +353,8 @@ function selectCurrentLocation(){
 	var sms;
 	var shapeValue = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[3].value;
 	var typeSelect = callerButton.parentNode.parentNode.getElementsByTagName("SELECT")[0];
-	var typeText = typeSelect.options[typeSelect.selectedIndex].text; 
-	var typeValue = typeSelect.options[typeSelect.selectedIndex].value; 
+	var typeText = typeSelect.options[typeSelect.selectedIndex].text;
+	var typeValue = typeSelect.options[typeSelect.selectedIndex].value;
 	if (typeValue){
 		sms = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + typeValue, 21, 25);
 	}else{
@@ -369,7 +369,7 @@ function selectCurrentLocation(){
 
 		var pt = new esri.geometry.Point(longitude,latitude,map.spatialReference);
 		var transpt = esri.geometry.geographicToWebMercator(pt);
-		var infoTemplate = new esri.InfoTemplate("");   
+		var infoTemplate = new esri.InfoTemplate("");
 		var attr = {"Temp":"Temporal Attribute"};
 		pgraphic = new esri.Graphic(transpt,sms,attr,infoTemplate);
 		pgraphic.setAttributes( {
@@ -390,23 +390,23 @@ function selectCurrentLocation(){
 				pgraphic.setInfoTemplate(new esri.InfoTemplate(""));
 				pgraphic.setSymbol(sms);
 			}
-			
+
 		}
 		else
 		{
 			pt = new esri.geometry.Point(jsonObject);
 //			var transpt = esri.geometry.geographicToWebMercator(pt);
-			var infoTemplate = new esri.InfoTemplate("");   
+			var infoTemplate = new esri.InfoTemplate("");
 			var attr = {"Temp":"Temporal Attribute"};
 			pgraphic = new esri.Graphic(pt,sms,attr,infoTemplate);
 			pgraphic.setAttributes( {
 				  "Structure Type":typeText
 				  });
-			
+
 		}
 	}
 	map.graphics.add(pgraphic);
-	
+
 }
 
 
@@ -421,7 +421,7 @@ function selectLocationCaller(currentLocation){
     element = callerButton.find('input').eq(2);
     element.val(esri.geometry.webMercatorToGeographic(currentLocation).x);
     window.opener.postvaluesx(element);
-    
+
     $(window.opener.callerGisObject).blur();
     $(window.opener.callerGisObject).focus();
 	//Very experimental, storing the point as Json Object
@@ -455,7 +455,7 @@ function selectLocationCallerShape(selectedGraphic){
 	var callerButton = window.opener.callerGisObject;
 	//This takes an identifier for the element shape (the sibling of the Map button) and replaces shape with latitude and longitude
 	//Very experimental, storing the point as Stringified Json Object
-	
+
 	//Since this is a shape that we have stored, we'll wipe the lat/lon values to avoid confusion
 	//The lat/lon fields can be used if they are known before hand and entered manually
 	//For quicker data entry.
@@ -474,12 +474,12 @@ function selectLocationCallerShape(selectedGraphic){
 		shapeField.value = JSON.stringify(selectedGraphic.toJson());
         window.opener.postvaluesy(shapeField);
 	}
-	
+
 	element = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1];
 	window.opener.postvaluesy(element);
     element = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2];
     window.opener.postvaluesx(element);
-    
+
 	window.close();
 }
 
@@ -501,11 +501,11 @@ function locate() {
     //var symbol = new esri.symbol.SimpleMarkerSymbol();
     var callerButton = window.opener.callerGisObject;
     var typeSelect = callerButton.parentNode.parentNode.getElementsByTagName("SELECT")[0];
-	var typeText = typeSelect.options[typeSelect.selectedIndex].text; 
+	var typeText = typeSelect.options[typeSelect.selectedIndex].text;
 	var typeValue = typeSelect.options[typeSelect.selectedIndex].value;
-  
-  
-	
+
+
+
 	if (typeValue!=""){
 		symbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + typeValue, 21, 25);
 	}else{
@@ -514,7 +514,7 @@ function locate() {
 		symbol.setColor(new dojo.Color([255,0,0,0.75]));
 	}
     var infoTemplate = new esri.InfoTemplate("Location", "Location: ${address}<br/>Score: ${score}<br/>FCL:${Type}");
-    
+
     var points =  new esri.geometry.Multipoint(map.spatialReference);
     stpoints = [];
     clearOptions("fclList");
@@ -522,24 +522,24 @@ function locate() {
       candidate = candidates[i];
       if (candidate.score > 80) {
         var attributes = { address: candidate.attributes.Name, score:candidate.score,Type:candidate.attributes.type, locatorName:candidate.attributes.Loc_name };
-        
+
         var pointCoordinates = null;
-        
+
         if(candidate.location.spatialReference != null) {
         	pointCoordinates = candidate.location;
         } else {
         	pointCoordinates = esri.geometry.geographicToWebMercator(candidate.location);
         }
-        
+
         var graphic = new esri.Graphic(pointCoordinates, symbol, attributes, infoTemplate);
         map.graphics.add(graphic);
-        
+
 //        map.graphics.add(new esri.Graphic(candidate.location, new esri.symbol.TextSymbol(candidate.attributes.Name).setOffset(0, 8)));
         stpoints.push(graphic);
         points.addPoint(candidate.location);
-        
-        
-        
+
+
+
         if (!isInList(candidate.attributes.type)){
         	var select = document.getElementById("fclList");
         	select.options[select.options.length] = new Option(candidate.attributes.type, candidate.attributes.type);
@@ -547,11 +547,11 @@ function locate() {
       }
     }
 
-/*    
+/*
     if (points.getExtent()){
     	map.setExtent(points.getExtent().expand(3));
     }
-*/    
+*/
     hideLoading();
   }
 
@@ -563,16 +563,16 @@ function locate() {
 		}
 	}
   }
-   
+
   function clearOptions(id)
   {
   	var selectObj = document.getElementById(id);
   	var selectParentNode = selectObj.parentNode;
-  	var newSelectObj = selectObj.cloneNode(false); 
+  	var newSelectObj = selectObj.cloneNode(false);
   	selectParentNode.replaceChild(newSelectObj, selectObj);
   	return newSelectObj;
   }
-  
+
   function isInList(seachtext) {
 	for ( var i = 0; i < document.getElementById('fclList').options.length; i++) {
 		if (document.getElementById('fclList').options[i].text == seachtext) {
@@ -582,4 +582,3 @@ function locate() {
 	}
 }
 
-  

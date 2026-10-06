@@ -29,7 +29,8 @@ const IndicatorByProgram: React.FC<ProgramGroupedByIndicatorProps> = (props) => 
     const handleIndicatorChange = (value: number) => {
         if (indicators && indicators.length > 0) {
             setSelectedIndicator(null);
-            const findIndicator = indicators.find((item: any) => item.id ===  value);
+            const findIndicator = indicators.find((item: any) => item.id ==  value);
+            console.log("Find Indicator: ", findIndicator);
             if (findIndicator) {
                 setSelectedIndicator(findIndicator);
             }
@@ -46,6 +47,7 @@ const IndicatorByProgram: React.FC<ProgramGroupedByIndicatorProps> = (props) => 
     }, [indicators]);
 
     useEffect(() => {
+        console.log("Selected Indicator ID: ", selectedIndicatorId);
         handleIndicatorChange(selectedIndicatorId as number)
     }, [selectedIndicatorId]);
 
@@ -104,7 +106,7 @@ const IndicatorByProgram: React.FC<ProgramGroupedByIndicatorProps> = (props) => 
                 </Row>
                 {selectedIndicator && (
                     <IndicatorProgressChart
-                        title={translations['amp.ndd.dashboard:me-program-progress']}
+                        title={translations['amp.ndd.dashboard:me-indicator-progress']}
                         section="left"
                         translations={translations}
                         filters={filters}

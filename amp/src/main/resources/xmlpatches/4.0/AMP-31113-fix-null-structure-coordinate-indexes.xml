@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../schemas/xmlpatcher.xsd ">
+	<jira>AMP-31113-fix-null-structure-coordinate-indexes</jira>
+	<keyword>fix null index column in amp_structure_coordinate</keyword>
+	<author>brianbrix</author>
+	<description>Backfill null index values in amp_structure_coordinate caused by inverse=true on the Hibernate list mapping never writing the index column. Now that the mapping uses a bag, the column is no longer read, but this patch keeps the data clean.</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				UPDATE amp_structure_coordinate SET index = (v.row_number - 1)
+					FROM (
+					    SELECT amp_structure_coordinate_id, row_number()
+					    OVER (PARTITION BY amp_structure_id ORDER BY amp_structure_coordinate_id)
+					    FROM amp_structure_coordinate
+					    WHERE index IS NULL
+					    ) v
+				WHERE v.amp_structure_coordinate_id = amp_structure_coordinate.amp_structure_coordinate_id
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

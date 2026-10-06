@@ -12,6 +12,91 @@ function addRtlStyle(location) {
     return '';
 }
 
+function rewriteCssUrls(cssText, cssFileUrl) {
+    var baseDir = cssFileUrl.substring(0, cssFileUrl.lastIndexOf('/') + 1);
+    var origin = window.location.origin;
+    return cssText.replace(/url\s*\(\s*(['"]?)([^'")\s]+)\1\s*\)/gi, function (match, quote, url) {
+       if (/^(https?:|data:|#|\/\/)/.test(url)) {
+            return match;
+        }
+        if (url.charAt(0) === '/') {
+            return 'url(' + quote + origin + url + quote + ')';
+        }
+        return 'url(' + quote + baseDir + url + quote + ')';
+    });
+}
+
+function fetchAndInlineCSS(url) {
+    if (typeof window.fetch === 'undefined' || !url) {
+        return Promise.resolve(url ? '<link rel="stylesheet" href="' + url + '">' : '');
+    }
+    return window.fetch(url)
+        .then(function (r) {
+            if (!r.ok) { throw new Error('HTTP ' + r.status); }
+            return r.text();
+        })
+        .then(function (css) {
+            return '<style>' + rewriteCssUrls(css, url) + '</style>';
+        })
+        .catch(function () {
+            return '<link rel="stylesheet" href="' + url + '">';
+        });
+}
+
+function fixImagePaths(container) {
+    var origin = window.location.origin;
+    container.find('[src]').each(function () {
+        var src = this.getAttribute('src');
+        if (!src || src.indexOf('data:') === 0) { return; }
+        if (/^\/[^/]/.test(src)) {
+            this.setAttribute('src', origin + src);
+            return;
+        }
+        if (src.indexOf('http://') === 0) {
+            this.setAttribute('src', src.replace('http://', 'https://'));
+        }
+    });
+}
+
+function inlineTileImages(container, done) {
+    if (typeof window.fetch === 'undefined') {
+        done();
+        return;
+    }
+    var imgs = container.find('img.leaflet-tile');
+    var total = imgs.length;
+    if (total === 0) {
+        done();
+        return;
+    }
+    var count = 0;
+    var finish = function () {
+        if (++count >= total) {
+            done();
+        }
+    };
+    imgs.each(function () {
+        var img = this;
+        var src = img.getAttribute('src');
+        if (!src || src.indexOf('data:') === 0) {
+            finish();
+            return;
+        }
+        window.fetch(src, { mode: 'cors' })
+            .then(function (response) { return response.blob(); })
+            .then(function (blob) {
+                var reader = new FileReader();
+                reader.onloadend = function () {
+                    img.src = reader.result;
+                    finish();
+                };
+                reader.onerror = finish;
+                reader.readAsDataURL(blob);
+            })
+            .catch(finish);
+    });
+}
+
 // TODO this should be split into at least two method:
 // 1- html select and transform
 // 2- post of the html
@@ -23,7 +108,7 @@ function printMap(options) {
     _.each(translateEl, function (el) {
         var elem = mapContainer.find(el);
         var original = $(el);
-        var transformRegExp = /^(translate|matrix)\(*/i;
+        var transformRegExp = /^(translate3d|translate|matrix)\(*/i;
         elem.each(function (index, e) {
             e = $(e);
             var position = $(original[index]).position();
@@ -64,12 +149,20 @@ function printMap(options) {
         }
     });
 
+    fixImagePaths(mapContainer);
 
-    var styleLocation = document.location.href.replace("index.html", "compiled-css/main.css");
-    var styleTabsLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/less/tabs.css");
+    var styleLocation          = document.location.href.replace("index.html", "compiled-css/main.css");
+    var styleTabsLocation      = document.location.href.replace("gisModule/dist/index.html", "tabs/css/less/tabs.css");
     var styleBootstrapLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap.css");
     var styleBootstrapThemeLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap-theme.css");
-    var fontBaseLocation = document.location.href.replace("index.html", "fonts");
+    var fontBaseLocation       = document.location.href.replace("index.html", "fonts");
+
+    var cssUrls = [styleLocation, styleBootstrapLocation, styleTabsLocation, styleBootstrapThemeLocation];
+    var isRtl = app.data.generalSettings.get("rtl-direction");
+    if (isRtl) {
+        cssUrls.push(document.location.href.replace("gisModule/dist/index.html", "css_2/amp-rtl.css"));
+    }
+
     // TODO remove this does not work the font wof file should be in the phantom installation path
     var fontFace = "@font-face {" +
                     " font-family: 'Open Sans';" +
@@ -85,33 +178,35 @@ function printMap(options) {
                     " font-weight: 800;" +
                     " font-style: normal;" +
                     "}";
-    var headers = '<meta http-equiv="content-type" content="text/html; charset=UTF-8">' +
-                  '<link rel="stylesheet" href="' + styleLocation + '">' +
-                  '<link rel="stylesheet" href="' + styleBootstrapLocation + '">' +
-                  '<link rel="stylesheet" href="' + styleTabsLocation + '">' +
-                  addRtlStyle(document.location.href) +
-                  '<link rel="stylesheet" href="' + styleBootstrapThemeLocation + '">' +
-                  '<style>' + fontFace + '</style>';
-    var html = "<html><head>" + headers + "</head><body onload=\"restoreScroll()\">" +
-        "<script>function restoreScroll() {" + script + "}</script>" +
-        mapContainer[0].outerHTML + "</body></html>";
-    //console.log(html); Only for Debugging
-    $.ajax({
-        data: JSON.stringify({
-            content: html,
-            width: window.innerWidth,
-            height: window.innerHeight
-        }),
-        contentType: 'application/json',
-        headers : {
-            'Accept' : 'image/png',
-            'Content-Type' : 'application/json; charset=utf-8'
-        },
-        method: 'POST',
-        url: '/rest/commons/print',
-        dataType: '*',
-        success: options.success,
-        error: options.error
+
+    Promise.all(cssUrls.map(fetchAndInlineCSS)).then(function (inlinedStyles) {
+        var headers = '<meta http-equiv="content-type" content="text/html; charset=UTF-8">' +
+                      inlinedStyles.join('') +
+                      '<style>' + fontFace + '</style>';
+
+        inlineTileImages(mapContainer, function () {
+            var html = "<html><head>" + headers + "</head><body onload=\"restoreScroll()\">" +
+                "<script>function restoreScroll() {" + script + "}</script>" +
+                mapContainer[0].outerHTML + "</body></html>";
+            //console.log(html); Only for Debugging
+            $.ajax({
+                data: JSON.stringify({
+                    content: html,
+                    width: window.innerWidth,
+                    height: window.innerHeight
+                }),
+                contentType: 'application/json',
+                headers : {
+                    'Accept' : 'image/png',
+                    'Content-Type' : 'application/json; charset=utf-8'
+                },
+                method: 'POST',
+                url: '/rest/commons/print',
+                dataType: 'text',
+                success: options.success,
+                error: options.error
+            });
+        });
     });
 }
 

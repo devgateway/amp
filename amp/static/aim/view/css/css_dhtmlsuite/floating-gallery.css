@@ -1,0 +1,50 @@
+/************************************************************************************************************
+
+	DHTML Suite for Applications
+	(C) www.dhtmlgoodies.com, Janury 2007
+
+	CSS for the DHTMLSuite.floatingGallery class.
+	
+	
+	www.dhtmlgoodies.com
+	Alf Magne Kalleland
+
+************************************************************************************************************/
+
+/* Set the <html> and <body> element to full size and overflow to hidden
+This is important for the script
+*/
+.DHTMLSuite_floatingGalleryContainer{	/* Pane content div */
+
+
+
+}
+
+.DHTMLSuite_floatingGalleryContainer .DHTMLSuite_floatingGalleryImageBox{
+	float:left;
+	width:120px;
+	height:170px;
+	position:relative;
+	margin:3px;
+	border:2px solid #CCC;
+	background-position: center 20px;
+	background-repeat:no-repeat;
+	cursor:pointer;
+}
+
+/* Special effects when an imageSelection object is used. This css is used to inform the user that the current element is selected */
+
+.DHTMLSuite_floatingGalleryContainer .imageSelection{
+	border:2px solid #316AC5;
+}
+
+.DHTMLSuite_floatingGalleryContainer .DHTMLSuite_floatingGalleryImageBox .DHTMLSuite_floatingGalleryImageTitle{
+	position:absolute;
+	bottom:0px;
+	left:0px;
+	text-align:center;
+	width:100%;
+	background-color:#EEE;
+	border-top:2px solid #CCC;
+
+}

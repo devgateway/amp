@@ -1,0 +1,92 @@
+package org.digijava.kernel.ampapi.endpoints.indicator;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+public class IndicatorYearValues {
+
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "indicatorId")
+    @JsonIdentityReference(alwaysAsId = true)
+    @JsonProperty("indicatorId")
+    private AmpIndicator indicator;
+
+    private BigDecimal baseValue;
+    private String baseValueDate;
+
+    private List<YearValue> actualValues;
+
+
+    private BigDecimal targetValue;
+    private String targetValueDate;
+
+    private String indicatorName;
+
+    public IndicatorYearValues(AmpIndicator indicator, BigDecimal baseValue, List<YearValue> actualValues,
+                               BigDecimal targetValue) {
+        this.indicator = indicator;
+        this.baseValue = baseValue;
+        this.indicatorName = indicator != null ? indicator.getName() : null;
+        this.actualValues = actualValues;
+        this.targetValue = targetValue;
+
+    }
+
+    public IndicatorYearValues(AmpIndicator indicator, BigDecimal baseValue, String baseValueDate,List<YearValue> actualValues,
+                               BigDecimal targetValue, String targetValueDate) {
+        this.indicator = indicator;
+        this.baseValue = baseValue;
+        this.baseValueDate = baseValueDate;
+        this.indicatorName = indicator != null ? indicator.getName() : null;
+        this.actualValues = actualValues;
+        this.targetValue = targetValue;
+        this.targetValueDate = targetValueDate;
+
+    }
+
+    public IndicatorYearValues() {
+    }
+
+    public AmpIndicator getIndicator() {
+        return indicator;
+    }
+
+    public BigDecimal getBaseValue() {
+        return baseValue;
+    }
+    public String getBaseValueDate() {
+        return baseValueDate;
+    }
+    public void setBaseValueDate(String baseValueDate) {
+        this.baseValueDate = baseValueDate;
+    }
+
+    public List<YearValue> getActualValues() {
+        return actualValues;
+    }
+
+    public BigDecimal getTargetValue() {
+        return targetValue;
+    }
+
+    public String getIndicatorName() {
+        return indicatorName;
+    }
+
+    public void setIndicatorName(String indicatorName) {
+        this.indicatorName = indicatorName;
+    }
+
+    public void setTargetValueDate(String targetValueDate) {
+        this.targetValueDate = targetValueDate;
+    }
+
+    public String getTargetValueDate() {
+        return targetValueDate;
+    }
+}

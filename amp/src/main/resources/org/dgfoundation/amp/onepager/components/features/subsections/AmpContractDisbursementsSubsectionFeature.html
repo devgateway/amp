@@ -1,0 +1,26 @@
+<wicket:extend>
+
+<table width="100%" border="0" cellspacing="2" cellpadding="2" class="inside">
+  	<tr>
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="right"><b class="ins_title">
+			<wicket:trn key="trn:adjType">Adjustment Type</wicket:trn></b></td>
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:amount">Amount</wicket:trn></b></td>	
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:currency">Currency</wicket:trn></b></td>	
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:transactionDate">Transaction Date</wicket:trn></b></td>	
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
+	</tr>
+	<tr wicket:id="list">
+		<td  class="inside"><span wicket:id="adjustmentType"/></td>
+		<span class="invisible-item" wicket:id="fundingAmount"/>	
+		<td colspan="2" class="inside">
+			<span wicket:id="delete"/>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="5" class="inside" align="center">
+			<span wicket:id="add" />
+		</td>
+	</tr>
+</table>
+
+</wicket:extend>

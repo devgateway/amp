@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.module.aim.dbentity.AmpIndicatorDisaggregationValue" table="amp_indicator_disaggregation_values">
+        <id name="id" column="id">
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_INDICATOR_DISAGGREGATION_VALUES_seq</param>
+            </generator>
+        </id>
+
+        <many-to-one name="indicator" class="org.digijava.module.aim.dbentity.AmpIndicator" column="indicator_id" not-null="true"/>
+
+        <many-to-one name="parentCategory" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" column="parent_category_id" not-null="true"/>
+        <many-to-one name="childCategory" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" column="child_category_id" not-null="false"/>
+
+        <many-to-one cascade="all" name="baseValue" class="org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue" column="base_value_id"/>
+        <many-to-one cascade="all" name="targetValue" class="org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue" column="target_value_id"/>
+
+        <!-- New set of actual values via join table -->
+        <set name="actualValues" table="amp_disagg_actual_values" cascade="all" lazy="false">
+            <key column="disagg_value_id" not-null="true"/>
+            <many-to-many column="global_value_id" class="org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue"/>
+        </set>
+    </class>
+</hibernate-mapping>

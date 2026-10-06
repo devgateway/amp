@@ -1,4 +1,5 @@
-var Deferred = require('jquery').Deferred;
+var $ = require('jquery');
+var Deferred = $.Deferred;
 var _ = require('underscore');
 
 
@@ -22,7 +23,10 @@ module.exports = {
         });
     }
 
-    return this._loaded.promise();
+    // Capture in local var: fetch() may abort a prior XHR synchronously which
+    // triggers the fail handler (deleting this._loaded) before we can return it.
+    var loaded = this._loaded;
+    return loaded ? loaded.promise() : $.Deferred().reject().promise();
   },
 
   loadAll: function(options) {

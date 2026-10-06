@@ -12,38 +12,35 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hamcrest.Matcher;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
 import java.util.Set;
 
 import static org.digijava.kernel.validators.ValidatorUtil.filter;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Octavian Ciubotaru
- */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({FeaturesUtil.class})
 public class TreeCollectionValidatorTest {
 
     private static APIField activityField;
     private static InMemoryLocationManager locationManager;
+    private MockedStatic<FeaturesUtil> featuresUtilMock;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         InMemoryCategoryValuesManager categoryValues = InMemoryCategoryValuesManager.getInstance();
-        PowerMockito.mockStatic(FeaturesUtil.class);
         locationManager = InMemoryLocationManager.getInstance();
-
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         activityField = ValidatorUtil.getMetaData();
+
+        // Setup static mocking for FeaturesUtil
+        featuresUtilMock = mockStatic(FeaturesUtil.class);
     }
 
     @Test
@@ -78,15 +75,15 @@ public class TreeCollectionValidatorTest {
 
         assertThat(violations, contains(violation()));
     }
-    
+
     @Test
     public void testObjectWithNullEntityInCollection() {
         AmpActivityVersion activity = new ActivityBuilder()
                 .addLocation(locationManager.getAmpLocation("Haiti"), 50f)
                 .getActivity();
-        
+
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
-    
+
         assertThat(violations, emptyIterable());
     }
 
@@ -96,14 +93,18 @@ public class TreeCollectionValidatorTest {
                 .addLocation(locationManager.getAmpLocation("Haiti", "Artibonite"), 50f)
                 .addLocation(locationManager.getAmpLocation("Haiti", "Artibonite"), 50f)
                 .getActivity();
+
         mockValidation();
+
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
         assertThat(violations, emptyIterable());
     }
 
     private void mockValidation() {
-        when(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM)).thenReturn(null);
+        featuresUtilMock.when(() ->
+                FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM)
+        ).thenReturn(null);
     }
 
     private Matcher<ConstraintViolation> violation() {

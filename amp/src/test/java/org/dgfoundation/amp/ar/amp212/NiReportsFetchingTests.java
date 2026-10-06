@@ -12,7 +12,7 @@ import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.util.Arrays;
@@ -21,11 +21,12 @@ import java.util.List;
 import java.util.Set;
 
 import static org.dgfoundation.amp.algo.AmpCollections.sorted;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * 
+ *
  * testcases for the fetching states of AMP + the AMP schema
- * 
+ *
  * @author Constantin Dolghier
  *
  */
@@ -73,7 +74,7 @@ public class NiReportsFetchingTests extends AmpReportingTestCase {
                     assertEquals("[(actId: 19, amt: 33888 on 2011-01-01, coos: {{agrs.agr=(level: 0, id: -999999999), bool.Project Results Available=(level: 0, id: 2), cats.Financing Instrument=(level: 1, id: 2120), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: 2119), cats.Vulnerable Group=(level: 1, id: -999999999), funding.Funding Id=(level: 0, id: 24), locs.DN Country=(level: 0, id: -999999999), orgs.DN=(level: 2, id: 21699)}}, meta: {MetaInfoSet: [type_of_assistance: default type of assistance, source_org: 21699, source_role: DN, adjustment_type: pipeline]}]",
                         cells.toString());
                 });
-        
+
         runInEngineContext(
                 Arrays.asList("Pure MTEF Project"),
                 engine -> {
@@ -82,7 +83,7 @@ public class NiReportsFetchingTests extends AmpReportingTestCase {
                         cells2.toString());
                 });
     }
-    
+
     @Test
     public void testRealMtefFunding() throws Exception {
         runInEngineContext(
@@ -106,13 +107,13 @@ public class NiReportsFetchingTests extends AmpReportingTestCase {
                     assertEquals(
                         "["
                             + "(actId: 79, 87680.841736 on 2015-10-06, adjustment_type: Actual, transaction_type: 0), "
-                            + "(actId: 79, 3632.137149 on 2014-12-16, adjustment_type: Actual, transaction_type: 0), " 
+                            + "(actId: 79, 3632.137149 on 2014-12-16, adjustment_type: Actual, transaction_type: 0), "
                             + "(actId: 79, 6250 on 2015-10-14, adjustment_type: Actual, transaction_type: 0)"
                             + "]",
                         digestCellsList(cells, this::digestTransactionAmounts));
                 });
     }
-    
+
     @Test
     public void testExchangeRatesToEur() throws Exception {
         runInEngineContext(
@@ -125,7 +126,7 @@ public class NiReportsFetchingTests extends AmpReportingTestCase {
                             + "(actId: 79, 80000 on 2015-10-06, adjustment_type: Actual, transaction_type: 0), "
                             + "(actId: 79, 3313.961935 on 2014-12-16, adjustment_type: Actual, transaction_type: 0), "
                             + "(actId: 79, 10000 on 2015-10-14, adjustment_type: Actual, transaction_type: 0)"
-                            + "]", 
+                            + "]",
                     digestCellsList(cells, this::digestTransactionAmounts));
                 });
     }
@@ -153,8 +154,8 @@ public class NiReportsFetchingTests extends AmpReportingTestCase {
             Arrays.asList("Unvalidated activity", "execution rate activity"),
             engine -> {
                 List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.ACTIVITY_UPDATED_BY).fetch(engine));
-                assertEquals("[" + 
-                    "ATL ATL (atl@amp.org) (id: 64, eid: 3), " + 
+                assertEquals("[" +
+                    "ATL ATL (atl@amp.org) (id: 64, eid: 3), " +
                     "ATL ATL (atl@amp.org) (id: 77, eid: 3)"
                     + "]",
                     cells.toString());
@@ -166,10 +167,10 @@ public class NiReportsFetchingTests extends AmpReportingTestCase {
         runInEngineContext(Arrays.asList("Unvalidated activity", "execution rate activity"),
             engine -> {
                 List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.IMPLEMENTATION_LEVEL).fetch(engine));
-                    assertEquals("[" + 
-                        "National (id: 64, eid: 70, coos: {cats.Implementation Level=(level: 1, id: 70)}), " + 
+                    assertEquals("[" +
+                        "National (id: 64, eid: 70, coos: {cats.Implementation Level=(level: 1, id: 70)}), " +
                         "Provincial (id: 77, eid: 69, coos: {cats.Implementation Level=(level: 1, id: 69)})"
-                        + "]", 
+                        + "]",
                     cells.toString());
             });
     }
@@ -197,7 +198,7 @@ public class NiReportsFetchingTests extends AmpReportingTestCase {
             assertEquals("[Yes (id: 33, eid: 1, coos: {bool.Joint Criteria=(level: 0, id: 1)})]", cells.toString());
         });
     }
-    
+
     @Test
     public void testPercentagesNormalization() throws Exception {
         // "new activity with contracting" lacks location entries
@@ -213,7 +214,7 @@ public class NiReportsFetchingTests extends AmpReportingTestCase {
                     cellsZone.toString());
         });
     }
-    
+
     @Test
     public void testPercentagesCorrectorsFetching() throws Exception {
         AmpReportsSchema schema = AmpReportsSchema.getInstance();
@@ -224,7 +225,7 @@ public class NiReportsFetchingTests extends AmpReportingTestCase {
             assertEquals("sumOfPercs: {}", schema.PERCENTAGE_CORRECTORS.get(schema.PP_DIM_USG).buildSnapshot(conn, ids).toString());
         }
     }
-    
+
     @Test
     public void testRelatedPledgeFetching() throws Exception {
         List<String> acts = Arrays.asList("Activity Linked With Pledge");

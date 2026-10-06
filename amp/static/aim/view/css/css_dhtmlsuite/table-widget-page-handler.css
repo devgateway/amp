@@ -1,0 +1,49 @@
+.DHTMLSuite_tableWidgetPageHandler_mainDiv{	/* parent div */
+	
+}
+
+.DHTMLSuite_tableWidgetPageHandler_mainDiv a{
+	color:#333;
+}
+
+.DHTMLSuite_tableWidgetPageHandler_mainDiv span{	/* There's a <span> in front and behind every page links, example: <span>[</span><a href...>1</a><span>]</span> */
+	padding-left:2px;
+	padding-right:2px;
+}
+.DHTMLSuite_tableWidgetPageHandler_mainDiv span.DHTMLSuite_pageHandler_lastLink{
+	padding-left:5px;
+}
+span.DHTMLSuite_pageHandler_firstLink{
+	padding-left:0px;
+	padding-right:7px;
+}
+span.DHTMLSuite_pageHandler_previousLink{
+	padding-left:0px;
+}
+
+.DHTMLSuite_tableWidgetPageHandler_result{	/* Result div : Result: 1 to 10 of 51 */
+	font-size:0.9em;	/* Slightly smaller font */
+
+}
+
+/* Page list div : Previous [1] [2] [3] Next */
+.DHTMLSuite_tableWidgetPageHandler_pageList{
+
+}
+
+.DHTMLSuite_tableWidgetPageHandler_pageList .previousLinkDisabled,.DHTMLSuite_tableWidgetPageHandler_pageList .nextLinkDisabled{ /* Disabled previous link and disabled next link */
+	color:#999;
+	cursor:default;
+
+}
+.DHTMLSuite_tableWidgetPageHandler_pageList .DHTMLSuite_tableWidgetPageHandler_activePage{	/* Active page number */
+	color:#F00;
+}
+.DHTMLSuite_tableWidgetPageHandler_pageList .DHTMLSuite_tableWidgetPageHandler_inactivePage{	/* Active page number */
+
+}
+.DHTMLSuite_tableWidgetPageHandler_pageList .DHTMLSuite_tableWidgetPageHandler_resultDisplay{	/* Div displaying info about dataset - Result: 1 to 10 of 51 */
+
+
+
+}

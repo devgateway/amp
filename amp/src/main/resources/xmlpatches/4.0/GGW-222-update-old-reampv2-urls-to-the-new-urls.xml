@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>GGW-84</jira>
+    <keyword>fix report generator urls</keyword>
+    <author>timothygachengo</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                UPDATE amp_menu_entry SET url= '/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/ndddashboard' WHERE name = 'NDD Dashboard';
+                UPDATE amp_menu_entry SET url= '/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/ssc' WHERE name = 'SSC Dashboard';
+
+                UPDATE amp_menu_entry_view SET url= '/TEMPLATE/reampv2/packages/container/build/index.html#/ampoffline' WHERE menu_id = (SELECT id FROM amp_menu_entry WHERE name = 'AMP Offline');
+                UPDATE amp_menu_entry_view SET url= '/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/ndddashboard' WHERE menu_id = (SELECT id FROM amp_menu_entry WHERE name = 'NDD Dashboard');
+                UPDATE amp_menu_entry_view SET url= '/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/ssc' WHERE menu_id = (SELECT id FROM amp_menu_entry WHERE name = 'SSC Dashboard');
+                UPDATE amp_menu_entry_view SET url= '/TEMPLATE/reampv2/packages/container/build/index.html#/reampv2-app/geocoder' WHERE menu_id = (SELECT id FROM amp_menu_entry WHERE name = 'AutoGeocoder');
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

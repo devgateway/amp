@@ -6,16 +6,14 @@ import StartUp from './components/StartUp';
 import defaultTrnPack from './config/initialTranslations.json';
 import './index.css';
 import '../../../open-sans.css';
-import InidcatorTable from './components/table/IndicatorTable';
+import IndicatorTable from './components/table/IndicatorTable';
 import { store } from './reducers/store';
 
 const AdminIndicatorManagerApp = () => {
   return (
-    <Provider store={store}>
       <StartUp defaultTrnPack={defaultTrnPack}>
-        <InidcatorTable />
+        <IndicatorTable />
       </StartUp>
-    </Provider>
   );
 };
 

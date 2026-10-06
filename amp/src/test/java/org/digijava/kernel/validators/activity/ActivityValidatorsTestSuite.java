@@ -1,13 +1,12 @@
 package org.digijava.kernel.validators.activity;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.platform.suite.api.SelectClasses;
 
 /**
  * @author Octavian Ciubotaru
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
+@org.junit.platform.suite.api.Suite
+@SelectClasses({
         ImplementationLevelValidatorTest.class,
         OnBudgetValidatorTest.class,
         FundingWithTransactionsValidatorTest.class,

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "GN-adm-0",
+    "admLevel": "adm-0",
+    "label": "ADM 0",
+    "country": "GN"
+  },
+  {
+    "id": "GN-adm-1",
+    "admLevel": "adm-1",
+    "label": "ADM 1",
+    "country": "GN"
+  },
+  {
+    "id": "GN-adm-2",
+    "admLevel": "adm-2",
+    "label": "ADM 2",
+    "country": "GN"
+  }
+]

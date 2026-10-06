@@ -7,17 +7,19 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.common.values.PossibleValuesCache;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.util.AssertionErrors.assertFalse;
+import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 /**
  * @author Octavian Ciubotaru
@@ -52,7 +54,7 @@ public class ValueValidatorTest {
     private PossibleValuesEnumerator pvEnumerator;
     private PossibleValuesCache possibleValuesCached;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         sectorFieldDescription = new APIField();
         sectorFieldDescription.setFieldName(SECTOR_FIELD);
@@ -67,7 +69,7 @@ public class ValueValidatorTest {
         fyFieldDescription.setApiType(new APIType(Long.class, FieldType.LIST, FieldType.LONG));
 
         List<APIField> apiFields = Arrays.asList(sectorFieldDescription, fyFieldDescription);
-        
+
         draftFieldDescription = new APIField();
         draftFieldDescription.setFieldName(DRAFT_FIELD);
         draftFieldDescription.setImportable(true);

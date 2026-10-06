@@ -1,0 +1,44 @@
+/************************************************************************************************************
+
+	DHTML Suite for Applications
+	(C) www.dhtmlgoodies.com, Janury 2007
+
+	CSS for the DHTMLSuite.filmstripGallery class.
+	
+	
+	www.dhtmlgoodies.com
+	Alf Magne Kalleland
+
+************************************************************************************************************/
+
+/* Set the <html> and <body> element to full size and overflow to hidden
+This is important for the script
+*/
+.DHTMLSuite_filmstripGalleryContainer{	/* Pane content div */
+
+
+
+}
+
+.DHTMLSuite_filmstripGalleryContainer .DHTMLSuite_filmstripGalleryImageBox{
+	float:left;
+	width:120px;
+	height:170px;
+	position:relative;
+	margin:3px;
+	border:2px solid #CCC;
+	background-position: center 20px;
+	background-repeat:no-repeat;
+	cursor:pointer;
+}
+
+.DHTMLSuite_filmstripGalleryContainer .DHTMLSuite_filmstripGalleryImageBox .DHTMLSuite_filmstripGalleryImageTitle{
+	position:absolute;
+	bottom:0px;
+	left:0px;
+	text-align:center;
+	width:100%;
+	background-color:#EEE;
+	border-top:2px solid #CCC;
+
+}

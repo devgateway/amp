@@ -1,8 +1,7 @@
 package org.dgfoundation.amp.ar;
 
 import org.dgfoundation.amp.ar.legacy.*;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.platform.suite.api.SelectClasses;
 
 /**
  * entry point for AMP 2.6 tests. Initializes standalone AMP as part of the discovery process.
@@ -10,8 +9,8 @@ import org.junit.runners.Suite;
  * @author Dolghier Constantin
  *
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
+@org.junit.platform.suite.api.Suite
+@SelectClasses({
         DirectedDisbursementsTests.class,
         MtefTests.class,
         ActivityPreviewTests.class,

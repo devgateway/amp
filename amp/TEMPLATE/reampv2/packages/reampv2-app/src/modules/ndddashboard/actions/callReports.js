@@ -23,7 +23,9 @@ export const callReport = (fundingType, filters, programIds, settings) => dispat
   return Promise.all([fetchApiData({
     url: DIRECT_INDIRECT_REPORT,
     body
-  })]).then((data) => dispatch(fetchIndirectReportSuccess(data[0])))
+  })]).then((data) => {
+    return dispatch(fetchIndirectReportSuccess(data[0]))
+  })
     .catch(error => dispatch(fetchIndirectReportError(error)));
 };
 

@@ -8,8 +8,7 @@ import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import org.digijava.kernel.services.sync.model.ListDiff;
 import org.digijava.kernel.services.sync.model.SystemDiff;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -19,6 +18,7 @@ import java.util.Date;
 /**
  * @author Octavian Ciubotaru
  */
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestAmpOfflineDiff {
 
@@ -43,6 +43,6 @@ public class TestAmpOfflineDiff {
         JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
         JsonSchema schema = factory.getJsonSchema(JsonLoader.fromResource(schemaResource));
         ProcessingReport report = schema.validate(JsonLoader.fromString(json));
-        Assert.assertTrue(String.format("Json: %s\nValidate report: %s", json, report.toString()), report.isSuccess());
+        assertTrue(report.isSuccess());
     }
 }

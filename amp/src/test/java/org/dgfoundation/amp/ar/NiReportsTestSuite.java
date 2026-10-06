@@ -1,16 +1,15 @@
 package org.dgfoundation.amp.ar;
 
 import org.dgfoundation.amp.ar.amp212.*;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.platform.suite.api.SelectClasses;
 
 /**
  * All tests for written for AMP 2.12.
  *
  * @author Dolghier Constantin
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
+@org.junit.platform.suite.api.Suite
+@SelectClasses({
         OfflineNiReportsTestSuite.class,
         NiReportsFetchingTests.class,
         AmpSchemaSanityTests.class,

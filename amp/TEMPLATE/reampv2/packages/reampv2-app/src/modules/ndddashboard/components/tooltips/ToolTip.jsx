@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './ToolTip.css';
 import { NDDTranslationContext } from '../StartUp';
-import { formatNumberWithSettings } from '../../utils/Utils';
+import {formatNumberByPattern, formatNumberWithSettings} from '../../utils/Utils';
 
 class ToolTip extends Component {
   // eslint-disable-next-line class-methods-use-this
@@ -21,8 +21,10 @@ class ToolTip extends Component {
       titleLabel, color, value, formattedValue, total, minWidth, isYearTotal, globalSettings
     } = this.props;
     const { translations } = this.context;
+
     const percentage = total > 0 ? (value * 100) / total : 0;
     const headerStyle = { backgroundColor: color };
+    const formattedPercentage= formatNumberByPattern(percentage,globalSettings.numberFormat,"en-US");
     const containerStyle = {};
     // Dont make it wider if the content doesnt need it.
     if (minWidth && this.getActualWidth(titleLabel) > minWidth) {
@@ -43,8 +45,7 @@ class ToolTip extends Component {
             {percentage > 0 ? (
               <div className="element grey">
                 <span className="of-total">
-                  {formatNumberWithSettings('', translations, globalSettings,
-                    percentage, false)}
+                  {formattedPercentage}
                   <b>% </b>
                   {isYearTotal
                     ? translations['amp.ndd.dashboard:of-year-total']

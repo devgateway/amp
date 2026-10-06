@@ -62,10 +62,13 @@ module.exports = BaseControlView.extend({
     // could do better, but must close accordion or get weird states from bootstrap and manual filter showing....
     this.app.data.filter.on('cancel', function() {
       self.$('.accordion-body').collapse('hide');
+      self.$('#filter-popup').hide();
     });
 
     // serialized obj is returned in event if needed.
     this.app.data.filter.on('apply', function() {
+      // #filter-popup is position:fixed so collapse('hide') alone does not remove it — hide explicitly.
+      self.$('#filter-popup').hide();
       //only collapse ui if it's expanded...otherwise strange bootstrap behaviour.
       if (self.$('.accordion-body.collapse.in').length > 0) {
         self.$('.accordion-body').collapse('hide');

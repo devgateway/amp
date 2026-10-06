@@ -2,7 +2,7 @@ package org.digijava.module.aim.validator;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.validator.groups.API;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import javax.validation.*;
 import javax.validation.groups.Default;
@@ -22,7 +22,7 @@ public abstract class AbstractValidatorTest<T extends ConstraintValidator> {
         this.clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();

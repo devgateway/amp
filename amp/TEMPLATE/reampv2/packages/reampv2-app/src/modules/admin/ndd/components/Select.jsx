@@ -7,16 +7,19 @@ import { NDDContext } from './Startup';
 import './css/Typeahead.css';
 import './css/style.css';
 import RequiredMark from './common/RequiredMark';
+import SelectHandler from "./SelectHandler";
 
 class Select extends Component {
   constructor(props) {
     super(props);
     this.drawSelector = this.drawSelector.bind(this);
+    this.onChangeSelect = this.onChangeSelect.bind(this);
+
   }
 
-  onChangeSelect(selected) {
+  onChangeSelect(selectedOption) {
     const { onChange, level } = this.props;
-    onChange(selected, level);
+    onChange(selectedOption ? [selectedOption] : [], level);
   }
 
   drawSelector() {
@@ -24,21 +27,17 @@ class Select extends Component {
       options, placeholder, selected, disabled
     } = this.props;
     const { translations, trnPrefix } = this.context;
-    const isValid = (selected && selected.length === 1);
-    const sortedOptions = options ? options.sort((a, b) => a.value.localeCompare(b.value)) : [];
+
     return (
-      <Typeahead
-        id="basic-typeahead-single"
-        labelKey="value"
-        className={!isValid ? 'is-invalid' : ''}
-        options={sortedOptions || []}
-        clearButton
-        onChange={this.onChangeSelect.bind(this)}
-        selected={selected}
-        placeholder={placeholder}
-        disabled={disabled}
-        emptyLabel={translations[`${trnPrefix}no-matches-found`]}
-      />
+        <SelectHandler
+            options={options}
+            placeholder={placeholder}
+            selected={selected}
+            disabled={disabled}
+            onChange={this.onChangeSelect}
+            translations={translations}
+            trnPrefix={trnPrefix}
+        />
     );
   }
 
@@ -65,7 +64,10 @@ Select.propTypes = {
   level: PropTypes.number.isRequired,
   disabled: PropTypes.bool.isRequired
 };
-
+Select.defaultProps = {
+  selected: [],
+  disabled: false
+};
 const mapStateToProps = state => ({
   translations: state.translationsReducer.translations
 });

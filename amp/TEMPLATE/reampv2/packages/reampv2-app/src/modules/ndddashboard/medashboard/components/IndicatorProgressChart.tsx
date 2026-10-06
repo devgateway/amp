@@ -81,6 +81,7 @@ const IndicatorProgressChart: React.FC<IndicatorProgressChartProps> = (props: In
                 targetValue: apiData.targetValue,
                 actualValue: actualValue === 0 ? apiData.baseValue : actualValue
             });
+        console.log("Progress Value: ", progress);
 
             setProgressValue(progress);
     }

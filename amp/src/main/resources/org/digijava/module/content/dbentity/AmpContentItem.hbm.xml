@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.content.dbentity.AmpContentItem" table="AMP_CONTENT_ITEM">
+		<id column="AMP_CONTENT_ITEM_ID" name="ampContentItemId" type="java.lang.Long" unsaved-value="null">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_content_item_seq</param>
+			</generator>
+		</id>
+		<property name="pageCode" column="PAGECODE" type="java.lang.String" />
+		<property name="layout" column="LAYOUT" type="java.lang.String" />
+		<property name="description" column="DESCRIPTION" type="java.lang.String" />
+		<property name="isHomepage" column="ISHOMEPAGE" type="java.lang.Boolean" />
+		<property name="htmlblock_1" column="HTMLBLOCK_1" type="java.lang.String" />
+		<property name="htmlblock_2" column="HTMLBLOCK_2" type="java.lang.String" />
+		<property name="title" column="TITLE" type="java.lang.String" />
+		<set name="contentThumbnails" cascade="all" inverse="true" order-by="PLACEHOLDER asc">
+			<cache usage="read-write" />
+			<key column="AMP_CONTENT_ITEM_ID" />
+			<one-to-many class="org.digijava.module.content.dbentity.AmpContentItemThumbnail" />
+		</set>
+	</class>
+</hibernate-mapping>

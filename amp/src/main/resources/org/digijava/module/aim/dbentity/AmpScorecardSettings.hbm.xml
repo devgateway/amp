@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpScorecardSettings" table="AMP_SCORECARD_SETTINGS">
+		<cache usage="read-write" />
+		<id name="ampScorecardSettingsId" column="id" type="java.lang.Long">
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_SCORECARD_SETTINGS_seq</param>
+			</generator>
+		</id>
+
+		<property name="validationPeriod" column="validation_period" type="java.lang.Boolean" />
+		<property name="validationTime" column="validation_time" type="java.lang.Integer" />
+		<property name="percentageThreshold" column="percentage_threshold" type="java.lang.Double" />
+		<property name="quarters" column="quarters" type="java.lang.String" />
+
+		<set name="closedStatuses" table="AMP_SCORECARD_SETTINGS_CATEGORY_VALUE"
+			inverse="true" lazy="true" fetch="select" cascade="save-update, all-delete-orphan">
+			<key>
+				<column name="AMP_SCORECARD_SETTINGS_ID" not-null="true" />
+			</key>
+			<one-to-many
+				class="org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue" />
+		</set>
+	</class>
+</hibernate-mapping>

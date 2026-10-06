@@ -21,6 +21,16 @@ export interface SectorObjectType {
 }
 
 export interface IndicatorObjectType {
+    frequency: undefined;
+    responsibleOrganizations: any[];
+    calculationMethod: string;
+    unitOfMeasure: undefined;
+    disaggregation: any[];
+    dataSource: string;
+    data: string;
+    logframeLinks: any[];
+    indicatorType: number | undefined;
+    relevanceForClimateChange: string;
     id:           number;
     name:         string;
     description:  string;
@@ -30,8 +40,29 @@ export interface IndicatorObjectType {
     sectors:      number[];
     base:         BaseAndTargetValueType | null;
     target:       BaseAndTargetValueType | null;
-    programId:       string | null;
+    programId:       number | null;
     indicatorsCategory: number | null;
+    outcomeId?: number;
+    outputId?: number;
+    // Add editable disaggregation values
+    disaggregationValues?: Array<{
+      parentCategoryId: number;
+      childCategoryId: number | null;
+        parentDisaggregationId: number | null;
+        childDisaggregationId: number | null;
+      base: {
+        originalValue: string | number;
+        originalValueDate: string;
+        revisedValue: string | number;
+        revisedValueDate: string;
+      };
+      target: {
+        originalValue: string | number;
+        originalValueDate: string;
+        revisedValue: string | number;
+        revisedValueDate: string;
+      };
+    }>;
 }
 
 export interface ProgramObjectType {

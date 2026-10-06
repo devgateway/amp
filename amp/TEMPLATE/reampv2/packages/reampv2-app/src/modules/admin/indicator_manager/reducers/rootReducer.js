@@ -13,6 +13,9 @@ import fetchProgramsReducer from './fetchProgramsReducer';
 import createIndicatorReducer from './createIndicatorReducer';
 import updateIndicatorReducer from './updateIndicatorReducer';
 import deleteIndicatorReducer from './deleteIndicatorReducer';
+import fetchResponsibleOrgsReducer from './fetchResponsibleOrgsReducer';
+import fetchOutcomesReducer from './fetchOutcomesReducer';
+import fetchOutputsReducer from "./fetchOutputsReducer";
 
 export default combineReducers({
   startupReducer,
@@ -26,5 +29,8 @@ export default combineReducers({
   updateIndicatorReducer,
   deleteIndicatorReducer,
   fetchSettingsReducer,
-  fetchAmpCategoryReducer
+  fetchAmpCategoryReducer,
+  fetchResponsibleOrgsReducer,
+  fetchOutputsReducer,
+  fetchOutcomesReducer
 });

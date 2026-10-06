@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-</jira>
+    <keyword>Add uploaded timestamp to imported files records</keyword>
+    <author>GitHub Copilot</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                ALTER TABLE IMPORTED_FILES_RECORD ADD COLUMN IF NOT EXISTS uploaded_at timestamp;
+                UPDATE IMPORTED_FILES_RECORD SET uploaded_at = CURRENT_TIMESTAMP WHERE uploaded_at IS NULL;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

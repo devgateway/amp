@@ -128,7 +128,6 @@ gulp.task('build-js', gulp.series('browserify', function() {
 
 gulp.task('less', function() {
   return gulp.src(paths.stylesheets.entry)
-    .pipe($.plumber())
     .pipe($.sourcemaps.init())
     .pipe($.less())
     .on('error', log)

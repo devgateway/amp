@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactTooltip from 'react-tooltip';
+import ReactTooltip, { Tooltip } from 'react-tooltip';
 import PropTypes from 'prop-types';
 import './SimpleLegend.css';
 
@@ -23,12 +23,27 @@ export default class SimpleLegend extends Component {
                       border: `2px solid ${getColor(d)}`,
                       backgroundColor: `${getColor(d)}`
                     }}
-                    data-tip={d.name}
-                    data-for={index.toString()}
-                  />
-                  <span className="label">
+                    data-tooltip-content={d.name}
+                    data-tooltip-id={index.toString()}
+                    data-tooltip-place="top"
+
+                  >
+
+                  </span>
+                  <span className="label"
+                        data-tooltip-content={d.name}
+                        data-tooltip-id={index.toString()}
+                        data-tooltip-place="top"
+                        style={{cursor: 'pointer'}}
+                  >
                     {d.name.substring(0, 10)}
-                    <ReactTooltip place="top" effect="float" backgroundColor={getColor(d)} id={index.toString()} />
+                    <Tooltip
+                        place="top"
+                        effect="float"
+                        style={{
+                          backgroundColor: `${getColor(d)}`
+                        }}
+                        id={index.toString()} />
                   </span>
                 </li>
               );

@@ -13,19 +13,19 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * A disbursement happened after (transaction date itself) the project closing date 
- * 
+ * A disbursement happened after (transaction date itself) the project closing date
+ *
  * @author Viorel Chihai
  */
 public class DisbursementsAfterActivityDateMatcherTests extends PerformanceRuleMatcherTests {
-    
-    @Before
+
+    @BeforeEach
     public void setUp() {
         super.setUp();
         definition = new DisbursementsAfterActivityDateMatcherDefinition();
@@ -34,14 +34,14 @@ public class DisbursementsAfterActivityDateMatcherTests extends PerformanceRuleM
     @Test
     public void testValidation() {
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.ACTIVITY_COMPLETION_DATE, getCriticalLevel());
-        
+
         assertNotNull(definition.createMatcher(rule));
     }
-    
+
     @Test
     public void testTwoDisbursementsAfterSelectedDate() {
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.ACTIVITY_COMPLETION_DATE, getCriticalLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -59,14 +59,14 @@ public class DisbursementsAfterActivityDateMatcherTests extends PerformanceRuleM
                                 .getFunding())
                 .withActualCompletionDate(new LocalDate(2011, 11, 12).toDate())
                 .getActivity();
-        
+
         assertNotNull(findPerformanceIssue(rule, a));
     }
-    
+
     @Test
     public void testTwoFundingsWithDisbursementsAfterSelectedDate() {
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.ACTIVITY_COMPLETION_DATE, getCriticalLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -91,14 +91,14 @@ public class DisbursementsAfterActivityDateMatcherTests extends PerformanceRuleM
                                 .getFunding())
                 .withActualCompletionDate(new LocalDate(2016, 11, 12).toDate())
                 .getActivity();
-        
+
         assertEquals(findPerformanceIssue(rule, a).getDonors().size(), 1);
     }
-    
+
     @Test
     public void testTwoFundingsWithDisbursementsBeforeSelectedDate() {
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.ACTIVITY_COMPLETION_DATE, getCriticalLevel());
-        
+
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
@@ -123,10 +123,10 @@ public class DisbursementsAfterActivityDateMatcherTests extends PerformanceRuleM
                                 .getFunding())
                 .withActualCompletionDate(new LocalDate(2016, 12, 13).toDate())
                 .getActivity();
-        
+
         assertNull(findPerformanceIssue(rule, a));
     }
-        
+
     public AmpPerformanceRule createRule(String activityDate, AmpCategoryValue level) {
 
         AmpPerformanceRule rule = new AmpPerformanceRule();
@@ -141,5 +141,5 @@ public class DisbursementsAfterActivityDateMatcherTests extends PerformanceRuleM
 
         return rule;
     }
-    
+
 }

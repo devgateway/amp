@@ -3,6 +3,8 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    background: #fff; /* Ensure light background */
+    padding: 0;
 }
 
 .view_row {
@@ -27,7 +29,7 @@
 }
 
 .view_item {
-    width: 50%;
+    width: 100%; /* Remove 50% restriction for full width */
     text-align: left;
 }
 
@@ -35,4 +37,81 @@
     padding: 4px 30px;
     margin-right: -15px;
     margin-left: -15px;
+}
+
+.section {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+}
+.section_title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+}
+.important {
+  font-weight: bold;
+  color: #36B37E;
+}
+.label {
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #333;
+}
+.value {
+  font-size: 1rem;
+  color: #222;
+}
+.no_data {
+  color: #999;
+  font-style: italic;
+}
+.tags_container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+.modal_title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #0052CC;
+  display: flex;
+  align-items: center;
+}
+.modal_header {
+  background: #f7f7f7;
+  border-bottom: 2px solid #e0e0e0;
+}
+.modal_body {
+  background: #fff !important; /* Force modal body to be light */
+}
+
+.hierarchical_table {
+    width: 100%;
+    background: #fff;
+}
+
+.error_state {
+  text-align: center;
+  color: #FF5630;
+  padding: 32px 0;
+}
+.modal_backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 100;
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-30914</jira>
+    <keyword>Views</keyword>
+    <author>B Mokandu</author>
+    <description>recreate view</description>
+
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                UPDATE dg_countries set iso='zz' WHERE country_name='Multi-country';
+                UPDATE amp_category_value_location set iso='zz' WHERE location_name='Multi-country';
+                CREATE OR REPLACE VIEW v_g_settings_countries AS SELECT dg_countries.iso AS id, dg_countries.country_name AS value FROM dg_countries ORDER BY dg_countries.country_name;;;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -1,0 +1,57 @@
+<div class="dhx_form_repeat">
+	<form>
+    <div class="dhx_repeat_left">
+               <label><input class="dhx_repeat_radio" type="radio" name="repeat" value="day" />Denne</label><br />
+               <label><input class="dhx_repeat_radio" type="radio" name="repeat" value="week"/>T�denne</label><br />
+               <label><input class="dhx_repeat_radio" type="radio" name="repeat" value="month" checked />Mesa�ne</label><br />
+               <label><input class="dhx_repeat_radio" type="radio" name="repeat" value="year" />Ro�ne</label>
+    </div>
+    <div class="dhx_repeat_divider"></div>
+    <div class="dhx_repeat_center">
+               <div style="display:none;" id="dhx_repeat_day">
+                   <label><input class="dhx_repeat_radio" type="radio" name="day_type" value="d"/>Ka�d�</label><input class="dhx_repeat_text" type="text" name="day_count" value="1" />de�<br />
+                   <label><input class="dhx_repeat_radio" type="radio" name="day_type" checked value="w"/>Ka�d� prac. de�</label>
+               </div>
+               <div style="display:none;" id="dhx_repeat_week">
+                   Opakova� ka�d�<input class="dhx_repeat_text" type="text" name="week_count" value="1" />t�de� v d�och:<br />
+
+                   <table class="dhx_repeat_days">
+                       <tr>
+                           <td>
+                               <label><input class="dhx_repeat_checkbox" type="checkbox" name="week_day" value="1" />Pondelok</label><br />
+                               <label><input class="dhx_repeat_checkbox" type="checkbox" name="week_day" value="4" />�tvrtok</label>
+                           </td>
+                           <td>
+                               <label><input class="dhx_repeat_checkbox" type="checkbox" name="week_day" value="2" />Utorok</label><br />
+                               <label><input class="dhx_repeat_checkbox" type="checkbox" name="week_day" value="5" />Piatok</label>
+                           </td>
+                           <td>
+                               <label><input class="dhx_repeat_checkbox" type="checkbox" name="week_day" value="3" />Streda</label><br />
+                               <label><input class="dhx_repeat_checkbox" type="checkbox" name="week_day" value="6" />Sobota</label>
+                           </td>
+                           <td>
+                               <label><input class="dhx_repeat_checkbox" type="checkbox" name="week_day" value="0" />Nede�a</label><br /><br />
+                           </td>
+                       </tr>
+                   </table>
+
+               </div>
+               <div id="dhx_repeat_month">
+                   <label><input class="dhx_repeat_radio" type="radio" name="month_type" value="d"/>Opakova�</label><input class="dhx_repeat_text" type="text" name="month_day" value="1" />de� ka�d�<input class="dhx_repeat_text" type="text" name="month_count" value="1" />mesiac<br />
+                   <label><input class="dhx_repeat_radio" type="radio" name="month_type" checked value="w"/>On</label><input class="dhx_repeat_text" type="text" name="month_week2" value="1" /><select name="month_day2"><option value="1" selected >Pondelok<option value="2">Utorok<option value="3">Streda<option value="4">�tvrtok<option value="5">Piatok<option value="6">Sobota<option value="0">Nede�a</select>ka�d�<input class="dhx_repeat_text" type="text" name="month_count2" value="1" />mesiac<br />
+               </div>
+               <div style="display:none;" id="dhx_repeat_year">
+                   <label><input class="dhx_repeat_radio" type="radio" name="year_type" value="d"/>Ka�d�</label><input class="dhx_repeat_text" type="text" name="year_day" value="1" />de�<select name="year_month"><option value="0" selected >Janu�r<option value="1">Febru�r<option value="2">Marec<option value="3">Apr�l<option value="4">M�j<option value="5">J�n<option value="6">J�l<option value="7">August<option value="8">September<option value="9">Okt�ber<option value="10">November<option value="11">December</select>mesiac<br />
+                   <label><input class="dhx_repeat_radio" type="radio" name="year_type" checked value="w"/>On</label><input class="dhx_repeat_text" type="text" name="year_week2" value="1" /><select name="year_day2"><option value="1" selected >Pondelok<option value="2">Utorok<option value="3">Streda<option value="4">�tvrtok<option value="5">Piatok<option value="6">Sobota<option value="7">Nede�a</select>po�as<select name="year_month2"><option value="0" selected >Janu�r<option value="1">Febru�r<option value="2">Marec<option value="3">Apr�l<option value="4">M�j<option value="5">J�n<option value="6">J�l<option value="7">August<option value="8">September<option value="9">Okt�ber<option value="10">November<option value="11">December</select><br />
+               </div>
+    </div>
+    <div class="dhx_repeat_divider"></div>
+    <div class="dhx_repeat_right">
+               <label><input class="dhx_repeat_radio" type="radio" name="end" checked/>Bez d�tumu ukon�enia</label><br />
+               <label><input class="dhx_repeat_radio" type="radio" name="end" />Po</label><input class="dhx_repeat_text" type="text" name="occurences_count" value="1" />udalostiach<br />
+               <label><input class="dhx_repeat_radio" type="radio" name="end" />Ukon�i�</label><input class="dhx_repeat_date" type="text" name="date_of_end" value="'+scheduler.config.repeat_date_of_end+'" /><br />
+    </div>
+    </form>
+ </div>
+ <div style="clear:both">
+ </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ProgramConfiguration from './ProgramConfiguration';
+import ProgramProgressComponent from './ProgramProgressComponent';
 import IndicatorByProgram from './IndicatorByProgram';
 import { Button, Row } from 'react-bootstrap';
 import { DefaultTranslations, ProgramConfigChild } from '../../types';
@@ -50,7 +50,7 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [indicatorsByProgramReducer.data]);
-
+  
     // @ts-ignore
     return (
         <div>
@@ -68,7 +68,7 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
             <div style={{
                 minHeight: '350px'
             }}>
-                <ProgramConfiguration
+                <ProgramProgressComponent
                     translations={translations}
                     setLevel1Child={setLevel1Child}
                     level1Child={level1Child}

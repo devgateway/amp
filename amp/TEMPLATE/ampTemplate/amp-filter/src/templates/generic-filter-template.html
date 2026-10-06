@@ -1,0 +1,22 @@
+<% if (!empty) { %>
+	<div class="search-form">
+	  <div class="input-group form-group">
+	    <input type="text" data-i18n="[placeholder]amp.gis:pane-filters-search-placeholder" class="form-control search-text" placeholder="Search...">
+	    <span class="input-group-btn">
+	      <button data-i18n="amp.gis:pane-filters-search" class="btn btn-success">Go</button>
+	    </span>
+	  </div><!-- /input-group -->
+	</div>
+	<div class="toggle-all">
+	<% if (isLocationFilter) {%>
+	  <div class="toggle-nav">
+	 	 <input class="include-location-children" <%= obj['tree'].get('include-location-children') ? "checked=checked" : "" %> type="checkbox" class="include-children-toggle"><label data-i18n="amp.gis:include-location-children">Include locations with children</label>
+	  </div>
+	<% } %>
+	
+	</div>
+
+	<div class="tree tree-container <%= isLocationFilter ? "location-tree-container" : "" %>" style=""></div><!--display:none;-->
+<% } else { %>
+	<span data-i18n='amp.gis:pane-subfilters-empty'></span>
+<% } %>

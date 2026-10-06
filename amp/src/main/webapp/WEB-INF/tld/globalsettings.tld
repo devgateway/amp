@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN" "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+<taglib>
+	<tlibversion>1.0</tlibversion>
+	<jspversion>2.0</jspversion>
+	<shortname>globalsettings</shortname>
+	<uri>http://digijava.org/GlobalSettings</uri>
+	<tag>
+		<name>test</name>
+		<tagclass>org.dgfoundation.amp.globalsettings.GlobalSettingsTagClass</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<attribute>
+			<name>name</name> 
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>compareWith</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>onTrueEvalBody</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+        <tag>
+		<name>value</name>
+		<tagclass>org.dgfoundation.amp.globalsettings.GlobalSettingsValueTagClass</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<attribute>
+			<name>name</name> 
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	
+</taglib>

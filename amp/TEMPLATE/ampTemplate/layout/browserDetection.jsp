@@ -1,5 +1,5 @@
-    <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-    <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+    <%@ taglib uri="http://digijava.org/digi" prefix="digi" %>
+    <%@ taglib uri="http://digijava.org/features" prefix="feature" %>
 
 	<feature:display name="Detect browser" module="Login - User Management">
 	<div class="modal fade" id="browserIncompatibleModal">
@@ -28,7 +28,7 @@
 	function detectBrowser(){
 		$.ajax({
 		async: false,
-		url: "/repository/aim/view/scripts/browserDetection/browser.js",
+		url: "/static/aim/view/scripts/browserDetection/browser.js",
 		dataType: "script"
 		});
 		var browserInfo = get_browser();

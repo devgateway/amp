@@ -1,0 +1,288 @@
+name: Security Scan
+
+on:
+  push:
+    # Scan the default branch directly on merge; feature branches are covered
+    # by the pull_request trigger below, avoiding duplicate runs.
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches: [ "**" ]
+  schedule:
+    # Re-scan every Monday at 06:00 UTC to catch newly published CVEs.
+    # Runs on the default branch; push/PR triggers cover all other branches.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to scan (optional — leave blank to scan the branch selected above)'
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  # -----------------------------------------------------------------------
+  # Resolve the exact commit to scan.
+  # - Automatic triggers (push / PR / schedule): use the triggering SHA.
+  # - Manual (workflow_dispatch, no pr_number): use the branch selected in
+  #   the "Run workflow" UI — GitHub checks out that branch automatically.
+  # - Manual (workflow_dispatch + pr_number): fetch the PR head SHA via API.
+  # -----------------------------------------------------------------------
+  setup:
+    name: Resolve target ref
+    runs-on: ubuntu-latest
+    outputs:
+      ref: ${{ steps.resolve.outputs.ref }}
+    steps:
+      - name: Resolve checkout ref
+        id: resolve
+        run: |
+          PR="${{ inputs.pr_number }}"
+          if [ -n "$PR" ]; then
+            if ! [[ "$PR" =~ ^[0-9]+$ ]]; then
+              echo "::error::pr_number must be numeric, got: ${PR}"
+              exit 1
+            fi
+            DATA=$(curl -sf \
+              -H "Authorization: Bearer ${{ github.token }}" \
+              "https://api.github.com/repos/${{ github.repository }}/pulls/${PR}")
+            STATE=$(echo "$DATA" | jq -r '.state')
+            if [ "$STATE" != "open" ]; then
+              echo "::error::PR #${PR} is not open (state: ${STATE})"
+              exit 1
+            fi
+            HEAD_REF=$(echo "$DATA" | jq -r '.head.ref')
+            HEAD_SHA=$(echo "$DATA" | jq -r '.head.sha')
+            echo "Scanning PR #${PR}: branch=${HEAD_REF} sha=${HEAD_SHA}"
+            echo "ref=${HEAD_SHA}" >> $GITHUB_OUTPUT
+          else
+            echo "ref=${{ github.sha }}" >> $GITHUB_OUTPUT
+          fi
+
+  # -----------------------------------------------------------------------
+  # Job 1: OWASP Dependency-Check (Java / Maven) + sequential npm audit
+  # OWASP covers Java/Maven artifacts and static JS files (via RetireJS).
+  # NodeAudit and NodePackage analyzers are disabled — npm coverage is
+  # handled entirely by the sequential 'npm audit' steps below, which
+  # avoid the npm registry rate limit (429) that OWASP's NodeAudit
+  # analyzer triggers and also eliminate false-negative warnings about
+  # missing node_modules from the NodePackage analyzer.
+  # -----------------------------------------------------------------------
+  owasp-maven:
+    name: OWASP Dependency-Check (Maven + npm)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    needs: setup
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.setup.outputs.ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Create report output directory
+        run: mkdir -p amp/target/dependency-check-report
+
+      - name: Run OWASP Dependency-Check
+        uses: dependency-check/Dependency-Check_Action@main
+        id: owasp
+        continue-on-error: true
+        with:
+          project: 'amp'
+          path: 'amp'
+          format: 'ALL'
+          out: 'amp/target/dependency-check-report'
+          args: >
+            --nvdApiKey ${{ secrets.NVD_API_KEY }}
+            --nvdApiDelay 10000
+            --failOnCVSS 7
+            --suppression /github/workspace/security/owasp-suppressions.xml
+            --scan /github/workspace/amp/ckeditor_4.4.6
+            --disableNodeAudit
+            --enableExperimental
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: owasp-dependency-check-report
+          path: amp/target/dependency-check-report/
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Show report directory (debug)
+        if: always()
+        run: |
+          echo "=== Dependency-Check output ==="
+          find . -path "*/dependency-check*" -print 2>/dev/null || true
+
+      - name: Fail if OWASP found CVEs
+        if: steps.owasp.outcome == 'failure'
+        run: exit 1
+
+      # Run npm audit sequentially (one package at a time) to stay within the
+      # npm registry rate limit. Each package waits for the previous to finish.
+      #
+      # KNOWN_UNFIXABLE: amp/TEMPLATE/reamp uses webpack 1 + babel 6, which have
+      # CVEs with no npm fix (all marked no-auto-fix). These are BUILD-TIME only
+      # devDependencies, not deployed to production. Fixing requires migrating to
+      # webpack 5 + babel 7. Tracked as tech debt — audited but excluded from gate.
+      - name: npm audit (all frontend packages)
+        id: npm_audit
+        if: always()
+        continue-on-error: true
+        run: |
+          PACKAGES=(
+            amp/TEMPLATE/ampTemplate/amp-state
+            amp/TEMPLATE/ampTemplate/amp-boilerplate
+            amp/TEMPLATE/ampTemplate/amp-filter
+            amp/TEMPLATE/ampTemplate/amp-translate
+            amp/TEMPLATE/ampTemplate/amp-url
+            amp/TEMPLATE/ampTemplate/amp-settings
+            amp/TEMPLATE/ampTemplate/gis-layers-manager
+            amp/TEMPLATE/ampTemplate/dashboard/dev
+            amp/TEMPLATE/ampTemplate/gisModule/dev
+            amp/TEMPLATE/reampv2
+          )
+          # Packages excluded from the failure gate due to unfixable build-tool CVEs.
+          # These are still audited and reported, but do not cause CI failure.
+          EXCLUDED=(
+            "amp/TEMPLATE/reamp"
+          )
+          FAIL=0
+          mkdir -p amp/target/dependency-check-report/npm-audit
+          for PKG in "${PACKAGES[@]}" "${EXCLUDED[@]}"; do
+            if [ ! -f "$PKG/package.json" ]; then
+              echo "Skipping $PKG (no package.json)"
+              continue
+            fi
+            NAME=$(basename "$PKG")
+            echo "--- npm audit: $PKG ---"
+            # Generate lock file if absent (required by npm audit)
+            if [ ! -f "$PKG/package-lock.json" ]; then
+              npm install --package-lock-only --ignore-scripts --prefix "$PKG" 2>&1 || true
+            fi
+            npm audit \
+              --prefix "$PKG" \
+              --audit-level high \
+              --json > "amp/target/dependency-check-report/npm-audit/${NAME}.json" 2>&1 || true
+            # Count only CRITICAL vulnerabilities that have a fix available.
+            # Excludes fix:false (no fix exists anywhere) and isSemVerMajor:true
+            # (would require a breaking dependency change — tracked as tech debt).
+            # This avoids false failures from browser-only crypto polyfills
+            # (cipher-base, sha.js, pbkdf2, elliptic) and abandoned deps like
+            # amp-translate/jquery (CISA KEV — requires code changes, not a dep bump).
+            CRIT=$(jq '[.vulnerabilities // {} | to_entries[] |
+              select(.value.severity == "critical") |
+              select(
+                .value.fixAvailable == true or
+                (.value.fixAvailable | type == "object" and .isSemVerMajor == false)
+              )] | length' \
+              "amp/target/dependency-check-report/npm-audit/${NAME}.json" 2>/dev/null || echo 0)
+            HIGH=$(jq '[.vulnerabilities // {} | to_entries[] |
+              select(.value.severity == "high") |
+              select(
+                .value.fixAvailable == true or
+                (.value.fixAvailable | type == "object" and .isSemVerMajor == false)
+              )] | length' \
+              "amp/target/dependency-check-report/npm-audit/${NAME}.json" 2>/dev/null || echo 0)
+            CRIT_ALL=$(jq '.metadata.vulnerabilities.critical // 0' \
+              "amp/target/dependency-check-report/npm-audit/${NAME}.json" 2>/dev/null || echo 0)
+            HIGH_ALL=$(jq '.metadata.vulnerabilities.high // 0' \
+              "amp/target/dependency-check-report/npm-audit/${NAME}.json" 2>/dev/null || echo 0)
+            echo "$NAME: critical=${CRIT_ALL} (${CRIT} actionable) high=${HIGH_ALL} (${HIGH} actionable)"
+            # Check if this package is excluded from the failure gate
+            GATED=true
+            for SKIP in "${EXCLUDED[@]}"; do
+              if [ "$PKG" = "$SKIP" ]; then GATED=false; break; fi
+            done
+            if $GATED && [ "$(( CRIT + HIGH ))" -gt 0 ]; then
+              echo "::error::$NAME: ${CRIT} critical + ${HIGH} high npm vulnerabilities. Run 'npm audit' in $PKG for details."
+              FAIL=1
+            elif ! $GATED && [ "$(( CRIT + HIGH ))" -gt 0 ]; then
+              echo "::warning::$NAME (excluded from gate): ${CRIT} critical + ${HIGH} high known unfixable CVEs in build tooling (webpack 1 / babel 6). Requires migration to webpack 5 + babel 7."
+            fi
+          done
+          exit $FAIL
+
+      - name: Upload npm audit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-reports
+          path: amp/target/dependency-check-report/npm-audit/
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Fail if OWASP or npm audit found issues
+        if: always()
+        run: |
+          if [ "${{ steps.owasp.outcome }}" = "failure" ]; then
+            echo "::error::OWASP Dependency-Check found vulnerabilities above the CVSS threshold."
+            exit 1
+          fi
+          if [ "${{ steps.npm_audit.outcome }}" = "failure" ]; then
+            echo "::error::npm audit found HIGH or CRITICAL vulnerabilities."
+            exit 1
+          fi
+
+  # -----------------------------------------------------------------------
+  # Job 2: Trivy — container image CVE scan (runs on push to main / PRs)
+  # Catches OS-level CVEs that OWASP cannot see (e.g. base image packages)
+  # -----------------------------------------------------------------------
+  trivy-image:
+    name: Trivy (Container Image)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: setup
+    # Only scan the image on pushes to main/master or on PRs targeting them,
+    # to avoid redundant scans on every feature branch push.
+    if: |
+      github.event_name == 'pull_request' ||
+      github.ref == 'refs/heads/main' ||
+      github.ref == 'refs/heads/master' ||
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.setup.outputs.ref }}
+
+      - name: Build Docker image (no push)
+        working-directory: amp
+        run: |
+          docker build \
+            --build-arg BUILD_SOURCE=security-scan \
+            --build-arg AMP_URL=http://localhost/ \
+            -t amp-security-scan:${{ github.sha }} \
+            . || echo "::warning::Docker build failed; skipping Trivy image scan"
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: 'amp-security-scan:${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'HIGH,CRITICAL'
+          exit-code: '1'
+          ignore-unfixed: true
+        continue-on-error: true
+
+      - name: Upload Trivy SARIF artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-sarif
+          path: trivy-results.sarif
+          retention-days: 30

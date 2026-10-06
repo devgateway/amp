@@ -21,7 +21,7 @@ var constants = new Constants();
 var app = new App({
 	  url: url,
 	  data: data,
-	  state: state
+	  state: state,
 });
 
 
@@ -32,7 +32,7 @@ if(state.loadPromise){
 		setSavedLanguage().then(function(){
 			configureApp();
 		});
-	});	
+	});
 } else {
 	configureApp();
 }
@@ -46,11 +46,11 @@ function setSavedLanguage(){
 	if(lang){
 		$.get( '/rest/translations/languages/' + lang, function() {}).always(function(){
 			deferred.resolve();
-		});		
+		});
 	}else{
 		deferred.resolve();
 	}
-	return deferred;	
+	return deferred;
 }
 
 //get language in saved map
@@ -62,7 +62,7 @@ function getLanguageFromState(){
 			lang = stateBlob.settings.language
 		}
 	}
-	return lang;	
+	return lang;
 }
 
 

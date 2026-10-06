@@ -7,21 +7,20 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
 /**
- * 
+ *
  * sanity checks for NiReports running offdb
- * 
+ *
  * @author Alexandru Cartaleanu
  *
  */
 public class OffDbNiReportEngineTests extends BasicSanityChecks {
 
     public OffDbNiReportEngineTests() {
-        inTransactionRule = null;
         nrRunReports = 0;
     }
 
@@ -39,19 +38,19 @@ public class OffDbNiReportEngineTests extends BasicSanityChecks {
               .withChildren(
                 new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Primary Sector", "112 - BASIC EDUCATION", "Funding-2010-Average Size of Disbursements", "123,321", "Funding-2010-Variance Of Disbursements", "0", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Variance Of Commitments", "0", "Totals-Actual Commitments", "213,231", "Totals-Average Size of Disbursements", "123,321", "Totals-Variance Of Commitments", "0", "Totals-Variance Of Disbursements", "0"),
                 new ReportAreaForTests(new AreaOwner(700), "Project Title", "custom_1", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION", "Funding-2015-Actual Commitments", "137,000", "Funding-2015-Average Size of Disbursements", "23,000", "Funding-2015-Variance Of Commitments", "18,000", "Funding-2015-Variance Of Disbursements", "6,000", "Totals-Actual Commitments", "137,000", "Totals-Average Size of Disbursements", "23,000", "Totals-Variance Of Commitments", "18,000", "Totals-Variance Of Disbursements", "6,000")      ));
-    
+
         ReportSpecificationImpl spec = buildSpecification("testVarianceAndAverageMeasuresFlat",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.AVERAGE_SIZE_DISBURSEMENTS, MeasureConstants.VARIANCE_OF_COMMITMENTS, MeasureConstants.VARIANCE_OF_DISBURSEMENTS),
             null,
             GroupingCriteria.GROUPING_YEARLY);
-        
+
         runNiTestCase(spec, "en", Arrays.asList("custom_1", "TAC_activity_1"), cor);
     }
-    
+
     @Test
     public void testVarianceAndAverageByPrimarySector() {
-        NiReportModel cor = 
+        NiReportModel cor =
             new NiReportModel("testVarianceAndAverageMeasuresByPrimarySector")
             .withHeaders(Arrays.asList(
                 "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 18))",
@@ -70,13 +69,13 @@ public class OffDbNiReportEngineTests extends BasicSanityChecks {
                 .withChildren(
                   new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2010-Average Size of Disbursements", "123,321", "Funding-2010-Variance Of Disbursements", "0", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Variance Of Commitments", "0", "Totals-Actual Commitments", "213,231", "Totals-Average Size of Disbursements", "123,321", "Totals-Variance Of Commitments", "0", "Totals-Variance Of Disbursements", "0"),
                   new ReportAreaForTests(new AreaOwner(700), "Project Title", "custom_1", "Funding-2015-Actual Commitments", "54,800", "Funding-2015-Average Size of Disbursements", "9,200", "Funding-2015-Variance Of Commitments", "7,200", "Funding-2015-Variance Of Disbursements", "2,400", "Totals-Actual Commitments", "54,800", "Totals-Average Size of Disbursements", "9,200", "Totals-Variance Of Commitments", "7,200", "Totals-Variance Of Disbursements", "2,400"))));
-                        
+
         ReportSpecificationImpl spec = buildSpecification("testVarianceAndAverageMeasuresByPrimarySector",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR),
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.AVERAGE_SIZE_DISBURSEMENTS, MeasureConstants.VARIANCE_OF_COMMITMENTS, MeasureConstants.VARIANCE_OF_DISBURSEMENTS),
             Arrays.asList(ColumnConstants.PRIMARY_SECTOR),
             GroupingCriteria.GROUPING_YEARLY);
-        
+
         runNiTestCase(spec, "en", Arrays.asList("custom_1", "TAC_activity_1"), cor);
     }
 }

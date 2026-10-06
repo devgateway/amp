@@ -1,0 +1,23 @@
+/************************************************************************************************************
+
+	DHTML Suite for Applications
+	(C) www.dhtmlgoodies.com, January 2007
+
+	CSS for the DHTMLSuite.window class
+	
+	
+	www.dhtmlgoodies.com
+	Alf Magne Kalleland
+
+************************************************************************************************************/
+
+.DHTMLSuite_resize_handle{	/* The bar that is parent of the menu strip */
+	position:absolute;
+	background-image:url(../images_dhtmlsuite/resize/resize-handle-small-square.gif);
+	background-repeat:no-repeat;
+	width:7px;
+	height:7px;	
+	z-index:10;
+
+}
+

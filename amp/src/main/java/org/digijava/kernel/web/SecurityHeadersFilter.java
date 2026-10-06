@@ -66,7 +66,7 @@ public class SecurityHeadersFilter implements Filter {
             "default-src 'self'; "
             + "base-uri 'self'; "
             + "object-src 'none'; "
-            + "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; "
+            + "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://ajax.googleapis.com https://cdn.datatables.net https://cdnjs.cloudflare.com; "
             + "style-src 'self' 'unsafe-inline' https:; "
             + "img-src 'self' data: blob: https:; "
             + "font-src 'self' data: https:; "

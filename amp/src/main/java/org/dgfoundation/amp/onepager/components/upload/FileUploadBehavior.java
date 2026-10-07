@@ -34,6 +34,8 @@ public class FileUploadBehavior extends Behavior {
     private final IModel<FileItem> fileItemModel;
     private final boolean deferUpload;
     private final String importButtonMarkupId;
+    private final String importedRowsMarkupId;
+    private final String uploadUrlOverride;
     /**
      * The name of the request parameter used for the multipart
      * Ajax request
@@ -41,19 +43,17 @@ public class FileUploadBehavior extends Behavior {
     public static final String PARAM_NAME = "FILE-UPLOAD";
 
     public FileUploadBehavior(String activityId, IModel<FileItem> fileItemModel) {
-        this(activityId, fileItemModel, false, null);
+        this(activityId, fileItemModel, null, null, null);
     }
 
-    public FileUploadBehavior(String activityId, IModel<FileItem> fileItemModel, boolean deferUpload) {
-        this(activityId, fileItemModel, deferUpload, null);
-    }
-
-    public FileUploadBehavior(String activityId, IModel<FileItem> fileItemModel, boolean deferUpload,
-            String importButtonMarkupId) {
+    public FileUploadBehavior(String activityId, IModel<FileItem> fileItemModel, String uploadUrlOverride,
+            String importButtonMarkupId, String importedRowsMarkupId) {
         this.activityId = activityId;
         this.fileItemModel = fileItemModel;
-        this.deferUpload = deferUpload;
+        this.uploadUrlOverride = uploadUrlOverride;
+        this.deferUpload = importButtonMarkupId != null;
         this.importButtonMarkupId = importButtonMarkupId;
+        this.importedRowsMarkupId = importedRowsMarkupId;
     }
 
     /**
@@ -83,18 +83,26 @@ public class FileUploadBehavior extends Behavior {
         response.render(JavaScriptHeaderItem.forReference(
                 new JavaScriptResourceReference(FileUploadBehavior.class, "jquery.fileupload.js"), System.currentTimeMillis() +"c", true));
 
-        String uploadUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(
+        String uploadUrl = uploadUrlOverride;
+        if (uploadUrl == null) {
+            uploadUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(
                 Url.parse(component.urlFor(new FileUploadResourceReference(activityId, fileItemModel), null).toString()));
+            uploadUrl = appendQueryParameter(uploadUrl, "activityId", activityId);
+            uploadUrl = appendSpringCsrfToken(uploadUrl);
+        } else {
+            HttpServletRequest request = ((ServletWebRequest) RequestCycle.get().getRequest()).getContainerRequest();
+            uploadUrl = request.getContextPath() + uploadUrl;
+            uploadUrl = appendSpringCsrfToken(uploadUrl);
+        }
         String markupId = component.getMarkupId();
         
         String maxFileSizeGS = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
+        String uploadParamName = uploadUrlOverride == null ? PARAM_NAME : "file";
         
         final Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("componentMarkupId", markupId);
-        uploadUrl = appendQueryParameter(uploadUrl, "activityId", activityId);
-        uploadUrl = appendSpringCsrfToken(uploadUrl);
         variables.put("url", uploadUrl);
-        variables.put("paramName", PARAM_NAME);
+        variables.put("paramName", uploadParamName);
         variables.put("uploadFailedMsg", TranslatorUtil.getTranslatedText("Upload failed! Please try again."));
         variables.put("uploadStartedMsg", TranslatorUtil.getTranslatedText("Upload started, please wait..."));
         variables.put("uploadFailedTooBigMsg", TranslatorUtil.getTranslatedText("The file size limit is {size} MB. This file exceeds the limit.").replace("{size}", maxFileSizeGS));
@@ -110,8 +118,9 @@ public class FileUploadBehavior extends Behavior {
         response.render(JavaScriptHeaderItem.forReference(
                 new TextTemplateResourceReference(FileUploadBehavior.class, "FileUploadBehavior.js", variablesModel), String.valueOf(System.currentTimeMillis()), true));
         response.render(OnLoadHeaderItem.forScript("setupFileUpload('#" + markupId + "', '" + uploadUrl + "', '"
-            + PARAM_NAME + "', " + deferUpload + ", '"
-            + (importButtonMarkupId == null ? "" : importButtonMarkupId) + "');"));
+            + uploadParamName + "', " + deferUpload + ", '"
+            + (importButtonMarkupId == null ? "" : importButtonMarkupId) + "', '"
+            + (importedRowsMarkupId == null ? "" : importedRowsMarkupId) + "');"));
     }
 
     static String appendSpringCsrfToken(String url) {

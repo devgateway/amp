@@ -4,13 +4,14 @@ Wicket.Event.add(window, "domready", function(event){
 
 $.getScript("/TEMPLATE/ampTemplate/script/common/FileTypeValidator.js");
 
-function setupFileUpload(componentId, componentUrl, componentParamName, deferUpload, importButtonMarkupId){
+function setupFileUpload(componentId, componentUrl, componentParamName, deferUpload, importButtonMarkupId, importedRowsMarkupId){
     $(function () {
         var pendingUploadData = null;
         var waitForUpload = false;
         var uploadInProgress = false;
         var allowImportClick = false;
         var importButton = importButtonMarkupId ? document.getElementById(importButtonMarkupId) : null;
+        var importedRows = importedRowsMarkupId ? document.getElementById(importedRowsMarkupId) : null;
         var fileInput = $(componentId).find('input[type=file]').get(0);
 
         function submitPendingUpload() {
@@ -88,14 +89,29 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
             	}
             },
             done: function (e, data){
-                //alert('upload done! result[' + JSON.stringify(data.result) + '] status[' + data.textStatus + '] jqXHR[' + JSON.stringify(data.jqXHR) +']');
-            	var result = eval(data.result)[0];
-                $(this).find('[role=fileUploadedMsg]').html(result.uploadTxt);
-                if (deferUpload && waitForUpload && importButton) {
+                if (deferUpload && waitForUpload && importButton && importedRows) {
+                    var result = data.result;
+                    try {
+                        if (typeof result === 'string') {
+                            result = JSON.parse(result);
+                        }
+                        if (!Array.isArray(result)) {
+                            throw new Error('Unexpected structure import response');
+                        }
+                    } catch (error) {
+                        alert("${uploadFailedMsg}");
+                        waitForUpload = false;
+                        uploadInProgress = false;
+                        return;
+                    }
+                    importedRows.value = JSON.stringify(result);
                     waitForUpload = false;
                     uploadInProgress = false;
                     allowImportClick = true;
                     importButton.click();
+                } else if (!deferUpload) {
+                    var result = eval(data.result)[0];
+                    $(this).find('[role=fileUploadedMsg]').html(result.uploadTxt);
                 }
             },
             fail: function (e, data){

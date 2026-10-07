@@ -4,12 +4,11 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -23,9 +22,9 @@ import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -36,8 +35,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.AbstractResource;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.util.lang.Bytes;
-import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
@@ -54,6 +51,7 @@ import org.dgfoundation.amp.onepager.helper.structure.CoordinateData;
 import org.dgfoundation.amp.onepager.helper.structure.MapData;
 import org.dgfoundation.amp.onepager.helper.structure.StructureData;
 import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
+import org.digijava.kernel.ampapi.endpoints.gis.StructureImportEndpoint;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.StructuresUtil;
@@ -337,61 +335,55 @@ public class AmpStructuresFormSectionFeature extends
 
 
 
-        final Model<FileItem> fileItemModel = new Model<FileItem>();
         final WebMarkupContainer rc = new WebMarkupContainer("resourcePanel");
+        final HiddenField<String> importedRowsField = new HiddenField<>("importedRows", Model.of(""));
+        importedRowsField.setOutputMarkupId(true);
+        rc.add(importedRowsField);
         AmpButtonField importStructures = new AmpButtonField("ajaxSubmit", "Import Structures", true) {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                if (fileItemModel.getObject() != null) {
-                    FileUpload upload = new FileUpload(fileItemModel.getObject());
-                    logger.info("File-Name: " + upload.getClientFileName() + " File-Size: " +
-                            Bytes.bytes(upload.getSize()));
-                    try (InputStream inputStream = upload.getInputStream();
-                         XSSFWorkbook workbook = new XSSFWorkbook(inputStream)) {
-                            XSSFSheet sheet = workbook.getSheetAt(0);
-                            Iterator<Row> rowIterator = sheet.iterator();
-                            if (!rowIterator.hasNext()) {
+                String rowsJson = RequestCycle.get().getRequest().getRequestParameters()
+                        .getParameterValue(importedRowsField.getInputName()).toString();
+                if (rowsJson == null || rowsJson.trim().isEmpty()) {
+                    this.error("No structure rows were returned from the workbook.");
+                } else {
+                    try {
+                        List<StructureImportEndpoint.StructureRow> rows = new ObjectMapper().readValue(rowsJson,
+                                new TypeReference<List<StructureImportEndpoint.StructureRow>>() { });
+                        Set<AmpStructure> structureTitles = new TreeSet<>(setModel.getObject());
+                        List<AmpStructure> importedStructures = new ArrayList<>();
+
+                        for (int index = 0; index < rows.size(); index++) {
+                            StructureImportEndpoint.StructureRow row = rows.get(index);
+                            AmpStructure structure = new AmpStructure();
+                            structure.setTitle(row.getTitle());
+                            structure.setDescription(row.getDescription());
+                            structure.setLatitude(row.getLatitude());
+                            structure.setLongitude(row.getLongitude());
+                            structure.setShape(row.getShape());
+                            if (!structureTitles.add(structure)) {
+                                this.error("Import rejected: structure title '" + row.getTitle() + "' on row "
+                                        + (index + 2)
+                                        + " duplicates an existing structure or another imported row."
+                                        + " Structure titles must be unique.");
+                                importedRowsField.setModelObject("");
+                                target.add(rc);
                                 return;
                             }
-                            rowIterator.next();
-                            Set<AmpStructure> structureTitles = new TreeSet<>(setModel.getObject());
-                            List<AmpStructure> importedStructures = new ArrayList<>();
-
-                            while (rowIterator.hasNext()) {
-                                XSSFRow row = (XSSFRow) rowIterator.next();
-                                String title = getStringValueFromCell(row.getCell(0));
-                                String description = getStringValueFromCell(row.getCell(1));
-                                String latitude = getStringValueFromCell(row.getCell(2));
-                                String longitude = getStringValueFromCell(row.getCell(3));
-                                String shape = getStringValueFromCell(row.getCell(4));
-
-                                AmpStructure stru = new AmpStructure();
-                                stru.setTitle(title);
-                                stru.setDescription(description);
-                                stru.setLatitude(latitude);
-                                stru.setLongitude(longitude);
-                                stru.setShape(shape);
-                                if (!structureTitles.add(stru)) {
-                                    this.error("Import rejected: structure title '" + title + "' on row "
-                                            + (row.getRowNum() + 1)
-                                            + " duplicates an existing structure or another imported row."
-                                            + " Structure titles must be unique.");
-                                    target.add(rc);
-                                    return;
-                                }
-                                importedStructures.add(stru);
-                            }
-                            for (AmpStructure structure : importedStructures) {
-                                list.addItem(structure);
-                            }
-                            list.goToLastPage();
-                            fileItemModel.setObject(null);
+                            importedStructures.add(structure);
+                        }
+                        for (AmpStructure structure : importedStructures) {
+                            list.addItem(structure);
+                        }
+                        list.goToLastPage();
                     } catch (Exception e) {
-                        logger.error("Error reading excel file", e);
+                        logger.error("Error applying imported structures", e);
+                        this.error("The workbook rows could not be imported.");
                     }
                 }
+                importedRowsField.setModelObject("");
                 target.add(containter);
                 target.add(rc);
             }
@@ -401,7 +393,7 @@ public class AmpStructuresFormSectionFeature extends
         rc.add(importStructures);
 
         FileUploadPanel fileUpload = new FileUploadPanel("file", String.valueOf(am.getObject().getAmpActivityId()),
-            fileItemModel, importStructures.getButton().getMarkupId()) {
+            null, "/rest/gis/structures/import", importStructures.getButton().getMarkupId(), importedRowsField.getMarkupId()) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -462,24 +454,6 @@ public class AmpStructuresFormSectionFeature extends
 
 
     }
-    private static String getStringValueFromCell(Cell cell) {
-        if (cell == null) {
-            return null;
-        }
-        switch (cell.getCellType()) {
-            case Cell.CELL_TYPE_STRING:
-                return cell.getStringCellValue();
-            case Cell.CELL_TYPE_NUMERIC:
-                return String.valueOf(cell.getNumericCellValue());
-            case Cell.CELL_TYPE_BOOLEAN:
-                return String.valueOf(cell.getBooleanCellValue());
-            case Cell.CELL_TYPE_FORMULA:
-                return cell.getCellFormula();
-            default:
-                return null;
-        }
-    }
-
     private void writeExcelFile(OutputStream out,PagingListEditor<AmpStructure> list) throws IOException {
         try(XSSFWorkbook workbook = new XSSFWorkbook()) {
             // Create Excel sheet

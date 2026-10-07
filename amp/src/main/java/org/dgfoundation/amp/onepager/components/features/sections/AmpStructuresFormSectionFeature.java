@@ -397,9 +397,11 @@ public class AmpStructuresFormSectionFeature extends
             }
         };
         importStructures.getButton().setDefaultFormProcessing(false);
+        importStructures.getButton().setOutputMarkupId(true);
+        rc.add(importStructures);
 
         FileUploadPanel fileUpload = new FileUploadPanel("file", String.valueOf(am.getObject().getAmpActivityId()),
-                fileItemModel) {
+            fileItemModel, importStructures.getButton().getMarkupId()) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -409,7 +411,6 @@ public class AmpStructuresFormSectionFeature extends
             }
         };
 
-        rc.add(importStructures);
         rc.add(fileUpload);
         FeedbackPanel importFeedback = new FeedbackPanel("importFeedback",
             new ContainerFeedbackMessageFilter(importStructures));

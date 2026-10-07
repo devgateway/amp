@@ -32,6 +32,8 @@ import java.util.Map;
 public class FileUploadBehavior extends Behavior {
     private final String activityId;
     private final IModel<FileItem> fileItemModel;
+    private final boolean deferUpload;
+    private final String importButtonMarkupId;
     /**
      * The name of the request parameter used for the multipart
      * Ajax request
@@ -39,8 +41,19 @@ public class FileUploadBehavior extends Behavior {
     public static final String PARAM_NAME = "FILE-UPLOAD";
 
     public FileUploadBehavior(String activityId, IModel<FileItem> fileItemModel) {
+        this(activityId, fileItemModel, false, null);
+    }
+
+    public FileUploadBehavior(String activityId, IModel<FileItem> fileItemModel, boolean deferUpload) {
+        this(activityId, fileItemModel, deferUpload, null);
+    }
+
+    public FileUploadBehavior(String activityId, IModel<FileItem> fileItemModel, boolean deferUpload,
+            String importButtonMarkupId) {
         this.activityId = activityId;
         this.fileItemModel = fileItemModel;
+        this.deferUpload = deferUpload;
+        this.importButtonMarkupId = importButtonMarkupId;
     }
 
     /**
@@ -96,7 +109,9 @@ public class FileUploadBehavior extends Behavior {
         };
         response.render(JavaScriptHeaderItem.forReference(
                 new TextTemplateResourceReference(FileUploadBehavior.class, "FileUploadBehavior.js", variablesModel), String.valueOf(System.currentTimeMillis()), true));
-        response.render(OnLoadHeaderItem.forScript("setupFileUpload('#" + markupId + "', '" + uploadUrl + "', '" + PARAM_NAME + "');"));
+        response.render(OnLoadHeaderItem.forScript("setupFileUpload('#" + markupId + "', '" + uploadUrl + "', '"
+            + PARAM_NAME + "', " + deferUpload + ", '"
+            + (importButtonMarkupId == null ? "" : importButtonMarkupId) + "');"));
     }
 
     static String appendSpringCsrfToken(String url) {

@@ -4,7 +4,7 @@ Wicket.Event.add(window, "domready", function(event){
 
 $.getScript("/TEMPLATE/ampTemplate/script/common/FileTypeValidator.js");
 
-function setupFileUpload(componentId, componentUrl, componentParamName, deferUpload, importButtonMarkupId, importedRowsMarkupId){
+function setupFileUpload(componentId, componentUrl, componentParamName, deferUpload, importButtonMarkupId, importedRowsMarkupId, fileOnlyUpload){
     $(function () {
         var pendingUploadData = null;
         var waitForUpload = false;
@@ -33,6 +33,9 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
                     allowImportClick = false;
                     return;
                 }
+                if (importedRows && importedRows.value && !pendingUploadData) {
+                    return;
+                }
 
                 event.preventDefault();
                 event.stopImmediatePropagation();
@@ -49,7 +52,7 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
             importButton.addEventListener('click', importButton.ampDeferredUploadClickHandler, true);
         }
 
-        $(componentId).fileupload({
+        var uploadOptions = {
             url: componentUrl,
             paramName: componentParamName,
             singleFileUploads: true,
@@ -124,7 +127,11 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
                 uploadInProgress = false;
                 pendingUploadData = null;
             }
-        });
+        };
+        if (fileOnlyUpload) {
+            uploadOptions.formData = [];
+        }
+        $(componentId).fileupload(uploadOptions);
     });
 }
 

@@ -120,7 +120,8 @@ public class FileUploadBehavior extends Behavior {
         response.render(OnLoadHeaderItem.forScript("setupFileUpload('#" + markupId + "', '" + uploadUrl + "', '"
             + uploadParamName + "', " + deferUpload + ", '"
             + (importButtonMarkupId == null ? "" : importButtonMarkupId) + "', '"
-            + (importedRowsMarkupId == null ? "" : importedRowsMarkupId) + "');"));
+            + (importedRowsMarkupId == null ? "" : importedRowsMarkupId) + "', "
+            + (uploadUrlOverride != null) + ");"));
     }
 
     static String appendSpringCsrfToken(String url) {

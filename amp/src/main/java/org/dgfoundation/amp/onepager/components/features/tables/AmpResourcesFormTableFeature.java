@@ -35,6 +35,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.helper.StagedResourceUploadStore;
+import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 
@@ -216,6 +218,11 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                 if (item.getModelObject().isExisting())
                     drs = new DownloadResourceStream(new PersistentObjectModel<>
                             (item.getModelObject().getExistingDocument()), item.getModelObject().getFileName());
+                else if (item.getModelObject().getStagedUploadId() != null) {
+                    TemporaryDocumentData staged = StagedResourceUploadStore.get(
+                            SessionUtil.getCurrentServletRequest(), item.getModelObject().getStagedUploadId());
+                    drs = new DownloadResourceStream(staged.getFormFile(), item.getModelObject().getFileName());
+                }
                 else
                     drs = new DownloadResourceStream(item.getModelObject().getFile(), item.getModelObject().getFileName());
 
@@ -266,7 +273,11 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                             delItems.add(item.getModelObject().getExistingDocument());
                         } else {
                             HashSet<TemporaryActivityDocument> newItems = getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
-                            newItems.remove(item.getModelObject());
+                            if (newItems != null) {
+                                newItems.remove(item.getModelObject());
+                            }
+                            StagedResourceUploadStore.delete(SessionUtil.getCurrentServletRequest(),
+                                    item.getModelObject().getStagedUploadId());
                         }
                         target.add(list.getParent());
                     }

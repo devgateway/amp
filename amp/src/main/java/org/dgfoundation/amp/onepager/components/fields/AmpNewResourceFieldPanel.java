@@ -4,6 +4,8 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -12,6 +14,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -31,6 +34,8 @@ import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.util.SessionUtil;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceEndpoint;
 import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeManager;
 import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeValidationResponse;
 import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeValidationStatus;
@@ -41,7 +46,10 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.contentrepository.helper.StagedResourceUploadStore;
+import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -106,7 +114,8 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
         if (model.getObject().getAmpActivityId() != null)
             activityId = Long.toString(model.getObject().getAmpActivityId());
         final Model<FileItem> fileItemModel = new Model<FileItem>();
-        FileUploadPanel fileUpload = new FileUploadPanel("file",activityId, fileItemModel);
+        final HiddenField<String> stagedUploadResponse = new HiddenField<>("stagedUploadResponse", Model.of(""));
+        stagedUploadResponse.setOutputMarkupId(true);
 
         final AmpTextFieldPanel<String> webLink = new AmpTextFieldPanel<String>("webLink", 
                 new PropertyModel<String>(td, "webLink"), "Web Link", true, true);
@@ -123,52 +132,7 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
         TrnLabel resourceLabel = new TrnLabel("resourceLabel", resourceLabelModel);
 
         // create the form
-        final Form<?> form = new Form<Void>("form") {
-            
-            /**
-             * @see org.apache.wicket.markup.html.form.Form#onSubmit()
-             */
-            @Override
-            protected void onSubmit() {
-                TemporaryActivityDocument tmp = td.getObject();
-                if (fileItemModel.getObject() != null)
-                    tmp.setFile(new FileUpload(fileItemModel.getObject()));
-
-                if (updateVisibility(td.getObject(), resourceIsURL)) {
-                    if (tmp.getFile() != null){
-                        double fSize = tmp.getFile().getSize()*100/(1024*1024);
-                        fSize = fSize/100;
-                        tmp.setFileSize(fSize);
-                        tmp.setFileName(tmp.getFile().getClientFileName());
-                        tmp.setContentType(tmp.getFile().getContentType());
-                    }
-                    
-                    if (tmp.getWebLink() != null) {
-                        tmp.setWebLink(DocumentManagerUtil.processUrl(tmp.getWebLink(), null));
-                        tmp.setFileName(tmp.getWebLink());
-                    }               
-                    
-                    tmp.setDate(Calendar.getInstance());
-                    tmp.setYear(String.valueOf((tmp.getDate()).get(Calendar.YEAR)));
-                    HashSet<TemporaryActivityDocument> newItemsSet = getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
-                    if (newItemsSet == null) {
-                        newItemsSet = new HashSet<TemporaryActivityDocument>();
-                        getSession().setMetaData(OnePagerConst.RESOURCES_NEW_ITEMS, newItemsSet);
-                    }
-
-                    tmp.setTranslatedDescriptionList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"description"));
-                    tmp.setTranslatedTitleList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"title"));
-                    tmp.setTranslatedNoteList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"description"));
-                    newItemsSet.add(tmp);
-                    TemporaryActivityDocument tmpDoc = new TemporaryActivityDocument();
-                    String docId = generateResourceKey("newResource");
-                    newResourceIdModel.setObject(docId);
-                    tmpDoc.setNewTemporaryDocumentId(docId);
-                    td.setObject(tmpDoc);
-                    fileItemModel.setObject(null);
-                }
-            }
-        };
+        final Form<?> form = new Form<Void>("form");
 
         add(createAddNewLink(fmName));
 
@@ -176,20 +140,13 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
         rc.add(new AttributeModifier("id", getToggleId()));
         rc.add(form);
         rc.add(name);
-        rc.add(fileUpload);
         rc.setOutputMarkupId(true);
         add(rc);
 
-        if (newResourceIsWebLink){
-            fileUpload.setVisible(false);
-            webLink.setVisibilityAllowed(true);
-        }
-        
         form.add(name);
         form.add(desc);
         form.add(note);
         form.add(type);
-        form.add(fileUpload);
         form.add(resourceLabel);
         form.add(webLink);
         
@@ -198,6 +155,34 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 TemporaryDocument tmp = td.getObject();
+                String response = stagedUploadResponse.getModelObject();
+                if (response != null && !response.trim().isEmpty()) {
+                    try {
+                        List<ResourceEndpoint.StagedResourceUpload> uploads = new ObjectMapper().readValue(response,
+                                new TypeReference<List<ResourceEndpoint.StagedResourceUpload>>() { });
+                        if (uploads.isEmpty()) {
+                            throw new IOException("The upload response did not contain a staged file.");
+                        }
+                        String uploadId = uploads.get(0).getUploadId();
+                        HttpServletRequest request = SessionUtil.getCurrentServletRequest();
+                        TemporaryDocumentData staged = StagedResourceUploadStore.get(request, uploadId);
+                        if (staged == null) {
+                            throw new IOException("The staged upload is no longer available.");
+                        }
+                        if (tmp.getStagedUploadId() != null && !tmp.getStagedUploadId().equals(uploadId)) {
+                            StagedResourceUploadStore.delete(request, tmp.getStagedUploadId());
+                        }
+                        tmp.setStagedUploadId(uploadId);
+                        tmp.setFileName(staged.getName());
+                        tmp.setContentType(staged.getContentType());
+                        tmp.setFileSize(staged.getFileSize());
+                    } catch (IOException e) {
+                        logger.error("Unable to read staged resource upload response", e);
+                        webLinkFeedbackContainer.setVisible(true);
+                        webLinkFeedbackLabel.setDefaultModelObject(FILE_PATH_NOT_SELECTED);
+                    }
+                    stagedUploadResponse.setModelObject("");
+                }
                 if (fileItemModel.getObject() != null)
                     tmp.setFile(new FileUpload(fileItemModel.getObject()));
                 target.add(name);
@@ -212,6 +197,37 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
                 target.add(resourcesList);
                 target.add(webLinkFeedbackContainer);
                 if (updateVisibility(td.getObject(), resourceIsURL)){
+                    if (tmp.getFile() != null){
+                        double fSize = tmp.getFile().getSize()*100/(1024*1024);
+                        fSize = fSize/100;
+                        tmp.setFileSize(fSize);
+                        tmp.setFileName(tmp.getFile().getClientFileName());
+                        tmp.setContentType(tmp.getFile().getContentType());
+                    }
+                    if (tmp.getWebLink() != null) {
+                        tmp.setWebLink(DocumentManagerUtil.processUrl(tmp.getWebLink(), null));
+                        tmp.setFileName(tmp.getWebLink());
+                    }
+                    tmp.setDate(Calendar.getInstance());
+                    tmp.setYear(String.valueOf(tmp.getDate().get(Calendar.YEAR)));
+                    HashSet<TemporaryActivityDocument> newItemsSet = getSession()
+                            .getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
+                    if (newItemsSet == null) {
+                        newItemsSet = new HashSet<>();
+                        getSession().setMetaData(OnePagerConst.RESOURCES_NEW_ITEMS, newItemsSet);
+                    }
+                    tmp.setTranslatedDescriptionList(getTranslationsForField(
+                            tmp.getNewTemporaryDocumentId(), "description"));
+                    tmp.setTranslatedTitleList(getTranslationsForField(tmp.getNewTemporaryDocumentId(), "title"));
+                    tmp.setTranslatedNoteList(getTranslationsForField(
+                            tmp.getNewTemporaryDocumentId(), "description"));
+                    newItemsSet.add((TemporaryActivityDocument) tmp);
+                    TemporaryActivityDocument tmpDoc = new TemporaryActivityDocument();
+                    String docId = generateResourceKey("newResource");
+                    newResourceIdModel.setObject(docId);
+                    tmpDoc.setNewTemporaryDocumentId(docId);
+                    td.setObject(tmpDoc);
+                    fileItemModel.setObject(null);
                     target.appendJavaScript("$('#" + getToggleId() + "').hide();");
                     target.appendJavaScript("$('#" + getToggleId() + "').find('[role=fileUploadedMsg]').html('');");
                     target.appendJavaScript("$('#uploadLabel').text('" + TranslatorWorker.translateText("No file chosen") + "');");
@@ -219,7 +235,18 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
                 }
             }
         };
+            submit.getButton().setOutputMarkupId(true);
         
+            FileUploadPanel fileUpload = newResourceIsWebLink
+                ? new FileUploadPanel("file", activityId, fileItemModel)
+                : new FileUploadPanel("file", activityId, fileItemModel, "/rest/resource/stage-upload",
+                    submit.getButton().getMarkupId(), stagedUploadResponse.getMarkupId());
+        if (newResourceIsWebLink) {
+            fileUpload.setVisible(false);
+            webLink.setVisibilityAllowed(true);
+        }
+        form.add(fileUpload);
+        form.add(stagedUploadResponse);
         form.add(submit);
         form.add(createCancelButton());
         
@@ -282,9 +309,9 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
                 urlSelected =true;
             }
         } else {
-            pathSelected = resource.getFile() != null;
+            pathSelected = resource.getFile() != null || resource.getStagedUploadId() != null;
             contentValid = true;
-            if (pathSelected) {
+            if (resource.getFile() != null) {
                 // validate the content of the file AMP-24920
                 if (isEnabledMimeTypeValidation()) {
                     try {

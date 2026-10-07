@@ -3,6 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.resource;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.*;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.input.BoundedInputStream;
+import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.ampapi.endpoints.activity.APIWorkspaceMemberFieldList;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
@@ -16,21 +18,34 @@ import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerListResource;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerResource;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeManager;
+import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeValidationResponse;
+import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeValidationStatus;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
+import org.digijava.module.contentrepository.helper.StagedResourceUploadStore;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -220,5 +235,146 @@ public class ResourceEndpoint {
             FileUtils.deleteQuietly(file);
         }
     }
+
+        @POST
+        @Path("stage-upload")
+        @Consumes(MediaType.MULTIPART_FORM_DATA)
+        @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+        @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "stageResourceUpload", ui = false)
+        @ApiOperation("Stage a resource file for a pending activity form")
+        public List<StagedResourceUpload> stageResourceUpload(@FormDataParam("file") InputStream uploadedInputStream,
+                        @FormDataParam("file") FormDataContentDisposition fileDetail, @Context HttpServletRequest request) {
+                if (uploadedInputStream == null || fileDetail == null || fileDetail.getFileName() == null) {
+                        throw new WebApplicationException("A file is required.", Response.Status.BAD_REQUEST);
+                }
+
+                long maxFileSize = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.CR_MAX_FILE_SIZE)
+                                * FileUtils.ONE_MB;
+                if (request.getContentLengthLong() > maxFileSize + FileUtils.ONE_MB) {
+                        throw new WebApplicationException("The file exceeds the upload size limit.",
+                                        Response.Status.REQUEST_ENTITY_TOO_LARGE);
+                }
+
+                File stagedFile = null;
+                try {
+                        stagedFile = File.createTempFile("amp-resource-upload-", ".tmp");
+                        stagedFile.deleteOnExit();
+                        FileUtils.copyInputStreamToFile(new BoundedInputStream(uploadedInputStream, maxFileSize + 1), stagedFile);
+                        if (stagedFile.length() > maxFileSize) {
+                                throw new WebApplicationException("The file exceeds the upload size limit.",
+                                                Response.Status.REQUEST_ENTITY_TOO_LARGE);
+                        }
+
+                        String fileName = new File(fileDetail.getFileName()).getName();
+                        if (FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.LIMIT_FILE_TYPE_FOR_UPLOAD)) {
+                                FileTypeValidationResponse validation;
+                                try (InputStream validationStream = new FileInputStream(stagedFile)) {
+                                        validation = FileTypeManager.getInstance().validateFileType(validationStream, fileName);
+                                }
+                                if (validation.getStatus() != FileTypeValidationStatus.ALLOWED) {
+                                        throw new WebApplicationException("The uploaded file type is not allowed.",
+                                                        Response.Status.BAD_REQUEST);
+                                }
+                        }
+
+                        Calendar uploadedAt = Calendar.getInstance();
+                        TemporaryDocumentData temporaryDocument = new TemporaryDocumentData();
+                        temporaryDocument.setName(fileName);
+                        temporaryDocument.setContentType(fileDetail.getType());
+                        temporaryDocument.setTrueUploadedFileSize((int) stagedFile.length());
+                        temporaryDocument.setFileSize(DocumentManagerUtil.bytesToMega((int) stagedFile.length()));
+                        temporaryDocument.setDate(uploadedAt.getTime());
+                        temporaryDocument.setYearofPublication(String.valueOf(uploadedAt.get(Calendar.YEAR)));
+                        temporaryDocument.setFormFile(new StagedFormFile(stagedFile, fileName, fileDetail.getType()));
+                        temporaryDocument.setStagedFile(stagedFile);
+                        String uploadId = StagedResourceUploadStore.store(request, temporaryDocument);
+                        stagedFile = null;
+
+                        return Collections.singletonList(new StagedResourceUpload(uploadId));
+                } catch (IOException e) {
+                        logger.error("Failed to stage resource upload.", e);
+                        throw new WebApplicationException("Failed to process the uploaded file.", e,
+                                        Response.Status.BAD_REQUEST);
+                } finally {
+                        FileUtils.deleteQuietly(stagedFile);
+                }
+        }
+
+        public static class StagedResourceUpload {
+                private String uploadId;
+
+                public StagedResourceUpload() {
+                }
+
+                public StagedResourceUpload(String uploadId) {
+                        this.uploadId = uploadId;
+                }
+
+                public String getUploadId() {
+                        return uploadId;
+                }
+
+                public void setUploadId(String uploadId) {
+                        this.uploadId = uploadId;
+                }
+        }
+
+        private static class StagedFormFile implements FormFile, Serializable {
+                private static final long serialVersionUID = 1L;
+
+                private final File file;
+                private final String fileName;
+                private final String contentType;
+
+                private StagedFormFile(File file, String fileName, String contentType) {
+                        this.file = file;
+                        this.fileName = fileName;
+                        this.contentType = contentType;
+                }
+
+                @Override
+                public String getContentType() {
+                        return contentType;
+                }
+
+                @Override
+                public void setContentType(String contentType) {
+                        throw new UnsupportedOperationException();
+                }
+
+                @Override
+                public int getFileSize() {
+                        return (int) file.length();
+                }
+
+                @Override
+                public void setFileSize(int fileSize) {
+                        throw new UnsupportedOperationException();
+                }
+
+                @Override
+                public String getFileName() {
+                        return fileName;
+                }
+
+                @Override
+                public void setFileName(String fileName) {
+                        throw new UnsupportedOperationException();
+                }
+
+                @Override
+                public byte[] getFileData() throws IOException {
+                        return FileUtils.readFileToByteArray(file);
+                }
+
+                @Override
+                public InputStream getInputStream() throws IOException {
+                        return new FileInputStream(file);
+                }
+
+                @Override
+                public void destroy() {
+                }
+        }
 
 }

@@ -384,14 +384,13 @@ public class AmpStructuresFormSectionFeature extends
         };
 
 
-        WebMarkupContainer rc = new WebMarkupContainer("resourcePanel");
-        rc.add(form);
-        rc.add(fileUpload);
-        rc.setOutputMarkupId(true);
-        add(rc);
+WebMarkupContainer rc = new WebMarkupContainer("resourcePanel");
+rc.add(form);
+rc.setOutputMarkupId(true);
+add(rc);
 
 
-        form.add(fileUpload);
+form.add(fileUpload);
         Button submit = new Button("ajaxSubmit");
 
         submit.add(new AttributeModifier("class", new Model("addStructure button_green_btm")));

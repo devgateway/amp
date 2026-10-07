@@ -21,7 +21,6 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -338,21 +337,16 @@ public class AmpStructuresFormSectionFeature extends
 
         final Model<FileItem> fileItemModel = new Model<FileItem>();
         FileUploadPanel fileUpload = new FileUploadPanel("file",String.valueOf(am.getObject().getAmpActivityId()), fileItemModel);
-        final Form<?> form = new Form<Void>("form") {
-
-
+        final WebMarkupContainer rc = new WebMarkupContainer("resourcePanel");
+        AmpButtonField importStructures = new AmpButtonField("ajaxSubmit", "Import Structures", true) {
             @Override
-            protected void onSubmit() {
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 if (fileItemModel.getObject() != null) {
                     FileUpload upload = new FileUpload(fileItemModel.getObject());
-                    if (upload == null) {
-                        logger.info("No file uploaded");
-                    } else {
-                        logger.info("File-Name: " + upload.getClientFileName() + " File-Size: " +
-                                Bytes.bytes(upload.getSize()));
-                        try {
-                                                        try (InputStream inputStream = upload.getInputStream();
-                                                                 XSSFWorkbook workbook = new XSSFWorkbook(inputStream)) {
+                    logger.info("File-Name: " + upload.getClientFileName() + " File-Size: " +
+                            Bytes.bytes(upload.getSize()));
+                    try (InputStream inputStream = upload.getInputStream();
+                         XSSFWorkbook workbook = new XSSFWorkbook(inputStream)) {
                             XSSFSheet sheet = workbook.getSheetAt(0);
                             Iterator<Row> rowIterator = sheet.iterator();
                             rowIterator.next();
@@ -370,34 +364,26 @@ public class AmpStructuresFormSectionFeature extends
                                 stru.setLatitude(latitude);
                                 stru.setLongitude(longitude);
                                 list.addItem(stru);
-                                list.goToLastPage();
-                                fileItemModel.setObject(null);
                             }
-                            }
-                        } catch (Exception e) {
-                            logger.error("Error reading excel file", e);
-                        }
+                            list.goToLastPage();
+                            fileItemModel.setObject(null);
+                    } catch (Exception e) {
+                        logger.error("Error reading excel file", e);
                     }
                 }
-
-                }
+                target.add(containter);
+                target.add(rc);
+            }
         };
+        importStructures.getButton().setDefaultFormProcessing(false);
 
 
-        WebMarkupContainer rc = new WebMarkupContainer("resourcePanel");
-        rc.add(form);
         rc.add(fileUpload);
+        rc.add(importStructures);
         rc.setOutputMarkupId(true);
         add(rc);
 
 
-        form.add(fileUpload);
-        Button submit = new Button("ajaxSubmit");
-
-        submit.add(new AttributeModifier("class", new Model("addStructure button_green_btm")));
-
-
-        form.add(submit);
         ResourceReference resourceReference = new ResourceReference("exportData-"+ System.currentTimeMillis()) {
             @Override
             public IResource getResource() {

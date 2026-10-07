@@ -338,9 +338,10 @@ public class AmpStructuresFormSectionFeature extends
 
 
         final Model<FileItem> fileItemModel = new Model<FileItem>();
-        FileUploadPanel fileUpload = new FileUploadPanel("file",String.valueOf(am.getObject().getAmpActivityId()), fileItemModel);
         final WebMarkupContainer rc = new WebMarkupContainer("resourcePanel");
         AmpButtonField importStructures = new AmpButtonField("ajaxSubmit", "Import Structures", true) {
+            private static final long serialVersionUID = 1L;
+
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 if (fileItemModel.getObject() != null) {
@@ -397,9 +398,19 @@ public class AmpStructuresFormSectionFeature extends
         };
         importStructures.getButton().setDefaultFormProcessing(false);
 
+        FileUploadPanel fileUpload = new FileUploadPanel("file", String.valueOf(am.getObject().getAmpActivityId()),
+                fileItemModel) {
+            private static final long serialVersionUID = 1L;
 
-        rc.add(fileUpload);
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(importStructures.isEnabledInHierarchy());
+            }
+        };
+
         rc.add(importStructures);
+        rc.add(fileUpload);
         FeedbackPanel importFeedback = new FeedbackPanel("importFeedback",
             new ContainerFeedbackMessageFilter(importStructures));
         importFeedback.setOutputMarkupId(true);

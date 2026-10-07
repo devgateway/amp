@@ -1,29 +1,19 @@
 <wicket:extend>
 		<tr>
-			<td colspan="4">
+			<td colspan="4" style="vertical-align: bottom;">
 				<span wicket:id="addbutton" />
 			</td>
-			<td colspan="5">
+			<td colspan="5" style="vertical-align: bottom;">
 				<div wicket:id="resourcePanel">
 					<div wicket:id="importFeedback"></div>
-					<table width="40%" style="margin-top: 70px;">
-						<tr>
-							<td colspan="2">
-								<span wicket:id="ajaxSubmit" />
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<div style="white-space: nowrap;" >
-									<span class="upfile" wicket:id="file" />
-								</div>
-							</td>
-						</tr>
-					</table>
+					<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 6px;">
+						<div style="white-space: nowrap;"><span class="upfile" wicket:id="file" /></div>
+						<span wicket:id="ajaxSubmit" />
+					</div>
 				</div>
 				<br>
 			</td>
-			<td colspan="3">
+			<td colspan="3" style="vertical-align: bottom;">
 				<a wicket:id="downloadLink" style="display:none;">Download</a>
 				<span wicket:id="exportStructures"/>
 			</td>

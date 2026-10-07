@@ -349,6 +349,9 @@ public class AmpStructuresFormSectionFeature extends
                          XSSFWorkbook workbook = new XSSFWorkbook(inputStream)) {
                             XSSFSheet sheet = workbook.getSheetAt(0);
                             Iterator<Row> rowIterator = sheet.iterator();
+                            if (!rowIterator.hasNext()) {
+                                return;
+                            }
                             rowIterator.next();
 
                             while (rowIterator.hasNext()) {

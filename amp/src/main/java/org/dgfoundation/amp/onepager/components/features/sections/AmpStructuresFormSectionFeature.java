@@ -357,12 +357,14 @@ public class AmpStructuresFormSectionFeature extends
                                 String description = getStringValueFromCell(row.getCell(1));
                                 String latitude = getStringValueFromCell(row.getCell(2));
                                 String longitude = getStringValueFromCell(row.getCell(3));
+                                String shape = getStringValueFromCell(row.getCell(4));
 
                                 AmpStructure stru = new AmpStructure();
                                 stru.setTitle(title);
                                 stru.setDescription(description);
                                 stru.setLatitude(latitude);
                                 stru.setLongitude(longitude);
+                                stru.setShape(shape);
                                 list.addItem(stru);
                             }
                             list.goToLastPage();
@@ -455,6 +457,7 @@ public class AmpStructuresFormSectionFeature extends
             headerRow.createCell(1).setCellValue("Description");
             headerRow.createCell(2).setCellValue("Latitude");
             headerRow.createCell(3).setCellValue("Longitude");
+            headerRow.createCell(4).setCellValue("Shape");
 
             int rowIndex = 1;
             for (AmpStructure structure : list.getModel().getObject()) {
@@ -464,6 +467,7 @@ public class AmpStructuresFormSectionFeature extends
                     createCellIfNotNull(row, 1, structure.getDescription());
                     createCellIfNotNull(row, 2, structure.getLatitude());
                     createCellIfNotNull(row, 3, structure.getLongitude());
+                    createCellIfNotNull(row, 4, structure.getShape());
                 }
                 rowIndex++;
             }

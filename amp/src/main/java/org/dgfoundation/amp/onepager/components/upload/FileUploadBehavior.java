@@ -105,6 +105,9 @@ public class FileUploadBehavior extends Behavior {
         variables.put("paramName", uploadParamName);
         variables.put("uploadFailedMsg", TranslatorUtil.getTranslatedText("Upload failed! Please try again."));
         variables.put("uploadStartedMsg", TranslatorUtil.getTranslatedText("Upload started, please wait..."));
+        String uploadAction = importedRowsMarkupId == null ? "Add" : "Import Structures";
+        variables.put("uploadPendingMsg", TranslatorUtil.getTranslatedText(
+            "File selected. Click " + uploadAction + " to upload."));
         variables.put("uploadFailedTooBigMsg", TranslatorUtil.getTranslatedText("The file size limit is {size} MB. This file exceeds the limit.").replace("{size}", maxFileSizeGS));
         variables.put("uploadMaxFileSize", Long.toString(Bytes.megabytes(Long.parseLong(maxFileSizeGS)).bytes()));
         variables.put("uploadNoFileLabel", TranslatorWorker.translateText("No file chosen"));

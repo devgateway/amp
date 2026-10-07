@@ -19,6 +19,9 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
             pendingUploadData = null;
             if (uploadData) {
                 uploadInProgress = true;
+                var fileSize = uploadData.files[0].size;
+                $(componentId).find('[role=fileUploadedMsg]').show()
+                    .html(" \"" + "${uploadStartedMsg}" + fileSize + "\" bytes");
                 uploadData.submit();
             }
         }
@@ -73,14 +76,17 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
 	            		$(this).find('[role=fileUploadedMsg]').html('');
 	                    $(this).find('[role=fileUploadedMsg]').hide();
 	            	} else {
-		            	$(this).find('[role=fileUploadedMsg]').show();
-		                $(this).find('[role=fileUploadedMsg]').html(" \"" + "${uploadStartedMsg}" + data.files[0].size + "\" bytes");            	
                         if (deferUpload) {
                             pendingUploadData = data;
                             if (waitForUpload) {
                                 submitPendingUpload();
+                            } else {
+                                $(this).find('[role=fileUploadedMsg]').show()
+                                    .text("${uploadPendingMsg}");
                             }
                         } else {
+                            $(this).find('[role=fileUploadedMsg]').show()
+                                .html(" \"" + "${uploadStartedMsg}" + data.files[0].size + "\" bytes");
                             data.submit();
                         }
 	            	}

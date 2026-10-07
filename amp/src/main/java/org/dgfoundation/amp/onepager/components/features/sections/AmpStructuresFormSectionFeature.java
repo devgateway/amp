@@ -471,21 +471,15 @@ public class AmpStructuresFormSectionFeature extends
             headerRow.createCell(3).setCellValue("Longitude");
 
             int rowIndex = 1;
-            for (Component child : list) {
-                if (child instanceof ListItem) {
-                    ListItem<AmpStructure> listItem = (ListItem<AmpStructure>) child;
-                    AmpStructure structure = listItem.getModelObject();
-
-                    // Create a new row for each structure
-                    XSSFRow row = sheet.createRow(rowIndex);
-                    if (structure != null) {
-                        createCellIfNotNull(row, 0, structure.getTitle());
-                        createCellIfNotNull(row, 1, structure.getDescription());
-                        createCellIfNotNull(row, 2, structure.getLatitude());
-                        createCellIfNotNull(row, 3, structure.getLongitude());
-                    }
-                    rowIndex++;
+            for (AmpStructure structure : list.getModel().getObject()) {
+                XSSFRow row = sheet.createRow(rowIndex);
+                if (structure != null) {
+                    createCellIfNotNull(row, 0, structure.getTitle());
+                    createCellIfNotNull(row, 1, structure.getDescription());
+                    createCellIfNotNull(row, 2, structure.getLatitude());
+                    createCellIfNotNull(row, 3, structure.getLongitude());
                 }
+                rowIndex++;
             }
 
             // Write workbook content to the output stream

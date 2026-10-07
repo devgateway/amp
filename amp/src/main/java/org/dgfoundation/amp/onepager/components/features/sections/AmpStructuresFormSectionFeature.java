@@ -351,7 +351,8 @@ public class AmpStructuresFormSectionFeature extends
                         logger.info("File-Name: " + upload.getClientFileName() + " File-Size: " +
                                 Bytes.bytes(upload.getSize()));
                         try {
-                            XSSFWorkbook workbook = new XSSFWorkbook(upload.getInputStream());
+                                                        try (InputStream inputStream = upload.getInputStream();
+                                                                 XSSFWorkbook workbook = new XSSFWorkbook(inputStream)) {
                             XSSFSheet sheet = workbook.getSheetAt(0);
                             Iterator<Row> rowIterator = sheet.iterator();
                             rowIterator.next();
@@ -371,6 +372,7 @@ public class AmpStructuresFormSectionFeature extends
                                 list.addItem(stru);
                                 list.goToLastPage();
                                 fileItemModel.setObject(null);
+                            }
                             }
                         } catch (Exception e) {
                             logger.error("Error reading excel file", e);
@@ -535,20 +537,13 @@ public class AmpStructuresFormSectionFeature extends
     }
 
     private void handleFileUpload(final FileUpload uploadedFile) throws IOException {
-        // Write the uploaded file to a temporary location
-        File tempFile = new File("temp_" + uploadedFile.getClientFileName());
-        uploadedFile.writeTo(tempFile);
-
-        try (InputStream inputStream = new FileInputStream(tempFile)) {
-            Workbook workbook = WorkbookFactory.create(inputStream);
+        try (InputStream inputStream = uploadedFile.getInputStream();
+             Workbook workbook = WorkbookFactory.create(inputStream)) {
             // ...
         } catch (IOException e) {
             // Handle exception
         } catch (InvalidFormatException e) {
             throw new RuntimeException(e);
-        } finally {
-            // Delete the temporary file
-            tempFile.delete();
         }
     }
 }

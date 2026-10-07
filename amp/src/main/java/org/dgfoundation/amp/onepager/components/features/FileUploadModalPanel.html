@@ -5,14 +5,9 @@
 </head>
 <body>
 <wicket:panel>
-    <!-- Ajax-enabled multipart form for file upload -->
-    <form wicket:id="uploadForm" enctype="multipart/form-data">
+    <form wicket:id="uploadForm">
+        <div wicket:id="fileUploadField"></div>
         <div>
-            <label for="fileUploadField">Choose a file:</label>
-            <input wicket:id="fileUploadField" type="file" />
-        </div>
-        <div>
-            <!-- Ajax-enabled submit button -->
             <button wicket:id="uploadButton" type="button">Upload</button>
         </div>
     </form>

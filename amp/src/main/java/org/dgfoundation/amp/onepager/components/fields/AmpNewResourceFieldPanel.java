@@ -154,7 +154,7 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
         AmpButtonField submit = new AmpButtonField("ajaxSubmit", "Add", true){
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                TemporaryDocument tmp = td.getObject();
+                TemporaryActivityDocument tmp = td.getObject();
                 String response = stagedUploadResponse.getModelObject();
                 if (response != null && !response.trim().isEmpty()) {
                     try {

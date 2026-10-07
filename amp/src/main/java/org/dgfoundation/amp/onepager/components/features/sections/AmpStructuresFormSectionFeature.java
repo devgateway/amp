@@ -19,6 +19,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
@@ -26,6 +27,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.ResourceLink;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -353,6 +355,8 @@ public class AmpStructuresFormSectionFeature extends
                                 return;
                             }
                             rowIterator.next();
+                            Set<AmpStructure> structureTitles = new TreeSet<>(setModel.getObject());
+                            List<AmpStructure> importedStructures = new ArrayList<>();
 
                             while (rowIterator.hasNext()) {
                                 XSSFRow row = (XSSFRow) rowIterator.next();
@@ -368,7 +372,18 @@ public class AmpStructuresFormSectionFeature extends
                                 stru.setLatitude(latitude);
                                 stru.setLongitude(longitude);
                                 stru.setShape(shape);
-                                list.addItem(stru);
+                                if (!structureTitles.add(stru)) {
+                                    this.error("Import rejected: structure title '" + title + "' on row "
+                                            + (row.getRowNum() + 1)
+                                            + " duplicates an existing structure or another imported row."
+                                            + " Structure titles must be unique.");
+                                    target.add(rc);
+                                    return;
+                                }
+                                importedStructures.add(stru);
+                            }
+                            for (AmpStructure structure : importedStructures) {
+                                list.addItem(structure);
                             }
                             list.goToLastPage();
                             fileItemModel.setObject(null);
@@ -385,6 +400,10 @@ public class AmpStructuresFormSectionFeature extends
 
         rc.add(fileUpload);
         rc.add(importStructures);
+        FeedbackPanel importFeedback = new FeedbackPanel("importFeedback",
+            new ContainerFeedbackMessageFilter(importStructures));
+        importFeedback.setOutputMarkupId(true);
+        rc.add(importFeedback);
         rc.setOutputMarkupId(true);
         add(rc);
 

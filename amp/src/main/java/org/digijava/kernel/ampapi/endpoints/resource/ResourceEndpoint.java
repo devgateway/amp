@@ -260,7 +260,7 @@ public class ResourceEndpoint {
                 File stagedFile = null;
                 try {
                         stagedFile = File.createTempFile("amp-resource-upload-", ".tmp");
-                        stagedFile.deleteOnExit();
+// StagedResourceUploadStore owns cleanup for this temporary file.
                         FileUtils.copyInputStreamToFile(new BoundedInputStream(uploadedInputStream, maxFileSize + 1), stagedFile);
                         if (stagedFile.length() > maxFileSize) {
                                 throw new WebApplicationException("The file exceeds the upload size limit.",

@@ -36,7 +36,6 @@ public class FileUploadBehavior extends Behavior {
     private final String importButtonMarkupId;
     private final String importedRowsMarkupId;
     private final String uploadUrlOverride;
-    private final String uploadPendingAction;
     /**
      * The name of the request parameter used for the multipart
      * Ajax request
@@ -49,18 +48,12 @@ public class FileUploadBehavior extends Behavior {
 
     public FileUploadBehavior(String activityId, IModel<FileItem> fileItemModel, String uploadUrlOverride,
             String importButtonMarkupId, String importedRowsMarkupId) {
-        this(activityId, fileItemModel, uploadUrlOverride, importButtonMarkupId, importedRowsMarkupId, "Add");
-    }
-
-    public FileUploadBehavior(String activityId, IModel<FileItem> fileItemModel, String uploadUrlOverride,
-            String importButtonMarkupId, String importedRowsMarkupId, String uploadPendingAction) {
         this.activityId = activityId;
         this.fileItemModel = fileItemModel;
         this.uploadUrlOverride = uploadUrlOverride;
         this.deferUpload = importButtonMarkupId != null;
         this.importButtonMarkupId = importButtonMarkupId;
         this.importedRowsMarkupId = importedRowsMarkupId;
-        this.uploadPendingAction = uploadPendingAction;
     }
 
     /**
@@ -112,8 +105,8 @@ public class FileUploadBehavior extends Behavior {
         variables.put("paramName", uploadParamName);
         variables.put("uploadFailedMsg", TranslatorUtil.getTranslatedText("Upload failed! Please try again."));
         variables.put("uploadStartedMsg", TranslatorUtil.getTranslatedText("Upload started, please wait..."));
-        variables.put("uploadPendingMsg", TranslatorUtil.getTranslatedText(
-            "File selected. Click " + uploadPendingAction + " to upload."));
+        variables.put("uploadPendingTemplate", TranslatorUtil.getTranslatedText(
+            "File selected. Click {action} to upload."));
         variables.put("uploadFailedTooBigMsg", TranslatorUtil.getTranslatedText("The file size limit is {size} MB. This file exceeds the limit.").replace("{size}", maxFileSizeGS));
         variables.put("uploadMaxFileSize", Long.toString(Bytes.megabytes(Long.parseLong(maxFileSizeGS)).bytes()));
         variables.put("uploadNoFileLabel", TranslatorWorker.translateText("No file chosen"));

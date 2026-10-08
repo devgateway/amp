@@ -14,6 +14,11 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
         var importedRows = importedRowsMarkupId ? document.getElementById(importedRowsMarkupId) : null;
         var fileInput = $(componentId).find('input[type=file]').get(0);
 
+        function getPendingUploadMessage() {
+            var action = importButton && (importButton.value || importButton.textContent);
+            return "${uploadPendingTemplate}".replace('{action}', action || 'Add');
+        }
+
         function submitPendingUpload() {
             var uploadData = pendingUploadData;
             pendingUploadData = null;
@@ -94,7 +99,7 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
                                 submitPendingUpload();
                             } else {
                                 $(this).find('[role=fileUploadedMsg]').show()
-                                    .text("${uploadPendingMsg}");
+                                    .text(getPendingUploadMessage());
                             }
                         } else {
                             $(this).find('[role=fileUploadedMsg]').show()

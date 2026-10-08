@@ -19,15 +19,9 @@ public class FileUploadPanel extends Panel {
 
     public FileUploadPanel(String id, String activityId, IModel<FileItem> fileItemModel,
             String uploadUrl, String importButtonMarkupId, String importedRowsMarkupId) {
-        this(id, activityId, fileItemModel, uploadUrl, importButtonMarkupId, importedRowsMarkupId, "Add");
-        }
-
-        public FileUploadPanel(String id, String activityId, IModel<FileItem> fileItemModel,
-            String uploadUrl, String importButtonMarkupId, String importedRowsMarkupId, String uploadPendingAction) {
         super(id);
         add (new Label("chooseFileLabel", TranslatorWorker.translateText("Choose file")));
         add (new Label("noFileLabel", TranslatorWorker.translateText("No file chosen")));
-        add(new FileUploadBehavior(activityId, fileItemModel, uploadUrl, importButtonMarkupId, importedRowsMarkupId,
-            uploadPendingAction));
+        add(new FileUploadBehavior(activityId, fileItemModel, uploadUrl, importButtonMarkupId, importedRowsMarkupId));
     }
 }

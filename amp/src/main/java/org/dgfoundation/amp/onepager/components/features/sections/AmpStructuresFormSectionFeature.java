@@ -393,7 +393,8 @@ public class AmpStructuresFormSectionFeature extends
         rc.add(importStructures);
 
         FileUploadPanel fileUpload = new FileUploadPanel("file", String.valueOf(am.getObject().getAmpActivityId()),
-            null, "/rest/gis/structures/import", importStructures.getButton().getMarkupId(), importedRowsField.getMarkupId()) {
+            null, "/rest/gis/structures/import", importStructures.getButton().getMarkupId(), importedRowsField.getMarkupId(),
+            "Import Structures") {
             private static final long serialVersionUID = 1L;
 
             @Override

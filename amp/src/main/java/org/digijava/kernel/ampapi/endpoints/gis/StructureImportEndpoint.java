@@ -43,8 +43,7 @@ public class StructureImportEndpoint {
         if (file == null) {
             throw badRequest("A workbook file is required.");
         }
-        long contentLength = request.getContentLengthLong();
-        if (contentLength > MAX_REQUEST_SIZE) {
+if (contentLength < 0 || contentLength > MAX_REQUEST_SIZE) {
             throw new WebApplicationException("Workbook exceeds the upload size limit.",
                     Response.Status.REQUEST_ENTITY_TOO_LARGE);
         }

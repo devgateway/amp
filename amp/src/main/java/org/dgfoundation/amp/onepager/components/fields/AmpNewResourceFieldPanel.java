@@ -181,6 +181,8 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
                         webLinkFeedbackContainer.setVisible(true);
                         webLinkFeedbackLabel.setDefaultModelObject(FILE_PATH_NOT_SELECTED);
                     }
+                    stagedUploadResponse.setModelObject("");
+                    target.add(stagedUploadResponse);
                 }
                 if (fileItemModel.getObject() != null)
                     tmp.setFile(new FileUpload(fileItemModel.getObject()));

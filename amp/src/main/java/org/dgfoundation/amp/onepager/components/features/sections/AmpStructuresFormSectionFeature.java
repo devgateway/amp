@@ -439,7 +439,7 @@ public class AmpStructuresFormSectionFeature extends
         };
         ResourceLink<Void> downloadLink = new ResourceLink<>("downloadLink", resourceReference);
         downloadLink.setOutputMarkupId(true);
-        add(downloadLink);
+        rc.add(downloadLink);
 
         AmpAjaxLinkField exportStructures = new AmpAjaxLinkField("exportStructures", "Export Structures", "Export Structures") {
             @Override
@@ -450,7 +450,7 @@ public class AmpStructuresFormSectionFeature extends
                 target.appendJavaScript("document.getElementById('" + downloadLinkMarkupId + "').click();");
             }
         };
-        add(exportStructures);
+rc.add(exportStructures);
 
 
     }

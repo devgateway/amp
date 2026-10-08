@@ -450,7 +450,7 @@ public class AmpStructuresFormSectionFeature extends
                 target.appendJavaScript("document.getElementById('" + downloadLinkMarkupId + "').click();");
             }
         };
-        add(exportStructures);
+rc.add(exportStructures);
 
 
     }

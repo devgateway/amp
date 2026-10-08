@@ -75,6 +75,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
             IS_DEVELOPMENT_MODE = true;
         }
 
+
         //getResourceSettings().setStripJavaScriptCommentsAndWhitespace(true);
         //getResourceSettings().setAddLastModifiedTimeToResourceReferenceUrl(true);
         //TODO:
@@ -278,16 +279,17 @@ public class OnePagerApp extends AuthenticatedWebApplication {
     @Override
     protected WebResponse newWebResponse(WebRequest webRequest, HttpServletResponse httpServletResponse) {
         return new ServletWebResponse((ServletWebRequest) webRequest, httpServletResponse) {
+
             @Override
             public void flush() {
+                // Add the X-Frame-Options header
                 try {
                     getContainerResponse().flushBuffer();
                 } catch (SocketException e) {
                     logger.warn("Socket exception encountered, ignoring", e);
                 } catch (IOException e) {
-                    // Socket Exception can be wrapped by a container specific exception.
-                    // So we check the cause of the container exception
-                    Throwable rootCause = null != e.getCause() ? e.getCause() : e;
+                    // Check if the root cause is a SocketException
+                    Throwable rootCause = (e.getCause() != null) ? e.getCause() : e;
                     if (rootCause instanceof SocketException) {
                         logger.warn("Socket exception encountered, ignoring.", rootCause);
                         return;

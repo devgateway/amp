@@ -498,7 +498,7 @@ const OutcomeOutputManagementPage: React.FC = () => {
                     </Button>
                     {' '}
                     <Button variant="secondary" className={styles.export_button} onClick={handleExportCSV}>
-                      <i className="fa fa-download" /> {t('amp.outcomeoutput:export-csv')}
+                      <i className="fa fa-download" /> {t('amp.outcomeoutput:exportCsv')}
                     </Button>
                   </div>
                 </Col>

@@ -4,6 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -54,8 +57,6 @@ public final class StagedResourceUploadStore {
             replacedUpload.deleteStagedFile();
             }
                 StoredUpload storedUpload = new StoredUpload(upload, System.currentTimeMillis());
-                storedUpload.expirationTask = EXPIRATION_EXECUTOR.schedule(upload::deleteStagedFile,
-                    UPLOAD_TTL_MILLIS, TimeUnit.MILLISECONDS);
                 uploads.put(uploadId, storedUpload);
         }
         return uploadId;
@@ -112,14 +113,28 @@ public final class StagedResourceUploadStore {
         private static final long serialVersionUID = 1L;
     }
 
-    private static class StoredUpload {
+    private static class StoredUpload implements Serializable {
+        private static final long serialVersionUID = 1L;
+
         private final TemporaryDocumentData upload;
         private final long createdAt;
-        private ScheduledFuture<?> expirationTask;
+        private transient ScheduledFuture<?> expirationTask;
 
         private StoredUpload(TemporaryDocumentData upload, long createdAt) {
             this.upload = upload;
             this.createdAt = createdAt;
+            scheduleExpiration();
+        }
+
+        private void scheduleExpiration() {
+            long remainingMillis = Math.max(0, createdAt + UPLOAD_TTL_MILLIS - System.currentTimeMillis());
+            expirationTask = EXPIRATION_EXECUTOR.schedule(upload::deleteStagedFile,
+                    remainingMillis, TimeUnit.MILLISECONDS);
+        }
+
+        private void readObject(ObjectInputStream input) throws IOException, ClassNotFoundException {
+            input.defaultReadObject();
+            scheduleExpiration();
         }
 
         private void cancelExpiration() {

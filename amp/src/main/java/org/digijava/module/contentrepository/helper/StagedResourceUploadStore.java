@@ -47,7 +47,7 @@ public final class StagedResourceUploadStore {
             int retainedUploadCount = uploads.size() - (replacedUpload == null ? 0 : 1);
             long retainedBytes = uploads.getStagedBytes()
                 - (replacedUpload == null ? 0 : replacedUpload.getTrueUploadedFileSize());
-                long byteLimit = Math.max(MAX_STAGED_BYTES_PER_SESSION, upload.getTrueUploadedFileSize());
+            long byteLimit = MAX_STAGED_BYTES_PER_SESSION;
             if (retainedUploadCount >= MAX_UPLOADS_PER_SESSION
                     || retainedBytes + upload.getTrueUploadedFileSize() > byteLimit) {
                 throw new UploadLimitExceededException();

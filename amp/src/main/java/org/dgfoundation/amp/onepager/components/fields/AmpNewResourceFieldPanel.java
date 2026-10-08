@@ -181,7 +181,6 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
                         webLinkFeedbackContainer.setVisible(true);
                         webLinkFeedbackLabel.setDefaultModelObject(FILE_PATH_NOT_SELECTED);
                     }
-                    stagedUploadResponse.setModelObject("");
                 }
                 if (fileItemModel.getObject() != null)
                     tmp.setFile(new FileUpload(fileItemModel.getObject()));
@@ -222,6 +221,7 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
                     tmp.setTranslatedNoteList(getTranslationsForField(
                             tmp.getNewTemporaryDocumentId(), "description"));
                     newItemsSet.add((TemporaryActivityDocument) tmp);
+                        stagedUploadResponse.setModelObject("");
                     TemporaryActivityDocument tmpDoc = new TemporaryActivityDocument();
                     String docId = generateResourceKey("newResource");
                     newResourceIdModel.setObject(docId);
@@ -248,7 +248,7 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
         form.add(fileUpload);
         form.add(stagedUploadResponse);
         form.add(submit);
-        form.add(createCancelButton());
+        form.add(createCancelButton(stagedUploadResponse, td));
         
         createWebLinkFeedbackContainer();
         form.add(webLinkFeedbackContainer);
@@ -272,10 +272,23 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
         return addNewLink;
     }
 
-    protected AmpAjaxLinkField createCancelButton() {
+        protected AmpAjaxLinkField createCancelButton(final HiddenField<String> stagedUploadResponse,
+            final IModel<TemporaryActivityDocument> temporaryDocumentModel) {
         AmpAjaxLinkField cancel = new AmpAjaxLinkField("cancel", "Cancel", "Cancel") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
+                TemporaryActivityDocument temporaryDocument = temporaryDocumentModel.getObject();
+                if (temporaryDocument.getStagedUploadId() != null) {
+                    StagedResourceUploadStore.delete(SessionUtil.getCurrentServletRequest(),
+                            temporaryDocument.getStagedUploadId());
+                    temporaryDocument.setStagedUploadId(null);
+                }
+                String deleteUrl = SessionUtil.getCurrentServletRequest().getContextPath()
+                    + "/rest/resource/stage-upload?uploadId=";
+                target.appendJavaScript("(function(){var response=document.getElementById('"
+                    + stagedUploadResponse.getMarkupId() + "').value;try{var uploads=JSON.parse(response||'[]');"
+                    + "uploads.forEach(function(upload){$.ajax({url:'" + deleteUrl
+                    + "'+encodeURIComponent(upload.uploadId),type:'DELETE'});});}catch(e){}})();");
                 target.appendJavaScript("$('#" + getToggleId() + "').hide();");
                 target.appendJavaScript("$('#" + getToggleId() + "').find('[role=fileUploadedMsg]').html('');");
                 target.appendJavaScript("$('#uploadLabel').text('" + TranslatorWorker.translateText("No file chosen") + "');");
@@ -285,7 +298,7 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
         
         return cancel;
     }
-    
+
     protected void createWebLinkFeedbackContainer() {
         webLinkFeedbackContainer = new WebMarkupContainer("webLinkFeedbackContainer");
         webLinkFeedbackContainer.setOutputMarkupId(true);

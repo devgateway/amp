@@ -135,6 +135,9 @@ public class ActivityUtil {
             a = saveActivityNewVersion(oldA, values, cumulativeValues, ampCurrentMember, draft, session, saveContext,
                     editorStore, site);
         } catch (Exception exception) {
+            if (exception instanceof StagedResourceSaveException) {
+                throw (StagedResourceSaveException) exception;
+            }
             logger.error("Error saving activity:", exception); // Log the exception
             throw new RuntimeException("Can't save activity:", exception);
         }
@@ -1211,8 +1214,7 @@ public class ActivityUtil {
                 TemporaryDocumentData tdd = temp.getStagedUploadId() == null ? new TemporaryDocumentData()
                         : StagedResourceUploadStore.get(request, temp.getStagedUploadId());
                 if (tdd == null) {
-                    logger.error("Staged resource upload is missing for " + temp.getFileName());
-                    continue;
+                    throw new IllegalStateException("Staged resource upload is missing for " + temp.getFileName());
                 }
                 tdd.setTitle(temp.getTitle());
                 tdd.setName(temp.getFileName());
@@ -1273,18 +1275,33 @@ public class ActivityUtil {
                         }
                     } else {
                         if (temp.getStagedUploadId() != null) {
-                            logger.warn("The staged document " + temp.getFileName() + " could not be saved.");
-                            continue;
+                            throw new StagedResourceSaveException("The staged document " + temp.getFileName()
+                                    + " could not be saved.");
                         }
                         aad.setUuid(temp.getExistingDocument().getUuid());
                     }
                     a.getActivityDocuments().add(aad);
                 } catch (JCRSessionException ex) {
-                    // we catch the exception and show a warning, but allow the activity to be saved
+                    if (temp.getStagedUploadId() != null) {
+                        throw new StagedResourceSaveException("The staged document " + temp.getFileName()
+                                + " could not be saved.", ex);
+                    }
                     logger.warn("The JCR Session couldn't be opened. " + "The document " + tdd.getName()
                             + " will not be saved.", ex);
                 }
             }
+        }
+    }
+
+    public static class StagedResourceSaveException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+
+        public StagedResourceSaveException(String message) {
+            super(message);
+        }
+
+        public StagedResourceSaveException(String message, Throwable cause) {
+            super(message, cause);
         }
     }
 

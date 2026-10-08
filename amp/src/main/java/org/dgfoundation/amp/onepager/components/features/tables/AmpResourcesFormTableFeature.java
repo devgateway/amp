@@ -221,7 +221,8 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                 else if (item.getModelObject().getStagedUploadId() != null) {
                     TemporaryDocumentData staged = StagedResourceUploadStore.get(
                             SessionUtil.getCurrentServletRequest(), item.getModelObject().getStagedUploadId());
-                    drs = new DownloadResourceStream(staged.getFormFile(), item.getModelObject().getFileName());
+                    drs = staged == null || staged.getFormFile() == null ? null
+                        : new DownloadResourceStream(staged.getFormFile(), item.getModelObject().getFileName());
                 }
                 else
                     drs = new DownloadResourceStream(item.getModelObject().getFile(), item.getModelObject().getFileName());
@@ -240,9 +241,13 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                     Link downloadLink = new Link("download") {
                         @Override
                         public void onClick() {
-                            getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(drs, drs.getFileName()));
+                            if (drs != null) {
+                                getRequestCycle().scheduleRequestHandlerAfterCurrent(
+                                        new ResourceStreamRequestHandler(drs, drs.getFileName()));
+                            }
                         }
                     };
+                    downloadLink.setEnabled(drs != null);
                     item.add(downloadLink);
 
                     String contentType = item.getModelObject().getFileName();
@@ -276,6 +281,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                             if (newItems != null) {
                                 newItems.remove(item.getModelObject());
                             }
+                            list.removeAll();
                             StagedResourceUploadStore.delete(SessionUtil.getCurrentServletRequest(),
                                     item.getModelObject().getStagedUploadId());
                         }

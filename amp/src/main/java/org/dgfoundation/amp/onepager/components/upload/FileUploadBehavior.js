@@ -18,6 +18,18 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
             var uploadData = pendingUploadData;
             pendingUploadData = null;
             if (uploadData) {
+                if (componentUrl.indexOf('/rest/resource/stage-upload') !== -1 && importedRows) {
+                    try {
+                        var previousUploads = JSON.parse(importedRows.value || '[]');
+                        if (previousUploads.length && previousUploads[0].uploadId) {
+                            var separator = componentUrl.indexOf('?') === -1 ? '?' : '&';
+                            uploadData.url = componentUrl + separator + 'replaceUploadId='
+                                + encodeURIComponent(previousUploads[0].uploadId);
+                        }
+                    } catch (error) {
+                        // Leave the original URL; the server still enforces the session quota.
+                    }
+                }
                 uploadInProgress = true;
                 var fileSize = uploadData.files[0].size;
                 $(componentId).find('[role=fileUploadedMsg]').show()

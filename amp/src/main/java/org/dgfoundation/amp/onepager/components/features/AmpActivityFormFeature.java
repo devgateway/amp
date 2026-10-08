@@ -58,6 +58,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.*;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorFundingInfoSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.helper.ActionButtonCancelLink;
+import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -84,6 +85,7 @@ import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
+import org.digijava.module.contentrepository.helper.StagedResourceUploadStore;
 
 import java.util.*;
 
@@ -1128,7 +1130,29 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId()), currentUserId));
         }
 
-        ActivityUtil.saveActivity((AmpActivityModel) am, draft, rejected);
+        HashSet<TemporaryActivityDocument> pendingResources = wicketSession.getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
+        if (pendingResources != null) {
+            for (TemporaryActivityDocument resource : pendingResources) {
+                if (resource.getStagedUploadId() != null
+                        && StagedResourceUploadStore.get(SessionUtil.getCurrentServletRequest(),
+                                resource.getStagedUploadId()) == null) {
+                    feedbackPanel.error(TranslatorUtil.getTranslatedText(
+                            "A selected document upload is no longer available. Remove it and upload the file again."));
+                    target.add(feedbackPanel);
+                    return;
+                }
+            }
+        }
+
+        try {
+            ActivityUtil.saveActivity((AmpActivityModel) am, draft, rejected);
+        } catch (ActivityUtil.StagedResourceSaveException e) {
+            logger.error("Unable to save a staged activity resource.", e);
+            feedbackPanel.error(TranslatorUtil.getTranslatedText(
+                    "A related document could not be saved. The activity was not saved; retry or remove the document."));
+            target.add(feedbackPanel);
+            return;
+        }
 
         info(TranslatorUtil.getTranslatedText("Activity saved successfully"));
 

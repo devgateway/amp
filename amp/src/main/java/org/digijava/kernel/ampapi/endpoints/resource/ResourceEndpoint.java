@@ -243,7 +243,9 @@ public class ResourceEndpoint {
         @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "stageResourceUpload", ui = false)
         @ApiOperation("Stage a resource file for a pending activity form")
         public List<StagedResourceUpload> stageResourceUpload(@FormDataParam("file") InputStream uploadedInputStream,
-                        @FormDataParam("file") FormDataContentDisposition fileDetail, @Context HttpServletRequest request) {
+                        @FormDataParam("file") FormDataContentDisposition fileDetail,
+                        @QueryParam("replaceUploadId") String replaceUploadId,
+                        @Context HttpServletRequest request) {
                 if (uploadedInputStream == null || fileDetail == null || fileDetail.getFileName() == null) {
                         throw new WebApplicationException("A file is required.", Response.Status.BAD_REQUEST);
                 }
@@ -287,10 +289,13 @@ public class ResourceEndpoint {
                         temporaryDocument.setYearofPublication(String.valueOf(uploadedAt.get(Calendar.YEAR)));
                         temporaryDocument.setFormFile(new StagedFormFile(stagedFile, fileName, fileDetail.getType()));
                         temporaryDocument.setStagedFile(stagedFile);
-                        String uploadId = StagedResourceUploadStore.store(request, temporaryDocument);
+                        String uploadId = StagedResourceUploadStore.store(request, temporaryDocument, replaceUploadId);
                         stagedFile = null;
 
                         return Collections.singletonList(new StagedResourceUpload(uploadId));
+                } catch (StagedResourceUploadStore.UploadLimitExceededException e) {
+                        throw new WebApplicationException("The session has too many staged uploads. Remove an upload and try again.",
+                                        Response.Status.REQUEST_ENTITY_TOO_LARGE);
                 } catch (IOException e) {
                         logger.error("Failed to stage resource upload.", e);
                         throw new WebApplicationException("Failed to process the uploaded file.", e,
@@ -298,6 +303,15 @@ public class ResourceEndpoint {
                 } finally {
                         FileUtils.deleteQuietly(stagedFile);
                 }
+        }
+
+        @DELETE
+        @Path("stage-upload")
+        @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "deleteStagedResourceUpload", ui = false)
+        @ApiOperation("Delete a staged resource file that is no longer needed")
+        public void deleteStagedResourceUpload(@QueryParam("uploadId") String uploadId,
+                        @Context HttpServletRequest request) {
+                StagedResourceUploadStore.delete(request, uploadId);
         }
 
         public static class StagedResourceUpload {

@@ -34,8 +34,9 @@
 								JOIN ni_all_programs_with_levels apl ON a.amp_program_id = apl.amp_theme_id
 								LEFT JOIN amp_theme level ON level.amp_theme_id = apl.id0
 								JOIN amp_program_settings aps ON aps.amp_program_settings_id = a.program_setting
+
 	   						WHERE aps.name = 'National Plan Objective' AND a.program_percentage <> 0
-						GROUP BY a.amp_activity_id, apl.id0, level.amp_theme_id
+						GROUP BY a.amp_activity_id, apl.id0, level.amp_theme_id, level.name
                     ) v
                     ON aav.amp_activity_id = v.amp_activity_id;
 			]]></lang>

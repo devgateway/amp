@@ -210,6 +210,14 @@ public class ActivityService {
                     }
                 }
             }
+            // If the AMP ID text cell was absent (activity has no AMP ID value), the id and
+            // ampUrl were never set in the loop above. Fall back to AreaOwner.id, which is
+            // always populated for every leaf row regardless of column configuration.
+            if (activity.getId() == null && reportArea.getOwner() != null && reportArea.getOwner().id > 0) {
+                long ownerId = reportArea.getOwner().id;
+                activity.setId(ownerId);
+                activity.setAmpUrl(ActivityGatekeeper.buildPreviewUrl(String.valueOf(ownerId)));
+            }
             matchesFilters.put("Programs",programs);
             activity.setMatchesFilters(matchesFilters);
             activities.add(activity);

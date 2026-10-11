@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../schemas/xmlpatcher.xsd ">
+	<jira>AMP-31085</jira>
+	<author>bmokandu</author>
+	<description>Add TruBudget username column to dg_user</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres"><![CDATA[
+
+				ALTER TABLE dg_user
+					ADD COLUMN IF NOT EXISTS tru_budget_user_name VARCHAR(255);
+
+				CREATE UNIQUE INDEX IF NOT EXISTS idx_dg_user_tru_budget_user_name
+					ON dg_user (lower(tru_budget_user_name))
+					WHERE tru_budget_user_name IS NOT NULL;
+
+			]]></lang>
+		</script>
+	</apply>
+</tns:patch>

@@ -21,6 +21,7 @@ package org.digijava.module.um.form;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -71,6 +72,11 @@ public class UserRegisterForm
     private String[] contentSelectedLanguages;
     private String organizationTypeOther;
     private Long selectedOrganizationId;
+    private Collection<TruBudgetIntent> truBudgetIntents;
+    private String[] selectedTruBudgetIntents;
+    private String truBudgetPassword;
+    private String truBudgetPasswordConfirmation;
+    private String truBudgetEnabled;
     private boolean nationalCoordinator = false;
     private HashMap<String,String> errors=null;
 //FocusBoxes
@@ -545,5 +551,44 @@ public class UserRegisterForm
     public void setNotificationEmail(String notificationEmail) {
         this.notificationEmail = notificationEmail;
     }
-    
+
+    public Collection<TruBudgetIntent> getTruBudgetIntents() {
+        return truBudgetIntents;
+    }
+
+    public void setTruBudgetIntents(Collection<TruBudgetIntent> truBudgetIntents) {
+        this.truBudgetIntents = truBudgetIntents;
+    }
+
+    public String[] getSelectedTruBudgetIntents() {
+        return selectedTruBudgetIntents;
+    }
+
+    public void setSelectedTruBudgetIntents(String[] selectedTruBudgetIntents) {
+        this.selectedTruBudgetIntents = selectedTruBudgetIntents;
+    }
+
+    public String getTruBudgetPassword() {
+        return truBudgetPassword;
+    }
+
+    public void setTruBudgetPassword(String truBudgetPassword) {
+        this.truBudgetPassword = truBudgetPassword;
+    }
+
+    public String getTruBudgetPasswordConfirmation() {
+        return truBudgetPasswordConfirmation;
+    }
+
+    public void setTruBudgetPasswordConfirmation(String truBudgetPasswordConfirmation) {
+        this.truBudgetPasswordConfirmation = truBudgetPasswordConfirmation;
+    }
+
+    public String getTruBudgetEnabled() {
+        return truBudgetEnabled;
+    }
+
+    public void setTruBudgetEnabled(String truBudgetEnabled) {
+        this.truBudgetEnabled = truBudgetEnabled;
+    }
 }

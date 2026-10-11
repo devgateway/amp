@@ -294,32 +294,37 @@ public class ActivityVersionUtil {
      */
     public static AmpActivityVersion initializeActivity(AmpActivityVersion act) throws DgException, IllegalArgumentException,
             IllegalAccessException, InvocationTargetException {
-        Session session = PersistenceManager.getRequestDBSession();
-        Method[] methods = AmpActivityVersion.class.getDeclaredMethods();
-        for (int i = 0; i < methods.length; i++) {
-            if (methods[i].getName().contains("get") && methods[i].getReturnType().getName().contains("java.util.Set")) {
-                Object methodValue = methods[i].invoke(act, null);
-                Collection auxColl = (Collection) methodValue;
-                if (auxColl != null) {
-                    auxColl.size();
-                    Iterator iInner = auxColl.iterator();
-                    while (iInner.hasNext()) {
-                        Object auxInnerObject = iInner.next();
-                        Method[] innerMethods = auxInnerObject.getClass().getDeclaredMethods();
-                        for (int j = 0; j < innerMethods.length; j++) {
-                            if (innerMethods[j].getName().contains("get")
-                                    && innerMethods[j].getReturnType().getName().contains("java.util.Set")) {
-                                Object innerMethodValue = innerMethods[j].invoke(auxInnerObject, null);
-                                Collection auxInnerColl = (Collection) innerMethodValue;
-                                if (auxInnerColl != null) {
-                                    auxInnerColl.size();
-                                }
-                            }
-                        }
-                    }
-                }
+        initializeCollectionGetters(act, 1);
+        return act;
+    }
+
+    private static void initializeCollectionGetters(Object source, int nestedDepth)
+            throws InvocationTargetException, IllegalAccessException {
+        if (source == null) {
+            return;
+        }
+
+        Method[] methods = source.getClass().getMethods();
+        for (Method method : methods) {
+            if (!method.getName().startsWith("get")
+                    || method.getParameterTypes().length != 0
+                    || !Collection.class.isAssignableFrom(method.getReturnType())) {
+                continue;
+            }
+
+            Collection<?> collection = (Collection<?>) method.invoke(source, (Object[]) null);
+            if (collection == null) {
+                continue;
+            }
+
+            collection.size();
+            if (nestedDepth <= 0) {
+                continue;
+            }
+
+            for (Object nestedObject : collection) {
+                initializeCollectionGetters(nestedObject, nestedDepth - 1);
             }
         }
-        return act;
     }
 }

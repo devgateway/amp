@@ -154,31 +154,6 @@
                 </c:if>
             </field:display>
 
-            <hr>
-            <div class="planning-line"><digi:trn>Date approbation RFE</digi:trn>:&nbsp;</div>
-            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateApprobRfe}"/></b></div>
-            <hr>
-            <div class="planning-line"><digi:trn>Methodological note date</digi:trn>:&nbsp;</div>
-            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateNoteMethode}"/></b></div>
-            <hr>
-            <div class="planning-line"><digi:trn>Start date of retrospective evaluation mission</digi:trn>:&nbsp;</div>
-            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateDebMissEval}"/></b></div>
-            <hr>
-            <div class="planning-line"><digi:trn>End date of retrospective evaluation mission</digi:trn>:&nbsp;</div>
-            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateFinMissEval}"/></b></div>
-            <hr>
-            <div class="planning-line"><digi:trn>Date of transmission to the D.O</digi:trn>:&nbsp;</div>
-            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateTransmisDo}"/></b></div>
-            <hr>
-            <div class="planning-line"><digi:trn>Date of transmission of the interim report to the Borrower</digi:trn>:&nbsp;</div>
-            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateTransmisEmpr}"/></b></div>
-            <hr>
-            <div class="planning-line"><digi:trn>Final report date</digi:trn>:&nbsp;</div>
-            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateRapportDef}"/></b></div>
-            <hr>
-            <div class="planning-line"><digi:trn>Final archiving date</digi:trn>:&nbsp;</div>
-            <div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.dateArchivDef}"/></b></div>
-
         </div>
     </fieldset>
 </module:display>

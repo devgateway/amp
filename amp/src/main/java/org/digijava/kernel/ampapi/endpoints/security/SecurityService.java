@@ -141,7 +141,13 @@ public class SecurityService {
         layout.setTrackingEnabled(trackingEnabled);
         layout.setSiteId(siteId);
         layout.setTrackingUrl(trackingUrl);
-        layout.setFooterText(TranslatorWorker.translateText("Developed in partnership with OECD, UNDP, "
+
+        String customFooterText = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.FOOTER_TEXT);
+        boolean hasCustomFooterText = StringUtils.isNotBlank(customFooterText);
+        // custom text replaces the whole footer line, including the "AMP <version> build <date> -" prefix
+        layout.setFooterOverride(hasCustomFooterText);
+        layout.setFooterText(hasCustomFooterText ? customFooterText
+                : TranslatorWorker.translateText("Developed in partnership with OECD, UNDP, "
                 + "WB, Government of Ethiopia and DG"));
         
         if (isAdmin) {

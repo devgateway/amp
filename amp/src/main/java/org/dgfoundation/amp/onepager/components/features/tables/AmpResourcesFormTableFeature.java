@@ -128,19 +128,20 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                 HashSet<AmpActivityDocument> delItems = getSession().getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);
                 if (delItems == null)
                     delItems = new HashSet<AmpActivityDocument>();
-                List<TemporaryActivityDocument> ret = new ArrayList<TemporaryActivityDocument>();
 
                 if (refreshExistingDocs)
                     existingTmpDocs = getExistingObject();
-                ret.addAll(existingTmpDocs);
+
+                if (existingTmpDocs==null)
+                {
+                    existingTmpDocs=new ArrayList<>();
+                }
+                List<TemporaryActivityDocument> ret = new ArrayList<>(existingTmpDocs);
 
                 if (am.getObject().getActivityDocuments() == null)
-                    am.getObject().setActivityDocuments(new HashSet<AmpActivityDocument>());
-                Iterator<AmpActivityDocument> it = setModel.getObject().iterator();
+                    am.getObject().setActivityDocuments(new HashSet<>());
 
-                while (it.hasNext()) {
-                    AmpActivityDocument d = (AmpActivityDocument) it
-                            .next();
+                for (AmpActivityDocument d : setModel.getObject()) {
                     //check if marked for delete
                     if (delItems.contains(d)) {
                         for (TemporaryDocument td : existingTmpDocs) {

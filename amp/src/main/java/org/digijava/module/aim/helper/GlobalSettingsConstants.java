@@ -175,6 +175,8 @@ public class GlobalSettingsConstants {
 
     public static final String TRACKING_SITE_URL = "Tracker URL";
 
+    public static final String FOOTER_TEXT = "Footer Text";
+
     public static final String TRACKING_SITE_ID = "Site ID for tracking";
 
     public static final String DEFAULT_ORG_GROUP = "Responsible Organization Default Organization Group";
@@ -278,6 +280,7 @@ public class GlobalSettingsConstants {
     public static final String AMP_DASHBOARD_URL = "AMP Dashboard URL";
     public static final String DONOR_FUNDING_ADM_LEVEL = "Donor Funding Administrative Level";
     public static final String DASHBOARD_CURRENCIES = "Dashboard Currencies";
+        public static final String TRUBUDGET_BULK_IMPORT_USER = "TruBudget Bulk Import User";
 
     public static final String NUMBER_OF_INDICATORS_IN_DASHBOARD = "Number of indicators in M&E Dashboard";
 

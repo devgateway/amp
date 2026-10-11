@@ -121,9 +121,9 @@ module.exports = Backbone.View.extend({
             onEachFeature: updateOuterBounds,
             style: function (feature) {
               // Check if the "NAME" attribute is "extra"
-              var defGISCountry = self.app.data.generalSettings.get('default-gis-country');
-              console.log("Default GIS country",defGISCountry)
-              if (defGISCountry.toLowerCase()!=='ws' && defGISCountry.toLowerCase()!=='zz' && defGISCountry.toLowerCase()!=='gg')
+              var defGISCountry = self.app.data.generalSettings.get('default-gis-country') || '';
+              defGISCountry = defGISCountry.toLowerCase();
+              if (defGISCountry !== 'ws' && defGISCountry !== 'zz' && defGISCountry !== 'gg')
               {
                 feature.properties['BELT']=false;
               }

@@ -35,19 +35,18 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.translator.TranslatorWorker;
 import static org.digijava.module.aim.action.dataimporter.ExcelImporter.processExcelFileInBatches;
 import org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfig;
 import org.digijava.module.aim.action.dataimporter.dbentity.DataImporterConfigValues;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.digijava.module.aim.action.dataimporter.util.ImportedFileUtil;
+import org.digijava.module.aim.action.dataimporter.util.ImporterUtil;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.ConstantsMap;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.isFileContentValid;
 import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.isFileReadable;
@@ -55,12 +54,15 @@ import static org.digijava.module.aim.action.dataimporter.util.ImporterUtil.remo
 
 import org.digijava.module.aim.action.dataimporter.util.ImporterConstants;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.DataImporterForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -81,8 +83,24 @@ import com.opencsv.exceptions.CsvValidationException;
 public class DataImporter extends Action {
     static Logger logger = LoggerFactory.getLogger(DataImporter.class);
 
+    private boolean canAccessDataImporter(HttpServletRequest request) {
+        if ("yes".equals(request.getSession().getAttribute("ampAdmin"))) {
+            return true;
+        }
+        AmpTeamMember current = TeamUtil.getCurrentAmpTeamMember();
+        return current != null
+                && current.getAmpMemberRole() != null
+                && (Boolean.TRUE.equals(current.getAmpMemberRole().getTeamHead())
+                || current.getAmpMemberRole().isApprover());
+    }
+
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        if (!canAccessDataImporter(request)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return null;
+        }
+
         // List of fields - map of original to translated
         Map<String, String> fieldsInfo = getEntityFieldsInfo();
         request.setAttribute("fieldsInfo", fieldsInfo);
@@ -91,6 +109,8 @@ public class DataImporter extends Action {
         request.setAttribute("configNames", configNames);
         List<AmpOrgGroup> orgGroups = DbUtil.getAllOrgGroups();
         request.setAttribute("orgGroups", orgGroups);
+        List<AmpOrganisation> recordingOrganizations = getRecordingOrganizationsForImporter();
+        request.setAttribute("recordingOrganizations", recordingOrganizations);
         request.setAttribute("activityStatuses", getActivityStatuses());
         request.setAttribute("programClassifications", getProgramClassificationNames());
         List<AmpCategoryValueLocations> availableLocations = getAvailableLocations();
@@ -144,7 +164,7 @@ public class DataImporter extends Action {
                         // Excel: return sheet names and columns per sheet for template configuration
                         List<String> sheetNames = new ArrayList<>();
                         Map<String, List<String>> columnsBySheet = new HashMap<>();
-                        try (Workbook workbook = new XSSFWorkbook(fileInputStream)) {
+                        try (Workbook workbook = ImporterUtil.openWorkbookWithStrictFallback(fileInputStream)) {
                             int numberOfSheets = workbook.getNumberOfSheets();
                             for (int i = 0; i < numberOfSheets; i++) {
                                 Sheet sheet = workbook.getSheetAt(i);
@@ -291,8 +311,8 @@ public class DataImporter extends Action {
                 return null;
             }
             List<String> sheetNames = new ArrayList<>();
-            try (InputStream is = dataImporterForm.getDataFile().getInputStream();
-                 Workbook workbook = new XSSFWorkbook(is)) {
+              try (InputStream is = dataImporterForm.getDataFile().getInputStream();
+                  Workbook workbook = ImporterUtil.openWorkbookWithStrictFallback(is)) {
                 int n = workbook.getNumberOfSheets();
                 for (int i = 0; i < n; i++) {
                     sheetNames.add(workbook.getSheetAt(i).getSheetName());
@@ -377,8 +397,10 @@ public class DataImporter extends Action {
                 boolean createMissingOrgGroups = dataImporterForm.isCreateMissingOrgGroups();
                 boolean createMissingPrograms = dataImporterForm.isCreateMissingPrograms();
                 boolean replaceExistingTransactions = dataImporterForm.isReplaceExistingTransactions();
+                boolean replaceExistingLocations = dataImporterForm.isReplaceExistingLocations();
                 Long orgGroupId = dataImporterForm.getOrgGroupId();
                 Long defaultActivityStatusId = dataImporterForm.getDefaultActivityStatusId();
+                Long defaultRecordingOrganizationId = dataImporterForm.getDefaultRecordingOrganizationId();
                 Long defaultLocationId = dataImporterForm.getDefaultLocationId();
                 String defaultProgramClassification = dataImporterForm.getDefaultProgramClassification();
                 logger.info("Internal: "+ isInternal);
@@ -391,8 +413,10 @@ public class DataImporter extends Action {
                 logger.info("Create missing org groups: " + createMissingOrgGroups);
                 logger.info("Create missing programs: " + createMissingPrograms);
                 logger.info("Replace existing transactions: " + replaceExistingTransactions);
+                logger.info("Replace existing locations: " + replaceExistingLocations);
                 logger.info("Org group id: "+ orgGroupId);
                 logger.info("Default activity status id: {}", defaultActivityStatusId);
+                logger.info("Default recording organization id: {}", defaultRecordingOrganizationId);
                 logger.info("Default location id: {}", defaultLocationId);
                 logger.info("Default program classification: {}", defaultProgramClassification);
                 boolean hasGenericOrgGroupMapping = columnPairsToUse.containsValue(ImporterConstants.ORG_GROUP);
@@ -444,15 +468,22 @@ public class DataImporter extends Action {
                     response.setStatus(400);
                     return mapping.findForward("importData");
                 }
+                if (columnPairsToUse.containsValue(ImporterConstants.ACTIVITY_INTERNAL_ID)
+                        && !columnPairsToUse.containsValue(ImporterConstants.RECORDING_ORGANIZATION)
+                        && defaultRecordingOrganizationId == null) {
+                    response.setHeader("errorMessage", "Please select a default recording organization when 'Activity Internal ID' is mapped without 'Recording Organization'.");
+                    response.setStatus(400);
+                    return mapping.findForward("importData");
+                }
                 logger.info("Configuration: {}", columnPairsToUse);
                 try {
                     if ((Objects.equals(request.getParameter("fileType"), "excel") || Objects.equals(request.getParameter("fileType"), "csv"))) {
                         String dataSheetChoice = request.getParameter("dataSheetChoice");
                         String dataSheetName = request.getParameter("dataSheetName");
                         boolean useSpecificSheet = "sheet".equals(dataSheetChoice) && dataSheetName != null && !dataSheetName.trim().isEmpty();
-                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions);
+                        res = processExcelFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, useSpecificSheet ? dataSheetName : null, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultRecordingOrganizationId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
                     } else if ( Objects.equals(request.getParameter("fileType"), "text")) {
-                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions);
+                        res = TxtDataImporter.processTxtFileInBatches(importedFilesRecord, tempFile, request, columnPairsToUse, isInternal, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultRecordingOrganizationId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
                     }
                 } catch (Exception e) {
                     ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
@@ -651,6 +682,9 @@ public class DataImporter extends Action {
         fieldsInfos.add(ImporterConstants.SECONDARY_SECTOR);
         fieldsInfos.add(ImporterConstants.PROJECT_LOCATION);
         fieldsInfos.add(ImporterConstants.PROJECT_START_DATE);
+        fieldsInfos.add(ImporterConstants.PROPOSED_PROJECT_START_DATE);
+        fieldsInfos.add(ImporterConstants.PROPOSED_PROJECT_END_DATE);
+        fieldsInfos.add(ImporterConstants.PROJECT_AGREEMENT_SIGN_DATE);
         fieldsInfos.add(ImporterConstants.PROJECT_END_DATE);
         fieldsInfos.add(ImporterConstants.DONOR_AGENCY);
         fieldsInfos.add(ImporterConstants.EXCHANGE_RATE);
@@ -685,6 +719,8 @@ public class DataImporter extends Action {
         fieldsInfos.add(ImporterConstants.BENEFICIARY_AGENCY);
         fieldsInfos.add(ImporterConstants.PROJECT_STATUS);
         fieldsInfos.add(ImporterConstants.PROCUREMENT_SYSTEM);
+        fieldsInfos.add(ImporterConstants.ACTIVITY_INTERNAL_ID);
+        fieldsInfos.add(ImporterConstants.RECORDING_ORGANIZATION);
         // Indicator columns for M&E import
         fieldsInfos.add(ImporterConstants.INDICATOR_NAME);
         fieldsInfos.add(ImporterConstants.PROGRAM_NAME);
@@ -742,6 +778,33 @@ public class DataImporter extends Action {
                 .map(AmpActivityProgramSettings::getName)
                 .filter(Objects::nonNull)
                 .sorted(String.CASE_INSENSITIVE_ORDER)
+                .collect(Collectors.toList());
+    }
+
+    private List<AmpOrganisation> getRecordingOrganizationsForImporter() {
+        List<AmpOrganisation> organizations = DbUtil.getAmpOrganisations(null);
+        if (organizations == null) {
+            organizations = new ArrayList<>();
+        }
+        logger.info("Found {} recording organizations in cache for importer", organizations.size());
+        if (organizations.isEmpty()) {
+            String queryString = "select org from " + AmpOrganisation.class.getName()
+                    + " org inner join org.orgGrpId grp"
+                    + " where (org.deleted is null or org.deleted = false)"
+                    + " and (grp.deleted is null or grp.deleted = false)";
+            List<?> rawOrganizations = PersistenceManager.getSession().createQuery(queryString).list();
+            organizations = new ArrayList<>();
+            for (Object candidate : rawOrganizations) {
+                if (candidate instanceof AmpOrganisation) {
+                    organizations.add((AmpOrganisation) candidate);
+                }
+            }
+        }
+        logger.info("Found {} recording organizations for importer", organizations.size());
+
+
+        return organizations.stream()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 

@@ -31,8 +31,8 @@ module.exports = BaseControlView.extend({
     //create layer manager
     var self = this;    
 
-    self.app.data.indicators.loadAll().then(function() {  	
-    	
+    self.app.data.indicators.loadAll().then(function() {
+
     	self.addSection(StatisticalLayersConfig.STANDARD);
     	self.addSection(StatisticalLayersConfig.MY_LAYERS);
     	self.addSection(StatisticalLayersConfig.SHARED);
@@ -46,6 +46,13 @@ module.exports = BaseControlView.extend({
   	      self.$('.content', self).append(section.render().el);
   	    });
   	
+	 }, function() {
+	    // indicators failed to load (e.g. backend error): still show the non-indicator sub-sections
+	    _.each(self.subSections, function(SectionView) {
+  	      var section = new SectionView({app: self.app, parent: self});
+  	      self.radioButtonGroup.push(section.collection);
+  	      self.$('.content', self).append(section.render().el);
+  	    });
 	 });     
     
     

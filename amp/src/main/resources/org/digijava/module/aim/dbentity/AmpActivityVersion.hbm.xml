@@ -139,6 +139,8 @@
 		</set>
 
 
+		<!-- AmpCategoryValue rows are shared reference data (statuses, types, etc.), never owned by
+		     one activity version, so this join must not cascade delete to the category value itself. -->
 		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="none">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />

@@ -12,13 +12,11 @@ import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
@@ -46,13 +44,13 @@ public class ExcelImporter {
     private static final int BATCH_SIZE = 1000;
 
     public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal) {
-        return processExcelFileInBatches(importedFilesRecord, file, request, config, isInternal, false, null, false, false, null, false, false, false, false, null, null, null, false, false);
+        return processExcelFileInBatches(importedFilesRecord, file, request, config, isInternal, false, null, false, false, null, false, false, false, false, null, null, null, null, false, false, false);
     }
 
-    public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting, String sheetNameToProcess, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions) {
+    public static int processExcelFileInBatches(ImportedFilesRecord importedFilesRecord, File file, HttpServletRequest request, Map<String, String> config, boolean isInternal, boolean skipExisting, String sheetNameToProcess, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultRecordingOrganizationId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions, boolean replaceExistingLocations) {
         int res = 0;
         ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.IN_PROGRESS);
-        try (Workbook workbook = new XSSFWorkbook(file)) {
+        try (Workbook workbook = ImporterUtil.openWorkbookWithStrictFallback(file)) {
             int numberOfSheets = workbook.getNumberOfSheets();
             logger.info("Number of sheets: {}", numberOfSheets);
 
@@ -66,7 +64,7 @@ public class ExcelImporter {
                 if (isInternal) {
                     addDonorAgencyColumn(sheet, FeaturesUtil.getGlobalSettingValue("Internal Ecowas Donor"));
                 }
-                processSheetInBatches(sheet, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions);
+                processSheetInBatches(sheet, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultRecordingOrganizationId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
             } else {
                 // Process each sheet in the workbook
                 for (int i = 0; i < numberOfSheets; i++) {
@@ -75,7 +73,7 @@ public class ExcelImporter {
                     if (isInternal) {
                         addDonorAgencyColumn(sheet, FeaturesUtil.getGlobalSettingValue("Internal Ecowas Donor"));
                     }
-                    processSheetInBatches(sheet, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions);
+                    processSheetInBatches(sheet, request, config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultRecordingOrganizationId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
                 }
             }
 
@@ -84,7 +82,7 @@ public class ExcelImporter {
         } catch (IOException e) {
             ImportedFileUtil.updateFileStatus(importedFilesRecord, ImportStatus.FAILED);
             logger.error("Error processing Excel file: {}", e.getMessage(), e);
-        } catch (InvalidFormatException | InvalidOperationException e) {
+        } catch (InvalidOperationException e) {
             logger.error("Error processing Excel file: {}", e.getMessage(), e);
         }
         logger.info("Finished processing file record id: {} with status: {}", importedFilesRecord.getId(), importedFilesRecord.getImportStatus());
@@ -119,7 +117,7 @@ public class ExcelImporter {
     }
 
 
-    public static void processSheetInBatches(Sheet sheet, HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions) throws JsonProcessingException {
+    public static void processSheetInBatches(Sheet sheet, HttpServletRequest request,Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultRecordingOrganizationId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions, boolean replaceExistingLocations) throws JsonProcessingException {
         // Get the number of rows in the sheet
         int rowCount = sheet.getPhysicalNumberOfRows();
         logger.info("There are {} rows in sheet {} " , rowCount, sheet.getSheetName());
@@ -141,12 +139,12 @@ public class ExcelImporter {
             }
 
             // Process the batch
-            processBatch(batch, sheet, request,config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions);
+            processBatch(batch, sheet, request,config, importedFilesRecord, skipExisting, createMissingOrgs, createMissingSectors, orgGroupId, createMissingOrgGroups, skipRecordsWithoutTransactions, validateActivities, addDisbursementForCommitment, defaultActivityStatusId, defaultRecordingOrganizationId, defaultLocationId, defaultProgramClassification, createMissingPrograms, replaceExistingTransactions, replaceExistingLocations);
         }
     }
 
 
-    public static void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions) throws JsonProcessingException {
+    public static void processBatch(List<Row> batch,Sheet sheet, HttpServletRequest request, Map<String, String> config, ImportedFilesRecord importedFilesRecord, boolean skipExisting, boolean createMissingOrgs, boolean createMissingSectors, Long orgGroupId, boolean createMissingOrgGroups, boolean skipRecordsWithoutTransactions, boolean validateActivities, boolean addDisbursementForCommitment, Long defaultActivityStatusId, Long defaultRecordingOrganizationId, Long defaultLocationId, String defaultProgramClassification, boolean createMissingPrograms, boolean replaceExistingTransactions, boolean replaceExistingLocations) throws JsonProcessingException {
         // Process the batch of rows
         SessionUtil.extendSessionIfNeeded(request);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
@@ -165,37 +163,29 @@ public class ExcelImporter {
                 OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
                 importDataModel.setCreation_date(now.format(formatter));
 
-                int componentCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.COMPONENT_CODE));
-                String componentCode = componentCodeColumn >= 0 ? getStringValueFromCell(rowRef.getCell(componentCodeColumn),true) : null;
+                String componentCode = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.COMPONENT_CODE);
 
-                int componentNameColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.COMPONENT_NAME));
-                String componentName = componentNameColumn >= 0 ? getStringValueFromCell(rowRef.getCell(componentNameColumn),true): null;
+                String componentName = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.COMPONENT_NAME);
 
-                int donorAgencyCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.DONOR_AGENCY_CODE));
-                String donorAgencyCode = donorAgencyCodeColumn >= 0 ? getStringValueFromCell(rowRef.getCell(donorAgencyCodeColumn),true) : null;
+                String donorAgencyCode = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.DONOR_AGENCY_CODE);
 
-                int responsibleOrgCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.RESPONSIBLE_ORGANIZATION_CODE));
-                String responsibleOrgCode = responsibleOrgCodeColumn >= 0 ? getStringValueFromCell(rowRef.getCell(responsibleOrgCodeColumn),true) : null;
+                String responsibleOrgCode = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.RESPONSIBLE_ORGANIZATION_CODE);
 
-                int primarySubSectorColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PRIMARY_SUBSECTOR));
-                String primarySubSector = primarySubSectorColumn >= 0 ? getStringValueFromCell(rowRef.getCell(primarySubSectorColumn),true) : null;
+                String primarySubSector = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PRIMARY_SUBSECTOR);
 
-                int secondarySubSectorColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.SECONDARY_SUBSECTOR));
-                String secondarySubSector = secondarySubSectorColumn >= 0 ? getStringValueFromCell(rowRef.getCell(secondarySubSectorColumn),true) : null;
+                String secondarySubSector = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.SECONDARY_SUBSECTOR);
 
-                int projectCodeColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PROJECT_CODE));
-                String projectCode = projectCodeColumn >= 0 ? getStringValueFromCell(rowRef.getCell(projectCodeColumn),false) : "";
+                String rawProjectCode = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PROJECT_CODE);
+                final String projectCode = rawProjectCode != null ? rawProjectCode : "";
                 importDataModel.setProject_code(projectCode);
 
-                int projectTitleColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PROJECT_TITLE));
-                String projectTitle = projectTitleColumn >= 0 ? getStringValueFromCell(rowRef.getCell(projectTitleColumn),false) : "";
+                String rawProjectTitle = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PROJECT_TITLE);
+                final String projectTitle = rawProjectTitle != null ? rawProjectTitle : "";
                 importDataModel.setProject_title(projectTitle);
-                int objectiveColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.OBJECTIVE));
-                String objective = objectiveColumn >= 0 ? getStringValueFromCell(rowRef.getCell(objectiveColumn),false) : null;
+                String objective = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.OBJECTIVE);
                 importDataModel.setObjective(objective);
 
-                int projectDescColumn = getColumnIndexByName(sheet, getKey(config, ImporterConstants.PROJECT_DESCRIPTION));
-                String projectDesc = projectDescColumn >= 0 ? getStringValueFromCell(rowRef.getCell(projectDescColumn),false) : null;
+                String projectDesc = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.PROJECT_DESCRIPTION);
                 importDataModel.setDescription(projectDesc);
 
                 String importedOrgGroupName;
@@ -215,6 +205,8 @@ public class ExcelImporter {
                 String executingOrgGroupNames = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.EXECUTING_AGENCY_GROUP);
                 String implementingOrgGroupNames = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.IMPLEMENTING_AGENCY_GROUP);
                 String contractingOrgGroupNames = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.CONTRACTING_AGENCY_GROUP);
+                String activityInternalId = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.ACTIVITY_INTERNAL_ID);
+                String recordingOrganization = ImporterUtil.getCellValueByConfig(rowRef, sheet, config, ImporterConstants.RECORDING_ORGANIZATION);
 
                 // Use holder arrays to capture values from lambda (for effectively final requirement)
                 final Long[] existingActivityIdHolder = new Long[1];  // Store only the ID, not the entity
@@ -271,6 +263,27 @@ public class ExcelImporter {
                                         }
                                         break;
                                     }
+                                    case ImporterConstants.PROJECT_AGREEMENT_SIGN_DATE: {
+                                        String formatted = org.digijava.module.aim.action.dataimporter.util.ImporterUtil.extractDateFromStringCell(cell);
+                                        if (formatted != null) {
+                                            importDataModel.setActual_approval_date(formatted);
+                                        }
+                                        break;
+                                    }
+                                    case ImporterConstants.PROPOSED_PROJECT_START_DATE: {
+                                        String formatted = org.digijava.module.aim.action.dataimporter.util.ImporterUtil.extractDateFromStringCell(cell);
+                                        if (formatted != null) {
+                                            importDataModel.setProposed_start_date(formatted);
+                                        }
+                                        break;
+                                    }
+                                    case ImporterConstants.PROPOSED_PROJECT_END_DATE: {
+                                        String formatted = org.digijava.module.aim.action.dataimporter.util.ImporterUtil.extractDateFromStringCell(cell);
+                                        if (formatted != null) {
+                                            importDataModel.setOriginal_completion_date(formatted);
+                                        }
+                                        break;
+                                    }
                                     case ImporterConstants.PROJECT_END_DATE: {
                                         String formatted = org.digijava.module.aim.action.dataimporter.util.ImporterUtil.extractDateFromStringCell(cell);
                                         if (formatted != null) {
@@ -323,26 +336,26 @@ public class ExcelImporter {
                                                 adjustmentType = parsed.adjustmentType;
                                             }
                                         }
-                                        fundings.addAll(setFundingItemsForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, commitment, disbursement, expenditure, adjustmentType, null, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
+                                        fundings.addAll(setFundingItemsForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, commitment, disbursement, expenditure, adjustmentType, existing, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
                                         break;
                                     }
                                     case ImporterConstants.PLANNED_COMMITMENT:
-                                        fundings.addAll(setFundingItemsForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false,false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, null, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
+                                        fundings.addAll(setFundingItemsForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false,false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, existing, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
                                         break;
                                     case ImporterConstants.PLANNED_DISBURSEMENT:
-                                        fundings.addAll(setFundingItemsForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, null, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
+                                        fundings.addAll(setFundingItemsForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, existing, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
                                         break;
                                     case ImporterConstants.PLANNED_EXPENDITURE:
-                                        fundings.addAll(setFundingItemsForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, null, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
+                                        fundings.addAll(setFundingItemsForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_PLANNED, existing, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
                                         break;
                                     case ImporterConstants.ACTUAL_COMMITMENT:
-                                        fundings.addAll(setFundingItemsForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, null, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
+                                        fundings.addAll(setFundingItemsForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, true, false, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, existing, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
                                         break;
                                     case ImporterConstants.ACTUAL_DISBURSEMENT:
-                                        fundings.addAll(setFundingItemsForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, null, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
+                                        fundings.addAll(setFundingItemsForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, true, false, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, existing, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
                                         break;
                                     case ImporterConstants.ACTUAL_EXPENDITURE:
-                                        fundings.addAll(setFundingItemsForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, null, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
+                                        fundings.addAll(setFundingItemsForExcel(sheet, config, rowRef, entry, importDataModel, session, cell, false, false,true, ImporterConstants.ADJUSTMENT_TYPE_ACTUAL, existing, createMissingOrgs, orgGroupId, importedOrgGroupName, createMissingOrgGroups, addDisbursementForCommitment));
                                         break;
                                     case ImporterConstants.MEASURE_TYPE:
                                         break;
@@ -357,6 +370,8 @@ public class ExcelImporter {
                                     case ImporterConstants.PROJECT_STATUS:
                                         break;
                                     case ImporterConstants.PROCUREMENT_SYSTEM:
+                                    case ImporterConstants.ACTIVITY_INTERNAL_ID:
+                                    case ImporterConstants.RECORDING_ORGANIZATION:
                                         break;
                                     case ImporterConstants.PROGRAM_NAME:
                                         programNamesHolder[0] = getStringValueFromCell(cell, false);
@@ -383,6 +398,9 @@ public class ExcelImporter {
                                 }
                             }
                         }
+                        applyActivityInternalIds(importDataModel, activityInternalId, recordingOrganization,
+                                defaultRecordingOrganizationId, session, createMissingOrgs, orgGroupId,
+                                importedOrgGroupName, createMissingOrgGroups);
                         if (!config.containsValue(ImporterConstants.PROJECT_LOCATION) && defaultLocationId != null) {
                             applyDefaultLocation(importDataModel, defaultLocationId, session);
                         }
@@ -423,7 +441,7 @@ public class ExcelImporter {
                 if (importedProject.getImportStatus() != ImportStatus.SKIPPED) {
                     try {
                         // Pass only the ID, not the entity - importTheData will re-fetch in its own transaction context
-                        activityId = importTheData(importDataModel, null, importedProject, componentName, componentCode, responsibleOrgIdHolder[0], fundings, existingActivityIdHolder[0], validateActivities, replaceExistingTransactions);
+                        activityId = importTheData(importDataModel, null, importedProject, componentName, componentCode, responsibleOrgIdHolder[0], fundings, existingActivityIdHolder[0], validateActivities, replaceExistingTransactions, replaceExistingLocations);
                     } catch (JsonProcessingException e) {
                         throw e;
                     }

@@ -10,7 +10,9 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportStatus;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedFilesRecord;
 import org.digijava.module.aim.action.dataimporter.dbentity.ImportedProject;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ImportProgressForm;
+import org.digijava.module.aim.util.TeamUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -24,8 +26,25 @@ import java.util.Map;
 
 public class ViewImportProgress extends Action {
     private static Logger logger =LoggerFactory.getLogger(ViewImportProgress.class);
+
+    private boolean canAccessDataImporter(HttpServletRequest request) {
+        if ("yes".equals(request.getSession().getAttribute("ampAdmin"))) {
+            return true;
+        }
+        AmpTeamMember current = TeamUtil.getCurrentAmpTeamMember();
+        return current != null
+                && current.getAmpMemberRole() != null
+                && (Boolean.TRUE.equals(current.getAmpMemberRole().getTeamHead())
+                || current.getAmpMemberRole().isApprover());
+    }
+
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        if (!canAccessDataImporter(request)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return null;
+        }
+
         ImportProgressForm importProgressForm = (ImportProgressForm) form;
         logger.info("Params: "+request.getParameterMap());
         request.setAttribute("importedFilesRecords",getAllImportFileRecords());

@@ -121,12 +121,18 @@
         return (name==null || name.length<1);
 	}
 
+	function isValidTruBudgetPassword(password){
+		var regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,16}$/;
+		return regex.test(password);
+	}
+
 
 	function validate(){
         name = document.umAddUserForm.firstNames.value;
         lastname = document.umAddUserForm.lastName.value;
         password = document.umAddUserForm.password.value;
         passwordConfirmation = document.umAddUserForm.passwordConfirmation.value;
+		truBudgetPassword = document.umAddUserForm.truBudgetPassword.value;
         selectedOrgType = document.umAddUserForm.selectedOrgType.value;
         selectedOrgGroup = document.umAddUserForm.selectedOrgGroup.value;
         selectedOrganizationId = document.umAddUserForm.selectedOrganizationId.value;
@@ -190,6 +196,16 @@
 			alert("${translation}");
         	return false;
         }
+        var addModifyTruBudgetUser = document.umAddUserForm.addModifyTruBudgetUser;
+        if(addModifyTruBudgetUser && addModifyTruBudgetUser.checked){
+			if(!isValidTruBudgetPassword(truBudgetPassword)){
+				<c:set var="translation">
+				<digi:trn>TruBudget password must be 8-16 chars and include uppercase, lowercase, number and special character.</digi:trn>
+		    	</c:set>
+				alert("${translation}");
+	        	return false;
+			}
+        }
         if(selectedOrgType=="-1"){
 			<c:set var="translation">
 			<digi:trn key="error.registration.enterorganizationother">Please enter Organization Type</digi:trn>
@@ -221,7 +237,24 @@
 	        $('#notificationEmailRow') [this.checked ? "show" : "hide"]();
 	      });
 
+		$('#trubudgetEnabledForUser').bind("click", function() {
+			toggleTruBudgetFields();
+		});
+
 		$('#notificationEmailRow')[$('#notificationEmailEnabled').is(":checked") ? "show" : "hide"]();
+		toggleTruBudgetFields();
+	}
+
+	function toggleTruBudgetFields() {
+		var enabled = $('#trubudgetEnabledForUser').is(':checked');
+		var addModify = $("input[name='addModifyTruBudgetUser']");
+		if (!enabled) {
+			addModify.prop('checked', false);
+		}
+		addModify.prop('disabled', !enabled);
+		$("input[name='truBudgetUserName']").prop('disabled', !enabled);
+		$("input[name='truBudgetPassword']").prop('disabled', !enabled);
+		$("select[name='selectedTruBudgetIntents']").prop('disabled', !enabled);
 	}
 
 	YAHOOAmp.util.Event.addListener(window, "load", init) ;
@@ -478,6 +511,68 @@
 													</html:select></td>
 
 											</tr>
+											<c:if test="${umAddUserForm.truBudgetEnabled=='true'}">
+											<tr>
+												<td width="3%">&nbsp;</td>
+												<td align=right class=f-names noWrap>
+													<digi:trn key="um:enableTruBudgetUser">Enable TruBudget for user</digi:trn>
+												</td>
+												<td align="left">
+													<html:checkbox property="truBudgetUserEnabled" styleClass="inp-text" styleId="trubudgetEnabledForUser"/>
+												</td>
+											</tr>
+											<tr>
+												<td width="3%">&nbsp;</td>
+												<td align=right class=f-names noWrap>
+													<digi:trn key="um:addModifyTruBudgetUser">Add/Modify TruBudget User</digi:trn>
+												</td>
+												<td align="left">
+													<html:checkbox property="addModifyTruBudgetUser" styleClass="inp-text"/>
+												</td>
+											</tr>
+											<tr>
+												<td width="3%">&nbsp;</td>
+												<td align=right class=f-names noWrap>
+														<%--													<FONT color=red>*</FONT>--%>
+													<digi:trn key="um:truBudgetIntents">TruBudget Permissions </digi:trn></td>
+												<td align="left">
+													<html:select property="selectedTruBudgetIntents" styleClass="inp-text" multiple="true">
+														<c:forEach var="cn"	items="${umAddUserForm.truBudgetIntents}">
+															<html:option value="${cn.truBudgetIntentName}"><c:out value="${cn.truBudgetIntentDisplayName}"></c:out></html:option>
+														</c:forEach>
+													</html:select>
+												</td>
+											</tr>
+											<tr>
+												<td width="3%">&nbsp;</td>
+													<td align=right class=f-names noWrap>
+														<digi:trn key="um:truBudgetUsername">TruBudget Username</digi:trn>
+													</td>
+													<td align="left">
+														<html:text styleId="truBudgetUserName" property="truBudgetUserName" size="20" />
+													</td>
+												</tr>
+												<tr>
+													<td width="3%">&nbsp;</td>
+												<td align=right class=f-names noWrap>
+													<FONT color=red>*</FONT>
+													<digi:trn key="um:truBudgetPassword">Enter TruBudget Password</digi:trn></td>
+												<td align="left">
+													<html:password styleId="userPassword" property="truBudgetPassword"
+																   size="20" autocomplete="new-password" />
+												</td>
+											</tr>
+												<%--											<tr>--%>
+												<%--												<td width="3%">&nbsp;</td>--%>
+												<%--												<td align=right class=f-names noWrap>--%>
+												<%--													<FONT color=red>*</FONT>--%>
+												<%--													<digi:trn key="um:truBudgetPassword">Repeat TruBudget Password</digi:trn></td>--%>
+												<%--												<td align="left">--%>
+												<%--													<html:password styleId="userPassword" property="truBudgetPasswordConfirmation"--%>
+												<%--																   size="20" autocomplete="new-password" />--%>
+												<%--												</td>--%>
+												<%--											</tr>--%>
+											</c:if>
  											<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
 											<tr>
 												<td  width="3%">&nbsp;</td>

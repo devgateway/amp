@@ -42,7 +42,13 @@ module.exports = Backbone.Collection.extend({
       self.url = '/rest/gis/indicators';
       self.fetch({remove: false}).then(function() {
         deferred.resolve();
+      }, function(xhr, textStatus) {
+        console.warn('failed to load indicators:', textStatus, xhr);
+        deferred.reject(xhr, textStatus);
       });
+    }, function(xhr, textStatus) {
+      console.warn('failed to load indicator-layers:', textStatus, xhr);
+      deferred.reject(xhr, textStatus);
     });
 
     return deferred;

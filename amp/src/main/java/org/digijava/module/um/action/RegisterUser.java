@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
@@ -28,8 +29,14 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.um.form.AddUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
+import org.digijava.module.um.util.UmUtil;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import static org.digijava.module.um.util.DbUtil.*;
 
 public class RegisterUser extends Action {
 
@@ -62,6 +69,42 @@ public class RegisterUser extends Action {
             User user = new User(userRegisterForm.getEmail().toLowerCase(),
                     userRegisterForm.getFirstNames(), userRegisterForm
                             .getLastName());
+            String truBudgetUserName = resolveTruBudgetUserName(userRegisterForm.getTruBudgetUserName(), userRegisterForm.getEmail());
+            List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+                user.setTruBudgetEnabled(userRegisterForm.getTruBudgetUserEnabled());
+
+                if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && userRegisterForm.getTruBudgetUserEnabled()) {
+                    if (!isTruBudgetUserNameAvailable(truBudgetUserName, null)) {
+                        userRegisterForm.addError("error.trubudget.usernameExists", "TruBudget username already exists");
+                        return (mapping.getInputForward());
+                    }
+                    user.setTruBudgetUserName(truBudgetUserName);
+                }
+
+                if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")
+                        && userRegisterForm.getTruBudgetUserEnabled()
+                        && userRegisterForm.getAddModifyTruBudgetUser()) {
+                if (!UmUtil.isValidTruBudgetPassword(userRegisterForm.getTruBudgetPassword())) {
+                    userRegisterForm.addError("error.strong.validation",
+                            "TruBudget password must be 8-16 chars and include uppercase, lowercase, number and special character");
+                    return (mapping.getInputForward());
+                }
+                // Use secure master key encryption (no need to store keyGen anymore, but keep for backward compatibility)
+                String keyGen = UmUtil.generateAESKey(128);
+                user.setTruBudgetKeyGen(keyGen);
+                String encryptedTruPassword = UmUtil.encryptTruBudgetPassword(userRegisterForm.getTruBudgetPassword(), user.getEmail());
+                user.setTruBudgetPassword(encryptedTruPassword);
+                String[] intents = userRegisterForm.getSelectedTruBudgetIntents();
+                List<TruBudgetIntent> truBudgetIntents = new ArrayList<>();
+                if (intents != null) {
+                    truBudgetIntents = getTruBudgetIntentsByName(intents);
+                }
+                logger.info("Intents: " + truBudgetIntents);
+
+//            user.getTruBudgetIntents().addAll(new HashSet<>(truBudgetIntents));
+                user.setInitialTruBudgetIntents(new HashSet<>(user.getTruBudgetIntents()));
+                user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
+            }
 
             // set client IP address
             user.setModifyingIP(RequestUtils.getRemoteAddress(request));

@@ -23,6 +23,9 @@ public class LayoutInformation {
     private String trackingUrl;
     
     private String footerText;
+
+    // true when footerText is a full replacement of the whole footer line, not just the credit part
+    private Boolean footerOverride;
     
     private List<LayoutAdminLink> adminLinks;
     
@@ -93,6 +96,14 @@ public class LayoutInformation {
     
     public void setFooterText(String footerText) {
         this.footerText = footerText;
+    }
+
+    public Boolean getFooterOverride() {
+        return footerOverride;
+    }
+
+    public void setFooterOverride(Boolean footerOverride) {
+        this.footerOverride = footerOverride;
     }
     
     public List<LayoutAdminLink> getAdminLinks() {

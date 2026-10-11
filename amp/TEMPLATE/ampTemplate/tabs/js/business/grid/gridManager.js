@@ -34,6 +34,26 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		return '/aim/viewActivityPreview.do~activityId=' + id;
 	}
 
+	function getRowActivityId(grid, rowId) {
+		var activityId = jQuery(grid).jqGrid('getCell', rowId, app.TabsApp.COLUMN_ACTIVITY_ID);
+		// Strip whitespace and non-breaking spaces (\u00A0 / &nbsp;) which hidden jqGrid
+		// cells may contain — they are truthy but not a valid numeric ID.
+		if (activityId) {
+			activityId = String(activityId).replace(/[\s\u00A0]/g, '');
+		}
+		if (!activityId) {
+			try {
+				activityId = jQuery(grid).jqGrid('getCell', rowId, 'Activity Id');
+				if (activityId) {
+					activityId = String(activityId).replace(/[\s\u00A0]/g, '');
+				}
+			} catch (error) {
+				activityId = '';
+			}
+		}
+		return activityId;
+	}
+
 	GridManager.prototype = {
 		constructor : GridManager
 	};
@@ -230,7 +250,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								//set default color and link for rows
 								row = this.rows[iRow];
 								className = row.className;
-								var id = row.cells[1].textContent;
+								var id = getRowActivityId(grid, row.id);
 								var iconedit = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
 									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>";
 								var iconvalidated = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
@@ -358,9 +378,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 										colIndex = i;
 									}
 								});
-                                var newContent = "<a class='preview-cell" + statusClass + "' href='" + getPreviewPageURL(id) + "'>"
-									+ jQuery(row.cells[colIndex]).html() + "</a>";
-								jQuery(row.cells[colIndex]).html(newContent);
+								if (id) {
+									var newContent = "<a class='preview-cell" + statusClass + "' href='" + getPreviewPageURL(id) + "'>"
+										+ jQuery(row.cells[colIndex]).html() + "</a>";
+									jQuery(row.cells[colIndex]).html(newContent);
+								}
 							}
 							
 							TranslationManager.searchAndTranslate();
@@ -545,6 +567,18 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 						row[column.columnName] = element.entityId;
 					}
 				});
+
+				// If AMP ID column is absent from the report the entityId was never extracted
+				// in the loop above. Every leaf element carries entityId regardless of column,
+				// so fall back to the first one we can find.
+				if (row[app.TabsApp.COLUMN_ACTIVITY_ID] === undefined) {
+					jQuery.each(obj.contents, function(hierarchicalName, element) {
+						if (element && element.entityId !== undefined) {
+							row[app.TabsApp.COLUMN_ACTIVITY_ID] = element.entityId;
+							return false; // break
+						}
+					});
+				}
 				
 				// To flatten the tree structure and maintain hierarchies values on every row we add the values from "auxCurrentHierarchiesValues".
 				if (hierarchies.models.length > 0) {

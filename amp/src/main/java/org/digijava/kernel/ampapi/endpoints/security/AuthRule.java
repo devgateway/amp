@@ -26,7 +26,13 @@ public enum AuthRule {
     /** if amp offline user-agent is present in headers check for AMP_OFFLINE. If not, check for other actions */
     AMP_OFFLINE_OPTIONAL,
     /** Current rule: If activity was created in private ws, it can only be access from there **/
-    PUBLIC_VIEW_ACTIVITY;
+    PUBLIC_VIEW_ACTIVITY,
+    /**
+     * Explicitly marks a method as intentionally open to anonymous callers.
+     * Must be used deliberately: a method with no authTypes at all is treated as
+     * {@link #AUTHENTICATED} by default (see {@link org.digijava.kernel.ampapi.endpoints.security.ActionAuthorizer}).
+     */
+    PUBLIC;
     
     @Override
     public String toString() {

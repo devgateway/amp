@@ -109,7 +109,14 @@
 	<!--
 	<http pattern="/esrigis/**" security="none" />
 	 -->
-	<http pattern="/rest/**" security="none" />
+
+	<http pattern="/rest/**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" create-session="stateless">
+		<csrf disabled="true"/>
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<!-- Stateless: SecurityService.storeInSession() manually sets SecurityContextHolder's
+		     Authentication on REST login; without this, SecurityContextPersistenceFilter would
+		     start persisting that token into the HTTP session, which JAX-RS auth never relied on. -->
+	</http>
     <http pattern="/api-docs/**" security="none" />
 
 <!--	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />-->
@@ -224,6 +231,14 @@
     <http pattern="/index.do*"  use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
+
+	<!-- login widget submits credentials here directly (no longer via HTTP Digest challenge-response),
+	     so this must be reachable while anonymous, unlike the catch-all ROLE_AUTHENTICATED chain below -->
+	<http pattern="/aim/postLogin.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<csrf request-matcher-ref="ampWebCsrfRequestMatcher" token-repository-ref="csrfTokenRepository"/>
+	</http>
+
 	<http pattern="/translation/showNewAdvancedTranslation.do*"  use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>
@@ -275,8 +290,9 @@
 		<custom-filter position="LOGOUT_FILTER" ref="logoutFilter" />
 	</http>
 
-	<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"
-				factory-method="getInstance"/>
+	<!-- AMP-SEC-017/054: bcrypt-hashes new/changed passwords; still verifies legacy plaintext
+	     accounts stored before this encoder was introduced (see AmpPasswordEncoder) -->
+	<beans:bean id="passwordEncoder" class="org.digijava.kernel.security.auth.AmpPasswordEncoder"/>
 
 
 	<!-- the authentication manager references the auth service -->

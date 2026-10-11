@@ -7,6 +7,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.ShaCrypt;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.*;
@@ -93,9 +94,10 @@ public final class AmpBackgroundActivitiesUtil {
         // set client IP address
         user.setModifyingIP("0.0.0.0");
 
-        // set password
-        user.setPassword(AMP_USER_PASSWORD);
-        user.setSalt(AMP_USER_PASSWORD);
+        // set password (AMP-SEC-017/054: never store the plaintext password)
+        String hashedPassword = new org.digijava.kernel.security.auth.AmpPasswordEncoder().encode(ShaCrypt.crypt(AMP_USER_PASSWORD).trim());
+        user.setPassword(hashedPassword);
+        user.setSalt(hashedPassword);
 
         // set Website
         user.setUrl("/");

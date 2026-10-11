@@ -25,6 +25,7 @@ package org.digijava.kernel.viewmanager;
 import org.apache.commons.digester.Digester;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.siteconfig.*;
+import org.digijava.kernel.util.XmlSecurityUtils;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -46,6 +47,8 @@ public class RepositoryParser {
         digester.setValidating(false);
         // Workaround Tomcat's issue with ClassLoader
         digester.setUseContextClassLoader(true);
+        // AMP-SEC-025/061: block XXE
+        XmlSecurityUtils.secureDigester(digester);
 
         // Configure digester
         digester.addObjectCreate("config", RepositoryLayout.class);

@@ -68,7 +68,7 @@ public class AmpConfiguration {
     @GET
     @Path("/settings")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "Settings")
+    @ApiMethod(ui = false, id = "Settings", authTypes = AuthRule.PUBLIC)
     @ApiOperation(
             value = "Retrieve general AMP settings",
             notes = "This endpoint provides access to general AMP configuration settings including " +
@@ -83,7 +83,7 @@ public class AmpConfiguration {
     @GET
     @Path("/settings/gis")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "GisSettings")
+    @ApiMethod(id = "GisSettings", authTypes = AuthRule.PUBLIC)
     @ApiOperation("GIS settings")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "GIS settings",
             response = AmpGeneralSettings.class))
@@ -105,7 +105,7 @@ public class AmpConfiguration {
     @GET
     @Path("/amp-offline-version-check")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "version-check")
+    @ApiMethod(ui = false, id = "version-check", authTypes = AuthRule.PUBLIC)
     @ApiOperation(
             value = "Check if AMP Offline App is compatible with current AMP version",
             notes = "This endpoint verifies compatibility between the AMP Offline application and the current AMP server version.\n\n" +
@@ -212,7 +212,7 @@ public class AmpConfiguration {
     @GET
     @Path("global-settings/public")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "public-global-settings")
+    @ApiMethod(ui = false, id = "public-global-settings", authTypes = AuthRule.PUBLIC)
     @ApiOperation(
             value = "Retrieve all public AMP Global Settings",
             notes = "This endpoint provides access to public global configuration settings in the AMP system.\n\n" +

@@ -77,7 +77,7 @@ public class AmpComponentField extends AmpFeaturePanel<Boolean>{
             expeditures.setOutputMarkupPlaceholderTag(true);
             add(expeditures);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); 
         }
     }
 

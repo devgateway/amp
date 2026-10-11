@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
+import org.digijava.kernel.util.XmlSecurityUtils;
 import java.io.*;
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class ExportAndImportTemplates extends DispatchAction {
             Unmarshaller m = jc.createUnmarshaller();
             Messaging item;
             try {
-                item = (Messaging) m.unmarshal(inputStream);
+                item = (Messaging) m.unmarshal(XmlSecurityUtils.secureSource(inputStream));
                 TemplatesList tempList=item.getTemplatesList();
                 if(tempList!=null){
                     List templates=tempList.getTemplate();

@@ -3,6 +3,7 @@ package org.digijava.module.autopatcher.core;
 import org.apache.log4j.Logger;
 import org.digijava.module.autopatcher.exceptions.InvalidPatchRepositoryException;
 import org.digijava.module.autopatcher.schema.Patch;
+import org.digijava.kernel.util.XmlSecurityUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -84,13 +85,13 @@ public class PatcherUtil {
     }
 
     public static Patch getUnmarshalledPatch(File patchFile)
-            throws JAXBException {
+            throws JAXBException, IOException {
         JAXBContext jc = JAXBContext
                 .newInstance("org.digijava.module.autopatcher.schema");
         Unmarshaller m = jc.createUnmarshaller();
         m.setValidating(true);
 
-        Patch p = (Patch) m.unmarshal(patchFile);
+        Patch p = (Patch) m.unmarshal(XmlSecurityUtils.secureSource(patchFile));
         
         return p;
     }

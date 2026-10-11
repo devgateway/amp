@@ -8,6 +8,7 @@ import org.dgfoundation.amp.utils.BoundedList;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceErrors;
 import org.digijava.kernel.util.ResponseUtil;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -29,6 +30,12 @@ public class DownloadFile extends Action {
             javax.servlet.http.HttpServletRequest request,
             javax.servlet.http.HttpServletResponse response)
             throws java.lang.Exception {
+
+        // moduleConfig/contentrepository/module-spring.xml), so it must enforce its own session check here.
+        if (TeamUtil.getCurrentUser() == null) {
+            response.sendError(javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED);
+            return null;
+        }
 
         String nodeUUID = request.getParameter("uuid");
 

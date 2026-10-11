@@ -20,7 +20,8 @@ public class SwaggerAuthorization extends AbstractSwaggerExtension {
     private static final Set<AuthRule> IGNORE_RULES = new TreeSet<>(Arrays.asList(
             AuthRule.AMP_OFFLINE,
             AuthRule.AMP_OFFLINE_OPTIONAL,
-            AuthRule.PUBLIC_VIEW_ACTIVITY));
+            AuthRule.PUBLIC_VIEW_ACTIVITY,
+            AuthRule.PUBLIC));
 
     @Override
     public void decorateOperation(Operation operation, Method method, Iterator<SwaggerExtension> chain) {

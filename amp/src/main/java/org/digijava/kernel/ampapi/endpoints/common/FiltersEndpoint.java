@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiResponses;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.PublicServices;
 import org.digijava.kernel.ampapi.endpoints.filters.*;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.*;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.request.TLSUtils;
@@ -136,7 +137,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/organizations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "organizations", name = "Organizations")
+    @ApiMethod(id = "organizations", name = "Organizations", authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Organizations' filters.",
             notes = "The response contains 2 objects - the list definitions and the values. \n"
                     + "The filter widget should create a tree for each organization type.")
@@ -167,7 +168,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/programs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "programs", name = "Programs")
+    @ApiMethod(id = "programs", name = "Programs", authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Programs' filters.",
             notes = "The response contains 2 objects - the list definitions and the values. \n"
                     + "The filter widget should create a tree for each program settings.")
@@ -197,7 +198,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/sectors")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "sectors", name = "Sectors")
+    @ApiMethod(id = "sectors", name = "Sectors", authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_SECTORS)
     @ApiOperation(value = "Retrieve the data needed for building the 'Sectors' filters.",
             notes = "The response contains 2 objects - the list definitions and the values. \n"
@@ -227,7 +228,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/locations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "locations", name = "Locations")
+    @ApiMethod(id = "locations", name = "Locations", authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_LOCATIONS)
     @ApiOperation(value = "Retrieve the data needed for building the 'Locations' filters.",
             notes = "The response contains 2 objects - the list definitions and the values. \n"
@@ -259,7 +260,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/activityApprovalStatus")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.APPROVAL_STATUS, name = ColumnConstants.APPROVAL_STATUS)
+    @ApiMethod(id = FiltersConstants.APPROVAL_STATUS, name = ColumnConstants.APPROVAL_STATUS, authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.APPROVAL_STATUS,
             visibilityCheck = "hasToShowActivityApprovalStatusFilter")
     @ApiOperation(value = "Retrieve the data needed for building the 'Approval Status' filter.",
@@ -277,7 +278,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/typeOfAssistance/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.TYPE_OF_ASSISTANCE, name = ColumnConstants.TYPE_OF_ASSISTANCE)
+    @ApiMethod(id = FiltersConstants.TYPE_OF_ASSISTANCE, name = ColumnConstants.TYPE_OF_ASSISTANCE, authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.TYPE_OF_ASSISTANCE)
     @ApiOperation(value = "Retrieve the data needed for building the 'Type           of Assistance' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
@@ -294,7 +295,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/modalities/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.MODALITIES, name = ColumnConstants.MODALITIES)
+    @ApiMethod(id = FiltersConstants.MODALITIES, name = ColumnConstants.MODALITIES, authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.MODALITIES)
     @ApiOperation(value = "Retrieve the data needed for building the 'Type           of Assistance' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
@@ -313,7 +314,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/modeOfPayment/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.MODE_OF_PAYMENT, name = ColumnConstants.MODE_OF_PAYMENT)
+    @ApiMethod(id = FiltersConstants.MODE_OF_PAYMENT, name = ColumnConstants.MODE_OF_PAYMENT, authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.MODE_OF_PAYMENT)
     @ApiOperation(value = "Retrieve the data needed for building the 'Mode of Payment' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
@@ -330,7 +331,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/activityStatus/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.STATUS, name = FiltersConstants.ACTIVITY_STATUS_NAME)
+    @ApiMethod(id = FiltersConstants.STATUS, name = FiltersConstants.ACTIVITY_STATUS_NAME, authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Activity Status' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Activity Status' values.")
@@ -358,7 +359,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/activityBudget/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.ACTIVITY_BUDGET, name = FiltersConstants.ACTIVITY_BUDGET_NAME)
+    @ApiMethod(id = FiltersConstants.ACTIVITY_BUDGET, name = FiltersConstants.ACTIVITY_BUDGET_NAME, authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Activity Budget' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Activity Budget' values.")
@@ -375,7 +376,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/procurementSystem/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.PROCUREMENT_SYSTEM, name = FiltersConstants.PROCUREMENT_SYSTEM_NAME)
+    @ApiMethod(id = FiltersConstants.PROCUREMENT_SYSTEM, name = FiltersConstants.PROCUREMENT_SYSTEM_NAME, authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Procurement System' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Procurement System' values.")
@@ -400,7 +401,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/fundingStatus/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.FUNDING_STATUS)
+    @ApiMethod(id = FiltersConstants.FUNDING_STATUS, authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Funding Status' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Funding Status' values.")
@@ -417,7 +418,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/expenditureClass/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.EXPENDITURE_CLASS, name = ColumnConstants.EXPENDITURE_CLASS)
+    @ApiMethod(id = FiltersConstants.EXPENDITURE_CLASS, name = ColumnConstants.EXPENDITURE_CLASS, authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Expenditure Class' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Expenditure Class' values.")
@@ -434,7 +435,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/concessionalityLevel/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.CONCESSIONALITY_LEVEL, name = ColumnConstants.CONCESSIONALITY_LEVEL)
+    @ApiMethod(id = FiltersConstants.CONCESSIONALITY_LEVEL, name = ColumnConstants.CONCESSIONALITY_LEVEL, authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Concessionality Level' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Concessionality Level' values.")
@@ -452,7 +453,8 @@ public class FiltersEndpoint {
     @Path("/performanceAlertLevel")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.PERFORMANCE_ALERT_LEVEL,
-            columns = ColumnConstants.PERFORMANCE_ALERT_LEVEL, name = ColumnConstants.PERFORMANCE_ALERT_LEVEL)
+            columns = ColumnConstants.PERFORMANCE_ALERT_LEVEL, name = ColumnConstants.PERFORMANCE_ALERT_LEVEL,
+            authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Performance Alert Level' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Performance Alert Level' values.")
@@ -469,7 +471,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/financingInstruments/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.FINANCING_INSTRUMENT, name = ColumnConstants.FINANCING_INSTRUMENT)
+    @ApiMethod(id = FiltersConstants.FINANCING_INSTRUMENT, name = ColumnConstants.FINANCING_INSTRUMENT, authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Financing Instrument' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Financing Instrument' values.")
@@ -486,7 +488,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/humanitarianAid/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.HUMANITARIAN_AID, name = ColumnConstants.HUMANITARIAN_AID)
+    @ApiMethod(id = FiltersConstants.HUMANITARIAN_AID, name = ColumnConstants.HUMANITARIAN_AID, authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Humanitarian Aid' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Humanitarian Aid' values.")
@@ -504,7 +506,7 @@ public class FiltersEndpoint {
     @Path("/disasterResponse/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.DISASTER_RESPONSE_MARKER,
-            name = ColumnConstants.DISASTER_RESPONSE_MARKER)
+            name = ColumnConstants.DISASTER_RESPONSE_MARKER, authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Disaster Response Marker' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Disaster Response Marker' values.")
@@ -521,7 +523,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/workspaces")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.TEAM, name = "Workspaces")
+    @ApiMethod(id = FiltersConstants.TEAM, name = "Workspaces", authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Workspaces' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Workspaces' values.")
@@ -539,7 +541,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/computedYear")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.COMPUTED_YEAR, name = ColumnConstants.COMPUTED_YEAR)
+    @ApiMethod(id = FiltersConstants.COMPUTED_YEAR, name = ColumnConstants.COMPUTED_YEAR, authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Computed Year' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Computed Year' values.")
@@ -587,7 +589,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/date/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "date", name = "Date")
+    @ApiMethod(id = "date", name = "Date", authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Date' filter.",
             notes = "This endpoint is used for fetching information about 'Date' filter. "
                     + "The items attribute contains information about the startYear and the endYear.")
@@ -599,7 +601,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/proposedStartDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.PROPOSED_START_DATE, name = ColumnConstants.PROPOSED_START_DATE)
+    @ApiMethod(id = FiltersConstants.PROPOSED_START_DATE, name = ColumnConstants.PROPOSED_START_DATE, authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Generic endpoint for 'Proposed Start Date' filter.", hidden = true,
             notes = "Since the date filters doesn't have possible values, this endpoint returns an empty list.")
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROPOSED_START_DATE,
@@ -611,7 +613,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/actualStartDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.ACTUAL_START_DATE, name = ColumnConstants.ACTUAL_START_DATE)
+    @ApiMethod(id = FiltersConstants.ACTUAL_START_DATE, name = ColumnConstants.ACTUAL_START_DATE, authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ACTUAL_START_DATE,
             fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     @ApiOperation(value = "Generic endpoint for 'Actual Start Date' filter.", hidden = true,
@@ -623,7 +625,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/actualApprovalDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.ACTUAL_APPROVAL_DATE, name = ColumnConstants.ACTUAL_APPROVAL_DATE)
+    @ApiMethod(id = FiltersConstants.ACTUAL_APPROVAL_DATE, name = ColumnConstants.ACTUAL_APPROVAL_DATE, authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ACTUAL_APPROVAL_DATE,
             fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     @ApiOperation(value = "Generic endpoint for 'Actual Approval Date' filter.", hidden = true,
@@ -635,7 +637,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/actualCompletionDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.ACTUAL_COMPLETION_DATE, name = ColumnConstants.ACTUAL_COMPLETION_DATE)
+    @ApiMethod(id = FiltersConstants.ACTUAL_COMPLETION_DATE, name = ColumnConstants.ACTUAL_COMPLETION_DATE, authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ACTUAL_COMPLETION_DATE,
             fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     @ApiOperation(value = "Generic endpoint for 'Actual Completion Date' filter.", hidden = true,
@@ -647,7 +649,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/effectiveFundingDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.EFFECTIVE_FUNDING_DATE, name = ColumnConstants.EFFECTIVE_FUNDING_DATE)
+    @ApiMethod(id = FiltersConstants.EFFECTIVE_FUNDING_DATE, name = ColumnConstants.EFFECTIVE_FUNDING_DATE, authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.EFFECTIVE_FUNDING_DATE,
             fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     @ApiOperation(value = "Generic endpoint for 'Effective Funding Date' filter.", hidden = true,
@@ -659,7 +661,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/finalDateContracting/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.FINAL_DATE_FOR_CONTRACTING, name = ColumnConstants.FINAL_DATE_FOR_CONTRACTING)
+    @ApiMethod(id = FiltersConstants.FINAL_DATE_FOR_CONTRACTING, name = ColumnConstants.FINAL_DATE_FOR_CONTRACTING, authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.FINAL_DATE_FOR_CONTRACTING,
             fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     @ApiOperation(value = "Generic endpoint for 'Final Date for Contracting' filter.", hidden = true,
@@ -671,7 +673,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/fundingClosingDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.FUNDING_CLOSING_DATE, name = ColumnConstants.FUNDING_CLOSING_DATE)
+    @ApiMethod(id = FiltersConstants.FUNDING_CLOSING_DATE, name = ColumnConstants.FUNDING_CLOSING_DATE, authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.FUNDING_CLOSING_DATE,
             fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     @ApiOperation(value = "Generic endpoint for 'Funding Closing Date' filter.", hidden = true,
@@ -683,7 +685,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/issueDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.ISSUE_DATE, name = ColumnConstants.ISSUE_DATE)
+    @ApiMethod(id = FiltersConstants.ISSUE_DATE, name = ColumnConstants.ISSUE_DATE, authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ISSUE_DATE,
             fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     @ApiOperation(value = "Generic endpoint for 'Issue Date' filter.", hidden = true,
@@ -695,7 +697,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/proposedApprovalDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.PROPOSED_APPROVAL_DATE, name = ColumnConstants.PROPOSED_APPROVAL_DATE)
+    @ApiMethod(id = FiltersConstants.PROPOSED_APPROVAL_DATE, name = ColumnConstants.PROPOSED_APPROVAL_DATE, authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROPOSED_APPROVAL_DATE,
             fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     @ApiOperation(value = "Generic endpoint for 'Proposed Approval Date' filter.", hidden = true,
@@ -707,7 +709,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/proposedCompletionDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.PROPOSED_COMPLETION_DATE, name = ColumnConstants.PROPOSED_COMPLETION_DATE)
+    @ApiMethod(id = FiltersConstants.PROPOSED_COMPLETION_DATE, name = ColumnConstants.PROPOSED_COMPLETION_DATE, authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROPOSED_COMPLETION_DATE,
             fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE)
     @ApiOperation(value = "Generic endpoint for 'Proposed Completion Date' filter.", hidden = true,
@@ -726,7 +728,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/pledgesDonors")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "pledges-donors", name = "Pledges Donors")
+    @ApiMethod(id = "pledges-donors", name = "Pledges Donors", authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Pledges Donors' filter.",
             notes = "The response contains 2 objects - the list definitions and the values. \n"
                     + "The filter widget should create a tree for 'Pledges Donors' values.")
@@ -745,7 +747,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/pledgesPrograms")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "pledges-programs", name = "Pledges Programs")
+    @ApiMethod(id = "pledges-programs", name = "Pledges Programs", authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Pledges Programs' filter.",
             notes = "The response contains 2 objects - the list definitions and the values. \n"
                     + "The filter widget should create a tree for each pledge program settings.")
@@ -764,7 +766,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/pledgesSectors")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "pledges-sectors", name = "Pledges Sectors")
+    @ApiMethod(id = "pledges-sectors", name = "Pledges Sectors", authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Pledges Sectors' filter.",
             notes = "The response contains 2 objects - the list definitions and the values. \n"
                     + "The filter widget should create a tree for each pledge sector scheme.")
@@ -784,7 +786,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/pledgesLocations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "pledges-locations", name = "Pledges Locations")
+    @ApiMethod(id = "pledges-locations", name = "Pledges Locations", authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Pledges Locations' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for each country.")
@@ -801,7 +803,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/pledgesStatus/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.STATUS, name = ColumnConstants.PLEDGE_STATUS)
+    @ApiMethod(id = FiltersConstants.STATUS, name = ColumnConstants.PLEDGE_STATUS, authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Pledges Status' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Pledges Status' values.")
@@ -819,7 +821,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/pledgesAidOfModality/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.PLEDGES_AID_MODALITY, name = ColumnConstants.PLEDGES_AID_MODALITY)
+    @ApiMethod(id = FiltersConstants.PLEDGES_AID_MODALITY, name = ColumnConstants.PLEDGES_AID_MODALITY, authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Pledges Aid of Modality' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Pledges Aid of Modality' values.")
@@ -837,7 +839,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/pledgesTypeOfAssistance/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.PLEDGES_TYPE_OF_ASSISTANCE, name = ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE)
+    @ApiMethod(id = FiltersConstants.PLEDGES_TYPE_OF_ASSISTANCE, name = ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Pledges Type of Assistance' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Pledges Type of Assistance' values.")
@@ -850,7 +852,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/pledgesDetailStartDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.PLEDGES_DETAIL_START_DATE, name = ColumnConstants.PLEDGES_DETAIL_START_DATE)
+    @ApiMethod(id = FiltersConstants.PLEDGES_DETAIL_START_DATE, name = ColumnConstants.PLEDGES_DETAIL_START_DATE, authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PLEDGES_DETAIL_START_DATE,
             fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
             componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
@@ -863,7 +865,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/pledgesDetailEndDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = FiltersConstants.PLEDGES_DETAIL_END_DATE, name = ColumnConstants.PLEDGES_DETAIL_END_DATE)
+    @ApiMethod(id = FiltersConstants.PLEDGES_DETAIL_END_DATE, name = ColumnConstants.PLEDGES_DETAIL_END_DATE, authTypes = AuthRule.PUBLIC)
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PLEDGES_DETAIL_END_DATE,
             fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
             componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
@@ -881,7 +883,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/boundaries")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "boundaries", name = "Boundaries")
+    @ApiMethod(id = "boundaries", name = "Boundaries", authTypes = AuthRule.PUBLIC)
     @ApiOperation(value = "Retrieve the data needed for building the 'Boundaries' filter.",
             notes = "The response contains 2 objects - the filter definition and the values. \n"
                     + "The filter widget should create a tree for 'Boundaries' values.")

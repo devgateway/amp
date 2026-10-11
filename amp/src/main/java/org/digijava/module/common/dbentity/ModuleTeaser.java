@@ -7,12 +7,10 @@
 *   This file is part of DiGi project (www.digijava.org).
 *   DiGi is a multi-site portal system written in Java/J2EE.
 *
-*   Confidential and Proprietary, Subject to the Non-Disclosure
-*   Agreement, Version 1.0, between the Development Gateway
-*   Foundation, Inc and the Recipient -- Copyright 2001-2004 Development
-*   Gateway Foundation, Inc.
+*   Copyright 2001-2004 Development Gateway Foundation, Inc.
 *
-*   Unauthorized Disclosure Prohibited.
+*   Licensed under the GNU General Public License version 3; see the repository
+*   LICENSE file for the full terms.
 *
 *************************************************************************/
 

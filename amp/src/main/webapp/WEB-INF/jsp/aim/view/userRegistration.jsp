@@ -223,6 +223,11 @@ Please do not attempt to use the Notification Email as user login.
 <center>
 <div class="reg_form_container">
 <div class="home_sec_title"><digi:trn key="um:accountInfoAboutYou">Account information / about you </digi:trn></div>
+<div class="registration-privacy-notice" style="font-size:12px; line-height:18px; margin:10px auto 14px; max-width:650px; text-align:left; color:#555;">
+  <digi:trn>To create an AMP account, you provide account information such as your name and email address.</digi:trn>
+  <digi:trn>Read the</digi:trn> <a href="/privacy-policy.html"><digi:trn>Privacy Policy</digi:trn></a>
+  <digi:trn>before registering. By submitting this form, you confirm that the information you provide may be used to create and administer your AMP account.</digi:trn>
+</div>
 <digi:instance property="aimUserRegisterForm" />
 <digi:form action="/registerUser.do" method="post" onsubmit="return validateAimUserRegisterForm(this);">
   <html:hidden property="orgType" />

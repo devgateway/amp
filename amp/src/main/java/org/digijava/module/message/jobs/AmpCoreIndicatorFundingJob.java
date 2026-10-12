@@ -17,9 +17,11 @@ import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -162,13 +164,36 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
                 logger.debug("Data sent successfully to amp dashboard. HTTP Response Code: " + responseCode);
             } else {
                 // Handle the error condition (e.g., log an error message)
-                logger.error("Error sending data to amp dashboard. HTTP Response Code: " + responseCode);
+                logger.error("Error sending data to amp dashboard. HTTP Response Code: " + responseCode
+                        + "; reports: " + ampCoreIndicatorCoreData.size()
+                        + "; response body: " + readErrorResponse(connection));
             }
 
             // Close the connection
             connection.disconnect();
         } catch (Exception e) {
             logger.error("Exception raised when sending data to dashboard", e);
+        }
+    }
+
+    static String readErrorResponse(HttpURLConnection connection) throws IOException {
+        InputStream errorStream = connection.getErrorStream();
+        if (errorStream == null) {
+            return "(no response body)";
+        }
+        try (InputStream response = errorStream) {
+            byte[] buffer = new byte[8193];
+            int length = 0;
+            while (length < buffer.length) {
+                int bytesRead = response.read(buffer, length, buffer.length - length);
+                if (bytesRead < 0) {
+                    break;
+                }
+                length += bytesRead;
+            }
+            String body = new String(buffer, 0, Math.min(length, 8192), StandardCharsets.UTF_8)
+                    .replace('\r', ' ').replace('\n', ' ');
+            return body + (length > 8192 ? " [truncated]" : "");
         }
     }
 

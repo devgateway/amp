@@ -143,16 +143,16 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
             // Create a URL object with the server's endpoint URL
             HttpURLConnection connection = getHttpURLConnection(serverUrl);
             // Create a Gson instance with custom serializer and Convert the ampDashboardFunding to JSON using a JSON library (e.g., Gson)
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(CoreIndicatorValueDTO.class, new CoreIndicatorValueDTOSerializer())
-                    .create();
-
-            String jsonData = gson.toJson(ampCoreIndicatorCoreData);
+            String jsonData = serializeReports(ampCoreIndicatorCoreData);
+            byte[] requestBody = jsonData.getBytes(StandardCharsets.UTF_8);
+            logger.info("Sending indicator progress export; method=" + connection.getRequestMethod()
+                    + "; url=" + requestDestination(connection.getURL())
+                    + "; reports=" + ampCoreIndicatorCoreData.size() + "; bytes=" + requestBody.length);
 
             // Get the output stream of the connection
             try (OutputStream os = connection.getOutputStream()) {
                 // Write the JSON data to the output stream
-                os.write(jsonData.getBytes("UTF-8"));
+                os.write(requestBody);
             }
 
             // Get the HTTP response code
@@ -165,7 +165,10 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
             } else {
                 // Handle the error condition (e.g., log an error message)
                 logger.error("Error sending data to amp dashboard. HTTP Response Code: " + responseCode
+                    + "; url=" + requestDestination(connection.getURL())
+                    + "; server=" + connection.getHeaderField("Server")
                         + "; reports: " + ampCoreIndicatorCoreData.size()
+                    + "; bytes=" + requestBody.length
                         + "; response body: " + readErrorResponse(connection));
             }
 
@@ -174,6 +177,18 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
         } catch (Exception e) {
             logger.error("Exception raised when sending data to dashboard", e);
         }
+    }
+
+    static String requestDestination(URL url) {
+        return url.getProtocol() + "://" + url.getHost()
+                + (url.getPort() == -1 ? "" : ":" + url.getPort()) + url.getPath();
+    }
+
+    static String serializeReports(List<CoreIndicatorProgressDTO> reports) {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(CoreIndicatorValueDTO.class, new CoreIndicatorValueDTOSerializer())
+                .create();
+        return gson.toJson(reports);
     }
 
     static String readErrorResponse(HttpURLConnection connection) throws IOException {

@@ -165,6 +165,7 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
             logger.info("Sending indicator progress export; method=" + connection.getRequestMethod()
                     + "; url=" + requestDestination(connection.getURL())
                     + "; reports=" + ampCoreIndicatorCoreData.size() + "; bytes=" + requestBody.length);
+                logger.info("Indicator progress export request JSON: " + jsonData);
 
             // Get the output stream of the connection
             try (OutputStream os = connection.getOutputStream()) {

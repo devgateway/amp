@@ -51,6 +51,18 @@ public class AmpCdipIndicatorFundingJob extends ConnectionCleaningJob implements
         AmpCoreIndicatorFundingJob.sendReportsToServer(reports, serverUrl + "/update-core-indicator-progress");
     }
 
+    private static String senegalLocationsCte() {
+        return "WITH RECURSIVE senegal_locations AS ("
+                + "SELECT id AS location_id, id AS country_id, 'Senegal'::text AS country_name "
+                + "FROM amp_category_value_location WHERE id = ("
+                + "SELECT min(id) FROM amp_category_value_location "
+                + "WHERE upper(trim(coalesce(iso, ''))) IN ('SN', 'SEN') "
+                + "OR lower(trim(location_name)) = 'senegal') "
+                + "UNION SELECT child.id, country.country_id, country.country_name "
+                + "FROM amp_category_value_location child "
+                + "JOIN senegal_locations country ON child.parent_location = country.location_id) ";
+    }
+
     static String buildQuery() {
         String statuses = AmpARFilter.VALIDATED_ACTIVITY_STATUS.stream()
                 .map(status -> "'" + status.getDbName() + "'")
@@ -58,8 +70,9 @@ public class AmpCdipIndicatorFundingJob extends ConnectionCleaningJob implements
         String programCodes = indicatorMap.values().stream()
                 .map(type -> "'" + type.getCoreType().toUpperCase(Locale.ROOT) + "'")
                 .collect(Collectors.joining(","));
-        return "SELECT cv.id AS core_type_id, cv.category_value AS core_type_name, "
-                + "al.location_id AS country_id, cvl.location_name AS country_name, "
+        return senegalLocationsCte()
+            + "SELECT cv.id AS core_type_id, cv.category_value AS core_type_name, "
+            + "country.country_id AS country_id, country.country_name AS country_name, "
                 + "org.amp_org_id AS donor_id, org.name AS donor_name, "
                 + "i.program_id, t.name AS program_name, t.parent_theme_id, "
                 + "ROUND(CAST(SUM(CASE WHEN iv.value_type = 0 THEN iv.value ELSE 0 END) AS NUMERIC), 2) "
@@ -72,7 +85,7 @@ public class AmpCdipIndicatorFundingJob extends ConnectionCleaningJob implements
                 + "JOIN amp_category_value cv ON i.indicators_category = cv.id "
                 + "JOIN amp_activity_location al ON ic.activity_location = al.amp_activity_location_id "
                 + "AND iv.activity_location = al.amp_activity_location_id "
-                + "JOIN amp_category_value_location cvl ON cvl.id = al.location_id "
+                + "JOIN senegal_locations country ON country.location_id = al.location_id "
                 + "JOIN (SELECT DISTINCT activity, organisation FROM amp_org_role WHERE role = 1) oro "
                 + "ON oro.activity = ic.activity_id "
                 + "JOIN amp_organisation org ON oro.organisation = org.amp_org_id "
@@ -82,9 +95,9 @@ public class AmpCdipIndicatorFundingJob extends ConnectionCleaningJob implements
                 + "AND left(i.code, 12) = 'cdip_ndc_sn_' "
                 + "AND t.theme_code IN (" + programCodes + ") "
                 + "AND aa.approval_status IN (" + statuses + ") "
-                + "GROUP BY cv.id, cv.category_value, al.location_id, cvl.location_name, "
+                + "GROUP BY cv.id, cv.category_value, country.country_id, country.country_name, "
                 + "org.amp_org_id, org.name, i.program_id, t.name, t.parent_theme_id "
-                + "ORDER BY cv.id, al.location_id, org.amp_org_id, i.program_id";
+                + "ORDER BY cv.id, country.country_id, org.amp_org_id, i.program_id";
     }
 
     static List<CoreIndicatorProgressDTO> readReports(Connection connection) throws SQLException {

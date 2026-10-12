@@ -53,21 +53,6 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
                         "Quantity of renewable energy consumed annually in MWH", 1000D, 4));
         indicatorMap.put("Number of beneficiaries",
                 new CoreIndicatorTypeDTO("K", "no_beneficiaries", "Number of beneficiaries", 1000D, 5));
-        indicatorMap.put("Land restored or under sustainable management (ha)",
-            new CoreIndicatorTypeDTO("ha", "cdip_ndc_sn_land",
-                "Land restored or under sustainable management (ha)", 1D, 1));
-        indicatorMap.put("People adopting or covered by adaptation measures (persons)",
-            new CoreIndicatorTypeDTO("persons", "cdip_ndc_sn_people",
-                "People adopting or covered by adaptation measures (persons)", 1D, 2));
-        indicatorMap.put("Climate finance committed or mobilized (XOF)",
-            new CoreIndicatorTypeDTO("XOF", "cdip_ndc_sn_finance",
-                "Climate finance committed or mobilized (XOF)", 1D, 3));
-        indicatorMap.put("GHG emissions mitigated (Gg CO2e)",
-            new CoreIndicatorTypeDTO("Gg CO2e", "cdip_ndc_sn_ghg",
-                "GHG emissions mitigated (Gg CO2e)", 1D, 4));
-        indicatorMap.put("Protective works and linear protection (km)",
-            new CoreIndicatorTypeDTO("km", "cdip_ndc_sn_protection",
-                "Protective works and linear protection (km)", 1D, 5));
     }
 
         static String buildQuery() {
@@ -99,6 +84,7 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
         query.append("        WHERE ic.sub_clazz = 'a'  ");
         query.append("        AND iv.value_type IN (0, 1)  ");
         query.append("        AND oro.role = 1  ");
+        query.append("        AND (i.code IS NULL OR left(i.code, 12) <> 'cdip_ndc_sn_')  ");
         String statusQuery = " AND aa.approval_status IN (:statuses) ";
         String placeholders = AmpARFilter.VALIDATED_ACTIVITY_STATUS.stream()
                 .map(status -> "'" + status.getDbName() + "'")

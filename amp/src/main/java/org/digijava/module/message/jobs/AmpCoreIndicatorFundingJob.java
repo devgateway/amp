@@ -85,6 +85,7 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
         query.append("        WHERE ic.sub_clazz = 'a'  ");
         query.append("        AND iv.value_type IN (0, 1)  ");
         query.append("        AND oro.role = 1  ");
+        query.append("        AND (i.code IS NULL OR left(i.code, 12) <> 'cdip_ndc_sn_')  ");
         String statusQuery = " AND aa.approval_status IN (:statuses) ";
         String placeholders = AmpARFilter.VALIDATED_ACTIVITY_STATUS.stream()
                 .map(status -> "'" + status.getDbName() + "'")

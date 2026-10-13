@@ -14,6 +14,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 
 public class AmpCdipIndicatorFundingJob extends ConnectionCleaningJob implements StatefulJob {
 
+    private static final int BATCH_SIZE = 50;
     private static final Map<String, CoreIndicatorTypeDTO> indicatorMap = new LinkedHashMap<>();
 
     static {
@@ -48,7 +50,26 @@ public class AmpCdipIndicatorFundingJob extends ConnectionCleaningJob implements
         List<CoreIndicatorProgressDTO> reports = new ArrayList<>();
         PersistenceManager.getSession().doWork(connection -> reports.addAll(readReports(connection)));
         String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_CORE_INDICATOR_URL);
-        AmpCoreIndicatorFundingJob.sendReportsToServer(reports, serverUrl + "/update-core-indicator-progress");
+        try {
+            sendReportsInBatches(reports, serverUrl + "/update-core-indicator-progress");
+        } catch (IOException exception) {
+            throw new JobExecutionException("CDIP indicator batch export failed", exception);
+        }
+    }
+
+    static void sendReportsInBatches(List<CoreIndicatorProgressDTO> reports, String serverUrl) throws IOException {
+        int batchCount = Math.max(1, (reports.size() + BATCH_SIZE - 1) / BATCH_SIZE);
+        for (int batchIndex = 0; batchIndex < batchCount; batchIndex++) {
+            int start = batchIndex * BATCH_SIZE;
+            int end = Math.min(start + BATCH_SIZE, reports.size());
+            boolean clearExisting = batchIndex == 0;
+            boolean finalBatch = batchIndex == batchCount - 1;
+            AmpCoreIndicatorFundingJob.logger.info("Sending CDIP indicator batch " + (batchIndex + 1)
+                    + "/" + batchCount + "; reports=" + (end - start)
+                    + "; clearExisting=" + clearExisting + "; finalBatch=" + finalBatch);
+            AmpCoreIndicatorFundingJob.sendReportBatch(reports.subList(start, end), serverUrl,
+                    clearExisting, finalBatch);
+        }
     }
 
     private static String senegalLocationsCte() {

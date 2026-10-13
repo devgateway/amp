@@ -26,7 +26,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,43 +142,47 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
 
     public static void sendReportsToServer(List<CoreIndicatorProgressDTO> ampCoreIndicatorCoreData, String serverUrl) {
         try {
-            // Create a URL object with the server's endpoint URL
-            HttpURLConnection connection = getHttpURLConnection(serverUrl);
-            // Create a Gson instance with custom serializer and Convert the ampDashboardFunding to JSON using a JSON library (e.g., Gson)
+            postReports(ampCoreIndicatorCoreData, serverUrl);
+        } catch (Exception e) {
+            logger.error("Exception raised when sending data to dashboard", e);
+        }
+    }
+
+    static void sendReportBatch(List<CoreIndicatorProgressDTO> reports, String serverUrl,
+            boolean clearExisting, boolean finalBatch) throws IOException {
+        String separator = serverUrl.contains("?") ? "&" : "?";
+        postReports(reports, serverUrl + separator + "clearExisting=" + clearExisting + "&finalBatch=" + finalBatch);
+    }
+
+    private static void postReports(List<CoreIndicatorProgressDTO> ampCoreIndicatorCoreData, String serverUrl)
+            throws IOException {
+        HttpURLConnection connection = getHttpURLConnection(serverUrl);
+        try {
             String jsonData = serializeReports(ampCoreIndicatorCoreData);
             byte[] requestBody = jsonData.getBytes(StandardCharsets.UTF_8);
             logger.info("Sending indicator progress export; method=" + connection.getRequestMethod()
                     + "; url=" + requestDestination(connection.getURL())
                     + "; reports=" + ampCoreIndicatorCoreData.size() + "; bytes=" + requestBody.length);
-                logger.info("Indicator progress export request JSON: " + jsonData);
+            logger.info("Indicator progress export request JSON: " + jsonData);
 
-            // Get the output stream of the connection
             try (OutputStream os = connection.getOutputStream()) {
-                // Write the JSON data to the output stream
                 os.write(requestBody);
             }
 
-            // Get the HTTP response code
             int responseCode = connection.getResponseCode();
-
-            // Check if the request was successful (e.g., HTTP 200 OK)
-            if (responseCode == 200) {
-                // The data has been successfully sent to the server
-                logger.debug("Data sent successfully to amp dashboard. HTTP Response Code: " + responseCode);
-            } else {
-                // Handle the error condition (e.g., log an error message)
-                logger.error("Error sending data to amp dashboard. HTTP Response Code: " + responseCode
-                    + "; url=" + requestDestination(connection.getURL())
-                    + "; server=" + connection.getHeaderField("Server")
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                String message = "Error sending data to amp dashboard. HTTP Response Code: " + responseCode
+                        + "; url=" + requestDestination(connection.getURL())
+                        + "; server=" + connection.getHeaderField("Server")
                         + "; reports: " + ampCoreIndicatorCoreData.size()
-                    + "; bytes=" + requestBody.length
-                        + "; response body: " + readErrorResponse(connection));
+                        + "; bytes=" + requestBody.length
+                        + "; response body: " + readErrorResponse(connection);
+                logger.error(message);
+                throw new IOException(message);
             }
-
-            // Close the connection
+            logger.debug("Data sent successfully to amp dashboard. HTTP Response Code: " + responseCode);
+        } finally {
             connection.disconnect();
-        } catch (Exception e) {
-            logger.error("Exception raised when sending data to dashboard", e);
         }
     }
 
@@ -222,17 +225,9 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
 
         // Open a connection to the server
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        String indicatorCoreServerUsername = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_CORE_INDICATOR_USERNAME);
-        String indicatorCoreServerPassword = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_CORE_INDICATOR_PASSWORD);
-
-
-        // Encode username and password
-        String auth = indicatorCoreServerUsername + ":" + indicatorCoreServerPassword; // Replace with actual username and password
-        String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
-        String authHeaderValue = "Basic " + encodedAuth;
-
-        // Set the Authorization header
-        //connection.setRequestProperty("Authorization", authHeaderValue);
+        connection.setConnectTimeout(30000);
+        connection.setReadTimeout(60000);
+        connection.setInstanceFollowRedirects(false);
 
         // Set the HTTP request method to POST
         connection.setRequestMethod("POST");

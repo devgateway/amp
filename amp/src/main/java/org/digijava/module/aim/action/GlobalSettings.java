@@ -145,6 +145,11 @@ public class GlobalSettings extends Action {
         gsForm.setGsfCol(col);
         for (AmpGlobalSettings ampGS:col)
         {
+            if (GlobalSettingsConstants.AMP_DASHBOARD_CORE_INDICATOR_CATEGORIES.equals(ampGS.getGlobalSettingsName())) {
+                String selectedCategories = ampGS.getGlobalSettingsValue();
+                ampGS.setListOfValues(selectedCategories == null || selectedCategories.isEmpty()
+                        ? new String[0] : selectedCategories.split(";"));
+            }
             //TODO: Add a new field to identify fields that need multiselect activated.
             if ((ampGS.getGlobalSettingsValue() != null) && (ampGS.getGlobalSettingsValue().indexOf(";") != -1))
             {

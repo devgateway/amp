@@ -24,7 +24,7 @@
                 INSERT INTO amp_global_settings
                     (id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable)
                 SELECT nextval('amp_global_settings_seq'), 'AMP Dashboard Core Indicator Categories',
-                    coalesce((SELECT string_agg(id::text, ';' ORDER BY id)
+                    coalesce((SELECT string_agg(id::text, chr(59) ORDER BY id)
                         FROM v_g_core_indicator_categories
                         WHERE value IN ('Hectares of land under restoration', 'Tonnes of Co2EQ sequestered',
                             'No of employment opportunities', 'Quantity of renewable energy consumed annually in MWH',

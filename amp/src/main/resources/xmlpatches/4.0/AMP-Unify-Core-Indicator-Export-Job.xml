@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd">
+    <keyword>Job Manager</keyword>
+    <author>brianbrix</author>
+    <description>Migrate CDIP schedules to the country-independent core exporter. Stop all AMP nodes before applying; review categories before resuming migrated triggers.</description>
+    <apply>
+        <script>
+            <lang delimiter=";;;" type="postgres"><![CDATA[
+                LOCK TABLE amp_quartz_job_class, qrtz_job_details, qrtz_triggers
+                    IN SHARE ROW EXCLUSIVE MODE;;;
+
+                UPDATE qrtz_triggers SET trigger_state = 'PAUSED'
+                WHERE trigger_state IN ('WAITING', 'ACQUIRED', 'BLOCKED', 'PAUSED_BLOCKED')
+                    AND (job_name, job_group) IN (
+                        SELECT job_name, job_group FROM qrtz_job_details
+                        WHERE job_class_name = 'org.digijava.module.message.jobs.AmpCdipIndicatorFundingJob'
+                    );;;
+
+                UPDATE qrtz_job_details
+                SET job_class_name = 'org.digijava.module.message.jobs.AmpCoreIndicatorFundingJob'
+                WHERE job_class_name = 'org.digijava.module.message.jobs.AmpCdipIndicatorFundingJob';;;
+
+                UPDATE amp_quartz_job_class
+                SET jc_class_fullname = 'org.digijava.module.message.jobs.AmpCoreIndicatorFundingJob',
+                    jc_name = 'Core indicator dashboard export'
+                WHERE jc_class_fullname = 'org.digijava.module.message.jobs.AmpCdipIndicatorFundingJob'
+                    AND NOT EXISTS (SELECT 1 FROM amp_quartz_job_class
+                        WHERE jc_class_fullname = 'org.digijava.module.message.jobs.AmpCoreIndicatorFundingJob');;;
+
+                DELETE FROM amp_quartz_job_class
+                WHERE jc_class_fullname = 'org.digijava.module.message.jobs.AmpCdipIndicatorFundingJob';;;
+
+                UPDATE amp_quartz_job_class SET jc_name = 'Core indicator dashboard export'
+                WHERE jc_class_fullname = 'org.digijava.module.message.jobs.AmpCoreIndicatorFundingJob';;;
+
+                SELECT setval('amp_quartz_job_class_seq', greatest(
+                    (SELECT coalesce(max(jc_id), 0) FROM amp_quartz_job_class),
+                    (SELECT last_value FROM amp_quartz_job_class_seq), 1), true);;;
+
+                INSERT INTO amp_quartz_job_class (jc_id, jc_name, jc_class_fullname)
+                SELECT nextval('amp_quartz_job_class_seq'), 'Core indicator dashboard export',
+                    'org.digijava.module.message.jobs.AmpCoreIndicatorFundingJob'
+                WHERE NOT EXISTS (SELECT 1 FROM amp_quartz_job_class
+                    WHERE jc_class_fullname = 'org.digijava.module.message.jobs.AmpCoreIndicatorFundingJob');;;
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

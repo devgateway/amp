@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements StatefulJob {
@@ -244,15 +245,13 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
 
     static void sendReportsInBatches(List<CoreIndicatorProgressDTO> reports, String serverUrl) throws IOException {
         int batchCount = Math.max(1, (reports.size() + BATCH_SIZE - 1) / BATCH_SIZE);
+        UUID uploadId = UUID.randomUUID();
         for (int batchIndex = 0; batchIndex < batchCount; batchIndex++) {
             int start = batchIndex * BATCH_SIZE;
             int end = Math.min(start + BATCH_SIZE, reports.size());
-            boolean clearExisting = batchIndex == 0;
-            boolean finalBatch = batchIndex == batchCount - 1;
             logger.info("Sending core indicator batch " + (batchIndex + 1) + "/" + batchCount
-                    + "; reports=" + (end - start) + "; clearExisting=" + clearExisting
-                    + "; finalBatch=" + finalBatch);
-            sendReportBatch(reports.subList(start, end), serverUrl, clearExisting, finalBatch);
+                + "; reports=" + (end - start) + "; uploadId=" + uploadId);
+            sendReportBatch(reports.subList(start, end), serverUrl, uploadId, batchIndex, batchCount);
         }
     }
 
@@ -265,9 +264,13 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
     }
 
     static void sendReportBatch(List<CoreIndicatorProgressDTO> reports, String serverUrl,
-            boolean clearExisting, boolean finalBatch) throws IOException {
-        String separator = serverUrl.contains("?") ? "&" : "?";
-        postReports(reports, serverUrl + separator + "clearExisting=" + clearExisting + "&finalBatch=" + finalBatch);
+            UUID uploadId, int batchIndex, int batchCount) throws IOException {
+        URL endpoint = new URL(serverUrl);
+        String query = endpoint.getQuery();
+        String batchPath = endpoint.getPath() + "/uploads/" + uploadId + "/batches/" + batchIndex;
+        URL batchUrl = new URL(endpoint, batchPath + "?"
+                + (query == null || query.isEmpty() ? "" : query + "&") + "batchCount=" + batchCount);
+        postReports(reports, batchUrl.toExternalForm());
     }
 
     private static void postReports(List<CoreIndicatorProgressDTO> ampCoreIndicatorCoreData, String serverUrl)

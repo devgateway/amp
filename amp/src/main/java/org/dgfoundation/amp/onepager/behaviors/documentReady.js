@@ -217,11 +217,17 @@ function switchTabs(lastIndex) {
 			base : "//ajax.googleapis.com/ajax/libs/yui/2.9.0/build/",
 			require : [ "tabview" ],
 			onSuccess : function() {
+				if (!document.getElementById("fundingTabs")) {
+					return;
+				}
 				var myFundingTabs = new YAHOO.widget.TabView("fundingTabs");
+				var tabs = myFundingTabs.get('tabs') || [];
+				if (tabs.length === 0) {
+					return;
+				}
 				if (lastIndex == -1) {// if its -1 we go the the last one
-					var newIndex = myFundingTabs.get('tabs').length - 1;
 					myFundingTabs
-							.selectTab(myFundingTabs.get('tabs').length - 1);
+							.selectTab(tabs.length - 1);
 				} else {
 					if (lastIndex >= 0) { // if its grater or equals than 0 we
 											// focus on that tab
@@ -231,7 +237,7 @@ function switchTabs(lastIndex) {
 								".collapsable").first().show();
 					} else {
 						// if no index is provided we focuse on the first tab
-						if (myFundingTabs.get('tabs').length > 0) {
+						if (tabs.length > 0) {
 							myFundingTabs.selectTab(0);
 						}
 					}
@@ -250,11 +256,17 @@ function indicatorTabs(lastIndex) {
 			base : "//ajax.googleapis.com/ajax/libs/yui/2.9.0/build/",
 			require : [ "tabview" ],
 			onSuccess : function() {
+				if (!document.getElementById("indicatorTabs")) {
+					return;
+				}
 				var myFundingTabs = new YAHOO.widget.TabView("indicatorTabs");
+				var tabs = myFundingTabs.get('tabs') || [];
+				if (tabs.length === 0) {
+					return;
+				}
 				if (lastIndex == -1) {// if its -1 we go the the last one
-					var newIndex = myFundingTabs.get('tabs').length - 1;
 					myFundingTabs
-						.selectTab(myFundingTabs.get('tabs').length - 1);
+						.selectTab(tabs.length - 1);
 				} else {
 					if (lastIndex >= 0) { // if its grater or equals than 0 we
 						// focus on that tab
@@ -264,7 +276,7 @@ function indicatorTabs(lastIndex) {
 							".collapsable").first().show();
 					} else {
 						// if no index is provided we focuse on the first tab
-						if (myFundingTabs.get('tabs').length > 0) {
+						if (tabs.length > 0) {
 							myFundingTabs.selectTab(0);
 						}
 					}

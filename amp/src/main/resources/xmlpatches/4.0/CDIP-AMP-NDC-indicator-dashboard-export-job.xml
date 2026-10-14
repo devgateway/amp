@@ -22,7 +22,10 @@
                        'org.digijava.module.message.jobs.AmpCdipIndicatorFundingJob'
                 WHERE NOT EXISTS (
                     SELECT 1 FROM amp_quartz_job_class
-                    WHERE jc_class_fullname = 'org.digijava.module.message.jobs.AmpCdipIndicatorFundingJob'
+                    WHERE jc_class_fullname IN (
+                        'org.digijava.module.message.jobs.AmpCdipIndicatorFundingJob',
+                        'org.digijava.module.message.jobs.AmpCoreIndicatorFundingJob'
+                    )
                 );
             </lang>
         </script>

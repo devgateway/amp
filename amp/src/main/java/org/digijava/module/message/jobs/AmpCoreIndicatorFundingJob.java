@@ -180,7 +180,8 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
         List<CoreIndicatorProgressDTO> resp = new ArrayList<>();
         PersistenceManager.getSession().doWork(connection -> resp.addAll(readReports(connection, categoryIds, countryId)));
         try {
-            sendReportsInBatches(resp, serverUrl + "/update-core-indicator-progress");
+            sendReportsInBatches(resp, (serverUrl.endsWith("/") ? serverUrl.substring(0, serverUrl.length() - 1) : serverUrl)
+                    + "/update-core-indicator-progress");
         } catch (IOException exception) {
             throw new JobExecutionException("Core indicator batch export failed", exception);
         }

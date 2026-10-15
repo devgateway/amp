@@ -143,7 +143,41 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
     }
 
     @Override
+    public boolean shouldExecuteInTransaction() {
+        return false;
+    }
+
+    @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
+        ExportSnapshot snapshot;
+        try {
+            snapshot = PersistenceManager.supplyInTransaction(() -> {
+                try {
+                    return readExportSnapshot();
+                } catch (JobExecutionException exception) {
+                    throw new IllegalStateException(exception);
+                }
+            });
+        } catch (RuntimeException exception) {
+            if (exception.getCause() instanceof JobExecutionException) {
+                throw (JobExecutionException) exception.getCause();
+            }
+            throw new JobExecutionException("Cannot read core indicator export snapshot", exception);
+        }
+        if (snapshot == null) {
+            return;
+        }
+        try {
+            String serverUrl = snapshot.serverUrl;
+            sendReportsInBatches(snapshot.reports,
+                    (serverUrl.endsWith("/") ? serverUrl.substring(0, serverUrl.length() - 1) : serverUrl)
+                            + "/update-core-indicator-progress");
+        } catch (IOException exception) {
+            throw new JobExecutionException("Core indicator batch export failed", exception);
+        }
+    }
+
+    private ExportSnapshot readExportSnapshot() throws JobExecutionException {
         List<Long> categoryIds;
         try {
             categoryIds = parseCategoryIds(FeaturesUtil.getGlobalSettingValue(
@@ -153,7 +187,7 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
         }
         if (categoryIds.isEmpty()) {
             logger.warn("Core indicator export skipped: no indicator categories selected in Global Settings");
-            return;
+            return null;
         }
         List<?> activeCategoryIds = PersistenceManager.getSession().createNativeQuery(
             "SELECT cv.id FROM amp_category_value cv "
@@ -179,11 +213,16 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
         logger.info("Core indicator export default country location ID: " + countryId);
         List<CoreIndicatorProgressDTO> resp = new ArrayList<>();
         PersistenceManager.getSession().doWork(connection -> resp.addAll(readReports(connection, categoryIds, countryId)));
-        try {
-            sendReportsInBatches(resp, (serverUrl.endsWith("/") ? serverUrl.substring(0, serverUrl.length() - 1) : serverUrl)
-                    + "/update-core-indicator-progress");
-        } catch (IOException exception) {
-            throw new JobExecutionException("Core indicator batch export failed", exception);
+        return new ExportSnapshot(serverUrl, resp);
+    }
+
+    private static final class ExportSnapshot {
+        private final String serverUrl;
+        private final List<CoreIndicatorProgressDTO> reports;
+
+        private ExportSnapshot(String serverUrl, List<CoreIndicatorProgressDTO> reports) {
+            this.serverUrl = serverUrl;
+            this.reports = reports;
         }
     }
 

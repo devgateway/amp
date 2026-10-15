@@ -95,7 +95,7 @@ public class FileUploadBehavior extends Behavior {
             }
         };
         response.render(JavaScriptHeaderItem.forReference(
-                new TextTemplateResourceReference(FileUploadBehavior.class, "FileUploadBehavior.js", variablesModel), String.valueOf(System.currentTimeMillis()), true));
+            new TextTemplateResourceReference(FileUploadBehavior.class, "FileUploadBehavior.js", "application/javascript", "UTF-8", variablesModel), String.valueOf(System.currentTimeMillis()), true));
         response.render(OnLoadHeaderItem.forScript("setupFileUpload('#" + markupId + "', '" + uploadUrl + "', '" + PARAM_NAME + "');"));
     }
 

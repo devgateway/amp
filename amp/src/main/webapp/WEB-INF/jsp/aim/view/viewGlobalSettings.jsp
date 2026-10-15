@@ -112,10 +112,23 @@ function validateCustomFields(form) {
 }
 
 function isRequired(form){
+	if (form.globalSettingsName && form.globalSettingsName.value == '<%=GlobalSettingsConstants.AMP_DASHBOARD_CORE_INDICATOR_CATEGORIES%>') {
+		return false;
+	}
 	if( form.globalSettingsNameTranslated.id=="gstv_Public_Portal_URL" ) {
 		return $("#gstv_Public_Portal").parent().find(".inp-text").val() == "true";
 	}
 	return true;
+}
+
+function updateCoreIndicatorCategories(selectElement) {
+	var selectedCategories = [];
+	for (var optionIndex = 0; optionIndex < selectElement.options.length; optionIndex++) {
+		if (selectElement.options[optionIndex].selected) {
+			selectedCategories.push(selectElement.options[optionIndex].value);
+		}
+	}
+	selectElement.form.gsfValue.value = selectedCategories.join(';');
 }
 
 function boolean_field_changed(sel)
@@ -395,6 +408,14 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 												String gsType = globalSett.getGlobalSettingsPossibleValues();
 											  %>
 
+											  <% if (GlobalSettingsConstants.AMP_DASHBOARD_CORE_INDICATOR_CATEGORIES.equals(globalSett.getGlobalSettingsName())) { %>
+											  <html:hidden property="gsfValue" value='<%=globalSett.getGlobalSettingsValue() == null ? "" : globalSett.getGlobalSettingsValue()%>'/>
+											  <html:select property="listOfValues" name="globalSett" multiple="true" size="8" styleClass="inp-text" style="width: 100%; max-width: 750px;" onchange="updateCoreIndicatorCategories(this)">
+												  <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
+													  <html:option value="${global.key}"><c:out value="${global.value}"/></html:option>
+												  </logic:iterate>
+											  </html:select>
+											  <% } else { %>
 
 			                                  <logic:notEmpty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
 
@@ -796,6 +817,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                      	</c:otherwise>
 			                                      	</c:choose>
 			                                    </logic:empty>
+											<% } %>
 			                                   </td>
 											</digi:form>
 			                            </tr>

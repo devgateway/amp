@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../schemas/xmlpatcher.xsd ">
+    <keyword>Job Manager</keyword>
+    <keyword>CDIP NDC indicator dashboard export</keyword>
+    <author>brianbrix</author>
+    <description>Register the CDIP NDC export job;</description>
+    <trigger type="all">
+        <condition type="entryInTableMissing" tablename="amp_quartz_job_class"
+                   columnname="jc_class_fullname" columnvalue="org.digijava.module.message.jobs.AmpCdipIndicatorFundingJob" />
+    </trigger>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                SELECT setval('amp_quartz_job_class_seq',
+                    greatest(coalesce((SELECT max(jc_id) FROM amp_quartz_job_class), 0),
+                             (SELECT last_value FROM amp_quartz_job_class_seq), 1), true);
+
+                INSERT INTO amp_quartz_job_class (jc_id, jc_name, jc_class_fullname)
+                SELECT nextval('amp_quartz_job_class_seq'), 'CDIP NDC indicator dashboard export',
+                       'org.digijava.module.message.jobs.AmpCdipIndicatorFundingJob'
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM amp_quartz_job_class
+                    WHERE jc_class_fullname IN (
+                        'org.digijava.module.message.jobs.AmpCdipIndicatorFundingJob',
+                        'org.digijava.module.message.jobs.AmpCoreIndicatorFundingJob'
+                    )
+                );
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

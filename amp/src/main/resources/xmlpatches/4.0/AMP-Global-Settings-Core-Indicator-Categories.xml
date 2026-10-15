@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../schemas/xmlpatcher.xsd">
+    <jira>AMP-DASHBOARD-CORE-INDICATOR-CATEGORIES</jira>
+    <author>brianbrix</author>
+    <description>Configure core indicator export categories in Global Settings</description>
+    <apply>
+        <script>
+            <lang delimiter=";;;" type="postgres"><![CDATA[
+                CREATE OR REPLACE VIEW v_g_core_indicator_categories AS
+                SELECT category.id, category.category_value AS value
+                FROM amp_category_value category
+                JOIN amp_category_class category_class ON category_class.id = category.amp_category_class_id
+                WHERE category_class.keyname = 'indicator_category' AND NOT coalesce(category.deleted, false)
+                ORDER BY category.category_value, category.id;;;
+
+                LOCK TABLE amp_global_settings IN SHARE ROW EXCLUSIVE MODE;;;
+                SELECT setval('amp_global_settings_seq', greatest(
+                    (SELECT coalesce(max(id), 0) FROM amp_global_settings),
+                    (SELECT last_value FROM amp_global_settings_seq), 1), true);;;
+
+                INSERT INTO amp_global_settings
+                    (id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable)
+                SELECT nextval('amp_global_settings_seq'), 'AMP Dashboard Core Indicator Categories',
+                    coalesce((SELECT string_agg(id::text, chr(59) ORDER BY id)
+                        FROM v_g_core_indicator_categories
+                        WHERE value IN ('Hectares of land under restoration', 'Tonnes of Co2EQ sequestered',
+                            'No of employment opportunities', 'Quantity of renewable energy consumed annually in MWH',
+                            'Number of beneficiaries')), ''),
+                    'v_g_core_indicator_categories',
+                    'Indicator categories exported by the core indicator job. An empty selection disables the export.',
+                    'general', false
+                WHERE NOT EXISTS (SELECT 1 FROM amp_global_settings
+                    WHERE settingsname = 'AMP Dashboard Core Indicator Categories');;;
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -3,16 +3,16 @@
  */
 package org.digijava.kernel.restclient;
 
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.JerseyClientBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.apache.log4j.Logger;
+import org.springframework.http.HttpEntity;
+
 import java.util.*;
 
 public class RestClient {
@@ -20,21 +20,19 @@ public class RestClient {
         JSON
     }
 
-    protected static final Logger logger = LoggerFactory.getLogger(RestClient.class);
+    protected static final Logger logger = Logger.getLogger(RestClient.class);
 
-    protected static Map<Type, Client> existingClients = new TreeMap<>();
-    protected static Map<Client, String> clientsMediaType = new HashMap<>();
+    protected static final Map<Type, Client> existingClients = new TreeMap<>();
+    protected static final Map<Client, String> clientsMediaType = new HashMap<>();
 
-    protected WebTarget webTarget;
-    protected String mediaType;
+    protected final Client client;
+    protected final String mediaType;
 
     public static synchronized RestClient getInstance(Type type) {
         if (!existingClients.containsKey(type)) {
-            ClientConfig config = new ClientConfig();
-            Client client = JerseyClientBuilder.newBuilder()
-                    .withConfig(config)
-                    .build();
+            Client client;
             if (Objects.requireNonNull(type) == Type.JSON) {
+                client = ClientBuilder.newClient();
                 clientsMediaType.put(client, MediaType.APPLICATION_JSON);
             } else {
                 throw new RuntimeException("Rest client not implemented for " + type + " type.");
@@ -45,33 +43,55 @@ public class RestClient {
     }
 
     private RestClient(Client client) {
-        this.webTarget = client.target("");
+        this.client = client;
         this.mediaType = clientsMediaType.get(client);
     }
 
-    /**
-     * Executes a GET request
-     *
-     * @param endpointURL REST Endpoint
-     * @param queryParams (optional) query parameters, multiple values allowed per parameter
-     * @return JSON string
-     */
     public String requestGET(String endpointURL, Map<String, List<String>> queryParams) {
-        WebTarget target = webTarget.path(endpointURL);
+        WebTarget webTarget = client.target(endpointURL);
 
-        // Build query parameters
-        for (Map.Entry<String, List<String>> entry : queryParams.entrySet()) {
-            String paramName = entry.getKey();
-            List<String> paramValues = entry.getValue();
-            for (String paramValue : paramValues) {
-                target = target.queryParam(paramName, paramValue);
+        if (queryParams != null) {
+            for (Map.Entry<String, List<String>> entry : queryParams.entrySet()) {
+                for (String value : entry.getValue()) {
+                    webTarget = webTarget.queryParam(entry.getKey(), value);
+                }
             }
         }
 
-        Invocation.Builder builder = target.request(mediaType);
+        Builder builder = webTarget.request().accept(mediaType);
         Response response = builder.get();
-        String info = String.format("[HTTP %d] GET %s", response.getStatus(), target.getUri());
+
+        String info = String.format("[HTTP %d] GET %s", response.getStatus(), webTarget.getUri());
         logger.debug(info);
-        return response.getEntity().toString();
+
+        String result = response.readEntity(String.class);
+        response.close(); // Always close Response in Jersey 2.x
+
+        return result;
+    }
+
+    public Response requestPOST(String endpointURL, HttpEntity<Map<String, Object>> requestBody) {
+        WebTarget webTarget = client.target(endpointURL);
+        Builder builder = webTarget.request().accept(mediaType);
+
+        if (requestBody != null) {
+            for (String headerName : requestBody.getHeaders().keySet()) {
+                for (String headerValue : Objects.requireNonNull(requestBody.getHeaders().get(headerName))) {
+                    builder.header(headerName, headerValue);
+                }
+            }
+        }
+
+        Entity<?> entity = Entity.entity(
+                requestBody != null ? requestBody.getBody() : null,
+                mediaType
+        );
+
+        Response response = builder.post(entity);
+
+        String info = String.format("[HTTP %d] POST %s", response.getStatus(), webTarget.getUri());
+        logger.debug(info);
+
+        return response;
     }
 }

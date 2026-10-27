@@ -21,4 +21,13 @@ public final class PublicServices {
                 .entity(entity)
                 .build();
     }
+    public static Response buildBadRequestResponseWithOriginHeaders(Object entity) {
+        return Response
+                .status(Response.Status.BAD_REQUEST)
+                .header(ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                .header(ACCESS_CONTROL_ALLOW_HEADERS, "*")
+                .header(ACCESS_CONTROL_ALLOW_METHODS, "*")
+                .entity(entity)
+                .build();
+    }
 }

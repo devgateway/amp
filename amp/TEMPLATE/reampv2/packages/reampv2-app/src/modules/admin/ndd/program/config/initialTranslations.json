@@ -20,7 +20,7 @@
   "amp.admin.ndd.program:add-new": "Add New",
   "amp.admin.ndd.program:button-save-all-edits": "Save all edits",
   "amp.admin.ndd.program:button-revert-all-edits": "Revert all changes",
-  "amp.admin.ndd.program:insert-data": "(insert data to the new field)",
+  "amp.admin.ndd.program:insert-data": "(add a new row)",
   "amp.admin.ndd.program:click-save": "Click the Save icon to save the added data row",
   "amp.admin.ndd.program:confirm-remove-row": "Are you sure you want to remove this mapping? (remember to click Save All button to confirm your changes).",
   "amp.admin.ndd.program:validation_error_1": "Error: Can't save changes until all programs have been selected.",

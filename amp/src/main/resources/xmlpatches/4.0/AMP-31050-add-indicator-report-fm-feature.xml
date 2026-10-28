@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../schemas/xmlpatcher.xsd ">
+    <jira>AMP-31050</jira>
+    <keyword>Indicator Report</keyword>
+    <author>brianbrix</author>
+    <description>Add the Indicator Report feature and enable it in the default visibility template.</description>
+    <apply>
+        <script>
+            <lang delimiter="@" type="postgres"><![CDATA[
+                DO $patch$
+                DECLARE
+                    report_types_id bigint;
+                    indicator_report_id bigint;
+                    default_template_id bigint;
+                BEGIN
+                    BEGIN
+                        SELECT id INTO STRICT report_types_id
+                        FROM amp_modules_visibility
+                        WHERE name = 'Report Types';
+                    EXCEPTION
+                        WHEN no_data_found OR too_many_rows THEN
+                            RAISE EXCEPTION 'Expected exactly one Report Types visibility module';
+                    END;
+
+                    BEGIN
+                        SELECT t.id INTO STRICT default_template_id
+                        FROM amp_global_settings s
+                        JOIN amp_templates_visibility t ON t.id = CAST(s.settingsvalue AS bigint)
+                        WHERE s.settingsname = 'Visibility Template';
+                    EXCEPTION
+                        WHEN no_data_found OR too_many_rows THEN
+                            RAISE EXCEPTION 'Expected exactly one valid default Visibility Template';
+                    END;
+
+                    BEGIN
+                        SELECT id INTO STRICT indicator_report_id
+                        FROM amp_features_visibility
+                        WHERE name = 'Indicator Report' AND parent = report_types_id;
+                    EXCEPTION
+                        WHEN no_data_found THEN
+                            INSERT INTO amp_features_visibility (id, name, haslevel, parent)
+                            VALUES (nextval('amp_features_visibility_seq'), 'Indicator Report', false, report_types_id)
+                            RETURNING id INTO indicator_report_id;
+                        WHEN too_many_rows THEN
+                            RAISE EXCEPTION 'Multiple Indicator Report features exist under Report Types';
+                    END;
+
+                    INSERT INTO amp_features_templates (template, feature)
+                    SELECT default_template_id, indicator_report_id
+                    WHERE NOT EXISTS (
+                        SELECT 1 FROM amp_features_templates
+                        WHERE template = default_template_id AND feature = indicator_report_id
+                    );
+                END
+                $patch$@
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

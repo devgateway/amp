@@ -36,22 +36,8 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 
 	function getRowActivityId(grid, rowId) {
 		var activityId = jQuery(grid).jqGrid('getCell', rowId, app.TabsApp.COLUMN_ACTIVITY_ID);
-		// Strip whitespace and non-breaking spaces (\u00A0 / &nbsp;) which hidden jqGrid
-		// cells may contain — they are truthy but not a valid numeric ID.
-		if (activityId) {
-			activityId = String(activityId).replace(/[\s\u00A0]/g, '');
-		}
-		if (!activityId) {
-			try {
-				activityId = jQuery(grid).jqGrid('getCell', rowId, 'Activity Id');
-				if (activityId) {
-					activityId = String(activityId).replace(/[\s\u00A0]/g, '');
-				}
-			} catch (error) {
-				activityId = '';
-			}
-		}
-		return activityId;
+		activityId = activityId ? String(activityId).replace(/(?:[\s\u00A0]|&nbsp;)/gi, '') : '';
+		return /^[1-9]\d*$/.test(activityId) ? activityId : '';
 	}
 
 	GridManager.prototype = {
@@ -251,11 +237,14 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								row = this.rows[iRow];
 								className = row.className;
 								var id = getRowActivityId(grid, row.id);
-								var iconedit = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
-									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>";
-								var iconvalidated = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
-									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/validate.png'/></a>";
-								var link = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id + "'>";
+								if (!id) {
+									console.warn('Cannot create activity links for a report row without a valid activity ID', row.id);
+								}
+								var iconedit = id ? "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
+									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>" : '';
+								var iconvalidated = id ? "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
+									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/validate.png'/></a>" : '';
+								var link = id ? "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id + "'>" : '';
 								
 								
 								row.className = className + ' status_1';
@@ -568,16 +557,9 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 					}
 				});
 
-				// If AMP ID column is absent from the report the entityId was never extracted
-				// in the loop above. Every leaf element carries entityId regardless of column,
-				// so fall back to the first one we can find.
-				if (row[app.TabsApp.COLUMN_ACTIVITY_ID] === undefined) {
-					jQuery.each(obj.contents, function(hierarchicalName, element) {
-						if (element && element.entityId !== undefined) {
-							row[app.TabsApp.COLUMN_ACTIVITY_ID] = element.entityId;
-							return false; // break
-						}
-					});
+				// A leaf owner identifies the activity, unlike individual cell entity IDs.
+				if (obj.owner && obj.owner.columnName === '##LEAF##' && obj.owner.id > 0) {
+					row[app.TabsApp.COLUMN_ACTIVITY_ID] = obj.owner.id;
 				}
 				
 				// To flatten the tree structure and maintain hierarchies values on every row we add the values from "auxCurrentHierarchiesValues".

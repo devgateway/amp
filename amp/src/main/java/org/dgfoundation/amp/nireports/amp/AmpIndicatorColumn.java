@@ -138,6 +138,7 @@ public class AmpIndicatorColumn extends AmpAmountColumn {
             // It is only present in v_ni_indicator_funding; for other funding views it is
             // absent and will be placed in ignoredColumns, so no read is attempted.
             new ImmutablePair<>(MetaCategory.CHILD_CATEGORY_VALUE_ID, "child_category_value_id"),
+            new ImmutablePair<>(MetaCategory.THIRD_CATEGORY_VALUE_ID, "third_category_value_id"),
             new ImmutablePair<>(MetaCategory.INDICATOR_ID, "me_indicator_id"),
             new ImmutablePair<>(MetaCategory.OUTPUT_ID, "output_id"),
             new ImmutablePair<>(MetaCategory.OUTCOME_ID, "outcome_id")

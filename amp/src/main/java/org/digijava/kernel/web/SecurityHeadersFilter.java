@@ -64,13 +64,16 @@ public class SecurityHeadersFilter implements Filter {
      */
     private static final String CSP_VALUE =
             "default-src 'self'; "
-            + "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
-            + "style-src 'self' 'unsafe-inline'; "
-            + "img-src 'self' data: blob:; "
-            + "font-src 'self' data:; "
-            + "connect-src 'self'; "
+            + "base-uri 'self'; "
+            + "object-src 'none'; "
+            + "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://ajax.googleapis.com https://cdn.datatables.net https://cdnjs.cloudflare.com; "
+            + "style-src 'self' 'unsafe-inline' https:; "
+            + "img-src 'self' data: blob: https:; "
+            + "font-src 'self' data: https:; "
+            + "connect-src 'self' http: https: ws: wss:; "
             + "frame-ancestors 'self'; "
-            + "object-src 'none';";
+            + "frame-src 'self' https: blob:; "
+            + "worker-src 'self' blob:;";
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

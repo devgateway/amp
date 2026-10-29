@@ -22,17 +22,16 @@
                 DROP VIEW IF EXISTS v_indicator_disaggregation_level_2;
                 CREATE VIEW v_indicator_disaggregation_level_2 AS
                 SELECT DISTINCT con.activity_id AS amp_activity_id,
-                    category.category_value AS name,
-                    category.id AS category_value_id,
+                    COALESCE(category.category_value, '') AS name,
+                    COALESCE(category.id, -999999999) AS category_value_id,
                     ind.indicator_id AS me_indicator_id,
                     theme.amp_theme_id AS me_npo_id
                 FROM amp_indicator_connection con
                 JOIN amp_indicator ind ON ind.indicator_id = con.indicator_id
                 JOIN amp_indicator_disaggregation_values value ON ind.indicator_id = value.indicator_id
-                JOIN amp_indicator_global_value base ON value.base_value_id = base.id
-                JOIN amp_category_value category ON category.id = value.third_category_id
+                LEFT JOIN amp_category_value category ON category.id = value.third_category_id
                 LEFT JOIN amp_theme theme ON ind.program_id = theme.amp_theme_id
-                WHERE con.activity_id IS NOT NULL AND base.type = 2
+                WHERE con.activity_id IS NOT NULL
                 ORDER BY con.activity_id;
             </lang>
         </script>

@@ -167,7 +167,7 @@ public class IndicatorMeasureBehaviour implements Behaviour<NiAmountCell> {
      *       {@link MetaCategory#INDICATOR_PROGRAM_ID}.</li>
      * </ul>
      */
-    private MetaCategory resolveMetaCategory(NiDimensionUsage dimUsage) {
+    MetaCategory resolveMetaCategory(NiDimensionUsage dimUsage) {
         if (dimUsage == AmpReportsSchema.INDICATOR_DISAGG_DIM_USG) {
             return CATEGORY_VALUE_ID;
         } else if (dimUsage == AmpReportsSchema.INDICATOR_DISAGG_LEVEL_1_DIM_USG) {

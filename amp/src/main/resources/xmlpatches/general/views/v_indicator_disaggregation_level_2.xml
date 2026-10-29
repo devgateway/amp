@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../../../schemas/xmlpatcher.xsd ">
+    <jira>AMP-31226</jira>
+    <keyword>Views</keyword>
+    <author>AMP</author>
+    <description>Recreate the third indicator disaggregation dimension view.</description>
+    <trigger type="all">
+        <condition type="custom">
+            <script returnVar="val">
+                <lang type="sql">
+                    SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+                </lang>
+            </script>
+            <test>val.equalsIgnoreCase("true")</test>
+        </condition>
+    </trigger>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                DROP VIEW IF EXISTS v_indicator_disaggregation_level_2;
+                CREATE VIEW v_indicator_disaggregation_level_2 AS
+                SELECT DISTINCT con.activity_id AS amp_activity_id,
+                    category.category_value AS name,
+                    category.id AS category_value_id,
+                    ind.indicator_id AS me_indicator_id,
+                    theme.amp_theme_id AS me_npo_id
+                FROM amp_indicator_connection con
+                JOIN amp_indicator ind ON ind.indicator_id = con.indicator_id
+                JOIN amp_indicator_disaggregation_values value ON ind.indicator_id = value.indicator_id
+                JOIN amp_indicator_global_value base ON value.base_value_id = base.id
+                JOIN amp_category_value category ON category.id = value.third_category_id
+                LEFT JOIN amp_theme theme ON ind.program_id = theme.amp_theme_id
+                WHERE con.activity_id IS NOT NULL AND base.type = 2
+                ORDER BY con.activity_id;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

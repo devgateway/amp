@@ -36,6 +36,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 import static org.dgfoundation.amp.nireports.amp.MetaCategory.CATEGORY_VALUE_ID;
 import static org.dgfoundation.amp.nireports.amp.MetaCategory.CHILD_CATEGORY_VALUE_ID;
+import static org.dgfoundation.amp.nireports.amp.MetaCategory.THIRD_CATEGORY_VALUE_ID;
 import static org.dgfoundation.amp.nireports.amp.MetaCategory.INDICATOR_ID;
 import static org.dgfoundation.amp.nireports.amp.MetaCategory.INDICATOR_PROGRAM_ID;
 
@@ -173,6 +174,8 @@ public class IndicatorMeasureBehaviour implements Behaviour<NiAmountCell> {
             // Level 1 (child) disaggregation category — stored separately from Level 0
             // so that both can be used as hierarchies simultaneously without conflicts.
             return CHILD_CATEGORY_VALUE_ID;
+        } else if (dimUsage == AmpReportsSchema.INDICATOR_DISAGG_LEVEL_2_DIM_USG) {
+            return THIRD_CATEGORY_VALUE_ID;
         } else if (dimUsage == AmpReportsSchema.INDICATOR_DIM_USG) {
             return INDICATOR_ID;
         }

@@ -33,6 +33,7 @@ public enum MetaCategory {
      * {@code amp_indicator_disaggregation_values}. NULL when no child category is assigned.
      */
     CHILD_CATEGORY_VALUE_ID("child_category_value_id"),
+    THIRD_CATEGORY_VALUE_ID("third_category_value_id"),
     INDICATOR_ID("me_indicator_id"),
     OUTPUT_ID("output_id"),
     OUTCOME_ID("outcome_id");

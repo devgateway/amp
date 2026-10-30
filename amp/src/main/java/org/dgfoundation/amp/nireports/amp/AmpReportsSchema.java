@@ -249,6 +249,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     public final static LevelColumn INDICATOR_DISAGG_LEVEL_1_COLUMN =
             INDICATOR_DISAGG_LEVEL_1_DIM_USG.getLevelColumn(CategoriesDimension.LEVEL_CAT_VALUE);
 
+    public final static NiDimensionUsage INDICATOR_DISAGG_LEVEL_2_DIM_USG =
+            catsDimension.getDimensionUsage("Indicator Disaggregation Third Category");
+    public final static LevelColumn INDICATOR_DISAGG_LEVEL_2_COLUMN =
+            INDICATOR_DISAGG_LEVEL_2_DIM_USG.getLevelColumn(CategoriesDimension.LEVEL_CAT_VALUE);
+
     // the organisation-based NiDimensionUsage's
     public final static NiDimensionUsage DONOR_DIM_USG = orgsDimension.getDimensionUsage(Constants.FUNDING_AGENCY);
     public final static NiDimensionUsage IA_DIM_USG = orgsDimension.getDimensionUsage(Constants.IMPLEMENTING_AGENCY);
@@ -414,6 +419,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             // (catsDimension-backed, distinct instance name from Level 0), so funding cells are tagged
             // with the child disaggregation category coordinate independently from the parent (Level 0).
             .put(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_1, "child_category_value_id")
+            .put(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_2, "third_category_value_id")
             .build());
 
     /**
@@ -827,6 +833,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         // on aidv.child_category_id, and its own INDICATOR_DISAGG_LEVEL_1_COLUMN so filtering by
         // Level 1 is fully independent from Level 0.
         indicator_disaggregation_level1_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_1, "v_indicator_disaggregation_level_1", INDICATOR_DISAGG_LEVEL_1_COLUMN);
+        indicator_disaggregation_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_2,
+                "v_indicator_disaggregation_level_2", INDICATOR_DISAGG_LEVEL_2_COLUMN);
 
         // indicator_degenerate_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_BASE_VALUE, "v_indicator_disaggregation_basevalue", indicatorsDimension);
         // indicator_degenerate_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_TARGET_VALUE, "v_indicator_disaggregation_targetvalue", indicatorsDimension);

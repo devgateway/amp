@@ -31,6 +31,7 @@
 				t.amp_theme_id  AS program_id,
 				NULL::integer AS category_value_id,
 				NULL::integer AS child_category_value_id,
+				NULL::bigint AS third_category_value_id,
 				ind.output_id,
 				ind.outcome_id
 				from amp_indicator i
@@ -52,6 +53,7 @@
 				t.amp_theme_id           AS program_id,
 				NULL::integer AS category_value_id,
 				NULL::integer AS child_category_value_id,
+				NULL::bigint AS third_category_value_id,
 				ind.output_id,
 				ind.outcome_id
 				from amp_indicator i
@@ -61,6 +63,15 @@
 				LEFT JOIN amp_theme t ON ind.program_id = t.amp_theme_id
 				LEFT JOIN amp_theme t2 ON t.parent_theme_id = t2.amp_theme_id
 				join amp_indicator_values iv ON ic.id = iv.ind_connect_id
+				WHERE NOT EXISTS (
+				    SELECT 1 FROM amp_indicator_disaggregation_values disagg
+				    WHERE disagg.indicator_id = ic.indicator_id
+				      AND (disagg.base_value_id = aigv.id OR disagg.target_value_id = aigv.id)
+				)
+				AND NOT EXISTS (
+				    SELECT 1 FROM amp_disagg_actual_values actual
+				    WHERE actual.global_value_id = aigv.id
+				)
 
 				UNION ALL
 
@@ -75,6 +86,7 @@
 				t.amp_theme_id           AS program_id,
 				acv.id             AS category_value_id,
 				aidv.child_category_id AS child_category_value_id,
+				aidv.third_category_id AS third_category_value_id,
 				ind.output_id,
 				ind.outcome_id
 				FROM amp_indicator_connection con
@@ -99,6 +111,7 @@
 				t.amp_theme_id           AS program_id,
 				acv.id             AS category_value_id,
 				aidv.child_category_id AS child_category_value_id,
+				aidv.third_category_id AS third_category_value_id,
 				ind.output_id,
 				ind.outcome_id
 				FROM amp_indicator_connection con
@@ -109,6 +122,33 @@
 				LEFT JOIN amp_theme t ON ind.program_id = t.amp_theme_id
 				join amp_indicator_values iv ON con.id = iv.ind_connect_id
 				WHERE con.activity_id IS NOT NULL
+
+				UNION ALL
+
+				/* Locationless actuals remain visible for each linked activity. */
+				SELECT con.activity_id AS amp_activity_id,
+				aigv.original_value AS value,
+				aigv.type AS value_type,
+				aigv.original_value_date AS value_date,
+				ind.indicator_id AS me_indicator_id,
+				t.amp_theme_id AS program_id,
+				aidv.parent_category_id AS category_value_id,
+				aidv.child_category_id AS child_category_value_id,
+				aidv.third_category_id AS third_category_value_id,
+				ind.output_id,
+				ind.outcome_id
+				FROM amp_indicator_disaggregation_values aidv
+				JOIN amp_indicator ind ON ind.indicator_id = aidv.indicator_id
+				JOIN amp_disagg_actual_values actual ON actual.disagg_value_id = aidv.id
+				JOIN amp_indicator_global_value aigv ON aigv.id = actual.global_value_id
+				JOIN (
+				    SELECT DISTINCT indicator_id, activity_id FROM amp_indicator_connection
+				    WHERE sub_clazz = 'a' AND activity_id IS NOT NULL
+				) con ON con.indicator_id = aidv.indicator_id
+				LEFT JOIN amp_activity_location location ON location.amp_activity_location_id = aigv.activity_location
+				LEFT JOIN amp_theme t ON t.amp_theme_id = ind.program_id
+				WHERE aigv.type = 1
+				  AND (aigv.activity_location IS NULL OR location.amp_activity_id = con.activity_id)
 				order by amp_activity_id, me_indicator_id, value_type, value;
         	</lang>
 		</script>

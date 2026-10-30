@@ -41,7 +41,9 @@ import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.*;
 import org.hibernate.query.Query;
+import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
+import org.hibernate.type.ObjectType;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;

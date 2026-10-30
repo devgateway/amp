@@ -24,6 +24,8 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -170,6 +172,12 @@ public class IndicatorManagerService {
     public MEIndicatorDTO createMEIndicator(final MEIndicatorDTO indicatorRequest) {
         Session session = PersistenceManager.getSession();
         AmpIndicator indicator = new AmpIndicator();
+        validateDisaggregationCriteriaCount(indicatorRequest.getDisaggregation());
+        validateThirdDimensionUpdate(Collections.emptySet(), indicatorRequest.getDisaggregationValues(),
+                indicatorRequest.getDisaggregation() != null
+                        && indicatorRequest.getDisaggregation().stream().filter(Objects::nonNull).distinct().count() > 2);
+        validateThirdDimensionOptions(indicatorRequest.getDisaggregation(), indicatorRequest.getDisaggregationValues(),
+                session);
         validateYear(indicatorRequest);
         //TODO see why the following line was commented out
         //validateNameProgramSectorUnique(name, indicatorRequest, session);
@@ -295,6 +303,7 @@ public class IndicatorManagerService {
                     AmpCategoryValue childCat = (AmpCategoryValue) session.get(AmpCategoryValue.class, dto.getChildCategoryId());
                     disaggValue.setChildCategory(childCat);
                 }
+                disaggValue.setThirdCategory(resolveThirdCategory(dto.getThirdCategoryId(), session));
                 if (dto.getBaseValue() != null) {
                     disaggValue.setBaseValue(dto.getBaseValue());
                     disaggValue.getBaseValue().setType(AmpIndicatorGlobalValue.BASE);
@@ -451,6 +460,20 @@ public class IndicatorManagerService {
         Session session = PersistenceManager.getSession();
         AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorId);
         if (indicator != null) {
+            validateDisaggregationCriteriaCount(indRequest.getDisaggregation());
+            List<Long> existingCriteria = indicator.getDisaggregation() == null ? new ArrayList<>()
+                    : indicator.getDisaggregation().stream().map(AmpCategoryValue::getId).distinct()
+                            .collect(Collectors.toList());
+            List<Long> submittedCriteria = indRequest.getDisaggregation() == null ? new ArrayList<>()
+                    : indRequest.getDisaggregation().stream().filter(Objects::nonNull).distinct()
+                            .collect(Collectors.toList());
+            if (existingCriteria.size() > 2 && !submittedCriteria.containsAll(existingCriteria)) {
+                throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(
+                        "Disaggregation criteria cannot be removed while a third criterion is in use."));
+            }
+            validateThirdDimensionUpdate(indicator.getDisaggregationValues(), indRequest.getDisaggregationValues(),
+                    existingCriteria.size() > 2 || submittedCriteria.size() > 2);
+            validateThirdDimensionOptions(indRequest.getDisaggregation(), indRequest.getDisaggregationValues(), session);
             if (!indicator.getName().equals(indRequest.getName())) {
                 validateIndicatorName(indRequest.getName(), session);
             }
@@ -621,13 +644,128 @@ public class IndicatorManagerService {
                 .orElse(null);
     }
 
-    private boolean sameDisaggregationCategories(AmpIndicatorDisaggregationValue existing,
-                                                 AmpIndicatorDisaggregationValueDto dto) {
-        return Objects.equals(getCategoryId(existing.getParentCategory()), dto.getParentCategoryId())
-                && Objects.equals(getCategoryId(existing.getChildCategory()), dto.getChildCategoryId());
+    static void validateThirdDimensionUpdate(Set<AmpIndicatorDisaggregationValue> existingValues,
+                                      Set<AmpIndicatorDisaggregationValueDto> submittedValues,
+                                      boolean hasThirdCriterion) {
+        if (existingValues == null || submittedValues == null) {
+            return;
+        }
+        boolean usesThirdDimension = hasThirdCriterion
+                || existingValues.stream().anyMatch(value -> value.getThirdCategory() != null)
+                || submittedValues.stream().anyMatch(value -> value.getThirdCategoryId() != null);
+        if (!usesThirdDimension) {
+            return;
+        }
+        Set<Long> submittedIds = new HashSet<>();
+        Set<List<Long>> submittedTuples = new HashSet<>();
+        for (AmpIndicatorDisaggregationValueDto dto : submittedValues) {
+            if (dto.getParentCategoryId() == null) {
+                throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(
+                        "A disaggregation value must have a parent category."));
+            }
+            if (!submittedTuples.add(Arrays.asList(dto.getParentCategoryId(), dto.getChildCategoryId(),
+                    dto.getThirdCategoryId()))) {
+                throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(
+                        "Duplicate disaggregation category combinations are not allowed."));
+            }
+            if (dto.getId() != null && (!submittedIds.add(dto.getId()) || existingValues.stream()
+                    .noneMatch(existing -> Objects.equals(existing.getId(), dto.getId())))) {
+                throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(
+                        "A submitted disaggregation value ID is duplicated or does not belong to this indicator."));
+            }
+            if (dto.getId() == null && existingValues.stream()
+                    .filter(existing -> sameDisaggregationCategories(existing, dto)).count() > 1) {
+                throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(
+                        "A disaggregation category combination matches multiple existing values."));
+            }
+        }
+        for (AmpIndicatorDisaggregationValue existing : existingValues) {
+            boolean preserved = submittedValues.stream().anyMatch(dto ->
+                    (dto.getId() == null || Objects.equals(existing.getId(), dto.getId()))
+                            && sameDisaggregationCategories(existing, dto));
+            if (!preserved) {
+                throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(
+                        "Existing disaggregation values cannot be removed or reassigned when using "
+                                + "a third disaggregation criterion."));
+            }
+
+        }
+        for (AmpIndicatorDisaggregationValueDto dto : submittedValues) {
+            if (dto.getId() != null && existingValues.stream()
+                    .anyMatch(existing -> Objects.equals(existing.getId(), dto.getId())
+                            && !sameDisaggregationCategories(existing, dto))) {
+                throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(
+                        "Existing disaggregation values cannot be reassigned to different categories."));
+            }
+        }
     }
 
-    private Long getCategoryId(AmpCategoryValue categoryValue) {
+    static void validateDisaggregationCriteriaCount(List<Long> criteria) {
+        if (criteria != null && criteria.stream().filter(Objects::nonNull).distinct().count() > 3) {
+            throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(
+                    "An indicator can have at most three disaggregation criteria."));
+        }
+    }
+
+    static void validateThirdDimensionOptions(List<Long> criteria,
+                                              Set<AmpIndicatorDisaggregationValueDto> values, Session session) {
+        Set<Long> selected = criteria == null ? Collections.emptySet() : criteria.stream()
+                .filter(Objects::nonNull).collect(Collectors.toSet());
+        boolean usesThirdDimension = selected.size() > 2 || values != null
+                && values.stream().anyMatch(value -> value.getThirdCategoryId() != null);
+        if (!usesThirdDimension) {
+            return;
+        }
+        for (Long criterion : selected) {
+            if (session.get(AmpCategoryValue.class, criterion) == null) {
+                throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(
+                        "Disaggregation criterion with id " + criterion + " not found."));
+            }
+        }
+        if (values == null) {
+            return;
+        }
+        Set<String> selectedClassNames = selected.stream().map(id -> "indicator_disaggregation_" + id)
+                .collect(Collectors.toSet());
+        Map<Long, String> optionClasses = new HashMap<>();
+        for (AmpIndicatorDisaggregationValueDto value : values) {
+            Set<String> combinationClasses = new HashSet<>();
+            for (Long optionId : Arrays.asList(value.getParentCategoryId(), value.getChildCategoryId(),
+                    value.getThirdCategoryId())) {
+                if (optionId == null) {
+                    continue;
+                }
+                String className = optionClasses.get(optionId);
+                if (className == null) {
+                    AmpCategoryValue option = session.get(AmpCategoryValue.class, optionId);
+                    if (option == null || option.getAmpCategoryClass() == null
+                            || option.getAmpCategoryClass().getKeyName() == null) {
+                        throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(
+                                "Disaggregation option with id " + optionId + " not found."));
+                    }
+                    className = option.getAmpCategoryClass().getKeyName();
+                    optionClasses.put(optionId, className);
+                }
+                if (!selectedClassNames.contains(className) || !combinationClasses.add(className)) {
+                    throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(
+                            "Each disaggregation option must belong to a different selected criterion."));
+                }
+            }
+            if (value.getThirdCategoryId() != null && value.getChildCategoryId() == null) {
+                throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(
+                        "A third disaggregation option requires a second option."));
+            }
+        }
+    }
+
+    private static boolean sameDisaggregationCategories(AmpIndicatorDisaggregationValue existing,
+                                                 AmpIndicatorDisaggregationValueDto dto) {
+        return Objects.equals(getCategoryId(existing.getParentCategory()), dto.getParentCategoryId())
+                && Objects.equals(getCategoryId(existing.getChildCategory()), dto.getChildCategoryId())
+                && Objects.equals(getCategoryId(existing.getThirdCategory()), dto.getThirdCategoryId());
+    }
+
+    private static Long getCategoryId(AmpCategoryValue categoryValue) {
         return categoryValue != null ? categoryValue.getId() : null;
     }
 
@@ -732,10 +870,23 @@ public class IndicatorManagerService {
         } else {
             disaggValue.setChildCategory(null);
         }
+        disaggValue.setThirdCategory(resolveThirdCategory(dto.getThirdCategoryId(), session));
         disaggValue.setBaseValue(updateIndicatorGlobalValue(disaggValue.getBaseValue(), dto.getBaseValue(), indicator,
                 AmpIndicatorGlobalValue.BASE, session));
         disaggValue.setTargetValue(updateIndicatorGlobalValue(disaggValue.getTargetValue(), dto.getTargetValue(), indicator,
                 AmpIndicatorGlobalValue.TARGET, session));
+    }
+
+    private AmpCategoryValue resolveThirdCategory(Long categoryId, Session session) {
+        if (categoryId == null) {
+            return null;
+        }
+        AmpCategoryValue category = session.get(AmpCategoryValue.class, categoryId);
+        if (category == null) {
+            throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError("Disaggregation category with id "
+                    + categoryId + " not found"));
+        }
+        return category;
     }
 
     private AmpIndicatorGlobalValue updateIndicatorGlobalValue(AmpIndicatorGlobalValue currentValue,

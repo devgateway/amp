@@ -20,6 +20,9 @@ public class AmpIndicatorDisaggregationValue implements Serializable {
     @Interchangeable(fieldTitle = "Child Category", importable = true, pickIdOnly = true)
     private AmpCategoryValue childCategory;
 
+    @Interchangeable(fieldTitle = "Third Category", importable = true, pickIdOnly = true)
+    private AmpCategoryValue thirdCategory;
+
     @Interchangeable(fieldTitle = "Base Value", importable = true)
     private AmpIndicatorGlobalValue baseValue;
 
@@ -80,6 +83,14 @@ public class AmpIndicatorDisaggregationValue implements Serializable {
 
     public void setChildCategory(AmpCategoryValue childCategory) {
         this.childCategory = childCategory;
+    }
+
+    public AmpCategoryValue getThirdCategory() {
+        return thirdCategory;
+    }
+
+    public void setThirdCategory(AmpCategoryValue thirdCategory) {
+        this.thirdCategory = thirdCategory;
     }
 
     public AmpIndicator getIndicator() {

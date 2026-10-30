@@ -34,6 +34,12 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		return '/aim/viewActivityPreview.do~activityId=' + id;
 	}
 
+	function getRowActivityId(grid, rowId) {
+		var activityId = jQuery(grid).jqGrid('getCell', rowId, app.TabsApp.COLUMN_ACTIVITY_ID);
+		activityId = activityId ? String(activityId).replace(/(?:[\s\u00A0]|&nbsp;)/gi, '') : '';
+		return /^[1-9]\d*$/.test(activityId) ? activityId : '';
+	}
+
 	GridManager.prototype = {
 		constructor : GridManager
 	};
@@ -230,12 +236,15 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								//set default color and link for rows
 								row = this.rows[iRow];
 								className = row.className;
-								var id = row.cells[1].textContent;
-								var iconedit = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
-									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>";
-								var iconvalidated = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
-									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/validate.png'/></a>";
-								var link = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id + "'>";
+								var id = getRowActivityId(grid, row.id);
+								if (!id) {
+									console.warn('Cannot create activity links for a report row without a valid activity ID', row.id);
+								}
+								var iconedit = id ? "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
+									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>" : '';
+								var iconvalidated = id ? "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
+									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/validate.png'/></a>" : '';
+								var link = id ? "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id + "'>" : '';
 								
 								
 								row.className = className + ' status_1';
@@ -358,9 +367,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 										colIndex = i;
 									}
 								});
-                                var newContent = "<a class='preview-cell" + statusClass + "' href='" + getPreviewPageURL(id) + "'>"
-									+ jQuery(row.cells[colIndex]).html() + "</a>";
-								jQuery(row.cells[colIndex]).html(newContent);
+								if (id) {
+									var newContent = "<a class='preview-cell" + statusClass + "' href='" + getPreviewPageURL(id) + "'>"
+										+ jQuery(row.cells[colIndex]).html() + "</a>";
+									jQuery(row.cells[colIndex]).html(newContent);
+								}
 							}
 							
 							TranslationManager.searchAndTranslate();
@@ -545,6 +556,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 						row[column.columnName] = element.entityId;
 					}
 				});
+
+				// A leaf owner identifies the activity, unlike individual cell entity IDs.
+				if (obj.owner && obj.owner.columnName === '##LEAF##' && obj.owner.id > 0) {
+					row[app.TabsApp.COLUMN_ACTIVITY_ID] = obj.owner.id;
+				}
 				
 				// To flatten the tree structure and maintain hierarchies values on every row we add the values from "auxCurrentHierarchiesValues".
 				if (hierarchies.models.length > 0) {

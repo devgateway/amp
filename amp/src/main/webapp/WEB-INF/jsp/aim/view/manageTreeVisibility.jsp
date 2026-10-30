@@ -73,6 +73,27 @@ function showDescriptionToolbox(id){
 	$("textarea[id^='textarea_']").css('display', 'none');
 	 $('#'+id).css('display', 'block');
 }
+
+function prepareVisibilityTreeSubmission(form) {
+	var selected = form.querySelectorAll(
+		'input[type="checkbox"][name^="moduleVis:"]:checked,'
+		+ 'input[type="checkbox"][name^="featureVis:"]:checked,'
+		+ 'input[type="checkbox"][name^="fieldVis:"]:checked'
+	);
+	form.elements["enabledVisibilityIds"].value = Array.prototype.map.call(selected, function (checkbox) {
+		return checkbox.name;
+	}).join(",");
+
+	var visibilityCheckboxes = form.querySelectorAll(
+		'input[type="checkbox"][name^="moduleVis:"],'
+		+ 'input[type="checkbox"][name^="featureVis:"],'
+		+ 'input[type="checkbox"][name^="fieldVis:"]'
+	);
+	Array.prototype.forEach.call(visibilityCheckboxes, function (checkbox) {
+		checkbox.disabled = true;
+	});
+	return true;
+}
 </script>
 
 <script type="text/javascript" src="<digi:file src="js_2/yui/tabview/tabview-min.js"/>"></script>
@@ -117,7 +138,8 @@ function showDescriptionToolbox(id){
 </div></form>
 
 	<digi:instance property="aimVisibilityManagerForm" />
-	<digi:form action="/visibilityManager.do" method="post" >
+	<digi:form action="/visibilityManager.do" method="post" onsubmit="return prepareVisibilityTreeSubmission(this)">
+	<input type="hidden" name="enabledVisibilityIds" value="" />
 
 	<bean:define name="aimVisibilityManagerForm" property="ampTreeVisibility" id="template" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
 	<bean:define name="template" property="items" id="modules" type="java.util.Map"  toScope="page"/>
@@ -621,5 +643,4 @@ return myMatches;
 	myTabs.set('activeIndex', 0);
 	
 </script>
-
 

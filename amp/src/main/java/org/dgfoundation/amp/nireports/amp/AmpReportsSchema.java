@@ -63,6 +63,7 @@ import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.nireports.*;
 import org.dgfoundation.amp.nireports.amp.dimensions.*;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDateTokenBehaviour;
+import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDisaggregationFilter;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDisaggregationTextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDisaggregationLevel1TextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorReportDataOutputter;
@@ -1544,6 +1545,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     }
 
     protected final CurrencyConvertor currencyConvertor = AmpCurrencyConvertor.getInstance();
+
+    @Override
+    public void processFetchedData(NiReportsEngine engine) {
+        IndicatorDisaggregationFilter.restrictIndicatorColumns(engine);
+    }
 
     @Override
     public NiReportDataOutputter getReportDataOutputter(NiReportsEngine engine) {

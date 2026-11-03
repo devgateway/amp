@@ -51,6 +51,8 @@ public abstract class BasicFiltersConverter {
      * predicates to apply to the cells of a given column
      */
     protected final Map<String, List<Predicate<Cell>>> cellPredicates = new HashMap<>();
+
+    protected final List<Predicate<Cell>> crossDimensionPredicates = new ArrayList<>();
     
     /**
      * columns whose actIds are to be a limiting superset of the ids which would make it into the report
@@ -84,7 +86,12 @@ public abstract class BasicFiltersConverter {
         Set<String> mandatoryHiers = this.filteringColumns.stream().filter(this::shouldCreateVirtualHierarchy).collect(Collectors.toSet());
         return new PassiveNiFilters(engine, 
                 AmpCollections.remap(coosPredicates, (niDim, preds) -> shouldCollapseDimension(niDim.dimension) ? AmpCollections.orPredicates(preds) : AmpCollections.mergePredicates(preds), null), 
-                cellPredicates, filteringColumns, mandatoryHiers, activityIdsSrc, activityIdsPredicate);
+                cellPredicates, filteringColumns, mandatoryHiers, activityIdsSrc, activityIdsPredicate) {
+            @Override
+            public boolean matchesCell(Cell cell) {
+                return crossDimensionPredicates.stream().allMatch(predicate -> predicate.test(cell));
+            }
+        };
     }
 
     /**

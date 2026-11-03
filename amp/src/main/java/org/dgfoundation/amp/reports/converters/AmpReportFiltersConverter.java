@@ -177,6 +177,8 @@ public class AmpReportFiltersConverter {
         
         // Activity section.
         addFilter(ColumnConstants.STATUS, AmpCategoryValue.class, "statuses", true);
+        addFilter(ColumnConstants.INDICATOR_DISAGGREGATION_FILTER, AmpCategoryValue.class,
+                "indicatorDisaggregationOptions", true);
         addFilter(ColumnConstants.APPROVAL_STATUS, String.class, "approvalStatusSelected", true);
 
         addFilter(ColumnConstants.PLEDGE_STATUS, AmpCategoryValue.class, "statuses", true);

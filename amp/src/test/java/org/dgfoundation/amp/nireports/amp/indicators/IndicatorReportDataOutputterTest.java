@@ -1,6 +1,10 @@
 package org.dgfoundation.amp.nireports.amp.indicators;
 
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.newreports.FilterRule;
+import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -153,6 +157,37 @@ class IndicatorReportDataOutputterTest {
     }
 
     @Test
+    void doesNotRepeatValuesOrLabelsWithMissingCoordinatesOnOtherCombinations() {
+        GroupColumn root = root();
+        CellColumn names = textColumn(root, "indicator", Collections.singletonList(name(1, "First")));
+        CellColumn parents = textColumn(root, "parent", Arrays.asList(
+                optionWithMissingCoordinates(parent, 1, 100, MISSING, MISSING, "Female"),
+                optionWithMissingCoordinates(parent, 1, 100, 200, MISSING, "Female")));
+        CellColumn children = textColumn(root, "child", Arrays.asList(
+                optionWithMissingCoordinates(child, 1, 100, MISSING, MISSING, ""),
+                optionWithMissingCoordinates(child, 1, 100, 200, MISSING, "Adult")));
+        CellColumn actuals = amountColumn(root, "actual", Arrays.asList(
+                amountWithMissingCoordinates(1, 100, MISSING, MISSING, 7),
+                amountWithMissingCoordinates(1, 100, 200, MISSING, 11),
+                amountWithMissingCoordinates(1, MISSING, MISSING, MISSING, 3)));
+
+        NiColumnReportData result = output(root);
+
+        NiRowId unallocated = new NiRowId(ACTIVITY).withCoordinates(Arrays.asList(1L, MISSING, MISSING));
+        NiRowId noChild = new NiRowId(ACTIVITY).withCoordinates(Arrays.asList(1L, 100L, MISSING));
+        NiRowId adult = new NiRowId(ACTIVITY).withCoordinates(Arrays.asList(1L, 100L, 200L));
+        assertEquals(3, result.orderedIds.size());
+        assertEquals("First", result.contents.get(names).get(adult).getDisplayedValue());
+        assertNull(result.contents.get(parents).get(unallocated));
+        assertEquals("", result.contents.get(children).get(noChild).getDisplayedValue());
+        assertEquals("Adult", result.contents.get(children).get(adult).getDisplayedValue());
+        assertEquals("3", result.contents.get(actuals).get(unallocated).getDisplayedValue());
+        assertEquals("7", result.contents.get(actuals).get(noChild).getDisplayedValue());
+        assertEquals("11", result.contents.get(actuals).get(adult).getDisplayedValue());
+        assertEquals("21", result.trailCells.get(actuals).getDisplayedValue());
+    }
+
+    @Test
     void leavesReportsWithoutDisaggregationColumnsUnchanged() {
         GroupColumn root = root();
         CellColumn names = textColumn(root, "indicator", Arrays.asList(name(1, "First"), name(2, "Second")));
@@ -164,6 +199,44 @@ class IndicatorReportDataOutputterTest {
         assertEquals(1, result.orderedIds.size());
         assertEquals("First, Second", result.contents.get(names).get(row).getDisplayedValue());
         assertEquals("33", result.contents.get(actuals).get(row).getDisplayedValue());
+    }
+
+    @Test
+    void includesFilteredCombinationWithUnallocatedSelectedLevelWithoutMeasures() {
+        activateDisaggregationFilter();
+        engine.fetchedColumns.put(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_0,
+                new ColumnContents(Collections.singletonList(option(parent, 1, 100, MISSING, MISSING, "Female"))));
+        GroupColumn root = root();
+        CellColumn names = textColumn(root, "indicator", Collections.singletonList(name(1, "First")));
+        CellColumn children = textColumn(root, "child", Collections.emptyList());
+
+        NiColumnReportData result = output(root);
+
+        NiRowId row = new NiRowId(ACTIVITY).withCoordinates(Arrays.asList(1L, MISSING));
+        assertEquals(1, result.orderedIds.size());
+        assertEquals("First", result.contents.get(names).get(row).getDisplayedValue());
+        assertNull(result.contents.get(children).get(row));
+    }
+
+    @Test
+    void totalsOnlyTheFilteredCombinationValues() {
+        activateDisaggregationFilter();
+        engine.fetchedColumns.put(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_0, new ColumnContents(Arrays.asList(
+                option(parent, 1, 100, 200, 300, "Female"),
+                option(parent, 1, 100, 201, 301, "Female"))));
+        GroupColumn root = root();
+        CellColumn parents = textColumn(root, "parent", Arrays.asList(
+                option(parent, 1, 100, 200, 300, "Female"),
+                option(parent, 1, 100, 201, 301, "Female")));
+        CellColumn actuals = amountColumn(root, "actual", Arrays.asList(
+                amount(1, 100, 200, 300, 11), amount(1, 100, 201, 301, 22)));
+
+        NiColumnReportData result = output(root);
+
+        NiRowId row = new NiRowId(ACTIVITY).withCoordinates(Arrays.asList(1L, 100L));
+        assertEquals("Female", result.contents.get(parents).get(row).getDisplayedValue());
+        assertEquals("33", result.contents.get(actuals).get(row).getDisplayedValue());
+        assertEquals("33", result.trailCells.get(actuals).getDisplayedValue());
     }
 
     @Test
@@ -204,6 +277,13 @@ class IndicatorReportDataOutputterTest {
         ColumnReportData data = new ColumnReportData(engine, null, contents);
         return (NiColumnReportData) new IndicatorReportDataOutputter(headers, engine, indicator.dimensionUsage,
                 Arrays.asList(parent, child, third), Arrays.asList("parent", "child", "third")).visitLeaf(data);
+    }
+
+    private void activateDisaggregationFilter() {
+        ReportFiltersImpl filters = new ReportFiltersImpl();
+        filters.addFilterRule(new ReportColumn(ColumnConstants.INDICATOR_DISAGGREGATION_FILTER),
+                new FilterRule(Collections.singletonList("100"), true));
+        ((ReportSpecificationImpl) engine.spec).setFilters(filters);
     }
 
     private GroupColumn root() {
@@ -254,6 +334,24 @@ class IndicatorReportDataOutputterTest {
         return wrap(new CategAmountCell(ACTIVITY,
                 new MonetaryAmount(BigDecimal.valueOf(value), NiPrecisionSetting.IDENTITY_PRECISION_SETTING),
                 MetaInfoSet.empty(), coordinates(indicatorId, parentId, childId, thirdId), null));
+    }
+
+    private NiCell optionWithMissingCoordinates(LevelColumn level, long indicatorId, long parentId, long childId,
+                                                long thirdId, String text) {
+        Map<NiDimensionUsage, Coordinate> coordinates = coordinates(indicatorId, parentId, childId, thirdId);
+        coordinates.entrySet().removeIf(entry -> entry.getValue().id == MISSING
+                && !entry.getKey().equals(level.dimensionUsage));
+        long id = coordinates.get(level.dimensionUsage).id;
+        return wrap(new TextCell(text, ACTIVITY, id, coordinates, Optional.of(level)));
+    }
+
+    private NiCell amountWithMissingCoordinates(long indicatorId, long parentId, long childId, long thirdId,
+                                                int value) {
+        Map<NiDimensionUsage, Coordinate> coordinates = coordinates(indicatorId, parentId, childId, thirdId);
+        coordinates.entrySet().removeIf(entry -> entry.getValue().id == MISSING);
+        return wrap(new CategAmountCell(ACTIVITY,
+                new MonetaryAmount(BigDecimal.valueOf(value), NiPrecisionSetting.IDENTITY_PRECISION_SETTING),
+                MetaInfoSet.empty(), coordinates, null));
     }
 
     private NiCell disaggregationActual(long indicatorId, long parentId, long childId, long thirdId, int value) {

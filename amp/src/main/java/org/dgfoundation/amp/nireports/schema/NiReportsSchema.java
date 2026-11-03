@@ -75,6 +75,9 @@ public interface NiReportsSchema {
         return entity.fetch(engine);
     }
 
+    default void processFetchedData(NiReportsEngine engine) {
+    }
+
     /**
      * returns true if an entity is a transaction-level hierarchy
      * @param col

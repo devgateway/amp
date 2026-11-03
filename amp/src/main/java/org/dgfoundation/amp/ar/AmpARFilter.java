@@ -154,6 +154,7 @@ public class AmpARFilter extends PropertyListable {
 
     private Long ampReportId;
     private Set<AmpCategoryValue> statuses = null;
+    private Set<AmpCategoryValue> indicatorDisaggregationOptions = null;
     private Set<AmpTeam> workspaces = null;
     // private Set donors=null; //not used anymore
     @PropertyListableIgnore
@@ -1548,6 +1549,14 @@ public class AmpARFilter extends PropertyListable {
      */
     public Set<AmpCategoryValue> getStatuses() {
         return statuses;
+    }
+
+    public Set<AmpCategoryValue> getIndicatorDisaggregationOptions() {
+        return indicatorDisaggregationOptions;
+    }
+
+    public void setIndicatorDisaggregationOptions(Set<AmpCategoryValue> indicatorDisaggregationOptions) {
+        this.indicatorDisaggregationOptions = indicatorDisaggregationOptions;
     }
 
     /**

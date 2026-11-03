@@ -3,6 +3,7 @@ package org.dgfoundation.amp.nireports.amp.indicators;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.nireports.output.NiColumnReportData;
 import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.output.NiReportDataOutputter;
@@ -11,6 +12,7 @@ import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker.SplitCellPercentage;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
@@ -66,6 +68,9 @@ public class IndicatorReportDataOutputter extends NiReportDataOutputter {
                 }
             });
         });
+        if (IndicatorDisaggregationFilter.isActive(engine)) {
+            addFilteredCombinationRows(report, dimensions, rows);
+        }
 
         Map<CellColumn, Map<NiRowId, NiOutCell>> output = new HashMap<>();
         report.getContents().forEach((column, contents) -> {
@@ -77,12 +82,14 @@ public class IndicatorReportDataOutputter extends NiReportDataOutputter {
                 } else {
                     for (List<Long> key : keys) {
                         List<NiCell> matching = cells.stream()
-                                .filter(cell -> matches(cell, dimensions, key))
+                                .filter(cell -> matches(cell, dimensions, key,
+                                        selectedLevels.containsKey(column.name)))
                                 .collect(Collectors.toList());
                         if (!matching.isEmpty()) {
                             values.put(new NiRowId(activityId).withCoordinates(key),
                                     column.getBehaviour().horizontalReduce(matching, engine));
                         }
+
                     }
                 }
             });
@@ -91,11 +98,59 @@ public class IndicatorReportDataOutputter extends NiReportDataOutputter {
         return new NiColumnReportData(output, buildTrailCells(report, output), report.splitter);
     }
 
-    private boolean matches(NiCell cell, List<NiDimensionUsage> dimensions, List<Long> key) {
+    private void addFilteredCombinationRows(ColumnReportData report, List<NiDimensionUsage> dimensions,
+                                            Map<Long, Set<List<Long>>> rows) {
+        engine.fetchedColumns.get(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_0).data
+                .forEach((activityId, combinations) -> {
+                    List<NiCell> leafCells = report.getContents().values().stream()
+                            .flatMap(contents -> contents.data.getOrDefault(activityId, java.util.Collections.emptyList())
+                                    .stream())
+                            .collect(Collectors.toList());
+                    for (NiCell combination : combinations) {
+                        if (leafCells.stream().noneMatch(cell -> matchesHierarchy(combination, cell))) {
+                            continue;
+                        }
+                        Map<NiDimensionUsage, Coordinate> coordinates = combination.getCell().getCoordinates();
+                        List<Long> key = dimensions.stream()
+                                .map(dimension -> coordinates.containsKey(dimension)
+                                        ? coordinates.get(dimension).id : ColumnReportData.UNALLOCATED_ID)
+                                .collect(Collectors.toList());
+                        rows.computeIfAbsent(activityId, ignored -> new LinkedHashSet<>()).add(key);
+                    }
+                });
+    }
+
+    private boolean matchesHierarchy(NiCell combination, NiCell leafCell) {
+        if (leafCell.getHiersTracker() == null) {
+            return true;
+        }
+        Map<NiDimensionUsage, Coordinate> coordinates = combination.getCell().getCoordinates();
+        for (Map.Entry<NiDimensionUsage, SplitCellPercentage> entry :
+                leafCell.getHiersTracker().getPercentages().entrySet()) {
+            if (!entry.getKey().equals(indicator)
+                    && selectedLevels.values().stream().noneMatch(level -> level.dimensionUsage.equals(entry.getKey()))) {
+                continue;
+            }
+            Coordinate coordinate = coordinates.get(entry.getKey());
+            long id = coordinate == null ? ColumnReportData.UNALLOCATED_ID : coordinate.id;
+            if (id != entry.getValue().id) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean matches(NiCell cell, List<NiDimensionUsage> dimensions, List<Long> key,
+                            boolean disaggregationColumn) {
         Map<NiDimensionUsage, Coordinate> coordinates = cell.getCell().getCoordinates();
         for (int i = 0; i < dimensions.size(); i++) {
             Coordinate coordinate = coordinates.get(dimensions.get(i));
             if (coordinate != null && coordinate.id != key.get(i)) {
+                return false;
+            }
+            if (i > 0 && coordinate == null
+                    && (disaggregationColumn || cell.getCell() instanceof CategAmountCell)
+                    && key.get(i) != ColumnReportData.UNALLOCATED_ID) {
                 return false;
             }
         }

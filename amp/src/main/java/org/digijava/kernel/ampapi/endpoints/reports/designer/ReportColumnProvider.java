@@ -44,7 +44,18 @@ public class ReportColumnProvider extends ReportEntityProvider {
     public static final int DEFAULT_ORDER_VALUE = 999;
 
     private static final Set<String> COLUMNS_IGNORED_IN_REPORT_WIZARD =
-            ImmutableSet.of(ColumnConstants.EXPENDITURE_CLASS);
+            ImmutableSet.of(
+                    ColumnConstants.EXPENDITURE_CLASS,
+                    "Indicator Disaggregation Criterion 1",
+                    "Indicator Disaggregation Criterion 2",
+                    "Indicator Disaggregation Criterion 3",
+                    "Indicator Disaggregation Option 1",
+                    "Indicator Disaggregation Option 2",
+                    "Indicator Disaggregation Option 3");
+
+    static boolean isIgnoredInReportWizard(String columnName) {
+        return COLUMNS_IGNORED_IN_REPORT_WIZARD.contains(columnName);
+    }
 
     private static final Map<String, String> COLUMN_TO_FM_FIELD_MAP = new ImmutableMap.Builder<String, String>()
             .put(REGIONAL_REGION, LOCATION_ADM_LEVEL_1)
@@ -308,7 +319,7 @@ public class ReportColumnProvider extends ReportEntityProvider {
                                     final boolean mtefColumnsEnabled) {
 
         String columnName = column.getColumnName();
-        if (COLUMNS_IGNORED_IN_REPORT_WIZARD.contains(columnName)) {
+        if (isIgnoredInReportWizard(columnName)) {
             return false;
         }
 

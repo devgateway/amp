@@ -39,7 +39,7 @@ public class FiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation(value = "Retrieve available filters.")
     public List<AvailableMethod> getAvailableFilters(
-            @ApiParam(value = "Report Type, D=donor, P=pledges", allowableValues = "D,P")
+            @ApiParam(value = "Report Type, D=donor, P=pledges, I=indicator", allowableValues = "D,P,I")
             @DefaultValue("D") @QueryParam("report-type") String reportType) {
         return EndpointUtils.getAvailableFilterMethods(FiltersEndpoint.class.getName(), reportType);
     }
@@ -249,6 +249,17 @@ public class FiltersEndpoint {
             notes = "Enables Cross-Origin Resource Sharing for endpoint")
     public Response describeLocations() {
         return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
+    @GET
+    @Path("/indicator-disaggregation")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.INDICATOR_DISAGGREGATION, name = "Disaggregation")
+    @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, componentType = FilterComponentType.REPORTS,
+            reportType = FilterReportType.INDICATOR)
+    @ApiOperation(value = "Retrieve disaggregation options grouped by criterion.")
+    public Response getIndicatorDisaggregation() {
+        return PublicServices.buildOkResponseWithOriginHeaders(DisaggregationFilterListManager.getFilterList());
     }
 
     /**

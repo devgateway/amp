@@ -25,7 +25,10 @@
                     COALESCE(category.category_value, '') AS name,
                     COALESCE(category.id, -999999999) AS category_value_id,
                     ind.indicator_id AS me_indicator_id,
-                    theme.amp_theme_id AS me_npo_id
+                    theme.amp_theme_id AS me_npo_id,
+                    value.parent_category_id AS parent_category_value_id,
+                    value.child_category_id AS child_category_value_id,
+                    value.third_category_id AS third_category_value_id
                 FROM amp_indicator_connection con
                 JOIN amp_indicator ind ON ind.indicator_id = con.indicator_id
                 JOIN amp_indicator_disaggregation_values value ON ind.indicator_id = value.indicator_id

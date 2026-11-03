@@ -62,7 +62,7 @@
 				left JOIN amp_indicator ind ON ind.indicator_id = ic.indicator_id
 				LEFT JOIN amp_theme t ON ind.program_id = t.amp_theme_id
 				LEFT JOIN amp_theme t2 ON t.parent_theme_id = t2.amp_theme_id
-				join amp_indicator_values iv ON ic.id = iv.ind_connect_id
+				left join amp_indicator_values iv ON ic.id = iv.ind_connect_id
 				WHERE NOT EXISTS (
 				    SELECT 1 FROM amp_indicator_disaggregation_values disagg
 				    WHERE disagg.indicator_id = ic.indicator_id
@@ -95,7 +95,7 @@
 				JOIN amp_indicator_global_value aigv ON aidv.base_value_id = aigv.id
 				JOIN amp_category_value acv ON acv.id = aidv.parent_category_id
 				LEFT JOIN amp_theme t ON ind.program_id = t.amp_theme_id
-				join amp_indicator_values iv ON con.id = iv.ind_connect_id
+				left join amp_indicator_values iv ON con.id = iv.ind_connect_id
 				WHERE con.activity_id IS NOT NULL
 
 				UNION ALL
@@ -120,7 +120,7 @@
 				JOIN amp_indicator_global_value aigv ON aidv.target_value_id = aigv.id
 				JOIN amp_category_value acv ON acv.id = aidv.parent_category_id
 				LEFT JOIN amp_theme t ON ind.program_id = t.amp_theme_id
-				join amp_indicator_values iv ON con.id = iv.ind_connect_id
+				left join amp_indicator_values iv ON con.id = iv.ind_connect_id
 				WHERE con.activity_id IS NOT NULL
 
 				UNION ALL

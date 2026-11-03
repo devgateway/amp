@@ -8,6 +8,7 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiFilters;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.SubDimensions;
+import org.dgfoundation.amp.nireports.output.NiReportDataOutputter;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 
@@ -93,6 +94,10 @@ public interface NiReportsSchema {
     public default List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine engine, CellColumn cc) {
         List<VSplitStrategy> res = cc.behaviour.getSubMeasureHierarchies(engine);
         return res!=null?res:new ArrayList<>();
+    }
+
+    default NiReportDataOutputter getReportDataOutputter(NiReportsEngine engine) {
+        return new NiReportDataOutputter(engine.headers, engine);
     }
 
     SubDimensions getSubDimensions();

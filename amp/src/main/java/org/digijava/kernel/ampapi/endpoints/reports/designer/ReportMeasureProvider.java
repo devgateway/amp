@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.reports.designer;
 
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpMeasures;
@@ -33,9 +34,15 @@ public class ReportMeasureProvider extends ReportEntityProvider {
         List<AmpMeasures> ampMeasures = fetchAmpMeasures(type);
 
         return ampMeasures.stream()
+                .filter(m -> isMeasureSupportedByReportType(type, m.getMeasureName()))
                 .filter(this::isAmpMeasureVisible)
                 .map(this::convertAmpMeasureToReportMeasure)
                 .collect(Collectors.toList());
+    }
+
+    static boolean isMeasureSupportedByReportType(ReportType type, String measureName) {
+        return type.isIndicator()
+                || !MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_ACTUAL_VALUE.equals(measureName);
     }
 
     private List<AmpMeasures> fetchAmpMeasures(final ReportType type) {

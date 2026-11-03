@@ -1,5 +1,6 @@
 import {
-  IS_MEASURELESS_REPORT, PROFILE_REPORT, PROFILE_TAB, TRN_PREFIX_REPORT, TRN_PREFIX_TAB
+  INDICATOR_DISAGGREGATION_REPORT, IS_MEASURELESS_REPORT, PROFILE_REPORT, PROFILE_TAB, TRN_PREFIX_REPORT,
+  TRN_PREFIX_TAB
 } from './constants';
 
 export function validateSaveModal(title, columns, reportDetails, hierarchies, measures) {
@@ -107,7 +108,9 @@ export function getProfileFromReport(data) {
 export function areEnoughDataForPreview(columns, measures, hierarchies, reportDetails, profile) {
   if (profile !== PROFILE_TAB) {
     if (columns && measures && hierarchies && reportDetails && columns.available && columns.available.length > 0) {
-      if (columns.selected.length > 0 && (IS_MEASURELESS_REPORT || measures.selected.length > 0)) {
+      const measuresRequired = !IS_MEASURELESS_REPORT
+        || reportDetails.selectedFundingGrouping === INDICATOR_DISAGGREGATION_REPORT;
+      if (columns.selected.length > 0 && (!measuresRequired || measures.selected.length > 0)) {
         const selectedSummaryReport = reportDetails && reportDetails.selectedSummaryReport;
         if (!selectedSummaryReport) {
           if (columns.selected.length === hierarchies.selected.length) {

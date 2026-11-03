@@ -355,7 +355,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
     }
     
     protected void flatten() {
-        this.reportOutput = this.rootReportData.accept(new NiReportDataOutputter(headers, this));
+        this.reportOutput = this.rootReportData.accept(schema.getReportDataOutputter(this));
     }
     
     /**

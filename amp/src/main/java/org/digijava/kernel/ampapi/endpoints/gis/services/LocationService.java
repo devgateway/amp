@@ -33,7 +33,6 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -303,25 +302,17 @@ public class LocationService {
             for (ReportArea reportArea : ll) {
                 if (implementationLevelColumn != null) {
                     List<ReportArea> childrenHierarchy = reportArea.getChildren();
-
                     for (ReportArea reportAreachi : childrenHierarchy) {
-                        Map<ReportOutputColumn, ReportCell> row = reportAreachi.getContents();
-                        Set<ReportOutputColumn> col = row.keySet();
-                        for (ReportOutputColumn reportOutputColumn : col) {
-                            if (reportOutputColumn.originalColumnName.equals(ColumnConstants.AMP_ID)) {
-                                activitiesId.add(((IdentifiedReportCell) row.get(reportOutputColumn)).entityId);
-                            }
+                        // Use AreaOwner.id — always populated for every leaf row regardless of
+                        // whether the activity has an AMP ID text value assigned.
+                        if (reportAreachi.getOwner() != null && reportAreachi.getOwner().id > 0) {
+                            activitiesId.add(reportAreachi.getOwner().id);
                         }
                     }
-
                 } else {
                     // we don't have hierarchy
-                    Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
-                    Set<ReportOutputColumn> col = row.keySet();
-                    for (ReportOutputColumn reportOutputColumn : col) {
-                        if (reportOutputColumn.originalColumnName.equals(ColumnConstants.AMP_ID)) {
-                            activitiesId.add(((IdentifiedReportCell) row.get(reportOutputColumn)).entityId);
-                        }
+                    if (reportArea.getOwner() != null && reportArea.getOwner().id > 0) {
+                        activitiesId.add(reportArea.getOwner().id);
                     }
                 }
             }

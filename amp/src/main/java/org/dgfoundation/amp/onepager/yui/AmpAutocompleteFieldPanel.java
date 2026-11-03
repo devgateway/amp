@@ -21,10 +21,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.resource.TextTemplateResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
-import org.apache.wicket.util.template.PackageTextTemplate;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
@@ -32,6 +30,7 @@ import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.util.JavaScriptTemplateResourceReference;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -275,15 +274,15 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
                 response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(
                         AmpAutocompleteFieldPanel.class,
                         "AmpAutocompleteCommonScripts.js")));
-                IModel variablesModel = new AbstractReadOnlyModel() {
-                    public Map getObject() {
-                        Map<String, CharSequence> variables = new HashMap<String, CharSequence>(
-                                2);
+                IModel<Map<String, Object>> variablesModel = new AbstractReadOnlyModel<Map<String, Object>>() {
+                    public Map<String, Object> getObject() {
+                        Map<String, Object> variables = new HashMap<>(2);
                         variables.put("noResults", Strings.toEscapedUnicode(TranslatorUtil.getTranslation("No results found")));
                         return variables;
                     }
                 };
-                response.render(JavaScriptHeaderItem.forReference(new TextTemplateResourceReference(clazz, jsName, PackageTextTemplate.DEFAULT_CONTENT_TYPE, "UTF-8", variablesModel)));
+                response.render(JavaScriptHeaderItem.forReference(
+                        new JavaScriptTemplateResourceReference(clazz, jsName, variablesModel)));
                 /*
                  * currently renderOnDomReadyJavaScript doesn't work as expected in IE8
                  * that is why jquery's $(document).ready has been added here

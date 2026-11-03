@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../schemas/xmlpatcher.xsd ">
+    <jira>AMP-31226</jira>
+    <author>brianbrix</author>
+    <description>Register the third disaggregation report field using the visibility of Level 1.</description>
+    <apply>
+        <script>
+            <lang delimiter="@" type="postgres"><![CDATA[
+                DO $patch$
+                DECLARE
+                    level1_id bigint;
+                    level2_id bigint;
+                    report_feature bigint;
+                BEGIN
+                    SELECT id, parent INTO STRICT level1_id, report_feature
+                    FROM amp_fields_visibility
+                    WHERE name = 'Indicator Disaggregation Level 1'
+                      AND parent IN (SELECT id FROM amp_features_visibility WHERE name = 'Reports');
+
+                    SELECT id INTO level2_id FROM amp_fields_visibility
+                    WHERE name = 'Indicator Disaggregation Level 2' AND parent = report_feature;
+                    IF level2_id IS NULL THEN
+                        INSERT INTO amp_fields_visibility (id, name, description, haslevel, parent)
+                        VALUES (nextval('amp_fields_visibility_seq'), 'Indicator Disaggregation Level 2',
+                                'Indicator Disaggregation Level 2', false, report_feature)
+                        RETURNING id INTO level2_id;
+                        INSERT INTO amp_fields_templates (template, field)
+                        SELECT template, level2_id FROM amp_fields_templates WHERE field = level1_id;
+                    END IF;
+                END
+                $patch$@
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

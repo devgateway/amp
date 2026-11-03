@@ -86,11 +86,13 @@ Backbone.sync = function(method, model, options) {
     	url = model.url();
     }
     
+    var isQueryFixture = url === "/TEMPLATE/ampTemplate/saikuui_reports/mockData/query.json";
+
     // AMP-22600: Remove timestamp argument.
     if (url.indexOf('.json') !== -1) {
     	Saiku.logger.log('Using cache=true for ' + url);
     	cache = true;
-    	type = 'POST';
+        type = isQueryFixture ? 'GET' : 'POST';
     }
         
     // Prepare for failure
@@ -146,6 +148,9 @@ Backbone.sync = function(method, model, options) {
     var data = model.attributes;
     if (typeof options.data != "undefined") {
       data = options.data;
+    }
+    if (isQueryFixture) {
+      data = undefined;
     }
     
     // Default JSON-request options.

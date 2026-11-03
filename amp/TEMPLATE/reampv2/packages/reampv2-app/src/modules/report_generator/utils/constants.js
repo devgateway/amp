@@ -39,7 +39,9 @@ export const COMPONENT_REPORT = 'funding-component';
 export const PLEDGES_REPORT = 'funding-pledges';
 
 export const INDICATOR_REPORT = 'funding-indicator';
-export const FUNDING_GROUPING_RADIO_OPTIONS = [FUNDING_DONOR, REGIONAL_REPORT, COMPONENT_REPORT, PLEDGES_REPORT, INDICATOR_REPORT];
+export const INDICATOR_DISAGGREGATION_REPORT = 'funding-indicator-disaggregation';
+export const FUNDING_GROUPING_RADIO_OPTIONS = [FUNDING_DONOR, REGIONAL_REPORT, COMPONENT_REPORT, PLEDGES_REPORT,
+  INDICATOR_REPORT, INDICATOR_DISAGGREGATION_REPORT];
 
 export const SHOW_PLEDGES = 'show-pledges';
 export const EMPTY_FUNDING_COLUMNS = 'empty-funding-columns';

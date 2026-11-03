@@ -2,6 +2,8 @@ var reportType = Saiku.originalReportMetadata.reportMetadata.reportSpec.reportTy
 var reportTypeCode = 'D';
 if (reportType === 5) {
     reportTypeCode = 'P';
+} else if (reportType === 7) {
+    reportTypeCode = 'I';
 }
 window.currentFilter = new ampFilter({
     el: $('#filter-popup'),

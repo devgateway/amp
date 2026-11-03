@@ -44,7 +44,18 @@ public class ReportColumnProvider extends ReportEntityProvider {
     public static final int DEFAULT_ORDER_VALUE = 999;
 
     private static final Set<String> COLUMNS_IGNORED_IN_REPORT_WIZARD =
-            ImmutableSet.of(ColumnConstants.EXPENDITURE_CLASS);
+            ImmutableSet.of(
+                    ColumnConstants.EXPENDITURE_CLASS,
+                    "Indicator Disaggregation Criterion 1",
+                    "Indicator Disaggregation Criterion 2",
+                    "Indicator Disaggregation Criterion 3",
+                    "Indicator Disaggregation Option 1",
+                    "Indicator Disaggregation Option 2",
+                    "Indicator Disaggregation Option 3");
+
+    static boolean isIgnoredInReportWizard(String columnName) {
+        return COLUMNS_IGNORED_IN_REPORT_WIZARD.contains(columnName);
+    }
 
     private static final Map<String, String> COLUMN_TO_FM_FIELD_MAP = new ImmutableMap.Builder<String, String>()
             .put(REGIONAL_REGION, LOCATION_ADM_LEVEL_1)
@@ -76,6 +87,7 @@ public class ReportColumnProvider extends ReportEntityProvider {
             .put(ColumnConstants.INDICATOR_OUTPUT, 23)
             .put(INDICATOR_DISAGGREGATION_LEVEL_0, 24)
             .put(INDICATOR_DISAGGREGATION_LEVEL_1, 25)
+            .put(INDICATOR_DISAGGREGATION_LEVEL_2, 26)
             .build();
 
     private static final List<String> DONOR_HIERARCHIES = ImmutableList.of(
@@ -111,7 +123,8 @@ public class ReportColumnProvider extends ReportEntityProvider {
             CONCESSIONALITY_LEVEL, DISASTER_RESPONSE_MARKER, PROJECT_CATEGORY, PROJECT_RESULTS_AVAILABLE,
             INDICATOR_NAME, INDICATOR_LOGFRAME_CATEGORY, INDICATOR_RISK, INDICATOR_SECTOR, INDICATOR_TYPE,
             REPORTING_SYSTEM, INDICATOR_DONOR, INDICATOR_THEME, INDICATOR_OUTCOME, INDICATOR_OUTPUT,
-            INDICATOR_DISAGGREGATION_LEVEL_0, INDICATOR_DISAGGREGATION_LEVEL_1
+            INDICATOR_DISAGGREGATION_LEVEL_0, INDICATOR_DISAGGREGATION_LEVEL_1,
+            INDICATOR_DISAGGREGATION_LEVEL_2
     );
 
     private static final List<String> COMPONENT_HIERARCHIES = ImmutableList.of(
@@ -306,7 +319,7 @@ public class ReportColumnProvider extends ReportEntityProvider {
                                     final boolean mtefColumnsEnabled) {
 
         String columnName = column.getColumnName();
-        if (COLUMNS_IGNORED_IN_REPORT_WIZARD.contains(columnName)) {
+        if (isIgnoredInReportWizard(columnName)) {
             return false;
         }
 

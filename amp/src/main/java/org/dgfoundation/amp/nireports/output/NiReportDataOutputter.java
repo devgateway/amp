@@ -21,8 +21,8 @@ import static java.util.stream.Collectors.toMap;
  */
 public class NiReportDataOutputter implements ReportDataVisitor<NiReportData> {
         
-    final NiHeaderInfo headers;
-    final NiReportsEngine engine;
+    protected final NiHeaderInfo headers;
+    protected final NiReportsEngine engine;
     
     public NiReportDataOutputter(NiHeaderInfo headers, NiReportsEngine engine) {
         this.headers = headers;
@@ -40,7 +40,7 @@ public class NiReportDataOutputter implements ReportDataVisitor<NiReportData> {
     /**
      * builds the trail cells for ColumnReportData 
      */
-    Map<CellColumn, NiOutCell> buildTrailCells(ColumnReportData crd, Map<CellColumn, Map<NiRowId, NiOutCell>> mappedContents) {
+    protected Map<CellColumn, NiOutCell> buildTrailCells(ColumnReportData crd, Map<CellColumn, Map<NiRowId, NiOutCell>> mappedContents) {
         return headers.leafColumns.stream().collect(toMap(Function.identity(), cellColumn -> 
             cellColumn.getBehaviour().buildColumnTrailCell(crd, cellColumn, mappedContents)));
     }

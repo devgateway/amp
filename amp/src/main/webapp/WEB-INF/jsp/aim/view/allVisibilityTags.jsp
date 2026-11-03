@@ -718,6 +718,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Indicator Outcome" feature="Reports"></field:display>
 <field:display name="Indicator Disaggregation Level 0" feature="Reports"></field:display>
 <field:display name="Indicator Disaggregation Level 1" feature="Reports"></field:display>
+<field:display name="Indicator Disaggregation Level 2" feature="Reports"></field:display>
 <field:display name="Indicator Primary Disaggregation Base Value" feature="Reports"></field:display>
 <field:display name="Indicator Primary Disaggregation Target Value" feature="Reports"></field:display>
 <field:display name="Indicator Secondary Disaggregation Base Value" feature="Reports"></field:display>

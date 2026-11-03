@@ -159,6 +159,8 @@ public class AmpARFilterConverter {
     private void addProjectFilters() {
         if (!arFilter.isPledgeFilter()) {
             addCategoryValueNamesFilter(arFilter.getStatuses(), ColumnConstants.STATUS);
+            addCategoryValueNamesFilter(arFilter.getIndicatorDisaggregationOptions(),
+                    ColumnConstants.INDICATOR_DISAGGREGATION_FILTER);
             addFilter(arFilter.getWorkspaces(), ColumnConstants.TEAM);
             addApprovalStatus();
             addBooleansFilter(arFilter.getHumanitarianAid(), ColumnConstants.HUMANITARIAN_AID);

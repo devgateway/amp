@@ -5,7 +5,9 @@ import {
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { IS_MEASURELESS_REPORT, PROFILE_TAB } from '../../utils/constants';
+import {
+  INDICATOR_DISAGGREGATION_REPORT, IS_MEASURELESS_REPORT, PROFILE_TAB
+} from '../../utils/constants';
 import {
   updateMeasuresSelected,
   updateMeasuresSorting,
@@ -90,9 +92,12 @@ class MeasuresSection extends Component {
 
   render() {
     const {
-      visible, translations, measures, selectedMeasures, measuresOrder, profile, existingReportSanitized
+      visible, translations, measures, selectedMeasures, measuresOrder, profile, existingReportSanitized,
+      selectedFundingGrouping
     } = this.props;
     const { search } = this.state;
+    const indicatorDisaggregationReport = selectedFundingGrouping === INDICATOR_DISAGGREGATION_REPORT;
+    const measuresRequired = !IS_MEASURELESS_REPORT || indicatorDisaggregationReport;
     const _measures = search ? measures.filter(i => i.label.toLowerCase().indexOf(search.toLowerCase()) > -1)
       : measures;
     return (
@@ -111,7 +116,8 @@ class MeasuresSection extends Component {
           </GridColumn>
           <Grid.Column computer="8" tablet="16">
             <OptionsList
-              title={translate('availableFinancialMeasures', profile, translations)}
+              title={translate(indicatorDisaggregationReport
+                ? 'availableIndicatorValues' : 'availableFinancialMeasures', profile, translations)}
               tooltip={translate('availableMeasuresTooltip', profile, translations)}
               isRequired
               className="smallHeight">
@@ -127,7 +133,8 @@ class MeasuresSection extends Component {
           <Grid.Column computer="8" tablet="16">
             <OptionsList
               className="smallHeight"
-              title={translate('orderSelectedFinancialMeasures', profile, translations)}
+              title={translate(indicatorDisaggregationReport
+                ? 'orderSelectedIndicatorValues' : 'orderSelectedFinancialMeasures', profile, translations)}
               tooltip={translate('selectedMeasuresTooltip', profile, translations)} >
               <ColumnSorter
                 keyPrefix="measures"
@@ -140,7 +147,7 @@ class MeasuresSection extends Component {
                 profile={profile} />
             </OptionsList>
           </Grid.Column>
-          {!IS_MEASURELESS_REPORT && selectedMeasures.length === 0
+          {measuresRequired && selectedMeasures.length === 0
             ? (
               <Grid.Column computer={16} className="narrowRow">
                 <ErrorMessage visible message={translate('mustSelectOneMeasure', profile, translations)} />
@@ -173,6 +180,7 @@ const mapStateToProps = (state) => ({
   selectedMeasures: state.uiReducer.measures.selected,
   measuresOrder: state.uiReducer.measures.order,
   profile: state.uiReducer.profile,
+  selectedFundingGrouping: state.uiReducer.reportDetails.selectedFundingGrouping,
   id: state.uiReducer.id,
   initialMeasures: state.mementoReducer.measures,
   existingReportSanitized: state.uiReducer.existingReportSanitized,
@@ -196,6 +204,7 @@ MeasuresSection.propTypes = {
   _updateMeasuresSorting: PropTypes.func.isRequired,
   _resetMeasuresSelected: PropTypes.func.isRequired,
   profile: PropTypes.string,
+  selectedFundingGrouping: PropTypes.string,
   id: PropTypes.number,
   initialMeasures: PropTypes.array,
   existingReportSanitized: PropTypes.bool,
@@ -206,6 +215,7 @@ MeasuresSection.defaultProps = {
   selectedMeasures: [],
   measuresOrder: [],
   profile: undefined,
+  selectedFundingGrouping: undefined,
   id: undefined,
   initialMeasures: [],
   existingReportSanitized: false,

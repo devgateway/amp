@@ -209,6 +209,9 @@ function pageLeaveConfirmationEnabler(){
 }
 
 function switchTabs(lastIndex) {
+		if (!document.getElementById("fundingTabs")) {
+			return;
+		}
 		$('div[data-is_tab=true]').each(function(index) {
 			$(this).appendTo("#theContent");
 		});
@@ -217,7 +220,13 @@ function switchTabs(lastIndex) {
 			base : "//ajax.googleapis.com/ajax/libs/yui/2.9.0/build/",
 			require : [ "tabview" ],
 			onSuccess : function() {
+				if (!document.getElementById("fundingTabs")) {
+					return;
+				}
 				var myFundingTabs = new YAHOO.widget.TabView("fundingTabs");
+				if (myFundingTabs.get('tabs').length === 0) {
+					return;
+				}
 				if (lastIndex == -1) {// if its -1 we go the the last one
 					var newIndex = myFundingTabs.get('tabs').length - 1;
 					myFundingTabs
@@ -242,6 +251,9 @@ function switchTabs(lastIndex) {
 }
 
 function indicatorTabs(lastIndex) {
+		if (!document.getElementById("indicatorTabs")) {
+			return;
+		}
 		$('div[data-is_location_tab=true]').each(function(index) {
 			$(this).appendTo("#theLocationIndicatorContent");
 		});
@@ -250,7 +262,13 @@ function indicatorTabs(lastIndex) {
 			base : "//ajax.googleapis.com/ajax/libs/yui/2.9.0/build/",
 			require : [ "tabview" ],
 			onSuccess : function() {
+				if (!document.getElementById("indicatorTabs")) {
+					return;
+				}
 				var myFundingTabs = new YAHOO.widget.TabView("indicatorTabs");
+				if (myFundingTabs.get('tabs').length === 0) {
+					return;
+				}
 				if (lastIndex == -1) {// if its -1 we go the the last one
 					var newIndex = myFundingTabs.get('tabs').length - 1;
 					myFundingTabs

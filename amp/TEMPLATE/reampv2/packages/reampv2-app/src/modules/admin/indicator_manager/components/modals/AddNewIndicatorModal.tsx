@@ -6,7 +6,7 @@ import styles from './css/IndicatorModal.module.css';
 import { DateUtil } from '../../utils/dateFn';
 import { translatedIndicatorValidationSchema } from '../../utils/validator';
 import { useDispatch, useSelector } from 'react-redux';
-import { BaseAndTargetValueType, DefaultComponentProps, ProgramSchemeType, SettingsType } from '../../types';
+import { BaseAndTargetValueType, DefaultComponentProps, DisaggregationFormValue, ProgramSchemeType, SettingsType } from '../../types';
 import { createIndicator } from '../../reducers/createIndicatorReducer';
 import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
 import { getOutcomes } from '../../reducers/fetchOutcomesReducer';
@@ -20,6 +20,8 @@ import { getResponsibleOrgs } from '../../reducers/fetchResponsibleOrgsReducer';
 import axios from 'axios';
 import Accordion from 'react-bootstrap/Accordion';
 import initialTranslations from '../../config/initialTranslations.json';
+import { buildThreeDisaggregationValues, hasEnteredDisaggregationValue } from '../../utils/disaggregation';
+import DisaggregationCombinationValues from './DisaggregationCombinationValues';
 
 
 const MySwal = withReactContent(Swal);
@@ -54,23 +56,7 @@ interface IndicatorFormValues {
   outputId?: number;
   outcomeId?: number;
   indicatorsCategory?: number;
-  // Add editable disaggregation values
-  disaggregationValues?: Array<{
-    parentCategoryId: number;
-    childCategoryId: number | null;
-    base: {
-      originalValue: string | number;
-      originalValueDate: string;
-      revisedValue: string | number;
-      revisedValueDate: string;
-    };
-    target: {
-      originalValue: string | number;
-      originalValueDate: string;
-      revisedValue: string | number;
-      revisedValueDate: string;
-    };
-  }>;
+  disaggregationValues?: DisaggregationFormValue[];
 }
 
 const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
@@ -326,6 +312,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const frequencyOptions = getCategoryOptions('indicator_frequency');
 
   const [disaggregationChildren, setDisaggregationChildren] = useState<{[key: number]: any[]}>({});
+  const [disaggregationLoading, setDisaggregationLoading] = useState(false);
+  const [disaggregationError, setDisaggregationError] = useState(false);
   const [singleDisaggregationActiveKey, setSingleDisaggregationActiveKey] = useState<string | null>('0');
   const [doubleDisaggregationActiveKey, setDoubleDisaggregationActiveKey] = useState<string | null>('0');
 
@@ -350,6 +338,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
         initialValues={initialValues}
         validationSchema={translatedIndicatorValidationSchema(translations)}
         onSubmit={(values) => {
+          if (disaggregationLoading || disaggregationError) {
+            MySwal.fire({ icon: 'error', text: t("amp.indicatormanager:disaggregation-options-error") });
+            return;
+          }
           const { name, description, code, sectors, programId, ascending, creationDate, base, target, indicatorsCategory } = values;
           if (selectedProgramSchemeId && !programId) {
             MySwal.fire({
@@ -422,18 +414,30 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
           // Move disaggregation children-fetching logic here
           useEffect(() => {
             const selected = props.values.disaggregation;
-            if (selected && (selected.length === 1 || selected.length === 2)) {
+            let active = true;
+            setDisaggregationError(false);
+            if (selected && selected.length > 0) {
+              setDisaggregationLoading(true);
+              setDisaggregationChildren({});
               Promise.all(selected.map(id => axios.get(`/rest/indicator_disaggregation/options/${id}`)))
                 .then((responses) => {
+                  if (!active) return;
                   const childrenMap = {};
                   selected.forEach((id, idx) => {
                     childrenMap[id] = responses[idx].data;
                   });
                   setDisaggregationChildren(childrenMap);
+                  setDisaggregationLoading(false);
+                }).catch(() => {
+                  if (!active) return;
+                  setDisaggregationLoading(false);
+                  setDisaggregationError(true);
                 });
             } else {
               setDisaggregationChildren({});
+              setDisaggregationLoading(false);
             }
+            return () => { active = false; };
           }, [props.values.disaggregation]);
 
           // Ensure all required disaggregation entries exist in Formik state before rendering Accordion
@@ -471,8 +475,12 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
               });
               // Remove any entries with childCategoryId: null
               updated = updated.filter((v: any) => v.childCategoryId !== null);
+            } else if (props.values.disaggregation.length === 3) {
+              updated = buildThreeDisaggregationValues(
+                props.values.disaggregation, disaggregationChildren, updated);
             }
-            if (updated.length !== props.values.disaggregationValues.length) {
+            if (updated.length !== props.values.disaggregationValues.length
+                || updated.some((value, index) => value !== props.values.disaggregationValues?.[index])) {
               props.setFieldValue('disaggregationValues', updated);
             }
           }, [props.values.disaggregation, disaggregationChildren]);
@@ -759,8 +767,18 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                               name="disaggregation"
                               options={disaggregationOptions}
                               onChange={(selectedValues) => {
-                                // Limit selection to max 2
-                                const limitedValues = selectedValues.slice(0, 2);
+                                const limitedValues = selectedValues.slice(0, 3);
+                                if (props.values.disaggregation.length === 3
+                                    && props.values.disaggregation.some(id => !limitedValues.some(value => value.value === id))
+                                    && (props.values.disaggregationValues || []).some(value =>
+                                      value.thirdCategoryId != null && hasEnteredDisaggregationValue(value))) {
+                                  MySwal.fire({ icon: 'error', text: t("amp.indicatormanager:unsaved-third-values-error") });
+                                  return;
+                                }
+                                if (limitedValues.length < 3) {
+                                  props.setFieldValue('disaggregationValues',
+                                    (props.values.disaggregationValues || []).filter(value => value.thirdCategoryId == null));
+                                }
                                 props.setFieldValue('disaggregation', limitedValues.map((v: any) => v.value));
                               }}
                               onBlur={props.handleBlur}
@@ -771,6 +789,11 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             />
                         </Form.Group>
                     </Row>
+                    {disaggregationError && <p role="alert">{t("amp.indicatormanager:disaggregation-options-error")}</p>}
+                    {props.values.disaggregation?.length === 3 && (
+                      <DisaggregationCombinationValues values={props.values.disaggregationValues || []}
+                        options={disaggregationChildren} translations={translations} onChange={updateDisaggregationField} />
+                    )}
                     {/* Accordion for disaggregation values, always in a new row below the select */}
                     {props.values.disaggregation?.length === 1 && (
                       <Row className={styles.view_row}>
@@ -1369,7 +1392,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                 <Button variant="secondary" onClick={handleClose}>
                   {t("amp.indicatormanager:close")}
                 </Button>
-                <Button type="submit" variant="success" >
+                <Button type="submit" variant="success" disabled={disaggregationLoading || disaggregationError} >
                   {t("amp.indicatormanager:save")}
                 </Button>
               </Modal.Footer>
@@ -1381,4 +1404,3 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 };
 
 export default AddNewIndicatorModal;
-

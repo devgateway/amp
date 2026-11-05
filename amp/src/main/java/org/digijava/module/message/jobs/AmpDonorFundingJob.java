@@ -1,6 +1,8 @@
 package org.digijava.module.message.jobs;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -53,6 +55,9 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
     protected static final Logger logger = Logger.getLogger(AmpDonorFundingJob.class);
     static final int MAX_BATCH_BYTES = 128 * 1024;
     static final int MAX_BATCH_RECORDS = 500;
+    // Leave headroom below the proxy's observed 1,000-value rejection threshold.
+    static final int MAX_BATCH_SCALAR_VALUES = 900;
+    private static final int BATCH_METADATA_SCALAR_VALUES = 4;
     private List<String> currencies = new ArrayList<>(java.util.Arrays.asList("USD", "EUR"));
     /*private String reportName = "preview report";
     private Integer reportType = ArConstants.DONOR_TYPE;*/
@@ -561,12 +566,14 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                 + ",\"totalBatches\":2147483647,\"totalRecords\":" + reports.size() + ",";
         int maxReportBytes = MAX_BATCH_BYTES - maximumMetadata.getBytes(StandardCharsets.UTF_8).length + 1;
         String prefix = "{\"reports\":[";
-        String firstSuffix = "],\"translations\":"
-                + gson.toJson(translations, new TypeToken<List<Map<String, String>>>() { }.getType()) + "}";
+        String translationsJson = gson.toJson(translations, new TypeToken<List<Map<String, String>>>() { }.getType());
+        String firstSuffix = "],\"translations\":" + translationsJson + "}";
         String suffix = "]}";
         List<String> contents = new ArrayList<>();
         StringBuilder current = new StringBuilder(prefix);
         int currentBytes = prefix.getBytes(StandardCharsets.UTF_8).length;
+        int currentScalarValues = BATCH_METADATA_SCALAR_VALUES
+                + countScalarValues(JsonParser.parseString(translationsJson));
         int count = 0;
         String currentSuffix = firstSuffix;
         for (ReportsDashboard report : reports) {
@@ -575,16 +582,21 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             }
             String json = gson.toJson(report);
             int reportBytes = json.getBytes(StandardCharsets.UTF_8).length;
+            int reportScalarValues = countScalarValues(JsonParser.parseString(json));
             int suffixBytes = currentSuffix.getBytes(StandardCharsets.UTF_8).length;
             if (count == MAX_BATCH_RECORDS || currentBytes + (count > 0 ? 1 : 0) + reportBytes
-                    + suffixBytes > maxReportBytes) {
+                    + suffixBytes > maxReportBytes || currentScalarValues + reportScalarValues > MAX_BATCH_SCALAR_VALUES) {
                 if (count == 0) {
+                    if (currentScalarValues + reportScalarValues > MAX_BATCH_SCALAR_VALUES) {
+                        throw new IOException("A donor funding record or its translations exceed the batch JSON scalar limit");
+                    }
                     throw new IOException("A donor funding record or its translations exceed the batch size limit");
                 }
                 current.append(currentSuffix);
                 contents.add(current.toString());
                 current = new StringBuilder(prefix);
                 currentBytes = prefix.getBytes(StandardCharsets.UTF_8).length;
+                currentScalarValues = BATCH_METADATA_SCALAR_VALUES;
                 count = 0;
                 currentSuffix = suffix;
                 suffixBytes = suffix.getBytes(StandardCharsets.UTF_8).length;
@@ -592,12 +604,16 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             if (currentBytes + reportBytes + suffixBytes > maxReportBytes) {
                 throw new IOException("A donor funding record exceeds the batch size limit");
             }
+            if (currentScalarValues + reportScalarValues > MAX_BATCH_SCALAR_VALUES) {
+                throw new IOException("A donor funding record exceeds the batch JSON scalar limit");
+            }
             if (count > 0) {
                 current.append(',');
                 currentBytes++;
             }
             current.append(json);
             currentBytes += reportBytes;
+            currentScalarValues += reportScalarValues;
             count++;
         }
         current.append(currentSuffix);
@@ -613,6 +629,21 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             batches.add(batch);
         }
         return batches;
+    }
+
+    private static int countScalarValues(JsonElement element) {
+        if (element.isJsonObject()) {
+            return element.getAsJsonObject().entrySet().stream()
+                    .mapToInt(entry -> countScalarValues(entry.getValue())).sum();
+        }
+        if (element.isJsonArray()) {
+            int count = 0;
+            for (JsonElement value : element.getAsJsonArray()) {
+                count += countScalarValues(value);
+            }
+            return count;
+        }
+        return 1;
     }
 
     private static void postJson(String url, byte[] requestBytes) throws IOException {

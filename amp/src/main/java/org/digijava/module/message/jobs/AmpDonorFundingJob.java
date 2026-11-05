@@ -532,13 +532,20 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         UUID importId = UUID.randomUUID();
         List<byte[]> batches = createBatches(ampDashboardFunding, translations, gson, importId);
         String batchUrl = serverUrl + "/batches";
+        logger.info("Sending " + batches.size() + " batches to server at " + batchUrl);
         logger.info("Starting donor funding import " + importId + " with " + ampDashboardFunding.size()
                 + " records in " + batches.size() + " batches");
 
         for (int i = 0; i < batches.size(); i++) {
             logger.info("Sending donor funding batch " + (i + 1) + "/" + batches.size()
                     + " (" + batches.get(i).length + " bytes)");
-            poster.post(batchUrl, batches.get(i));
+            try {
+                poster.post(batchUrl, batches.get(i));
+            } catch (IOException | RuntimeException e) {
+                logger.error("Donor funding import "  + importId + " batch "
+                        + (i + 1) + "/" + batches.size() + " failed", e);
+                throw e;
+            }
         }
         logger.info("Completed donor funding import " + importId);
     }

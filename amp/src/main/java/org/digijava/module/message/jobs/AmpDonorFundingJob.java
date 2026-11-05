@@ -1,6 +1,7 @@
 package org.digijava.module.message.jobs;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -36,7 +37,10 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -47,6 +51,8 @@ import java.util.stream.Collectors;
 public class AmpDonorFundingJob extends ConnectionCleaningJob implements StatefulJob {
 
     protected static final Logger logger = Logger.getLogger(AmpDonorFundingJob.class);
+    static final int MAX_BATCH_BYTES = 128 * 1024;
+    static final int MAX_BATCH_RECORDS = 500;
     private List<String> currencies = new ArrayList<>(java.util.Arrays.asList("USD", "EUR"));
     /*private String reportName = "preview report";
     private Integer reportType = ArConstants.DONOR_TYPE;*/
@@ -71,7 +77,11 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);
         assert serverUrl != null;
         serverUrl = serverUrl.endsWith("/") ? serverUrl + "amp-funding/importDonorFunding" : serverUrl + "/amp-funding/importDonorFunding";
-        sendReportsToServer(ampDashboardFundingCombined, translations, serverUrl);
+        try {
+            sendReportsToServer(ampDashboardFundingCombined, translations, serverUrl);
+        } catch (IOException e) {
+            throw new JobExecutionException("Failed to import donor funding into the dashboard", e);
+        }
     }
 
     @NotNull
@@ -512,46 +522,127 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         return translations;
     }
 
-    public static void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, List<Map<String, String>> translations, String serverUrl) {
-        try {
-            // Create a URL object with the server's endpoint URL
-            logger.info("Sending data to amp dashboard at: " + serverUrl);
-            logger.info("Number of records to send: " + ampDashboardFunding.size());
-            HttpURLConnection connection = getHttpURLConnection(serverUrl);
-            
-            // Create a wrapper object with reports and translations
-            Map<String, Object> submissionData = new HashMap<>();
-            submissionData.put("reports", ampDashboardFunding);
-            submissionData.put("translations", translations);
-            
-            // Convert to JSON using a JSON library (e.g., Gson)
-            Gson gson = new Gson();
-            String jsonData = gson.toJson(submissionData);
-//            logger.info("JSON data: " + jsonData);
+    public static void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, List<Map<String, String>> translations, String serverUrl) throws IOException {
+        sendReportsToServer(ampDashboardFunding, translations, serverUrl, AmpDonorFundingJob::postJson);
+    }
 
-            // Get the output stream of the connection
-            try (OutputStream os = connection.getOutputStream()) {
-                // Write the JSON data to the output stream
-                os.write(jsonData.getBytes(StandardCharsets.UTF_8));
-            }
+    static void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, List<Map<String, String>> translations,
+                                    String serverUrl, JsonPoster poster) throws IOException {
+        Gson gson = new Gson();
+        UUID importId = UUID.randomUUID();
+        List<byte[]> batches = createBatches(ampDashboardFunding, translations, gson, importId);
+        String batchUrl = serverUrl + "/batches";
+        logger.info("Starting donor funding import " + importId + " with " + ampDashboardFunding.size()
+                + " records in " + batches.size() + " batches");
 
-            // Get the HTTP response code
-            int responseCode = connection.getResponseCode();
-
-            // Check if the request was successful (e.g., HTTP 200 OK)
-            if (responseCode == 200) {
-                // The data has been successfully sent to the server
-                logger.info("Data sent successfully to amp dashboard. HTTP Response Code: " + responseCode);
-            } else {
-                // Handle the error condition (e.g., log an error message)
-                logger.info("Error sending data to amp dashboard. HTTP Response Code: " + responseCode);
-            }
-
-            // Close the connection
-            connection.disconnect();
-        } catch (Exception e) {
-            logger.error("Exception raised when sending data to dashboard", e);
+        for (int i = 0; i < batches.size(); i++) {
+            logger.info("Sending donor funding batch " + (i + 1) + "/" + batches.size()
+                    + " (" + batches.get(i).length + " bytes)");
+            poster.post(batchUrl, batches.get(i));
         }
+        logger.info("Completed donor funding import " + importId);
+    }
+
+    static List<byte[]> createBatches(List<ReportsDashboard> reports, List<Map<String, String>> translations,
+                                      Gson gson, UUID importId) throws IOException {
+        if (reports == null || reports.isEmpty()) {
+            throw new IOException("Cannot import donor funding without reports");
+        }
+        String maximumMetadata = "{\"importId\":\"" + importId + "\",\"batchNumber\":2147483647"
+                + ",\"totalBatches\":2147483647,\"totalRecords\":" + reports.size() + ",";
+        int maxReportBytes = MAX_BATCH_BYTES - maximumMetadata.getBytes(StandardCharsets.UTF_8).length + 1;
+        String prefix = "{\"reports\":[";
+        String firstSuffix = "],\"translations\":"
+                + gson.toJson(translations, new TypeToken<List<Map<String, String>>>() { }.getType()) + "}";
+        String suffix = "]}";
+        List<String> contents = new ArrayList<>();
+        StringBuilder current = new StringBuilder(prefix);
+        int currentBytes = prefix.getBytes(StandardCharsets.UTF_8).length;
+        int count = 0;
+        String currentSuffix = firstSuffix;
+        for (ReportsDashboard report : reports) {
+            if (report == null) {
+                throw new IOException("Cannot import a null donor funding report");
+            }
+            String json = gson.toJson(report);
+            int reportBytes = json.getBytes(StandardCharsets.UTF_8).length;
+            int suffixBytes = currentSuffix.getBytes(StandardCharsets.UTF_8).length;
+            if (count == MAX_BATCH_RECORDS || currentBytes + (count > 0 ? 1 : 0) + reportBytes
+                    + suffixBytes > maxReportBytes) {
+                if (count == 0) {
+                    throw new IOException("A donor funding record or its translations exceed the batch size limit");
+                }
+                current.append(currentSuffix);
+                contents.add(current.toString());
+                current = new StringBuilder(prefix);
+                currentBytes = prefix.getBytes(StandardCharsets.UTF_8).length;
+                count = 0;
+                currentSuffix = suffix;
+                suffixBytes = suffix.getBytes(StandardCharsets.UTF_8).length;
+            }
+            if (currentBytes + reportBytes + suffixBytes > maxReportBytes) {
+                throw new IOException("A donor funding record exceeds the batch size limit");
+            }
+            if (count > 0) {
+                current.append(',');
+                currentBytes++;
+            }
+            current.append(json);
+            currentBytes += reportBytes;
+            count++;
+        }
+        current.append(currentSuffix);
+        contents.add(current.toString());
+        List<byte[]> batches = new ArrayList<>();
+        for (int i = 0; i < contents.size(); i++) {
+            String metadata = "{\"importId\":\"" + importId + "\",\"batchNumber\":" + i
+                    + ",\"totalBatches\":" + contents.size() + ",\"totalRecords\":" + reports.size() + ",";
+            byte[] batch = (metadata + contents.get(i).substring(1)).getBytes(StandardCharsets.UTF_8);
+            if (batch.length > MAX_BATCH_BYTES) {
+                throw new IOException("A donor funding batch exceeds the batch size limit");
+            }
+            batches.add(batch);
+        }
+        return batches;
+    }
+
+    private static void postJson(String url, byte[] requestBytes) throws IOException {
+        postJson(getHttpURLConnection(url), url, requestBytes);
+    }
+
+    static void postJson(HttpURLConnection connection, String url, byte[] requestBytes) throws IOException {
+        try {
+            connection.setFixedLengthStreamingMode(requestBytes.length);
+            try (OutputStream os = connection.getOutputStream()) {
+                os.write(requestBytes);
+            }
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode < 200 || responseCode >= 300) {
+                StringBuilder details = new StringBuilder();
+                InputStream errorStream = connection.getErrorStream();
+                if (errorStream != null) {
+                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(errorStream, StandardCharsets.UTF_8))) {
+                        char[] buffer = new char[2048];
+                        int count;
+                        while (details.length() < buffer.length
+                                && (count = reader.read(buffer, 0, buffer.length - details.length())) != -1) {
+                            details.append(buffer, 0, count);
+                        }
+                    }
+                }
+                String safeDetails = details.toString().replaceAll("[\\p{Cntrl}]+", " ");
+                throw new IOException("Dashboard returned HTTP " + responseCode + " for "
+                        + new URL(url).getPath() + ": " + safeDetails);
+            }
+        } finally {
+            connection.disconnect();
+        }
+    }
+
+    @FunctionalInterface
+    interface JsonPoster {
+        void post(String url, byte[] requestBytes) throws IOException;
     }
 
     @NotNull
@@ -566,6 +657,8 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
 
         // Set the content type of the request
         connection.setRequestProperty("Content-Type", "application/json");
+        connection.setConnectTimeout(15000);
+        connection.setReadTimeout(900000);
 
         // Enable input and output streams for the connection
         connection.setDoOutput(true);

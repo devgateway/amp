@@ -21,6 +21,7 @@ import java.util.Map;
 public abstract class AmpImporter {
 
     private static Logger logger = Logger.getLogger(AmpImporter.class);
+    private static final int IMPORT_BATCH_SIZE = 500;
 
     protected String importFileName;
     protected String[] columnNames;
@@ -47,21 +48,34 @@ public abstract class AmpImporter {
             initializeReader(fr);
         } catch (FileNotFoundException e) {
             logger.error(e.getMessage(), e);
-            //e.printStackTrace();
+            return;
         }
         
         session = PersistenceManager.getSession(); // ensure a clean Session exists
         try {
+            int importedRows = 0;
             while (true) {          
                 Map<String, String> o = parseNextLine();
                 if (o == null) break;
                 saveToDB(o);
+                importedRows++;
+                if (importedRows % IMPORT_BATCH_SIZE == 0) {
+                    session.flush();
+                    session.getTransaction().commit();
+                    session.clear();
+                    session.beginTransaction();
+                    logger.info("************************* Imported " + importedRows + " rows from " + importFileName+" *************************");
+                }
             };
         } catch (Exception e) {
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
+            }
             logger.error("error while running import on " + this.getClass().getName(), e);
+        } finally {
+            PersistenceManager.closeQuietly(fr);
+            PersistenceManager.cleanupSession(session);
         }
-        PersistenceManager.closeQuietly(fr);
-        PersistenceManager.endSessionLifecycle();
     }
 
     protected abstract String getFileType();

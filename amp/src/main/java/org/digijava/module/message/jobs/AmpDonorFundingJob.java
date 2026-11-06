@@ -548,8 +548,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                 poster.post(batchUrl, batches.get(i));
             } catch (IOException | RuntimeException e) {
                     logger.error("Donor funding import " + importId + " batch "
-                            + (i + 1) + "/" + batches.size() + " request body (sensitive): "
-                            + new String(batches.get(i), StandardCharsets.UTF_8));
+                            + (i + 1) + "/" + batches.size(), e);
 
                 throw e;
             }

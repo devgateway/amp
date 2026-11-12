@@ -92,6 +92,10 @@ Backbone.sync = function(method, model, options) {
     	cache = true;
     	type = 'POST';
     }
+    var isMockData = url.indexOf('/TEMPLATE/ampTemplate/saikuui_reports/mockData/') === 0;
+    if (isMockData) {
+      type = 'GET';
+    }
         
     // Prepare for failure
     if (typeof Settings.ERRORS == "undefined") {
@@ -146,6 +150,9 @@ Backbone.sync = function(method, model, options) {
     var data = model.attributes;
     if (typeof options.data != "undefined") {
       data = options.data;
+    }
+    if (isMockData) {
+      data = undefined;
     }
     
     // Default JSON-request options.

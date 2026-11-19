@@ -10,9 +10,13 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
         var waitForUpload = false;
         var uploadInProgress = false;
         var allowImportClick = false;
+        var invalidSelection = false;
         var importButton = importButtonMarkupId ? document.getElementById(importButtonMarkupId) : null;
-        var importedRows = importedRowsMarkupId ? document.getElementById(importedRowsMarkupId) : null;
         var fileInput = $(componentId).find('input[type=file]').get(0);
+
+        function getImportedRows() {
+            return importedRowsMarkupId ? document.getElementById(importedRowsMarkupId) : null;
+        }
 
         function getPendingUploadMessage() {
             var action = importButton && (importButton.value || importButton.textContent);
@@ -21,6 +25,7 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
 
         function submitPendingUpload() {
             var uploadData = pendingUploadData;
+            var importedRows = getImportedRows();
             pendingUploadData = null;
             if (uploadData) {
                 if (componentUrl.indexOf('/rest/resource/stage-upload') !== -1 && importedRows) {
@@ -49,11 +54,12 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
                 importButton.removeEventListener('click', importButton.ampDeferredUploadClickHandler, true);
             }
             importButton.ampDeferredUploadClickHandler = function (event) {
+                var importedRows = getImportedRows();
                 if (allowImportClick) {
                     allowImportClick = false;
                     return;
                 }
-                if (importedRows && importedRows.value && !pendingUploadData) {
+                if (importedRows && importedRows.value && !pendingUploadData && !invalidSelection) {
                     return;
                 }
 
@@ -66,10 +72,20 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
                 if (pendingUploadData) {
                     submitPendingUpload();
                 } else {
-                    fileInput.click();
+                    $(componentId).find('input[type=file]').get(0).click();
                 }
             };
             importButton.addEventListener('click', importButton.ampDeferredUploadClickHandler, true);
+            $(componentId).off('amp:resetUpload').on('amp:resetUpload', function () {
+                pendingUploadData = null;
+                waitForUpload = false;
+                invalidSelection = false;
+                var importedRows = getImportedRows();
+                if (importedRows) {
+                    importedRows.value = '';
+                }
+                $(this).find('.custom-file-label').removeAttr('title');
+            });
         }
 
         var uploadOptions = {
@@ -81,20 +97,30 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
             minFileSize: 1,
             maxFileSize: 20000000,
             add: function (e, data) {
-            	try {
-	            	if (!FileTypeValidator.isValid(data.files[0].name)) {
-	            		alert(FileTypeValidator.errorMessage);
-	            		$('#uploadLabel').text(FileTypeValidator.errorMessage);
-	            		$(this).find('[role=fileUploadedMsg]').html('');
-	                    $(this).find('[role=fileUploadedMsg]').hide();
-	            	} else if (data.files[0].size > parseFloat("${uploadMaxFileSize}")) {
-	            		alert("${uploadFailedTooBigMsg}");
-	            		$('#uploadLabel').text("${uploadNoFileLabel}");
-	            		$(this).find('[role=fileUploadedMsg]').html('');
-	                    $(this).find('[role=fileUploadedMsg]').hide();
-	            	} else {
+                try {
+                    if (!FileTypeValidator.isValid(data.files[0].name)) {
+                        pendingUploadData = null;
+                        waitForUpload = false;
+                        invalidSelection = true;
+                        alert(FileTypeValidator.errorMessage);
+                        $(this).find('.custom-file-label').removeAttr('title').text(FileTypeValidator.errorMessage);
+                        $(this).find('[role=fileUploadedMsg]').html('');
+                        $(this).find('[role=fileUploadedMsg]').hide();
+                    } else if (data.files[0].size > parseFloat("${uploadMaxFileSize}")) {
+                        pendingUploadData = null;
+                        waitForUpload = false;
+                        invalidSelection = true;
+                        alert("${uploadFailedTooBigMsg}");
+                        $(this).find('.custom-file-label').removeAttr('title').text("${uploadNoFileLabel}");
+                        $(this).find('[role=fileUploadedMsg]').html('');
+                        $(this).find('[role=fileUploadedMsg]').hide();
+                    } else {
                         if (deferUpload) {
                             pendingUploadData = data;
+                            invalidSelection = false;
+                            var fileName = data.files[0].name;
+                            var fileLabel = fileName.length > 15 ? fileName.substring(0, 12) + '....' : fileName;
+                            $(this).find('.custom-file-label').text(fileLabel).attr('title', fileName);
                             if (waitForUpload) {
                                 submitPendingUpload();
                             } else {
@@ -106,15 +132,40 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
                                 .html(" \"" + "${uploadStartedMsg}" + data.files[0].size + "\" bytes");
                             data.submit();
                         }
-	            	}
-            	} catch(err) {
-            		alert(FileTypeValidator.errorMessage);
-            		$('#uploadLabel').text(FileTypeValidator.errorMessage);
-            		$(this).find('[role=fileUploadedMsg]').html('');
+                    }
+                } catch(err) {
+                    pendingUploadData = null;
+                    waitForUpload = false;
+                    invalidSelection = true;
+                    alert(FileTypeValidator.errorMessage);
+                    $(this).find('.custom-file-label').removeAttr('title').text(FileTypeValidator.errorMessage);
+                    $(this).find('[role=fileUploadedMsg]').html('');
                     $(this).find('[role=fileUploadedMsg]').hide();
-            	}
+                }
             },
             done: function (e, data){
+                var importedRows = getImportedRows();
+                if (deferUpload && !waitForUpload) {
+                    uploadInProgress = false;
+                    if (componentUrl.indexOf('/rest/resource/stage-upload') !== -1) {
+                        try {
+                            var canceledUploads = typeof data.result === 'string'
+                                ? JSON.parse(data.result) : data.result;
+                            if (Array.isArray(canceledUploads)) {
+                                canceledUploads.forEach(function (upload) {
+                                    if (upload.uploadId) {
+                                        var separator = componentUrl.indexOf('?') === -1 ? '?' : '&';
+                                        $.ajax({url: componentUrl + separator + 'uploadId='
+                                            + encodeURIComponent(upload.uploadId), type: 'DELETE'});
+                                    }
+                                });
+                            }
+                        } catch (error) {
+                            return;
+                        }
+                    }
+                    return;
+                }
                 if (deferUpload && waitForUpload && importButton && importedRows) {
                     var result = data.result;
                     try {
@@ -128,6 +179,7 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
                         alert("${uploadFailedMsg}");
                         waitForUpload = false;
                         uploadInProgress = false;
+                        invalidSelection = true;
                         return;
                     }
                     importedRows.value = JSON.stringify(result);
@@ -142,13 +194,18 @@ function setupFileUpload(componentId, componentUrl, componentParamName, deferUpl
             },
             fail: function (e, data){
                 //alert('upload failed! result[' + JSON.stringify(data.result) + '] status[' + data.textStatus + '] jqXHR[' + JSON.stringify(data.jqXHR) +']');
+                if (deferUpload && !waitForUpload) {
+                    uploadInProgress = false;
+                    return;
+                }
                 alert("${uploadFailedMsg}");
-                $('#uploadLabel').text("${uploadNoFileLabel}");
+                $(this).find('.custom-file-label').removeAttr('title').text("${uploadNoFileLabel}");
                 $(this).find('[role=fileUploadedMsg]').html('');
                 $(this).find('[role=fileUploadedMsg]').hide();
                 waitForUpload = false;
                 uploadInProgress = false;
                 pendingUploadData = null;
+                invalidSelection = true;
             }
         };
         if (fileOnlyUpload) {

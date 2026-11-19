@@ -232,7 +232,8 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
                     fileItemModel.setObject(null);
                     target.appendJavaScript("$('#" + getToggleId() + "').hide();");
                     target.appendJavaScript("$('#" + getToggleId() + "').find('[role=fileUploadedMsg]').html('');");
-                    target.appendJavaScript("$('#uploadLabel').text('" + TranslatorWorker.translateText("No file chosen") + "');");
+                    target.appendJavaScript("$('#" + getToggleId() + "').find('.custom-file-label').removeAttr('title').text('"
+                            + TranslatorWorker.translateText("No file chosen") + "');");
                     
                 }
             }
@@ -293,7 +294,9 @@ public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
                     + "'+encodeURIComponent(upload.uploadId),type:'DELETE'});});}catch(e){}})();");
                 target.appendJavaScript("$('#" + getToggleId() + "').hide();");
                 target.appendJavaScript("$('#" + getToggleId() + "').find('[role=fileUploadedMsg]').html('');");
-                target.appendJavaScript("$('#uploadLabel').text('" + TranslatorWorker.translateText("No file chosen") + "');");
+                target.appendJavaScript("$('#" + getToggleId() + "').find('.upfile').trigger('amp:resetUpload');");
+                target.appendJavaScript("$('#" + getToggleId() + "').find('.custom-file-label').text('"
+                    + TranslatorWorker.translateText("No file chosen") + "');");
                 webLinkFeedbackContainer.setVisible(false);
             }
         };

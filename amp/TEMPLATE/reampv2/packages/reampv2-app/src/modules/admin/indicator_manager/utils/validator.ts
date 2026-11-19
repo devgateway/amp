@@ -45,7 +45,7 @@ export const translatedIndicatorValidationSchema = (translations: DefaultTransla
       revisedValue: Yup.number().optional().nullable(),
       revisedValueDate: Yup.date().optional().nullable().when('originalValueDate', (originalValueDate: any) => {
         if (originalValueDate) {
-          return Yup.date().min(originalValueDate, translations["amp.indicatormanager:errors-revised-target-date-invalid"]).optional().nullable();
+          return Yup.date().min(originalValueDate, translations["amp.indicatormanager:errorsRevisedTargetDateInvalid"]).optional().nullable();
         }
         return Yup.date().optional().nullable();
       }),

@@ -14,9 +14,14 @@ import org.digijava.kernel.translator.TranslatorWorker;
 public class FileUploadPanel extends Panel {
 
     public FileUploadPanel(String id, String activityId, IModel<FileItem> fileItemModel) {
+        this(id, activityId, fileItemModel, null, null, null);
+    }
+
+    public FileUploadPanel(String id, String activityId, IModel<FileItem> fileItemModel,
+            String uploadUrl, String importButtonMarkupId, String importedRowsMarkupId) {
         super(id);
         add (new Label("chooseFileLabel", TranslatorWorker.translateText("Choose file")));
         add (new Label("noFileLabel", TranslatorWorker.translateText("No file chosen")));
-        add(new FileUploadBehavior(activityId, fileItemModel));
+        add(new FileUploadBehavior(activityId, fileItemModel, uploadUrl, importButtonMarkupId, importedRowsMarkupId));
     }
 }

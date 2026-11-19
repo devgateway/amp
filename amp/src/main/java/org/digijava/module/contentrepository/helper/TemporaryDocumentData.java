@@ -15,6 +15,7 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -26,6 +27,7 @@ public class TemporaryDocumentData extends DocumentData {
     private boolean errorsFound;
     private int trueUploadedFileSize;
     private FormFile formFile;
+    private File stagedFile;
     private static Logger logger    = Logger.getLogger(TemporaryDocumentData.class);
     
     public int getTrueUploadedFileSize() {
@@ -45,6 +47,18 @@ public class TemporaryDocumentData extends DocumentData {
     }
     public void setFormFile(FormFile formFile) {
         this.formFile = formFile;
+    }
+
+    public void setStagedFile(File stagedFile) {
+        this.stagedFile = stagedFile;
+    }
+
+    public void deleteStagedFile() {
+        if (stagedFile != null && stagedFile.exists() && !stagedFile.delete()) {
+            logger.warn("Unable to delete staged document upload " + stagedFile.getName());
+        }
+        stagedFile = null;
+        formFile = null;
     }
     
     public TemporaryDocumentData (){

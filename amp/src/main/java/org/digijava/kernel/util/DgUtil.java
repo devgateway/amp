@@ -265,6 +265,7 @@ public class DgUtil {
             cookiePath = "/";
         }
         cookie.setPath(cookiePath);
+        cookie.setSecure(request.isSecure());
         response.addCookie(cookie);
     }
 

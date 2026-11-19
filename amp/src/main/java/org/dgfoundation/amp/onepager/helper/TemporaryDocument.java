@@ -27,6 +27,7 @@ public class TemporaryDocument implements Serializable {
     private String webLink;
     private String fileName;
     private String newTemporaryDocumentId;
+    private String stagedUploadId;
     
     public TemporaryDocument() {
         existing = false;
@@ -110,5 +111,13 @@ public class TemporaryDocument implements Serializable {
 
     public void setNewTemporaryDocumentId(String newTemporaryDocumentId) {
         this.newTemporaryDocumentId = newTemporaryDocumentId;
+    }
+
+    public String getStagedUploadId() {
+        return stagedUploadId;
+    }
+
+    public void setStagedUploadId(String stagedUploadId) {
+        this.stagedUploadId = stagedUploadId;
     }
 }

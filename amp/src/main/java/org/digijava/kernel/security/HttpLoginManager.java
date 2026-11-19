@@ -926,6 +926,8 @@ public final class HttpLoginManager {
         }
 
         sessionIdCookie.setPath(cookiePath);
+        sessionIdCookie.setSecure(true);
+        sessionIdCookie.setHttpOnly(true);
 
         response.addCookie(sessionIdCookie);
     }
@@ -1038,6 +1040,8 @@ public final class HttpLoginManager {
                     }
 
                     cookies[loop].setPath(cookiePath);
+                    cookies[loop].setSecure(request.isSecure());
+                    cookies[loop].setHttpOnly(true);
 
                     response.addCookie(cookies[loop]);
                     logger.debug("Removing cookie: " + cookies[loop].getDomain() +
@@ -1079,6 +1083,8 @@ public final class HttpLoginManager {
         }
 
         userNameCookie.setPath(cookiePath);
+        userNameCookie.setSecure(request.isSecure());
+        userNameCookie.setHttpOnly(true);
 
         response.addCookie(userNameCookie);
     }

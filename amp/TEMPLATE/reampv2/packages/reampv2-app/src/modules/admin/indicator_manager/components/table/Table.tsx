@@ -326,7 +326,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                             >
                               <i className="fa fa-download" />
                               {' '}
-                              <span>{t('amp.indicatormanager:export-csv')}</span>
+                              <span>{t('amp.indicatormanager:exportCsv')}</span>
                             </ExportCSVButton>
                           </div>
                         </Col>

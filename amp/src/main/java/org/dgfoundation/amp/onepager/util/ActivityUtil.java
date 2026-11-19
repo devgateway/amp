@@ -33,6 +33,7 @@ import org.digijava.module.contentrepository.exception.JCRSessionException;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
+import org.digijava.module.contentrepository.helper.StagedResourceUploadStore;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
@@ -136,6 +137,9 @@ public class ActivityUtil {
             a = saveActivityNewVersion(oldA, values, cumulativeValues, ampCurrentMember, draft, session, saveContext,
                     editorStore, site);
         } catch (Exception exception) {
+            if (exception instanceof StagedResourceSaveException) {
+                throw (StagedResourceSaveException) exception;
+            }
             logger.error("Error saving activity:", exception); // Log the exception
             throw new RuntimeException("Can't save activity:", exception);
         }
@@ -1208,7 +1212,12 @@ public class ActivityUtil {
     private static void insertResources(AmpActivityVersion a, HashSet<TemporaryActivityDocument> newResources) {
         if (newResources != null) {
             for (TemporaryActivityDocument temp : newResources) {
-                TemporaryDocumentData tdd = new TemporaryDocumentData();
+                HttpServletRequest request = SessionUtil.getCurrentServletRequest();
+                TemporaryDocumentData tdd = temp.getStagedUploadId() == null ? new TemporaryDocumentData()
+                        : StagedResourceUploadStore.get(request, temp.getStagedUploadId());
+                if (tdd == null) {
+                    throw new IllegalStateException("Staged resource upload is missing for " + temp.getFileName());
+                }
                 tdd.setTitle(temp.getTitle());
                 tdd.setName(temp.getFileName());
                 tdd.setDescription(temp.getDescription());
@@ -1256,23 +1265,45 @@ public class ActivityUtil {
                 tdd.setWebLink(temp.getWebLink());
 
                 try {
-                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest());
+                    NodeWrapper node = tdd.saveToRepository(request);
 
                     AmpActivityDocument aad = new AmpActivityDocument();
                     aad.setAmpActivity(a);
                     aad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
                     if (node != null) {
                         aad.setUuid(node.getUuid());
+                        if (temp.getStagedUploadId() != null) {
+                            StagedResourceUploadStore.delete(request, temp.getStagedUploadId());
+                        }
                     } else {
+                        if (temp.getStagedUploadId() != null) {
+                            throw new StagedResourceSaveException("The staged document " + temp.getFileName()
+                                    + " could not be saved.");
+                        }
                         aad.setUuid(temp.getExistingDocument().getUuid());
                     }
                     a.getActivityDocuments().add(aad);
                 } catch (JCRSessionException ex) {
-                    // we catch the exception and show a warning, but allow the activity to be saved
+                    if (temp.getStagedUploadId() != null) {
+                        throw new StagedResourceSaveException("The staged document " + temp.getFileName()
+                                + " could not be saved.", ex);
+                    }
                     logger.warn("The JCR Session couldn't be opened. " + "The document " + tdd.getName()
                             + " will not be saved.", ex);
                 }
             }
+        }
+    }
+
+    public static class StagedResourceSaveException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+
+        public StagedResourceSaveException(String message) {
+            super(message);
+        }
+
+        public StagedResourceSaveException(String message, Throwable cause) {
+            super(message, cause);
         }
     }
 

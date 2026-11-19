@@ -132,25 +132,11 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                     delItems = new HashSet<AmpActivityDocument>();
                 List<TemporaryActivityDocument> ret = new ArrayList<TemporaryActivityDocument>();
 
-                if (refreshExistingDocs)
+                if (refreshExistingDocs || existingTmpDocs == null)
                     existingTmpDocs = getExistingObject();
-                ret.addAll(existingTmpDocs);
-
-                if (am.getObject().getActivityDocuments() == null)
-                    am.getObject().setActivityDocuments(new HashSet<AmpActivityDocument>());
-                Iterator<AmpActivityDocument> it = setModel.getObject().iterator();
-
-                while (it.hasNext()) {
-                    AmpActivityDocument d = (AmpActivityDocument) it
-                            .next();
-                    //check if marked for delete
-                    if (delItems.contains(d)) {
-                        for (TemporaryDocument td : existingTmpDocs) {
-                            if (td.getExistingDocument().equals(d)) {
-                                existingTmpDocs.remove(td);
-                                break;
-                            }
-                        }
+                for (TemporaryActivityDocument document : existingTmpDocs) {
+                    if (!delItems.contains(document.getExistingDocument())) {
+                        ret.add(document);
                     }
                 }
                 ret.addAll(newItems);
@@ -269,21 +255,22 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                 AmpDeleteLinkField delRelOrg = new AmpDeleteLinkField("delete", "Delete Resource") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        if (item.getModelObject().isExisting()) {
+                        TemporaryActivityDocument document = item.getModelObject();
+                        if (document.isExisting()) {
                             HashSet<AmpActivityDocument> delItems = getSession().getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);
                             if (delItems == null) {
                                 delItems = new HashSet<AmpActivityDocument>();
                                 getSession().setMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS, delItems);
                             }
-                            delItems.add(item.getModelObject().getExistingDocument());
+                            delItems.add(document.getExistingDocument());
                         } else {
                             HashSet<TemporaryActivityDocument> newItems = getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
                             if (newItems != null) {
-                                newItems.remove(item.getModelObject());
+                                newItems.remove(document);
                             }
                             list.removeAll();
                             StagedResourceUploadStore.delete(SessionUtil.getCurrentServletRequest(),
-                                    item.getModelObject().getStagedUploadId());
+                                    document.getStagedUploadId());
                         }
                         target.add(list.getParent());
                     }

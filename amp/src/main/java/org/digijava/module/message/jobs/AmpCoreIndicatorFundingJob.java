@@ -161,7 +161,7 @@ public class AmpCoreIndicatorFundingJob extends ConnectionCleaningJob implements
                 logger.info("Data sent successfully to amp dashboard. HTTP Response Code: " + responseCode);
             } else {
                 // Handle the error condition (e.g., log an error message)
-                logger.info("Error sending data to amp dashboard. HTTP Response Code: " + responseCode);
+                logger.error("Error sending data to amp dashboard. HTTP Response Code: " + responseCode);
             }
 
             // Close the connection

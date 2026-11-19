@@ -26,7 +26,7 @@ function setLabel(obj){
           if (text.length > 15) {
               text = text.substring (0,12) + "....";
           }
-          $("#uploadLabel").text(text);
+	   $(obj).closest('.custom-file-input').next('.custom-file-label').text(text);
 }
 
 function isScrolledIntoView(docViewTop, docViewBottom, elem){

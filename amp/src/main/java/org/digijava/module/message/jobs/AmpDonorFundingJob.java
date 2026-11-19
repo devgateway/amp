@@ -1,6 +1,9 @@
 package org.digijava.module.message.jobs;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -36,9 +39,11 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -48,6 +53,11 @@ import java.util.stream.Collectors;
 public class AmpDonorFundingJob extends ConnectionCleaningJob implements StatefulJob {
 
     protected static final Logger logger = Logger.getLogger(AmpDonorFundingJob.class);
+    static final int MAX_BATCH_BYTES = 128 * 1024;
+    static final int MAX_BATCH_RECORDS = 500;
+    // Leave headroom below the proxy's observed 1,000-value rejection threshold.
+    static final int MAX_BATCH_SCALAR_VALUES = 900;
+    private static final int BATCH_METADATA_SCALAR_VALUES = 4;
     private List<String> currencies = new ArrayList<>(java.util.Arrays.asList("USD", "EUR"));
     /*private String reportName = "preview report";
     private Integer reportType = ArConstants.DONOR_TYPE;*/
@@ -72,7 +82,11 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         String serverUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_DASHBOARD_URL);
         assert serverUrl != null;
         serverUrl = serverUrl.endsWith("/") ? serverUrl + "amp-funding/importDonorFunding" : serverUrl + "/amp-funding/importDonorFunding";
-        sendReportsToServer(ampDashboardFundingCombined, translations, serverUrl);
+        try {
+            sendReportsToServer(ampDashboardFundingCombined, translations, serverUrl);
+        } catch (IOException e) {
+            throw new JobExecutionException("Failed to import donor funding into the dashboard", e);
+        }
     }
 
     @NotNull
@@ -81,8 +95,6 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         List<ReportsDashboard> ampDashboardFunding = processReportData(fundingReport, currencyCode);
         // The ampDashboardFunding data contains objects for commitments and disbursment differently in
         // separate objects. We need to combine them in same object combining commitment and disbursment values.
-        //Make year configurable
-        //+ "|" + report.getYear()
         return new ArrayList<>(ampDashboardFunding.stream()
                 .collect(Collectors.toMap(
                         report -> report.getDonorAgency()
@@ -91,7 +103,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                 + "|" + report.getLocation()
                                 + "|" + report.getImplementationLevel()
                                 + "|" + report.getStatus()
-                                //+ "|" + report.getYear()
+                                + "|" + extractYear(report)
                                 + "|" + report.getReportingSystem()
                                 + "|" + report.getTypeOfAssistance()
                                 + "|" + report.getProcurementSystem()
@@ -110,8 +122,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         logger.info("Number of leaf headers: " + report.leafHeaders.size());
 
         // Find columns by name for robustness (works regardless of order)
-        // Note: Indices are based on the order in addColumnsToSpecification:
-        // Hierarchies: 0-10, then AMP_ID (11), ACTIVITY_COUNT (12), measures (13-14)
+        // Note: indices align with hierarchy columns first; non-hierarchy columns may be omitted from leaf headers
         ReportOutputColumn donorAgency = findColumnByName(report.leafHeaders, ColumnConstants.DONOR_AGENCY, 0);
         ReportOutputColumn implementingAgency = findColumnByName(report.leafHeaders, ColumnConstants.IMPLEMENTING_AGENCY, 1);
         ReportOutputColumn procurementSystemAgency = findColumnByName(report.leafHeaders, ColumnConstants.PROCUREMENT_SYSTEM, 2);
@@ -121,10 +132,10 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         ReportOutputColumn impLocation = findColumnByName(report.leafHeaders, location_adm_level, 5);
         ReportOutputColumn status = findColumnByName(report.leafHeaders, ColumnConstants.STATUS, 6);
         ReportOutputColumn typeOfAssistance = findColumnByName(report.leafHeaders, ColumnConstants.TYPE_OF_ASSISTANCE, 7);
-        ReportOutputColumn reportingSystem = findColumnByName(report.leafHeaders, ColumnConstants.PRIMARY_SECTOR, 8); // Also called Forum
+        ReportOutputColumn reportingSystem = findColumnByName(report.leafHeaders, ColumnConstants.REPORTING_SYSTEM, 8); // Also called Forum
         ReportOutputColumn responsibleOrg = findColumnByName(report.leafHeaders, ColumnConstants.RESPONSIBLE_ORGANIZATION, 9);
         ReportOutputColumn secondarySector = findColumnByName(report.leafHeaders, ColumnConstants.SECONDARY_SECTOR, 10);
-        ReportOutputColumn ampId = findColumnByName(report.leafHeaders, ColumnConstants.AMP_ID, 11); // AMP_ID is now after hierarchies
+        ReportOutputColumn ampId = findOptionalColumnByName(report.leafHeaders, ColumnConstants.AMP_ID, 11);
 
         List<ReportsDashboard> ampDashboardFunding = new ArrayList<>();
 
@@ -171,41 +182,23 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                                                                         for (ReportArea secondarySectorData : responsibleOrgData.getChildren()) {
                                                                                             TextCell secondarySectorCell = (TextCell) secondarySectorData.getContents().get(secondarySector);
 
-                                                                                            Long activityCount = 0L;
-                                                                                            // collect activity count
-                                                                                            for (Map.Entry<ReportOutputColumn, ReportCell> content : responsibleOrgData.getContents().entrySet()) {
-                                                                                                ReportOutputColumn col = content.getKey();
-                                                                                                if (col.originalColumnName.equals(ColumnConstants.ACTIVITY_COUNT)) {
-                                                                                                    IntCell amount = (IntCell) content.getValue();
-                                                                                                    if (amount != null && amount.value != null) {
-                                                                                                        activityCount = (Long) amount.value;
-                                                                                                    }
-                                                                                                }
+                                                                                            Long activityCount = extractActivityCount(secondarySectorData);
+                                                                                            // In some outputs, Activity Count sits on the parent node.
+                                                                                            if (activityCount == 0L) {
+                                                                                                activityCount = extractActivityCount(responsibleOrgData);
                                                                                             }
-                                                                                            // gather AMP IDs from children (leaf nodes)
-                                                                                            List<String> ampIdsList = new ArrayList<>();
-                                                                                            if (responsibleOrgData.getChildren() != null) {
-                                                                                                for (ReportArea ampIdData : responsibleOrgData.getChildren()) {
-                                                                                                    TextCell ampIdCell = (TextCell) ampIdData.getContents().get(ampId);
-                                                                                                    if (ampIdCell != null && ampIdCell.value != null) {
-                                                                                                        ampIdsList.add(ampIdCell.value.toString());
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                            // fallback if AMP ID directly on this node and no children
+                                                                                            // Gather AMP IDs from the same area where measures are read.
+                                                                                            List<String> ampIdsList = extractAmpIds(secondarySectorData, ampId);
                                                                                             if (ampIdsList.isEmpty()) {
-                                                                                                TextCell directAmpIdCell = (TextCell) responsibleOrgData.getContents().get(ampId);
-                                                                                                if (directAmpIdCell != null && directAmpIdCell.value != null) {
-                                                                                                    ampIdsList.add(directAmpIdCell.value.toString());
-                                                                                                }
+                                                                                                ampIdsList = extractAmpIds(responsibleOrgData, ampId);
                                                                                             }
-                                                                                            String ampIdsJoined = String.join(",", ampIdsList);
+                                                                                            String ampIdsJoined = ampIdsList.isEmpty() ? null : String.join(",", ampIdsList);
 
                                                                                             // now process measures
-                                                                                            for (Map.Entry<ReportOutputColumn, ReportCell> content : responsibleOrgData.getContents().entrySet()) {
+                                                                                            for (Map.Entry<ReportOutputColumn, ReportCell> content : secondarySectorData.getContents().entrySet()) {
                                                                                                 ReportOutputColumn col = content.getKey();
                                                                                                 if (col.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS) || col.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
-                                                                                                    if (col.parentColumn != null && col.parentColumn.originalColumnName.equals("Totals")) {
+                                                                                                    if (col.parentColumn != null && !col.parentColumn.originalColumnName.equals("Totals")) {
                                                                                                         ReportsDashboard fundingReport = new ReportsDashboard();
                                                                                                         fundingReport.setDonorAgency(donorAgencyCell != null ? donorAgencyCell.value.toString() : null);
                                                                                                         fundingReport.setImplementingAgency(implementingAgencyCell != null ? implementingAgencyCell.value.toString() : null);
@@ -218,6 +211,7 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                                                                                                         fundingReport.setProcurementSystem(procurementSystemAgencyCell != null ? procurementSystemAgencyCell.value.toString() : null);
                                                                                                         fundingReport.setResponsibleOrganization(responsibleOrgCell != null ? responsibleOrgCell.value.toString() : null);
                                                                                                         fundingReport.setSecondarySector(secondarySectorCell != null ? secondarySectorCell.value.toString() : null);
+                                                                                                        assignYear(fundingReport, col.parentColumn.originalColumnName);
                                                                                                         fundingReport.setActivityCount(activityCount);
                                                                                                         fundingReport.setCurrency(currencyCode);
                                                                                                         fundingReport.setActivityIds(ampIdsJoined);
@@ -313,6 +307,54 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
                 leafHeaders.stream().map(c -> c.originalColumnName != null ? c.originalColumnName : "null").collect(Collectors.joining(", ")));
     }
 
+    private Long extractActivityCount(ReportArea reportArea) {
+        Long activityCount = 0L;
+        for (Map.Entry<ReportOutputColumn, ReportCell> content : reportArea.getContents().entrySet()) {
+            ReportOutputColumn col = content.getKey();
+            if (col.originalColumnName.equals(ColumnConstants.ACTIVITY_COUNT)) {
+                IntCell amount = (IntCell) content.getValue();
+                if (amount != null && amount.value != null) {
+                    activityCount = (Long) amount.value;
+                }
+                break;
+            }
+        }
+        return activityCount;
+    }
+
+    private List<String> extractAmpIds(ReportArea reportArea, ReportOutputColumn ampIdColumn) {
+        List<String> ampIdsList = new ArrayList<>();
+        if (ampIdColumn == null) {
+            return ampIdsList;
+        }
+
+        if (reportArea.getChildren() != null) {
+            for (ReportArea ampIdData : reportArea.getChildren()) {
+                TextCell ampIdCell = (TextCell) ampIdData.getContents().get(ampIdColumn);
+                if (ampIdCell != null && ampIdCell.value != null) {
+                    ampIdsList.add(ampIdCell.value.toString());
+                }
+            }
+        }
+
+        if (ampIdsList.isEmpty()) {
+            TextCell directAmpIdCell = (TextCell) reportArea.getContents().get(ampIdColumn);
+            if (directAmpIdCell != null && directAmpIdCell.value != null) {
+                ampIdsList.add(directAmpIdCell.value.toString());
+            }
+        }
+        return ampIdsList;
+    }
+
+    private ReportOutputColumn findOptionalColumnByName(List<ReportOutputColumn> leafHeaders, String columnName, int expectedIndex) {
+        try {
+            return findColumnByName(leafHeaders, columnName, expectedIndex);
+        } catch (RuntimeException ex) {
+            logger.warn("Optional column missing from report output: " + columnName + ". Continuing without it.");
+            return null;
+        }
+    }
+
     private void addFilters(ReportSpecificationImpl spec) {
         if (spec.getFilters() == null) {
             spec.setFilters(new ReportFiltersImpl());
@@ -333,9 +375,8 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", ArConstants.DONOR_TYPE);
         addColumnsToSpecification(spec);
 
-        spec.setSummaryReport(false);
-        //TODO broken by year configurable
-        spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
+        spec.setSummaryReport(true);
+        spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
         spec.setShowOriginalCurrency(false);
         spec.setDisplayEmptyFundingRows(true);
         ReportSettingsImpl reportSettings = new ReportSettingsImpl();
@@ -357,23 +398,38 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         spec.addColumn(new ReportColumn(ColumnConstants.STATUS));
         spec.addColumn(new ReportColumn(ColumnConstants.TYPE_OF_ASSISTANCE));
         //TODO for GGW this is reporting system, for others it is Sectors
-        spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
+        spec.addColumn(new ReportColumn(ColumnConstants.REPORTING_SYSTEM));
         spec.addColumn(new ReportColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION));
         spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_SECTOR));
-        // Ensure AMP ID is part of the hierarchy so commitments roll up under each activity
-
-        // Set hierarchies - includes AMP_ID so commitments/disbursements roll up under each activity
-        // This is required for summary reports to include all columns in leaf headers
+        // Set hierarchy columns used to navigate the report output tree.
         Set<ReportColumn> hierarchyColumns = new LinkedHashSet<>(spec.getColumns());
         spec.setHierarchies(hierarchyColumns);
 
-        // Add non-hierarchy columns after setHierarchies
+        // Add non-hierarchy columns after setHierarchies.
+        // AMP ID may be absent in some grouped outputs; parser handles it as optional.
         spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
         spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_COUNT));
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 
         logger.info("Report columns set for Donor Funding Report" + spec.getColumns().size());
+    }
+
+    private String extractYear(ReportsDashboard report) {
+        try {
+            Object year = ReportsDashboard.class.getMethod("getYear").invoke(report);
+            return year != null ? year.toString() : null;
+        } catch (ReflectiveOperationException ignored) {
+            return null;
+        }
+    }
+
+    private void assignYear(ReportsDashboard report, String year) {
+        try {
+            ReportsDashboard.class.getMethod("setYear", String.class).invoke(report, year);
+        } catch (ReflectiveOperationException ignored) {
+            // Year accessor is optional in some builds.
+        }
     }
 
     /**
@@ -406,9 +462,10 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
             fieldMappings.put("implementingAgency", ColumnConstants.IMPLEMENTING_AGENCY);
             fieldMappings.put("pillar", ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
             fieldMappings.put("location", locationAdmLevel != null ? locationAdmLevel : ColumnConstants.LOCATION);
+            fieldMappings.put("country", locationAdmLevel != null ? locationAdmLevel : ColumnConstants.LOCATION);
             fieldMappings.put("implementationLevel", ColumnConstants.IMPLEMENTATION_LEVEL);
             fieldMappings.put("status", ColumnConstants.STATUS);
-            fieldMappings.put("reportingSystem", ColumnConstants.PRIMARY_SECTOR);
+            fieldMappings.put("reportingSystem", ColumnConstants.REPORTING_SYSTEM);
             fieldMappings.put("typeOfAssistance", ColumnConstants.TYPE_OF_ASSISTANCE);
             fieldMappings.put("procurementSystem", ColumnConstants.PROCUREMENT_SYSTEM);
             fieldMappings.put("responsibleOrganization", ColumnConstants.RESPONSIBLE_ORGANIZATION);
@@ -470,46 +527,161 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
         return translations;
     }
 
-    public static void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, List<Map<String, String>> translations, String serverUrl) {
-        try {
-            // Create a URL object with the server's endpoint URL
-            logger.info("Sending data to amp dashboard at: " + serverUrl);
-            logger.info("Number of records to send: " + ampDashboardFunding.size());
-            HttpURLConnection connection = getHttpURLConnection(serverUrl);
-            
-            // Create a wrapper object with reports and translations
-            Map<String, Object> submissionData = new HashMap<>();
-            submissionData.put("reports", ampDashboardFunding);
-            submissionData.put("translations", translations);
-            
-            // Convert to JSON using a JSON library (e.g., Gson)
-            Gson gson = new Gson();
-            String jsonData = gson.toJson(submissionData);
-//            logger.info("JSON data: " + jsonData);
+    public static void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, List<Map<String, String>> translations, String serverUrl) throws IOException {
+        sendReportsToServer(ampDashboardFunding, translations, serverUrl, AmpDonorFundingJob::postJson);
+    }
 
-            // Get the output stream of the connection
-            try (OutputStream os = connection.getOutputStream()) {
-                // Write the JSON data to the output stream
-                os.write(jsonData.getBytes(StandardCharsets.UTF_8));
+    static void sendReportsToServer(List<ReportsDashboard> ampDashboardFunding, List<Map<String, String>> translations,
+                                    String serverUrl, JsonPoster poster) throws IOException {
+        Gson gson = new Gson();
+        UUID importId = UUID.randomUUID();
+        List<byte[]> batches = createBatches(ampDashboardFunding, translations, gson, importId);
+        String batchUrl = serverUrl + "/batches";
+        logger.info("Sending " + batches.size() + " batches to server at " + batchUrl);
+        logger.info("Starting donor funding import " + importId + " with " + ampDashboardFunding.size()
+                + " records in " + batches.size() + " batches");
+
+        for (int i = 0; i < batches.size(); i++) {
+            logger.info("Sending donor funding batch " + (i + 1) + "/" + batches.size()
+                    + " (" + batches.get(i).length + " bytes)");
+            try {
+                poster.post(batchUrl, batches.get(i));
+            } catch (IOException | RuntimeException e) {
+                    logger.error("Donor funding import " + importId + " batch "
+                            + (i + 1) + "/" + batches.size(), e);
+
+                throw e;
             }
-
-            // Get the HTTP response code
-            int responseCode = connection.getResponseCode();
-
-            // Check if the request was successful (e.g., HTTP 200 OK)
-            if (responseCode == 200) {
-                // The data has been successfully sent to the server
-                logger.info("Data sent successfully to amp dashboard. HTTP Response Code: " + responseCode);
-            } else {
-                // Handle the error condition (e.g., log an error message)
-                logger.info("Error sending data to amp dashboard. HTTP Response Code: " + responseCode);
-            }
-
-            // Close the connection
-            connection.disconnect();
-        } catch (Exception e) {
-            logger.error("Exception raised when sending data to dashboard", e);
         }
+        logger.info("Completed donor funding import " + importId);
+    }
+
+    static List<byte[]> createBatches(List<ReportsDashboard> reports, List<Map<String, String>> translations,
+                                      Gson gson, UUID importId) throws IOException {
+        if (reports == null || reports.isEmpty()) {
+            throw new IOException("Cannot import donor funding without reports");
+        }
+        String maximumMetadata = "{\"importId\":\"" + importId + "\",\"batchNumber\":2147483647"
+                + ",\"totalBatches\":2147483647,\"totalRecords\":" + reports.size() + ",";
+        int maxReportBytes = MAX_BATCH_BYTES - maximumMetadata.getBytes(StandardCharsets.UTF_8).length + 1;
+        String prefix = "{\"reports\":[";
+        String translationsJson = gson.toJson(translations, new TypeToken<List<Map<String, String>>>() { }.getType());
+        String firstSuffix = "],\"translations\":" + translationsJson + "}";
+        String suffix = "]}";
+        List<String> contents = new ArrayList<>();
+        StringBuilder current = new StringBuilder(prefix);
+        int currentBytes = prefix.getBytes(StandardCharsets.UTF_8).length;
+        int currentScalarValues = BATCH_METADATA_SCALAR_VALUES
+                + countScalarValues(JsonParser.parseString(translationsJson));
+        int count = 0;
+        String currentSuffix = firstSuffix;
+        for (ReportsDashboard report : reports) {
+            if (report == null) {
+                throw new IOException("Cannot import a null donor funding report");
+            }
+            String json = gson.toJson(report);
+            int reportBytes = json.getBytes(StandardCharsets.UTF_8).length;
+            int reportScalarValues = countScalarValues(JsonParser.parseString(json));
+            int suffixBytes = currentSuffix.getBytes(StandardCharsets.UTF_8).length;
+            if (count == MAX_BATCH_RECORDS || currentBytes + (count > 0 ? 1 : 0) + reportBytes
+                    + suffixBytes > maxReportBytes || currentScalarValues + reportScalarValues > MAX_BATCH_SCALAR_VALUES) {
+                if (count == 0) {
+                    if (currentScalarValues + reportScalarValues > MAX_BATCH_SCALAR_VALUES) {
+                        throw new IOException("A donor funding record or its translations exceed the batch JSON scalar limit");
+                    }
+                    throw new IOException("A donor funding record or its translations exceed the batch size limit");
+                }
+                current.append(currentSuffix);
+                contents.add(current.toString());
+                current = new StringBuilder(prefix);
+                currentBytes = prefix.getBytes(StandardCharsets.UTF_8).length;
+                currentScalarValues = BATCH_METADATA_SCALAR_VALUES;
+                count = 0;
+                currentSuffix = suffix;
+                suffixBytes = suffix.getBytes(StandardCharsets.UTF_8).length;
+            }
+            if (currentBytes + reportBytes + suffixBytes > maxReportBytes) {
+                throw new IOException("A donor funding record exceeds the batch size limit");
+            }
+            if (currentScalarValues + reportScalarValues > MAX_BATCH_SCALAR_VALUES) {
+                throw new IOException("A donor funding record exceeds the batch JSON scalar limit");
+            }
+            if (count > 0) {
+                current.append(',');
+                currentBytes++;
+            }
+            current.append(json);
+            currentBytes += reportBytes;
+            currentScalarValues += reportScalarValues;
+            count++;
+        }
+        current.append(currentSuffix);
+        contents.add(current.toString());
+        List<byte[]> batches = new ArrayList<>();
+        for (int i = 0; i < contents.size(); i++) {
+            String metadata = "{\"importId\":\"" + importId + "\",\"batchNumber\":" + i
+                    + ",\"totalBatches\":" + contents.size() + ",\"totalRecords\":" + reports.size() + ",";
+            byte[] batch = (metadata + contents.get(i).substring(1)).getBytes(StandardCharsets.UTF_8);
+            if (batch.length > MAX_BATCH_BYTES) {
+                throw new IOException("A donor funding batch exceeds the batch size limit");
+            }
+            batches.add(batch);
+        }
+        return batches;
+    }
+
+    private static int countScalarValues(JsonElement element) {
+        if (element.isJsonObject()) {
+            return element.getAsJsonObject().entrySet().stream()
+                    .mapToInt(entry -> countScalarValues(entry.getValue())).sum();
+        }
+        if (element.isJsonArray()) {
+            int count = 0;
+            for (JsonElement value : element.getAsJsonArray()) {
+                count += countScalarValues(value);
+            }
+            return count;
+        }
+        return 1;
+    }
+
+    private static void postJson(String url, byte[] requestBytes) throws IOException {
+        postJson(getHttpURLConnection(url), url, requestBytes);
+    }
+
+    static void postJson(HttpURLConnection connection, String url, byte[] requestBytes) throws IOException {
+        try {
+            connection.setFixedLengthStreamingMode(requestBytes.length);
+            try (OutputStream os = connection.getOutputStream()) {
+                os.write(requestBytes);
+            }
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode < 200 || responseCode >= 300) {
+                StringBuilder details = new StringBuilder();
+                InputStream errorStream = connection.getErrorStream();
+                if (errorStream != null) {
+                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(errorStream, StandardCharsets.UTF_8))) {
+                        char[] buffer = new char[2048];
+                        int count;
+                        while (details.length() < buffer.length
+                                && (count = reader.read(buffer, 0, buffer.length - details.length())) != -1) {
+                            details.append(buffer, 0, count);
+                        }
+                    }
+                }
+                String safeDetails = details.toString().replaceAll("[\\p{Cntrl}]+", " ");
+                throw new IOException("Dashboard returned HTTP " + responseCode + " for "
+                        + new URL(url).getPath() + ": " + safeDetails);
+            }
+        } finally {
+            connection.disconnect();
+        }
+    }
+
+    @FunctionalInterface
+    interface JsonPoster {
+        void post(String url, byte[] requestBytes) throws IOException;
     }
 
     @NotNull
@@ -524,6 +696,8 @@ public class AmpDonorFundingJob extends ConnectionCleaningJob implements Statefu
 
         // Set the content type of the request
         connection.setRequestProperty("Content-Type", "application/json");
+        connection.setConnectTimeout(15000);
+        connection.setReadTimeout(900000);
 
         // Enable input and output streams for the connection
         connection.setDoOutput(true);

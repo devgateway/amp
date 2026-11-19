@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiResponses;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.PublicServices;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
+import org.digijava.kernel.ampapi.endpoints.publicportal.dto.PublicDonorCommitmentsByYear;
 import org.digijava.kernel.ampapi.endpoints.publicportal.dto.PublicTotalsByMeasure;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportFormParameters;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
@@ -122,6 +123,31 @@ public class PublicEndpoint {
             value = "Describe options for endpoint",
             notes = "Enables Cross-Origin Resource Sharing for endpoint")
     public Response describeTotalByMeasure() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
+
+    @POST
+    @Path("/donorCommitmentsByYear")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "donorCommitmentsByYear")
+    @ApiOperation("Commitments by donor up to selected year")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Donor commitments by year",
+            response = PublicDonorCommitmentsByYear.class))
+    public Response getDonorCommitmentsByYear(SettingsAndFiltersParameters config,
+                                              @ApiParam(value = "Include commitments up to this year", required = false)
+                                              @QueryParam("year") Integer year) {
+        return PublicServices.buildOkResponseWithOriginHeaders(
+                PublicPortalService.getDonorCommitmentsByYear(config, year));
+    }
+
+
+    @OPTIONS
+    @Path("/donorCommitmentsByYear")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeDonorCommitmentsByYear() {
         return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 

@@ -22,6 +22,16 @@
 <!--		<url-pattern>/wicket/*</url-pattern>-->
 <!--	</filter-mapping>-->
 	<filter>
+		<filter-name>securityHeadersFilter</filter-name>
+		<filter-class>org.digijava.kernel.web.SecurityHeadersFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>securityHeadersFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
+	<filter>
 		<filter-name>javamelody</filter-name>
 		<filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
 		<async-supported>true</async-supported>

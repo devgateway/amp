@@ -717,9 +717,11 @@ public class IndicatorManagerService {
             return;
         }
         for (Long criterion : selected) {
-            if (session.get(AmpCategoryValue.class, criterion) == null) {
+            AmpCategoryValue criterionValue = session.get(AmpCategoryValue.class, criterion);
+            if (criterionValue == null || criterionValue.getAmpCategoryClass() == null
+                    || !"indicator_disaggregation".equals(criterionValue.getAmpCategoryClass().getKeyName())) {
                 throw new ApiRuntimeException(BAD_REQUEST, ApiError.toError(
-                        "Disaggregation criterion with id " + criterion + " not found."));
+                        "Category with id " + criterion + " is not a valid disaggregation criterion."));
             }
         }
         if (values == null) {

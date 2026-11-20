@@ -198,8 +198,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
             aux.getImages().addAll(auxSetImages);
         } else {
 
-            aux.getImages().clear();
-            aux.getImages().addAll(new HashSet<>());
+aux.setImages(new HashSet<>());
         }
 
         if (aux.getCoordinates() != null && !aux.getCoordinates().isEmpty()) {

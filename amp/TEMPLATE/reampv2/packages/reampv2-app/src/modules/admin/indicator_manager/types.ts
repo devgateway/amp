@@ -13,6 +13,28 @@ export interface BaseAndTargetValueType {
     revisedValueDate?:  string;
 }
 
+export interface DisaggregationFormValue {
+    id?: number;
+    parentCategoryId: number;
+    childCategoryId: number | null;
+    thirdCategoryId?: number | null;
+    parentDisaggregationId?: number | null;
+    childDisaggregationId?: number | null;
+    thirdDisaggregationId?: number | null;
+    base: {
+        originalValue: string | number;
+        originalValueDate: string;
+        revisedValue: string | number;
+        revisedValueDate: string;
+    };
+    target: {
+        originalValue: string | number;
+        originalValueDate: string;
+        revisedValue: string | number;
+        revisedValueDate: string;
+    };
+}
+
 export interface SectorObjectType {
     id:           number;
     name:         string;
@@ -45,24 +67,7 @@ export interface IndicatorObjectType {
     outcomeId?: number;
     outputId?: number;
     // Add editable disaggregation values
-    disaggregationValues?: Array<{
-      parentCategoryId: number;
-      childCategoryId: number | null;
-        parentDisaggregationId: number | null;
-        childDisaggregationId: number | null;
-      base: {
-        originalValue: string | number;
-        originalValueDate: string;
-        revisedValue: string | number;
-        revisedValueDate: string;
-      };
-      target: {
-        originalValue: string | number;
-        originalValueDate: string;
-        revisedValue: string | number;
-        revisedValueDate: string;
-      };
-    }>;
+    disaggregationValues?: DisaggregationFormValue[];
 }
 
 export interface ProgramObjectType {

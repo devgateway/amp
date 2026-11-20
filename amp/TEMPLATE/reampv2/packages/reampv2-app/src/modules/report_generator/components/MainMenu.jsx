@@ -5,7 +5,9 @@ import {
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { FM_IS_PUBLIC_REPORT_ENABLED, PROFILE_TAB } from '../utils/constants';
+import {
+  FM_IS_PUBLIC_REPORT_ENABLED, INDICATOR_DISAGGREGATION_REPORT, PROFILE_TAB
+} from '../utils/constants';
 import './MainMenu.css';
 import SaveModal from './SaveModal';
 import { getLayout } from '../actions/layoutActions';
@@ -56,6 +58,8 @@ class MainMenu extends Component {
       translations, tab, saveNewReport, saveReport, loaded, results, runReport, id, options,
       columns, measures, hierarchies, reportDetails, profile, runReportPending, reportSaving
     } = this.props;
+    const measuresTitle = reportDetails.selectedFundingGrouping === INDICATOR_DISAGGREGATION_REPORT
+      ? 'indicatorValues' : 'financialMeasures';
     return (
       <>
         <Menu fluid vertical>
@@ -73,7 +77,7 @@ class MainMenu extends Component {
               />
           <Menu.Item
             name={MENU + 2}
-            content={`3. ${translate('financialMeasures', profile, translations)}`}
+            content={`3. ${translate(measuresTitle, profile, translations)}`}
             active={tab === 2}
             onClick={this.handleItemClick}
               />

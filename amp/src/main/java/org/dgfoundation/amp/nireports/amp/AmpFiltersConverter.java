@@ -9,6 +9,7 @@ import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.nireports.BasicFiltersConverter;
 import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
@@ -16,6 +17,7 @@ import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * the AMP filtering rules, used jointly by {@link AmpReportsSchema} and {@link HardcodedReportsTestSchema}
@@ -101,11 +103,30 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 
     @Override
     protected void processColumnElement(String columnName, FilterRule rule) {
+
+        if (columnName.equals(ColumnConstants.INDICATOR_DISAGGREGATION_FILTER)) {
+            if (spec.getReportType() != ArConstants.INDICATOR_TYPE) {
+                throw new IllegalArgumentException("The disaggregation filter is only supported for indicator reports");
+            }
+            if (rule.filterType != FilterType.VALUES || !rule.valuesInclusive || rule.values == null) {
+                throw new IllegalArgumentException("The disaggregation filter requires a list of selected options");
+            }
+            Set<Long> selected = rule.addIds(null);
+            if (!selected.isEmpty()) {
+                List<NiDimensionUsage> levels = getDisaggregationLevels();
+                Predicate<Cell> predicate = cell -> matchesDisaggregation(cell, selected, levels);
+                crossDimensionPredicates.add(predicate);
+                String anchor = ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_0;
+                filteringColumns.add(anchor);
+                cellPredicates.computeIfAbsent(anchor, ignored -> new ArrayList<>()).add(predicate);
+            }
+            return;
+        }
         
         if (columnName.equals(ColumnConstants.COMPUTED_YEAR)) {
             return; /** Ignore computed year, the value is processed through {@link AmpReportFilters#computedYear} */
         }
-        
+
         if (columnName.equals(ColumnConstants.DONOR_ID))
             columnName = ColumnConstants.DONOR_AGENCY; // Hello, filter widget with your weird peculiarities
         
@@ -151,6 +172,23 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
                 
         // gone till here -> we're going to fail anyway, but using the superclass
         super.processColumnElement(columnName, rule);
+    }
+
+    protected List<NiDimensionUsage> getDisaggregationLevels() {
+        return Arrays.asList(AmpReportsSchema.INDICATOR_DISAGG_DIM_USG,
+                AmpReportsSchema.INDICATOR_DISAGG_LEVEL_1_DIM_USG,
+                AmpReportsSchema.INDICATOR_DISAGG_LEVEL_2_DIM_USG);
+    }
+
+    static boolean matchesDisaggregation(Cell cell, Set<Long> selected, List<NiDimensionUsage> levels) {
+        Map<NiDimensionUsage, NiDimension.Coordinate> coordinates = cell.getCoordinates();
+        boolean hasDisaggregation = levels.stream().anyMatch(coordinates::containsKey);
+        if (!(cell instanceof CategAmountCell) && !hasDisaggregation) {
+            return true;
+        }
+        return levels.stream().map(coordinates::get)
+                .filter(Objects::nonNull)
+                .anyMatch(coordinate -> selected.contains(coordinate.id));
     }
 
     /**

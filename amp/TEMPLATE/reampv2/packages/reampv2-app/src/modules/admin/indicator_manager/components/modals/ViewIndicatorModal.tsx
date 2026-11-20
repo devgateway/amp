@@ -222,6 +222,35 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                                     <div className={styles.label}><b>{t("amp.indicatormanager:disaggregation-values")}</b></div>
                                     <div className={styles.value} style={{ width: '100%' }}>
                                         {indicator.disaggregationValues && indicator.disaggregationValues.length > 0 ? (
+                                          indicator.disaggregation?.length > 2 || indicator.disaggregationValues.some(dv => dv.thirdCategoryId != null) ? (
+                                            <div style={{ maxHeight: '40vh', overflow: 'auto', width: '100%' }}>
+                                              <table className={styles.hierarchical_table} style={{ width: '100%' }}>
+                                                <thead>
+                                                  <tr>
+                                                    <th>{t("amp.indicatormanager:disaggregation")}</th>
+                                                    <th>{t("amp.indicatormanager:original-base-value")}</th>
+                                                    <th>{t("amp.indicatormanager:revised-base-value")}</th>
+                                                    <th>{t("amp.indicatormanager:original-target-value")}</th>
+                                                    <th>{t("amp.indicatormanager:revised-target-value")}</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  {indicator.disaggregationValues.map((dv, index) => (
+                                                    <tr key={dv.id ?? index}>
+                                                      <td>{getCategoryLabel(dv.parentCategoryId)} / {getCategoryLabel(dv.childCategoryId ?? undefined)} / {
+                                                        dv.thirdCategoryId != null ? getCategoryLabel(dv.thirdCategoryId)
+                                                          : t("amp.indicatormanager:unallocated-third")
+                                                      }</td>
+                                                      <td>{dv.base?.originalValue} {dv.base?.originalValueDate}</td>
+                                                      <td>{dv.base?.revisedValue} {dv.base?.revisedValueDate}</td>
+                                                      <td>{dv.target?.originalValue} {dv.target?.originalValueDate}</td>
+                                                      <td>{dv.target?.revisedValue} {dv.target?.revisedValueDate}</td>
+                                                    </tr>
+                                                  ))}
+                                                </tbody>
+                                              </table>
+                                            </div>
+                                          ) : (
                                             <div style={{ maxHeight: '40vh', overflow: 'auto', width: '100%' }}>
                                                 {/* Transposed Table */}
                                                 {(() => {
@@ -400,6 +429,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                                                   );
                                                 })()}
                                             </div>
+                                          )
                                         ) : (
                                             <div className={styles.no_data}>{t("amp.indicatormanager:no-disaggregation-values")}</div>
                                         )}

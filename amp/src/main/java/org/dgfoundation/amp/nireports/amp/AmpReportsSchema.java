@@ -63,11 +63,14 @@ import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.nireports.*;
 import org.dgfoundation.amp.nireports.amp.dimensions.*;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDateTokenBehaviour;
+import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDisaggregationFilter;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDisaggregationTextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDisaggregationLevel1TextualTokenBehaviour;
+import org.dgfoundation.amp.nireports.amp.indicators.IndicatorReportDataOutputter;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorTextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.*;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
+import org.dgfoundation.amp.nireports.output.NiReportDataOutputter;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
@@ -190,6 +193,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
     @SuppressWarnings("serial")
     public final static Map<String, String> measureDescriptions = new HashMap<String, String>() {{
+        put(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_ACTUAL_VALUE,
+                "Actual indicator values attached to disaggregation combinations");
         put(MeasureConstants.CUMULATED_DISBURSEMENTS, "Prior Actual Disbursements + Previous Month Disbursements");
         put(MeasureConstants.CUMULATIVE_COMMITMENT, "Sum of all ACTUAL COMMITMENTS independent of filters");
         put(MeasureConstants.CUMULATIVE_DISBURSEMENT, "Sum of all ACTUAL DISBURSEMENTS independent of filters");
@@ -248,6 +253,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             catsDimension.getDimensionUsage("Indicator Disaggregation Child Category");
     public final static LevelColumn INDICATOR_DISAGG_LEVEL_1_COLUMN =
             INDICATOR_DISAGG_LEVEL_1_DIM_USG.getLevelColumn(CategoriesDimension.LEVEL_CAT_VALUE);
+
+    public final static NiDimensionUsage INDICATOR_DISAGG_LEVEL_2_DIM_USG =
+            catsDimension.getDimensionUsage("Indicator Disaggregation Third Category");
+    public final static LevelColumn INDICATOR_DISAGG_LEVEL_2_COLUMN =
+            INDICATOR_DISAGG_LEVEL_2_DIM_USG.getLevelColumn(CategoriesDimension.LEVEL_CAT_VALUE);
 
     // the organisation-based NiDimensionUsage's
     public final static NiDimensionUsage DONOR_DIM_USG = orgsDimension.getDimensionUsage(Constants.FUNDING_AGENCY);
@@ -414,6 +424,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             // (catsDimension-backed, distinct instance name from Level 0), so funding cells are tagged
             // with the child disaggregation category coordinate independently from the parent (Level 0).
             .put(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_1, "child_category_value_id")
+            .put(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_2, "third_category_value_id")
             .build());
 
     /**
@@ -827,6 +838,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         // on aidv.child_category_id, and its own INDICATOR_DISAGG_LEVEL_1_COLUMN so filtering by
         // Level 1 is fully independent from Level 0.
         indicator_disaggregation_level1_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_1, "v_indicator_disaggregation_level_1", INDICATOR_DISAGG_LEVEL_1_COLUMN);
+        indicator_disaggregation_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_2,
+                "v_indicator_disaggregation_level_2", INDICATOR_DISAGG_LEVEL_2_COLUMN);
 
         // indicator_degenerate_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_BASE_VALUE, "v_indicator_disaggregation_basevalue", indicatorsDimension);
         // indicator_degenerate_dimension(ColumnConstants.INDICATOR_DISAGGREGATION_TARGET_VALUE, "v_indicator_disaggregation_targetvalue", indicatorsDimension);
@@ -1331,6 +1344,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_ACTUAL_VALUE, AmpIndicatorValue.ACTUAL));
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_TARGET_VALUE, AmpIndicatorValue.TARGET));
         addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_BASE_VALUE, AmpIndicatorValue.BASE));
+        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_ACTUAL_VALUE,
+                AmpIndicatorValue.ACTUAL, true));
 
         // TODO: maybe we need a different behaviour for disaggregations because the values displayed come from the Admin and are "fixed".
         //addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_PRIMARY_DISAGGREGATION_BASE_VALUE, AmpIndicatorValue.BASE_DISAGGREGATED_LEVEL_0));
@@ -1442,7 +1457,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     }
 
     private AmpReportsSchema indicator_single_dimension(String columnName, String view, LevelColumn levelColumn, Behaviour<NiTextCell> behaviour) {
-        SimpleTextColumn col = SimpleTextColumn.fromView(columnName, view, levelColumn, behaviour);
+        SimpleTextColumn col = behaviour instanceof IndicatorDisaggregationTextualTokenBehaviour
+                ? new IndicatorDisaggregationColumn(columnName, view, levelColumn, behaviour)
+                : SimpleTextColumn.fromView(columnName, view, levelColumn, behaviour);
         col.allowNulls(true);
         return addColumn(col);
     }
@@ -1528,6 +1545,25 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     }
 
     protected final CurrencyConvertor currencyConvertor = AmpCurrencyConvertor.getInstance();
+
+    @Override
+    public void processFetchedData(NiReportsEngine engine) {
+        IndicatorDisaggregationFilter.restrictIndicatorColumns(engine);
+    }
+
+    @Override
+    public NiReportDataOutputter getReportDataOutputter(NiReportsEngine engine) {
+        if (engine.spec.getReportType() == ArConstants.INDICATOR_TYPE && !engine.spec.isSummaryReport()) {
+            return new IndicatorReportDataOutputter(
+                    engine.headers, engine, INDICATOR_DIM_USG,
+                    Arrays.asList(INDICATOR_DISAGG_LEVEL_COLUMN, INDICATOR_DISAGG_LEVEL_1_COLUMN,
+                            INDICATOR_DISAGG_LEVEL_2_COLUMN),
+                    Arrays.asList(ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_0,
+                            ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_1,
+                            ColumnConstants.INDICATOR_DISAGGREGATION_LEVEL_2));
+        }
+        return super.getReportDataOutputter(engine);
+    }
 
     @Override
     public AmpAmountColumn getFundingFetcher(NiReportsEngine engine) {

@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.Strings;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -85,7 +86,8 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
 
                 }
                 // make parentDisaggregationName bold
-                Label parentNameLabel = new Label("parentName", Model.of("<b>" + parentDisaggregationName + "</b>: " + parentName));
+                Label parentNameLabel = new Label("parentName", Model.of("<b>"
+                        + Strings.escapeMarkup(parentDisaggregationName) + "</b>: " + Strings.escapeMarkup(parentName)));
                 parentNameLabel.setEscapeModelStrings(false);
                 parentNameLabel.setOutputMarkupId(true);
                 parentItem.add(parentNameLabel);
@@ -124,7 +126,14 @@ public class AmpMEDisaggregationValuesFeaturePanel extends AmpFeaturePanel<AmpIn
                             childDisaggregation = PersistenceManager.getSession().get(AmpCategoryValue.class, classId);
                             if (childDisaggregation != null) childDisaggregationName = childDisaggregation.getLabel();
                         }
-                        String childHeaderText = "<b>" + childDisaggregationName + "</b>: " + childName;
+                        String childHeaderText = "<b>" + Strings.escapeMarkup(childDisaggregationName) + "</b>: "
+                                + Strings.escapeMarkup(childName);
+                        AmpCategoryValue thirdCategory = disaggVal.getThirdCategory();
+                        if (thirdCategory != null) {
+                            childHeaderText += " / " + Strings.escapeMarkup(thirdCategory.getValue());
+                        } else if (indicatorModel.getObject().getDisaggregation().size() > 2) {
+                            childHeaderText += " / Unallocated in third dimension";
+                        }
                         Label childHeader = new Label("childHeader", Model.of(childHeaderText));
                         childHeader.setEscapeModelStrings(false);
                         childHeader.setOutputMarkupId(true);

@@ -363,7 +363,9 @@ public class EndpointUtils {
                     }
                     
                     boolean isFilterVisible = reportType.toUpperCase().equals(filterDefinition.reportType().getType()) 
-                            || reportType.toUpperCase().equals(FilterReportType.ALL.getType());
+                            || reportType.toUpperCase().equals(FilterReportType.ALL.getType())
+                            || (reportType.toUpperCase().equals(FilterReportType.INDICATOR.getType())
+                                && filterDefinition.reportType() == FilterReportType.DONOR);
                     
                     if (isVisibleColumn && isFilterVisible) {
                         //then we have to add it to the filters list

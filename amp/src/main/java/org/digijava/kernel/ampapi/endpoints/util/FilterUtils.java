@@ -82,6 +82,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PROCUREMENT_SYSTEM, ColumnConstants.PROCUREMENT_SYSTEM);
         mapSimpleColumn(FiltersConstants.GOVERNMENT_APPROVAL_PROCEDURES, ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES);
         mapSimpleColumn(FiltersConstants.HUMANITARIAN_AID, ColumnConstants.HUMANITARIAN_AID);
+        mapSimpleColumn(FiltersConstants.INDICATOR_DISAGGREGATION, ColumnConstants.INDICATOR_DISAGGREGATION_FILTER);
         mapSimpleColumn(FiltersConstants.IMPLEMENTING_AGENCY, ColumnConstants.IMPLEMENTING_AGENCY);
         mapSimpleColumn(FiltersConstants.IMPLEMENTING_AGENCY_GROUP, ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
         mapSimpleColumn(FiltersConstants.IMPLEMENTING_AGENCY_TYPE, ColumnConstants.IMPLEMENTING_AGENCY_TYPE);

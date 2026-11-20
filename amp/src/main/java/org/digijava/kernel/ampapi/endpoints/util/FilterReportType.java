@@ -11,6 +11,7 @@ package org.digijava.kernel.ampapi.endpoints.util;
 public enum FilterReportType {
     DONOR("D"),
     PLEDGE("P"),
+    INDICATOR("I"),
     ALL("ALL");
     
     private final String type;

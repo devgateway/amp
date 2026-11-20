@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../schemas/xmlpatcher.xsd ">
+    <jira>AMP-31226</jira>
+    <author>brianbrix</author>
+    <description>Register the indicator disaggregation actual value report measure.</description>
+    <apply>
+        <script>
+            <lang delimiter="@" type="postgres"><![CDATA[
+                DO $patch$
+                DECLARE
+                    measures_module bigint;
+                    base_feature bigint;
+                    actual_feature bigint;
+                BEGIN
+                    INSERT INTO amp_measures (measureid, measurename, aliasname, type, description)
+                    SELECT nextval('amp_measures_seq'), 'Indicator Primary Disaggregation Actual Value',
+                           'Indicator Primary Disaggregation Actual Value', 'A',
+                           'Actual indicator values attached to disaggregation combinations'
+                    WHERE NOT EXISTS (
+                        SELECT 1 FROM amp_measures
+                        WHERE measurename = 'Indicator Primary Disaggregation Actual Value' AND type = 'A'
+                    );
+
+                    SELECT measures.id INTO STRICT measures_module
+                    FROM amp_modules_visibility measures
+                    JOIN amp_modules_visibility reporting ON reporting.id = measures.parent
+                    WHERE lower(measures.name) = 'measures' AND lower(reporting.name) = 'reporting';
+                    BEGIN
+                        SELECT id INTO STRICT actual_feature FROM amp_features_visibility
+                        WHERE name = 'Indicator Primary Disaggregation Actual Value' AND parent = measures_module;
+                    EXCEPTION WHEN no_data_found THEN
+                        SELECT id INTO STRICT base_feature FROM amp_features_visibility
+                        WHERE name = 'Indicator Primary Disaggregation Base Value' AND parent = measures_module;
+                        INSERT INTO amp_features_visibility (id, name, haslevel, parent)
+                        VALUES (nextval('amp_features_visibility_seq'),
+                                'Indicator Primary Disaggregation Actual Value', false, measures_module)
+                        RETURNING id INTO actual_feature;
+                        INSERT INTO amp_features_templates (template, feature)
+                        SELECT template, actual_feature FROM amp_features_templates WHERE feature = base_feature;
+                    END;
+                END
+                $patch$@
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

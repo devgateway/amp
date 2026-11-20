@@ -183,6 +183,16 @@ input[type=number] {
     padding-right: 4px;
 }
 
+.disaggregationCombinationSection {
+    padding: 7px 10px;
+    margin-top: 1rem;
+}
+
+.disaggregationToggle {
+    width: 100%;
+    text-align: left;
+}
+
 .disaggregationValueCard {
     margin-bottom: 10px;
     border: 1px solid #e1e8f0;

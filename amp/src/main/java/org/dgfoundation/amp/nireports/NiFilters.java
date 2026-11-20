@@ -17,6 +17,10 @@ import java.util.function.Predicate;
  *
  */
 public interface NiFilters {
+
+    default boolean matchesCell(Cell cell) {
+        return true;
+    }
     
     /**
      * the IDs of the entities (activities / pledges) which are selected by the workspace filter or global filter

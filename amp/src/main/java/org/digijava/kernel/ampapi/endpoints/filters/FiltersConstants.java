@@ -67,6 +67,7 @@ public class FiltersConstants {
     public static final String FUNDING_STATUS = "funding-status";
     public static final String GOVERNMENT_APPROVAL_PROCEDURES = "government-approval-procedures";
     public static final String HUMANITARIAN_AID = "humanitarian-aid";
+    public static final String INDICATOR_DISAGGREGATION = "indicator-disaggregation";
     public static final String IMPLEMENTING_AGENCY = "implementing-agency";
     public static final String IMPLEMENTING_AGENCY_GROUP = "implementing-agency-group";
     public static final String IMPLEMENTING_AGENCY_TYPE = "implementing-agency-type";

@@ -12,6 +12,7 @@ import {
 } from '../actions/stateUIActions';
 import { toggleIcon } from '../utils/appliedFiltersExtenalCode';
 import { translate, hasFilters } from '../utils/Utils';
+import { PROFILE_TAB } from '../utils/constants';
 import '@devgateway/amp-filter/dist/amp-filter.css';
 
 const Filter = require('@devgateway/amp-filter/dist/amp-filter');
@@ -28,7 +29,7 @@ class Filters extends Component {
 
   componentDidMount() {
     const {
-      _getMetadata, id, filters, _updateAppliedFilters
+      _getMetadata, id, filters, _updateAppliedFilters, profile,
     } = this.props;
     const { store } = this.context;
 
@@ -38,6 +39,7 @@ class Filters extends Component {
         draggable: true,
         caller: 'REPORTS',
         reportType: action.payload.type,
+        reportContext: profile !== PROFILE_TAB,
       });
 
       filter.on('apply', this.applyFilters);

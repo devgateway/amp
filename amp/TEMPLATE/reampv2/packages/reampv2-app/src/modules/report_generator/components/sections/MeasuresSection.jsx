@@ -97,7 +97,7 @@ class MeasuresSection extends Component {
     } = this.props;
     const { search } = this.state;
     const indicatorDisaggregationReport = selectedFundingGrouping === INDICATOR_DISAGGREGATION_REPORT;
-    const measuresRequired = !IS_MEASURELESS_REPORT || indicatorDisaggregationReport;
+    const measuresRequired = !IS_MEASURELESS_REPORT;
     const _measures = search ? measures.filter(i => i.label.toLowerCase().indexOf(search.toLowerCase()) > -1)
       : measures;
     return (

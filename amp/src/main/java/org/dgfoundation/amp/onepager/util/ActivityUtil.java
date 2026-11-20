@@ -421,7 +421,7 @@ public class ActivityUtil {
 
     private static AmpIndicatorGlobalValue getActualValueToSave(AmpIndicatorGlobalValue actualValue,
                                                                 boolean createNewVersion) {
-        if (!createNewVersion || actualValue.getId() == null) {
+        if (!createNewVersion || actualValue.getId() == null || actualValue.getActivityLocation() == null) {
             return actualValue;
         }
         AmpIndicatorGlobalValue clonedValue = new AmpIndicatorGlobalValue(AmpIndicatorGlobalValue.ACTUAL);
@@ -432,6 +432,9 @@ public class ActivityUtil {
 
     private static List<Object> getActualValueKey(AmpIndicatorGlobalValue actualValue,
                                                   AmpActivityLocation activityLocation) {
+        if (activityLocation == null && actualValue.getId() != null) {
+            return Collections.singletonList(actualValue.getId());
+        }
         return Arrays.asList(
                 activityLocation != null ? activityLocation.getId() : null,
                 getLocationId(activityLocation),
@@ -482,7 +485,7 @@ public class ActivityUtil {
     private static boolean matchesActivityLocation(AmpActivityLocation activityLocation,
                                                    Set<Long> activityLocationIds, Set<Long> locationIds) {
         if (activityLocation == null) {
-            return false;
+            return true;
         }
         if (activityLocation.getId() != null) {
             return !activityLocationIds.isEmpty() && activityLocationIds.contains(activityLocation.getId());
@@ -494,30 +497,34 @@ public class ActivityUtil {
     private static void syncDisaggregationActualValueLinks(AmpIndicatorDisaggregationValue disaggregationValue,
                                                            Collection<AmpIndicatorGlobalValue> actualValues,
                                                            Set<Long> activityLocationIds, Session session) {
-        if (disaggregationValue.getId() == null || activityLocationIds.isEmpty()) {
+        if (disaggregationValue.getId() == null) {
             return;
         }
 
-        Query<?> deleteLinks = session.createNativeQuery("DELETE FROM amp_disagg_actual_values links "
-                + "USING amp_indicator_global_value global_values "
-                + "WHERE links.global_value_id = global_values.id "
-                + "AND links.disagg_value_id = :disaggValueId "
-                + "AND global_values.activity_location IN (:activityLocationIds)");
-        deleteLinks.setParameter("disaggValueId", disaggregationValue.getId(), LongType.INSTANCE);
-        deleteLinks.setParameterList("activityLocationIds", activityLocationIds);
-        deleteLinks.executeUpdate();
+        if (!activityLocationIds.isEmpty()) {
+            Query<?> deleteLinks = session.createNativeQuery("DELETE FROM amp_disagg_actual_values links "
+                    + "USING amp_indicator_global_value global_values "
+                    + "WHERE links.global_value_id = global_values.id "
+                    + "AND links.disagg_value_id = :disaggValueId "
+                    + "AND global_values.activity_location IN (:activityLocationIds)");
+            deleteLinks.setParameter("disaggValueId", disaggregationValue.getId(), LongType.INSTANCE);
+            deleteLinks.setParameterList("activityLocationIds", activityLocationIds);
+            deleteLinks.executeUpdate();
+        }
 
         Set<Long> linkedValueIds = new HashSet<>();
         for (AmpIndicatorGlobalValue actualValue : actualValues) {
-            if (actualValue.getId() == null || actualValue.getActivityLocation() == null
-                    || actualValue.getActivityLocation().getId() == null
-                    || !activityLocationIds.contains(actualValue.getActivityLocation().getId())
+            AmpActivityLocation activityLocation = actualValue.getActivityLocation();
+            if (actualValue.getId() == null
+                    || (activityLocation != null && (activityLocation.getId() == null
+                    || !activityLocationIds.contains(activityLocation.getId())))
                     || !linkedValueIds.add(actualValue.getId())) {
                 continue;
             }
 
             Query<?> insertLink = session.createNativeQuery("INSERT INTO amp_disagg_actual_values "
-                    + "(disagg_value_id, global_value_id) VALUES (:disaggValueId, :globalValueId)");
+                    + "(disagg_value_id, global_value_id) VALUES (:disaggValueId, :globalValueId) "
+                    + "ON CONFLICT DO NOTHING");
             insertLink.setParameter("disaggValueId", disaggregationValue.getId(), LongType.INSTANCE);
             insertLink.setParameter("globalValueId", actualValue.getId(), LongType.INSTANCE);
             insertLink.executeUpdate();

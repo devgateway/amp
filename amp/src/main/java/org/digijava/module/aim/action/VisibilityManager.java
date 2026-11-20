@@ -401,6 +401,7 @@ public class VisibilityManager extends MultiAction {
             form.addError("aim:fm:errortemplateExistent", "Template name already exist in database. Please choose another name for template.");
             request.setAttribute("templateId", templateId);
         } else {
+            Set<String> enabledVisibilityIds = parseEnabledVisibilityIds(request.getParameter("enabledVisibilityIds"));
             AmpTemplatesVisibility templateVisibility = FeaturesUtil.getTemplateVisibility(templateId);
             ampTreeVisibility.buildAmpTreeVisibility(templateVisibility);
             TreeSet<AmpModulesVisibility> modules = new TreeSet<>();
@@ -409,10 +410,11 @@ public class VisibilityManager extends MultiAction {
 
             for (AmpTreeVisibility obj : ampTreeVisibility.getItems().values()) {
                 if (obj.getRoot() instanceof AmpModulesVisibility)
-                    if (request.getParameter("moduleVis:" + obj.getRoot().getId()) != null) {
+                    if (isVisibilityEnabled(request, enabledVisibilityIds,
+                            "moduleVis:" + obj.getRoot().getId())) {
                         modules.add((AmpModulesVisibility) obj.getRoot());
                     }
-                recursivelyParseFMTree(obj, modules, features, fields, request);
+                recursivelyParseFMTree(obj, modules, features, fields, request, enabledVisibilityIds);
             }
 
             FeaturesUtil.updateAmpTemplateNameTreeVisibility(request.getParameter("templateName"), templateId, hbsession);
@@ -441,16 +443,24 @@ public class VisibilityManager extends MultiAction {
 
     public void recursivelyParseFMTree(AmpTreeVisibility atv, TreeSet<AmpModulesVisibility> modules, TreeSet<AmpFeaturesVisibility> features, TreeSet<AmpFieldsVisibility> fields,HttpServletRequest request)
     {
+        recursivelyParseFMTree(atv, modules, features, fields, request,
+                parseEnabledVisibilityIds(request.getParameter("enabledVisibilityIds")));
+    }
+
+    private void recursivelyParseFMTree(AmpTreeVisibility atv, TreeSet<AmpModulesVisibility> modules,
+            TreeSet<AmpFeaturesVisibility> features, TreeSet<AmpFieldsVisibility> fields,
+            HttpServletRequest request, Set<String> enabledVisibilityIds)
+    {
         if (atv.getItems() ==null ) return;
         if (atv.getItems().isEmpty()) return;
         for(AmpTreeVisibility auxTree:atv.getItems().values()) {
             if (auxTree.getRoot() instanceof AmpModulesVisibility)
-                if(request.getParameter("moduleVis:"+auxTree.getRoot().getId())!=null)
+                if(isVisibilityEnabled(request, enabledVisibilityIds, "moduleVis:" + auxTree.getRoot().getId()))
                 {
                     modules.add((AmpModulesVisibility) auxTree.getRoot());
                 }
             if(auxTree.getRoot() instanceof AmpFeaturesVisibility)
-                if(request.getParameter("featureVis:"+auxTree.getRoot().getId())!=null)
+                if(isVisibilityEnabled(request, enabledVisibilityIds, "featureVis:" + auxTree.getRoot().getId()))
                 {// ONly enable Top Countries in Multi-country mode
                     boolean topCountriesAllowed  = checkMultiCountryForTopCountries(auxTree.getRoot().getName());
                     if (!topCountriesAllowed)
@@ -462,12 +472,32 @@ public class VisibilityManager extends MultiAction {
                     features.add((AmpFeaturesVisibility) auxTree.getRoot());
                 }
             if(auxTree.getRoot() instanceof AmpFieldsVisibility)
-                if(request.getParameter("fieldVis:"+auxTree.getRoot().getId())!=null)
+                if(isVisibilityEnabled(request, enabledVisibilityIds, "fieldVis:" + auxTree.getRoot().getId()))
                 {
                     fields.add((AmpFieldsVisibility) auxTree.getRoot());
                 }
-            recursivelyParseFMTree(auxTree, modules, features, fields, request);
+            recursivelyParseFMTree(auxTree, modules, features, fields, request, enabledVisibilityIds);
         }
+    }
+
+    static Set<String> parseEnabledVisibilityIds(String submittedIds) {
+        if (submittedIds == null) {
+            return null;
+        }
+        Set<String> enabledIds = new HashSet<>();
+        for (String id : submittedIds.split(",")) {
+            if (!id.isEmpty()) {
+                enabledIds.add(id);
+            }
+        }
+        return enabledIds;
+    }
+
+    private static boolean isVisibilityEnabled(HttpServletRequest request, Set<String> enabledVisibilityIds,
+            String visibilityId) {
+        return enabledVisibilityIds == null
+                ? request.getParameter(visibilityId) != null
+                : enabledVisibilityIds.contains(visibilityId);
     }
 
     public String trimString(String s)

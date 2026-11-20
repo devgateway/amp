@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../schemas/xmlpatcher.xsd ">
+    <jira>AMP-31226</jira>
+    <author>brianbrix</author>
+    <description>Ensure the storage used for disaggregated actual values exists before recreating report views.</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                ALTER TABLE amp_indicator_global_value ADD COLUMN IF NOT EXISTS activity_location BIGINT;
+                CREATE INDEX IF NOT EXISTS amp_indicator_global_value_activity_location_idx
+                    ON amp_indicator_global_value (activity_location);
+                CREATE TABLE IF NOT EXISTS amp_disagg_actual_values (
+                    disagg_value_id BIGINT NOT NULL REFERENCES amp_indicator_disaggregation_values(id),
+                    global_value_id BIGINT NOT NULL REFERENCES amp_indicator_global_value(id),
+                    PRIMARY KEY (disagg_value_id, global_value_id)
+                );
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

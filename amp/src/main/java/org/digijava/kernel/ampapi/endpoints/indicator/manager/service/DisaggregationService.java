@@ -117,7 +117,8 @@ public class DisaggregationService {
         Long linkedCount = session.createQuery("select count(disaggValue.id) from "
                 + AmpIndicatorDisaggregationValue.class.getName() + " disaggValue "
                 + "where disaggValue.parentCategory.id = :optionId "
-                + "or disaggValue.childCategory.id = :optionId", Long.class)
+                + "or disaggValue.childCategory.id = :optionId "
+                + "or disaggValue.thirdCategory.id = :optionId", Long.class)
                 .setParameter("optionId", optionId)
                 .uniqueResult();
         return linkedCount != null && linkedCount > 0;

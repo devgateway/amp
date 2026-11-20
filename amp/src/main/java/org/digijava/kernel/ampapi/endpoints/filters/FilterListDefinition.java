@@ -23,6 +23,8 @@ public class FilterListDefinition {
     
     @ApiModelProperty(value = "If the tree should be built dynamically. ")
     private boolean filtered;
+
+    private boolean serializeSelectedLeaves;
     
     @ApiModelProperty(value = "The name of the object from which the values should be fetched")
     private String items;
@@ -64,6 +66,14 @@ public class FilterListDefinition {
 
     public boolean isFiltered() {
         return filtered;
+    }
+
+    public boolean isSerializeSelectedLeaves() {
+        return serializeSelectedLeaves;
+    }
+
+    public void setSerializeSelectedLeaves(boolean serializeSelectedLeaves) {
+        this.serializeSelectedLeaves = serializeSelectedLeaves;
     }
 
     public void setFiltered(boolean filtered) {

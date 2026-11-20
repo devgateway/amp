@@ -355,7 +355,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
     }
     
     protected void flatten() {
-        this.reportOutput = this.rootReportData.accept(new NiReportDataOutputter(headers, this));
+        this.reportOutput = this.rootReportData.accept(schema.getReportDataOutputter(this));
     }
     
     /**
@@ -367,6 +367,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
         timer.run("filtersApply", this::applyFilters);
         timer.run("columns", this::fetchColumns);
         timer.run("measures", this::fetchMeasures);
+        schema.processFetchedData(this);
         if (fundingFiltersIds()) {
             cleanColumnsAccordingToFunding();
         }
@@ -493,6 +494,8 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
     }
     
     protected<K extends Cell> boolean cellMatchesFilters(K cell) {
+        if (!filters.matchesCell(cell))
+            return false;
         for(Map.Entry<NiDimensionUsage, Predicate<Coordinate>> filterItem:filters.getProcessedFilters().entrySet()) {
             Coordinate cellCoo = cell.getCoordinates().get(filterItem.getKey());
             if (cellCoo == null) 

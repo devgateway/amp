@@ -194,8 +194,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
                 auxImg.setStructure(aux);
                 auxSetImages.add(auxImg);
             }
-            aux.getImages().clear();
-            aux.getImages().addAll(auxSetImages);
+            aux.setImages(new HashSet<>(auxSetImages));
         } else {
 
 aux.setImages(new HashSet<>());

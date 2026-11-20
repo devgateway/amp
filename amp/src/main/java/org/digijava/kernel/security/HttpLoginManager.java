@@ -1083,7 +1083,7 @@ public final class HttpLoginManager {
         }
 
         userNameCookie.setPath(cookiePath);
-        userNameCookie.setSecure(true);
+        userNameCookie.setSecure(request.isSecure());
         userNameCookie.setHttpOnly(true);
 
         response.addCookie(userNameCookie);

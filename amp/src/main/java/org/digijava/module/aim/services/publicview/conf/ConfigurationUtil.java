@@ -1,6 +1,7 @@
 package org.digijava.module.aim.services.publicview.conf;
 
 
+import org.digijava.kernel.util.XmlSecurityUtils;
 import org.xml.sax.InputSource;
 
 import javax.servlet.ServletContext;
@@ -28,7 +29,7 @@ public class ConfigurationUtil {
     public static Configuration initConfig (InputSource inputSource) throws JAXBException, FileNotFoundException {
         JAXBContext jc = JAXBContext.newInstance(Configuration.class);
         Unmarshaller um = jc.createUnmarshaller();
-        Configuration retVal = (Configuration)um.unmarshal(inputSource);
+        Configuration retVal = (Configuration)um.unmarshal(XmlSecurityUtils.secureSource(inputSource));
         return retVal;
     }
 

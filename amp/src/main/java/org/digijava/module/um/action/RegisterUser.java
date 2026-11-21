@@ -17,11 +17,13 @@ import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.security.PasswordPolicyValidator;
+import org.digijava.kernel.security.auth.AmpPasswordEncoder;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.ShaCrypt;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -71,9 +73,10 @@ public class RegisterUser extends Action {
                 request.setAttribute(PasswordPolicyValidator.SHOW_PASSWORD_POLICY_RULES, true);
                 return (mapping.getInputForward());
             }
-            // set password
-            user.setPassword(userRegisterForm.getPassword().trim());
-            user.setSalt(userRegisterForm.getPassword().trim());
+            // set password (AMP-SEC-017/054: never store the plaintext password)
+            String hashedPassword = new AmpPasswordEncoder().encode(ShaCrypt.crypt(userRegisterForm.getPassword().trim()).trim());
+            user.setPassword(hashedPassword);
+            user.setSalt(hashedPassword);
 
             // set Website
             user.setUrl(userRegisterForm.getWebSite());

@@ -18,6 +18,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.VisibilityManagerExportHelper;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.kernel.util.XmlSecurityUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -95,7 +96,7 @@ public class VisibilityManager extends MultiAction {
         JAXBContext jc = JAXBContext.newInstance("org.dgfoundation.amp.visibility.feed.fm.schema");
         Unmarshaller um = jc.createUnmarshaller();
         try {
-            VisibilityTemplates  vtemplate = (VisibilityTemplates) um.unmarshal(vForm.getUploadFile().getInputStream());
+            VisibilityTemplates  vtemplate = (VisibilityTemplates) um.unmarshal(XmlSecurityUtils.secureSource(vForm.getUploadFile().getInputStream()));
             VisibilityManagerExportHelper vhelper = new VisibilityManagerExportHelper();
             vhelper.importXmlVisbilityTemplate(vtemplate);
         } catch (JAXBException je) {

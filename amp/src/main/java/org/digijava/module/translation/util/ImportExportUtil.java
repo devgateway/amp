@@ -28,6 +28,7 @@ import org.digijava.module.translation.importexport.ImportType;
 import org.digijava.module.translation.importexport.TranslationSearcher;
 import org.digijava.module.translation.jaxb.Language;
 import org.digijava.module.translation.jaxb.Translations;
+import org.digijava.kernel.util.XmlSecurityUtils;
 import org.digijava.module.translation.jaxb.Trn;
 import org.digijava.module.translation.util.importexport.ImportResult;
 import org.digijava.module.translation.util.importexport.ImportRowConsumerCallable;
@@ -322,8 +323,10 @@ public class ImportExportUtil {
         Translations root = null;
         try {
             Unmarshaller unmarshaller = getUnmarshaler();
-            root = (Translations) unmarshaller.unmarshal(file);
+            root = (Translations) unmarshaller.unmarshal(XmlSecurityUtils.secureSource(file));
         } catch (JAXBException e) {
+            logger.error(e.getMessage(), e);
+        } catch (java.io.FileNotFoundException e) {
             logger.error(e.getMessage(), e);
         }
         return root;

@@ -12,6 +12,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.CachedTranslatorWorker;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.XmlSecurityUtils;
 import org.digijava.module.aim.form.TranslatorManagerForm;
 import org.digijava.module.aim.helper.TrnHashMap;
 import org.digijava.module.translation.entity.MessageGroup;
@@ -67,7 +68,7 @@ public class TranslatorManager extends Action {
             List<String> languagesImport = new ArrayList<String>();
             
             try {
-                trns_in = (Translations) m.unmarshal(inputStream);
+                trns_in = (Translations) m.unmarshal(XmlSecurityUtils.secureSource(inputStream));
                 if (trns_in.getTrn() != null) {
                     Iterator<Trn> it = trns_in.getTrn().iterator();
                     while (it.hasNext()) {
@@ -121,7 +122,7 @@ public class TranslatorManager extends Action {
                     trnHashMaps.add(tHashMap);
                 }           
             try {
-                trns_in = (Translations) m.unmarshal(inputStream);
+                trns_in = (Translations) m.unmarshal(XmlSecurityUtils.secureSource(inputStream));
                 if (trns_in.getTrn() != null) {
                     logger.info("Processing "+trns_in.getTrn().size()+" translation groups (trn tags)...");
 //                  Iterator<Trn> it = trns_in.getTrn().iterator();                 

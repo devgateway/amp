@@ -212,9 +212,21 @@ public final class XmlPatcherUtil {
         return ret;
     }
 
-    static javax.xml.transform.TransformerFactory transFact = javax.xml.transform.TransformerFactory.newInstance( );
+    static javax.xml.transform.TransformerFactory transFact = createSecureTransformerFactory();
     static javax.xml.transform.Transformer cached_transformer;
     static String lastPathTransformerPath = null;
+
+    // AMP-SEC-026/062: block XXE via XSLT (external DTD/stylesheet access)
+    private static javax.xml.transform.TransformerFactory createSecureTransformerFactory() {
+        javax.xml.transform.TransformerFactory factory = javax.xml.transform.TransformerFactory.newInstance();
+        try {
+            factory.setAttribute(javax.xml.XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            factory.setAttribute(javax.xml.XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+        } catch (IllegalArgumentException e) {
+            logger.warn("TransformerFactory implementation does not support restricting external access", e);
+        }
+        return factory;
+    }
 
     static Unmarshaller cached_unmarshaller;
     static String lastUnmarshallerPath = null;
@@ -244,6 +256,13 @@ public final class XmlPatcherUtil {
 
             // initialize JAXB 2.0 validation
             SchemaFactory sf = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+            // AMP-SEC-026/062: block XXE via the XSD (external DTD/schema access)
+            try {
+                sf.setProperty(javax.xml.XMLConstants.ACCESS_EXTERNAL_DTD, "");
+                sf.setProperty(javax.xml.XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+            } catch (SAXException e) {
+                logger.warn("SchemaFactory implementation does not support restricting external access", e);
+            }
             Schema schema = sf.newSchema(new File(schemaURI));
             cached_unmarshaller.setSchema(schema);
             cached_unmarshaller.setEventHandler(new DefaultValidationEventHandler());

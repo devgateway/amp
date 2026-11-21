@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.common;
 
 import io.swagger.annotations.*;
 import org.digijava.kernel.ampapi.endpoints.dto.Language;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
 import org.digijava.kernel.entity.Locale;
@@ -65,7 +66,7 @@ public class TranslationsEndPoints {
             )
     })
     ))
-    @ApiMethod(ui = false, id = "Translations")
+    @ApiMethod(ui = false, id = "Translations", authTypes = AuthRule.PUBLIC)
     public Map<String, String> getLangPack(
             @ApiParam(name = "param", required = true, value = "Key-label pairs to translate",
                     examples =
@@ -108,7 +109,7 @@ public class TranslationsEndPoints {
             )
     })
     ))
-    @ApiMethod(ui = false, id = "CustomLanguageTranslations")
+    @ApiMethod(ui = false, id = "CustomLanguageTranslations", authTypes = AuthRule.PUBLIC)
     public Map<String, String> getLangPack(@PathParam("langCode") @ApiParam(example = "en") String langCode,
                                            @ApiParam(name = "param", required = true,
                                                    value = "Key-label pairs to translate")
@@ -131,7 +132,7 @@ public class TranslationsEndPoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation("Get the list of languages used in AMP.")
-    @ApiMethod(ui = false, id = "languages")
+    @ApiMethod(ui = false, id = "languages", authTypes = AuthRule.PUBLIC)
     public List<Language> getLanguages() {
         return TranslationManager.getAmpLanguages();
     }
@@ -139,7 +140,7 @@ public class TranslationsEndPoints {
     @GET
     @Path("/languages/{langCode}")
     @ApiOperation("Change the language used in session.")
-    @ApiMethod(ui = false, id = "LanguageSwitch")
+    @ApiMethod(ui = false, id = "LanguageSwitch", authTypes = AuthRule.PUBLIC)
     public String switchLanguage(@PathParam("langCode") @ApiParam(name = "langCode", example = "fr") String langCode,
                                @Context HttpServletResponse response) {
         Locale locale = new Locale();

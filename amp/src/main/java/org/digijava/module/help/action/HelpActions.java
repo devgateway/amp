@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import org.digijava.kernel.util.XmlSecurityUtils;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
@@ -952,7 +953,7 @@ public class HelpActions extends DispatchAction {
         if(xmlContent == null) return mapping.findForward("admin");
         JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
         Unmarshaller m = jc.createUnmarshaller();
-        help_in = (AmpHelpRoot) m.unmarshal(new ByteArrayInputStream(xmlContent));
+        help_in = (AmpHelpRoot) m.unmarshal(XmlSecurityUtils.secureSource(new ByteArrayInputStream(xmlContent)));
         //remove all existing help topics           
         List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(site);
       

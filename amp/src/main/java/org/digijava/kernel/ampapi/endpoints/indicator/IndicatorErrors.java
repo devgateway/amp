@@ -41,4 +41,10 @@ public class IndicatorErrors {
             new ApiErrorMessage(ERROR_CLASS_INDICATOR_ID, 10,
                     "Invalid Import: Administrative divisions in the uploaded file do not match "
                             + "Admin level selected in wizard");
+
+    public static final ApiErrorMessage FILE_TOO_LARGE = new ApiErrorMessage(ERROR_CLASS_INDICATOR_ID, 11,
+            "Uploaded file exceeds the maximum allowed size");
+
+    public static final ApiErrorMessage INVALID_FILE_TYPE = new ApiErrorMessage(ERROR_CLASS_INDICATOR_ID, 12,
+            "Uploaded file is not a valid Excel (.xls) file");
 }

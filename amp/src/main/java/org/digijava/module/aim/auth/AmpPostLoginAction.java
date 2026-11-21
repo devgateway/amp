@@ -10,12 +10,10 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.security.ApiAuthentication;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
-import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.ampapi.endpoints.security.SecurityService;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.UserUtils;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.AuditLoggerUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,19 +36,26 @@ public class AmpPostLoginAction extends Action {
         
         String id = request.getParameter("j_autoWorkspaceId");
         request.getSession().setAttribute("j_autoWorkspaceId", id);
-        
-        Authentication authResult = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = null;
-        try {
-            currentUser = getUser(authResult);
-        } catch(DgException ex) {
-            throw new RuntimeException(ex);
+
+        String username = request.getParameter("j_username");
+        String password = request.getParameter("j_password");
+
+        SecurityService securityService = SecurityService.getInstance();
+        User currentUser = securityService.verifyCredentials(username, password);
+        if (currentUser == null) {
+            out.println(getJsonResponse(toLoginWidgetErrorCode(SecurityErrors.INVALID_USER_PASSWORD)));
+            return null;
         }
 
-        ApiErrorMessage res = ApiAuthentication.login(currentUser, request);
-        if(res != null) {
+        ApiErrorMessage res = ApiAuthentication.performSecurityChecks(currentUser, request);
+        if (res != null) {
             out.println(getJsonResponse(toLoginWidgetErrorCode(res)));
         } else {
+            securityService.invalidateExistingSession();
+            securityService.storeInSession(username, null, currentUser);
+            // re-apply: invalidateExistingSession() discarded the session it was written to above
+            request.getSession().setAttribute("j_autoWorkspaceId", id);
+            AuditLoggerUtil.logUserLogin(request, currentUser, Constants.LOGIN_ACTION);
             out.println(getJsonResponse("noError", null));
         }
 
@@ -99,32 +104,4 @@ public class AmpPostLoginAction extends Action {
         json+="}"; 
         return json;
     }
-    
-     protected User getUser(Authentication currentAuth) throws DgException {
-            if(currentAuth == null) {
-                return null;
-            }
-
-            if(currentAuth.getPrincipal() == null) {
-                return null;
-            }
-
-            User user;
-            Object principal = currentAuth.getPrincipal();
-            if(principal instanceof Long) {
-                Long userId = (Long) principal;
-                user = UserUtils.getUser(userId);
-            } else {
-                String userName;
-                if(principal instanceof UserDetails) {
-                    UserDetails userDetails = (UserDetails) principal;
-                    userName = userDetails.getUsername();
-                } else {
-                    userName = principal.toString();
-                }
-                user = UserUtils.getUserByEmailAddress(userName);
-            }
-
-            return user;
-        }
 }

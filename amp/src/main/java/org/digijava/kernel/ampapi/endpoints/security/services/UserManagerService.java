@@ -32,6 +32,7 @@ import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.security.PasswordPolicyValidator;
+import org.digijava.kernel.security.auth.AmpPasswordEncoder;
 import org.digijava.kernel.services.AmpVersionInfo;
 import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -114,8 +115,10 @@ public class UserManagerService {
         user.setFirstNames(firstName);
         user.setLastName(lastName);
         user.setEmail(email);
-        user.setPassword(password);
-        user.setSalt(password);
+        // AMP-SEC-017/054: never store the plaintext password
+        String hashedPassword = new AmpPasswordEncoder().encode(ShaCrypt.crypt(password.trim()).trim());
+        user.setPassword(hashedPassword);
+        user.setSalt(hashedPassword);
         user.setNotificationEmailEnabled(notificationEmailEnabled);
         if(notificationEmailEnabled){
             user.setNotificationEmail(notificationEmail);

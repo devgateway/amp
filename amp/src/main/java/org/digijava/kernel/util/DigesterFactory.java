@@ -127,6 +127,9 @@ public class DigesterFactory{
         if (rule != null) {
             digester.addRuleSet(rule);
         }
+        // AMP-SEC-025/061: block XXE, but this factory is only used for trusted, locally-deployed
+        // config files (digi.xml relies on a DOCTYPE-declared general entity to include digi-common.xml)
+        XmlSecurityUtils.secureDigester(digester, true);
 
         return (digester);
     }

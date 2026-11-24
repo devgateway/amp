@@ -18,7 +18,7 @@ clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTld
   	jmxEnabled="true"
   	name="ampDS"  
   	removeAbandoned="true" 
-	removeAbandonedTimeout="14400"
+	removeAbandonedTimeout="1200"
   	suspectTimeout="120" 
   	logAbandoned="true" 
   	type="javax.sql.DataSource"

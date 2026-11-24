@@ -7,6 +7,7 @@ import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.time.Time;
+import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.module.contentrepository.helper.CrConstants;
@@ -27,6 +28,7 @@ public class DownloadResourceStream<T extends ObjectReferringDocument> implement
     private String contentType;
     private transient Locale locale;
     private FileUpload file;
+    private FormFile stagedFile;
     private boolean newResource;
     private IModel<T> doc;
     private String fileName;
@@ -36,6 +38,12 @@ public class DownloadResourceStream<T extends ObjectReferringDocument> implement
     public DownloadResourceStream(FileUpload f, String fileName) {
         this(f);
         this.fileName = fileName;
+    }
+
+    public DownloadResourceStream(FormFile file, String fileName) {
+        this.stagedFile = file;
+        this.fileName = fileName;
+        this.newResource = true;
     }
 
     public DownloadResourceStream(FileUpload f) {
@@ -59,11 +67,17 @@ public class DownloadResourceStream<T extends ObjectReferringDocument> implement
         //Singleton
         if (true || contentType == null) {
             if (newResource) {
-                contentType = file.getContentType();
-                fileSize = Bytes.bytes(file.getSize());
-                fileName = file.getClientFileName();
                 try {
-                    fileData = file.getInputStream();
+                    if (stagedFile != null) {
+                        contentType = stagedFile.getContentType();
+                        fileSize = Bytes.bytes(stagedFile.getFileSize());
+                        fileData = stagedFile.getInputStream();
+                    } else {
+                        contentType = file.getContentType();
+                        fileSize = Bytes.bytes(file.getSize());
+                        fileName = file.getClientFileName();
+                        fileData = file.getInputStream();
+                    }
                 } catch (IOException e) {
                     logger.error(e.getMessage(), e);
                 }

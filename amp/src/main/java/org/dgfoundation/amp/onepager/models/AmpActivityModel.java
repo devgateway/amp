@@ -9,6 +9,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.util.SessionUtil;
+import org.digijava.module.contentrepository.helper.StagedResourceUploadStore;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeService;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -61,6 +63,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
     public void beginConversation(boolean reset) {
         if(reset){
             AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
+            StagedResourceUploadStore.clear(SessionUtil.getCurrentServletRequest());
             s.setMetaData(OnePagerConst.RESOURCES_NEW_ITEMS, null);
             s.setMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS, null);
             s.setMetaData(OnePagerConst.GPI_RESOURCES_NEW_ITEMS, null);

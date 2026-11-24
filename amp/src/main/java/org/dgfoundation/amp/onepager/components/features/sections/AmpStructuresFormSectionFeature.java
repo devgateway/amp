@@ -4,39 +4,65 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.link.ResourceLink;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.validator.RangeValidator;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.resource.AbstractResource;
+import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.request.resource.ResourceReference;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
+import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.PagingListEditor;
 import org.dgfoundation.amp.onepager.components.PagingListNavigator;
-import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
-import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.LatAndLongValidator;
+import org.dgfoundation.amp.onepager.components.features.CustomResourceLinkResourceLink;
+import org.dgfoundation.amp.onepager.components.features.ExportExcelResourceReference;
+import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.components.upload.FileUploadPanel;
+import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
 import org.dgfoundation.amp.onepager.helper.structure.ColorData;
 import org.dgfoundation.amp.onepager.helper.structure.CoordinateData;
 import org.dgfoundation.amp.onepager.helper.structure.MapData;
 import org.dgfoundation.amp.onepager.helper.structure.StructureData;
 import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
+import org.digijava.kernel.ampapi.endpoints.gis.StructureImportEndpoint;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.StructuresUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class AmpStructuresFormSectionFeature extends
@@ -308,6 +334,165 @@ public class AmpStructuresFormSectionFeature extends
        add(addbutton);
 
 
+
+        final WebMarkupContainer rc = new WebMarkupContainer("resourcePanel");
+        final HiddenField<String> importedRowsField = new HiddenField<>("importedRows", Model.of(""));
+        importedRowsField.setOutputMarkupId(true);
+        rc.add(importedRowsField);
+        AmpButtonField importStructures = new AmpButtonField("ajaxSubmit", "Import Structures", true) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                String rowsJson = RequestCycle.get().getRequest().getRequestParameters()
+                        .getParameterValue(importedRowsField.getInputName()).toString();
+                if (rowsJson == null || rowsJson.trim().isEmpty()) {
+                    this.error("No structure rows were returned from the workbook.");
+                } else {
+                    try {
+                        List<StructureImportEndpoint.StructureRow> rows = new ObjectMapper().readValue(rowsJson,
+                                new TypeReference<List<StructureImportEndpoint.StructureRow>>() { });
+                        Set<AmpStructure> structureTitles = new TreeSet<>(setModel.getObject());
+                        List<AmpStructure> importedStructures = new ArrayList<>();
+
+                        for (int index = 0; index < rows.size(); index++) {
+                            StructureImportEndpoint.StructureRow row = rows.get(index);
+                            AmpStructure structure = new AmpStructure();
+                            structure.setTitle(row.getTitle());
+                            structure.setDescription(row.getDescription());
+                            structure.setLatitude(row.getLatitude());
+                            structure.setLongitude(row.getLongitude());
+                            structure.setShape(row.getShape());
+                            if (!structureTitles.add(structure)) {
+                                this.error("Import rejected: structure title '" + row.getTitle() + "' on row "
+                                        + (index + 2)
+                                        + " duplicates an existing structure or another imported row."
+                                        + " Structure titles must be unique.");
+                                importedRowsField.setModelObject("");
+                                target.add(rc);
+                                return;
+                            }
+                            importedStructures.add(structure);
+                        }
+                        for (AmpStructure structure : importedStructures) {
+                            list.addItem(structure);
+                        }
+                        list.goToLastPage();
+                    } catch (Exception e) {
+                        logger.error("Error applying imported structures", e);
+                        this.error("The workbook rows could not be imported.");
+                    }
+                }
+                importedRowsField.setModelObject("");
+                target.add(containter);
+                target.add(rc);
+            }
+        };
+        importStructures.getButton().setDefaultFormProcessing(false);
+        importStructures.getButton().setOutputMarkupId(true);
+        rc.add(importStructures);
+
+        FileUploadPanel fileUpload = new FileUploadPanel("file", String.valueOf(am.getObject().getAmpActivityId()),
+            null, "/rest/gis/structures/import", importStructures.getButton().getMarkupId(), importedRowsField.getMarkupId()) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(importStructures.isEnabledInHierarchy());
+            }
+        };
+
+        rc.add(fileUpload);
+        FeedbackPanel importFeedback = new FeedbackPanel("importFeedback",
+            new ContainerFeedbackMessageFilter(importStructures));
+        importFeedback.setOutputMarkupId(true);
+        rc.add(importFeedback);
+        rc.setOutputMarkupId(true);
+        add(rc);
+
+
+        ResourceReference resourceReference = new ResourceReference("exportData-"+ System.currentTimeMillis()) {
+            @Override
+            public IResource getResource() {
+                return new AbstractResource() {
+                    @Override
+                    protected ResourceResponse newResourceResponse(Attributes attributes) {
+                        ResourceResponse response = new ResourceResponse();
+                        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                        response.setFileName("exported-structures-activity-"+am.getObject().getAmpId()+".xlsx");
+                        response.disableCaching();
+                        response.setWriteCallback(new WriteCallback() {
+                            @Override
+                            public void writeData(Attributes attributes) {
+                                try (OutputStream out = attributes.getResponse().getOutputStream()) {
+                                    writeExcelFile(out, list);
+                                } catch (IOException e) {
+                                    logger.error("Error writing data to file", e);
+                                }
+                            }
+                        });
+                        return response;
+                    }
+                };
+            }
+        };
+        ResourceLink<Void> downloadLink = new ResourceLink<>("downloadLink", resourceReference);
+        downloadLink.setOutputMarkupId(true);
+        add(downloadLink);
+
+        AmpAjaxLinkField exportStructures = new AmpAjaxLinkField("exportStructures", "Export Structures", "Export Structures") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                logger.info("Preparing to download data");
+                String downloadLinkMarkupId = downloadLink.getMarkupId();
+                target.add(list.getParent());
+                target.appendJavaScript("document.getElementById('" + downloadLinkMarkupId + "').click();");
+            }
+        };
+        add(exportStructures);
+
+
+    }
+    private void writeExcelFile(OutputStream out,PagingListEditor<AmpStructure> list) throws IOException {
+        try(XSSFWorkbook workbook = new XSSFWorkbook()) {
+            // Create Excel sheet
+            XSSFSheet sheet = workbook.createSheet("Structures");
+
+            // Create header row
+            XSSFRow headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("Title");
+            headerRow.createCell(1).setCellValue("Description");
+            headerRow.createCell(2).setCellValue("Latitude");
+            headerRow.createCell(3).setCellValue("Longitude");
+            headerRow.createCell(4).setCellValue("Shape");
+
+            int rowIndex = 1;
+            for (AmpStructure structure : list.getModel().getObject()) {
+                XSSFRow row = sheet.createRow(rowIndex);
+                if (structure != null) {
+                    createCellIfNotNull(row, 0, structure.getTitle());
+                    createCellIfNotNull(row, 1, structure.getDescription());
+                    createCellIfNotNull(row, 2, structure.getLatitude());
+                    createCellIfNotNull(row, 3, structure.getLongitude());
+                    createCellIfNotNull(row, 4, structure.getShape());
+                }
+                rowIndex++;
+            }
+
+            // Write workbook content to the output stream
+            workbook.write(out);
+
+            // Respond with the written content
+        } catch (IOException e) {
+            logger.error("Error exporting data to Excel", e);
+        }
+    }
+
+    private void createCellIfNotNull(XSSFRow row, int columnIndex, Object value) {
+        if (value != null) {
+            row.createCell(columnIndex).setCellValue(value.toString());
+        }
     }
 
     public StructureData getDataFromStructureModel(IModel<AmpStructure> structureModel) {
@@ -342,4 +527,17 @@ public class AmpStructuresFormSectionFeature extends
         return structureModel.getObject().getCoordinates() != null && structureModel.getObject().
                 getCoordinates().size() > 0;
     }
+
+    private void handleFileUpload(final FileUpload uploadedFile) throws IOException {
+        try (InputStream inputStream = uploadedFile.getInputStream();
+             Workbook workbook = WorkbookFactory.create(inputStream)) {
+            // ...
+        } catch (IOException e) {
+            // Handle exception
+        } catch (InvalidFormatException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
+
+

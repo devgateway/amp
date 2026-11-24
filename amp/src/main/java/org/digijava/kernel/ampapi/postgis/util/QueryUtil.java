@@ -391,7 +391,7 @@ public class QueryUtil {
             AmpTeamMember current = TeamUtil.getCurrentAmpTeamMember();
             if (current != null && current.getUser() != null){
                 queryString += " or (ind.accessType = " + IndicatorAccessType.SHARED + " and s.workspace.ampTeamId = " + current.getAmpTeam().getAmpTeamId() + " ) ";
-                queryString += " or (ind.accessType = " + IndicatorAccessType.PRIVATE + " and c.user.id = " + current.getUser().getId() + ") ";
+                queryString += " or (ind.accessType = " + IndicatorAccessType.PRIVATE + " and c.id = " + current.getUser().getId() + ") ";
             }
 
             queryString += " ) ";
